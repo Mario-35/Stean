@@ -1,8 +1,8 @@
-![Logo](https://raw.githubusercontent.com/Mario-35/Stean/main/doc/assets/logo.png "Logo")
+![Logo](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/logo.png "Logo")
 
 ## SensorThings Enhanced API Node
 
-![Inrae](https://raw.githubusercontent.com/Mario-35/Stean/main/doc/assets/inrae.png "Inrae")
+![Inrae](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/inrae.png "Inrae")
 
 # Installation
 
@@ -25,18 +25,18 @@ or use first install (the file will be automatically create)
 
 ## Want to use this with docker
 
-![Docker](https://raw.githubusercontent.com/Mario-35/Stean/main/doc/assets/logo-docker.png "Docker")
+![Docker](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/logo-docker.png "Docker")
 
 # COMMING SOON
 
 The project run under nodeJS.
 
-![Nodejs](https://raw.githubusercontent.com/Mario-35/Stean/main/doc/assets/nodejs.png "Nodejs")
+![Nodejs](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/nodejs.png "Nodejs")
 
-![TypeScript](https://raw.githubusercontent.com/Mario-35/Stean/main/doc/assets/ts.png "TypeScript") ![Javascript](https://raw.githubusercontent.com/Mario-35/Stean/main/doc/assets/js.png "Javascript")
+![TypeScript](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/ts.png "TypeScript") ![Javascript](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/js.png "Javascript")
 
 
-![HTML JS CSS](https://raw.githubusercontent.com/Mario-35/Stean/main/doc/assets/html.png "HTML JS CSS")
+![HTML JS CSS](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/html.png "HTML JS CSS")
 
 ## Directory Structure
 
