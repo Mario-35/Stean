@@ -1,0 +1,201 @@
+<span style="color:#FF0000">  ======================== </span><span style="color:#00FFFF">  START _STEAN version : 0 [production] </span><span style="color:#FFFFFF">  26/06/2024 : 09:55:37 </span><span style="color:#FF0000">  ========================</span><br />
+<span style="color:#00FFFF">  Read config </span><span style="color:#FFFFFF">  /home/madam/api/configuration/configuration.json</span><br />
+<span style="color:#00FFFF">  Write config </span><span style="color:#FFFFFF">  /home/madam/api/configuration/configuration.json</span><br />
+<span style="color:#00FFFF">  Test database exist </span><span style="color:#FFFFFF">  postgres</span><br />
+<span style="color:#00FFFF">  </span><span style="color:#FF00FF"> Database => </span><span style="color:#FFFF00"> [admin] </span><span style="color:#FFFFFF">  on line </span><span style="color:#FFFFFF">  🌍</span><br />
+<span style="color:#00FFFF">  Test database exist </span><span style="color:#FFFFFF">  agrhys</span><br />
+<span style="color:#00FFFF">  </span><span style="color:#FFFF00"> [admin] </span><span style="color:#00FF00"> Listening on port </span><span style="color:#FFFFFF">  8029</span><br />
+<span style="color:#00FFFF">  </span><span style="color:#FF00FF"> Database => </span><span style="color:#FFFF00"> [agrhys] </span><span style="color:#FFFFFF">  on line </span><span style="color:#FFFFFF">  🌍</span><br />
+<span style="color:#00FFFF">  Test database exist </span><span style="color:#FFFFFF">  batelev</span><br />
+<span style="color:#00FFFF">  </span><span style="color:#FFFF00"> [agrhys] </span><span style="color:#00FF00"> Listening on port </span><span style="color:#FFFFFF">  8030</span><br />
+<span style="color:#00FFFF">  </span><span style="color:#FF00FF"> Database => </span><span style="color:#FFFF00"> [batelev] </span><span style="color:#FFFFFF">  on line </span><span style="color:#FFFFFF">  🌍</span><br />
+<span style="color:#00FFFF">  Test database exist </span><span style="color:#FFFFFF">  agri4cast</span><br />
+<span style="color:#00FFFF">  </span><span style="color:#FFFF00"> [batelev] </span><span style="color:#00FF00"> Listening on port </span><span style="color:#FFFFFF">  8031</span><br />
+<span style="color:#00FFFF">  </span><span style="color:#FF00FF"> Database => </span><span style="color:#FFFF00"> [agri4cast] </span><span style="color:#FFFFFF">  on line </span><span style="color:#FFFFFF">  🌍</span><br />
+<span style="color:#00FFFF">  Test database exist </span><span style="color:#FFFFFF">  safran</span><br />
+<span style="color:#00FFFF">  </span><span style="color:#FFFF00"> [agri4cast] </span><span style="color:#00FF00"> Listening on port </span><span style="color:#FFFFFF">  8033</span><br />
+<span style="color:#00FFFF">  </span><span style="color:#FF00FF"> Database => </span><span style="color:#FFFF00"> [safran] </span><span style="color:#FFFFFF">  on line </span><span style="color:#FFFFFF">  🌍</span><br />
+<span style="color:#00FFFF">  Test database exist </span><span style="color:#FFFFFF">  selune</span><br />
+<span style="color:#00FFFF">  </span><span style="color:#FFFF00"> [safran] </span><span style="color:#00FF00"> Listening on port </span><span style="color:#FFFFFF">  8034</span><br />
+<span style="color:#00FFFF">  </span><span style="color:#FF00FF"> Database => </span><span style="color:#FFFF00"> [selune] </span><span style="color:#FFFFFF">  on line </span><span style="color:#FFFFFF">  🌍</span><br />
+<span style="color:#00FFFF">  Test database exist </span><span style="color:#FFFFFF">  wsci</span><br />
+<span style="color:#00FFFF">  </span><span style="color:#FFFF00"> [selune] </span><span style="color:#00FF00"> Listening on port </span><span style="color:#FFFFFF">  8035</span><br />
+<span style="color:#00FFFF">  </span><span style="color:#FF00FF"> Database => </span><span style="color:#FFFF00"> [wsci] </span><span style="color:#FFFFFF">  on line </span><span style="color:#FFFFFF">  🌍</span><br />
+<span style="color:#00FFFF">  Test database exist </span><span style="color:#FFFFFF">  rennesmetro</span><br />
+<span style="color:#00FFFF">  </span><span style="color:#FFFF00"> [wsci] </span><span style="color:#00FF00"> Listening on port </span><span style="color:#FFFFFF">  8036</span><br />
+<span style="color:#00FFFF">  </span><span style="color:#FF00FF"> Database => </span><span style="color:#FFFF00"> [rennesmetro] </span><span style="color:#FFFFFF">  on line </span><span style="color:#FFFFFF">  🌍</span><br />
+<span style="color:#00FFFF">  Test database exist </span><span style="color:#FFFFFF">  efele</span><br />
+<span style="color:#00FFFF">  </span><span style="color:#FFFF00"> [rennesmetro] </span><span style="color:#00FF00"> Listening on port </span><span style="color:#FFFFFF">  8037</span><br />
+<span style="color:#00FFFF">  </span><span style="color:#FF00FF"> Database => </span><span style="color:#FFFF00"> [efele] </span><span style="color:#FFFFFF">  on line </span><span style="color:#FFFFFF">  🌍</span><br />
+<span style="color:#00FFFF">  Test database exist </span><span style="color:#FFFFFF">  bosco</span><br />
+<span style="color:#00FFFF">  </span><span style="color:#FFFF00"> [efele] </span><span style="color:#00FF00"> Listening on port </span><span style="color:#FFFFFF">  8038</span><br />
+<span style="color:#00FFFF">  </span><span style="color:#FF00FF"> Database => </span><span style="color:#FFFF00"> [bosco] </span><span style="color:#FFFFFF">  on line </span><span style="color:#FFFFFF">  🌍</span><br />
+<span style="color:#00FFFF">  Test database exist </span><span style="color:#FFFFFF">  bosco2</span><br />
+<span style="color:#00FFFF">  </span><span style="color:#FFFF00"> [bosco] </span><span style="color:#00FF00"> Listening on port </span><span style="color:#FFFFFF">  8040</span><br />
+<span style="color:#00FFFF">  </span><span style="color:#FF00FF"> Database => </span><span style="color:#FFFF00"> [bosco2] </span><span style="color:#FFFFFF">  on line </span><span style="color:#FFFFFF">  🌍</span><br />
+<span style="color:#00FFFF">  </span><span style="color:#FF00FF"> [bosco2] </span><span style="color:#00FF00"> Add listening on port </span><span style="color:#FFFFFF">  8040</span><br />
+<span style="color:#00FFFF">  Test database exist </span><span style="color:#FFFFFF">  onde</span><br />
+<span style="color:#00FFFF">  </span><span style="color:#FF00FF"> Database => </span><span style="color:#FFFF00"> [onde] </span><span style="color:#FFFFFF">  on line </span><span style="color:#FFFFFF">  🌍</span><br />
+<span style="color:#00FFFF">  Test database exist </span><span style="color:#FFFFFF">  monitoringquimper</span><br />
+<span style="color:#00FFFF">  </span><span style="color:#FFFF00"> [onde] </span><span style="color:#00FF00"> Listening on port </span><span style="color:#FFFFFF">  8041</span><br />
+<span style="color:#00FFFF">  </span><span style="color:#FF00FF"> Database => </span><span style="color:#FFFF00"> [monitoringquimper] </span><span style="color:#FFFFFF">  on line </span><span style="color:#FFFFFF">  🌍</span><br />
+<span style="color:#00FFFF">  Test database exist </span><span style="color:#FFFFFF">  hubeau</span><br />
+<span style="color:#00FFFF">  </span><span style="color:#FFFF00"> [monitoringquimper] </span><span style="color:#00FF00"> Listening on port </span><span style="color:#FFFFFF">  8042</span><br />
+<span style="color:#00FFFF">  </span><span style="color:#FF00FF"> Database => </span><span style="color:#FFFF00"> [hubeau] </span><span style="color:#FFFFFF">  on line </span><span style="color:#FFFFFF">  🌍</span><br />
+<span style="color:#00FFFF">  </span><span style="color:#FFFF00"> [hubeau] </span><span style="color:#00FF00"> Listening on port </span><span style="color:#FFFFFF">  8044</span><br />
+<span style="color:#FFFFFF">  26/06/2024 09:56:16  🡸 GET /rennesmetro/v1.1/Query</span><br />
+<span style="color:#FFFFFF">  26/06/2024 09:56:16  🡺 GET /rennesmetro/v1.1/Query 200 40ms 200.4kb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 09:56:23  🡸 GET /rennesmetro/v1.1/Query</span><br />
+<span style="color:#FFFFFF">  26/06/2024 09:56:24  🡺 GET /rennesmetro/v1.1/Query 200 31ms 200.4kb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 09:56:26  🡸 GET /rennesmetro/v1.1/Things</span><br />
+<span style="color:#FFFFFF">  26/06/2024 09:56:26  🡺 GET /rennesmetro/v1.1/Things 200 14ms 750b</span><br />
+<span style="color:#FFFFFF">  26/06/2024 09:56:30  🡸 GET /rennesmetro/v1.1/Query</span><br />
+<span style="color:#FFFFFF">  26/06/2024 09:56:30  🡺 GET /rennesmetro/v1.1/Query 200 31ms 200.4kb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 09:56:42  🡸 GET /rennesmetro/v1.1/Query</span><br />
+<span style="color:#FFFFFF">  26/06/2024 09:56:42  🡺 GET /rennesmetro/v1.1/Query 200 32ms 200.4kb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 09:57:00  🡸 GET /rennesmetro/v1.1/Things?$debug=true</span><br />
+<span style="color:#DB61D9"> =====[ Query Start ]=====</span><br />
+<span style="color:#93C572"><pre> SELECT count(t),
+	coalesce( json_agg(t), '[]') AS results
+	FROM (
+	SELECT CONCAT('http://sensorthings.geosas.fr/rennesmetro/v1.1/Things(', "thing"."id", ')') AS "@iot.selfLink",
+		"id" AS "@iot.id",
+		"thing"."name" AS "name",
+		"thing"."description" AS "description",
+		"thing"."properties" AS "properties",
+		 CONCAT('http://sensorthings.geosas.fr/rennesmetro/v1.1/Things(', "thing"."id", ')/Locations') AS "Locations@iot.navigationLink",
+		 CONCAT('http://sensorthings.geosas.fr/rennesmetro/v1.1/Things(', "thing"."id", ')/HistoricalLocations') AS "HistoricalLocations@iot.navigationLink",
+		 CONCAT('http://sensorthings.geosas.fr/rennesmetro/v1.1/Things(', "thing"."id", ')/Datastreams') AS "Datastreams@iot.navigationLink",
+		 CONCAT('http://sensorthings.geosas.fr/rennesmetro/v1.1/Things(', "thing"."id", ')/MultiDatastreams') AS "MultiDatastreams@iot.navigationLink"
+ FROM "thing"
+ ORDER BY "id"
+ LIMIT 200
+) as t
+</pre></span>
+
+<span style="color:#FFFFFF">  26/06/2024 09:57:00  🡺 GET /rennesmetro/v1.1/Things?$debug=true 200 7ms 750b</span><br />
+<span style="color:#FFFFFF">  26/06/2024 09:59:13  🡸 GET /rennesmetro/v1.1/Query</span><br />
+<span style="color:#FFFFFF">  26/06/2024 09:59:13  🡺 GET /rennesmetro/v1.1/Query 200 36ms 200.4kb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 09:59:14  🡸 GET /rennesmetro/v1.1/Things</span><br />
+<span style="color:#FFFFFF">  26/06/2024 09:59:14  🡺 GET /rennesmetro/v1.1/Things 200 7ms 750b</span><br />
+<span style="color:#FFFFFF">  26/06/2024 09:59:19  🡸 GET /rennesmetro/v1.1/Locations</span><br />
+<span style="color:#FFFFFF">  26/06/2024 09:59:19  🡺 GET /rennesmetro/v1.1/Locations 200 26ms 706b</span><br />
+<span style="color:#FFFFFF">  26/06/2024 09:59:26  🡸 GET /rennesmetro/v1.1/Locations</span><br />
+<span style="color:#FFFFFF">  26/06/2024 09:59:26  🡺 GET /rennesmetro/v1.1/Locations 200 5ms 706b</span><br />
+<span style="color:#FFFFFF">  26/06/2024 09:59:30  🡸 GET /rennesmetro/v1.1/Locations(1</span><br />
+<span style="color:#FFFFFF">  26/06/2024 09:59:30  🡺 GET /rennesmetro/v1.1/Locations(1 200 7ms 594b</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:01:31  🡸 GET /rennesmetro/v1.1/</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:01:31  🡺 GET /rennesmetro/v1.1/ 200 4ms 2.08kb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:01:33  🡸 GET /rennesmetro/v1.1/Datastreams</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:01:33  🡺 GET /rennesmetro/v1.1/Datastreams 200 10ms 1.32kb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:01:34  🡸 GET /rennesmetro/v1.1/Datastreams(1</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:01:34  🡺 GET /rennesmetro/v1.1/Datastreams(1 200 12ms 1.19kb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:01:36  🡸 GET /rennesmetro/v1.1/Datastreams(1)/Thing</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:01:36  🡺 GET /rennesmetro/v1.1/Datastreams(1)/Thing 200 9ms 750b</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:01:38  🡸 GET /rennesmetro/v1.1/Things(1)/Locations</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:01:38  🡺 GET /rennesmetro/v1.1/Things(1)/Locations 200 12ms 706b</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:03:49  🡸 GET /rennesmetro/v1.1/Query</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:03:49  🡺 GET /rennesmetro/v1.1/Query 200 28ms 200.4kb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:10:07  🡸 GET /rennesmetro/v1.1/MultiDatastreams(1)/Observations?$resultFormat=graph&$top=10000&$orderby=id%20desc&$debug=true</span><br />
+<span style="color:#DB61D9"> =====[ Query Start ]=====</span><br />
+<span style="color:#93C572"><pre> SELECT coalesce( json_agg(t), '[]') AS results
+	FROM (
+	WITH 
+      src AS (
+        SELECT 
+          id, 
+          description, 
+          jsonb_array_elements("unitOfMeasurements")->>'name' AS name, 
+          jsonb_array_elements("unitOfMeasurements")->>'symbol' AS symbol 
+        FROM 
+        (SELECT * FROM multidatastream WHERE id = 1 ) AS l
+      ),  
+      results AS (
+        SELECT 
+          src.id, 
+          src.description, 
+          src.name, 
+          src.symbol, 
+          (
+            SELECT 
+              STRING_AGG(concat, ',') AS datas 
+            FROM (
+                SELECT CONCAT('[new Date("', round_minutes("resultTime", 5), '"), ', result->'value'->(select array_position(array(select jsonb_array_elements("unitOfMeasurements")->> 'name' FROM ( SELECT * FROM multidatastream WHERE id = 1 ) AS l), src.name)-1),']')
+ FROM "observation"
+ WHERE "observation"."id" in (SELECT "observation"."id" from "observation" WHERE "observation"."multidatastream_id" = 1)
+ORDER BY "id" DESC,  "resultTime" ASC
+ LIMIT 10000
+
+                ) AS nop )
+        FROM 
+          "multidatastream" 
+        INNER JOIN src ON multidatastream.id = src.id
+      ) 
+      SELECT * FROM results ) as t
+</pre></span>
+
+<span style="color:#FFFFFF">  26/06/2024 10:10:09  🡺 GET /rennesmetro/v1.1/MultiDatastreams(1)/Observations?$resultFormat=graph&$top=10000&$orderby=id%20desc&$debug=true 200 1,798ms 1mb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:21:04  🡸 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-04-04T19:59:59.000Z&$top=1000&%24top=10000</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:21:04  🡺 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-04-04T19:59:59.000Z&$top=1000&%24top=10000 200 820ms 7.29mb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:21:36  🡸 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-02-29T19:59:59.000Z&$top=1000&%24top=10000</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:21:37  🡺 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-02-29T19:59:59.000Z&$top=1000&%24top=10000 200 571ms 7.29mb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:21:37  🡸 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-02-29T19:59:59.000Z&$top=10000&$skip=10000&%24top=10000</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:21:38  🡺 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-02-29T19:59:59.000Z&$top=10000&$skip=10000&%24top=10000 200 322ms 1.8mb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:22:43  🡸 GET /rennesmetro/v1.1/metrics</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:22:44  🡺 GET /rennesmetro/v1.1/metrics 200 742ms 576.9kb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:22:52  🡸 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-04-04T19:59:59.000Z&$top=1000&%24top=10000</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:22:52  🡺 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-04-04T19:59:59.000Z&$top=1000&%24top=10000 200 620ms 7.29mb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:22:53  🡸 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-04-04T19:59:59.000Z&$top=10000&$skip=10000&%24top=10000</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:22:54  🡺 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-04-04T19:59:59.000Z&$top=10000&$skip=10000&%24top=10000 200 553ms 7.3mb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:22:55  🡸 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-04-04T19:59:59.000Z&$top=10000&$skip=20000&%24top=10000</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:22:55  🡺 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-04-04T19:59:59.000Z&$top=10000&$skip=20000&%24top=10000 200 343ms 1.51mb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:24:28  🡸 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-04-04T19:59:59.000Z&$top=1000&%24top=10000</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:24:29  🡺 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-04-04T19:59:59.000Z&$top=1000&%24top=10000 200 678ms 7.29mb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:24:30  🡸 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-04-04T19:59:59.000Z&$top=10000&$skip=10000&%24top=10000</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:24:30  🡺 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-04-04T19:59:59.000Z&$top=10000&$skip=10000&%24top=10000 200 581ms 7.3mb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:24:32  🡸 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-04-04T19:59:59.000Z&$top=10000&$skip=20000&%24top=10000</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:24:32  🡺 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-04-04T19:59:59.000Z&$top=10000&$skip=20000&%24top=10000 200 340ms 1.51mb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:26:18  🡸 GET /rennesmetro/v1.1/Query</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:26:18  🡺 GET /rennesmetro/v1.1/Query 200 36ms 200.4kb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:26:44  🡸 GET /rennesmetro/v1.1/Query</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:26:44  🡺 GET /rennesmetro/v1.1/Query 200 30ms 200.4kb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:26:58  🡸 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-04-04T19:59:59.000Z&$top=1000&%24top=10000</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:26:58  🡺 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-04-04T19:59:59.000Z&$top=1000&%24top=10000 200 805ms 7.29mb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:27:01  🡸 GET /rennesmetro/v1.1/?%24top=20000&%24select=phenomenonTime%2Cresult</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:27:01  🡺 GET /rennesmetro/v1.1/?%24top=20000&%24select=phenomenonTime%2Cresult 200 4ms 2.08kb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:27:15  🡸 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-04-04T19:59:59.000Z&$top=1000&%24top=20000&%24select=phenomenonTime%2Cresult</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:27:16  🡺 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-04-04T19:59:59.000Z&$top=1000&%24top=20000&%24select=phenomenonTime%2Cresult 200 352ms 1.91mb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:27:16  🡸 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-04-04T19:59:59.000Z&$select=phenomenonTime,result&$top=20000&$skip=20000&%24top=20000&%24select=phenomenonTime%2Cresult</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:27:17  🡺 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-04-04T19:59:59.000Z&$select=phenomenonTime,result&$top=20000&$skip=20000&%24top=20000&%24select=phenomenonTime%2Cresult 200 290ms 202.05kb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:27:27  🡸 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-04-04T19:59:59.000Z&$top=1000&%24top=20000&%24select=phenomenonTime%2Cresult</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:27:27  🡺 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-04-04T19:59:59.000Z&$top=1000&%24top=20000&%24select=phenomenonTime%2Cresult 200 379ms 1.91mb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:27:27  🡸 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-04-04T19:59:59.000Z&$select=phenomenonTime,result&$top=20000&$skip=20000&%24top=20000&%24select=phenomenonTime%2Cresult</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:27:28  🡺 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-04-04T19:59:59.000Z&$select=phenomenonTime,result&$top=20000&$skip=20000&%24top=20000&%24select=phenomenonTime%2Cresult 200 285ms 202.05kb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:27:41  🡸 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202024-01-21T10:09:22.746Z%20and%20phenomenonTime%20le%202024-02-24T01:04:11.281Z&$top=1000&%24top=20000&%24select=phenomenonTime%2Cresult</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:27:41  🡺 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202024-01-21T10:09:22.746Z%20and%20phenomenonTime%20le%202024-02-24T01:04:11.281Z&$top=1000&%24top=20000&%24select=phenomenonTime%2Cresult 200 310ms 829.41kb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:28:04  🡸 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-02-28T19:59:59.000Z&$top=1000&%24top=20000&%24select=phenomenonTime%2Cresult</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:28:04  🡺 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202023-12-31T20:00:00.000Z%20and%20phenomenonTime%20le%202024-02-28T19:59:59.000Z&$top=1000&%24top=20000&%24select=phenomenonTime%2Cresult 200 311ms 1.16mb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:28:13  🡸 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202024-01-24T20:00:00.000Z%20and%20phenomenonTime%20le%202024-02-28T19:59:59.000Z&$top=1000&%24top=20000&%24select=phenomenonTime%2Cresult</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:28:13  🡺 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202024-01-24T20:00:00.000Z%20and%20phenomenonTime%20le%202024-02-28T19:59:59.000Z&$top=1000&%24top=20000&%24select=phenomenonTime%2Cresult 200 225ms 868.9kb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:28:52  🡸 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202024-01-24T20:00:00.000Z%20and%20phenomenonTime%20le%202024-02-28T19:59:59.000Z&$top=1000&%24top=20000&%24select=phenomenonTime%2Cresult</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:28:53  🡺 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202024-01-24T20:00:00.000Z%20and%20phenomenonTime%20le%202024-02-28T19:59:59.000Z&$top=1000&%24top=20000&%24select=phenomenonTime%2Cresult 200 244ms 868.9kb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:33:12  🡸 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202024-06-25T08:33:11.746Z%20and%20phenomenonTime%20le%202024-06-26T08:33:11.746Z&$top=1000&%24top=20000&%24select=phenomenonTime%2Cresult</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:33:12  🡺 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202024-06-25T08:33:11.746Z%20and%20phenomenonTime%20le%202024-06-26T08:33:11.746Z&$top=1000&%24top=20000&%24select=phenomenonTime%2Cresult 200 158ms 15.08kb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:33:36  🡸 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202024-01-24T20:00:00.000Z%20and%20phenomenonTime%20le%202024-02-28T19:59:59.000Z&$top=1000&%24top=20000&%24select=phenomenonTime%2Cresult</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:33:36  🡺 GET /rennesmetro/v1.1/Datastreams(1)/Observations?$orderby=phenomenonTime%20asc&$filter=phenomenonTime%20ge%202024-01-24T20:00:00.000Z%20and%20phenomenonTime%20le%202024-02-28T19:59:59.000Z&$top=1000&%24top=20000&%24select=phenomenonTime%2Cresult 200 230ms 868.9kb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:50:32  🡸 GET /rennesmetro/v1.1/Query</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:50:32  🡺 GET /rennesmetro/v1.1/Query 200 29ms 200.4kb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:50:49  🡸 GET /rennesmetro/v1.1/MultiDatastreams(1)/ObservedProperties</span><br />
+<span style="color:#FFFFFF">  26/06/2024 10:50:49  🡺 GET /rennesmetro/v1.1/MultiDatastreams(1)/ObservedProperties 200 7ms 1.12kb</span><br />
+<span style="color:#FFFFFF">  26/06/2024 11:00:13  🡸 GET /rennesmetro/v1.1/Things(11)/MultiDatastreams</span><br />
+<span style="color:#FFFFFF">  26/06/2024 11:00:13  🡺 GET /rennesmetro/v1.1/Things(11)/MultiDatastreams 200 36ms 17b</span><br />
+<span style="color:#FFFFFF">  26/06/2024 11:01:04  🡸 POST /rennesmetro/v1.0/Loras</span><br />
+<span style="color:#FFFFFF">  26/06/2024 11:01:04  🡺 POST /rennesmetro/v1.0/Loras 201 48ms 590b</span><br />
+<span style="color:#FFFFFF">  26/06/2024 11:03:07  🡸 POST /rennesmetro/v1.0/Loras</span><br />
+<span style="color:#FFFFFF">  26/06/2024 11:03:07  🡺 POST /rennesmetro/v1.0/Loras 201 17ms 602b</span><br />
+<span style="color:#FFFFFF">  26/06/2024 11:05:13  🡸 POST /rennesmetro/v1.0/Loras</span><br />
+<span style="color:#FFFFFF">  26/06/2024 11:05:13  🡺 POST /rennesmetro/v1.0/Loras 201 15ms 617b</span><br />
+<span style="color:#FFFFFF">  26/06/2024 11:06:04  🡸 POST /rennesmetro/v1.0/Loras</span><br />
+<span style="color:#FFFFFF">  26/06/2024 11:06:04  🡺 POST /rennesmetro/v1.0/Loras 201 13ms 588b</span><br />
+<span style="color:#FFFFFF">  26/06/2024 11:09:16  🡸 GET /rennesmetro/v1.1/log</span><br />
+<span style="color:#FFFFFF">  26/06/2024 11:09:16  🡺 GET /rennesmetro/v1.1/log 200 201ms 184.27kb</span><br />
