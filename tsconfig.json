@@ -1,0 +1,45 @@
+{
+    "compileOnSave": false,
+    "compilerOptions": {
+        "esModuleInterop": true,
+        "noImplicitAny": true,
+        "resolveJsonModule": true,
+        "experimentalDecorators": true,
+        "strict": true,
+        "moduleResolution": "node",
+        "noUnusedLocals": true,
+        "noUnusedParameters": false,
+        "strictPropertyInitialization": false,
+        "preserveConstEnums": true,
+        "sourceMap": false,
+        "typeRoots": [
+            "node_modules/@types",
+            "./types"
+        ],
+        "outDir": "build",
+        "noEmit": false,
+        "module": "commonjs",
+        "target": "es2022",
+        "lib": [
+            "es2017"
+        ]
+    },
+    "ts-node": {
+        "compilerOptions": {
+            "module": "commonjs"
+        }
+    },
+    "include": [
+        "src/server/**/*.ts",
+        "env"
+, "src/server/db/helpers/getEntitesListts", "src/server/views/monitor/index.js"    ],
+    "exclude": [
+        "node_modules",
+        "migrations",
+        "scripts",
+        "seeds",
+        "test",
+        "apidoc",
+        "build"
+    ]
+}
