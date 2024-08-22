@@ -22,6 +22,10 @@ SQLSCRIPT=./script.sql
 # prevent no found
 STEANVER="not installed"
 
+is_run() {
+    ISRUN=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8029/test/v1.1/)
+}
+
 # Create run script
 create_run() {
     if [ -f $FILERUN ]; then
@@ -43,6 +47,7 @@ create_run() {
 
 # Function to show logo
 logo() {
+    check_stean
     echo ""
     echo -e "\e[32m  ____ __________    _     _   _ \e[0m"
     echo -e "\e[32m / ___|_ __  ____|  / \   | \ | |\e[0m"
@@ -50,6 +55,32 @@ logo() {
     echo -e "\e[32m  ___) | | | |___ / ___ \ | |\  |\e[0m"
     echo -e "\e[32m |____/|_| |_____|_/   \_\|_| \_|   \e[34m$STEANVER\e[0m"
     echo ""
+}
+
+# Function to check Node and install it if not
+check_stean() {
+    # load configuration
+    if [ -f $CONF ]; then
+        read APIDEST < $CONF
+        APIDEST=$(echo "$APIDEST" | sed 's:/*$::')
+    fi
+
+    # Del configuration file if blank
+    if [ -z "${APIDEST}" ]; then
+        if [ -f $CONF ]; then
+            rm .steanpath
+            echo "Delete => .steanpath cause is blank"
+        fi
+    fi
+
+    # Stean version
+    if [ -f $APIDEST/api/package.json ]; then
+        STEANVER=$(cat $APIDEST/api/package.json \
+        | grep version \
+        | head -1 \
+        | awk -F: '{ print $2 }' \
+        | sed 's/[",]//g')
+    fi
 }
 
 # Function to check Node and install it if not
@@ -214,8 +245,8 @@ selectOption() {
             echo "┌───────────────────────────────────────────────────────────────┐"
             echo "│                     STEAN folder Install                      │"
             echo "└───────────────────────────────────────────────────────────────┘"
-            read -p "Enter the path to install api (/var/www/stean) [./]: " APIDEST
-            echo $APIDEST > .steanpath
+            read -p "Enter the path to install api (/var/www/stean) [./]: " APIDEST;
+            echo $APIDEST > .steanpath;
             ;;
         "Change path")
             echo "┌───────────────────────────────────────────────────────────────┐"
@@ -235,6 +266,7 @@ selectOption() {
             check_dist;
             stop_stean;
             install_stean;
+            logo
             ;;
         "Update stean")
             echo "┌───────────────────────────────────────────────────────────────┐"
@@ -284,41 +316,24 @@ selectOption() {
         "Quit")
             exit
             ;;
-        *) echo "invalid option $REPLY";;
+        *) echo "invalid option $options[${1}]";;
     esac
 
 }
 
 infos() {
-    # load configuration
-    if [ -f $CONF ]; then
-        read APIDEST < $CONF
-        APIDEST=$(echo "$APIDEST" | sed 's:/*$::')
-    fi
-
-    # Del configuration file if blank
-    if [ -z "${APIDEST}" ]; then
-        if [ -f $CONF ]; then
-            rm .steanpath
-            echo "Delete => .steanpath cause is blank"
-        fi
-    fi
-
-    # Stean version
-    if [ -f $APIDEST/api/package.json ]; then
-        STEANVER=$(cat $APIDEST/api/package.json \
-        | grep version \
-        | head -1 \
-        | awk -F: '{ print $2 }' \
-        | sed 's/[",]//g')
-    fi
-    
+    check_stean   
     check_node
     check_pg
     check_pm2
+    is_run
     # Dtermine options menu
     if [ -f $APIDEST/api/index.js ]; then
-        options=("Change path" "Update stean" "Back to previous" "Create run script" "Run stean" "Stop stean" "Logs" "Quit")
+        if [ -f $APIDEST/apiBak/index.js ]; then    
+            options=("Change path" "Update stean" "Back to previous" "Create run script" "action" "Logs" "Quit");
+        else
+            options=("Change path" "Update stean" "Create run script" "action" "Logs" "Quit");
+        fi
     else
         if [ -f .steanpath ]; then
             options=("Change path" "Install all" "Check postGis" "Quit")
@@ -327,6 +342,19 @@ infos() {
             options=("Indicate path" "Check postGis" "Quit")
         fi
     fi
+
+    if [ -f $FILERUN ]; then
+        options=("${options[@]/Create run script/Recreate run script}")
+    fi
+
+    if [[ "$ISRUN" == "000" ]]; 
+        then
+            options=("${options[@]/action/Run stean}")
+        else
+            options=("${options[@]/action/Stop stean}")
+    fi
+
+    
 
     NBOPTIONS=${#options[@]};
     LM="$(($NBOPTIONS - 1))";
@@ -376,16 +404,21 @@ infos;
         TPUT 1 5
         $E "Path :              Stean :               ";
         TPUT  0 12; $e $APIDEST; 
-        TPUT  0 33; $e $STEANVER; 
+        TPUT  0 33; $e $STEANVER;
+        if [[ "$ISRUN" == "000" ]]; 
+            then
+                TPUT  0 42; $e "STOP"; 
+            else
+                TPUT  0 42; $e "RUN"; 
+        fi
         UNMARK;
     }        
     FOOT() { 
         MARK;
         TPUT "$((NBOPTIONS + 5))" 5
-        printf "Node:           PM2:      Postgres:       "; 
-        TPUT  "$((NBOPTIONS + 5))" 11; $e $NODEVER ; 
-        TPUT  "$((NBOPTIONS + 5))" 25; $e $PM2VER; 
-        TPUT  "$((NBOPTIONS + 5))" 40; $e "${PGVER:18:5}";
+        printf "Node:           Postgres:                 "; 
+        TPUT  "$((NBOPTIONS + 5))" 11; $e $NODEVER ;
+        TPUT  "$((NBOPTIONS + 5))" 30; $e "${PGVER:18:5}";
         UNMARK;
     }          
     ARROW() {
@@ -481,7 +514,7 @@ infos;
     INIT;
     while [[ "$O" != " " ]]; do 
         case $i in
-            0) S=M0;SC;if [[ $cur == "" ]];then R;selectOption 0;ES;fi;;
+            0) S=M0;SC;if [[ $cur == "" ]];then R;selectOption 0;INIT;fi;;
             1) S=M1;SC;if [[ $cur == "" ]];then R;selectOption 1;ES;fi;;
             2) S=M2;SC;if [[ $cur == "" ]];then R;selectOption 2;ES;fi;;
             3) S=M3;SC;if [[ $cur == "" ]];then R;selectOption 3;ES;fi;;
