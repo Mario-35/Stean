@@ -228,8 +228,6 @@ export const generateApiDoc = (input: IApiDoc[], filename: string): boolean => {
     return true;
 };
 
-
-
 export const limitResult = (input: Record<string, any>, keyName?: string) => {  
     const key:string = keyName || "value";
     if (input["body"][key]) input["body"][key] = [input["body"][key][0], input["body"][key][1], "..."];

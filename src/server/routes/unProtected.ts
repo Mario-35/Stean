@@ -1,10 +1,10 @@
 /**
- * Unprotected Routes for API
- *
- * @copyright 2020-present Inrae
- * @author mario.adam@inrae.fr
- *
- */
+* Unprotected Routes for API
+*
+* @copyright 2020-present Inrae
+* @author mario.adam@inrae.fr
+*
+*/
 // onsole.log("!----------------------------------- Unprotected Routes for API -----------------------------------!");
 
 import Router from "koa-router";
@@ -50,7 +50,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
       ctx.body = bodyError.toString();
       return;
     // logs
-    case "LOGS":
+    case "LOGGING":
       const bodyLogs = new HtmlLogs(ctx, "../../" + EFileName.logs);
       ctx.type = returnFormats.html.type;
       ctx.body = bodyLogs.toString();

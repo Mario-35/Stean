@@ -52,7 +52,8 @@ export function addTest(infos: Iinfos): Iinfos {
     const verb = infos.api.split("}")[0].split("{")[1] || "get";
     _LOG.push(`   ${nbAdd()}. ${infos.api}\r [${verb ? verb.toUpperCase() : "GET"} ${infos.apiExample.http}](${proxy(true)}${encodeURI(infos.apiExample.http)}) ❌`);
     const tempDatas = infos.apiParamExample ? `<pre data-type="get" class="language-http" tabindex="0"><code class="language-http">${util.inspect(infos.apiParamExample, { breakLength: Infinity, showHidden: true, depth: Infinity})}</code></pre>` : "";
-    _HTML.push(`<tr> <td><span class="method meth-${verb}">${verb}</span></td> <td><div class="text"><p>${infos.api}</p></div> <a class="tests" href="${proxy(true)}${encodeURI(infos.apiExample.http)}" target="_blank">${infos.apiExample.http}</a> ${tempDatas} </td><td>✔️</td></tr>`); 
+    const link =  (verb === "get") ? `<a class="tests" href="${proxy(true)}${encodeURI(infos.apiExample.http)}" target="_blank">${infos.apiExample.http}</a>` : `<div class="text"><p>${infos.apiExample.http}</p></div>`; 
+    _HTML.push(`<tr> <td><span class="method meth-${verb}">${verb}</span></td> <td><div class="text"><p>${infos.api}</p></div> ${link} ${tempDatas} </td><td>✔️</td></tr>`); 
     _INDEX = _LOG.length - 1;
     if (infos.apiParamExample) _LOG.push(postDatas(infos.apiParamExample));
     writeLog(false);

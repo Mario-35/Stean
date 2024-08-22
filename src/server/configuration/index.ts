@@ -41,7 +41,6 @@ class Configuration {
       console.log = (data: any) => {};
       this.readConfigFile();
     } else  console.log = (data: any) => {
-      // this.writeLog(`${ new Error().stack?.split("\n")[2].trim().split("(")[0].split("at ")[1].trim() }`);
       if (data) this.writeLog(data);
     };
   }
