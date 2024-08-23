@@ -11,7 +11,7 @@
 
 import fs from "fs";
 import crypto from "crypto";
-import { isString } from "../helpers/tests";
+import { isString } from "../helpers/";
 import { APP_KEY } from "../constants";
 import { EFileName } from "../enums";
 

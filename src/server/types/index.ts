@@ -12,7 +12,7 @@ import { allEntitiesType, EExtensions, EOptions } from "../enums";
 import { Ientity } from "./entity";
 
 export { Icomon } from "./comon";
-export { IconfigFile } from "./configFile";
+export { Iservice } from "./configFile";
 export { IcsvColumn } from "./csvColumn";
 export { IcsvFile } from "./csvFile";
 export { IcsvImport } from "./csvImport";
@@ -24,7 +24,6 @@ export { Ilog } from "./log";
 export { ILoraDecodingResult } from "./loraDecodingResult";
 export { IodataContext } from "./odataContext";
 export { IpgQuery } from "./pgQuery";
-export { Iliteral } from "./literal";
 export { IqueryOptions } from "./queryOptions";
 export { IreturnFormat } from "./returnFormat";
 export { IreturnResult } from "./returnResult";

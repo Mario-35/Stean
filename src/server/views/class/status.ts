@@ -7,7 +7,7 @@
  */
 // onsole.log("!----------------------------------- HTML Views Status for API -----------------------------------!");
 
-import { serverConfig } from "../../configuration";
+import { config } from "../../configuration";
 import { EChar, EExtensions } from "../../enums";
 import { Iuser, koaContext } from "../../types";
 import { CoreHtmlView } from "./core";
@@ -19,7 +19,7 @@ export class Status extends CoreHtmlView {
     }
     
     public status(ctx: koaContext, user: Iuser) {        
-      const config = serverConfig.getConfigNameFromDatabase(user.database);  
+      const service = config.getConfigNameFromDatabase(user.database);  
       const url = `${this.ctx.decodedUrl.linkbase}/${this.ctx.config.apiVersion}`;  
       const sec = ctx.config.extensions.includes(EExtensions.users);     
       this._HTMLResult = [`<!DOCTYPE html>
@@ -30,7 +30,7 @@ export class Status extends CoreHtmlView {
                     <div class="login-html">
                         ${this.title("Status")}
                         <h3>Username : ${ user.username }</h3> 
-                        <h3>Hosting : ${user.database == "all" ? "all" : config ? serverConfig.getConfig(config).pg.host : "Not Found"}</h3>
+                        <h3>Hosting : ${user.database == "all" ? "all" : service ? config.getConfig(service).pg.host : "Not Found"}</h3>
                         <h3>Database : ${user.database}</h3>
                         <h3>Status : ${ user.id && user.id > 0 ? EChar.ok : !sec ? EChar.ok : EChar.notOk}</h3> 
                         <h3>Post : ${ user.canPost === true ? EChar.ok : !sec ? EChar.ok : EChar.notOk}</h3>

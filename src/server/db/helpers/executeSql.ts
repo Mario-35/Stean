@@ -7,36 +7,36 @@
  */
 // onsole.log("!----------------------------------- executeSql -----------------------------------!");
 
-import { serverConfig } from "../../configuration";
+import { config } from "../../configuration";
 import { log } from "../../log";
 import { isTest } from "../../helpers";
-import { IconfigFile, keyobj } from "../../types";
+import { Iservice, keyobj } from "../../types";
 
-const executeSqlOne = async (config: IconfigFile, query: string): Promise<object> => {
-    serverConfig.writeLog(log.query(query))
+const executeSqlOne = async (service: Iservice , query: string): Promise<object> => {
+    config.writeLog(log.query(query))
     return new Promise(async function (resolve, reject) {
-        await serverConfig.connection(config.name).unsafe(query).then((res: object) => {                            
+        await config.connection(service.name).unsafe(query).then((res: object) => {                            
             resolve(res);
         }).catch((err: Error) => {
-            if (!isTest() && +err["code" as keyobj] === 23505) serverConfig.writeLog(log.queryError(query, err));
+            if (!isTest() && +err["code" as keyobj] === 23505) config.writeLog(log.queryError(query, err));
             reject(err);
         });
     });
 };
 
-const executeSqlMulti = async (config: IconfigFile, query: string[]): Promise<object> => {
-    serverConfig.writeLog(log.query(query));
+const executeSqlMulti = async (service: Iservice , query: string[]): Promise<object> => {
+    config.writeLog(log.query(query));
     return new Promise(async function (resolve, reject) {
-        await serverConfig.connection(config.name).begin(sql => query.map((e: string) => sql.unsafe(e)))
+        await config.connection(service.name).begin(sql => query.map((e: string) => sql.unsafe(e)))
         .then((res: object) => {                            
             resolve(res);
         }).catch((err: Error) => {
-            if (!isTest() && +err["code" as keyobj] === 23505) serverConfig.writeLog(log.queryError(query, err));
+            if (!isTest() && +err["code" as keyobj] === 23505) config.writeLog(log.queryError(query, err));
             reject(err);
         });
     });
 };
 
-export const executeSql = async (config: IconfigFile, query: string | string[]): Promise<object> => typeof query === "string" 
-    ? executeSqlOne(config, query) 
-    : executeSqlMulti(config, query);
+export const executeSql = async (service: Iservice , query: string | string[]): Promise<object> => typeof query === "string" 
+    ? executeSqlOne(service, query) 
+    : executeSqlMulti(service, query);

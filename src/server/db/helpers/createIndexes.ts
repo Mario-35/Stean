@@ -7,7 +7,7 @@
  */
 // onsole.log("!----------------------------------- createIndexes -----------------------------------!");
 
-import { serverConfig } from "../../configuration";
+import { config } from "../../configuration";
 import { EChar, EExtensions } from "../../enums";
 import { asyncForEach } from "../../helpers";
 import { log } from "../../log";
@@ -16,7 +16,7 @@ import { log } from "../../log";
 export const createIndexes = (name: string): void => {
     const exe = async (name: string, queries: string[]): Promise<boolean> => {
         await asyncForEach( queries, async (query: string) => {
-          await serverConfig
+          await config
             .connection(name)
             .unsafe(query)
             .catch((error: Error) => {
@@ -49,7 +49,7 @@ export const createIndexes = (name: string): void => {
         FROM datas where "datastream".id = datas.id`
     ] 
 
-    if (serverConfig.getConfig(name).extensions.includes(EExtensions.multiDatastream)) {
+    if (config.getConfig(name).extensions.includes(EExtensions.multiDatastream)) {
         sqls.push(`WITH multidatastreams AS (
                 select distinct "multidatastream_id" AS id from observation
             ),

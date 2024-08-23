@@ -12,7 +12,7 @@ import { typeExtensions, typeOptions } from ".";
 import { EVersion } from "../enums";
 import { IdbConnection } from "./dbConnection";
 
-export interface IconfigFile {
+export interface Iservice {
     name:           string; // name of the config file
     key?:           string; // key for crypto
     ports?:         {

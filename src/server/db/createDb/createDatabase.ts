@@ -8,7 +8,7 @@
 // onsole.log("!----------------------------------- createSTDB -----------------------------------!");
 
 import { createTable, createUser } from "../helpers";
-import { serverConfig } from "../../configuration";
+import { config } from "../../configuration";
 import { addDoubleQuotes, addSimpleQuotes, asyncForEach } from "../../helpers";
 import { _RIGHTS } from "../constants";
 import { IKeyString } from "../../types";
@@ -21,9 +21,9 @@ import { createRole } from "../helpers/createRole";
 export const createDatabase = async (configName: string): Promise<IKeyString> => {
   console.log(log.debug_head("createDatabase", configName));
   // init result
-  const config = serverConfig.getConfig(configName).pg;
-  const returnValue: IKeyString = { "Start create Database": config.database };
-  const adminConnection = serverConfig.adminConnection();
+  const servicePg = config.getConfig(configName).pg;
+  const returnValue: IKeyString = { "Start create Database": servicePg.database };
+  const adminConnection = config.adminConnection();
   // Test connection Admin
   if (!adminConnection) {
     returnValue["DROP Error"] = "No Admin connection";
@@ -31,20 +31,20 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
   }
 
   // create blank DATABASE
-  await adminConnection.unsafe(`CREATE DATABASE ${config.database}`)
+  await adminConnection.unsafe(`CREATE DATABASE ${servicePg.database}`)
     .then(async () => {
-      returnValue[`Create Database`] = `${config.database} ${EChar.ok}`;
+      returnValue[`Create Database`] = `${servicePg.database} ${EChar.ok}`;
       // create USER if not exist
-      await adminConnection.unsafe(`SELECT COUNT(*) FROM pg_user WHERE usename = ${addSimpleQuotes(config.user)};`)
+      await adminConnection.unsafe(`SELECT COUNT(*) FROM pg_user WHERE usename = ${addSimpleQuotes(servicePg.user)};`)
         .then(async (res: Record<string, any>) => {
           if (res[0].count == 0) {            
-            returnValue[`CREATE ROLE ${config.user}`] = await adminConnection.unsafe(`CREATE ROLE ${config.user} WITH PASSWORD ${addSimpleQuotes(config.password)} ${_RIGHTS}`)
+            returnValue[`CREATE ROLE ${servicePg.user}`] = await adminConnection.unsafe(`CREATE ROLE ${servicePg.user} WITH PASSWORD ${addSimpleQuotes(servicePg.password)} ${_RIGHTS}`)
               .then(() => EChar.ok)
               .catch((err: Error) => err.message);
           } else {
-            await adminConnection.unsafe(`ALTER ROLE ${config.user} WITH PASSWORD ${addSimpleQuotes(config.password)}  ${_RIGHTS}`)
+            await adminConnection.unsafe(`ALTER ROLE ${servicePg.user} WITH PASSWORD ${addSimpleQuotes(servicePg.password)}  ${_RIGHTS}`)
               .then(() => {
-                returnValue[`Create/Alter ROLE`] = `${config.user} ${EChar.ok}`;
+                returnValue[`Create/Alter ROLE`] = `${servicePg.user} ${EChar.ok}`;
               })
               .catch((error: Error) => {
                 console.log(error);
@@ -55,7 +55,7 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
       console.log(error);
     });
 
-    const dbConnection = serverConfig.connection(configName);
+    const dbConnection = config.connection(configName);
     if (!dbConnection) {
       returnValue["DROP Error"] = `No DB connection ${EChar.notOk}`;
       return returnValue;
@@ -86,7 +86,7 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
   // loop to create each table
   await asyncForEach( triggers(configName), async (query: string) => {
     const name = query.split(" */")[0].split("/*")[1].trim();
-    await serverConfig.connection(configName).unsafe(query)
+    await config.connection(configName).unsafe(query)
       .then(() => {
         log.create(name, EChar.ok);
       }).catch((error: Error) => {
@@ -97,7 +97,7 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
   );
 
   // If only numeric extension
-  if ( serverConfig.getConfig(configName).extensions.includes( EExtensions.highPrecision ) ) {
+  if ( config.getConfig(configName).extensions.includes( EExtensions.highPrecision ) ) {
     await dbConnection.unsafe(`ALTER TABLE ${addDoubleQuotes(DB.Observations.table)} ALTER COLUMN 'result' TYPE float4 USING null;`)
       .catch((error: Error) => {
         console.log(error);
@@ -110,15 +110,15 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
       });
   }
 
-  returnValue[`Create Role`] = await createRole(serverConfig.getConfig(configName))
+  returnValue[`Create Role`] = await createRole(config.getConfig(configName))
     .then(() => EChar.ok)
     .catch((err: Error) => err.message);
 
-  returnValue[`Create user`] = await createUser(serverConfig.getConfig(configName))
+  returnValue[`Create user`] = await createUser(config.getConfig(configName))
     .then(() => EChar.ok)
     .catch((err: Error) => err.message);
 
-  await dbConnection.unsafe(`SELECT COUNT(*) FROM pg_user WHERE usename = ${addSimpleQuotes(config.user)};`)
+  await dbConnection.unsafe(`SELECT COUNT(*) FROM pg_user WHERE usename = ${addSimpleQuotes(servicePg.user)};`)
     .then(() => { returnValue["ALL finished ..."] = EChar.ok; })
     .catch((err: Error) => err.message);
     

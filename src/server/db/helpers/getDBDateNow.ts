@@ -8,5 +8,5 @@
 // onsole.log("!----------------------------------- getDBDateNow -----------------------------------!");
 
 import { executeSqlValues } from ".";
-import { IconfigFile } from "../../types";
-export const getDBDateNow = async ( config: IconfigFile ): Promise<string> => await executeSqlValues(config, "SELECT current_timestamp;").then((res: Record<string, any>) => res[0]);
+import { Iservice } from "../../types";
+export const getDBDateNow = async ( service: Iservice  ): Promise<string> => await executeSqlValues(service, "SELECT current_timestamp;").then((res: Record<string, any>) => res[0]);

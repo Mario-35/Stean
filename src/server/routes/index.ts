@@ -14,7 +14,7 @@ import { EExtensions, EHttpCode } from "../enums";
 import { createBearerToken, getUserId } from "../helpers";
 import { decodeUrl, firstInstall } from "./helper";
 import { errors } from "../messages";
-import { serverConfig } from "../configuration";
+import { config } from "../configuration";
 import { models } from "../models";
 export { unProtectedRoutes } from "./unProtected";
 export { protectedRoutes } from "./protected";
@@ -33,7 +33,7 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
  
   if (!decodedUrl) {
     // Get all infos services
-    if (ctx.path.toLocaleUpperCase() === "/INFOS") ctx.body = serverConfig.getInfosForAll(ctx);
+    if (ctx.path.toLocaleUpperCase() === "/INFOS") ctx.body = config.getInfosForAll(ctx);
     return;
   };
   
@@ -43,7 +43,7 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
 
   if (!decodedUrl.service) throw new Error(errors.noNameIdentified);
   if (decodedUrl.service && decodedUrl.configName) 
-    ctx.config = serverConfig.getConfig(decodedUrl.configName);
+    ctx.config = config.getConfig(decodedUrl.configName);
     else return;
 
   // forcing post loras with different version IT'S POSSIBLE BECAUSE COLUMN ARE THE SAME FOR ALL VERSION

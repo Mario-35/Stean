@@ -15,7 +15,7 @@ import * as entities from "../entities/index";
 import { returnFormats } from "../../helpers";
 import { createReadStream } from 'fs';
 import { addAbortSignal } from 'stream';
-import { serverConfig } from "../../configuration";
+import { config } from "../../configuration";
 import { log } from "../../log";
 
 export class CreateFile extends Common {
@@ -103,7 +103,7 @@ export class CreateFile extends Common {
         ${cols}, 
         CONSTRAINT ${paramsFile.tempTable}_pkey PRIMARY KEY (id));`;
         await executeSqlValues(ctx.config, createTable);
-      const writable = serverConfig.connection(ctx.config.name).unsafe(`COPY ${paramsFile.tempTable}  (${headers.join( "," )}) FROM STDIN WITH(FORMAT csv, DELIMITER ';'${ paramsFile.header })`).writable();
+      const writable = config.connection(ctx.config.name).unsafe(`COPY ${paramsFile.tempTable}  (${headers.join( "," )}) FROM STDIN WITH(FORMAT csv, DELIMITER ';'${ paramsFile.header })`).writable();
       return await new Promise<string | undefined>(async (resolve, reject) => {
       
       readable
@@ -117,7 +117,7 @@ export class CreateFile extends Common {
                     )}', '2021-09-17T14:56:36+02:00', '2021-09-17T14:56:36+02:00', json_build_object('value',ROW_TO_JSON(p)) FROM (SELECT * FROM ${
                       paramsFile.tempTable
                     }) AS p`;
-          await serverConfig.connection(this.ctx.config.name).unsafe(sql);          
+          await config.connection(this.ctx.config.name).unsafe(sql);          
           resolve(returnValue["body"]);
         })
         .on('error', (err) => {

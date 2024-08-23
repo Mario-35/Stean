@@ -9,7 +9,7 @@
 
 import { addToStrings, ADMIN, APP_NAME, APP_VERSION, color, DEFAULT_DB, NODE_ENV, setReady, TEST, _DEBUG } from "../constants";
 import { asyncForEach, createTunnel, decrypt, encrypt, isProduction, isTest, logToHtml, } from "../helpers";
-import { IconfigFile, IdbConnection, IserviceInfos, koaContext, keyobj } from "../types";
+import { Iservice, IdbConnection, IserviceInfos, koaContext, keyobj } from "../types";
 import { errors, infos, msg } from "../messages";
 import { createIndexes, createService} from "../db/helpers";
 import { app } from "..";
@@ -23,24 +23,25 @@ import { createDatabase, testDatas } from "../db/createDb";
 import { userAccess } from "../db/dataAccess";
 import path from "path";
 import { formatconfigFile, testDbExists, validJSONConfig } from "./helpers";
-import { MqttSerer } from "../mqtt";
+import { MqttServer } from "../mqtt";
 
 // class to logCreate configs environements
 class Configuration {
-  static configs: { [key: string]: IconfigFile } = {};
+  static services: { [key: string]: Iservice } = {};
   static filePath: string;
-  static mqttSerer: MqttSerer
+  static MqttServer: MqttServer;
   static queries: { [key: string]: string[] } = {};
   public logFile = fs.createWriteStream(path.resolve(__dirname, "../", EFileName.logs), {flags : 'w'});
-  static listeningPorts: number[] = [];
+  static listenPorts: number[] = [];
   constructor() {
     const file: fs.PathOrFileDescriptor = __dirname + `/${EFileName.config}`;
     Configuration.filePath = file.toString();
     // override console log important in production build will remove all console.log
     if (isTest()) {
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       console.log = (data: any) => {};
       this.readConfigFile();
-    } else  console.log = (data: any) => {
+    } else console.log = (data: any) => {
       if (data) this.writeLog(data);
     };
   }
@@ -54,9 +55,9 @@ class Configuration {
   writeLog(input: any) {
     if (input) {
       process.stdout.write(input + "\n");
-      if (serverConfig && serverConfig.logFile) serverConfig.logFile.write(logToHtml(input));
+      if (config && config.logFile) config.logFile.write(logToHtml(input));
     }
-  };
+  }
   
   // Read string (or default configuration file) as configuration file
   public readConfigFile(input?: string) {
@@ -65,19 +66,19 @@ class Configuration {
     try {
       // load File
       const fileContent = input || fs.readFileSync(Configuration.filePath, "utf8");
-      if (fileContent.trim() === "")  {
+      if (fileContent.trim() === "") {
         this.writeLog(log.error(msg(errors.fileEmpty, Configuration.filePath), Configuration.filePath));
         process.exit(111);      
       }
       // decrypt file
-      Configuration.configs = JSON.parse(decrypt(fileContent));
-      if (validJSONConfig(Configuration.configs)) {
+      Configuration.services = JSON.parse(decrypt(fileContent));
+      if (validJSONConfig(Configuration.services)) {
         if (isTest()) {
-          Configuration.configs[ADMIN] = this.formatConfig(ADMIN);
-          Configuration.configs[TEST] = this.formatConfig(testDatas["create"]);
+          Configuration.services[ADMIN] = this.formatConfig(ADMIN);
+          Configuration.services[TEST] = this.formatConfig(testDatas["create"]);
         } else {
-          Object.keys(Configuration.configs).forEach((element: string) => {
-            Configuration.configs[element] = this.formatConfig(element);
+          Object.keys(Configuration.services).forEach((element: string) => {
+            Configuration.services[element] = this.formatConfig(element);
           });
         }
       } else {
@@ -94,15 +95,15 @@ class Configuration {
 
 
   public defaultHttp() {
-    return Configuration.configs[ADMIN] && Configuration.configs[ADMIN].ports ? Configuration.configs[ADMIN].ports?.http || 8029 : 8029;
+    return Configuration.services[ADMIN] && Configuration.services[ADMIN].ports ? Configuration.services[ADMIN].ports?.http || 8029 : 8029;
   }
 
   public initMqtt() {
-    Configuration.mqttSerer = new MqttSerer({wsPort : Configuration.configs[ADMIN].ports?.ws || 1883, tcpPort  : Configuration.configs[ADMIN].ports?.tcp || 9000});
+    Configuration.MqttServer = new MqttServer({wsPort : Configuration.services[ADMIN].ports?.ws || 1883, tcpPort  : Configuration.services[ADMIN].ports?.tcp || 9000});
   }
 
   getBrokerId() {
-    return Configuration.mqttSerer.broker.id 
+    return Configuration.MqttServer.broker.id; 
   }
 
   // verify if configuration file Exist
@@ -111,10 +112,10 @@ class Configuration {
   }
 
   // return infos routes
-  getInfos = (ctx: koaContext, name: string): IserviceInfos  => {
+  getInfos = (ctx: koaContext, name: string): IserviceInfos => {
     const protocol:string = ctx.request.headers["x-forwarded-proto"]
       ? ctx.request.headers["x-forwarded-proto"].toString()
-      : Configuration.configs[name].options.includes(EOptions.forceHttps)
+      : Configuration.services[name].options.includes(EOptions.forceHttps)
         ? "https"
         : ctx.protocol;
         
@@ -127,8 +128,8 @@ class Configuration {
           : "";
 
     // make rootName
-    if (!linkBase.includes(name)) linkBase +=  "/" + name;
-    const version = Configuration.configs[name].apiVersion;
+    if (!linkBase.includes(name)) linkBase += "/" + name;
+    const version = Configuration.services[name].apiVersion;
     return {
       protocol: protocol,
       linkBase: linkBase,
@@ -136,34 +137,34 @@ class Configuration {
       root : process.env.NODE_ENV?.trim() === "test" ? `proxy/${version}` : `${linkBase}/${version}`,
       model : `https://app.diagrams.net/?lightbox=1&edit=_blank#U${linkBase}/${version}/draw`
     };
-  }
+  };
 
   // return infos routes for all services
   public getInfosForAll(ctx: koaContext): { [key: string]: IserviceInfos } {
-        const result:Record<string, any>  = {};    
+        const result:Record<string, any> = {};    
     this.getConfigs().forEach((conf: string) => {
-      result[conf] = this.getInfos(ctx, conf)
+      result[conf] = this.getInfos(ctx, conf);
     });
     return result;
   }
 
   public isConfig(name: string) {
-    return Configuration.configs.hasOwnProperty(name)
+    return Configuration.services.hasOwnProperty(name);
   }
 
   public getConfig(name: string) {
-    return Configuration.configs[name];
+    return Configuration.services[name];
   }
 
   public getConfigs() {
-    return Object.keys(Configuration.configs).filter(e => e !== ADMIN);
+    return Object.keys(Configuration.services).filter(e => e !== ADMIN);
   }
 
   // Write an encrypt config file in json file
   writeConfig(): boolean {
     this.writeLog(log.message("Write config", Configuration.filePath));
-    const result: Record<string, any>  = {};
-    Object.entries(Configuration.configs).forEach(([k, v]) => {
+    const result: Record<string, any> = {};
+    Object.entries(Configuration.services).forEach(([k, v]) => {
       if (k !== TEST) result[k] = Object.keys(v).filter(e => !e.startsWith("_")) .reduce((obj, key) => { obj[key as keyobj] = v[key as keyobj]; return obj; }, {} );
     });
     // in some case of crash config is blank so prevent to overrite it
@@ -185,7 +186,7 @@ class Configuration {
 
   async executeMultipleQueries(configName: string, queries: string[], infos: string):Promise<boolean> {
     await asyncForEach( queries, async (query: string) => {
-      await serverConfig
+      await config
         .connection(configName)
         .unsafe(query)
         .catch((error: Error) => {
@@ -220,13 +221,13 @@ class Configuration {
   
   // return the connection
   public connection(name: string): postgres.Sql<Record<string, unknown>> {    
-    if (!Configuration.configs[name]._connection) this.createDbConnectionFromConfigName(name);
-    return Configuration.configs[name]._connection || this.createDbConnection(Configuration.configs[name].pg);
+    if (!Configuration.services[name]._connection) this.createDbConnectionFromConfigName(name);
+    return Configuration.services[name]._connection || this.createDbConnection(Configuration.services[name].pg);
   }
   
   // return postgres.js connection with ADMIN rights
   public adminConnection(): postgres.Sql<Record<string, unknown>> {
-    const input = Configuration.configs[ADMIN].pg;    
+    const input = Configuration.services[ADMIN].pg;    
     return postgres(`postgres://${input.user}:${input.password}@${input.host}:${input.port || 5432}/${DEFAULT_DB}`,
       {
         debug: _DEBUG,          
@@ -277,8 +278,8 @@ class Configuration {
   }
   
   public createDbConnectionFromConfigName(input: string): postgres.Sql<Record<string, unknown>> {
-    const temp = this.createDbConnection(Configuration.configs[input].pg);
-    Configuration.configs[input]._connection = temp;
+    const temp = this.createDbConnection(Configuration.services[input].pg);
+    Configuration.services[input]._connection = temp;
     return temp;
   }
 
@@ -293,7 +294,7 @@ class Configuration {
   async relogCreateTrigger(configName: string): Promise<boolean> {
     await asyncForEach( triggers(configName), async (query: string) => {
       const name = query.split(" */")[0].split("/*")[1].trim();
-      await serverConfig.connection(configName).unsafe(query).then(() => {
+      await config.connection(configName).unsafe(query).then(() => {
         log.create(`[${configName}] ${name}`, EChar.ok);
       }).catch((error: Error) => {
         console.log(error);
@@ -308,7 +309,7 @@ class Configuration {
     // Updates database after init
     if ( update && update[EUpdate.afterAll] && Object.entries(update[EUpdate.afterAll]).length > 0 ) {
       this.clearQueries();
-      Object.keys(Configuration.configs)
+      Object.keys(Configuration.services)
         .filter((e) => e != ADMIN)
         .forEach(async (connectName: string) => {
           update[EUpdate.afterAll].forEach((operation: string) => { this.addToQueries(connectName, operation); });
@@ -318,16 +319,16 @@ class Configuration {
     
     if (update && update[EUpdate.decoders] && Object.entries(update[EUpdate.decoders]).length > 0) {
       this.clearQueries();
-      Object.keys(Configuration.configs)
-        .filter( (e) => e != ADMIN && Configuration.configs[e].extensions.includes(EExtensions.lora) )
+      Object.keys(Configuration.services)
+        .filter( (e) => e != ADMIN && Configuration.services[e].extensions.includes(EExtensions.lora) )
         .forEach((connectName: string) => {
-          if(Configuration.configs[connectName].extensions.includes(EExtensions.lora)) {
-            const decs:string[] = []
+          if(Configuration.services[connectName].extensions.includes(EExtensions.lora)) {
+            const decs:string[] = [];
             Object.keys(update[EUpdate.decoders]).forEach(async (name: string) => {
               const hash = this.hashCode(update[EUpdate.decoders as keyobj][name]);
               decs.push(name);            
               const sql = `UPDATE decoder SET code='${update[EUpdate.decoders as keyobj][name]}', hash = '${hash}' WHERE name = '${name}' AND hash <> '${hash}' `;
-              await serverConfig
+              await config
               .connection(connectName)
               .unsafe(sql)
               .catch((error: Error) => {
@@ -343,25 +344,25 @@ class Configuration {
   }
 
  addListening(port: number, message: string) {
-  if (Configuration.listeningPorts.includes(port)) this.messageListen(`ADD ${message}`, String(port));
+  if (Configuration.listenPorts.includes(port)) this.messageListen(`ADD ${message}`, String(port));
   else app.listen(port, () => {
-      Configuration.listeningPorts.push(port);
+      Configuration.listenPorts.push(port);
       this.messageListen(message, String(port));
     });
   }
   // initialisation serve NOT IN TEST
   async init(input?: string): Promise<boolean> {
-    if (this.configFileExist()  === true || input) {
+    if (this.configFileExist() === true || input) {
       this.readConfigFile(input);
       console.log(log.message(infos.configuration, infos.loaded + " " + EChar.ok));    
       let status = true;
       await asyncForEach(
         // Start connection ALL entries in config file
-        Object.keys(Configuration.configs).filter(e => e.toUpperCase() !== TEST.toUpperCase()),
+        Object.keys(Configuration.services).filter(e => e.toUpperCase() !== TEST.toUpperCase()),
         async (key: string) => {
           try {
-            if (Configuration.configs[key].pg.tunnel) {
-              const test = await this.connectionTunnel(Configuration.configs[key].pg);
+            if (Configuration.services[key].pg.tunnel) {
+              const test = await this.connectionTunnel(Configuration.services[key].pg);
               if(test === true) await this.addToServer(key);
             } else await this.addToServer(key);
           } catch (error) {
@@ -377,8 +378,8 @@ class Configuration {
         this.afterAll();
       }           
       if(!isTest()) {
-        if( await testDbExists(Configuration.configs[ADMIN].pg, TEST) ) 
-          Configuration.configs[TEST] = this.formatConfig(testDatas["create"]);
+        if( await testDbExists(Configuration.services[ADMIN].pg, TEST) ) 
+          Configuration.services[TEST] = this.formatConfig(testDatas["create"]);
         else await createService(testDatas);
         this.writeLog(log._head(TEST));
         this.messageListen(TEST, String(this.defaultHttp()) , true);
@@ -388,7 +389,7 @@ class Configuration {
       return status;
     // no configuration file so First install    
     } else {
-        console.log(log.message("file", Configuration.filePath  + " " + EChar.notOk));
+        console.log(log.message("file", Configuration.filePath + " " + EChar.notOk));
         this.addListening(this.defaultHttp(), "First launch");
         return true;
     }
@@ -397,37 +398,36 @@ class Configuration {
   // return config name from config name
   public getConfigNameFromDatabase(input: string): string | undefined {
     if (input !== "all") {
-      const aliasName = Object.keys(Configuration.configs).filter( (configName: string) => Configuration.configs[configName].pg.database === input )[0];
+      const aliasName = Object.keys(Configuration.services).filter( (configName: string) => Configuration.services[configName].pg.database === input )[0];
       if (aliasName) return aliasName;
       throw new Error(`No configuration found for ${input} name`);
     }
   }
 
   public getConfigForExcelExport = (name: string): object=> {
-    const result: Record<string, any> = Object.assign({}, Configuration.configs[name].pg);
+    const result: Record<string, any> = Object.assign({}, Configuration.services[name].pg);
     result["password"] = "*****";
     ["name", "apiVersion", "port", "date_format", "webSite", "nb_page", "forceHttps", "highPrecision", "canDrop", "logFile", "alias", "extensions"].forEach(e => {
-      result[e]= Configuration.configs[name][e as keyobj];
+      result[e]= Configuration.services[name][e as keyobj];
     }); 
     return result;
   };
   
   public getConfigNameFromName = (name: string): string | undefined => {
     if (name) {
-      if (Object.keys(Configuration.configs).includes(name)) return name;
-      Object.keys(Configuration.configs).forEach((configName: string) => {
-        if (Configuration.configs[configName].alias.includes(name)) return configName;
+      if (Object.keys(Configuration.services).includes(name)) return name;
+      Object.keys(Configuration.services).forEach((configName: string) => {
+        if (Configuration.services[configName].alias.includes(name)) return configName;
       });
     }
   };
 
-
   
-  // return IconfigFile Formated for IconfigFile object or name found in json file
-  private formatConfig(input: object | string, name?: string): IconfigFile {
+  // return Iservice Formated for Iservice object or name found in json file
+  private formatConfig(input: object | string, name?: string): Iservice {
     if (typeof input === "string") {
       name = input;
-      input = Configuration.configs[input];
+      input = Configuration.services[input];
     }
     const goodDbName = name
     ? name
@@ -437,10 +437,10 @@ class Configuration {
   }
 
   // Add config to configuration file
-  public async addConfig(addJson: object): Promise<IconfigFile | undefined> {
+  public async addConfig(addJson: object): Promise<Iservice | undefined> {
     try {
       const addedConfig = this.formatConfig(addJson);      
-      Configuration.configs[addedConfig.name] = addedConfig;
+      Configuration.services[addedConfig.name] = addedConfig;
       if(!isTest()) {
         await this.addToServer(addedConfig.name);
         this.writeConfig();
@@ -458,10 +458,10 @@ class Configuration {
       .then(async (res: boolean) => {
         if (res === true) {
           await userAccess.post(key, {
-            username: Configuration.configs[key].pg.user,
+            username: Configuration.services[key].pg.user,
             email: "steandefault@email.com",
-            password: Configuration.configs[key].pg.password,
-            database: Configuration.configs[key].pg.database,
+            password: Configuration.services[key].pg.password,
+            database: Configuration.services[key].pg.database,
             canPost: true,
             canDelete: true,
             canCreateUser: true,
@@ -476,7 +476,7 @@ class Configuration {
         return res;
       })
       .catch((error: Error) => {
-        this.writeLog(log.error(errors.unableFindCreate, Configuration.configs[key].pg.database));
+        this.writeLog(log.error(errors.unableFindCreate, Configuration.services[key].pg.database));
         console.log(error);
         process.exit(111);
       });
@@ -484,14 +484,14 @@ class Configuration {
 
   // test in boolean exist if not and logCreate is true then logCreate DB
   private async tryToCreateDB(connectName: string): Promise<boolean> {
-    this.writeLog(log.booting("Try create Database", Configuration.configs[connectName].pg.database));
+    this.writeLog(log.booting("Try create Database", Configuration.services[connectName].pg.database));
     return await createDatabase(connectName)
       .then(async () => {
-        this.writeLog(log.booting(`${infos.db} ${infos.create} [${Configuration.configs[connectName].pg.database}]`, EChar.ok ));
+        this.writeLog(log.booting(`${infos.db} ${infos.create} [${Configuration.services[connectName].pg.database}]`, EChar.ok ));
         this.createDbConnectionFromConfigName(connectName);
         return true;
       })
-      .catch((err: Error) => {;        
+      .catch((err: Error) => {        
         this.writeLog(log.error(msg(infos.create, infos.db), err.message));
         return false;
       });
@@ -499,7 +499,7 @@ class Configuration {
 
   // verify if database exist and if create is true create database if not exist.
   private async isServiceExist(connectName: string, create: boolean): Promise<boolean> {
-    this.writeLog(log.booting(infos.dbExist, Configuration.configs[connectName].pg.database));
+    this.writeLog(log.booting(infos.dbExist, Configuration.services[connectName].pg.database));
     return await this.connection(connectName)`select 1+1 AS result`.then(async () => {
       const listTempTables = await this.connection(connectName)`SELECT array_agg(table_name) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE 'temp%';`;
       const tables = listTempTables[0]["array_agg"];
@@ -517,7 +517,7 @@ class Configuration {
           if (update[EUpdate.beforeAll] && Object.entries(update[EUpdate.beforeAll]).length > 0 ) {
             console.log(log._head(EUpdate.beforeAll));
             try {              
-              Object.keys(Configuration.configs)
+              Object.keys(Configuration.services)
                 .filter((e) => ![ADMIN, TEST].includes(e))
                 .forEach((connectName: string) => {
                   update[EUpdate.beforeAll].forEach((operation: string) => {
@@ -542,12 +542,12 @@ class Configuration {
           if (!isTest()) return await this.tryToCreateDB(connectName);
           // Database does not exist
         } else if (error["code" as keyobj] === "3D000" && create == true) {
-          console.log(log._infos(msg(infos.tryCreate, infos.db), Configuration.configs[connectName].pg.database ));
+          console.log(log._infos(msg(infos.tryCreate, infos.db), Configuration.services[connectName].pg.database ));
           if (connectName !== TEST) return await this.tryToCreateDB(connectName);
-        } else  console.log(error);
+        } else console.log(error);
         return false;
       });
   }
 }
 
-export const serverConfig = new Configuration();
+export const config = new Configuration();

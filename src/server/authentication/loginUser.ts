@@ -8,13 +8,13 @@
 // onsole.log("!----------------------------------- loginUser -----------------------------------!");
 
 import { createToken } from ".";
-import { serverConfig } from "../configuration";
+import { config } from "../configuration";
 import { EHttpCode } from "../enums";
 import { decrypt } from "../helpers";
 import { Iuser, koaContext } from "../types";
 
 const getUser = async (configName: string, username: string,  password: string): Promise<Iuser | undefined> => {
-  const query = await serverConfig.connection(configName)<Iuser[]>`SELECT * FROM "user" WHERE username = ${username} LIMIT 1`;
+  const query = await config.connection(configName)<Iuser[]>`SELECT * FROM "user" WHERE username = ${username} LIMIT 1`;
   if (query.length === 1) {  
     const user:Iuser = { ... query[0] } 
     if ( user && password.trim() === decrypt(user.password) ) {

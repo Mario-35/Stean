@@ -239,6 +239,52 @@ run_stean() {
     pm2 start $APIDEST/api/index.js
 }
 
+create_configuration() {
+    FILECFG=$APIDEST/api/configuration/configuration.json 
+    read -p "Enter the postgres host [localhost]: " host;
+    host=${host:-localhost}
+    read -p "Enter ADMIN postgres username [postgres]: " user;
+    user=${user:-postgres}
+    read -p "Enter ADMIN postgres password [postgres]: "$'\n' -s password;
+    password=${password:-postgres}
+    read -n 4 -p "Enter postgres port [5432]: " port;
+    port=${port:-5432}
+    read -n 4 -p "Enter http port [8029]: " http;
+    http=${http:-8029}
+    read -n 4 -p "Enter tcp port [9000]: " tcp;
+    tcp=${tcp:-9000}
+    read -n 4 -p "Enter ws port [1883]: " ws;
+    ws=${ws:-1883}
+    echo "{" > $FILECFG
+    echo "  \"admin\": {" >> $FILECFG
+    echo "      \"name\": \"admin\"," >> $FILECFG
+    echo "      \"ports\": {" >> $FILECFG
+    echo "          \"http\": $http," >> $FILECFG
+    echo "          \"tcp\": $tcp," >> $FILECFG
+    echo "          \"ws\": $ws" >> $FILECFG
+    echo "      }," >> $FILECFG
+    echo "      \"pg\": {" >> $FILECFG
+    echo "          \"host\": \"$host\"," >> $FILECFG
+    echo "          \"port\": $port," >> $FILECFG
+    echo "          \"user\": \"$user\"," >> $FILECFG
+    echo "          \"password\": \"$password\"," >> $FILECFG
+    echo "          \"database\": \"postgres\"," >> $FILECFG
+    echo "          \"retry\": 2" >> $FILECFG
+    echo "      }," >> $FILECFG
+    echo "      \"apiVersion\": \"v1.1\"," >> $FILECFG
+    echo "      \"date_format\": \"DD/MM/YYYY hh:mi:ss\"," >> $FILECFG
+    echo "      \"nb_page\": 200," >> $FILECFG
+    echo "      \"alias\": [" >> $FILECFG
+    echo "          \"\"" >> $FILECFG
+    echo "      ]," >> $FILECFG
+    echo "      \"extensions\": [" >> $FILECFG
+    echo "          \"base\"" >> $FILECFG
+    echo "      ]," >> $FILECFG
+    echo "      \"options\": []    " >> $FILECFG
+    echo "  }" >> $FILECFG
+    echo "}" >> $FILECFG
+}
+
 selectOption() {
     case "${options[${1}]}" in
         "Indicate path")
@@ -290,6 +336,12 @@ selectOption() {
             echo "└───────────────────────────────────────────────────────────────┘"         
             create_run          
             ;;
+        "Recreate run script")
+            echo "┌───────────────────────────────────────────────────────────────┐"
+            echo "│                      Recreate Run script                      │"
+            echo "└───────────────────────────────────────────────────────────────┘"         
+            create_run          
+            ;;            
         "Run stean")
             echo "┌───────────────────────────────────────────────────────────────┐"
             echo "│                           STEAN Run                           │"
@@ -310,8 +362,17 @@ selectOption() {
             sudo -i -u postgres psql -c "create extension postgis;"
             sudo -i -u postgres psql -c "SELECT PostGIS_version();"
             ;;
-        "Logs")
-            pm2 logs --lines 500
+        "Create configuration")
+            echo "┌───────────────────────────────────────────────────────────────┐"
+            echo "│                     create configuration                      │"
+            echo "└───────────────────────────────────────────────────────────────┘"
+            create_configuration
+            ;;            
+        "Decode configuration")
+            echo "┌───────────────────────────────────────────────────────────────┐"
+            echo "│                     Decode configuration                      │"
+            echo "└───────────────────────────────────────────────────────────────┘"
+            node ./api/configuration/decode.js >configuration.json
             ;;
         "Quit")
             exit
@@ -329,33 +390,35 @@ infos() {
     is_run
     # Dtermine options menu
     if [ -f $APIDEST/api/index.js ]; then
-        if [ -f $APIDEST/apiBak/index.js ]; then    
-            options=("Change path" "Update stean" "Back to previous" "Create run script" "action" "Logs" "Quit");
+            options=("Change path" "Update stean");
+            if [ -f $APIDEST/apiBak/index.js ]; then 
+                options+=("Back to previous");
+            fi
+            if [ -f $FILERUN ]; then
+                    options+=('Recreate run script')
+                else
+                    options+=('Create run script')
+            fi
+            if [[ "$ISRUN" == "000" ]]; then
+                    options+=('Run stean')
+                else
+                    options+=('Stop stean')
+            fi            
         else
-            options=("Change path" "Update stean" "Create run script" "action" "Logs" "Quit");
-        fi
-    else
-        if [ -f .steanpath ]; then
-            options=("Change path" "Install all" "Check postGis" "Quit")
-        else
-            echo -e "\e[31mNo path you have to indicate the path\e[0m"
-            options=("Indicate path" "Check postGis" "Quit")
-        fi
+            if [ -f .steanpath ]; then
+                    options=("Change path" "Install all")
+                else 
+                    options=("Indicate path")
+            fi
+            options+=('Check postGis')
     fi
 
-    if [ -f $FILERUN ]; then
-        options=("${options[@]/Create run script/Recreate run script}")
-    fi
-
-    if [[ "$ISRUN" == "000" ]]; 
-        then
-            options=("${options[@]/action/Run stean}")
-        else
-            options=("${options[@]/action/Stop stean}")
-    fi
-
-    
-
+    if [ -f $APIDEST/api/configuration/configuration.json ]; then
+            options+=('Decode configuration')
+        else 
+            options+=("Create configuration")
+    fi    
+    options+=('Quit')
     NBOPTIONS=${#options[@]};
     LM="$(($NBOPTIONS - 1))";
 }

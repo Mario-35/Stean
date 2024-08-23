@@ -9,7 +9,7 @@
 import { query, resourcePath } from "./parser/parser";
 import { Token } from "./parser/lexer";
 import { cleanUrl, returnFormats } from "../helpers";
-import { serverConfig } from "../configuration";
+import { config } from "../configuration";
 import { SqlOptions } from "./parser/sqlOptions";
 import { multiDatastreamKeys } from "../db/queries";
 import { RootPgVisitor } from "./visitor";
@@ -21,7 +21,7 @@ const doSomeWarkAfterCreateAst = async (input: RootPgVisitor, ctx: koaContext) =
   if (
     (input.returnFormat === returnFormats.csv && input.entity === "Observations" &&  input.parentEntity?.endsWith('atastreams') && input.parentId && <bigint>input.parentId > 0) ||
     (input.splitResult && input.splitResult[0].toUpperCase() == "ALL" && input.parentId && <bigint>input.parentId > 0) ) {
-    const temp = await serverConfig.connection(ctx.config.name).unsafe(`${multiDatastreamKeys(input.parentId)}`);
+    const temp = await config.connection(ctx.config.name).unsafe(`${multiDatastreamKeys(input.parentId)}`);
     input.splitResult = temp[0]["keys"];
   }
 };

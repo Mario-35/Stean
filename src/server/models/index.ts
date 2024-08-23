@@ -1,4 +1,4 @@
-import { serverConfig } from "../configuration";
+import { config } from "../configuration";
 import { ADMIN, TEST } from "../constants";
 import { log } from "../log";
 import { _STREAM } from "../db/constants";
@@ -7,7 +7,7 @@ import { asJson } from "../db/queries";
 import { EColumnType, EExtensions, EVersion, filterEntities } from "../enums";
 import { addDoubleQuotes, deepClone, isTest } from "../helpers";
 import { errors, msg } from "../messages";
-import { IconfigFile, Ientities, Ientity, IstreamInfos, koaContext } from "../types";
+import { Iservice, Ientities, Ientity, IstreamInfos, koaContext } from "../types";
 import fs from "fs";
 import conformance from "./conformance.json";
 import { FeatureOfInterest, Thing, Location, Config, CreateFile, CreateObservation, Datastream, Decoder, HistoricalLocation, HistoricalObservation, Log, Lora, MultiDatastream, MultiDatastreamObservedProperty, Observation, Sensor, User, LocationHistoricalLocation, ObservedProperty, ThingLocation } from "./entities";
@@ -87,7 +87,7 @@ class Models {
   }
   
   async getInfos(ctx: koaContext) {
-    const temp = serverConfig.getInfos(ctx, ctx.config.name)
+    const temp = config.getInfos(ctx, ctx.config.name)
     const result: Record<string, any> = {
       ... temp,
       ready : ctx.config._connection ? true : false,
@@ -121,17 +121,17 @@ class Models {
     return result;
   }
     // Get multiDatastream or Datastrems infos in one function
-  public async getStreamInfos(config: IconfigFile, input: Record<string, any> ): Promise<IstreamInfos | undefined> {
+  public async getStreamInfos(service: Iservice , input: Record<string, any> ): Promise<IstreamInfos | undefined> {
     const stream: _STREAM = input["Datastream"] ? "Datastream" : input["MultiDatastream"] ? "MultiDatastream" : undefined;
     if (!stream) return undefined;
-    const streamEntity = models.getEntityName(config, stream); 
+    const streamEntity = models.getEntityName(service, stream); 
     if (!streamEntity) return undefined;
     const foiId: bigint | undefined = input["FeaturesOfInterest"] ? input["FeaturesOfInterest"] : undefined;
-    const searchKey = input[models.DBFull(config)[streamEntity].name] || input[models.DBFull(config)[streamEntity].singular];
+    const searchKey = input[models.DBFull(service)[streamEntity].name] || input[models.DBFull(service)[streamEntity].singular];
     const streamId: string | undefined = isNaN(searchKey) ? searchKey["@iot.id"] : searchKey;
     if (streamId) {
-      const query = `SELECT "id", "observationType", "_default_foi" FROM ${addDoubleQuotes(models.DBFull(config)[streamEntity].table)} WHERE id = ${BigInt(streamId)} LIMIT 1`;
-      return executeSqlValues(config, asJson({ query: query, singular: true, strip: false, count: false }))
+      const query = `SELECT "id", "observationType", "_default_foi" FROM ${addDoubleQuotes(models.DBFull(service)[streamEntity].table)} WHERE id = ${BigInt(streamId)} LIMIT 1`;
+      return executeSqlValues(service, asJson({ query: query, singular: true, strip: false, count: false }))
         .then((res: object) => {        
           return res ? {
             type: stream,
@@ -187,48 +187,48 @@ class Models {
     return testVersion(nb);
   }
   
-  private filtering(config: IconfigFile) {    
-    return Object.fromEntries(Object.entries(Models.models[config.apiVersion]).filter(([, v]) => Object.keys(filterEntities(config.extensions)).includes(v.name))) as Ientities;
+  private filtering(service: Iservice ) {    
+    return Object.fromEntries(Object.entries(Models.models[service.apiVersion]).filter(([, v]) => Object.keys(filterEntities(service.extensions)).includes(v.name))) as Ientities;
   }
 
-  public version(config: IconfigFile): string {
-    if (config && config.apiVersion && testVersion(config.apiVersion)) return config.apiVersion;
-    throw new Error(msg(errors.wrongVersion, config.apiVersion));
+  public version(service: Iservice ): string {
+    if (service && service.apiVersion && testVersion(service.apiVersion)) return service.apiVersion;
+    throw new Error(msg(errors.wrongVersion, service.apiVersion));
   }
 
-  public filteredModelFromConfig(config: IconfigFile, ): Ientities {
-    if (testVersion(config.apiVersion) === false) this.createVersion(config.apiVersion);
-    return config.name === ADMIN ? this.DBAdmin(config) : this.filtering(config);
+  public filteredModelFromConfig(service: Iservice  ): Ientities {
+    if (testVersion(service.apiVersion) === false) this.createVersion(service.apiVersion);
+    return service.name === ADMIN ? this.DBAdmin(service) : this.filtering(service);
   }
   
-  public DBFull(config: IconfigFile | string): Ientities {
-    if (typeof config === "string") {
-      const nameConfig = serverConfig.getConfigNameFromName(config);
+  public DBFull(service: Iservice | string): Ientities {
+    if (typeof service === "string") {
+      const nameConfig = config.getConfigNameFromName(service);
       if (!nameConfig) throw new Error(errors.configName);
-      if (testVersion(serverConfig.getConfig(nameConfig).apiVersion) === false) this.createVersion(serverConfig.getConfig(nameConfig).apiVersion);
-      config = serverConfig.getConfig(nameConfig);
+      if (testVersion(config.getConfig(nameConfig).apiVersion) === false) this.createVersion(config.getConfig(nameConfig).apiVersion);
+      service = config.getConfig(nameConfig);
     }  
-    return Models.models[config.apiVersion];
+    return Models.models[service.apiVersion];
   }
   
-  public DBAdmin(config: IconfigFile):Ientities {
+  public DBAdmin(service: Iservice ):Ientities {
     const entities = Models.models[EVersion.v1_0];
     return Object.fromEntries(Object.entries(entities)) as Ientities;
 
     // return Object.fromEntries(Object.entries( Models.models[EVersion.v1_0]));
   } 
 
-  public isSingular(config: IconfigFile, input: string): boolean { 
+  public isSingular(service: Iservice , input: string): boolean { 
     if (config && input) {
-      const entityName = this.getEntityName(config, input); 
-      return entityName ? Models.models[config.apiVersion][entityName].singular == input : false; 
+      const entityName = this.getEntityName(service, input); 
+      return entityName ? Models.models[service.apiVersion][entityName].singular == input : false; 
     }          
     return false;
   }
 
-  public getEntityName(config: IconfigFile, search: string): string | undefined {
+  public getEntityName(service: Iservice , search: string): string | undefined {
     if (config && search) {        
-      const tempModel = Models.models[config.apiVersion];
+      const tempModel = Models.models[service.apiVersion];
       const testString: string | undefined = search
           .trim()
           .match(/[a-zA-Z_]/g)
@@ -246,31 +246,26 @@ class Models {
     }
   }
 
-  public getEntity = (config: IconfigFile, entity: Ientity | string): Ientity | undefined => {
+  public getEntity = (service: Iservice , entity: Ientity | string): Ientity | undefined => {
     if (config && entity) {
       if (typeof entity === "string") {
-        const entityName = this.getEntityName(config, entity.trim());
+        const entityName = this.getEntityName(service, entity.trim());
         if (!entityName) return;
         entity = entityName;
       } 
-      return (typeof entity === "string") ? Models.models[config.apiVersion][entity] : Models.models[config.apiVersion][entity.name];
+      return (typeof entity === "string") ? Models.models[service.apiVersion][entity] : Models.models[service.apiVersion][entity.name];
     }
   };
   
-  public getRelationColumnTable = (config: IconfigFile, entity: Ientity | string, test: string): EColumnType | undefined => {
+  public getRelationColumnTable = (service: Iservice , entity: Ientity | string, test: string): EColumnType | undefined => {
     if (config && entity) {
-      const tempEntity = this.getEntity(config, entity);
+      const tempEntity = this.getEntity(service, entity);
       if (tempEntity)
           return tempEntity.relations.hasOwnProperty(test)
           ? EColumnType.Relation
           : tempEntity.columns.hasOwnProperty(test)
               ? EColumnType.Column
               : undefined;
-          // return tempEntity.columns.hasOwnProperty(test)
-          // ? EColumnType.Column
-          // : tempEntity.columns.hasOwnProperty(test)
-          //     ? EColumnType.Relation
-          //     : undefined;
     }      
   };
 
@@ -282,9 +277,9 @@ class Models {
     return Object.keys(input.columns).filter((word) => !word.includes("_") && !word.includes("id")); 
   }
 
-  public isColumnType(config: IconfigFile, entity: Ientity | string, column: string , test: string): boolean {
+  public isColumnType(service: Iservice , entity: Ientity | string, column: string , test: string): boolean {
     if (config && entity) {
-      const tempEntity = this.getEntity(config, entity);
+      const tempEntity = this.getEntity(service, entity);
       return tempEntity && tempEntity.columns[column] ? (tempEntity.columns[column].type.toLowerCase() === test.toLowerCase()) : false;
     }
     return false;
@@ -357,7 +352,7 @@ class Models {
 
   public init() {    
     if (isTest()) {      
-      this.createVersion(serverConfig.getConfig(TEST).apiVersion);
+      this.createVersion(config.getConfig(TEST).apiVersion);
     }
   }
 }

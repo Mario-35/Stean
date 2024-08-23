@@ -20,21 +20,21 @@ import serve from "koa-static";
 import favicon from 'koa-favicon';
 import { constants } from "zlib";
 import { log } from "./log";
-import { serverConfig } from "./configuration";
+import { config } from "./configuration";
 import { models } from "./models";
 import { isTest, logToHtml } from "./helpers";
 import { RootPgVisitor } from "./odata/visitor";
 import { sqlStopDbName } from "./routes/helper";
 import { EChar } from "./enums";
 import { protectedRoutes, routerHandle, unProtectedRoutes } from "./routes/";
-import { IconfigFile, IdecodedUrl, Ientities, Ilog, IuserToken, koaContext } from "./types";
+import { Iservice, IdecodedUrl, Ientities, Ilog, IuserToken, koaContext } from "./types";
 import { HELMET_CONFIG, APP_KEY, APP_NAME, APP_VERSION, ADMIN } from "./constants";
 
 // Extend koa context 
 declare module "koa" {
   export interface DefaultContext {
     decodedUrl: IdecodedUrl;
-    config: IconfigFile;
+    service: Iservice ;
     odata: RootPgVisitor;
     datas: Record<string, any>;
     user: IuserToken;
@@ -75,7 +75,7 @@ if (!isTest())
     if(str.includes("/logs")) return;
     str = `[39m ${new Date().toLocaleString()}${str}`;
     process.stdout.write(str + "\n");
-    if (serverConfig.logFile) serverConfig.logFile.write(logToHtml(str));
+    if (config.logFile) config.logFile.write(logToHtml(str));
   }));
 
 // add json capabilities to KOA server
@@ -102,16 +102,16 @@ models.init();
 // Start server initialisaion
 export const server = isTest()
   // Tdd init
-  ? app.listen(serverConfig.getConfig(ADMIN).ports?.http || 8029, async () => {
-    await serverConfig
+  ? app.listen(config.getConfig(ADMIN).ports?.http || 8029, async () => {
+    await config
           .connection(ADMIN)`${sqlStopDbName('test')}`
           .then(async () => {
-            await serverConfig.connection(ADMIN)`DROP DATABASE IF EXISTS test`;
+            await config.connection(ADMIN)`DROP DATABASE IF EXISTS test`;
             process.stdout.write(`DROP DATABASE IF EXISTS test\n`);
           });
       console.log(log.message(`${APP_NAME} version : ${APP_VERSION}`, "ready " + EChar.ok));
     })
   // Production or dev init
-  : serverConfig.init();
+  : config.init();
   
   

@@ -8,7 +8,7 @@
 // onsole.log("!----------------------------------- entity Log -----------------------------------!");
 
 import { createEntity } from ".";
-import { IconfigFile, Ientity, IKeyBoolean } from "../../types";
+import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _text } from "./constants";
 import { addDoubleQuotes } from "../../helpers";
 import { _ID } from "../../db/constants";
@@ -20,7 +20,7 @@ export const Log:Ientity  = createEntity("Logs", {
     columns: {
       id: {
         create: _idBig,
-        alias(config: IconfigFile, test: IKeyBoolean) {
+        alias(service: Iservice , test: IKeyBoolean) {
            return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${addDoubleQuotes(_ID)}`: ''}` ;
         },
         type: "number",

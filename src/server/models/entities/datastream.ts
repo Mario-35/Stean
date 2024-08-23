@@ -9,7 +9,7 @@
 
 import { createEntity } from ".";
 import { EDatesType, EObservationType, ERelations } from "../../enums";
-import { IconfigFile, Ientity, IKeyBoolean } from "../../types";
+import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _idRel, _text, _tz } from "./constants";
 import { addDoubleQuotes } from "../../helpers";
 import { _ID } from "../../db/constants";
@@ -21,7 +21,7 @@ export const Datastream:Ientity  = createEntity("Datastreams", {
     columns: {
       id: {
         create: _idBig,
-        alias(config: IconfigFile, test: IKeyBoolean) {
+        alias(service: Iservice , test: IKeyBoolean) {
            return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${addDoubleQuotes(_ID)}`: ''}` ;
         },
         type: "number",
@@ -59,14 +59,14 @@ export const Datastream:Ientity  = createEntity("Datastreams", {
       },
       phenomenonTime: {
         create: "",
-        alias(config: IconfigFile, test: IKeyBoolean | undefined) {          
+        alias(service: Iservice , test: IKeyBoolean | undefined) {          
           return `CONCAT(to_char("_phenomenonTimeStart",'${EDatesType.date}'),'/',to_char("_phenomenonTimeEnd",'${EDatesType.date}')) AS "phenomenonTime"`;
         },
         type: "text",
       },
       resultTime: {
         create: "",
-        alias(config: IconfigFile, test: IKeyBoolean | undefined) {
+        alias(service: Iservice , test: IKeyBoolean | undefined) {
           return `CONCAT(to_char("_resultTimeStart",'${EDatesType.date}'),'/',to_char("_resultTimeEnd",'${EDatesType.date}')) AS "resultTime"`;
         },
         type: "text",

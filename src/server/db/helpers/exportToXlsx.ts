@@ -9,7 +9,7 @@
 
 import Excel from "exceljs";
 import postgres from "postgres";
-import { serverConfig } from "../../configuration";
+import { config } from "../../configuration";
 import { asyncForEach } from "../../helpers";
 import { models } from "../../models";
 import { EHttpCode, filterEntities } from "../../enums";
@@ -66,12 +66,12 @@ const createColumnsList = async (ctx: koaContext, entity: string) => {
       if (ctx.model[entity].columns[column].create !== "") {
         // IF JSON create column-key  note THAT is limit 200 firts items
         if (models.isColumnType(ctx.config, ctx.model[entity], column, "json")) {
-          const tempSqlResult = await serverConfig.connection(ctx.config.name).unsafe(createQuery(`jsonb_object_keys("${column}")`))
+          const tempSqlResult = await config.connection(ctx.config.name).unsafe(createQuery(`jsonb_object_keys("${column}")`))
             .catch(async (e) => {
               if (e.code === "22023") {
-                const tempSqlResult = await serverConfig.connection(ctx.config.name).unsafe(createQuery(`jsonb_object_keys("${column}"[0])`)).catch(async (e) => {
+                const tempSqlResult = await config.connection(ctx.config.name).unsafe(createQuery(`jsonb_object_keys("${column}"[0])`)).catch(async (e) => {
                   if (e.code === "42804") {
-                    const tempSqlResult = await serverConfig.connection(ctx.config.name).unsafe(createQuery(`jsonb_object_keys(jsonb_array_elements("${column}"))`));
+                    const tempSqlResult = await config.connection(ctx.config.name).unsafe(createQuery(`jsonb_object_keys(jsonb_array_elements("${column}"))`));
                     if (tempSqlResult && tempSqlResult.length > 0)
                       tempSqlResult.forEach((e: Iterable<postgres.Row> ) => { columnList.push( `jsonb_array_elements("${column}")->>'${e[column as keyobj]}' AS "${column}-${e[column as keyobj]}"`); });
                   } else console.log(e);
@@ -96,13 +96,13 @@ export const exportToXlsx = async (ctx: koaContext) => {
   workbook.created = new Date(Date.now());
   workbook.modified = new Date(Date.now());
   // Get configs infos
-  addConfigToExcel(workbook, serverConfig.getConfigForExcelExport(ctx.config.name));
+  addConfigToExcel(workbook, config.getConfigForExcelExport(ctx.config.name));
   // Loop on entities
   await asyncForEach(
     Object.keys(filterEntities(ctx.config.extensions)).filter((entity: string) => ctx.model[entity].table !== "" ),
     async (entity: string) => {
       const cols = await createColumnsList(ctx, entity);      
-      const temp = await serverConfig.connection(ctx.config.name).unsafe(`select ${cols} from "${ctx.model[entity].table}" LIMIT 200`);  
+      const temp = await config.connection(ctx.config.name).unsafe(`select ${cols} from "${ctx.model[entity].table}" LIMIT 200`);  
       await addToExcel(workbook, entity, temp);
   });
   // Save file

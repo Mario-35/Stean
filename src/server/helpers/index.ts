@@ -15,7 +15,7 @@ export const addSimpleQuotes = (input: string): string => addQuotes(input, "'");
 export const getUserId = (ctx: koaContext): number => ctx.state.user && ctx.state.user.id ? ctx.state.user.id : -1;
 export const removeAllQuotes = (input: string): string => input.replace(/['"]+/g, "");
 export const unikeList = (input: string[]) => [...new Set(input)];
-export  * from "./tests";
+export { isTest, isProduction, isCsvOrArray, isGraph, isObservation, isAdmin,  isAllowedTo, isString , isBoolean , isNumber , isIntegerNumber , isObject, isArray } from "./tests";
 export { asyncForEach } from "./asyncForEach";
 export { cleanStringComma } from "./cleanStringComma";
 export { cleanUrl } from "./cleanUrl";

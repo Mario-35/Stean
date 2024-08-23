@@ -1,11 +1,10 @@
 "use strict";
+const UglifyJS = require("uglify-js");
 const minify = require("@node-minify/core");
 const cleanCSS = require("@node-minify/clean-css");
 const htmlMinifier = require('@node-minify/html-minifier');
-var UglifyJS = require("uglify-js");
 var globby = require("globby");
 var path = require("path");
-var extend = require("extend");
 var fs = require("graceful-fs");
 var mkdirp = require("mkdirp");
 var archiver = require("archiver");
@@ -16,6 +15,88 @@ updateJson["decoders"] = {
   "rhf1s001" : require("./sandbox/loras/RHF1S001"),
   "senscap" : require("./sandbox/loras/Sensecap.js"),
   "wattEco" : require("./sandbox/loras/Watteco.js") 
+};
+
+function extend() {
+  var defineProperty = Object.defineProperty;
+  var setProperty = function setProperty(target, options) {
+    if (defineProperty && options.name === '__proto__') {
+      defineProperty(target, options.name, {
+        enumerable: true,
+        configurable: true,
+        value: options.newValue,
+        writable: true
+      });
+    } else {
+      // eslint-disable-next-line no-param-reassign
+      target[options.name] = options.newValue;
+    }
+  };
+  
+  // Return undefined instead of __proto__ if '__proto__' is not an own property
+  var getProperty = function getProperty(obj, name) {
+    if (name === '__proto__') {
+      if (!hasOwn.call(obj, name)) {
+        return void 0;
+      } else if (gOPD) {
+        // In early versions of node, obj['__proto__'] is buggy when obj has __proto__ as an own property. Object.getOwnPropertyDescriptor() works.
+        return gOPD(obj, name).value;
+      }
+    }
+  
+    return obj[name];
+  };
+	var options, name, src, copy, copyIsArray, clone;
+	var target = arguments[0];
+	var i = 1;
+	var length = arguments.length;
+	var deep = false;
+
+	// Handle a deep copy situation
+	if (typeof target === 'boolean') {
+		deep = target;
+		target = arguments[1] || {};
+		// skip the boolean and the target
+		i = 2;
+	}
+	if (target == null || (typeof target !== 'object' && typeof target !== 'function')) {
+		target = {};
+	}
+
+	for (; i < length; ++i) {
+		options = arguments[i];
+		// Only deal with non-null/undefined values
+		if (options != null) {
+			// Extend the base object
+			for (name in options) {
+				src = getProperty(target, name);
+				copy = getProperty(options, name);
+
+				// Prevent never-ending loop
+				if (target !== copy) {
+					// Recurse if we're merging plain objects or arrays
+					if (deep && copy && ((copyIsArray = isArray(copy)))) {
+						if (copyIsArray) {
+							copyIsArray = false;
+							clone = src && isArray(src) ? src : [];
+						} else {
+							clone = src  ? src : {};
+						}
+
+						// Never move original objects, clone them
+						setProperty(target, { name: name, newValue: extend(deep, clone, copy) });
+
+					// Don't bring in undefined values
+					} else if (typeof copy !== 'undefined') {
+						setProperty(target, { name: name, newValue: copy });
+					}
+				}
+			}
+		}
+	}
+
+	// Return the modified object
+	return target;
 };
 
 const encrypt = (text, key) => {
@@ -125,7 +206,6 @@ function zipDirectory(source, out) {
 
 function ugly (dirPath, options) {
   console.log(`\x1b[32m uglyFy \x1b[36m ====> \x1b[35m ${dirPath} \x1b[0m`);
-
   options = extend({}, {
     comments: true,
     output: "js",
@@ -135,8 +215,7 @@ function ugly (dirPath, options) {
     callback: null,
     logLevel: "info",
     removeAttributeQuotes: true,
-  }, options);
-    
+  }, options);    
   // grab and minify all the js files
   var files = globby.sync(options.patterns, {
     cwd: dirPath
@@ -208,6 +287,7 @@ copyFileSync( "./src/server/favicon.ico", "build/" );
 copyFileSync("./src/server/models/model.drawio", "build/models/");
 
 const packageJson = require("./package.json");
+const { log } = require("console");
 delete packageJson.scripts;
 delete packageJson.devDependencies;
 delete packageJson.apidoc;

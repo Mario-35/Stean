@@ -8,7 +8,7 @@
  */
 // onsole.log("!----------------------------------- Helpers for user admin. -----------------------------------!");
 
-import { serverConfig } from "../../configuration";
+import { config } from "../../configuration";
 import { ADMIN, setDebug } from "../../constants";
 import { EFrom, EVersion } from "../../enums";
 import { cleanUrl } from "../../helpers";
@@ -42,11 +42,11 @@ export const decodeUrl = (ctx: koaContext, input?: string): IdecodedUrl | undefi
   const paths = url.pathname.split('/').filter(e => e != "");  
   // no service
   if (paths[0]) 
-    configName = configName || serverConfig.getConfigNameFromName(paths[0].toLowerCase());
+    configName = configName || config.getConfigNameFromName(paths[0].toLowerCase());
     else throw new Error(errors.noNameIdentified);
   // get getLinkBase from service
   if (configName) {
-    const LinkBase = serverConfig.getInfos(ctx, configName);
+    const LinkBase = config.getInfos(ctx, configName);
     let idStr: string | undefined = undefined;
     let id: string | 0 = 0;
     // if nothing ===> root

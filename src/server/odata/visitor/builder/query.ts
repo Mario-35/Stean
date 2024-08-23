@@ -10,7 +10,7 @@
 import { _COLUMNSEPARATOR } from "../../../constants";
 import { addDoubleQuotes, cleanStringComma, containsAll, isCsvOrArray, isGraph, isObservation, removeAllQuotes, removeDoubleQuotes } from "../../../helpers";
 import { asJson } from "../../../db/queries";
-import { IconfigFile, Ientity, IKeyBoolean, IpgQuery } from "../../../types";
+import { Iservice, Ientity, IKeyBoolean, IpgQuery } from "../../../types";
 import { PgVisitor, RootPgVisitor } from "..";
 import { models } from "../../../models";
 import { allEntities, EOptions } from "../../../enums";
@@ -51,11 +51,11 @@ export class Query  {
          * @returns formated column or 
          */
         
-        function formatedColumn(config: IconfigFile, entity : Ientity, column: string, options?: IKeyBoolean): string | undefined {   
+        function formatedColumn(service: Iservice , entity : Ientity, column: string, options?: IKeyBoolean): string | undefined {   
             console.log(log.whereIam(column));
             if (entity.columns[column]) {
                 // is column have alias
-                const alias = entity.columns[column].alias(config, options ? options : undefined);
+                const alias = entity.columns[column].alias(service, options ? options : undefined);
                 if (testIn(alias || column) === true) return alias || column;
                 if (options) {
                     if (alias && options["alias"] === true) return alias;

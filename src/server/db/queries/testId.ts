@@ -1,11 +1,12 @@
 /**
- * testId.
+ * testId
 *
 * @copyright 2020-present Inrae
 * @author mario.adam@inrae.fr
 *
 */
-// onsole.log("!----------------------------------- testId. -----------------------------------!");
+// onsole.log("!----------------------------------- testId -----------------------------------!");
+
 export const testId = (table: string, id: bigint | string): string => 
 `SELECT 
 CASE WHEN EXISTS(

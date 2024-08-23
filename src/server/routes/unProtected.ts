@@ -16,7 +16,7 @@ import { IreturnResult } from "../types";
 import { DefaultState, Context } from "koa";
 import { createOdata } from "../odata";
 import { infos } from "../messages";
-import { serverConfig } from "../configuration";
+import { config } from "../configuration";
 import { createDatabase, testDatas } from "../db/createDb";
 import { executeAdmin, executeSql, exportService } from "../db/helpers";
 import { models } from "../models";
@@ -109,7 +109,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
       let sql = getUrlKey(ctx.request.url, "query");
       if (sql) {
         sql = atob(sql);
-        const resultSql = await executeSql(sql.includes("log_request") ? serverConfig.getConfig(ADMIN) : ctx.config, sql);
+        const resultSql = await executeSql(sql.includes("log_request") ? config.getConfig(ADMIN) : ctx.config, sql);
         ctx.status = EHttpCode.created;
         ctx.body = [resultSql];
       }
@@ -145,7 +145,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
     case "CREATEDBTEST":
       console.log(log.debug_head("GET createDB"));
       try {
-        await serverConfig.connection(ADMIN)`DROP DATABASE IF EXISTS test`;
+        await config.connection(ADMIN)`DROP DATABASE IF EXISTS test`;
         ctx.body = await createService(testDatas),    
         ctx.status = EHttpCode.created;
       } catch (error) {
@@ -156,10 +156,10 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
     // Drop DB test
     case "REMOVEDBTEST":
       console.log(log.debug_head("GET remove DB test"));
-      const returnDel = await serverConfig
+      const returnDel = await config
         .connection(ADMIN)`${sqlStopDbName('test')}`
         .then(async () => {
-          await serverConfig.connection(ADMIN)`DROP DATABASE IF EXISTS test`;
+          await config.connection(ADMIN)`DROP DATABASE IF EXISTS test`;
           return true;
         });
       if (returnDel) {

@@ -8,12 +8,12 @@
 // onsole.log("!----------------------------------- createQueryParams -----------------------------------!");
 
 import { getAuthenticatedUser } from "../../authentication";
-import { serverConfig } from "../../configuration";
+import { config } from "../../configuration";
 import { log } from "../../log";
 import { models } from "../../models";
 import { decodeUrl } from "../../routes/helper/decodeUrl";
 import { Ientities, IqueryOptions, koaContext } from "../../types";
-import { blankUser } from "./blankUser";
+import { blankUser } from "./";
 
 export async function createQueryParams(ctx: koaContext): Promise<IqueryOptions| undefined> {
     console.log(log.whereIam());
@@ -40,7 +40,7 @@ export async function createQueryParams(ctx: koaContext): Promise<IqueryOptions|
         user: user,
         graph: ctx.url.includes("$resultFormat=graph"),
         admin: ctx.config.name === 'admin',
-        services: serverConfig.getInfosForAll(ctx),
+        services: config.getInfosForAll(ctx),
         _DATAS:  Object.fromEntries(Object.entries(model).filter( ([k, v]) => listEntities.includes(k) && v.order > 0)) as Ientities,
     };
 };

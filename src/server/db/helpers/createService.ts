@@ -8,7 +8,7 @@
 // onsole.log("!----------------------------------- createService -----------------------------------!");
 
 import { addToService, createDatabase, executeAdmin, executeSqlValues } from ".";
-import { serverConfig } from "../../configuration";
+import { config } from "../../configuration";
 import { addDoubleQuotes, addSimpleQuotes, asyncForEach } from "../../helpers";
 import { models } from "../../models";
 import { createInsertValues } from "../../models/helpers";
@@ -25,8 +25,8 @@ const prepareDatas = (dataInput: Record<string, string>, entity: string): object
   return dataInput;
 }
 
-const getConvertedData = async (url: string): Promise<object> => {
-  return fetch(url, { method: 'GET', headers: {}, }).then((response) => response.json());
+const getConvertedData = async (url: string): Promise<object | unknown> => {
+  return await fetch(url, { method: 'GET', headers: {}, }).then((response) => response.json());
 }
 
 const addToServiceFromUrl = async (url: string | undefined, ctx: koaContext): Promise<string> => {
@@ -46,11 +46,11 @@ const addToServiceFromUrl = async (url: string | undefined, ctx: koaContext): Pr
 export const createService = async (dataInput: Record<string, any>, ctx?: koaContext): Promise<Record<string, any>> => {
   console.log(log.whereIam());
   if(dataInput && dataInput["create"]) {    
-    serverConfig.addConfig(dataInput["create"]);
+    config.addConfig(dataInput["create"]);
   }
   const results: Record<string, string>  = {};
   const serviceName = dataInput["create" as keyobj]["name"];
-  const config = serverConfig.getConfig(serviceName);
+  const service = config.getConfig(serviceName);
   const mess = `Database [${serviceName}]`; 
   const createDB = async () => {
     try {  
@@ -77,15 +77,15 @@ export const createService = async (dataInput: Record<string, any>, ctx?: koaCon
     }
   });
 
-  const tmp = models.filteredModelFromConfig(config);
+  const tmp = models.filteredModelFromConfig(service);
     
   await asyncForEach( Object.keys(tmp) .filter((elem: string) => tmp[elem].createOrder > 0) .sort((a, b) => (tmp[a].createOrder > tmp[b].createOrder ? 1 : -1)), async (entityName: string) => {
     if (dataInput[entityName]) {
-      const goodEntity = models.getEntity(config, entityName);
+      const goodEntity = models.getEntity(service, entityName);
       if (goodEntity) {
         try {
-          const sqls: string[] =dataInput[entityName].map((element: any) =>`INSERT INTO ${addDoubleQuotes(goodEntity.table)} ${createInsertValues(config, prepareDatas(element, goodEntity.name), goodEntity.name)}`);
-          await executeSqlValues(serverConfig.getConfig(serviceName), sqls.join(";")).then((res: Record<string, any>) =>{
+          const sqls: string[] =dataInput[entityName].map((element: any) =>`INSERT INTO ${addDoubleQuotes(goodEntity.table)} ${createInsertValues(service, prepareDatas(element, goodEntity.name), goodEntity.name)}`);
+          await executeSqlValues(config.getConfig(serviceName), sqls.join(";")).then((res: Record<string, any>) =>{
             results[entityName] = EChar.ok;
           }).catch((error: any) => {
             console.log(error);

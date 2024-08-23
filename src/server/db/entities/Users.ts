@@ -9,7 +9,7 @@
 import { keyobj, koaContext } from "../../types";
 import { Common } from "./common";
 import { IreturnResult } from "../../types";
-import { serverConfig } from "../../configuration";
+import { config } from "../../configuration";
 import { hidePassword } from "../../helpers";
 import { errors } from "../../messages/";
 import { EHttpCode, EUserRights } from "../../enums";
@@ -27,7 +27,7 @@ export class Users extends Common {
   async getAll(): Promise<IreturnResult | undefined> {
     console.log(log.whereIam());
     if (this.ctx.user?.PDCUAS[EUserRights.SuperAdmin] === true || this.ctx.user?.PDCUAS[EUserRights.Admin] === true ) {
-      const temp = await executeSqlValues(serverConfig.getConfig(ADMIN), `SELECT ${models.getSelectColumnList(models.DBAdmin(serverConfig.getConfig(ADMIN)).Users)} FROM "user" ORDER BY "id"`);      
+      const temp = await executeSqlValues(config.getConfig(ADMIN), `SELECT ${models.getSelectColumnList(models.DBAdmin(config.getConfig(ADMIN)).Users)} FROM "user" ORDER BY "id"`);      
       return this.formatReturnResult({
         body: hidePassword(temp),
       });
@@ -38,7 +38,7 @@ export class Users extends Common {
     console.log(log.whereIam());
     if (dataInput)
       return this.formatReturnResult({
-        body: await serverConfig.addConfig(dataInput),
+        body: await config.addConfig(dataInput),
       });
   }
 }

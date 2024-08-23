@@ -12,7 +12,7 @@ import { userAccess } from "../db/dataAccess";
 import { EExtensions } from "../enums";
 import { decrypt } from "../helpers";
 import { Iuser, koaContext } from "../types";
-import { blankUser } from "../views/helpers/blankUser";
+import { blankUser } from "../views/helpers/";
 
 export const getAuthenticatedUser = async ( ctx: koaContext ): Promise<Iuser | undefined> => {
   if (!ctx.config.extensions.includes(EExtensions.users)) return blankUser(ctx);

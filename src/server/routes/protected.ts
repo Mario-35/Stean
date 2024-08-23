@@ -19,7 +19,7 @@ import { EExtensions, EHttpCode, EUserRights } from "../enums";
 import { loginUser } from "../authentication";
 import { ADMIN } from "../constants";
 import { executeSqlValues } from "../db/helpers";
-import { serverConfig } from "../configuration";
+import { config } from "../configuration";
 import { checkPassword, emailIsValid } from "./helper";
 import { Login, Query } from "../views";
 import { createQueryParams } from "../views/helpers";
@@ -54,7 +54,7 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
       if (ctx.body["username"].trim() === "") {
         why["username"] = msg(errors.empty, "username");
       } else {
-        const user = await executeSqlValues(serverConfig.getConfig(ADMIN), `SELECT "username" FROM "user" WHERE username = '${ctx.body["username"]}' LIMIT 1`);
+        const user = await executeSqlValues(config.getConfig(ADMIN), `SELECT "username" FROM "user" WHERE username = '${ctx.body["username"]}' LIMIT 1`);
         if (user) why["username"] = errors.alreadyPresent;
       }
       // Email
@@ -105,7 +105,7 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
   
   // Add new lora observation this is a special route without ahtorisatiaon to post (deveui and correct payload limit risks)
   console.log(ctx.request.headers["authorization"] );
-  if ((ctx.user && ctx.user.id > 0) || !ctx.config.extensions.includes(EExtensions.users) || ctx.request.url.includes("/Lora") || (ctx.request.headers["authorization"] && ctx.request.headers["authorization"] === serverConfig.getBrokerId() )) {
+  if ((ctx.user && ctx.user.id > 0) || !ctx.config.extensions.includes(EExtensions.users) || ctx.request.url.includes("/Lora") || (ctx.request.headers["authorization"] && ctx.request.headers["authorization"] === config.getBrokerId() )) {
     if (ctx.request.type.startsWith("application/json") && Object.keys(ctx.body).length > 0) {
       const odataVisitor = await createOdata(ctx);
       if (odataVisitor) ctx.odata = odataVisitor;

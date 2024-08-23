@@ -12,10 +12,10 @@ import util from "util";
 import { EVersion } from "../../enums";
 import { unikeList, unique } from "../../helpers";
 import { errors } from "../../messages";
-import { IconfigFile, typeExtensions, typeOptions } from "../../types";
+import { Iservice, typeExtensions, typeOptions } from "../../types";
 import { getModelVersion } from "../../models/helpers";
 
-export function formatconfigFile(name: string, input: Record<string, any>): IconfigFile {
+export function formatconfigFile(name: string, input: Record<string, any>): Iservice {
     const options: typeof typeOptions = input["options"]
     ? unique([... String(input["options"]).split(",")]) as typeof typeOptions 
     : [];
@@ -27,7 +27,7 @@ export function formatconfigFile(name: string, input: Record<string, any>): Icon
     if (input["extensions"]["users"]) extensions.includes("users");
     const version = name === ADMIN ? EVersion.v1_1  : String(input["apiVersion"]).trim();
 
-    const returnValue: IconfigFile = {
+    const returnValue: Iservice = {
       name: name,
       ports: name === ADMIN
           ? {

@@ -9,7 +9,7 @@
 
 import { Common } from "./common";
 import { IreturnResult, koaContext } from "../../types";
-import { serverConfig } from "../../configuration";
+import { config } from "../../configuration";
 import { hideKeysInJson, hidePassword } from "../../helpers";
 import { addToService, createService } from "../helpers";
 import { setDebug } from "../../constants";
@@ -33,12 +33,12 @@ export class Configs extends Common {
     // Return result If not authorised    
     if (!can) 
         return this.formatReturnResult({
-          body: hidePassword(serverConfig.getConfig(this.ctx.config.name))
+          body: hidePassword(config.getConfig(this.ctx.config.name))
         });    
     // Return result
     return this.formatReturnResult({
-      body: hidePassword(serverConfig.getConfigs().map((elem: string) => ({ 
-        [elem] : { ...serverConfig.getConfig(elem) }
+      body: hidePassword(config.getConfigs().map((elem: string) => ({ 
+        [elem] : { ...config.getConfig(elem) }
       })))
     });
   }
@@ -50,7 +50,7 @@ export class Configs extends Common {
     // Return result
     return this.formatReturnResult({
       body: hideKeysInJson(
-        serverConfig.getConfig( typeof this.ctx.odata.id === "string" ? this.ctx.odata.id  : this.ctx.config.name ), ["entities"] ),
+        config.getConfig( typeof this.ctx.odata.id === "string" ? this.ctx.odata.id  : this.ctx.config.name ), ["entities"] ),
     });
   }
   
@@ -68,7 +68,7 @@ export class Configs extends Common {
     }
     if (!userAuthenticated(this.ctx)) this.ctx.throw(EHttpCode.Unauthorized);    
     if (dataInput) {
-      const added = await serverConfig.addConfig(dataInput);
+      const added = await config.addConfig(dataInput);
       if (added)
         return this.formatReturnResult({
           body: hidePassword(added),

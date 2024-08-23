@@ -18,7 +18,7 @@ import { createInsertValues, createUpdateValues } from "../../../models/helpers"
 import { apiAccess } from "../../../db/dataAccess";
 import * as entities from "../../../db/entities";
 import { PgVisitor } from "..";
-import { serverConfig } from "../../../configuration";
+import { config } from "../../../configuration";
 
 export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor): string {
     const formatInsertEntityData = (entity: string, datas: object, main: PgVisitor): Record<string, any> => {
@@ -357,6 +357,6 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
         strip: src.ctx.config.options.includes(EOptions.stripNull),
         count: false
     });
-    serverConfig.writeLog(log.query(sqlResult));
+    config.writeLog(log.query(sqlResult));
     return sqlResult;
 }

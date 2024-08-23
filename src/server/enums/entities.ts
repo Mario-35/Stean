@@ -45,7 +45,7 @@ enum EnumLogEntities {
 }
 
 export const filterEntities = (exts: string[], name?: string) => {    
-    // const exts = (typeof input === "string") ? input === "ALL" ? Object.keys(EExtensions) : serverConfig.getConfig(input).extensions : input.extensions;
+    // const exts = (typeof input === "string") ? input === "ALL" ? Object.keys(EExtensions) : config.getConfig(input).extensions : input.extensions;
     let res = EnumBaseEntities;
     if (exts.includes(EExtensions.logs)) res = {... res, ... EnumLogEntities};
     if (exts.includes(EExtensions.multiDatastream)) res = {... res, ... EnumMultiDatastreamEntities};

@@ -9,13 +9,13 @@
 // onsole.log("!----------------------------------- firstInstall -----------------------------------!");
 
 import postgres from "postgres";
-import { serverConfig } from "../../configuration";
+import { config } from "../../configuration";
 import { returnFormats, unique } from "../../helpers";
 import { koaContext, IdecodedUrl, IKeyString } from "../../types";
 import { First, Service } from "../../views";
 
 export async function firstInstall(ctx: koaContext): Promise<IdecodedUrl | undefined>  { 
-  if (serverConfig.configFileExist() === false) {
+  if (config.configFileExist() === false) {
     // If Configuration file Not exist first Install
     const why: IKeyString = {};
     const src = JSON.parse(JSON.stringify(ctx.request.body, null, 2));
@@ -121,7 +121,7 @@ export async function firstInstall(ctx: koaContext): Promise<IdecodedUrl | undef
             "extensions": src["extensions"],
             "options": src["options"]
           }
-          await serverConfig.init(JSON.stringify(confJson, null, 2));      
+          await config.init(JSON.stringify(confJson, null, 2));      
         } else {
           returnBody(true);
         }

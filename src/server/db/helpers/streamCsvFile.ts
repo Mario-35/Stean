@@ -10,7 +10,7 @@
 import { IcsvFile, IcsvImport, koaContext } from "../../types";
 import { createReadStream } from 'fs';
 import { addAbortSignal } from 'stream';
-import { serverConfig } from "../../configuration";
+import { config } from "../../configuration";
 import { executeSql, executeSqlValues } from ".";
 import { log } from "../../log";
 
@@ -21,7 +21,7 @@ export async function streamCsvFile( ctx: koaContext, paramsFile: IcsvFile, sqlR
   const readable = createReadStream(paramsFile.filename);
   sqlRequest.columns.forEach((value) => cols.push(`"${value}" varchar(255) NULL`));
   await executeSql(ctx.config, `CREATE TABLE "${paramsFile.tempTable}" ( id serial4 NOT NULL, ${cols}, CONSTRAINT ${paramsFile.tempTable}_pkey PRIMARY KEY (id));`).catch((error: any) => {console.log(error)});
-  const writable = serverConfig.connection(ctx.config.name).unsafe(`COPY "${paramsFile.tempTable}" (${sqlRequest.columns.join( "," )}) FROM STDIN WITH(FORMAT csv, DELIMITER ';'${ paramsFile.header })`).writable();
+  const writable = config.connection(ctx.config.name).unsafe(`COPY "${paramsFile.tempTable}" (${sqlRequest.columns.join( "," )}) FROM STDIN WITH(FORMAT csv, DELIMITER ';'${ paramsFile.header })`).writable();
 
   return new Promise(async function (resolve, reject) {
     readable

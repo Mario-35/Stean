@@ -1,14 +1,14 @@
 /**
- * MqttSerer Routes for API
+ * MqttServer Routes for API
  *
  * @copyright 2020-present Inrae
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- MqttSerer Routes for API -----------------------------------!");
+// onsole.log("!----------------------------------- MqttServer Routes for API -----------------------------------!");
 
 import Aedes, { AedesPublishPacket, Client, PublishPacket, Subscription } from 'aedes';
-import { serverConfig } from '../configuration';
+import { config } from '../configuration';
 import { log } from '../log';
 import { color, setDebug } from '../constants';
 import { EColor } from '../enums';
@@ -17,18 +17,18 @@ import { loginUser } from '../authentication';
 import { createServer } from 'aedes-server-factory';
 
 
-export class MqttSerer {
+export class MqttServer {
     broker: Aedes;
     constructor(ports: {wsPort : number, tcpPort  : number}) {        
         setDebug(true);
         this.broker = new Aedes();
         const mqttServer  = createServer(this.broker, { ws: true });
         mqttServer.listen(ports.wsPort,() => {
-            serverConfig.messageListen("MQTT Broker on WS", String(ports.wsPort));
+            config.messageListen("MQTT Broker on WS", String(ports.wsPort));
         });
         const mqttTcpServer  = createServer(this.broker);
         mqttTcpServer.listen(ports.tcpPort, () => {
-            serverConfig.messageListen("MQTT Broker on TCP", String(ports.tcpPort));
+            config.messageListen("MQTT Broker on TCP", String(ports.tcpPort));
         });
     }
     
@@ -60,8 +60,8 @@ export class MqttSerer {
                     body: packet.payload.toString(),
                 })
                 if (api) {
-                    serverConfig.writeLog(log.debug_infos(`[MESSAGE_PUBLISHED] Client ${(client ? client.id : 'BROKER_' + this.broker.id)} has published message on ${packet.topic} to broker`, this.broker.id));
-                    api.json().then((e: JSON) => {
+                    config.writeLog(log.debug_infos(`[MESSAGE_PUBLISHED] Client ${(client ? client.id : 'BROKER_' + this.broker.id)} has published message on ${packet.topic} to broker`, this.broker.id));
+                    api.json().then((e: any) => {
                         client.emit("message", e);
                         resolve(e);
                     });
@@ -80,10 +80,10 @@ export class MqttSerer {
                 const url =  client.req.url.trim().split("/").filter((e: string )=> e !== "");
                 if (url[url.length -1] === "login") {                    
                    return await loginUser(undefined,{configName: url[0], username: String(username), password: Buffer.from(password, 'base64').toString()}).then((user) => {
-                        serverConfig.writeLog(log.debug_infos(`${color(user ? EColor.Green : EColor.Red)}${color(EColor.Cyan)}${(user ? infos.authSuccess : errors.authFailed)} to broker`, this.broker.id));
+                        config.writeLog(log.debug_infos(`${color(user ? EColor.Green : EColor.Red)}${color(EColor.Cyan)}${(user ? infos.authSuccess : errors.authFailed)} to broker`, this.broker.id));
                         return callback(user ? null : new Error(errors.authFailed), user ? true : false);
                     }).catch((error: Error) => {                
-                        serverConfig.writeLog(log.error(errors.authFailed, error));
+                        config.writeLog(log.error(errors.authFailed, error));
                         return callback(error, false);
                     });
                 }
@@ -92,10 +92,10 @@ export class MqttSerer {
                     const paket = client["_parser" as keyof object]["settings"];
                     if (paket["cmd" as keyof object] === "connect") {                    
                         return await loginUser(undefined,{configName: String(paket["clientId" as keyof object]).split("_")[0], username: String(paket["username" as keyof object]), password: Buffer.from(paket["password" as keyof object], 'base64').toString()}).then((user) => {
-                            serverConfig.writeLog(log.debug_infos(`${color(user ? EColor.Green : EColor.Red)}${color(EColor.Cyan)}${(user ? infos.authSuccess : errors.authFailed)} to broker`, this.broker.id));
+                            config.writeLog(log.debug_infos(`${color(user ? EColor.Green : EColor.Red)}${color(EColor.Cyan)}${(user ? infos.authSuccess : errors.authFailed)} to broker`, this.broker.id));
                             return callback(user ? null : new Error(errors.authFailed), user ? true : false);
                         }).catch((error: Error) => {                
-                            serverConfig.writeLog(log.error(errors.authFailed, error));
+                            config.writeLog(log.error(errors.authFailed, error));
                             return callback(error, false);
                         });
                     }
@@ -113,7 +113,7 @@ export class MqttSerer {
         this.broker.published = (packet: AedesPublishPacket, client: Client | null, callback: any) => {
             if (client) {
                 console.log(log.whereIam('published'));
-                if (client) serverConfig.writeLog(log.debug_infos(`${color(EColor.Green)}[PUBLISHED] ${color(EColor.Cyan)}${(client ? client.id : client)}`, packet.payload.toString()));
+                if (client) config.writeLog(log.debug_infos(`${color(EColor.Green)}[PUBLISHED] ${color(EColor.Cyan)}${(client ? client.id : client)}`, packet.payload.toString()));
             }
         }
 
@@ -121,7 +121,7 @@ export class MqttSerer {
         this.broker.on('client', (client: Client | null) => {
             if (client) {
                 console.log(log.whereIam(`client : ${client ? client.id : client}`));
-                serverConfig.writeLog(log.debug_infos(`${color(EColor.Green)}[CLIENT_CONNECTED] ${color(EColor.Cyan)}${(client ? client.id : client)} connected to broker`, this.broker.id));
+                config.writeLog(log.debug_infos(`${color(EColor.Green)}[CLIENT_CONNECTED] ${color(EColor.Cyan)}${(client ? client.id : client)} connected to broker`, this.broker.id));
             }
         })
         
@@ -129,7 +129,7 @@ export class MqttSerer {
         this.broker.on('clientDisconnect', (client: Client | null) => {
             if (client) {
                 console.log(log.whereIam('clientDisconnect'));
-                serverConfig.writeLog(log.debug_infos(`${color(EColor.Red)}[CLIENT_DISCONNECTED] ${color(EColor.Cyan)}${(client ? client.id : client)} disconnected from the broker`, this.broker.id));
+                config.writeLog(log.debug_infos(`${color(EColor.Red)}[CLIENT_DISCONNECTED] ${color(EColor.Cyan)}${(client ? client.id : client)} disconnected from the broker`, this.broker.id));
             }
         })
         
@@ -137,7 +137,7 @@ export class MqttSerer {
         this.broker.on('subscribe', (subscriptions: Subscription[], client: Client | null) => {
             if (client) {
                 console.log(log.whereIam('subscribe'));
-                serverConfig.writeLog(log.debug_infos(`${color(EColor.Yellow)}[TOPIC_SUBSCRIBED] ${color(EColor.Green)}${(client ? client.id : client)} subscribed to topics: ${subscriptions.map((s: any )=> s.topic).join(',')} on broker`, this.broker.id));
+                config.writeLog(log.debug_infos(`${color(EColor.Yellow)}[TOPIC_SUBSCRIBED] ${color(EColor.Green)}${(client ? client.id : client)} subscribed to topics: ${subscriptions.map((s: any )=> s.topic).join(',')} on broker`, this.broker.id));
             }
         })
         
@@ -145,7 +145,7 @@ export class MqttSerer {
         this.broker.on('unsubscribe', (subscriptions: any, client: Client | null) => {
             if (client) {
                 console.log(log.whereIam('unsubscribe'));
-                serverConfig.writeLog(log.debug_infos(`${color(EColor.Yellow)}[TOPIC_UNSUBSCRIBED] ${color(EColor.Red)}${(client ? client.id : client)} unsubscribed to topics: ${subscriptions.map((s: any )=> s.topic).join(',')} from broker`, this.broker.id));
+                config.writeLog(log.debug_infos(`${color(EColor.Yellow)}[TOPIC_UNSUBSCRIBED] ${color(EColor.Red)}${(client ? client.id : client)} unsubscribed to topics: ${subscriptions.map((s: any )=> s.topic).join(',')} from broker`, this.broker.id));
             }
         })
         

@@ -9,7 +9,7 @@
 
 import { createEntity } from ".";
 import { ERelations } from "../../enums";
-import { IconfigFile, Ientity, IKeyBoolean } from "../../types";
+import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { addDoubleQuotes } from "../../helpers";
 import { _idBig } from "./constants";
 import { _ID } from "../../db/constants";
@@ -21,7 +21,7 @@ import { _ID } from "../../db/constants";
     columns: {
       id: {
         create: _idBig,
-        alias(config: IconfigFile, test: IKeyBoolean) {
+        alias(service: Iservice , test: IKeyBoolean) {
            return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${addDoubleQuotes(_ID)}`: ''}` ;
         },
         type: "number",
@@ -33,7 +33,7 @@ import { _ID } from "../../db/constants";
       },
       result: {
         create: "JSONB NULL",
-        alias(config: IconfigFile, test: IKeyBoolean | undefined) {
+        alias(service: Iservice , test: IKeyBoolean | undefined) {
           if (!test) return "result";  
           if (test["valueskeys"] && test["valueskeys"] === true) 
             return `COALESCE("result"-> 'valueskeys', "result"-> 'value')${test && test["as"] === true ? ` AS "result"`: ''}`;

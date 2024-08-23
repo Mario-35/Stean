@@ -6,14 +6,14 @@
  *
  */
 // onsole.log("!----------------------------------- executeAdmin. -----------------------------------!");
-import { serverConfig } from "../../configuration";
+import { config } from "../../configuration";
 import { ADMIN } from "../../constants";
 import { log } from "../../log";
 
 export const executeAdmin = async (query: string): Promise<object> => {
-    serverConfig.writeLog(log.query(query));
+    config.writeLog(log.query(query));
     return new Promise(async function (resolve, reject) {
-        await serverConfig.connection(ADMIN).unsafe(query).then((res: object) => {                            
+        await config.connection(ADMIN).unsafe(query).then((res: object) => {                            
             resolve(res);
         }).catch((err: Error) => {
             reject(err);

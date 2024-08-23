@@ -7,7 +7,7 @@
  */
 // onsole.log("!----------------------------------- createTable -----------------------------------!");
 
-import { serverConfig } from "../../configuration";
+import { config } from "../../configuration";
 import { log } from "../../log";
 import { addDoubleQuotes } from "../../helpers";
 import { Ientity, IKeyString } from "../../types";
@@ -23,7 +23,7 @@ export const createTable = async ( configName: string, tableEntity: Ientity, doA
   const returnValue: IKeyString = {};
   let insertion = "";
 
-  if (!serverConfig.connection(configName)) {
+  if (!config.connection(configName)) {
     log.error("connection Error");
     return { error: "connection Error" };
   }
@@ -44,7 +44,7 @@ export const createTable = async ( configName: string, tableEntity: Ientity, doA
 
   if (tableEntity.table.trim() != "")
     returnValue[String(`Create table ${addDoubleQuotes(tableEntity.table)}`)] =
-    await serverConfig.connection(configName).unsafe(`CREATE TABLE ${addDoubleQuotes(tableEntity.table)} (${insertion});`)
+    await config.connection(configName).unsafe(`CREATE TABLE ${addDoubleQuotes(tableEntity.table)} (${insertion});`)
         .then(() => EChar.ok)
         .catch((error: Error) => error.message);
 
@@ -59,14 +59,14 @@ export const createTable = async ( configName: string, tableEntity: Ientity, doA
 
   if (tabTemp.length > 0)
     returnValue[`${tab()}Create indexes for ${tableEntity.name}`] =
-    await serverConfig.connection(configName).unsafe(tabTemp.join(";"))
+    await config.connection(configName).unsafe(tabTemp.join(";"))
         .then(() => EChar.ok)
         .catch((error: Error) => error.message);
 
   // CREATE CONSTRAINTS
   if (tableEntity.constraints && tableConstraints.length > 0)
     returnValue[`${tab()}Create constraints for ${tableEntity.table}`] =
-      await serverConfig.connection(configName).unsafe(tableConstraints.join(" "))
+      await config.connection(configName).unsafe(tableConstraints.join(" "))
         .then(() => EChar.ok)
         .catch((error: Error) => error.message);
 
@@ -74,7 +74,7 @@ export const createTable = async ( configName: string, tableEntity: Ientity, doA
   if (tableEntity.after) {
     if (tableEntity.after.toUpperCase().startsWith("INSERT"))
       returnValue[`${tab()}Something to do after for ${tableEntity.table}`] =
-      await serverConfig.connection(configName).unsafe(tableEntity.after)
+      await config.connection(configName).unsafe(tableEntity.after)
           .then(() => EChar.ok)
           .catch((error: Error) => {
             log.error(error);
@@ -84,7 +84,7 @@ export const createTable = async ( configName: string, tableEntity: Ientity, doA
 
   // CREATE SOMETHING AFTER (migration)
   if (doAfter) {
-    returnValue[`${tab()} doAfter ${tableEntity.table}`] = await serverConfig.connection(configName).unsafe(doAfter)
+    returnValue[`${tab()} doAfter ${tableEntity.table}`] = await config.connection(configName).unsafe(doAfter)
       .then(() => EChar.ok)
       .catch((error: Error) => error.message);
   }

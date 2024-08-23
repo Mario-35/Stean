@@ -6,7 +6,7 @@
  *
  */
 
-import { serverConfig } from "../../configuration";
+import { config } from "../../configuration";
 import { APP_NAME } from "../../constants";
 import { asyncForEach } from "../../helpers";
 import { log } from "../../log";
@@ -73,7 +73,7 @@ export const getMetrics = async (ctx: koaContext): Promise<string[] | { [key: st
     Object.keys(metrics),
     async (operation: string) => {
       if (metrics[operation])
-        await serverConfig.connection(ctx.config.name).unsafe(`${metrics[operation]}`)
+        await config.connection(ctx.config.name).unsafe(`${metrics[operation]}`)
           .then((result) => {            
             res[operation] = result.length === 1 ? Object.values(result[0])[0] : result;
           })

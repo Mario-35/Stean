@@ -12,16 +12,16 @@ import { models } from "..";
 import { ESCAPE_SIMPLE_QUOTE } from "../../constants";
 import { addDoubleQuotes, addSimpleQuotes, removeDoubleQuotes } from "../../helpers";
 import { log } from "../../log";
-import { IconfigFile } from "../../types";
+import { Iservice } from "../../types";
 
 // create postgresSql 
-export function createInsertValues(config: IconfigFile, input: Record<string, any>, entityName?: string): string  {
+export function createInsertValues(service: Iservice , input: Record<string, any>, entityName?: string): string  {
     console.log(log.whereIam());
-    if (config && input) {
+    if (service && input) {
         const keys:string[] = [];
         const values:string[] = [];            
         if (entityName) {
-            const entity = models.getEntity(config, entityName);
+            const entity = models.getEntity(service, entityName);
             if (!entity) return "";
             Object.keys(input).forEach((e: string ) => {
                 if (input[e] && entity.columns[e]) {

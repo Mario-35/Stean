@@ -7,25 +7,25 @@
  */
 
  import { EChar } from "../../enums";
-import { IconfigFile } from "../../types";
+import { Iservice } from "../../types";
 import { _RIGHTS } from "../constants";
 import { userAccess } from "../dataAccess";
 // onsole.log("!----------------------------------- createUser -----------------------------------!");
 
-export const createUser = async (config: IconfigFile): Promise<string> => {
+export const createUser = async (service: Iservice ): Promise<string> => {
   return new Promise(async function (resolve, reject) {
-    await userAccess.post(config.name, {
-      username: config.pg.user,
+    await userAccess.post(service.name, {
+      username: service.pg.user,
       email: "TWOdefault@email.com",
-      password: config.pg.password,
-      database: config.pg.database,
+      password: service.pg.password,
+      database: service.pg.database,
       canPost: true,
       canDelete: true,
       canCreateUser: true,
       canCreateDb: true,
       superAdmin: false,
       admin: false})
-    .then(() => { resolve(`${config.pg.user} ${EChar.ok}`); })
+    .then(() => { resolve(`${service.pg.user} ${EChar.ok}`); })
     .catch((err: Error) => {
       console.log(err);
       reject(err);
