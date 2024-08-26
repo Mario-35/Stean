@@ -1,27 +1,24 @@
 ![Logo](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/logo.png "Logo")
 
-## SensorThings Enhanced API Node
+# SensorThings Enhanced API Node
 
 ![version](https://img.shields.io/badge/version-0.9.0-red)
 
-
 ![Inrae](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/inrae.png "Inrae")
 
-
-# Installation / Deploy
+## Installation / Deploy
 
 ![node](https://img.shields.io/badge/NodeJs-%20>16-blue)
 ![postgreSql](https://img.shields.io/badge/PostgreSQL-%20>14-blue)
 ![postGIS](https://img.shields.io/badge/postGIS-%20>3-blue)
 ![pm2](https://img.shields.io/badge/pm2-%20>5-blue "")
 
-## deploy on server run :
 
 ```curl -fsSL https://raw.githubusercontent.com/Mario-35/Stean/main/scripts/stean.sh -o stean.sh && chmod +x stean.sh && ./stean.sh```
 
 <details>
     <summary>If you need help</summary>
-    The menu differs depending on the progress of the installation but the header and footer of the menu display certain states:
+The menu differs depending on the progress of the installation but the header and footer of the menu display certain states:
 
 ![steanSh](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/steanSh.jpg "steanSh")
 
@@ -33,13 +30,19 @@
 - "Indicate path" or "Change path" : indicates the installation path of the api
 - "Check postGis" : test the existence and the version of postGis
 - "Install all" : Install stean after check if nodeJs, Postgres and pm2 are installed
-    
-    After install the best way is to run api with the url : "http://localhost:8029" or with url show by the menu and go to the first start whrere you can test connection and create a service.
+- "Back to previous" : If a backup is present install it instead of actual installed stean
+- "Create / Recreate run script" : create run.sh with all parameters
+- "Run / Stop stean" : run or stop API (if configuration.json is found)
 
-    ![firstStart](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/firstStart.jpg "firstStart")
+</details>
 
-    the other way is to create your own configuration.json file with that structure :
+# STEAN configuration
 
+The configuration.json file must be found by the api in the configuration folder if the file not exist the api redirect you to th first install page to create that file with your firs service :
+
+![firstStart](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/firstStart.jpg "firstStart")
+
+### You can create manually your configuration.json file :
 ```json
 {
     // admin must be in configuration file
@@ -94,29 +97,23 @@
             "stripNull",  // null value are not visible,
             "forceHttps" // force api to add s to http of this service,
         ]
+    }, 
+    "myServiceNumber2": {
+        ...
     }
 }
 ```
 
-- "Back to previous" : If a backup is present install it instead of actual installed stean
-- "Create / Recreate run script" : create run.sh with all parameters
-- "Run / Stop stean" : run or stop API
-
-</details>
-
-
-
 ## use on local windows as production (for testing) use :  [script](https://raw.githubusercontent.com/Mario-35/Stean/main/scripts/install.ps1) as install.ps1
 
-## for developper : 
+## for developper
 
 1. Fork/Clone : <https://github.com/Mario-35/Stean.git>
 2. Install dependencies : npm install
 3. Fire up Postgres WITH Postgis on the default ports
-4. Make configuration.json file (see [example](https://github.com/Mario-35/Stean/blob/main/src/server/configuration/example.md))
-or use first install (the file will be automatically create)
+4. Make configuration.json file or use first install (the file will be automatically create)
 5. npm run dev for dev, npm run build (vs script package.json)
-6. If database not exists the program create it.
+6. If database not exists the program create it. note that db test is automaticly create
 
 [Release infos](https://github.com/Mario-35/Stean/blob/main/realease.md)
 
@@ -132,7 +129,6 @@ The project run under nodeJS.
 ![Nodejs](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/nodejs.png "Nodejs")
 
 ![TypeScript](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/ts.png "TypeScript") ![Javascript](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/js.png "Javascript")
-
 
 ![HTML JS CSS](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/html.png "HTML JS CSS")
 
@@ -186,7 +182,6 @@ The project run under nodeJS.
  ┃ ┗ 📜dbTest.ts // DB test connection
  ┗ 📜build.js // js file for building app
 ```
-
 
 - [Node.js](https://nodejs.org/) `v18.15.0`
 - [PostgreSQL](https://www.postgresql.org/)
