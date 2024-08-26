@@ -1,17 +1,11 @@
 ![Logo](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/logo.png "Logo")
 
-# SensorThings Enhanced API Node
-
-![version](https://img.shields.io/badge/version-0.9.0-red)
+# SensorThings Enhanced API Node ![version](https://img.shields.io/badge/version-0.9.0-red)
+[Release infos](https://github.com/Mario-35/Stean/blob/main/realease.md)
 
 ![Inrae](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/inrae.png "Inrae")
 
-## Installation / Deploy
-
-![node](https://img.shields.io/badge/NodeJs-%20>16-blue)
-![postgreSql](https://img.shields.io/badge/PostgreSQL-%20>14-blue)
-![postGIS](https://img.shields.io/badge/postGIS-%20>3-blue)
-![pm2](https://img.shields.io/badge/pm2-%20>5-blue "")
+## Installation / Deploy  ![node](https://img.shields.io/badge/NodeJs-%20>16-blue)![postgreSql](https://img.shields.io/badge/PostgreSQL-%20>14-blue) ![postGIS](https://img.shields.io/badge/postGIS-%20>3-blue) ![pm2](https://img.shields.io/badge/pm2-%20>5-blue "")
 
 
 ```curl -fsSL https://raw.githubusercontent.com/Mario-35/Stean/main/scripts/stean.sh -o stean.sh && chmod +x stean.sh && ./stean.sh```
@@ -36,7 +30,7 @@ The menu differs depending on the progress of the installation but the header an
 
 </details>
 
-# STEAN configuration
+## STEAN configuration
 
 The configuration.json file must be found by the api in the configuration folder if the file not exist the api redirect you to th first install page to create that file with your firs service :
 
@@ -115,7 +109,7 @@ The configuration.json file must be found by the api in the configuration folder
 5. npm run dev for dev, npm run build (vs script package.json)
 6. If database not exists the program create it. note that db test is automaticly create
 
-[Release infos](https://github.com/Mario-35/Stean/blob/main/realease.md)
+
 
 ## Want to use this with docker
 
