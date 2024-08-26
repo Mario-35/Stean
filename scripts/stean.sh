@@ -383,7 +383,6 @@ infos() {
     check_node
     check_pg
     check_pm2
-
     FILECFG=$APIDEST/api/configuration/configuration.json
     PORT=$(grep -Po '"http":.*?[^\\],' $FILECFG | grep -o -E "[0-9]+")
     URL="http://localhost:$PORT"
@@ -399,6 +398,7 @@ infos() {
                 else
                     options+=('Create run script')
             fi
+            
             if [[ "$ACTIVE" == "000" ]]; then
                     options+=('Run stean')
                 else
@@ -413,10 +413,12 @@ infos() {
             options+=('Check postGis')
     fi
 
-    if [ -f $FILECFG ]; then
-            options+=('Decode configuration')
-        else 
-            options+=("Create blank configuration")
+    if [[ "$STEANVER" != "not installed" ]]; then
+        if [ -f $FILECFG ]; then
+                options+=('Decode configuration')
+            else 
+                options+=("Create blank configuration")
+        fi    
     fi    
     options+=('Quit')
     NBOPTIONS=${#options[@]};
@@ -468,16 +470,20 @@ infos;
         $E "Path :              Stean :               ";
         TPUT  0 12; $e $APIDEST; 
         TPUT  0 33; $e $STEANVER;
-        if [[ "$ACTIVE" == "000" ]]; 
-            then
-                TPUT  0 42; $e "STOP"; 
-            else
-                TPUT  0 42; $e "RUN"; 
+        if [[ "$STEANVER" != "not installed" ]]; then
+            if [[ "$ACTIVE" == "000" ]]; 
+                then
+                    TPUT  0 42; $e "STOP"; 
+                else
+                    TPUT  0 42; $e "RUN"; 
+            fi
         fi
         UNMARK;
     }        
     FOOT() {
-        TPUT  "$((NBOPTIONS + 4))" 8; $e $URL;        
+        if [[ "$STEANVER" != "not installed" ]]; then
+            TPUT  "$((NBOPTIONS + 4))" 8; $e $URL;
+        fi
         MARK;
         TPUT "$((NBOPTIONS + 5))" 5
         printf "Node:           Postgres:                 "; 

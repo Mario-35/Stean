@@ -2,7 +2,14 @@
 
 ## SensorThings Enhanced API Node
 
+![version](https://img.shields.io/badge/version-0.9.0-blue)
+
+![node](https://img.shields.io/badge/NodeJs-%20>16-green)
+![postgreSql](https://img.shields.io/badge/PostgreSQL-%20>14-green)
+![postGIS](https://img.shields.io/badge/postGIS-%20>3-green)
+
 ![Inrae](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/inrae.png "Inrae")
+
 
 # Installation
 
