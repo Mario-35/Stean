@@ -37,7 +37,7 @@ The configuration.json file must be found by the api in the configuration folder
 ![firstStart](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/firstStart.jpg "firstStart")
 
 ### You can create manually your configuration.json file :
-```json
+```json5
 {
     // admin must be in configuration file
     "admin": {
