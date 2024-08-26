@@ -19,9 +19,6 @@
 
 ```curl -fsSL https://raw.githubusercontent.com/Mario-35/Stean/main/scripts/stean.sh -o stean.sh && chmod +x stean.sh && ./stean.sh```
 
-
-## If you need some help :  [help to deploy](https://raw.githubusercontent.com/Mario-35/Stean/main/DEPLOY.md)
-
 <details>
     <summary>If you need help</summary>
 The menu differs depending on the progress of the installation but the header and footer of the menu display certain states:
@@ -31,11 +28,7 @@ The menu differs depending on the progress of the installation but the header an
 - At the bottom of the menu the version of node and postgresSql
 - Quit to exit installation script
 
-<span style="white-space: pre;color:black;background:white">│Path : .            Stean : 0.9.0     RUN    │</span><br>
-<span style="white-space: pre;color:white;background:black">│                                                         │</span><br>
-<span style="white-space: pre;color:white;background:black">│ http://localhost:8029                         │</span><br>
-<span style="white-space: pre;color:black;background:white">│Node: v16.20.2  Postgres:16.1             │</span>
-
+![steanSh](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/steanSh.jpg "steanSh")
 
 - "Indicate path" or "Change path" : indicates the installation path of the api
 - "Check postGis" : test the existence and the version of postGis
