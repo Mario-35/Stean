@@ -2,19 +2,27 @@
 
 ## SensorThings Enhanced API Node
 
-![version](https://img.shields.io/badge/version-0.9.0-blue)
+![version](https://img.shields.io/badge/version-0.9.0-red)
 
-![node](https://img.shields.io/badge/NodeJs-%20>16-green)
-![postgreSql](https://img.shields.io/badge/PostgreSQL-%20>14-green)
-![postGIS](https://img.shields.io/badge/postGIS-%20>3-green)
 
 ![Inrae](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/inrae.png "Inrae")
 
 
-# Installation
+# Installation / Deploy
+
+![node](https://img.shields.io/badge/NodeJs-%20>16-blue)
+![postgreSql](https://img.shields.io/badge/PostgreSQL-%20>14-blue)
+![postGIS](https://img.shields.io/badge/postGIS-%20>3-blue)
+![pm2](https://img.shields.io/badge/pm2-%20>5-blue)
 
 ## deploy on server run :
+
 ```curl -fsSL https://raw.githubusercontent.com/Mario-35/Stean/main/scripts/stean.sh -o stean.sh && chmod +x stean.sh && ./stean.sh```
+
+
+## If you need some help :  [help to deploy](https://raw.githubusercontent.com/Mario-35/Stean/main/DEPLOY.md)
+
+If you need help : 
 
 ## use on local windows as production (for testing) use :  [script](https://raw.githubusercontent.com/Mario-35/Stean/main/scripts/install.ps1) as install.ps1
 
