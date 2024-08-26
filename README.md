@@ -13,7 +13,7 @@
 ![node](https://img.shields.io/badge/NodeJs-%20>16-blue)
 ![postgreSql](https://img.shields.io/badge/PostgreSQL-%20>14-blue)
 ![postGIS](https://img.shields.io/badge/postGIS-%20>3-blue)
-![pm2](https://img.shields.io/badge/pm2-%20>5-blue)
+![pm2](https://img.shields.io/badge/pm2-%20>5-blue "")
 
 ## deploy on server run :
 
@@ -64,7 +64,8 @@ or use first install (the file will be automatically create)
 
 ![Docker](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/logo-docker.png "Docker")
 
-# COMMING SOON
+<details>
+    <summary>Tech Stack</summary>
 
 The project run under nodeJS.
 
@@ -126,7 +127,6 @@ The project run under nodeJS.
  ┗ 📜build.js // js file for building app
 ```
 
-## Tech Stack
 
 - [Node.js](https://nodejs.org/) `v18.15.0`
 - [PostgreSQL](https://www.postgresql.org/)
@@ -154,3 +154,5 @@ The project run under nodeJS.
 - [koa-favicon](https://github.com/koajs/favicon)
 - [@koa/cors](https://github.com/koajs/cors)
 - [passport-local](https://github.com/jaredhanson/passport-local)
+
+</details>
