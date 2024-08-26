@@ -24,6 +24,14 @@
 
 If you need help : 
 
+<details>
+<summary>Click to toggle contents of `code`</summary>
+
+```
+CODE!
+```
+</details>
+
 ## use on local windows as production (for testing) use :  [script](https://raw.githubusercontent.com/Mario-35/Stean/main/scripts/install.ps1) as install.ps1
 
 ## for developper : 
