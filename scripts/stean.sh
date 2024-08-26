@@ -21,13 +21,27 @@ FILERUN=./run.sh
 SQLSCRIPT=./script.sql
 # prevent no found
 STEANVER="not installed"
+ACTIVE=000
 
-is_run() {
-    ISRUN=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8029/test/v1.1/)
+function parse_json()
+{
+    echo $1 | \
+    sed -e 's/[{}]/''/g' | \
+    sed -e 's/", "/'\",\"'/g' | \
+    sed -e 's/" ,"/'\",\"'/g' | \
+    sed -e 's/" , "/'\",\"'/g' | \
+    sed -e 's/","/'\"---SEPERATOR---\"'/g' | \
+    awk -F=':' -v RS='---SEPERATOR---' "\$1~/\"$2\"/ {print}" | \
+    sed -e "s/\"$2\"://" | \
+    tr -d "\n\t" | \
+    sed -e 's/\\"/"/g' | \
+    sed -e 's/\\\\/\\/g' | \
+    sed -e 's/^[ \t]*//g' | \
+    sed -e 's/^"//'  -e 's/"$//'
 }
 
 # Create run script
-create_run() {
+create_run_script() {
     if [ -f $FILERUN ]; then
         rm $FILERUN
         echo "Delete => $FILERUN"
@@ -212,8 +226,8 @@ install_stean() {
     echo "unzip $FILEDIST => $APIDEST/api"
     # Save config
     if [ -f $APIDEST/apiBak/configuration/configuration.json ]; then
-        cp $APIDEST/apiBak/configuration/configuration.json $APIDEST/api/configuration/configuration.json
-        echo "Move $APIDEST/apiBak/configuration/configuration.json => $APIDEST/api/configuration/configuration.json"
+        cp $APIDEST/apiBak/configuration/configuration.json $FILECFG
+        echo "Move $APIDEST/apiBak/configuration/configuration.json => $FILECFG"
     fi
     # Save key
     if [ -f $APIDEST/apiBak/configuration/.key ]; then
@@ -239,8 +253,7 @@ run_stean() {
     pm2 start $APIDEST/api/index.js
 }
 
-create_configuration() {
-    FILECFG=$APIDEST/api/configuration/configuration.json 
+create_configuration_json() {    
     read -p "Enter the postgres host [localhost]: " host;
     host=${host:-localhost}
     read -p "Enter ADMIN postgres username [postgres]: " user;
@@ -334,13 +347,13 @@ selectOption() {
             echo "┌───────────────────────────────────────────────────────────────┐"
             echo "│                       Create Run script                       │"
             echo "└───────────────────────────────────────────────────────────────┘"         
-            create_run          
+            create_run_script          
             ;;
         "Recreate run script")
             echo "┌───────────────────────────────────────────────────────────────┐"
             echo "│                      Recreate Run script                      │"
             echo "└───────────────────────────────────────────────────────────────┘"         
-            create_run          
+            create_run_script          
             ;;            
         "Run stean")
             echo "┌───────────────────────────────────────────────────────────────┐"
@@ -362,11 +375,11 @@ selectOption() {
             sudo -i -u postgres psql -c "create extension postgis;"
             sudo -i -u postgres psql -c "SELECT PostGIS_version();"
             ;;
-        "Create configuration")
+        "Create blank configuration")
             echo "┌───────────────────────────────────────────────────────────────┐"
             echo "│                     create configuration                      │"
             echo "└───────────────────────────────────────────────────────────────┘"
-            create_configuration
+            create_configuration_json
             ;;            
         "Decode configuration")
             echo "┌───────────────────────────────────────────────────────────────┐"
@@ -387,7 +400,11 @@ infos() {
     check_node
     check_pg
     check_pm2
-    is_run
+
+    FILECFG=$APIDEST/api/configuration/configuration.json
+    PORT=$(grep -Po '"http":.*?[^\\],' $FILECFG | grep -o -E "[0-9]+")
+    URL="http://localhost:$PORT"
+    ACTIVE=$(curl -s -o /dev/null -w "%{http_code}" $URL/v1.1/)
     # Dtermine options menu
     if [ -f $APIDEST/api/index.js ]; then
             options=("Change path" "Update stean");
@@ -399,7 +416,7 @@ infos() {
                 else
                     options+=('Create run script')
             fi
-            if [[ "$ISRUN" == "000" ]]; then
+            if [[ "$ACTIVE" == "000" ]]; then
                     options+=('Run stean')
                 else
                     options+=('Stop stean')
@@ -413,10 +430,10 @@ infos() {
             options+=('Check postGis')
     fi
 
-    if [ -f $APIDEST/api/configuration/configuration.json ]; then
+    if [ -f $FILECFG ]; then
             options+=('Decode configuration')
         else 
-            options+=("Create configuration")
+            options+=("Create blank configuration")
     fi    
     options+=('Quit')
     NBOPTIONS=${#options[@]};
@@ -468,7 +485,7 @@ infos;
         $E "Path :              Stean :               ";
         TPUT  0 12; $e $APIDEST; 
         TPUT  0 33; $e $STEANVER;
-        if [[ "$ISRUN" == "000" ]]; 
+        if [[ "$ACTIVE" == "000" ]]; 
             then
                 TPUT  0 42; $e "STOP"; 
             else
@@ -476,7 +493,8 @@ infos;
         fi
         UNMARK;
     }        
-    FOOT() { 
+    FOOT() {
+        TPUT  "$((NBOPTIONS + 4))" 8; $e $URL;        
         MARK;
         TPUT "$((NBOPTIONS + 5))" 5
         printf "Node:           Postgres:                 "; 
