@@ -3,8 +3,6 @@
 # SensorThings Enhanced API Node ![version](https://img.shields.io/badge/version-0.9.0-red)
 [Release infos](https://github.com/Mario-35/Stean/blob/main/realease.md)
 
-![Inrae](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/inrae.png "Inrae")
-
 ## Installation / Deploy  ![node](https://img.shields.io/badge/NodeJs-%20>16-blue)![postgreSql](https://img.shields.io/badge/PostgreSQL-%20>14-blue) ![postGIS](https://img.shields.io/badge/postGIS-%20>3-blue) ![pm2](https://img.shields.io/badge/pm2-%20>5-blue "")
 
 
