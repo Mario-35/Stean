@@ -40,13 +40,6 @@
 
     the other way is to create your own configuration.json file with that structure :
 
-- "Back to previous" : If a backup is present install it instead of actual installed stean
-- "Create / Recreate run script" : create run.sh with all parameters
-- "Run / Stop stean" : run or stop API
-
-</details>
-
-
 ```json
 {
     // admin must be in configuration file
@@ -91,23 +84,26 @@
         "extensions": [
             "base", // SensorThings core
             "multiDatastream", // SensorThings Multidatastream Extension
-            "lora" // Lora Extension
-            "logs" // Logs Extension
-            // Users Extension
-            "users"
+            "lora", // Lora Extension
+            "logs", // Logs Extension
+            "users" // Users Extension
         ],
         "options": [
-            // if it's true postres float8 will be used instead of float4
-            "highPrecision",
-            // database can be destroy (usefull in testing phose)
-            "canDrop",
-            // force api to add s to http of this service,
-            "stripNull",
-            // null value are not visible,
+            "highPrecision", // float8 will be used instead of float4
+            "canDrop", // database can be destroy (usefull in testing phose)
+            "stripNull",  // null value are not visible,
+            "forceHttps" // force api to add s to http of this service,
         ]
     }
 }
 ```
+
+- "Back to previous" : If a backup is present install it instead of actual installed stean
+- "Create / Recreate run script" : create run.sh with all parameters
+- "Run / Stop stean" : run or stop API
+
+</details>
+
 
 
 ## use on local windows as production (for testing) use :  [script](https://raw.githubusercontent.com/Mario-35/Stean/main/scripts/install.ps1) as install.ps1
