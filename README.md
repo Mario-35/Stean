@@ -21,7 +21,7 @@
 
 <details>
     <summary>If you need help</summary>
-The menu differs depending on the progress of the installation but the header and footer of the menu display certain states:
+    The menu differs depending on the progress of the installation but the header and footer of the menu display certain states:
 
 ![steanSh](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/steanSh.jpg "steanSh")
 
@@ -30,18 +30,85 @@ The menu differs depending on the progress of the installation but the header an
 - The state of stean (RUN or STOP)
 - At the bottom of the menu the version of node and postgresSql
 - Quit to exit installation script
-
-
 - "Indicate path" or "Change path" : indicates the installation path of the api
 - "Check postGis" : test the existence and the version of postGis
 - "Install all" : Install stean after check if nodeJs, Postgres and pm2 are installed
-    After install the best way is to run api with the url : "http://localhost:8029" or with url show by the menu and go to the first start whrere you ran test connection and create a service.
+    
+    After install the best way is to run api with the url : "http://localhost:8029" or with url show by the menu and go to the first start whrere you can test connection and create a service.
+
     ![firstStart](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/firstStart.jpg "firstStart")
+
+    the other way is to create your own configuration.json file with that structure :
+
 - "Back to previous" : If a backup is present install it instead of actual installed stean
 - "Create / Recreate run script" : create run.sh with all parameters
 - "Run / Stop stean" : run or stop API
 
 </details>
+
+
+```json
+{
+    // admin must be in configuration file
+    "admin": {
+        "name": "admin",
+        "ports": {
+            "http": 8029, // http port
+            "tcp": 9000, // tcp port for mqtt
+            "ws": 1883 // web socket
+        },
+        // postgresSql Connection // with admin rights (create database rights and user ...)
+        "pg": {
+            "host": "localhost",
+            "port": 5432,
+            "user": "postgres",
+            "password": "password", // ADMIN password (with rights to create DB)
+            "database": "postgres",
+            "retry": 2
+        }
+    },
+    "myService": { // service name        
+        "name": "myService", // name of the service SAME as key name
+        "port": 8037, // not used
+        // postgresSql Connection 
+        "pg": {
+            "host": "localhost",
+            "port": 5432,
+            "user": "myname", // user to create
+            "password": "myPass",
+            //  name of the database (if not exit a blank database will be create)
+            "database": "myservice",
+            "retry": 2
+        },
+        "apiVersion": "1.1", // model version 1.0 ou 1.1
+        "date_format": "DD/MM/YYYY hh:mi:ss", // date format in jsons
+        "nb_page": 200, // pagination number by page
+        // list of alias name
+        "alias": [
+            ""
+        ],
+        // etensions of the service
+        "extensions": [
+            "base", // SensorThings core
+            "multiDatastream", // SensorThings Multidatastream Extension
+            "lora" // Lora Extension
+            "logs" // Logs Extension
+            // Users Extension
+            "users"
+        ],
+        "options": [
+            // if it's true postres float8 will be used instead of float4
+            "highPrecision",
+            // database can be destroy (usefull in testing phose)
+            "canDrop",
+            // force api to add s to http of this service,
+            "stripNull",
+            // null value are not visible,
+        ]
+    }
+}
+```
+
 
 ## use on local windows as production (for testing) use :  [script](https://raw.githubusercontent.com/Mario-35/Stean/main/scripts/install.ps1) as install.ps1
 
