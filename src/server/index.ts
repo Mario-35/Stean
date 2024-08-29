@@ -13,12 +13,10 @@ import Koa from "koa";
 import bodyParser from "koa-bodyparser";
 import logger from "koa-logger";
 import helmet from "koa-helmet";
-import compress from "koa-compress";
 import json from "koa-json";
 import cors from "@koa/cors";
 import serve from "koa-static";
 import favicon from 'koa-favicon';
-import { constants } from "zlib";
 import { log } from "./log";
 import { config } from "./configuration";
 import { models } from "./models";
@@ -54,16 +52,7 @@ app.use(serve(path.join(__dirname, "/apidoc")));
 app.use(helmet.contentSecurityPolicy({ directives: HELMET_CONFIG }));
 
 // bodybarser https://github.com/koajs/bodyparser
-app.use(bodyParser({ enableTypes: ["json", "text", "form"] }));
-
-app.use(compress({
-  filter: function (content_type) {
-    return ( /json/i.test(content_type) || /text/i.test(content_type)) },
-    threshold: 1024,
-    gzip: {
-    flush: constants.Z_NO_FLUSH,
-    level: constants.Z_BEST_COMPRESSION
-  }}));
+app.use(bodyParser({ enableTypes: ["json", "text", "form"] }));;
 
 // router
 app.use(routerHandle);

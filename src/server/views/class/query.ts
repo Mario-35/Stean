@@ -17,7 +17,6 @@ import { CoreHtmlView } from "./core";
 import fs from "fs";
 import path from "path";
 
-
 export class Query extends CoreHtmlView {
     params: IqueryOptions;
     constructor(ctx: koaContext, datas: IqueryOptions) {

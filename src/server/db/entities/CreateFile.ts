@@ -124,7 +124,6 @@ export class CreateFile extends Common {
           log.error('ABORTED-STREAM');
           reject(err);
         });
-        
       // await finished(stream);
       });
   };
