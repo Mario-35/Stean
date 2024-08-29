@@ -30,7 +30,7 @@ export class Status extends CoreHtmlView {
                     <div class="login-html">
                         ${this.title("Status")}
                         <h3>Username : ${ user.username }</h3> 
-                        <h3>Hosting : ${user.database == "all" ? "all" : service ? config.getConfig(service).pg.host : "Not Found"}</h3>
+                        <h3>Hosting : ${user.database == "all" ? "all" : service ? config.getService(service).pg.host : "Not Found"}</h3>
                         <h3>Database : ${user.database}</h3>
                         <h3>Status : ${ user.id && user.id > 0 ? EChar.ok : !sec ? EChar.ok : EChar.notOk}</h3> 
                         <h3>Post : ${ user.canPost === true ? EChar.ok : !sec ? EChar.ok : EChar.notOk}</h3>

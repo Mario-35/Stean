@@ -12,7 +12,7 @@ import { allEntitiesType, EExtensions, EOptions } from "../enums";
 import { Ientity } from "./entity";
 
 export { Icomon } from "./comon";
-export { Iservice } from "./configFile";
+export { Iservice } from "./service";
 export { IcsvColumn } from "./csvColumn";
 export { IcsvFile } from "./csvFile";
 export { IcsvImport } from "./csvImport";

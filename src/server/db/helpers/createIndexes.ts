@@ -49,7 +49,7 @@ export const createIndexes = (name: string): void => {
         FROM datas where "datastream".id = datas.id`
     ] 
 
-    if (config.getConfig(name).extensions.includes(EExtensions.multiDatastream)) {
+    if (config.getService(name).extensions.includes(EExtensions.multiDatastream)) {
         sqls.push(`WITH multidatastreams AS (
                 select distinct "multidatastream_id" AS id from observation
             ),

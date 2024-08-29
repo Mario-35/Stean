@@ -73,7 +73,7 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
         }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -99,7 +99,7 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
                         }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err: Error, res: any) => {                
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -126,7 +126,7 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
                         }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -153,7 +153,7 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
                         }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -180,7 +180,7 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
                         }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err: Error, res: any) => {                
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -207,7 +207,7 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
                         }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -233,7 +233,7 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
     //                     }
     //     };
     //     chai.request(server)
-    //         .get(`/test/${infos.apiExample.http}`)
+    //         .get(`/test/${info.apiExample.http}`)
     //         .end((err: Error, res: any) => {
     //             should.not.exist(err);
     //             res.status.should.equal(200);
@@ -261,7 +261,7 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
                         }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -288,7 +288,7 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
                         }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -315,7 +315,7 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
                         }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -342,7 +342,7 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
                         }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -369,7 +369,7 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
                         }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -396,7 +396,7 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
                         }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -422,9 +422,9 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
     //                     }
     //     };
     //     chai.request(server)
-    //         .get(`/test/${infos.apiExample.http}`)
+    //         .get(`/test/${info.apiExample.http}`)
     //         .end((err: Error, res: any) => {
-    //             console.log(infos.apiExample.http);
+    //             console.log(info.apiExample.http);
                 
     //             should.not.exist(err);
     //             res.status.should.equal(200);
@@ -452,9 +452,9 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
     //                     }
     //     };
     //     chai.request(server)
-    //         .get(`/test/${infos.apiExample.http}`)
+    //         .get(`/test/${info.apiExample.http}`)
     //         .end((err: Error, res: any) => {
-    //             console.log(infos.apiExample.http);
+    //             console.log(info.apiExample.http);
     //             should.not.exist(err);
     //             res.status.should.equal(200);
     //             res.type.should.equal("application/json");

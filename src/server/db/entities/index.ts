@@ -7,7 +7,7 @@
  */
 // onsole.log("!----------------------------------- Index entities -----------------------------------!");
 
-export { Configs } from "./Configs";
+export { Services } from "./Services";
 export { Datastreams } from "./Datastreams";
 export { FeaturesOfInterest } from "./FeaturesOfInterest";
 export { HistoricalLocations } from "./HistoricalLocations";

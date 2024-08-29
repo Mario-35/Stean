@@ -13,7 +13,7 @@ import { IdbConnection } from "../../types";
 
 // test if database exist with admin connection
 export async function  testDbExists(adminConn: IdbConnection, database: string): Promise<boolean> {
-    return await postgres( `postgres://${adminConn.user}:${adminConn.password}@${adminConn.host}:${adminConn.port || 5432}/${database}`,
+    return await postgres(`postgres://${adminConn.user}:${adminConn.password}@${adminConn.host}:${adminConn.port || 5432}/${database}`,
       {
         debug: _DEBUG,          
         connection: { 

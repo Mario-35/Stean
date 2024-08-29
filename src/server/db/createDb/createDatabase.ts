@@ -21,7 +21,7 @@ import { createRole } from "../helpers/createRole";
 export const createDatabase = async (configName: string): Promise<IKeyString> => {
   console.log(log.debug_head("createDatabase", configName));
   // init result
-  const servicePg = config.getConfig(configName).pg;
+  const servicePg = config.getService(configName).pg;
   const returnValue: IKeyString = { "Start create Database": servicePg.database };
   const adminConnection = config.adminConnection();
   // Test connection Admin
@@ -97,7 +97,7 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
   );
 
   // If only numeric extension
-  if ( config.getConfig(configName).extensions.includes( EExtensions.highPrecision ) ) {
+  if ( config.getService(configName).extensions.includes( EExtensions.highPrecision ) ) {
     await dbConnection.unsafe(`ALTER TABLE ${addDoubleQuotes(DB.Observations.table)} ALTER COLUMN 'result' TYPE float4 USING null;`)
       .catch((error: Error) => {
         console.log(error);
@@ -110,11 +110,11 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
       });
   }
 
-  returnValue[`Create Role`] = await createRole(config.getConfig(configName))
+  returnValue[`Create Role`] = await createRole(config.getService(configName))
     .then(() => EChar.ok)
     .catch((err: Error) => err.message);
 
-  returnValue[`Create user`] = await createUser(config.getConfig(configName))
+  returnValue[`Create user`] = await createUser(config.getService(configName))
     .then(() => EChar.ok)
     .catch((err: Error) => err.message);
 

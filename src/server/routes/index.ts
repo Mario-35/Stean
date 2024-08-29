@@ -10,8 +10,8 @@
 import { decodeToken } from "../authentication";
 import { _DEBUG } from "../constants";
 import { log } from "../log";
-import { EExtensions, EHttpCode } from "../enums";
-import { createBearerToken, getUserId } from "../helpers";
+import { EExtensions, EFileName, EHttpCode } from "../enums";
+import { createBearerToken, getUserId, returnFormats } from "../helpers";
 import { decodeUrl, firstInstall } from "./helper";
 import { errors } from "../messages";
 import { config } from "../configuration";
@@ -21,19 +21,33 @@ export { protectedRoutes } from "./protected";
 import querystring from "querystring";
 import { koaContext } from "../types";
 import { writeLogToDb } from "../log/writeLogToDb";
+import { HtmlLogs } from "../views/class/logs";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const routerHandle = async (ctx: koaContext, next: any) => { 
   // First Install 
-  await firstInstall(ctx);  
+  if (config.configFileExist() === false) await firstInstall(ctx);  
   // create token
   createBearerToken(ctx);
   // decode url
-  const decodedUrl = decodeUrl(ctx);
- 
+  const decodedUrl = decodeUrl(ctx); 
   if (!decodedUrl) {
     // Get all infos services
-    if (ctx.path.toLocaleUpperCase() === "/INFOS") ctx.body = config.getInfosForAll(ctx);
+    switch (ctx.path.toLocaleUpperCase()) {
+      case "/INFOS":
+          ctx.body = config.getInfosForAll(ctx);        
+          return;
+        // metrics for moinoring
+        case "/SERVICE": 
+          await firstInstall(ctx);  
+          return;
+        // metrics for moinoring
+        case "/LOGGING": 
+          const bodyLogs = new HtmlLogs(ctx, "../../" + EFileName.logs);
+          ctx.type = returnFormats.html.type;
+          ctx.body = bodyLogs.toString();
+          return;
+     }
     return;
   };
   
@@ -43,7 +57,7 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
 
   if (!decodedUrl.service) throw new Error(errors.noNameIdentified);
   if (decodedUrl.service && decodedUrl.configName) 
-    ctx.config = config.getConfig(decodedUrl.configName);
+    ctx.config = config.getService(decodedUrl.configName);
     else return;
 
   // forcing post loras with different version IT'S POSSIBLE BECAUSE COLUMN ARE THE SAME FOR ALL VERSION

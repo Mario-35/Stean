@@ -13,7 +13,7 @@ import { koaContext } from "../../types";
 
 export const exportToJson = async (ctx: koaContext) => {
   // get config with hidden password
-  const result: Record<string, any> = { "create": hidePassword(config.getConfig(ctx.config.name))};
+  const result: Record<string, any> = { "create": hidePassword(config.getService(ctx.config.name))};
   // get entites list
   const entities = Object.keys(ctx.model).filter((e: string) => ctx.model[e].createOrder > 0);
   // add ThingsLocations

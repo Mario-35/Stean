@@ -50,7 +50,7 @@ addToApiDoc({
                 apiParamExample: { "username": identification.username, "password": identification.password }
             });
             chai.request(server)
-                .post(`/test/${infos.apiExample.http}`)
+                .post(`/test/${info.apiExample.http}`)
                 .type("form")
                 .send(identification)
                 .end((err: Error, res: any) => {
@@ -75,9 +75,9 @@ addToApiDoc({
                 apiParamExample: { "username": identification.username, "password": "nowhere" }
             });
             chai.request(server)
-                .post(`/test/${infos.apiExample.http}`)
+                .post(`/test/${info.apiExample.http}`)
                 .type("form")
-                .send(infos.apiParamExample)
+                .send(info.apiParamExample)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(401);
@@ -99,7 +99,7 @@ addToApiDoc({
                 }
             });
             chai.request(server)
-                .get(`/test/${infos.apiExample.http}`)
+                .get(`/test/${info.apiExample.http}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.body.should.include.keys("message");

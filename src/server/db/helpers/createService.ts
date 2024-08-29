@@ -47,10 +47,10 @@ export const createService = async (dataInput: Record<string, any>, ctx?: koaCon
   console.log(log.whereIam());
   if(dataInput && dataInput["create"]) {    
     config.addConfig(dataInput["create"]);
-  }
+  }  
   const results: Record<string, string>  = {};
   const serviceName = dataInput["create" as keyobj]["name"];
-  const service = config.getConfig(serviceName);
+  const service = config.getService(serviceName);
   const mess = `Database [${serviceName}]`; 
   const createDB = async () => {
     try {  
@@ -85,7 +85,7 @@ export const createService = async (dataInput: Record<string, any>, ctx?: koaCon
       if (goodEntity) {
         try {
           const sqls: string[] =dataInput[entityName].map((element: any) =>`INSERT INTO ${addDoubleQuotes(goodEntity.table)} ${createInsertValues(service, prepareDatas(element, goodEntity.name), goodEntity.name)}`);
-          await executeSqlValues(config.getConfig(serviceName), sqls.join(";")).then((res: Record<string, any>) =>{
+          await executeSqlValues(config.getService(serviceName), sqls.join(";")).then((res: Record<string, any>) =>{
             results[entityName] = EChar.ok;
           }).catch((error: any) => {
             console.log(error);

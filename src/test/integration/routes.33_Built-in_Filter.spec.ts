@@ -53,7 +53,7 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
             }
         });
         chai.request(server)
-        .get(`/test/${infos.apiExample.http}`)
+        .get(`/test/${info.apiExample.http}`)
         .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -95,7 +95,7 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
             }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -121,7 +121,7 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
             }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -144,7 +144,7 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
             }
         });
         chai.request(server)
-        .get(`/test/${infos.apiExample.http}`)
+        .get(`/test/${info.apiExample.http}`)
             .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -169,7 +169,7 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
             }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -196,7 +196,7 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
             }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -222,7 +222,7 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
             }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -249,7 +249,7 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
         });
 
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -276,7 +276,7 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
         });
 
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -302,7 +302,7 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
     //     };
 
     //     chai.request(server)
-    //         .get(`/test/${infos.apiExample.http}`)
+    //         .get(`/test/${info.apiExample.http}`)
     //         .end((err, res) => {
     //             should.not.exist(err);
     //             res.status.should.equal(200);
@@ -329,7 +329,7 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
     //     };
 
     //     chai.request(server)
-    //         .get(`/test/${infos.apiExample.http}`)
+    //         .get(`/test/${info.apiExample.http}`)
     //         .end((err, res) => {
     //             should.not.exist(err);
     //             res.status.should.equal(200);
@@ -356,7 +356,7 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
     //     };
 
     //     chai.request(server)
-    //         .get(`/test/${infos.apiExample.http}`)
+    //         .get(`/test/${info.apiExample.http}`)
     //         .end((err, res) => {
     //             should.not.exist(err);
     //             res.status.should.equal(200);
@@ -384,7 +384,7 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
     //     };
 
     //     chai.request(server)
-    //         .get(`/test/${infos.apiExample.http}`)
+    //         .get(`/test/${info.apiExample.http}`)
     //         .end((err, res) => {
     //             should.not.exist(err);
     //             res.status.should.equal(200);
@@ -411,7 +411,7 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
     //     };
 
     //     chai.request(server)
-    //         .get(`/test/${infos.apiExample.http}`)
+    //         .get(`/test/${info.apiExample.http}`)
     //         .end((err, res) => {
     //             should.not.exist(err);
     //             res.status.should.equal(200);
@@ -438,7 +438,7 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
     //     };
 
     //     chai.request(server)
-    //         .get(`/test/${infos.apiExample.http}`)
+    //         .get(`/test/${info.apiExample.http}`)
     //         .end((err, res) => {
     //             should.not.exist(err);
     //             res.status.should.equal(200);
@@ -465,7 +465,7 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
     //     };
 
     //     chai.request(server)
-    //         .get(`/test/${infos.apiExample.http}`)
+    //         .get(`/test/${info.apiExample.http}`)
     //         .end((err, res) => {
     //             should.not.exist(err);
     //             res.status.should.equal(200);
@@ -495,7 +495,7 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
     //     };
 
     //     chai.request(server)
-    //         .get(`/test/${infos.apiExample.http}`)
+    //         .get(`/test/${info.apiExample.http}`)
     //         .end((err, res) => {
     //             should.not.exist(err);
     //             res.status.should.equal(200);

@@ -7,7 +7,7 @@
  */
 // onsole.log("!----------------------------------- HTML Views First Install for API. -----------------------------------!");
 
-import { infos } from "../../messages";
+import { info } from "../../messages";
 import { IKeyString, koaContext } from "../../types";
 import { CoreHtmlView } from "./core";
 
@@ -36,28 +36,28 @@ export class First extends CoreHtmlView {
                   <div class="login-html" color="#FF0000">
                     ${this.title("First Start")}
                     <input id="tab-1" type="radio" name="tab" class="sign-in" checked>
-                    <label for="tab-1" class="tab">${infos.pg} Admin</label>
+                    <label for="tab-1" class="tab">${info.pg} Admin</label>
                     <input id="tab-2" type="radio" name="tab" class="sign-up">
                     <label for="tab-2" class="tab">Help</label>
                     <div class="login-form">
                       <form action="/install" method="post">
                         <div class="sign-in-htm">
-                        ${this.addHidden("_src", "_first")}
-                        ${this.addTextInput({name: "host", label: infos.host , value: datas.body && datas.body.host || "localhost", alert: alert("host"), toolType: infos.least5Tool})}
-                        ${this.addTextInput({name: "username", label: infos.user, value: datas.body && datas.body.username || "postgres", alert: alert("username"), toolType: infos.least5Tool})}
-                        ${this.addTextInput({name: "password", label: infos.pass, password: true, value: "", alert: alert("password"), toolType: infos.passTool})}
-                        ${this.addTextInput({name: "repeat", label: infos.rep, password: true, value: "", alert: alert("repeat"), toolType: infos.repTool})}
-                        ${this.addSubmitButton(infos.dbPgConn)}
-                        ${ datas.why && datas.why["_error"] ? this.AddErrorMessage(datas.why["_error"]) : ""}
+                          ${this.addHidden("_src", "_first")}
+                          ${this.addTextInput({name: "host", label: info.host , value: datas.body && datas.body.host || "localhost", alert: alert("host"), toolType: info.least5Tool})}
+                          ${this.addTextInput({name: "username", label: info.user, value: datas.body && datas.body.username || "postgres", alert: alert("username"), toolType: info.least5Tool})}
+                          ${this.addTextInput({name: "password", label: info.pass, password: true, value: "", alert: alert("password"), toolType: info.passTool})}
+                          ${this.addTextInput({name: "repeat", label: info.rep, password: true, value: "", alert: alert("repeat"), toolType: info.repTool})}
+                          ${this.addSubmitButton(info.dbPgConn)}
+                          ${ datas.why && datas.why["_error"] ? this.AddErrorMessage(datas.why["_error"]) : ""}
                         </div> 
                         <div class="sign-up-htm">
-                        <span>
-                          You have to create configuration to start the API<br>
-                          <br>
-                          You have to put user admin postgresSql connection in PostgresSql Admin in tab above (This user must have right to create databases).<br>
-                          <br>
-                          When the connection test succed you can create your first service.
-                        </span>
+                          <span>
+                            You have to create configuration to start the API<br>
+                            <br>
+                            You have to put user admin postgresSql connection in PostgresSql Admin in tab above (This user must have right to create databases).<br>
+                            <br>
+                            When the connection test succed you can create your first service.
+                          </span>
                         </div>
                       </form>
                     </div>

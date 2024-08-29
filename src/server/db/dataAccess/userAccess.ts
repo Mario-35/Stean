@@ -13,19 +13,19 @@ import { config } from "../../configuration";
 import { ADMIN } from "../../constants";
 import { models } from "../../models";
 
-const cols = () => Object.keys(models.DBAdmin(config.getConfig(ADMIN)).Users.columns);
+const cols = () => Object.keys(models.DBAdmin(config.getService(ADMIN)).Users.columns);
 
 export const userAccess = {
   getAll: async (configName: string, ) => {
     const conn = config.connection(configName);
-    const query = await conn<Iuser[]>`SELECT ${conn(cols())} FROM ${conn(models.DBAdmin(config.getConfig(configName)).Users.table)} ORDER BY id`;
+    const query = await conn<Iuser[]>`SELECT ${conn(cols())} FROM ${conn(models.DBAdmin(config.getService(configName)).Users.table)} ORDER BY id`;
     return query[0];
   },
 
   getSingle: async (configName: string, id: string | number) => {
     const conn = config.connection(configName);
     id = (typeof id === "number") ? String(id) : id;    
-    const query = await conn<Iuser[]>`SELECT ${conn(cols())} FROM ${conn(models.DBAdmin(config.getConfig(configName)).Users.table)} WHERE id = ${+id} LIMIT 1`;
+    const query = await conn<Iuser[]>`SELECT ${conn(cols())} FROM ${conn(models.DBAdmin(config.getService(configName)).Users.table)} WHERE id = ${+id} LIMIT 1`;
       if (query.length === 1) return query[0];
   },
 

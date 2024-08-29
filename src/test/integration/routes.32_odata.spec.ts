@@ -61,7 +61,7 @@ describe("Odata", () => {
                         }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -92,7 +92,7 @@ describe("Odata", () => {
         }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -126,7 +126,7 @@ describe("Odata", () => {
             }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err: Error, res: any) => {
                 // there should be no errors
                 should.not.exist(err);
@@ -156,7 +156,7 @@ describe("Odata", () => {
             }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err: Error, res: any) => {
                 // there should be no errors
                 should.not.exist(err);
@@ -187,7 +187,7 @@ describe("Odata", () => {
             }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err: Error, res: any) => {
                 // there should be no errors
                 should.not.exist(err);
@@ -217,7 +217,7 @@ describe("Odata", () => {
             python: defaultGet("python", "KEYHTTP") }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -243,7 +243,7 @@ describe("Odata", () => {
         });
         executeQuery(count("thing")).then((result: Record<string, any>) => {
                 chai.request(server)
-                    .get(`/test/${infos.apiExample.http}`)
+                    .get(`/test/${info.apiExample.http}`)
                     .end((err, res) => {
                         should.not.exist(err);
                         res.status.should.equal(200);
@@ -272,7 +272,7 @@ describe("Odata", () => {
         });
         executeQuery(count("thing")).then((result: Record<string, any>) => {
                 chai.request(server)
-                    .get(`/test/${infos.apiExample.http}`)
+                    .get(`/test/${info.apiExample.http}`)
                     .end((err, res) => {
                         should.not.exist(err);
                         res.status.should.equal(200);
@@ -300,7 +300,7 @@ describe("Odata", () => {
             python: defaultGet("python", "KEYHTTP") }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -327,7 +327,7 @@ describe("Odata", () => {
         });
         executeQuery(count("observation")).then((result: Record<string, any>) => {
                 chai.request(server)
-                    .get(`/test/${infos.apiExample.http}`)
+                    .get(`/test/${info.apiExample.http}`)
                     .end((err, res) => {
                         should.not.exist(err);
                         res.status.should.equal(200);
@@ -354,7 +354,7 @@ describe("Odata", () => {
                 python: defaultGet("python", "KEYHTTP") }
             });    
             chai.request(server)
-                .get(`/test/${infos.apiExample.http}`)
+                .get(`/test/${info.apiExample.http}`)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -379,7 +379,7 @@ describe("Odata", () => {
 					}
 				});
         chai.request(server)
-        .get(`/test/${infos.apiExample.http}`)
+        .get(`/test/${info.apiExample.http}`)
         .end((err, res) => {
         should.not.exist(err);
         res.status.should.equal(200);
@@ -403,7 +403,7 @@ describe("Odata", () => {
 					}
 				});
         chai.request(server)
-        .get(`/test/${infos.apiExample.http}`)
+        .get(`/test/${info.apiExample.http}`)
         .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -426,7 +426,7 @@ describe("Odata", () => {
 					}
 				});
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -449,7 +449,7 @@ describe("Odata", () => {
 					}
 				});
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -472,7 +472,7 @@ describe("Odata", () => {
 					}
 				});
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -495,7 +495,7 @@ describe("Odata", () => {
 					}
 				});
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -518,7 +518,7 @@ describe("Odata", () => {
 					}
 				});
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -545,7 +545,7 @@ describe("Odata", () => {
             python: defaultGet("python", "KEYHTTP") }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.equal(200);

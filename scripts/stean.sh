@@ -46,11 +46,11 @@ create_run_script() {
 logo() {
     check_stean
     echo ""
-    echo -e "\e[32m  ____ __________    _     _   _ \e[0m"
-    echo -e "\e[32m / ___|_ __  ____|  / \   | \ | |\e[0m"
-    echo -e "\e[32m \___ \| | |  _|   / _ \  |  \| |\e[0m"
-    echo -e "\e[32m  ___) | | | |___ / ___ \ | |\  |\e[0m"
-    echo -e "\e[32m |____/|_| |_____|_/   \_\|_| \_|   \e[34m$STEANVER\e[0m"
+    echo -e "\e[32m  ____ __________   _     _   _ \e[0m"
+    echo -e "\e[32m / ___|_ __  ____| / \   | \ | |\e[0m"
+    echo -e "\e[32m \___ \| | |  _|  / _ \  |  \| |\e[0m"
+    echo -e "\e[32m  ___) | | | |___/ ___ \ | |\  |\e[0m"
+    echo -e "\e[32m |____/|_| |______/   \_\|_| \_|   \e[34m$STEANVER\e[0m"
     echo ""
 }
 
@@ -384,9 +384,13 @@ infos() {
     check_pg
     check_pm2
     FILECFG=$APIDEST/api/configuration/configuration.json
-    PORT=$(grep -Po '"http":.*?[^\\],' $FILECFG | grep -o -E "[0-9]+")
-    URL="http://localhost:$PORT"
-    ACTIVE=$(curl -s -o /dev/null -w "%{http_code}" $URL/v1.1/)
+    if [ -f $FILECFG ]; then
+        PORT=$(grep -Po '"http":.*?[^\\],' $FILECFG | grep -o -E "[0-9]+")
+        URL="http://localhost:$PORT"
+        ACTIVE=$(curl -s -o /dev/null -w "%{http_code}" $URL/v1.1/)
+    else 
+        URL="http://localhost:8029"       
+    fi 
     # Dtermine options menu
     if [ -f $APIDEST/api/index.js ]; then
             options=("Change path" "Update stean");

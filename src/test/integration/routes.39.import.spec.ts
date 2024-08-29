@@ -50,7 +50,7 @@ const multi = {
 };
 
 addToApiDoc({
-    api: `{infos} /Import Infos.`,
+    api: `{infos} /Import info.`,
     apiName: "InfosImport",
     apiDescription: `<hr>
     <div class="text">
@@ -85,9 +85,9 @@ describe("CSV Import", function () {
             apiParamExample: simple
         });
         chai.request(server)
-            .post(`/test/${infos.apiExample.http}`)
+            .post(`/test/${info.apiExample.http}`)
             .field("Content-Type", "multipart/form-data")
-            .field("datas", JSON.stringify(infos.apiParamExample))
+            .field("datas", JSON.stringify(info.apiParamExample))
             .field("method", "POST")
             .field("nb", "1")
             .attach("file", "./src/test/integration/files/simple.csv")
@@ -114,9 +114,9 @@ describe("CSV Import", function () {
             apiParamExample: simple
         });
         chai.request(server)
-            .post(`/test/${infos.apiExample.http}`)
+            .post(`/test/${info.apiExample.http}`)
             .field("Content-Type", "multipart/form-data")
-            .field("datas", JSON.stringify(infos.apiParamExample))
+            .field("datas", JSON.stringify(info.apiParamExample))
             .field("method", "POST")
             .field("nb", "1")
             .attach("file", "./src/test/integration/files/simple.csv")
@@ -146,9 +146,9 @@ describe("CSV Import", function () {
             apiParamExample: multi
         });
         chai.request(server)
-            .post(`/test/${infos.apiExample.http}`)
+            .post(`/test/${info.apiExample.http}`)
             .field("Content-Type", "multipart/form-data")
-            .field("datas", JSON.stringify(infos.apiParamExample))
+            .field("datas", JSON.stringify(info.apiParamExample))
             .field("method", "POST")
             .field("nb", "1")
             .attach("file", "./src/test/integration/files/multi.csv")
@@ -178,9 +178,9 @@ describe("CSV Import", function () {
             apiParamExample: multi
         });
         chai.request(server)
-            .post(`/test/${infos.apiExample.http}`)
+            .post(`/test/${info.apiExample.http}`)
             .field("Content-Type", "multipart/form-data")
-            .field("datas", JSON.stringify(infos.apiParamExample))
+            .field("datas", JSON.stringify(info.apiParamExample))
             .field("method", "POST")
             .field("nb", "1")
             .attach("file", "./src/test/integration/files/multi.csv")

@@ -30,7 +30,7 @@ class Log {
   }
 
   public message<T>(cle: string, infos: T) {
-    return `${color(EColor.Yellow)} ${cle} ${color( EColor.White )}:${color(EColor.Cyan)} ${showAll( infos)}${color(EColor.Reset)}`;
+    return `${color(EColor.Yellow)}${cle} ${color( EColor.White )}:${color(EColor.Cyan)} ${showAll( infos)}${color(EColor.Reset)}`;
   }
 
   public query(sql: unknown) {
@@ -68,7 +68,7 @@ class Log {
   }
 
   _head<T>(cle: string, infos?: T) {
-    return infos ? `${color(EColor.Green)} ${this.line(12)} ${color( EColor.Cyan )} ${cle} ${color(EColor.White)} ${this.logAll( infos, this.debugFile )} ${color(EColor.Green)} ${this.line(12)}${color( EColor.Reset )}` : this.separator(cle, 12);
+    return infos ? `${color(EColor.Green)}${this.line(12)} ${color( EColor.Cyan )} ${cle} ${color(EColor.White)} ${this.logAll( infos, this.debugFile )} ${color(EColor.Green)} ${this.line(12)}${color( EColor.Reset )}` : this.separator(cle, 12);
   }
   debug_head<T>(cle: string, infos?: T) {
     if (_DEBUG) return this._head(cle, infos);
@@ -97,7 +97,7 @@ class Log {
   whereIam(infos?: unknown) {  
     if (_DEBUG) {
       const tmp = infos ? `${color(EColor.Default)} ${infos} ${color(EColor.Reset)}` : '';
-      return `${color(EColor.Red)} ${this.line(4)} ${color(EColor.Cyan)} ${ new Error().stack?.split("\n")[2].trim().split("(")[0].split("at ")[1].trim() } ${tmp}${color(EColor.Red)} ${this.line(4)}${color(EColor.Reset)}`;
+      return `${color(EColor.Red)}${this.line(4)} ${color(EColor.Cyan)} ${ new Error().stack?.split("\n")[2].trim().split("(")[0].split("at ")[1].trim() } ${tmp}${color(EColor.Red)} ${this.line(4)}${color(EColor.Reset)}`;
     };
   }  
 

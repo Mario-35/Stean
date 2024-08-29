@@ -24,7 +24,6 @@ import { config } from "./configuration";
 import { models } from "./models";
 import { isTest, logToHtml } from "./helpers";
 import { RootPgVisitor } from "./odata/visitor";
-import { sqlStopDbName } from "./routes/helper";
 import { EChar } from "./enums";
 import { protectedRoutes, routerHandle, unProtectedRoutes } from "./routes/";
 import { Iservice, IdecodedUrl, Ientities, Ilog, IuserToken, koaContext } from "./types";
@@ -102,12 +101,11 @@ models.init();
 // Start server initialisaion
 export const server = isTest()
   // Tdd init
-  ? app.listen(config.getConfig(ADMIN).ports?.http || 8029, async () => {
+  ? app.listen(config.getService(ADMIN).ports?.http || 8029, async () => {    
     await config
-          .connection(ADMIN)`${sqlStopDbName('test')}`
+          .connection(ADMIN)`SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname = 'test'`
           .then(async () => {
             await config.connection(ADMIN)`DROP DATABASE IF EXISTS test`;
-            process.stdout.write(`DROP DATABASE IF EXISTS test\n`);
           });
       console.log(log.message(`${APP_NAME} version : ${APP_VERSION}`, "ready " + EChar.ok));
     })

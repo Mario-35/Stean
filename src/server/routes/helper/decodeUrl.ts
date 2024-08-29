@@ -16,13 +16,13 @@ import { log } from "../../log";
 import { errors } from "../../messages";
 import { IdecodedUrl, koaContext  } from "../../types";
 
-//   service root URI       resource path       query options
-// __________|_________________ __|________________ ___|______________
-//                             \                   \                  \
-// http://example.org:8029/v1.1/Things(1)/Locations?$orderby=ID&$top=10
-// _____/________________/____/___________________/___________________/
-//   |           |         |              |                |
-// protocol     host    version        pathname          search
+//   service root URI                   resource path     query options
+// __________|______________________________|___________ _______|____________
+//                                 \                   \                  \
+// http://example.org:8029/test/v1.1/Things(1)/Locations?$orderby=ID&$top=10
+// _____/________________/____/____/___________________/___________________/
+//   |           |         |    |         |                |
+// protocol    host   service  version  pathname         search
 
 export const decodeUrl = (ctx: koaContext, input?: string): IdecodedUrl | undefined => {
   // get input
@@ -32,14 +32,14 @@ export const decodeUrl = (ctx: koaContext, input?: string): IdecodedUrl | undefi
   setDebug(input.includes("?$debug=true") || input.includes("&$debug=true"));
   console.log(log.whereIam());
   // decode url
-  const url = new URL(cleanUrl(input.replace("$debug=true", "").normalize("NFD") .replace(/[\u0300-\u036f]/g, ""))); 
+  const url = new URL(cleanUrl(input.replace("$debug=true", "").normalize("NFD").replace(/[\u0300-\u036f]/g, ""))); 
   // get configName from port    
   let configName:  string | undefined = undefined;
   // split path
   // path[0] : service
   // path[1] : version
   // path[...] : path
-  const paths = url.pathname.split('/').filter(e => e != "");  
+  const paths = url.pathname.split('/').filter(e => e != "");
   // no service
   if (paths[0]) 
     configName = configName || config.getConfigNameFromName(paths[0].toLowerCase());
@@ -59,6 +59,7 @@ export const decodeUrl = (ctx: koaContext, input?: string): IdecodedUrl | undefi
     }  
     // result
     return  {
+      origin: url.origin,
       search: url.search,
       service: paths[0],
       version: paths[0] === ADMIN ? EVersion.v1_0 : paths[1],

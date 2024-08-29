@@ -11,7 +11,7 @@
  import { addDoubleQuotes, returnFormats } from "../../helpers/index";
  import { IreturnResult, keyobj, koaContext } from "../../types";
  import { executeSqlValues, removeKeyFromUrl } from "../helpers";
- import { getErrorCode, infos } from "../../messages";
+ import { getErrorCode, info } from "../../messages";
  import { log } from "../../log";
  
  // Common class
@@ -142,7 +142,7 @@
    async addWultipleLines(dataInput: Record<string, any>  | undefined): Promise<IreturnResult | undefined> {
      console.log(log.whereIam());
      // stop save to log cause if datainput too big 
-     if (this.ctx.log) this.ctx.log.datas = {datas: infos.MultilinesNotSaved};
+     if (this.ctx.log) this.ctx.log.datas = {datas: info.MultilinesNotSaved};
      // create queries
      const sqls:string[] = Object(dataInput).map((datas: Record<string, any> ) => {
        const modifiedDatas = this.formatDataInput(datas);

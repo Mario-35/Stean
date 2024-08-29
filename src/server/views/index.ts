@@ -7,6 +7,7 @@
  */
 // onsole.log("!----------------------------------- HTML Views Index for API -----------------------------------!");
 
+export { Admin } from './class/admin';
 export { First } from './class/first';
 export { Service } from './class/service';
 export { Login } from './class/login';

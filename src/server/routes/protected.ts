@@ -14,7 +14,7 @@ import fs from "fs";
 import { IKeyString, IreturnResult, Iuser, koaContext } from "../types";
 import { DefaultState, Context } from "koa";
 import { createOdata } from "../odata";
-import { errors, infos, msg } from "../messages";
+import { errors, info, msg } from "../messages";
 import { EExtensions, EHttpCode, EUserRights } from "../enums";
 import { loginUser } from "../authentication";
 import { ADMIN } from "../constants";
@@ -39,7 +39,7 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
             ctx.redirect(`${ctx.decodedUrl.root}/Status`);
           else
             ctx.body = {
-              message: infos.loginOk,
+              message: info.loginOk,
               user: user.username,
               token: user.token,
             };
@@ -54,7 +54,7 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
       if (ctx.body["username"].trim() === "") {
         why["username"] = msg(errors.empty, "username");
       } else {
-        const user = await executeSqlValues(config.getConfig(ADMIN), `SELECT "username" FROM "user" WHERE username = '${ctx.body["username"]}' LIMIT 1`);
+        const user = await executeSqlValues(config.getService(ADMIN), `SELECT "username" FROM "user" WHERE username = '${ctx.body["username"]}' LIMIT 1`);
         if (user) why["username"] = errors.alreadyPresent;
       }
       // Email

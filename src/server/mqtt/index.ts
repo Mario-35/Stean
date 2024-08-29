@@ -10,7 +10,7 @@
 import Aedes, { AedesPublishPacket, Client, PublishPacket, Subscription } from 'aedes';
 import { config } from '../configuration';
 import { log } from '../log';
-import { color, setDebug } from '../constants';
+import { color } from '../constants';
 import { EColor } from '../enums';
 import { errors, infos } from '../messages';
 import { loginUser } from '../authentication';
@@ -19,8 +19,7 @@ import { createServer } from 'aedes-server-factory';
 
 export class MqttServer {
     broker: Aedes;
-    constructor(ports: {wsPort : number, tcpPort  : number}) {        
-        setDebug(true);
+    constructor(ports: {wsPort : number, tcpPort  : number}) {
         this.broker = new Aedes();
         const mqttServer  = createServer(this.broker, { ws: true });
         mqttServer.listen(ports.wsPort,() => {
@@ -80,7 +79,7 @@ export class MqttServer {
                 const url =  client.req.url.trim().split("/").filter((e: string )=> e !== "");
                 if (url[url.length -1] === "login") {                    
                    return await loginUser(undefined,{configName: url[0], username: String(username), password: Buffer.from(password, 'base64').toString()}).then((user) => {
-                        config.writeLog(log.debug_infos(`${color(user ? EColor.Green : EColor.Red)}${color(EColor.Cyan)}${(user ? infos.authSuccess : errors.authFailed)} to broker`, this.broker.id));
+                        config.writeLog(log.debug_infos(`${color(user ? EColor.Green : EColor.Red)}${color(EColor.Cyan)}${(user ? infos(["auth","success"]) : errors.authFailed)} to broker`, this.broker.id));
                         return callback(user ? null : new Error(errors.authFailed), user ? true : false);
                     }).catch((error: Error) => {                
                         config.writeLog(log.error(errors.authFailed, error));
@@ -92,7 +91,7 @@ export class MqttServer {
                     const paket = client["_parser" as keyof object]["settings"];
                     if (paket["cmd" as keyof object] === "connect") {                    
                         return await loginUser(undefined,{configName: String(paket["clientId" as keyof object]).split("_")[0], username: String(paket["username" as keyof object]), password: Buffer.from(paket["password" as keyof object], 'base64').toString()}).then((user) => {
-                            config.writeLog(log.debug_infos(`${color(user ? EColor.Green : EColor.Red)}${color(EColor.Cyan)}${(user ? infos.authSuccess : errors.authFailed)} to broker`, this.broker.id));
+                            config.writeLog(log.debug_infos(`${color(user ? EColor.Green : EColor.Red)}${color(EColor.Cyan)}${(user ? infos(["auth","success"]) : errors.authFailed)} to broker`, this.broker.id));
                             return callback(user ? null : new Error(errors.authFailed), user ? true : false);
                         }).catch((error: Error) => {                
                             config.writeLog(log.error(errors.authFailed, error));
@@ -154,7 +153,6 @@ export class MqttServer {
             if (client && !packet.topic.includes("$SYS")) {
                 console.log(log.whereIam('publish'));
                 this.apiCaller(packet, client).then((res) => {
-                    console.log(client.id);
                     res = {mqtt : res as JSON}
                     client.publish({
                         cmd: "publish", 

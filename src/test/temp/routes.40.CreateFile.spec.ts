@@ -29,7 +29,7 @@ const addToApiDoc = (input: IApiInput) => {
 };
 
 addToApiDoc({
-    api: `{infos} /Import Infos.`,
+    api: `{infos} /Import info.`,
     apiName: "InfosCreateFile",
     apiDescription: `<hr>
     <div class="text">
@@ -89,7 +89,7 @@ describe(`CSV ${entity.name}`, function () {
             }
         });
         chai.request(server)
-            .post(`/test/${infos.apiExample.http}`)
+            .post(`/test/${info.apiExample.http}`)
             .field("Content-Type", "multipart/form-data")
             .field("method", "POST")
             .field("nb", "1")
@@ -120,7 +120,7 @@ describe(`CSV ${entity.name}`, function () {
             apiExample: { http: `/${testVersion}/Things(${thingId})/CreateFile` },
         });
         chai.request(server)
-            .post(`/test${infos.apiExample.http}`)
+            .post(`/test${info.apiExample.http}`)
             .field("Content-Type", "multipart/form-data")
             .field("method", "POST")
             .field("nb", "22")

@@ -53,7 +53,7 @@ describe("Odata BuiltInMisc", () => {
                         }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -80,7 +80,7 @@ describe("Odata BuiltInMisc", () => {
 					}
 				});
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err: Error, res: any) => { 
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -106,7 +106,7 @@ describe("Odata BuiltInMisc", () => {
 					}
 				});
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err: Error, res: any) => {     
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -132,7 +132,7 @@ describe("Odata BuiltInMisc", () => {
 					}
 				});
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${info.apiExample.http}`)
             .end((err: Error, res: any) => { 
                 should.not.exist(err);
                 res.status.should.equal(200);

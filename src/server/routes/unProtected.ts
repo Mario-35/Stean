@@ -15,14 +15,14 @@ import { apiAccess } from "../db/dataAccess";
 import { IreturnResult } from "../types";
 import { DefaultState, Context } from "koa";
 import { createOdata } from "../odata";
-import { infos } from "../messages";
+import { info } from "../messages";
 import { config } from "../configuration";
 import { createDatabase, testDatas } from "../db/createDb";
 import { executeAdmin, executeSql, exportService } from "../db/helpers";
 import { models } from "../models";
 import { sqlStopDbName } from "./helper";
 import { createService } from "../db/helpers";
-import { HtmlError, Login, Status,  Query } from "../views/";
+import { HtmlError, Login, Status, Query } from "../views/";
 import { createQueryParams } from "../views/helpers";
 import { EFileName, EOptions, EHttpCode } from "../enums";
 import { getMetrics } from "../db/monitoring";
@@ -37,7 +37,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
     case `/`:
       ctx.body = models.getRoot(ctx);
       ctx.type = returnFormats.json.type;
-      return;
+      return;    
     // metrics for moinoring
     case "METRICS":
       ctx.type = returnFormats.json.type;
@@ -50,10 +50,8 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
       ctx.body = bodyError.toString();
       return;
     // logs
-    case "LOGGING":
-      const bodyLogs = new HtmlLogs(ctx, "../../" + EFileName.logs);
-      ctx.type = returnFormats.html.type;
-      ctx.body = bodyLogs.toString();
+    case "LOGGING":;
+      ctx.redirect(`${ctx.decodedUrl.origin}/logging`);
       return;
     case "LOGSBAK":
       const bodyLogsBak = new HtmlLogs(ctx, "../../../" + EFileName.logsBak);
@@ -66,6 +64,9 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
       ctx.body = await exportService(ctx);
       return;
     // User login
+    case "SERVICE":
+      ctx.redirect(`${ctx.decodedUrl.origin}/service`);
+      return;
     case "LOGIN":
       if (userAuthenticated(ctx)) ctx.redirect(`${ctx.decodedUrl.root}/status`);
       else {
@@ -101,7 +102,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
         ctx.redirect(`${ctx.decodedUrl.root}/login`);
       else ctx.status = EHttpCode.ok;
       ctx.body = {
-        message: infos.logoutOk,
+        message: info.logoutOk,
       };
       return; 
     // Execute Sql query pass in url 
@@ -109,7 +110,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
       let sql = getUrlKey(ctx.request.url, "query");
       if (sql) {
         sql = atob(sql);
-        const resultSql = await executeSql(sql.includes("log_request") ? config.getConfig(ADMIN) : ctx.config, sql);
+        const resultSql = await executeSql(sql.includes("log_request") ? config.getService(ADMIN) : ctx.config, sql);
         ctx.status = EHttpCode.created;
         ctx.body = [resultSql];
       }

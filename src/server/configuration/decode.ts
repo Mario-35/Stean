@@ -17,7 +17,7 @@ import { EFileName } from "../enums";
 
 const decrypt = (input: string, key: string): string => {
   input = input.split("\r\n").join("");     
-  if (isString("string") && input[32] == ".") {      
+  if (isString(input) && input[32] == ".") {      
     try {
       const decipher = crypto.createDecipheriv( "aes-256-ctr", key, Buffer.from(input.substring(32, 0), "hex") );
       const decrpyted = Buffer.concat([ decipher.update(Buffer.from(input.slice(33), "hex")), decipher.final(), ]);

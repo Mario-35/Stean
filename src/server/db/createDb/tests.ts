@@ -92,7 +92,6 @@ export const testDatas:Record<string, any> = {
 		},
 		"apiVersion": "v1.1",
 		"date_format": "DD/MM/YYYY HH24:MI:SS",
-		"webSite": "no web site",
 		"nb_page": 1000,
 		"alias": [],
 		"extensions": [

@@ -1,5 +1,5 @@
 import { config } from "../configuration";
-import { ADMIN, TEST } from "../constants";
+import { ADMIN } from "../constants";
 import { log } from "../log";
 import { _STREAM } from "../db/constants";
 import { executeSqlValues } from "../db/helpers";
@@ -10,7 +10,7 @@ import { errors, msg } from "../messages";
 import { Iservice, Ientities, Ientity, IstreamInfos, koaContext } from "../types";
 import fs from "fs";
 import conformance from "./conformance.json";
-import { FeatureOfInterest, Thing, Location, Config, CreateFile, CreateObservation, Datastream, Decoder, HistoricalLocation, HistoricalObservation, Log, Lora, MultiDatastream, MultiDatastreamObservedProperty, Observation, Sensor, User, LocationHistoricalLocation, ObservedProperty, ThingLocation } from "./entities";
+import { FeatureOfInterest, Thing, Location, Service, CreateFile, CreateObservation, Datastream, Decoder, HistoricalLocation, HistoricalObservation, Log, Lora, MultiDatastream, MultiDatastreamObservedProperty, Observation, Sensor, User, LocationHistoricalLocation, ObservedProperty, ThingLocation } from "./entities";
 
 const testVersion = (input: string) => Object.keys(Models.models).includes(input);
 
@@ -36,7 +36,7 @@ class Models {
           Loras: Lora,        
           Logs: Log,        
           Users: User,        
-          Configs: Config,        
+          Services: Service,        
           CreateObservations: CreateObservation,        
           CreateFile: CreateFile,
       };                
@@ -205,8 +205,8 @@ class Models {
     if (typeof service === "string") {
       const nameConfig = config.getConfigNameFromName(service);
       if (!nameConfig) throw new Error(errors.configName);
-      if (testVersion(config.getConfig(nameConfig).apiVersion) === false) this.createVersion(config.getConfig(nameConfig).apiVersion);
-      service = config.getConfig(nameConfig);
+      if (testVersion(config.getService(nameConfig).apiVersion) === false) this.createVersion(config.getService(nameConfig).apiVersion);
+      service = config.getService(nameConfig);
     }  
     return Models.models[service.apiVersion];
   }
@@ -352,7 +352,7 @@ class Models {
 
   public init() {    
     if (isTest()) {      
-      this.createVersion(config.getConfig(TEST).apiVersion);
+      this.createVersion(EVersion.v1_1);
     }
   }
 }

@@ -72,7 +72,7 @@ describe("endpoint : HistoricalLocations", () => {
 				apiSuccess: ["{number} id @iot.id", "{relation} selfLink @iot.selfLink", ...success]
 			});
 			chai.request(server)
-				.get(`/test/${infos.apiExample.http}`)
+				.get(`/test/${info.apiExample.http}`)
 				.end((err, res) => {
 					should.not.exist(err);
 					res.status.should.equal(200);
@@ -105,7 +105,7 @@ describe("endpoint : HistoricalLocations", () => {
 				}
 			});
 			chai.request(server)
-				.get(`/test/${infos.apiExample.http}`)
+				.get(`/test/${info.apiExample.http}`)
 				.end((err: Error, res: any) => {
 					should.not.exist(err);
 					res.status.should.equal(200);
@@ -134,7 +134,7 @@ describe("endpoint : HistoricalLocations", () => {
 				}
 			});
 			chai.request(server)
-				.get(`/test/${infos.apiExample.http}`)
+				.get(`/test/${info.apiExample.http}`)
 				.end((err, res) => {
 					should.not.exist(err);
 					res.status.should.equal(404);
@@ -156,7 +156,7 @@ describe("endpoint : HistoricalLocations", () => {
 				}
 			});
 			chai.request(server)
-				.get(`/test/${infos.apiExample.http}`)
+				.get(`/test/${info.apiExample.http}`)
 				.end((err, res) => {
 					should.not.exist(err);
 					res.status.should.equal(404);
@@ -180,7 +180,7 @@ describe("endpoint : HistoricalLocations", () => {
 				}
 			});
 			chai.request(server)
-				.get(`/test/${infos.apiExample.http}`)
+				.get(`/test/${info.apiExample.http}`)
 				.end((err: Error, res: any) => {
 					should.not.exist(err);
 					res.status.should.equal(200);
@@ -212,7 +212,7 @@ describe("endpoint : HistoricalLocations", () => {
 				}
 			});
 			chai.request(server)
-				.get(`/test/${infos.apiExample.http}`)
+				.get(`/test/${info.apiExample.http}`)
 				.end((err: Error, res: any) => {
 					should.not.exist(err);
 					res.status.should.equal(200);
@@ -239,7 +239,7 @@ describe("endpoint : HistoricalLocations", () => {
 				}
 			});
 			chai.request(server)
-				.get(`/test/${infos.apiExample.http}`)
+				.get(`/test/${info.apiExample.http}`)
 				.end((err: Error, res: any) => {
 					should.not.exist(err);
 					res.status.should.equal(200);
@@ -266,7 +266,7 @@ describe("endpoint : HistoricalLocations", () => {
 				}
 			});
 			chai.request(server)
-				.get(`/test/${infos.apiExample.http}`)
+				.get(`/test/${info.apiExample.http}`)
 				.end((err: Error, res: any) => {
 					should.not.exist(err);
 					res.status.should.equal(200);
@@ -291,7 +291,7 @@ describe("endpoint : HistoricalLocations", () => {
 				}
 			});
 			chai.request(server)
-				.get(`/test/${infos.apiExample.http}`)
+				.get(`/test/${info.apiExample.http}`)
 				.end((err: Error, res: any) => {
 					should.not.exist(err);
 					res.status.should.equal(200);
@@ -321,7 +321,7 @@ describe("endpoint : HistoricalLocations", () => {
 
 			
 			chai.request(server)
-				.get(`/test/${infos.apiExample.http}`)
+				.get(`/test/${info.apiExample.http}`)
 				.end((err: Error, res: any) => {
 					should.not.exist(err);
 					res.status.should.equal(200);
@@ -356,8 +356,8 @@ describe("endpoint : HistoricalLocations", () => {
 					apiParamExample: datas
 				});
 				chai.request(server)
-					.patch(`/test/${infos.apiExample.http}`)
-					.send(infos.apiParamExample)
+					.patch(`/test/${info.apiExample.http}`)
+					.send(info.apiParamExample)
 					.set("Cookie", `${keyTokenName}=${token}`)
 					.end((err: Error, res: any) => {
 						should.not.exist(err);
@@ -384,7 +384,7 @@ describe("endpoint : HistoricalLocations", () => {
 				}
 			});
 			chai.request(server)
-				.patch(`/test/${infos.apiExample.http}`)
+				.patch(`/test/${info.apiExample.http}`)
 				.send(datas)
 				.set("Cookie", `${keyTokenName}=${token}`)
 				.end((err: Error, res: any) => {
@@ -414,7 +414,7 @@ describe("endpoint : HistoricalLocations", () => {
 					}
 				});
 				chai.request(server)
-					.delete(`/test/${infos.apiExample.http}`)
+					.delete(`/test/${info.apiExample.http}`)
 					.set("Cookie", `${keyTokenName}=${token}`)
 					.end((err: Error, res: any) => {
 						should.not.exist(err);

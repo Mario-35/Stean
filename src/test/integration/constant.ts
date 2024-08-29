@@ -517,8 +517,8 @@ export const infos: Record<string, any>  = {
     Logs: {
     },
 
-    Configs: {
-        definition: "A Config represent the configuration of the service and the possibility to create a service.",
+    Services: {
+        definition: "A Service represent the configuration of the service and the possibility to create a service.",
         columns: {
             name: "Name of the service.",
             apiVersion: "version of the model",

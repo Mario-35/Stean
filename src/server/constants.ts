@@ -22,12 +22,7 @@ export const ESCAPE_SIMPLE_QUOTE = (input: string) => input.replace(/[']+/g, "''
 export const HELMET_CONFIG = Object.freeze({
   defaultSrc: ["'self'"],
   scriptSrc: ["'self'", "'unsafe-inline'", "cdnjs.cloudflare.com"],
-  styleSrc: [
-    "'self'",
-    "'unsafe-inline'",
-    "cdnjs.cloudflare.com",
-    "fonts.googleapis.com",
-  ],  
+  styleSrc: [ "'self'", "'unsafe-inline'", "cdnjs.cloudflare.com", "fonts.googleapis.com", ],  
 });  
 export const NODE_ENV = process.env.NODE_ENV ? process.env.NODE_ENV : "production";
 export const SIMPLEQUOTEDCOMA = "',\n'";

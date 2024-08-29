@@ -39,7 +39,7 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
  };
  
  addToApiDoc({
-     api: `{infos} ${entity.name} Infos.`,
+     api: `{infos} ${entity.name} info.`,
      apiName: `Infos${entity.name}`,
      apiDescription:
          "Lora is an layer for add observations in sensorThings from LORA sensors, the link with sensor is done by deveui (the unique ID of lora sensor) in things properties",
@@ -80,7 +80,7 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
 				apiSuccess: ["{number} id @iot.id", "{relation} selfLink @iot.selfLink", ...success]
 			});
 			chai.request(server)
-				.get(`/test/${infos.apiExample.http}`)
+				.get(`/test/${info.apiExample.http}`)
 				.end((err, res) => {
 					should.not.exist(err);
 					res.status.should.equal(200);
@@ -112,7 +112,7 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
 				}
 			});
 			chai.request(server)
-				.get(`/test/${infos.apiExample.http}`)
+				.get(`/test/${info.apiExample.http}`)
 				.end((err: Error, res: any) => {
 					should.not.exist(err);
 					res.status.should.equal(200);
@@ -143,7 +143,7 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
 				}
 			});
 			chai.request(server)
-				.get(`/test/${infos.apiExample.http}`)
+				.get(`/test/${info.apiExample.http}`)
 				.end((err, res) => {
 					should.not.exist(err);
 					res.status.should.equal(404);
@@ -166,7 +166,7 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
 				}
 			});
 			chai.request(server)
-				.get(`/test/${infos.apiExample.http}`)
+				.get(`/test/${info.apiExample.http}`)
 				.end((err: Error, res: any) => {
 					should.not.exist(err);
 					res.status.should.equal(200);
@@ -197,7 +197,7 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
 				}
 			});
 			chai.request(server)
-				.get(`/test/${infos.apiExample.http}`)
+				.get(`/test/${info.apiExample.http}`)
 				.end((err, res) => {
 					should.not.exist(err);
 					res.status.should.equal(404);
@@ -218,7 +218,7 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
 				}
 			});
 			chai.request(server)
-				.get(`/test/${infos.apiExample.http}`)
+				.get(`/test/${info.apiExample.http}`)
 				.end((err, res) => {
 					should.not.exist(err);
 					res.status.should.equal(404);
@@ -239,7 +239,7 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
 				}
 			});
 			chai.request(server)
-				.get(`/test/${infos.apiExample.http}`)
+				.get(`/test/${info.apiExample.http}`)
 				.end((err: Error, res: any) => {
 					should.not.exist(err);
 					res.status.should.equal(200);
@@ -268,7 +268,7 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
 				}
 			});
 			chai.request(server)
-				.get(`/test/${infos.apiExample.http}`)
+				.get(`/test/${info.apiExample.http}`)
 				.end((err: Error, res: any) => {
 					should.not.exist(err);
 					res.status.should.equal(200);
@@ -296,7 +296,7 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
 				}
 			});
 			chai.request(server)
-				.get(`/test/${infos.apiExample.http}`)
+				.get(`/test/${info.apiExample.http}`)
 				.end((err: Error, res: any) => {
 					should.not.exist(err);
 					res.status.should.equal(200);
@@ -320,7 +320,7 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
 				}
 			});
 			chai.request(server)
-				.get(`/test/${infos.apiExample.http}`)
+				.get(`/test/${info.apiExample.http}`)
 				.end((err: Error, res: any) => {
 					should.not.exist(err);
 					res.status.should.equal(200);
@@ -348,7 +348,7 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
 				}
 			});
 			chai.request(server)
-				.get(`/test/${infos.apiExample.http}`)
+				.get(`/test/${info.apiExample.http}`)
 				.end((err: Error, res: any) => {
 					should.not.exist(err);
 					res.status.should.equal(200);
@@ -378,7 +378,7 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
 				}
 			});
 			chai.request(server)
-				.get(`/test/${infos.apiExample.http}`)
+				.get(`/test/${info.apiExample.http}`)
 				.end((err: Error, res: any) => {
 					should.not.exist(err);
 					res.status.should.equal(200);
@@ -420,8 +420,8 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
                  apiParamExample: datas
              });
         chai.request(server)
-                 .post(`/test/${infos.apiExample.http}`)
-                 .send(infos.apiParamExample)
+                 .post(`/test/${info.apiExample.http}`)
+                 .send(info.apiParamExample)
                  .set("Cookie", `${keyTokenName}=${token}`)
                  .end((err: Error, res: any) => {                    
                      should.not.exist(err);
@@ -457,8 +457,8 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
                  apiParamExample: datas
              });
         chai.request(server)
-                 .post(`/test/${infos.apiExample.http}`)
-                 .send(infos.apiParamExample)
+                 .post(`/test/${info.apiExample.http}`)
+                 .send(info.apiParamExample)
                  .set("Cookie", `${keyTokenName}=${token}`)
                  .end((err: Error, res: any) => {  
                      should.not.exist(err);
@@ -492,7 +492,7 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
 				}
 			});
         chai.request(server)
-             .post(`/test/${infos.apiExample.http}`)
+             .post(`/test/${info.apiExample.http}`)
                  .send(datas)
                  .set("Cookie", `${keyTokenName}=${token}`)
                  .end((err: Error, res: any) => {
@@ -523,8 +523,8 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
                  apiParamExample: datas
              });
         chai.request(server)
-                 .post(`/test/${infos.apiExample.http}`)
-                 .send(infos.apiParamExample)
+                 .post(`/test/${info.apiExample.http}`)
+                 .send(info.apiParamExample)
                  .set("Cookie", `${keyTokenName}=${token}`)
                  .end((err: Error, res: any) => {
                      should.not.exist(err);
@@ -558,8 +558,8 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
                 apiParamExample: datas
             });
             chai.request(server)
-                .post(`/test/${infos.apiExample.http}`)
-                .send(infos.apiParamExample)
+                .post(`/test/${info.apiExample.http}`)
+                .send(info.apiParamExample)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
@@ -589,8 +589,8 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
                 apiParamExample: datas
             });
             chai.request(server)
-                .post(`/test/${infos.apiExample.http}`)
-                .send(infos.apiParamExample)
+                .post(`/test/${info.apiExample.http}`)
+                .send(info.apiParamExample)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
@@ -612,7 +612,7 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
 					}
 				});
             chai.request(server)
-                .post(`/test/${infos.apiExample.http}`)
+                .post(`/test/${info.apiExample.http}`)
                 .send({})
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
@@ -645,8 +645,8 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
                  apiParamExample: datas
              });
         chai.request(server)
-                 .post(`/test/${infos.apiExample.http}`)
-                 .send(infos.apiParamExample)
+                 .post(`/test/${info.apiExample.http}`)
+                 .send(info.apiParamExample)
                  .set("Cookie", `${keyTokenName}=${token}`)
                  .end((err: Error, res: any) => {                    
                      should.not.exist(err);
@@ -682,8 +682,8 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
                  apiParamExample: datas
              });
         chai.request(server)
-                 .post(`/test/${infos.apiExample.http}`)
-                 .send(infos.apiParamExample)
+                 .post(`/test/${info.apiExample.http}`)
+                 .send(info.apiParamExample)
                  .set("Cookie", `${keyTokenName}=${token}`)
                  .end((err: Error, res: any) => {
                      should.not.exist(err);
@@ -720,8 +720,8 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
                  apiParamExample: datas
              });
         chai.request(server)
-                 .post(`/test/${infos.apiExample.http}`)
-                 .send(infos.apiParamExample)
+                 .post(`/test/${info.apiExample.http}`)
+                 .send(info.apiParamExample)
                  .set("Cookie", `${keyTokenName}=${token}`)
                  .end((err: Error, res: any) => {
                      should.not.exist(err);
@@ -758,8 +758,8 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
                  apiParamExample: datas
              });
         chai.request(server)
-                 .post(`/test/${infos.apiExample.http}`)
-                 .send(infos.apiParamExample)
+                 .post(`/test/${info.apiExample.http}`)
+                 .send(info.apiParamExample)
                  .set("Cookie", `${keyTokenName}=${token}`)
                  .end((err: Error, res: any) => {
                      should.not.exist(err);
@@ -793,7 +793,7 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
      //                     }
      //                 };
      //                 chai.request(server)
-     //                     .delete(`/test/${infos.apiExample.http}`)
+     //                     .delete(`/test/${info.apiExample.http}`)
      //                     .set("Cookie", `${keyTokenName}=${token}`)
      //                     .end((err: Error, res: any) => {
      //                         should.not.exist(err);
