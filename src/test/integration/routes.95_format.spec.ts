@@ -26,7 +26,7 @@ const addToApiDoc = (input: IApiInput) => {
 };
 
 addToApiDoc({
-    api: `{infos} /Format info.`,
+    api: `{infos} /Format Infos.`,
     apiName: "FormatInfos",
     apiDescription: `Format result json as default, dataArray, csv, txt,  graph or graphDatas, note that $value return result as text.`,
     result: ""
@@ -49,7 +49,7 @@ describe("Output formats", () => {
 					
 				},            });
             chai.request(server)
-                .get(`/test/${info.apiExample.http}`)
+                .get(`/test/${infos.apiExample.http}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -73,7 +73,7 @@ describe("Output formats", () => {
 				},      
             });
             chai.request(server)
-                .get(`/test/${info.apiExample.http}`)
+                .get(`/test/${infos.apiExample.http}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -98,7 +98,7 @@ describe("Output formats", () => {
 		// 		}, 
         //     });
         //     chai.request(server)
-        //         .get(`/test/${info.apiExample.http}`)
+        //         .get(`/test/${infos.apiExample.http}`)
         //         .end((err: Error, res: any) => { 
         //             should.not.exist(err);
         //             res.status.should.equal(200);
@@ -166,7 +166,7 @@ describe("Output formats", () => {
 				}, 
             });
             chai.request(server)
-                .get(`/test/${info.apiExample.http}`)
+                .get(`/test/${infos.apiExample.http}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -189,7 +189,7 @@ describe("Output formats", () => {
 				}, 
             });
             chai.request(server)
-                .get(`/test/${info.apiExample.http}`)
+                .get(`/test/${infos.apiExample.http}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);

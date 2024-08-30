@@ -28,7 +28,7 @@ const addToApiDoc = (input: IApiInput) => {
 };
 
 addToApiDoc({
-    api: `{infos} /CreateObservations info.`,
+    api: `{infos} /CreateObservations Infos.`,
     apiName: "InfosCreateObservations",
     apiDescription: `Besides creating Observation entities one by one with multiple HTTP POST requests, there is a need to create multiple Observation entities with a lighter message body in a single HTTP request. In this case, a sensing system can buffer multiple Observations and send them to a SensorThings service in one HTTP request. Here we propose an Action operation CreateObservations.
     ${blank(1)}The message body aggregates Observations by Datastreams, which means all the Observations linked to one Datastream SHALL be aggregated in one JSON object. The parameters of each JSON object are shown in the following table.
@@ -131,8 +131,8 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
         });
 
         chai.request(server)
-            .post(`/test/${info.apiExample.http}`)
-            .send(info.apiParamExample)
+            .post(`/test/${infos.apiExample.http}`)
+            .send(infos.apiParamExample)
             .set("Cookie", `${keyTokenName}=${token}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
@@ -167,7 +167,7 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
 					}
 				});
         chai.request(server)
-        .post(`/test/${info.apiExample.http}`)
+        .post(`/test/${infos.apiExample.http}`)
             .send(datas)
             .set("Cookie", `${keyTokenName}=${token}`)
             .end((err: Error, res: any) => {
@@ -190,7 +190,7 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
 					}
 				});
         chai.request(server)
-        .post(`/test/${info.apiExample.http}`)
+        .post(`/test/${infos.apiExample.http}`)
             .send(datasObs(2))
             .set("Cookie", `${keyTokenName}=${token}`)
             .end((err: Error, res: any) => {                
@@ -218,7 +218,7 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
             apiParamExample: datasObs(2)
         });
         chai.request(server)
-        .post(`/test/${info.apiExample.http}`)
+        .post(`/test/${infos.apiExample.http}`)
         .send(datasObs(2))
         .set("Cookie", `${keyTokenName}=${token}`)
             .end((err: Error, res: any) => {
@@ -249,7 +249,7 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
             apiParamExample: datas
         });
         chai.request(server)
-        .post(`/test/${info.apiExample.http}`)
+        .post(`/test/${infos.apiExample.http}`)
         .send(datas)
         .set("Cookie", `${keyTokenName}=${token}`)
         .end((err: Error, res: any) => {
@@ -279,7 +279,7 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
             apiParamExample: datas
         });
         chai.request(server)
-        .post(`/test/${info.apiExample.http}`)
+        .post(`/test/${infos.apiExample.http}`)
         .send(datas)
         .set("Cookie", `${keyTokenName}=${token}`)
             .end((err: Error, res: any) => {
@@ -308,7 +308,7 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
             apiParamExample: datas
         });
         chai.request(server)
-        .post(`/test/${info.apiExample.http}`)
+        .post(`/test/${infos.apiExample.http}`)
         .send(datas)
         .set("Cookie", `${keyTokenName}=${token}`)
         .end((err: Error, res: any) => {
@@ -340,7 +340,7 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
             apiParamExample: datas
         });
         chai.request(server)
-        .post(`/test/${info.apiExample.http}`)
+        .post(`/test/${infos.apiExample.http}`)
         .send(datas)
         .set("Cookie", `${keyTokenName}=${token}`)
         .end((err: Error, res: any) => {

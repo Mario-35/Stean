@@ -126,7 +126,7 @@ export class CreateFile extends Common {
         });
       // await finished(stream);
       });
-  };
+  }; 
   async getAll(): Promise<IreturnResult | undefined> {
     this.ctx.throw(400, { code: 400 });
   }

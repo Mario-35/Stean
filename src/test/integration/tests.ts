@@ -49,19 +49,19 @@ export function addSimpleTest(messsage: string) {
 };
 
 export function addTest(infos: Iinfos): Iinfos {    
-    const verb = info.api.split("}")[0].split("{")[1] || "get";
-    _LOG.push(`   ${nbAdd()}. ${info.api}\r [${verb ? verb.toUpperCase() : "GET"} ${info.apiExample.http}](${proxy(true)}${encodeURI(info.apiExample.http)}) ❌`);
-    const tempDatas = info.apiParamExample ? `<pre data-type="get" class="language-http" tabindex="0"><code class="language-http">${util.inspect(info.apiParamExample, { breakLength: Infinity, showHidden: true, depth: Infinity})}</code></pre>` : "";
-    const link =  (verb === "get") ? `<a class="tests" href="${proxy(true)}${encodeURI(info.apiExample.http)}" target="_blank">${info.apiExample.http}</a>` : `<div class="text"><p>${info.apiExample.http}</p></div>`; 
-    _HTML.push(`<tr> <td><span class="method meth-${verb}">${verb}</span></td> <td><div class="text"><p>${info.api}</p></div> ${link} ${tempDatas} </td><td>✔️</td></tr>`); 
+    const verb = infos.api.split("}")[0].split("{")[1] || "get";
+    _LOG.push(`   ${nbAdd()}. ${infos.api}\r [${verb ? verb.toUpperCase() : "GET"} ${infos.apiExample.http}](${proxy(true)}${encodeURI(infos.apiExample.http)}) ❌`);
+    const tempDatas = infos.apiParamExample ? `<pre data-type="get" class="language-http" tabindex="0"><code class="language-http">${util.inspect(infos.apiParamExample, { breakLength: Infinity, showHidden: true, depth: Infinity})}</code></pre>` : "";
+    const link =  (verb === "get") ? `<a class="tests" href="${proxy(true)}${encodeURI(infos.apiExample.http)}" target="_blank">${infos.apiExample.http}</a>` : `<div class="text"><p>${infos.apiExample.http}</p></div>`; 
+    _HTML.push(`<tr> <td><span class="method meth-${verb}">${verb}</span></td> <td><div class="text"><p>${infos.api}</p></div> ${link} ${tempDatas} </td><td>✔️</td></tr>`); 
     _INDEX = _LOG.length - 1;
-    if (info.apiParamExample) _LOG.push(postDatas(info.apiParamExample));
+    if (infos.apiParamExample) _LOG.push(postDatas(infos.apiParamExample));
     writeLog(false);
     return infos;
 };
 
 export function addPostFile(infos: Iinfos) {
-    _LOG.push(`  ${nbAdd()}. ${info.api}\r [POST ${info.apiExample.url}](${proxy(true)}${encodeURI(info.apiExample.url)}) ✔️\r\n`);
+    _LOG.push(`  ${nbAdd()}. ${infos.api}\r [POST ${infos.apiExample.url}](${proxy(true)}${encodeURI(infos.apiExample.url)}) ✔️\r\n`);
 };
 
 export const postDatas = (input: any): string =>  `${_SEP}js\r\n${util.inspect(input, { breakLength: Infinity, showHidden: true, depth: Infinity })} \r\n${_SEP}\r\n`;

@@ -518,7 +518,7 @@ export const infos: Record<string, any>  = {
     },
 
     Services: {
-        definition: "A Service represent the configuration of the service and the possibility to create a service.",
+        definition: `A Service represent the configuration of the service and the possibility to create a service with an assistant with the route /service:<br><table><tr><td>The screen below appear</td><td>and after admin postgres connection ok</td><tr><td><img src="./assets/admin.jpg" alt="admin login"></td><td><img src="./assets/service.jpg" alt="service"></td></tr></table>`,
         columns: {
             name: "Name of the service.",
             apiVersion: "version of the model",

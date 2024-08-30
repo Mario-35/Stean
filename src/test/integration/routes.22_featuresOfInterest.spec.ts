@@ -99,7 +99,7 @@ addToApiDoc({
                 }
             });
             chai.request(server)
-                .get(`/test/${info.apiExample.http}`)
+                .get(`/test/${infos.apiExample.http}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -125,7 +125,7 @@ addToApiDoc({
 				}
 			});
 			chai.request(server)
-				.get(`/test/${info.apiExample.http}`)
+				.get(`/test/${infos.apiExample.http}`)
 				.end((err, res) => {
 					should.not.exist(err);
 					res.status.should.equal(404);
@@ -147,7 +147,7 @@ addToApiDoc({
 				}
 			});
 			chai.request(server)
-				.get(`/test/${info.apiExample.http}`)
+				.get(`/test/${infos.apiExample.http}`)
 				.end((err, res) => {
 					should.not.exist(err);
 					res.status.should.equal(404);
@@ -167,7 +167,7 @@ addToApiDoc({
                 }
             });
             chai.request(server)
-                .get(`/test/${info.apiExample.http}`)
+                .get(`/test/${infos.apiExample.http}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -193,7 +193,7 @@ addToApiDoc({
 				}
 			});            
             chai.request(server)
-            .get(`/test/${info.apiExample.http}`)
+            .get(`/test/${infos.apiExample.http}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -220,7 +220,7 @@ addToApiDoc({
 				}
 			});
             chai.request(server)
-            .get(`/test/${info.apiExample.http}`)
+            .get(`/test/${infos.apiExample.http}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -263,8 +263,8 @@ addToApiDoc({
                 apiParamExample: datas
             });
             chai.request(server)
-                .post(`/test/${info.apiExample.http}`)
-                .send(info.apiParamExample)
+                .post(`/test/${infos.apiExample.http}`)
+                .send(infos.apiParamExample)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
@@ -287,7 +287,7 @@ addToApiDoc({
 				}
 			});
             chai.request(server)
-                .post(`/test/${info.apiExample.http}`)
+                .post(`/test/${infos.apiExample.http}`)
                 .send({})
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
@@ -325,8 +325,8 @@ addToApiDoc({
                         apiParamExample: datas
                     });
                     chai.request(server)
-                        .patch(`/test/${info.apiExample.http}`)
-                        .send(info.apiParamExample)
+                        .patch(`/test/${infos.apiExample.http}`)
+                        .send(infos.apiParamExample)
                         .set("Cookie", `${keyTokenName}=${token}`)
                         .end((err: Error, res: any) => {
                             should.not.exist(err);
@@ -365,7 +365,7 @@ addToApiDoc({
 				}
 			});
 			chai.request(server)
-				.patch(`/test/${info.apiExample.http}`)
+				.patch(`/test/${infos.apiExample.http}`)
 				.send(datas)
 				.set("Cookie", `${keyTokenName}=${token}`)
 				.end((err: Error, res: any) => {
@@ -395,7 +395,7 @@ addToApiDoc({
 					}
 				});
 				chai.request(server)
-					.delete(`/test/${info.apiExample.http}`)
+					.delete(`/test/${infos.apiExample.http}`)
 					.set("Cookie", `${keyTokenName}=${token}`)
 					.end((err: Error, res: any) => {
 						should.not.exist(err);
@@ -424,7 +424,7 @@ addToApiDoc({
 				}
 			});
 			chai.request(server)
-				.delete(`/test/${info.apiExample.http}`)
+				.delete(`/test/${infos.apiExample.http}`)
 				.set("Cookie", `${keyTokenName}=${token}`)
 				.end((err: Error, res: any) => {
 					should.not.exist(err);

@@ -53,7 +53,7 @@ describe("Odata BuiltInFunctions [9.3.3.5.2]", () => {
                         }
         });
         chai.request(server)
-            .get(`/test/${info.apiExample.http}`)
+            .get(`/test/${infos.apiExample.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -77,7 +77,7 @@ describe("Odata BuiltInFunctions [9.3.3.5.2]", () => {
 					}
 				});
         chai.request(server)
-            .get(`/test/${info.apiExample.http}`)
+            .get(`/test/${infos.apiExample.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -103,7 +103,7 @@ describe("Odata BuiltInFunctions [9.3.3.5.2]", () => {
                         }
         });
         chai.request(server)
-            .get(`/test/${info.apiExample.http}`)
+            .get(`/test/${infos.apiExample.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -127,7 +127,7 @@ describe("Odata BuiltInFunctions [9.3.3.5.2]", () => {
 					}
 				});
         chai.request(server)
-            .get(`/test/${info.apiExample.http}`)
+            .get(`/test/${infos.apiExample.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -153,7 +153,7 @@ describe("Odata BuiltInFunctions [9.3.3.5.2]", () => {
                         }
         });
         chai.request(server)
-            .get(`/test/${info.apiExample.http}`)
+            .get(`/test/${infos.apiExample.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -177,7 +177,7 @@ describe("Odata BuiltInFunctions [9.3.3.5.2]", () => {
             }
         });
         chai.request(server)
-            .get(`/test/${info.apiExample.http}`)
+            .get(`/test/${infos.apiExample.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -203,7 +203,7 @@ describe("Odata BuiltInFunctions [9.3.3.5.2]", () => {
                         }
         });
         chai.request(server)
-            .get(`/test/${info.apiExample.http}`)
+            .get(`/test/${infos.apiExample.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -230,7 +230,7 @@ describe("Odata BuiltInFunctions [9.3.3.5.2]", () => {
                         }
         });
         chai.request(server)
-            .get(`/test/${info.apiExample.http}`)
+            .get(`/test/${infos.apiExample.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -257,7 +257,7 @@ describe("Odata BuiltInFunctions [9.3.3.5.2]", () => {
                         }
         });
         chai.request(server)
-            .get(`/test/${info.apiExample.http}`)
+            .get(`/test/${infos.apiExample.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -284,7 +284,7 @@ describe("Odata BuiltInFunctions [9.3.3.5.2]", () => {
                         }
         });
         chai.request(server)
-            .get(`/test/${info.apiExample.http}`)
+            .get(`/test/${infos.apiExample.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -311,7 +311,7 @@ describe("Odata BuiltInFunctions [9.3.3.5.2]", () => {
                         }
         });
         chai.request(server)
-            .get(`/test/${info.apiExample.http}`)
+            .get(`/test/${infos.apiExample.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -338,7 +338,7 @@ describe("Odata BuiltInFunctions [9.3.3.5.2]", () => {
                         }
         });
         chai.request(server)
-            .get(`/test/${info.apiExample.http}`)
+            .get(`/test/${infos.apiExample.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -365,7 +365,7 @@ describe("Odata BuiltInFunctions [9.3.3.5.2]", () => {
                         }
         });
         chai.request(server)
-            .get(`/test/${info.apiExample.http}`)
+            .get(`/test/${infos.apiExample.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -392,7 +392,7 @@ describe("Odata BuiltInFunctions [9.3.3.5.2]", () => {
     //                     }
     //     };
     //     chai.request(server)
-    //         .get(`/test/${info.apiExample.http}`)
+    //         .get(`/test/${infos.apiExample.http}`)
     //         .end((err: Error, res: any) => {
     //             should.not.exist(err);
     //             res.status.should.equal(200);
@@ -419,7 +419,7 @@ describe("Odata BuiltInFunctions [9.3.3.5.2]", () => {
                         }
         });
         chai.request(server)
-            .get(`/test/${info.apiExample.http}`)
+            .get(`/test/${infos.apiExample.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);

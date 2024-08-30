@@ -148,7 +148,7 @@ describe("endpoint : Service", () => {
 				}
 			});
 			chai.request(server)
-				.get(`/test/${info.apiExample.http}`)
+				.get(`/test/${infos.apiExample.http}`)
 				.set("Cookie", `${keyTokenName}=${token}`)
 				.end((err, res) => {
 					should.not.exist(err);
@@ -176,7 +176,7 @@ describe("endpoint : Service", () => {
 				}
 			});
 			chai.request(server)
-				.get(`/test/${info.apiExample.http}`)
+				.get(`/test/${infos.apiExample.http}`)
 				.set("Cookie", `${keyTokenName}=${token}`)
 				.end((err: Error, res: any) => {
 					should.not.exist(err);
@@ -210,7 +210,7 @@ describe("endpoint : Service", () => {
 				apiParamExample: confPres
 			});
 			chai.request(server)
-				.post(`/test/${info.apiExample.http}`)
+				.post(`/test/${infos.apiExample.http}`)
 				.send(conf)
 				.set("Cookie", `${keyTokenName}=${token}`)
 				.end((err: Error, res: any) => {

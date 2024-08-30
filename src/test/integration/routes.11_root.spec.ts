@@ -77,7 +77,7 @@ describe("endpoint : index", () => {
             });
 
             chai.request(server)
-            .get(`/test/${info.apiExample.http}`)
+            .get(`/test/${infos.apiExample.http}`)
             .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.eql(200);
@@ -128,7 +128,7 @@ describe("endpoint : index", () => {
             });
 
             chai.request(server)
-            .get(`/test/${info.apiExample.http}`)
+            .get(`/test/${infos.apiExample.http}`)
             .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.eql(200);
