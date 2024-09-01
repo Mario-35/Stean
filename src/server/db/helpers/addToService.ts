@@ -7,7 +7,7 @@
  */
 // onsole.log("!----------------------------------- addToService -----------------------------------!");
 
-import { addDoubleQuotes, asyncForEach } from "../../helpers";
+import { doubleQuotesString, asyncForEach } from "../../helpers";
 import { log } from "../../log";
 import { models } from "../../models";
 import { createInsertValues } from "../../models/helpers";
@@ -40,7 +40,7 @@ export const addToService = async (ctx: koaContext, dataInput: Record<string, an
           user_id: String(ctx.user.id),
           error: error
         } ;
-        await executeSqlValues(ctx.config, `INSERT INTO ${addDoubleQuotes(models.DBFull(ctx.config).Logs.table)} ${createInsertValues(ctx.config, datas, models.DBFull(ctx.config).Logs.name)} returning id`);
+        await executeSqlValues(ctx.config, `INSERT INTO ${doubleQuotesString(models.DBFull(ctx.config).Logs.table)} ${createInsertValues(ctx.config, datas, models.DBFull(ctx.config).Logs.name)} returning id`);
       }
     });
   }

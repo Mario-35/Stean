@@ -8,7 +8,7 @@
 // onsole.log("!----------------------------------- exportToJson -----------------------------------!");
 
 import { config } from "../../configuration";
-import { addDoubleQuotes, asyncForEach, getUrlKey, hidePassword, removeEmpty } from "../../helpers";
+import { doubleQuotesString, asyncForEach, getUrlKey, hidePassword, removeEmpty } from "../../helpers";
 import { koaContext } from "../../types";
 
 export const exportToJson = async (ctx: koaContext) => {
@@ -33,7 +33,7 @@ export const exportToJson = async (ctx: koaContext) => {
           const table = e.split("_")[0];
           rels.push(`CASE WHEN "${e}" ISNULL THEN NULL ELSE JSON_BUILD_OBJECT('@iot.name', (SELECT REPLACE (name, '''', '''''') FROM "${table}" WHERE "${table}"."id" = ${e} LIMIT 1)) END AS "${e}"`);          
         });   
-        const columnListWithQuotes = columnList.map(e => addDoubleQuotes(e)).join();        
+        const columnListWithQuotes = columnList.map(e => doubleQuotesString(e)).join();        
         if (columnListWithQuotes.length <= 1) rels.shift();
         // Execute query        
         const tempResult = await config.connection(ctx.config.name).unsafe(`select ${columnListWithQuotes}${rels.length > 1 ? rels.join() : ""}\n FROM "${ctx.model[entity].table}" LIMIT ${getUrlKey(ctx.request.url, "limit") || ctx.config.nb_page}`);  

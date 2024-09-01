@@ -10,7 +10,7 @@ import { createEntity } from ".";
 import { ERelations } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _text } from "./constants";
-import { addDoubleQuotes } from "../../helpers";
+import { doubleQuotesString } from "../../helpers";
 import { _ID } from "../../db/constants";
 
 export const Location:Ientity  = createEntity("Locations", {
@@ -21,7 +21,7 @@ export const Location:Ientity  = createEntity("Locations", {
       id: {
         create: _idBig,
         alias(service: Iservice , test: IKeyBoolean) {
-           return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${addDoubleQuotes(_ID)}`: ''}` ;
+           return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotesString(_ID)}`: ''}` ;
         },
         type: "number",
       },

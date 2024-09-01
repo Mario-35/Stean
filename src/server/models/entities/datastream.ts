@@ -11,7 +11,7 @@ import { createEntity } from ".";
 import { EDatesType, EObservationType, ERelations } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _idRel, _text, _tz } from "./constants";
-import { addDoubleQuotes } from "../../helpers";
+import { doubleQuotesString } from "../../helpers";
 import { _ID } from "../../db/constants";
 
 export const Datastream:Ientity  = createEntity("Datastreams", {
@@ -22,7 +22,7 @@ export const Datastream:Ientity  = createEntity("Datastreams", {
       id: {
         create: _idBig,
         alias(service: Iservice , test: IKeyBoolean) {
-           return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${addDoubleQuotes(_ID)}`: ''}` ;
+           return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotesString(_ID)}`: ''}` ;
         },
         type: "number",
       },

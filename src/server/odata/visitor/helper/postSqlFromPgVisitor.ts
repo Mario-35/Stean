@@ -8,7 +8,7 @@
 // onsole.log("!----------------------------------- postSqlFromPgVisitor -----------------------------------!");
 
 import { VOIDTABLE } from "../../../constants";
-import { addDoubleQuotes, getBigIntFromString } from "../../../helpers";
+import { doubleQuotesString, getBigIntFromString } from "../../../helpers";
 import { Ientity, IKeyString } from "../../../types";
 import { EOperation, EOptions } from "../../../enums";
 import { asJson } from "../../../db/queries";
@@ -340,14 +340,14 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
     if ((names[postEntity.table] && queryMaker[postEntity.table] && queryMaker[postEntity.table].datas) || root === undefined) {
         queryMaker[postEntity.table].datas = Object.assign(root as object, queryMaker[postEntity.table].datas);
         queryMaker[postEntity.table].keyId = src.id ? "id" : "*";
-        sqlResult = queryMakerToString(`WITH "log_request" AS (SELECT srid FROM ${addDoubleQuotes(VOIDTABLE)} LIMIT 1)`);
+        sqlResult = queryMakerToString(`WITH "log_request" AS (SELECT srid FROM ${doubleQuotesString(VOIDTABLE)} LIMIT 1)`);
     } else {
         sqlResult = queryMakerToString(
             src.id
             ? root && Object.entries(root).length > 0
-            ? `WITH ${postEntity.table} AS (UPDATE ${addDoubleQuotes(postEntity.table)} set ${createUpdateValues(root)} WHERE "id" = (select verifyId('${postEntity.table}', ${src.id}) as id) RETURNING ${allFields})`
-                : `WITH ${postEntity.table} AS (SELECT * FROM ${addDoubleQuotes(postEntity.table)} WHERE "id" = ${src.id.toString()})`
-                : `WITH ${postEntity.table} AS (INSERT INTO ${addDoubleQuotes(postEntity.table)} ${createInsertValues(src.ctx.config, formatInsertEntityData(postEntity.name, root, src))} RETURNING ${allFields})`
+            ? `WITH ${postEntity.table} AS (UPDATE ${doubleQuotesString(postEntity.table)} set ${createUpdateValues(root)} WHERE "id" = (select verifyId('${postEntity.table}', ${src.id}) as id) RETURNING ${allFields})`
+                : `WITH ${postEntity.table} AS (SELECT * FROM ${doubleQuotesString(postEntity.table)} WHERE "id" = ${src.id.toString()})`
+                : `WITH ${postEntity.table} AS (INSERT INTO ${doubleQuotesString(postEntity.table)} ${createInsertValues(src.ctx.config, formatInsertEntityData(postEntity.name, root, src))} RETURNING ${allFields})`
                 );
             }
     const temp = src.toPgQuery(); 

@@ -11,7 +11,7 @@ import { createEntity } from ".";
 import { ERelations } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig } from "./constants";
-import { addDoubleQuotes } from "../../helpers";
+import { doubleQuotesString } from "../../helpers";
 import { _ID } from "../../db/constants";
 
   export const HistoricalObservation:Ientity  = createEntity("HistoricalObservations", {
@@ -22,7 +22,7 @@ import { _ID } from "../../db/constants";
       id: {
         create: _idBig,
         alias(service: Iservice , test: IKeyBoolean) {
-           return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${addDoubleQuotes(_ID)}`: ''}` ;
+           return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotesString(_ID)}`: ''}` ;
         },
         type: "bigint"
       },

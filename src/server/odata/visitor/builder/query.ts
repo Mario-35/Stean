@@ -8,7 +8,7 @@
 // onsole.log("!----------------------------------- Query builder -----------------------------------!");
 
 import { _COLUMNSEPARATOR } from "../../../constants";
-import { addDoubleQuotes, cleanStringComma, containsAll, isCsvOrArray, isGraph, isObservation, removeAllQuotes, removeDoubleQuotes } from "../../../helpers";
+import { doubleQuotesString, cleanStringComma, containsAll, isCsvOrArray, isGraph, isObservation, removeAllQuotes, removeFirstEndDoubleQuotes } from "../../../helpers";
 import { asJson } from "../../../db/queries";
 import { Iservice, Ientity, IKeyBoolean, IpgQuery } from "../../../types";
 import { PgVisitor, RootPgVisitor } from "..";
@@ -60,9 +60,9 @@ export class Query  {
                 if (options) {
                     if (alias && options["alias"] === true) return alias;
                     let result: string = "";
-                    if (options["table"] === true && (testIn(alias || column) === false)) result += `${addDoubleQuotes(entity.table)}.`;
-                    result += alias || options["quoted"] === true ? addDoubleQuotes(column) : column;
-                    if (options["as"] === true || (alias && alias.includes("->")) ) result += ` AS ${addDoubleQuotes(column)}`;
+                    if (options["table"] === true && (testIn(alias || column) === false)) result += `${doubleQuotesString(entity.table)}.`;
+                    result += alias || options["quoted"] === true ? doubleQuotesString(column) : column;
+                    if (options["as"] === true || (alias && alias.includes("->")) ) result += ` AS ${doubleQuotesString(column)}`;
                     return result;
                 } else return column;
             } else if (testIn(column) === true) return column;
@@ -93,7 +93,7 @@ export class Query  {
         // If array result add id 
         const returnValue: string[] = isCsvOrArray(main) && !element.query.select.toString().includes(`"id"${_COLUMNSEPARATOR}`) ? ["id"] : []; 
         // create selfLink                                   
-        const selfLink = `CONCAT('${main.ctx.decodedUrl.root}/${tempEntity.name}(', "${tempEntity.table}"."id", ')') AS ${addDoubleQuotes(_SELFLINK)}`; 
+        const selfLink = `CONCAT('${main.ctx.decodedUrl.root}/${tempEntity.name}(', "${tempEntity.table}"."id", ')') AS ${doubleQuotesString(_SELFLINK)}`; 
         // if $ref return only selfLink
         if (element.onlyRef == true) return [selfLink];
         if (element.showRelations == true ) returnValue.push(selfLink);
@@ -103,7 +103,7 @@ export class Query  {
                 .filter((word) => !word.includes("_"))
                 .filter(e => !(e === "result" && element.splitResult))
                 .filter(e => !tempEntity.columns[e].extensions || tempEntity.columns[e].extensions && containsAll(main.ctx.config.extensions, tempEntity.columns[e].extensions) === true || "")
-            : element.query.select.toString().split(_COLUMNSEPARATOR).filter((word: string) => word.trim() != "").map(e => removeDoubleQuotes(e));
+            : element.query.select.toString().split(_COLUMNSEPARATOR).filter((word: string) => word.trim() != "").map(e => removeFirstEndDoubleQuotes(e));
             // loop on columns
         columns.map((column: string) => {
             const force = ["id", "result"].includes(column) ? true : false;
@@ -121,11 +121,11 @@ export class Query  {
              if (testIisCsvOrArray && ["payload", "deveui", "phenomenonTime"].includes(removeAllQuotes(e))) this.keyNames.add(e);
         });
         // add interval if requested
-        if (main.interval) main.addToIntervalColumns(`CONCAT('${main.ctx.decodedUrl.root}/${tempEntity.name}(', COALESCE("@iot.id", '0')::text, ')') AS ${addDoubleQuotes(_SELFLINK)}`);
-        // If observation entity        
+        if (main.interval) main.addToIntervalColumns(`CONCAT('${main.ctx.decodedUrl.root}/${tempEntity.name}(', COALESCE("@iot.id", '0')::text, ')') AS ${doubleQuotesString(_SELFLINK)}`);
+        // If observation entity
         if (isObservation(tempEntity) === true && element.onlyRef === false ) {
             if (main.interval && !isGraph(main)) returnValue.push(`timestamp_ceil("resultTime", interval '${main.interval}') AS srcdate`);
-            if (element.splitResult && main.parentEntity === "MultiDatastreams") element.splitResult.forEach((elem: string) => {
+            if (element.splitResult) element.splitResult.forEach((elem: string) => {
                 const one = element && element.splitResult && element.splitResult.length === 1;
                 const alias: string = one ? "result" : elem;
                 returnValue.push( `(result->>'valueskeys')::json->'${element.splitResult && one ? removeAllQuotes(element.splitResult[0]) : alias}' AS "${ one ? elem : alias}"` );
@@ -163,7 +163,7 @@ export class Query  {
                                 query: query, 
                                 singular : models.isSingular(main.ctx.config, name),
                                 strip: main.ctx.config.options.includes(EOptions.stripNull),
-                                count: false })}) AS ${addDoubleQuotes(name)}`;
+                                count: false })}) AS ${doubleQuotesString(name)}`;
                             else throw new Error(errors.invalidQuery);
                         }
                     });
@@ -177,7 +177,7 @@ export class Query  {
                                 let stream: string | undefined = undefined;
                                 if (tempTable && !main.ctx.model[realEntityName].relations[rel].relationKey.startsWith("_"))
                                     if ( main.ctx.config.options.includes(EOptions.stripNull) && realEntityName === main.ctx.model[allEntities.Observations].name &&  tempTable.endsWith(main.ctx.model[allEntities.Datastreams].name)) stream = `CASE WHEN ${main.ctx.model[tempTable].table}_id NOTNULL THEN`;
-                                        select.push(`${stream ? stream : ""} CONCAT('${main.ctx.decodedUrl.root}/${main.ctx.model[realEntityName].name}(', ${addDoubleQuotes(main.ctx.model[realEntityName].table)}."id", ')/${rel}') ${stream ? "END ": ""}AS "${rel}${_NAVLINK}"`);                            
+                                        select.push(`${stream ? stream : ""} CONCAT('${main.ctx.decodedUrl.root}/${main.ctx.model[realEntityName].name}(', ${doubleQuotesString(main.ctx.model[realEntityName].table)}."id", ')/${rel}') ${stream ? "END ": ""}AS "${rel}${_NAVLINK}"`);                            
                                         main.addToIntervalColumns(`'${main.ctx.decodedUrl.root}/${main.ctx.model[realEntityName].name}(0)/${rel}' AS "${rel}${_NAVLINK}"`);
                             }
                         });

@@ -7,7 +7,7 @@
  */
 // onsole.log("!----------------------------------- writeLogToDb -----------------------------------!");
 
-import { addDoubleQuotes, hidePassword, isTest } from "../helpers";
+import { doubleQuotesString, hidePassword, isTest } from "../helpers";
 import { executeSqlValues } from "../db/helpers";
 import { models } from "../models";
 import { log } from ".";
@@ -31,7 +31,7 @@ export const writeLogToDb = async ( ctx: koaContext, ...error: any[] ): Promise<
     const code = Math.floor(ctx.log.code / 100);
     if (code == 2 || code == 3 )return;
     
-    await executeSqlValues(ctx.config, `INSERT INTO ${addDoubleQuotes(models.DBFull(ctx.config).Logs.table)} ${createInsertValues(ctx.config, ctx.log, models.DBFull(ctx.config).Logs.name)} returning id`).then((res: object) =>{
+    await executeSqlValues(ctx.config, `INSERT INTO ${doubleQuotesString(models.DBFull(ctx.config).Logs.table)} ${createInsertValues(ctx.config, ctx.log, models.DBFull(ctx.config).Logs.name)} returning id`).then((res: object) =>{
       if (!isTest()) console.log(log.url(`${ctx.decodedUrl.root}/Logs(${res[0 as keyobj]})`));      
     }).catch((error) => {
       console.log(error);

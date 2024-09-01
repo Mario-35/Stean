@@ -9,7 +9,7 @@
 
 import { createTable, createUser } from "../helpers";
 import { config } from "../../configuration";
-import { addDoubleQuotes, addSimpleQuotes, asyncForEach } from "../../helpers";
+import { doubleQuotesString, simpleQuotesString, asyncForEach } from "../../helpers";
 import { _RIGHTS } from "../constants";
 import { IKeyString } from "../../types";
 import { EChar, EExtensions } from "../../enums";
@@ -35,14 +35,14 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
     .then(async () => {
       returnValue[`Create Database`] = `${servicePg.database} ${EChar.ok}`;
       // create USER if not exist
-      await adminConnection.unsafe(`SELECT COUNT(*) FROM pg_user WHERE usename = ${addSimpleQuotes(servicePg.user)};`)
+      await adminConnection.unsafe(`SELECT COUNT(*) FROM pg_user WHERE usename = ${simpleQuotesString(servicePg.user)};`)
         .then(async (res: Record<string, any>) => {
           if (res[0].count == 0) {            
-            returnValue[`CREATE ROLE ${servicePg.user}`] = await adminConnection.unsafe(`CREATE ROLE ${servicePg.user} WITH PASSWORD ${addSimpleQuotes(servicePg.password)} ${_RIGHTS}`)
+            returnValue[`CREATE ROLE ${servicePg.user}`] = await adminConnection.unsafe(`CREATE ROLE ${servicePg.user} WITH PASSWORD ${simpleQuotesString(servicePg.password)} ${_RIGHTS}`)
               .then(() => EChar.ok)
               .catch((err: Error) => err.message);
           } else {
-            await adminConnection.unsafe(`ALTER ROLE ${servicePg.user} WITH PASSWORD ${addSimpleQuotes(servicePg.password)}  ${_RIGHTS}`)
+            await adminConnection.unsafe(`ALTER ROLE ${servicePg.user} WITH PASSWORD ${simpleQuotesString(servicePg.password)}  ${_RIGHTS}`)
               .then(() => {
                 returnValue[`Create/Alter ROLE`] = `${servicePg.user} ${EChar.ok}`;
               })
@@ -98,12 +98,12 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
 
   // If only numeric extension
   if ( config.getService(configName).extensions.includes( EExtensions.highPrecision ) ) {
-    await dbConnection.unsafe(`ALTER TABLE ${addDoubleQuotes(DB.Observations.table)} ALTER COLUMN 'result' TYPE float4 USING null;`)
+    await dbConnection.unsafe(`ALTER TABLE ${doubleQuotesString(DB.Observations.table)} ALTER COLUMN 'result' TYPE float4 USING null;`)
       .catch((error: Error) => {
         console.log(error);
         return error;
       });
-    await dbConnection.unsafe(`ALTER TABLE ${addDoubleQuotes(DB.HistoricalLocations.table)} ALTER COLUMN '_result' TYPE float4 USING null;`)
+    await dbConnection.unsafe(`ALTER TABLE ${doubleQuotesString(DB.HistoricalLocations.table)} ALTER COLUMN '_result' TYPE float4 USING null;`)
       .catch((error) => {
         console.log(error);
         return error;
@@ -118,7 +118,7 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
     .then(() => EChar.ok)
     .catch((err: Error) => err.message);
 
-  await dbConnection.unsafe(`SELECT COUNT(*) FROM pg_user WHERE usename = ${addSimpleQuotes(servicePg.user)};`)
+  await dbConnection.unsafe(`SELECT COUNT(*) FROM pg_user WHERE usename = ${simpleQuotesString(servicePg.user)};`)
     .then(() => { returnValue["ALL finished ..."] = EChar.ok; })
     .catch((err: Error) => err.message);
     

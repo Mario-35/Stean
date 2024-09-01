@@ -8,7 +8,7 @@
  */
 // onsole.log("!----------------------------------- Common class entity -----------------------------------!");
 
- import { addDoubleQuotes, returnFormats } from "../../helpers/index";
+ import { doubleQuotesString, returnFormats } from "../../helpers/index";
  import { IreturnResult, keyobj, koaContext } from "../../types";
  import { executeSqlValues, removeKeyFromUrl } from "../helpers";
  import { getErrorCode, info } from "../../messages";
@@ -234,7 +234,7 @@
    async delete(idInput: bigint | string): Promise<IreturnResult | undefined> {
      console.log(log.whereIam());
      // create Query
-     const sql = `DELETE FROM ${addDoubleQuotes(this.ctx.model[this.constructor.name].table)} WHERE "id" = ${idInput} RETURNING id`;
+     const sql = `DELETE FROM ${doubleQuotesString(this.ctx.model[this.constructor.name].table)} WHERE "id" = ${idInput} RETURNING id`;
      // Return results
      if (sql) switch (this.ctx.odata.returnFormat ) {
        case returnFormats.sql:

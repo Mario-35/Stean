@@ -5,7 +5,7 @@ import { _STREAM } from "../db/constants";
 import { executeSqlValues } from "../db/helpers";
 import { asJson } from "../db/queries";
 import { EColumnType, EExtensions, EVersion, filterEntities } from "../enums";
-import { addDoubleQuotes, deepClone, isTest } from "../helpers";
+import { doubleQuotesString, deepClone, isTest } from "../helpers";
 import { errors, msg } from "../messages";
 import { Iservice, Ientities, Ientity, IstreamInfos, koaContext } from "../types";
 import fs from "fs";
@@ -130,7 +130,7 @@ class Models {
     const searchKey = input[models.DBFull(service)[streamEntity].name] || input[models.DBFull(service)[streamEntity].singular];
     const streamId: string | undefined = isNaN(searchKey) ? searchKey["@iot.id"] : searchKey;
     if (streamId) {
-      const query = `SELECT "id", "observationType", "_default_foi" FROM ${addDoubleQuotes(models.DBFull(service)[streamEntity].table)} WHERE id = ${BigInt(streamId)} LIMIT 1`;
+      const query = `SELECT "id", "observationType", "_default_foi" FROM ${doubleQuotesString(models.DBFull(service)[streamEntity].table)} WHERE id = ${BigInt(streamId)} LIMIT 1`;
       return executeSqlValues(service, asJson({ query: query, singular: true, strip: false, count: false }))
         .then((res: object) => {        
           return res ? {
@@ -270,7 +270,7 @@ class Models {
   };
 
   public getSelectColumnList(input: Ientity) {
-      return Object.keys(input.columns).filter((word) => !word.includes("_")).map((e: string) => `${addDoubleQuotes(input.table)}.${addDoubleQuotes(e)}`);
+      return Object.keys(input.columns).filter((word) => !word.includes("_")).map((e: string) => `${doubleQuotesString(input.table)}.${doubleQuotesString(e)}`);
   }
 
   getColumnListNameWithoutId(input: Ientity) {

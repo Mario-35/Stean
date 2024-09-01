@@ -10,7 +10,7 @@
 import Router from "koa-router";
 import { userAuthenticated, getAuthenticatedUser, } from "../authentication";
 import { ADMIN, _READY } from "../constants";
-import { addSimpleQuotes, getUrlKey, returnFormats } from "../helpers";
+import { simpleQuotesString, getUrlKey, returnFormats } from "../helpers";
 import { apiAccess } from "../db/dataAccess";
 import { IreturnResult } from "../types";
 import { DefaultState, Context } from "koa";
@@ -130,7 +130,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
     case "DROP":
       console.log(log.debug_head("drop database"));
       if (ctx.config.options.includes(EOptions.canDrop)) {        
-        await executeAdmin(sqlStopDbName(addSimpleQuotes(ctx.config.pg.database))).then(async () => {
+        await executeAdmin(sqlStopDbName(simpleQuotesString(ctx.config.pg.database))).then(async () => {
             await executeAdmin(`DROP DATABASE IF EXISTS ${ctx.config.pg.database}`);
             try {
               ctx.status = EHttpCode.created;

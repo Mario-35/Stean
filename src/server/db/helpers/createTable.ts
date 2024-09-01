@@ -9,7 +9,7 @@
 
 import { config } from "../../configuration";
 import { log } from "../../log";
-import { addDoubleQuotes } from "../../helpers";
+import { doubleQuotesString } from "../../helpers";
 import { Ientity, IKeyString } from "../../types";
 import { EChar } from "../../enums";
 
@@ -30,7 +30,7 @@ export const createTable = async ( configName: string, tableEntity: Ientity, doA
   
   Object.keys(tableEntity.columns).forEach((column) => {
     if (tableEntity.columns[column].create.trim() != "")
-      tabIeInsert.push(`${addDoubleQuotes(column)} ${tableEntity.columns[column].create}`);
+      tabIeInsert.push(`${doubleQuotesString(column)} ${tableEntity.columns[column].create}`);
   });
 
   insertion = tabIeInsert.join(", ");
@@ -38,13 +38,13 @@ export const createTable = async ( configName: string, tableEntity: Ientity, doA
   if (tableEntity.constraints) {
     Object.keys(tableEntity.constraints).forEach((constraint) => {
       if (tableEntity.constraints)
-        tableConstraints.push( `ALTER TABLE ONLY ${addDoubleQuotes(tableEntity.table)} ADD CONSTRAINT ${addDoubleQuotes(constraint)} ${tableEntity.constraints[constraint]};` );
+        tableConstraints.push( `ALTER TABLE ONLY ${doubleQuotesString(tableEntity.table)} ADD CONSTRAINT ${doubleQuotesString(constraint)} ${tableEntity.constraints[constraint]};` );
     });
   }
 
   if (tableEntity.table.trim() != "")
-    returnValue[String(`Create table ${addDoubleQuotes(tableEntity.table)}`)] =
-    await config.connection(configName).unsafe(`CREATE TABLE ${addDoubleQuotes(tableEntity.table)} (${insertion});`)
+    returnValue[String(`Create table ${doubleQuotesString(tableEntity.table)}`)] =
+    await config.connection(configName).unsafe(`CREATE TABLE ${doubleQuotesString(tableEntity.table)} (${insertion});`)
         .then(() => EChar.ok)
         .catch((error: Error) => error.message);
 

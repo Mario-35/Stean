@@ -9,7 +9,7 @@
 
 import { addToService, createDatabase, executeAdmin, executeSqlValues } from ".";
 import { config } from "../../configuration";
-import { addDoubleQuotes, addSimpleQuotes, asyncForEach } from "../../helpers";
+import { doubleQuotesString, simpleQuotesString, asyncForEach } from "../../helpers";
 import { models } from "../../models";
 import { createInsertValues } from "../../models/helpers";
 import { sqlStopDbName } from "../../routes/helper";
@@ -63,7 +63,7 @@ export const createService = async (dataInput: Record<string, any>, ctx?: koaCon
   }
   
 
-  await executeAdmin(sqlStopDbName(addSimpleQuotes(serviceName))).then(async () => {
+  await executeAdmin(sqlStopDbName(simpleQuotesString(serviceName))).then(async () => {
     await executeAdmin(`DROP DATABASE IF EXISTS ${serviceName}`).then(async () => {
       results[`Drop ${mess}`] = EChar.ok;
       await createDB();
@@ -84,7 +84,7 @@ export const createService = async (dataInput: Record<string, any>, ctx?: koaCon
       const goodEntity = models.getEntity(service, entityName);
       if (goodEntity) {
         try {
-          const sqls: string[] =dataInput[entityName].map((element: any) =>`INSERT INTO ${addDoubleQuotes(goodEntity.table)} ${createInsertValues(service, prepareDatas(element, goodEntity.name), goodEntity.name)}`);
+          const sqls: string[] =dataInput[entityName].map((element: any) =>`INSERT INTO ${doubleQuotesString(goodEntity.table)} ${createInsertValues(service, prepareDatas(element, goodEntity.name), goodEntity.name)}`);
           await executeSqlValues(config.getService(serviceName), sqls.join(";")).then((res: Record<string, any>) =>{
             results[entityName] = EChar.ok;
           }).catch((error: any) => {

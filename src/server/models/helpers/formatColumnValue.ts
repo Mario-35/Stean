@@ -8,7 +8,7 @@
 // onsole.log("!----------------------------------- formatColumnValue -----------------------------------!");
 
 import { ESCAPE_ARRAY_JSON, ESCAPE_SIMPLE_QUOTE } from "../../constants";
-import { addDoubleQuotes, addSimpleQuotes, removeSimpleQuotes } from "../../helpers";
+import { doubleQuotesString, simpleQuotesString, removeFirstEndSimpleQuotes } from "../../helpers";
 import { log } from "../../log";
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -21,7 +21,7 @@ import { log } from "../../log";
         : value.hasOwnProperty("@iot.id") 
         ? value["@iot.id"]
         : type === 'text[]' 
-          ? addSimpleQuotes(`{${value.map((e: string) => addDoubleQuotes(removeSimpleQuotes(e))).join(",")}}`) 
+          ? simpleQuotesString(`{${value.map((e: string) => doubleQuotesString(removeFirstEndSimpleQuotes(e))).join(",")}}`) 
           : `'${ESCAPE_SIMPLE_QUOTE(JSON.stringify(value))}'`;
       default:        
         if (value) switch (value) {
@@ -40,21 +40,21 @@ import { log } from "../../log";
                 return `'${value ? 1 : 0}'`;
               case 'json':
               case 'jsonb':
-                 return addSimpleQuotes(ESCAPE_SIMPLE_QUOTE(JSON.stringify(value)));
+                 return simpleQuotesString(ESCAPE_SIMPLE_QUOTE(JSON.stringify(value)));
               case 'text[]':
                 const temp = ESCAPE_ARRAY_JSON(String(value));
-                if (temp) return addSimpleQuotes(temp);
+                if (temp) return simpleQuotesString(temp);
                 return "ARRAY ERROR";
               case 'result':
-                return addSimpleQuotes(ESCAPE_SIMPLE_QUOTE(JSON.stringify(value)));
+                return simpleQuotesString(ESCAPE_SIMPLE_QUOTE(JSON.stringify(value)));
               default:
                 break;
             }
             if (String(value).startsWith("(SELECT")) return `${value}`;
             try {
-                return value.includes("'") ? addSimpleQuotes(ESCAPE_SIMPLE_QUOTE(value)): addSimpleQuotes(value);
+                return value.includes("'") ? simpleQuotesString(ESCAPE_SIMPLE_QUOTE(value)): simpleQuotesString(value);
             } catch (error) {            
-                return addSimpleQuotes(value);
+                return simpleQuotesString(value);
             }
         }
     } 

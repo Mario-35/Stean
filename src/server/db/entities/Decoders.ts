@@ -9,7 +9,7 @@
 
 import { IreturnResult, koaContext } from "../../types";
 import { Common } from "./common";
-import { addDoubleQuotes, asyncForEach } from "../../helpers";
+import { doubleQuotesString, asyncForEach } from "../../helpers";
 import { decodingPayload } from "../../lora";
 import { executeSql, executeSqlValues } from "../helpers";
 import { log } from "../../log";
@@ -24,7 +24,7 @@ export class Decoders extends Common {
     console.log(log.whereIam());
     if (this.ctx.odata.payload) {
       const result:Record<string, any>  = {};
-      const decoders = await executeSql(this.ctx.config, `SELECT "id", "name", "code", "nomenclature", "synonym" FROM ${addDoubleQuotes(this.ctx.model.Decoders.table)}`);
+      const decoders = await executeSql(this.ctx.config, `SELECT "id", "name", "code", "nomenclature", "synonym" FROM ${doubleQuotesString(this.ctx.model.Decoders.table)}`);
       await asyncForEach(
         // Start connectionsening ALL entries in config file
         Object(decoders),

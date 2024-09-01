@@ -7,7 +7,7 @@
  */
 // onsole.log("!----------------------------------- pgVisitor for odata -----------------------------------!");
 
-import { addDoubleQuotes, addSimpleQuotes, isGraph, isObservation, isTest, removeAllQuotes, returnFormats } from "../../../helpers";
+import { doubleQuotesString, simpleQuotesString, isGraph, isObservation, isTest, removeAllQuotes, returnFormats } from "../../../helpers";
 import { IodataContext, IKeyString, Ientity, IKeyBoolean, IpgQuery, koaContext, IvisitRessource } from "../../../types";
 import { Token } from "../../parser/lexer";
 import { Literal } from "../../parser/literal";
@@ -81,7 +81,7 @@ testo(input: string) {
   addToIntervalColumns(input: string) {
     // TODO test with create    
     if (input.endsWith('Time"')) input = `step AS ${input}`;
-      else if (input === addDoubleQuotes(_ID)) input = `coalesce(${addDoubleQuotes(_ID)}, 0) AS ${addDoubleQuotes(_ID)}`;
+      else if (input === doubleQuotesString(_ID)) input = `coalesce(${doubleQuotesString(_ID)}, 0) AS ${doubleQuotesString(_ID)}`;
         else if (input.startsWith("CONCAT")) input = `${input}`;
           else if (input[0] !== "'") input = `${input}`;
     if (this.intervalColumns) this.intervalColumns.push(input); 
@@ -139,7 +139,7 @@ testo(input: string) {
     let result: string | undefined | void = undefined;
     if (entity && column != "" && entity.columns[column]) {
       result = entity.columns[column].alias(this.ctx.config, options);
-      if (!result) result = addDoubleQuotes(column);
+      if (!result) result = doubleQuotesString(column);
     }
     return result ? `${ options.table === true && result && result[0] === '"' ? `"${entity.table}".${result}` : result }` : undefined;
   }; 
@@ -340,7 +340,7 @@ testo(input: string) {
     context.identifier = tempColumn ? tempColumn : node.raw;
     if (context.target)
       // @ts-ignore
-      (this.query[context.target as keyof object] as Query).add(tempColumn ? `${tempColumn}${_COLUMNSEPARATOR}` : `${addDoubleQuotes(node.raw)}${_COLUMNSEPARATOR}`); 
+      (this.query[context.target as keyof object] as Query).add(tempColumn ? `${tempColumn}${_COLUMNSEPARATOR}` : `${doubleQuotesString(node.raw)}${_COLUMNSEPARATOR}`); 
       this.showRelations = false;
   }
 
@@ -385,7 +385,7 @@ testo(input: string) {
       if (models.getRelationColumnTable(this.ctx.config, this.ctx.model[this.entity], node.value.current.raw) === EColumnType.Column
             && models.isColumnType(this.ctx.config, this.ctx.model[this.entity], node.value.current.raw, "json") 
             && node.value.next.raw[0] == "/" ) {
-              this.query.where.add(`${addDoubleQuotes(node.value.current.raw)}->>${addSimpleQuotes(node.value.next.raw.slice(1))}`);
+              this.query.where.add(`${doubleQuotesString(node.value.current.raw)}->>${simpleQuotesString(node.value.next.raw.slice(1))}`);
       } else if (node.value.next.raw[0] == "/") {       
         this.Visit(node.value.current, context);
         context.identifier += ".";
@@ -430,7 +430,7 @@ testo(input: string) {
       if (testIsDate) {
         this.query.where.add(`${columnName 
                           ? columnName 
-                          : `${addDoubleQuotes(node.value.left.raw)}`}${testIsDate}`);
+                          : `${doubleQuotesString(node.value.left.raw)}`}${testIsDate}`);
         return true;
       }
     }
@@ -493,7 +493,7 @@ testo(input: string) {
       // @ts-ignore
 
               this.query[context.target].add(context.key);
-              // this[context.target] += addDoubleQuotes(context.key);
+              // this[context.target] += doubleQuotesString(context.key);
             }
           }
         }
@@ -501,7 +501,7 @@ testo(input: string) {
         const tempEntity = models.getEntity(this.ctx.config, node.value.name);
         if (tempEntity) {
           if (context.relation) {
-            context.sql = `${addDoubleQuotes(this.ctx.model[entity].table)}.${addDoubleQuotes(this.ctx.model[entity].relations[node.value.name].entityColumn)} IN (SELECT ${addDoubleQuotes(tempEntity.table)}.${addDoubleQuotes(this.ctx.model[entity].relations[node.value.name].relationKey)} FROM ${addDoubleQuotes(tempEntity.table)}`;
+            context.sql = `${doubleQuotesString(this.ctx.model[entity].table)}.${doubleQuotesString(this.ctx.model[entity].relations[node.value.name].entityColumn)} IN (SELECT ${doubleQuotesString(tempEntity.table)}.${doubleQuotesString(this.ctx.model[entity].relations[node.value.name].relationKey)} FROM ${doubleQuotesString(tempEntity.table)}`;
           } else {
             context.relation = node.value.name;
             context.table = tempEntity.table;
@@ -510,7 +510,7 @@ testo(input: string) {
             context.key = this.ctx.model[entity].relations[context.relation].entityColumn; 
       // @ts-ignore
 
-            this.query[context.target].add(addDoubleQuotes(this.ctx.model[entity].relations[context.relation].entityColumn));
+            this.query[context.target].add(doubleQuotesString(this.ctx.model[entity].relations[context.relation].entityColumn));
           }
           return;
         }
@@ -522,7 +522,7 @@ testo(input: string) {
     const alias = this.getColumn(node.value.name, "", context);
     node.value.name = alias ? alias : node.value.name;
     if (context.relation && context.identifier && models.isColumnType(this.ctx.config, this.ctx.model[context.relation], removeAllQuotes(context.identifier).split(".")[0], "json")) {
-      context.identifier = `${addDoubleQuotes(context.identifier.split(".")[0])}->>${addSimpleQuotes(node.raw)}`;     
+      context.identifier = `${doubleQuotesString(context.identifier.split(".")[0])}->>${simpleQuotesString(node.raw)}`;     
     } else {
       if (context.target ===  EQuery.Where) this.createComplexWhere(context.identifier ? context.identifier.split(".")[0] : this.entity, node, context);
       if (!context.relation && !context.identifier && alias && context.target) {
@@ -532,7 +532,7 @@ testo(input: string) {
         context.identifier = node.value.name;
         if (context.target && !context.key) {
           let alias = this.getColumnNameOrAlias(this.ctx.model[this.entity], node.value.name, this.createDefaultOptions());
-          alias = context.target ===  EQuery.Where ? alias?.split(" AS ")[0]: EQuery.OrderBy ? addDoubleQuotes(node.value.name ) : alias;
+          alias = context.target ===  EQuery.Where ? alias?.split(" AS ")[0]: EQuery.OrderBy ? doubleQuotesString(node.value.name ) : alias;
           // @ts-ignore
           this.query[context.target].add(node.value.name.includes("->>") ||node.value.name.includes("->") || node.value.name.includes("::")
             ? node.value.name
@@ -540,7 +540,7 @@ testo(input: string) {
               ? alias 
                 ? alias 
                 : ''
-              : addDoubleQuotes(node.value.name));
+              : doubleQuotesString(node.value.name));
           }
       }
     }    
@@ -567,11 +567,11 @@ testo(input: string) {
   }
 
   protected VisitLiteral(node: Token, context: IodataContext): void {
-    if (context.relation && context.target === EQuery.Where) {
+    if (context.relation && context.table && context.target === EQuery.Where) {
       const temp = this.query.where.toString().split(" ").filter(e => e != "");      
       context.sign = temp.pop(); 
       this.query.where.init(temp.join(" "));
-      this.query.where.add(` ${context.in && context.in === true ? '' : ' IN @START@'}(SELECT ${this.ctx.model[this.entity].relations[context.relation] ? addDoubleQuotes(this.ctx.model[this.entity].relations[context.relation]["relationKey"]) : `${addDoubleQuotes(context.table)}."id"`} FROM ${addDoubleQuotes(context.table)} WHERE `);
+      this.query.where.add(` ${context.in && context.in === true ? '' : ' IN @START@'}(SELECT ${this.ctx.model[this.entity].relations[context.relation] ? doubleQuotesString(this.ctx.model[this.entity].relations[context.relation]["relationKey"]) : `${doubleQuotesString(context.table)}."id"`} FROM ${doubleQuotesString(context.table)} WHERE `);
       context.in = true;
       if (context.identifier) {
         if (context.identifier.startsWith("CASE") || context.identifier.startsWith("("))
@@ -580,7 +580,7 @@ testo(input: string) {
             const tempEntity = models.getEntity(this.ctx.config, context.relation);    
             const alias = tempEntity ? this.getColumnNameOrAlias(tempEntity, context.identifier , this.createDefaultOptions()) : undefined;
             this.query.where.add((context.sql)
-              ? `${context.sql} ${context.target} ${addDoubleQuotes(context.identifier)}))@END@`
+              ? `${context.sql} ${context.target} ${doubleQuotesString(context.identifier)}))@END@`
               : `${alias ? alias : `${ context.identifier.replace("@EXPRESSION@", ` ${SQLLiteral.convert(node.value, node.raw)} ${this.inverseSign(context.sign)}`) }`})`);
         } else {
           const tempEntity = models.getEntity(this.ctx.config, context.relation);    
@@ -590,7 +590,7 @@ testo(input: string) {
 
 
           this.query.where.add((context.sql)
-            ? `${context.sql} ${context.target} ${addDoubleQuotes(context.identifier)} ${context.sign} ${SQLLiteral.convert(node.value, node.raw)}))@END@`
+            ? `${context.sql} ${context.target} ${doubleQuotesString(context.identifier)} ${context.sign} ${SQLLiteral.convert(node.value, node.raw)}))@END@`
             : `${alias ? '' : `${context.table}.`}${alias ? alias : `${quotes}${ context.identifier }${quotes}`} ${context.sign} ${SQLLiteral.convert(node.value, node.raw)})`);
         }
       }
@@ -622,20 +622,21 @@ testo(input: string) {
       const temp = column.split("/");
       if (tempEntity.relations.hasOwnProperty(temp[0])) {
         const rel = tempEntity.relations[temp[0]];
-        column = `(SELECT ${addDoubleQuotes(temp[1])} FROM ${addDoubleQuotes(rel.tableName)} WHERE ${rel.expand} AND length(${addDoubleQuotes(temp[1])}::text) > 2)`;
+        column = `(SELECT ${doubleQuotesString(temp[1])} FROM ${doubleQuotesString(rel.tableName)} WHERE ${rel.expand} AND length(${doubleQuotesString(temp[1])}::text) > 2)`;
         test = this.ctx.model[rel.entityName].columns[temp[1]].test;
-        if (test)  test = `(SELECT ${addDoubleQuotes(test)} FROM ${addDoubleQuotes(rel.tableName)} WHERE ${rel.expand})`;
+        if (test)  test = `(SELECT ${doubleQuotesString(test)} FROM ${doubleQuotesString(rel.tableName)} WHERE ${rel.expand})`;
       }
     } else if (!tempEntity.columns.hasOwnProperty(column)) {
       if (tempEntity.relations.hasOwnProperty(column)) {
         const rel = tempEntity.relations[column];
-        column = `(SELECT ${addDoubleQuotes(rel.entityColumn)} FROM ${addDoubleQuotes(rel.tableName)} WHERE ${rel.expand} AND length(${addDoubleQuotes(rel.entityColumn)}::text) > 2)`;
+        column = `(SELECT ${doubleQuotesString(rel.entityColumn)} FROM ${doubleQuotesString(rel.tableName)} WHERE ${rel.expand} AND length(${doubleQuotesString(rel.entityColumn)}::text) > 2)`;
         test = this.ctx.model[rel.entityName].columns[rel.entityColumn].test;
       } else throw new Error(`Invalid column ${column}`);
     } else {      
-      // TODO ADD addDoubleQuotes
-      test = addDoubleQuotes(tempEntity.columns[column].test);
-      column = addDoubleQuotes(column);
+      // TODO ADD doubleQuotesString
+      const temp = tempEntity.columns[column].test;
+      if (temp) test = doubleQuotesString(temp);
+      column = doubleQuotesString(column);
     }
     if (test)
       column = `CASE WHEN ${test} LIKE '%geo+json' THEN ST_GeomFromEWKT(ST_GeomFromGeoJSON(coalesce(${column}->'geometry',${column}))) ELSE ST_GeomFromEWKT(${column}::text) END`;
@@ -665,7 +666,7 @@ testo(input: string) {
       const test = decodeURIComponent( Literal.convert(params[index].value, params[index].raw) );
       if (test === "result") return this.formatColumnResult(context, operation, ForceString);
       const column = isColumn(test);       
-      return column ? addDoubleQuotes(column) : addSimpleQuotes(geoColumnOrData(index, false));
+      return column ? doubleQuotesString(column) : simpleQuotesString(geoColumnOrData(index, false));
     };
 
     const geoColumnOrData = (index: number, srid: boolean): string => {

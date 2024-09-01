@@ -15,7 +15,7 @@ import { EColumnType, EExtensions, EHttpCode } from "../../../enums";
 import { log } from "../../../log";
 import { _COLUMNSEPARATOR } from "../../../constants";
 import { PgVisitor } from "../.";
-import { addDoubleQuotes } from "../../../helpers";
+import { doubleQuotesString } from "../../../helpers";
 import { models } from "../../../models";
 import { errors } from "../../../messages";
 
@@ -111,7 +111,7 @@ export class RootPgVisitor extends PgVisitor {
           this.VisitRessources(node.value.navigation, context);
         }
       } else if (this.ctx.model[this.entity].columns[node.value.path.raw]) {
-        this.query.select.add(`${addDoubleQuotes(node.value.path.raw )}${_COLUMNSEPARATOR}`);
+        this.query.select.add(`${doubleQuotesString(node.value.path.raw )}${_COLUMNSEPARATOR}`);
         this.showRelations = false;
       } else this.entity = node.value.path.raw;
     }
@@ -143,7 +143,7 @@ export class RootPgVisitor extends PgVisitor {
           this.single = tempEntity.singular === node.value.name || BigInt(this.id) > 0  ? true : false;
         }
     } else if (this.ctx.model[this.entity].columns[node.value.name]) {
-      this.query.select.add(`${addDoubleQuotes(node.value.name)}${_COLUMNSEPARATOR}`);
+      this.query.select.add(`${doubleQuotesString(node.value.name)}${_COLUMNSEPARATOR}`);
       this.showRelations = false;
     } else this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: errors.notValid });
 	}

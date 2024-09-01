@@ -36,3 +36,5 @@ export let _DEBUG = false;
 export let _READY = false;
 export function addToStrings(input: string[], data: string) { if (input) input.push(data); else input = [data]; }
 export const APP_KEY = getKey() ;
+
+export const STRINGEXC = ["CONCAT", "CASE", "COALESCE"];
