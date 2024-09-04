@@ -24,7 +24,7 @@ fs.mkdirSync(path.resolve(__dirname, "../server/apiDocs/"), {
 });
 
 addToApiDoc({
-    api: `{infos} /Identification Infos`,
+    api: `{infos} /Identification Extension`,
     apiName: `InfosToken`,
     apiDescription: `<hr>
     <div class="text">

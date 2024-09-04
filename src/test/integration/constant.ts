@@ -495,7 +495,7 @@ export const infos: Record<string, any>  = {
     },
 
     Loras: {
-        definition: "A Lora is>>.",
+        definition: "Lora is an extension for adding observations in sensorThings from LORA sensors, the link with sensor is done by deveui (the unique ID of lora sensor) in things properties",
         reference: "",
         columns: {
             id: definitions.id,
@@ -518,7 +518,7 @@ export const infos: Record<string, any>  = {
     },
 
     Services: {
-        definition: `A Service represent the configuration of the service and the possibility to create a service with an assistant with the route /service:<br><table><tr><td>The screen below appear</td><td>and after admin postgres connection ok</td><tr><td><img src="./assets/admin.jpg" alt="admin login"></td><td><img src="./assets/service.jpg" alt="service"></td></tr></table>`,
+        definition: `Service is an extension that  represent the configuration of one service and the possibility to create a new service with an assistant with the route /service:<br><table><tr><td class="noBorder">The screen below appear</td><td class="noBorder">and after admin postgres connection ok</td><tr><td class="noBorder"><img src="./assets/admin.jpg" alt="admin login"></td><td class="noBorder"><img src="./assets/service.jpg" alt="service"></td></tr></table>`,
         columns: {
             name: "Name of the service.",
             apiVersion: "version of the model",

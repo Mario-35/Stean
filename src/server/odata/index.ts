@@ -17,7 +17,7 @@ import { koaContext } from "../types";
 import { errors } from "../messages";
 import { EHttpCode } from "../enums";
 
-const doSomeWarkAfterCreateAst = async (input: RootPgVisitor, ctx: koaContext) => {
+const doSomeWorkAfterCreateAst = async (input: RootPgVisitor, ctx: koaContext) => {
   if (
     (input.returnFormat === returnFormats.csv && input.entity === "Observations" &&  input.parentEntity?.endsWith('atastreams') && input.parentId && <bigint>input.parentId > 0) ||
     (input.splitResult && input.splitResult[0].toUpperCase() == "ALL" && input.parentId && <bigint>input.parentId > 0) ) {
@@ -54,22 +54,24 @@ export const createOdata = async (ctx: koaContext): Promise<RootPgVisitor | unde
   if (urlSrc && urlSrc.trim() != "") urlSrc = escapesOdata(urlSrc);
   
   // replace element  
-  const clean = (replaceThis: string, by?: string) => urlSrc = urlSrc.split(replaceThis).join(by ? by : "");
-
+  const replaceElement = (replaceThis: string, by?: string) => urlSrc = urlSrc.split(replaceThis).join(by ? by : "");
+  
   // function to remove element in url
   const removeElement = (input: string) => {
-    clean(`&${input}`);
-    clean(input);
+    replaceElement(`&${input}`);
+    replaceElement(input);
   };
   
-  clean("geography%27", "%27");
-  clean("@iot.");
+  replaceElement("geography%27", "%27");
+  replaceElement("@iot.");
   
   // clean id in url
-  urlSrc = cleanUrl(clean("@iot.id", "id"));
+  urlSrc = cleanUrl(replaceElement("@iot.id", "id"));
 
+  // if nothing to do return
   if (urlSrc === "/") return;
 
+  // Remove actions that are not odata
   if (urlSrc.includes("$"))
     urlSrc.split("$").forEach((element: string) => {
       switch (element) {
@@ -91,24 +93,24 @@ export const createOdata = async (ctx: koaContext): Promise<RootPgVisitor | unde
     
   const urlSrcSplit = cleanUrl(urlSrc).split("?");
 
-  if (!urlSrcSplit[1]) urlSrcSplit.push(`$top=${ctx.config.nb_page ? ctx.config.nb_page : 200}`);
+  if (!urlSrcSplit[1]) urlSrcSplit.push(`$top=${ctx.config.nb_page || 200}`);
 
   if (urlSrcSplit[0].split("(").length != urlSrcSplit[0].split(")").length) urlSrcSplit[0] += ")";
+  // INIT ressource
   let astRessources: Token;
   
   try {
     astRessources = <Token>resourcePath(<string>urlSrcSplit[0]);    
   } catch (error) {
-    console.log(error);
-    
+    console.log(error);    
     ctx.throw(EHttpCode.notFound, { code: EHttpCode.badRequest, detail: errors.notValid  });
   }
-
+  // INIT query
   const astQuery: Token = <Token>query(decodeURIComponent(urlSrcSplit[1]));
 
   const temp = new RootPgVisitor(ctx, options, astRessources).start(astQuery);
 
-  await doSomeWarkAfterCreateAst(temp, ctx);
+  await doSomeWorkAfterCreateAst(temp, ctx);
 
   return temp;
 };

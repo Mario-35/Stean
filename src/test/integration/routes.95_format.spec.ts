@@ -26,7 +26,7 @@ const addToApiDoc = (input: IApiInput) => {
 };
 
 addToApiDoc({
-    api: `{infos} /Format Infos.`,
+    api: `{infos} /Format Extension.`,
     apiName: "FormatInfos",
     apiDescription: `Format result json as default, dataArray, csv, txt,  graph or graphDatas, note that $value return result as text.`,
     result: ""

@@ -50,7 +50,7 @@ const multi = {
 };
 
 addToApiDoc({
-    api: `{infos} /Import Infos.`,
+    api: `{infos} /Import Extension.`,
     apiName: "InfosImport",
     apiDescription: `<hr>
     <div class="text">

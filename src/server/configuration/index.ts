@@ -58,7 +58,6 @@ class Configuration {
       if (config && config.logFile) config.logFile.write(logToHtml(input));
     }
   }
-  
   // Read string (or default configuration file) as configuration file
   public readConfigFile(input?: string) {
     this.writeLog(`${color(EColor.Red)}${"▬".repeat(24)} ${color( EColor.Cyan )} ${`START ${APP_NAME} ${info.ver} : ${APP_VERSION} [${NODE_ENV}]`} ${color( EColor.White )} ${new Date().toLocaleDateString()} : ${new Date().toLocaleTimeString()} ${color( EColor.Red )} ${"▬".repeat(24)}${color(EColor.Reset)}`);

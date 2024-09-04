@@ -8,7 +8,7 @@
 // onsole.log("!----------------------------------- Query builder -----------------------------------!");
 
 import { _COLUMNSEPARATOR } from "../../../constants";
-import { doubleQuotesString, cleanStringComma, containsAll, isCsvOrArray, isGraph, isObservation, removeAllQuotes, removeFirstEndDoubleQuotes } from "../../../helpers";
+import { doubleQuotesString, cleanStringComma, containsAll, isCsvOrArray, isGraph, isObservation, removeAllQuotes, removeFirstEndDoubleQuotes, formatPostgresString } from "../../../helpers";
 import { asJson } from "../../../db/queries";
 import { Iservice, Ientity, IKeyBoolean, IpgQuery } from "../../../types";
 import { PgVisitor, RootPgVisitor } from "..";
@@ -128,7 +128,7 @@ export class Query  {
             if (element.splitResult && main.parentEntity === "MultiDatastreams") element.splitResult.forEach((elem: string) => {
                 const one = element && element.splitResult && element.splitResult.length === 1;
                 const alias: string = one ? "result" : elem;
-                returnValue.push( `(result->>'valueskeys')::json->'${element.splitResult && one ? removeAllQuotes(element.splitResult[0]) : alias}' AS "${ one ? elem : alias}"` );
+                returnValue.push( `(result->>'valueskeys')::json->'${element.splitResult && formatPostgresString(one ? element.splitResult[0] : alias)}' AS "${removeAllQuotes(one ? elem : alias)}"` );
                 this.keyNames.add(one ? elem : alias);
             });
         }

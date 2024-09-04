@@ -9,7 +9,6 @@ import { doubleQuotesString, deepClone, isTest } from "../helpers";
 import { errors, msg } from "../messages";
 import { Iservice, Ientities, Ientity, IstreamInfos, koaContext } from "../types";
 import fs from "fs";
-import conformance from "./conformance.json";
 import { FeatureOfInterest, Thing, Location, Service, CreateFile, CreateObservation, Datastream, Decoder, HistoricalLocation, HistoricalObservation, Log, Lora, MultiDatastream, MultiDatastreamObservedProperty, Observation, Sensor, User, LocationHistoricalLocation, ObservedProperty, ThingLocation } from "./entities";
 
 const testVersion = (input: string) => Object.keys(Models.models).includes(input);
@@ -107,20 +106,14 @@ class Models {
     
     result["extensions"] = extensions;
     result["options"] = ctx.config.options;
-    await executeSqlValues(ctx.config, `
-    select version(), 
-    (SELECT ARRAY(SELECT extname||'-'||extversion AS extension FROM pg_extension) AS extension),
-    (SELECT c.relname||'.'||a.attname FROM pg_attribute a JOIN pg_class c ON (a.attrelid=c.relfilenode) WHERE a.atttypid = 114)
-    ;`
+    await executeSqlValues(ctx.config, ` select version(), (SELECT ARRAY(SELECT extname||'-'||extversion AS extension FROM pg_extension) AS extension), (SELECT c.relname||'.'||a.attname FROM pg_attribute a JOIN pg_class c ON (a.attrelid=c.relfilenode) WHERE a.atttypid = 114) ;`
     ).then(res => {
       result["Postgres"]["version"] = res[0 as keyof object];
       result["Postgres"]["extensions"] = res[1 as keyof object];
     });
-
-
     return result;
   }
-    // Get multiDatastream or Datastrems infos in one function
+    // Get multiDatastream or Datastrems infos
   public async getStreamInfos(service: Iservice , input: Record<string, any> ): Promise<IstreamInfos | undefined> {
     const stream: _STREAM = input["Datastream"] ? "Datastream" : input["MultiDatastream"] ? "MultiDatastream" : undefined;
     if (!stream) return undefined;
@@ -130,7 +123,7 @@ class Models {
     const searchKey = input[models.DBFull(service)[streamEntity].name] || input[models.DBFull(service)[streamEntity].singular];
     const streamId: string | undefined = isNaN(searchKey) ? searchKey["@iot.id"] : searchKey;
     if (streamId) {
-      const query = `SELECT "id", "observationType", "_default_foi" FROM ${doubleQuotesString(models.DBFull(service)[streamEntity].table)} WHERE id = ${BigInt(streamId)} LIMIT 1`;
+      const query = `SELECT "id", "observationType", "_default_foi" FROM ${doubleQuotesString(models.DBFull(service)[streamEntity].table)} WHERE "id" = ${BigInt(streamId)} LIMIT 1`;
       return executeSqlValues(service, asJson({ query: query, singular: true, strip: false, count: false }))
         .then((res: object) => {        
           return res ? {
@@ -157,10 +150,10 @@ class Models {
         type: "json"
       };
     };
-
+    // add properties to entities
     ["Things", "Locations", "FeaturesOfInterest", "ObservedProperties", "Sensors", "Datastreams", "MultiDatastreams"]
       .forEach((e: string) => { input[e].columns["properties"] = makeJson("properties"); });
-  
+    // add geom to Location
     input.Locations.columns["geom"] = {
       create: "geometry NULL",
       alias() {
@@ -214,8 +207,6 @@ class Models {
   public DBAdmin(service: Iservice ):Ientities {
     const entities = Models.models[EVersion.v1_0];
     return Object.fromEntries(Object.entries(entities)) as Ientities;
-
-    // return Object.fromEntries(Object.entries( Models.models[EVersion.v1_0]));
   } 
 
   public isSingular(service: Iservice , input: string): boolean { 
@@ -230,9 +221,9 @@ class Models {
     if (config && search) {        
       const tempModel = Models.models[service.apiVersion];
       const testString: string | undefined = search
-          .trim()
-          .match(/[a-zA-Z_]/g)
-          ?.join("");
+            .trim()
+            .match(/[a-zA-Z_]/g)
+            ?.join("");
 
       return tempModel && testString
           ? tempModel.hasOwnProperty(testString)
@@ -304,47 +295,56 @@ class Models {
           value : expectedResponse.filter((elem) => Object.keys(elem).length)
         };    
       case EVersion.v1_1:
-        expectedResponse = expectedResponse.filter((elem) => Object.keys(elem).length);    
-        const list:string[] = [];
-        list.push(conformance["1.1"].root);
-        list.push("https://docs.ogc.org/is/18-088/18-088.html#uri-components");
-        list.push("https://docs.ogc.org/is/18-088/18-088.html#resource-path");
-        list.push("https://docs.ogc.org/is/18-088/18-088.html#requesting-data");
-        list.push("https://docs.ogc.org/is/18-088/18-088.html#create-update-delete");
-        // conformance.push("https://docs.ogc.org/is/18-088/18-088.html#batch-requests");
-
-
-
-
-        list.push(`"http://www.opengis.net/spec/iot_sensing/1.1/req/receive-updates-via-mqtt/receive-updates": { "endpoints": [ "mqtt://server.example.com:1833", "ws://server.example.com/sensorThings", ]`);
-
-
-
-
-
-
-
+        expectedResponse = expectedResponse.filter((elem) => Object.keys(elem).length); 
+        // base   
+        const list:string[] = [
+        "https://docs.ogc.org/is/18-088/18-088.html",
+        // list.push("https://docs.ogc.org/is/18-088/18-088.html#req-batch-request-batch-request");
+        "https://docs.ogc.org/is/18-088/18-088.html#uri-components",
+        "https://docs.ogc.org/is/18-088/18-088.html#resource-path",
+        "https://docs.ogc.org/is/18-088/18-088.html#req-resource-path-resource-path-to-entities",
+        "https://docs.ogc.org/is/18-088/18-088.html#requesting-data",
+        "https://docs.ogc.org/is/18-088/18-088.html#create-update-delete",
+        "https://docs.ogc.org/is/18-088/18-088.html#req-data-array-data-array",
+        "https://docs.ogc.org/is/18-088/18-088.html#req-resource-path-resource-path-to-entities",
+        "http://docs.oasis-open.org/odata/odata-json-format/v4.01/odata-json-format-v4.01.html",
+        "https://datatracker.ietf.org/doc/html/rfc4180"];
+        // "http://www.opengis.net/spec/iot_sensing/1.1/req/receive-updates-via-mqtt/receive-updates",
+        // "https://fraunhoferiosb.github.io/FROST-Server/extensions/DeepSelect.html",
+        // "https://fraunhoferiosb.github.io/FROST-Server/extensions/GeoJSON-ResultFormat.html",
+        // "https://fraunhoferiosb.github.io/FROST-Server/extensions/JsonBatchRequest.html",
+        // "https://fraunhoferiosb.github.io/FROST-Server/extensions/OpenAPI.html",
+        // "https://fraunhoferiosb.github.io/FROST-Server/extensions/ResponseMetadata.html",
+        // "https://fraunhoferiosb.github.io/FROST-Server/extensions/SelectDistinct.html",
+        // "https://github.com/INSIDE-information-systems/SensorThingsAPI/blob/master/CSV-ResultFormat/CSV-ResultFormat.md",
+        // "https://github.com/INSIDE-information-systems/SensorThingsAPI/blob/master/EntityLinking/Linking.md#Expand",
+        // "https://github.com/INSIDE-information-systems/SensorThingsAPI/blob/master/EntityLinking/Linking.md#Filter",
+        // "https://github.com/INSIDE-information-systems/SensorThingsAPI/blob/master/EntityLinking/Linking.md#NavigationLinks"],
+        if (ctx.config.extensions.includes(EExtensions.lora)) list.push(`${ctx.decodedUrl.origin}/#api-Loras`);
         if (ctx.config.extensions.includes(EExtensions.multiDatastream)) list.push("https://docs.ogc.org/is/18-088/18-088.html#multidatastream-extension");
-        if (ctx.config.extensions.includes(EExtensions.mqtt)) list.push("https://docs.ogc.org/is/18-088/18-088.html#create-observation-dataarray");
-        // conformance.push("https://docs.ogc.org/is/18-088/18-088.html#mqtt-extension");
-        list.push("http://docs.oasis-open.org/odata/odata-json-format/v4.01/odata-json-format-v4.01.html");
-        list.push("https://datatracker.ietf.org/doc/html/rfc4180");
+        if (ctx.config.extensions.includes(EExtensions.mqtt)) list.push("https://docs.ogc.org/is/18-088/18-088.html#req-create-observations-via-mqtt-observations-creation",
+                                                                        "https://docs.ogc.org/is/18-088/18-088.html#mqtt-extension");
+        console.log(ctx.config.extensions);
+        
         const temp: Record<string, any>  =  {
           "value" : expectedResponse.filter((elem) => Object.keys(elem).length),
           "serverSettings" : {
             "conformance" : list,
           }
         };
-        
+        if (ctx.config.extensions.includes(EExtensions.logs)) list.push(`${ctx.decodedUrl.origin}/#api-Logs`);
+        list.push(`${ctx.decodedUrl.origin}/#api-Services`);
+        list.push(`${ctx.decodedUrl.origin}/#api-Token`);
+        list.push(`${ctx.decodedUrl.origin}/#api-Import`);
+        list.push(`${ctx.decodedUrl.origin}/#api-Format`);        
         temp[`${ctx.decodedUrl.linkbase}/${ctx.config.apiVersion}/req/receive-updates-via-mqtt/receive-updates`] = 
         {
           "endpoints": [
-            "mqtt://server.example.com:1833",
+            `mqtt://server.example.com:${config.getService(ADMIN).ports?.ws}`,
             "ws://server.example.com/sensorThings",
           ]
         }
         return temp;
-        
         default:
           break;
       }

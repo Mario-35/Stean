@@ -99,6 +99,7 @@ export const testDatas:Record<string, any> = {
 			"multiDatastream",
 			"lora",
 			"users",
+			"mqtt",
 			"logs"
 		],
 		"options": [

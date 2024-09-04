@@ -42,7 +42,7 @@ const addToApiDoc = (input: IApiInput) => {
 };
 
 addToApiDoc({
-    api: `{infos} ${entity.name} infos`,
+    api: `{infos} ${entity.name} Extension`,
     apiName: `Infos${entity.name}`,    
     apiDescription: infos[entity.name].definition,
     apiReference: infos[entity.name].reference,

@@ -512,3 +512,6 @@ p.deprecated span{
   color: #0b400b;
   margin-left: 5px;
 }
+.noBorder {
+  border: 0;
+}

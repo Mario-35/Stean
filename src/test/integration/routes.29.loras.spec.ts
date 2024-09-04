@@ -10,7 +10,7 @@
 
  import chai from "chai";
  import chaiHttp from "chai-http";
- import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, defaultPost, limitResult, apiInfos, showHide, nbColor, nbColorTitle, testVersion, _RAWDB, defaultGet } from "./constant";
+ import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, defaultPost, limitResult, apiInfos, showHide, nbColor, nbColorTitle, testVersion, _RAWDB, defaultGet, infos, listOfColumns } from "./constant";
  import { server } from "../../server/index";
  import { Ientity } from "../../server/types";
 import { addStartNewTest, addTest, writeLog } from "./tests";
@@ -39,16 +39,17 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
  };
  
  addToApiDoc({
-     api: `{infos} ${entity.name} Infos.`,
+     api: `{infos} ${entity.name} Extension.`,
      apiName: `Infos${entity.name}`,
-     apiDescription:
-         "Lora is an layer for add observations in sensorThings from LORA sensors, the link with sensor is done by deveui (the unique ID of lora sensor) in things properties",
-     apiReference: "",
+     apiDescription: infos[entity.name].definition,
+     apiReference: infos[entity.name].reference,
      result: ""
  });
  
  describe("endpoint : Lora", () => {
-     const success: string[] = [];
+     const temp = listOfColumns(entity);
+     const success = temp.success;
+    //  const params = temp.params;
      let token = "";
      
      before((done) => {         
@@ -64,7 +65,7 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
  
      describe(`{get} ${entity.name} ${nbColorTitle}[9.2]`, () => {
 		afterEach(() => { writeLog(true); });
-
+        
 		it(`Return all ${entity.name} ${nbColor}[9.2.2]`, (done) => {
 			const infos = addTest({
 				api: `{get} ${entity.name} Get all`,
