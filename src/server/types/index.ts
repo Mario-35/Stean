@@ -11,6 +11,7 @@ import Koa from "koa";
 import { allEntitiesType, EExtensions, EOptions } from "../enums";
 import { Ientity } from "./entity";
 
+export { IrelationInfos } from "./relationInfos";
 export { Icomon } from "./comon";
 export { Iservice } from "./service";
 export { IcsvColumn } from "./csvColumn";

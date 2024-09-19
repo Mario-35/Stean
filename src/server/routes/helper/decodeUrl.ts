@@ -26,8 +26,7 @@ import { IdecodedUrl, koaContext  } from "../../types";
 
 export const decodeUrl = (ctx: koaContext, input?: string): IdecodedUrl | undefined => {
   // get input
-  input = input || ctx.href; 
-  input = input;
+  input = input || ctx.href;
   // debug mode
   setDebug(input.includes("?$debug=true") || input.includes("&$debug=true"));
   console.log(log.whereIam());
@@ -35,10 +34,7 @@ export const decodeUrl = (ctx: koaContext, input?: string): IdecodedUrl | undefi
   const url = new URL(cleanUrl(input.replace("$debug=true", "").normalize("NFD").replace(/[\u0300-\u036f]/g, ""))); 
   // get configName from port    
   let configName:  string | undefined = undefined;
-  // split path
-  // path[0] : service
-  // path[1] : version
-  // path[...] : path
+  // path[0] : service, path[1] : version, path[...] : path
   const paths = url.pathname.split('/').filter(e => e != "");
   // no service
   if (paths[0]) 

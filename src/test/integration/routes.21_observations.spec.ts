@@ -17,6 +17,9 @@ import { testsKeys as Datastreams_testsKeys } from "./routes.17_datastreams.spec
 import { executeQuery, last } from "./executeQuery";
 import { testDatas } from "../../server/db/createDb";
 import { addStartNewTest, addTest, writeLog } from "./tests";
+import geo from './files/geo.json';
+
+
 export const testsKeys = [
     "@iot.id",
     "@iot.selfLink",
@@ -507,13 +510,10 @@ describe("endpoint : Observations", () => {
                 "resultTime": "2017-02-07T18:02:05.000Z",
                 "result": 21.6,
                 "FeatureOfInterest": {
-                    "name": "Au Comptoir Vénitien (Created new location)",
-                    "description": "Au Comptoir Vénitien",
+                    "name": ":From Saint-Malo (Created new location)",
+                    "description": "From Saint-Malo",
                     "encodingType": "application/geo+json",
-                    "feature": {
-                        "type": "Point",
-                        "coordinates": [48.11829243294942, -1.717928984533772]
-                    }
+                    "feature": geo.Fougères.geometry
                 },
                 "Datastream": { "@iot.id": 6 }
             };
@@ -586,10 +586,7 @@ describe("endpoint : Observations", () => {
                     "name": "Au Comptoir Vénitien [7]",
                     "description": "Au Comptoir Vénitien",
                     "encodingType": "application/geo+json",
-                    "feature": {
-                        "type": "Point",
-                        "coordinates": [48.11829243294942, -1.717928984533772]
-                    }
+                    "feature": geo.Rennes.geometry
                 }
             };
             const infos = addTest({
@@ -636,10 +633,7 @@ describe("endpoint : Observations", () => {
                     "name": "Au Comptoir Vénitien",
                     "description": "Au Comptoir Vénitien",
                     "encodingType": "application/geo+json",
-                    "feature": {
-                        "type": "Point",
-                        "coordinates": [48.11829243294942, -1.717928984533772]
-                    }
+                    "feature": geo.Rennes.geometry
                 }
             };
             const infos = addTest({
@@ -684,7 +678,7 @@ describe("endpoint : Observations", () => {
                     "encodingType": "application/geo+json",
                     "feature": {
                         "type": "Point",
-                        "coordinates": [48.11829243294942, -1.717928984533772]
+                        "feature": geo.Rennes.geometry
                     }
                 }
             };
@@ -723,7 +717,7 @@ describe("endpoint : Observations", () => {
                     "encodingType": "application/geo+json",
                     "feature": {
                         "type": "Point",
-                        "coordinates": [48.11829243294942, -1.717928984533772]
+                        "feature": geo.Rennes.geometry
                     }
                 }
             };

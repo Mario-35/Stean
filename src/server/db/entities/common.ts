@@ -121,6 +121,10 @@
      switch (this.ctx.odata.returnFormat) {
        case returnFormats.sql:
          return this.formatReturnResult({ body: sql }); 
+        case returnFormats.GeoJSON:
+          return await executeSqlValues(this.ctx.config, sql).then((res: Record<string, any>) => {
+            return this.formatReturnResult({ body: res[0] });
+          });
        default:
          return await executeSqlValues(this.ctx.config, sql).then((res: Record<string, any>) => {
            if (this.ctx.odata.query.select && this.ctx.odata.onlyValue  === true) {

@@ -51,4 +51,8 @@ export class Core {
     this._src = this._src.map(e => typeof e === "string" ? e.replace(from, to) : e);
   }
 
+  pop() {    
+    return this._src.pop();
+  }
+
 }

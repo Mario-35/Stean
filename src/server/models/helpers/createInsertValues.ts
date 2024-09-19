@@ -7,7 +7,7 @@
  */
 // onsole.log("!----------------------------------- createInsertValues -----------------------------------!");
 
-import { formatColumnValue } from ".";
+import { formatColumnValue, relationInfos } from ".";
 import { models } from "..";
 import { ESCAPE_SIMPLE_QUOTE } from "../../constants";
 import { doubleQuotesString, simpleQuotesString, removeFirstEndDoubleQuotes } from "../../helpers";
@@ -30,12 +30,13 @@ export function createInsertValues(service: Iservice , input: Record<string, any
                     keys.push(doubleQuotesString(e));
                     values.push(temp);
                   }
-                } else if (input[e] && entity.relations[e]) {                
-                  const col = entity.relations[e].entityColumn;
-                  if (entity.columns[col]) {
-                    const temp = formatColumnValue(col, input[e], entity.columns[col].type);
+                } else if (input[e] && entity.relations[e]) {
+                    const relation = relationInfos(service, entity.name, e);
+                    
+                  if (entity.columns[relation.column]) {
+                    const temp = formatColumnValue(relation.column, input[e], entity.columns[relation.column].type);
                     if (temp) {
-                      keys.push(doubleQuotesString(col));
+                      keys.push(doubleQuotesString(relation.column));
                       values.push(temp);
                     }  
                   }                  

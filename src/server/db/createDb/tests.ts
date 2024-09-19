@@ -34,6 +34,234 @@ const n = {
 	]
 }
 
+const geo = {
+
+	"Angers": {
+		"type": "Feature",
+		"properties": {
+		  "name":"Angers"
+		},
+		"geometry": {
+		  "coordinates": [
+			-0.5528847276950444,
+			47.46996912080425
+		  ],
+		  "type": "Point"
+		},
+		"id": 0
+	  },
+	  "Nantes": {
+		"type": "Feature",
+		"properties": {
+		  "name":"Nantes"
+		},
+		"geometry": {
+		  "coordinates": [
+			-1.54241217683861,
+			47.223625061665274
+		  ],
+		  "type": "Point"
+		},
+		"id": 1
+	  },
+	  "Vannes": {
+		"type": "Feature",
+		"properties": {
+		  "name": "Vannes"
+		},
+		"geometry": {
+		  "coordinates": [
+			-2.7596625115984637,
+			47.66493020501483
+		  ],
+		  "type": "Point"
+		},
+		"id": 2
+	  },
+	  "Lorient": {
+		"type": "Feature",
+		"properties": {
+		  "name":"Lorient"
+		},
+		"geometry": {
+		  "coordinates": [
+			-3.377509239138959,
+			47.74736066059859
+		  ],
+		  "type": "Point"
+		},
+		"id": 3
+	  },
+	  "Quimperlé":{
+		"type": "Feature",
+		"properties": {
+		  "name":"Quimperlé"
+		},
+		"geometry": {
+		  "coordinates": [
+			-3.5551084364122687,
+			47.86866728326285
+		  ],
+		  "type": "Point"
+		},
+		"id": 4
+	  },
+	  "Quimper":{
+		"type": "Feature",
+		"properties": {
+		  "name":"Quimper"
+		},
+		"geometry": {
+		  "coordinates": [
+			-4.108433416883344,
+			47.99535576613954
+		  ],
+		  "type": "Point"
+		},
+		"id": 5
+	  },
+	  "Pleyben":{
+		"type": "Feature",
+		"properties": {
+		  "name":"Pleyben"
+		},
+		"geometry": {
+		  "coordinates": [
+			-3.9733716628968807,
+			48.22237203586653
+		  ],
+		  "type": "Point"
+		},
+		"id": 6
+	  },
+	  "Brest":{
+		"type": "Feature",
+		"properties": {
+		  "name":"Brest"
+		},
+		"geometry": {
+		  "coordinates": [
+			-4.478460131480347,
+			48.40856811055875
+		  ],
+		  "type": "Point"
+		},
+		"id": 7
+	  },
+	  "Morlaix":{
+		"type": "Feature",
+		"properties": {
+		  "name":"Morlaix"
+		},
+		"geometry": {
+		  "coordinates": [
+			-3.8573075531622294,
+			48.58344913955506
+		  ],
+		  "type": "Point"
+		},
+		"id": 8
+	  },
+	  "Guimgamp":{
+		"type": "Feature",
+		"properties": {
+		  "name":"Guimgamp"
+		},
+		"geometry": {
+		  "coordinates": [
+			-3.148594867800796,
+			48.55556794006753
+		  ],
+		  "type": "Point"
+		},
+		"id": 9
+	  },
+	  "Saint-Brieuc":{
+		"type": "Feature",
+		"properties": {
+		  "name":"Saint-Brieuc"
+		},
+		"geometry": {
+		  "coordinates": [
+			-2.7462126107293727,
+			48.48952830328679
+		  ],
+		  "type": "Point"
+		},
+		"id": 10
+	  },
+	  "Saint-Malo":{
+		"type": "Feature",
+		"properties": {
+		  "name":"Saint-Malo"
+		},
+		"geometry": {
+		  "coordinates": [
+			-1.9867722904692187,
+			48.643104431904845
+		  ],
+		  "type": "Point"
+		},
+		"id": 11
+	  },
+	  "Fougères":{
+		"type": "Feature",
+		"properties": {
+		  "name":"Fougères"
+		},
+		"geometry": {
+		  "coordinates": [
+			-1.202481228298467,
+			48.35475608212215
+		  ],
+		  "type": "Point"
+		},
+		"id": 12
+	  },
+	  "Laval":{
+		"type": "Feature",
+		"properties": {
+		  "name":"Laval"
+		},
+		"geometry": {
+		  "coordinates": [
+			-0.7723899516274741,
+			48.072230699253026
+		  ],
+		  "type": "Point"
+		},
+		"id": 13
+	  },
+	  "Chateau-Gontier":{
+		"type": "Feature",
+		"properties": {
+		  "name":"Chateau-Gontier"
+		},
+		"geometry": {
+		  "coordinates": [
+			-0.6990393387893619,
+			47.83012585998793
+		  ],
+		  "type": "Point"
+		},
+		"id": 14
+	  },
+	  "Rennes":{
+		"type": "Feature",
+		"properties": {
+		  "name":"Rennes"
+		},
+		"geometry": {
+		  "coordinates": [
+			-1.6567440482485551,
+			48.11256463781973
+		  ],
+		  "type": "Point"
+		},
+		"id": 15
+	  }
+  }
+
 const nb = (hr: number) => hr < 10 ? `0${hr}` : `${hr}`;
 
 const createObservations = () => {
@@ -178,55 +406,37 @@ export const testDatas:Record<string, any> = {
 			"name": `${n["classic"]} Features Of Interest`,
 			"description": `Description of ${n["classic"]} Features Of Interest`,	
 			"encodingType": "application/geo+json",
-			"feature": {
-				"type": "Point",
-				"coordinates": [-4.1208244, 47.9441891]
-			}
+			"feature": geo.Angers.geometry
 		},
 		{
 			"name": `${n["apostrophe"]} Features Of Interest`,
 			"description": `Description of ${n["apostrophe"]} Features Of Interest`,	
 			"encodingType": "application/geo+json",
-			"feature": {
-				"type": "Point",
-				"coordinates": [-4.1208244, 47.9441891]
-			}
+			"feature": geo.Nantes.geometry
 		},
 		{
 			"name": `${n["accent"]} Features Of Interest`,
 			"description": `Description of ${n["accent"]} Features Of Interest`,	
 			"encodingType": "application/geo+json",
-			"feature": {
-				"type": "Point",
-				"coordinates": [-4.1208244, 47.9441891]
-			}
+			"feature": geo.Vannes.geometry
 		},
 		{
 			"name": `${n["special"]} Features Of Interest`,
 			"description": `Description of ${n["special"]} Features Of Interest`,	
 			"encodingType": "application/geo+json",
-			"feature": {
-				"type": "Point",
-				"coordinates": [-4.1208244, 47.9441891]
-			}
+			"feature": geo.Lorient.geometry
 		},
 		{
 			"name": `${n["hack"]} Features Of Interest`,
 			"description": `Description of ${n["hack"]} Features Of Interest`,	
 			"encodingType": "application/geo+json",
-			"feature": {
-				"type": "Point",
-				"coordinates": [-4.1208244, 47.9441891]
-			}
+			"feature": geo.Quimperlé.geometry
 		},
 		{
 			"name": "Somewhere on earth",
 			"description": "Well watershed",
 			"encodingType": "application/geo+json",
-			"feature": {
-				"type": "Point",
-				"coordinates": [-4.1208244, 47.9441891]
-			}
+			"feature": geo.Quimper.geometry
 		},
 		{
 			"name": "Next to you",
@@ -750,31 +960,19 @@ export const testDatas:Record<string, any> = {
 			"name": "Near of me",
 			"description": "Watershed point",
 			"encodingType": "application/geo+json",
-			"feature": {
-				"type": "Point",
-				"coordinates": [-2.831291, 48.0057694]
-			}
+			"feature": geo.Pleyben.geometry
 		},
 		{
 			"name": "bv kerrien",
 			"description": "Bassin versant de Kerrien",
 			"encodingType": "application/geo+json",
-			"feature": {
-				"type": "Point",
-				"coordinates": [-4.1227251, 47.941086]
-			}
+			"feature": geo.Brest.geometry
 		},
 		{
 			"name": "Temperature, Humidity & conductivity",
 			"description": "Temperature, Humidity and Electrical conductivity",
 			"encodingType": "application/geo+json",
-			"feature": {
-				"type": "Point",
-				"coordinates": [
-					-1.699344671117873,
-					48.13680400636883
-				]
-			}
+			"feature": geo.Morlaix.geometry
 		}
 	],
 	"Locations": [
@@ -782,148 +980,73 @@ export const testDatas:Record<string, any> = {
 			"name": `${n["classic"]} Location`,
 			"description": `Description of ${n["classic"]} Location`,
 			"encodingType": "application/geo+json",
-			"location": {
-				"type": "Feature",
-				"geometry": {
-					"type": "Point",
-					"coordinates": [-4.1208244, 47.9441891]
-				}
-			}
+			"location": geo.Angers.geometry
 		},
 		{
 			"name": `${n["apostrophe"]} Location`,
 			"description": `Description of ${n["apostrophe"]} Location`,
 			"encodingType": "application/geo+json",
-			"location": {
-				"type": "Feature",
-				"geometry": {
-					"type": "Point",
-					"coordinates": [-2.831291, 48.0057694]
-				}
-			}
+			"location": geo.Nantes.geometry
 		},
 		{
 			"name": `${n["accent"]} Location`,
 			"description": `Description of ${n["accent"]} Location`,
 			"encodingType": "application/geo+json",
-			"location": {
-				"type": "Feature",
-				"geometry": {
-					"type": "Point",
-					"coordinates": [-4.1235308, 47.9402973]
-				}
-			}
+			"location": geo.Vannes.geometry
 		},
 		{
 			"name": `${n["special"]} Location`,
 			"description": `Description of ${n["special"]} Location`,
 			"encodingType": "application/geo+json",
-			"location": {
-				"type": "Feature",
-				"geometry": {
-					"type": "Point",
-					"coordinates": [48.06467042196109, -1.623116279666956]
-				}
-			}
+			"location": geo.Lorient.geometry
 		},
 		{
 			"name": `${n["hack"]} Location`,
 			"description": `Description of ${n["hack"]} Location`,
 			"encodingType": "application/geo+json",
-			"location": {
-				"type": "Feature",
-				"geometry": {
-					"type": "Point",
-					"coordinates": [-4.1227251, 47.941086]
-				}
-			}
+			"location": geo.Quimperlé.geometry
 		},
 		{
 			"name": "Institut Agro",
 			"description": "Institut Agro Rennes-Angers",
 			"encodingType": "application/geo+json",
-			"location": {
-				"type": "Feature",
-				"geometry": {
-					"type": "Point",
-					"coordinates": [48.1140652783794, -1.7062956999598533]
-				}
-			}
+			"location": geo.Rennes.geometry
 		},
 		{
 			"name": "On the Moon",
 			"description": "Climatic chamber location",
 			"encodingType": "application/geo+json",
-			"location": {
-				"type": "Feature",
-				"geometry": {
-					"type": "Point",
-					"coordinates": [
-						-4.1090774,
-						48.0076685
-					]
-				}
-			}
+			"location": geo.Quimper.geometry
 		},
 		{
 			"name": "Outlet E30",
 			"description": "Exutoire du bassin versant du Puits",
 			"encodingType": "application/geo+json",
-			"location": {
-				"type": "Point",
-				"coordinates": [
-					-4.1208244,
-					47.9441891
-				]
-			}
+			"location": geo.Pleyben.geometry
 		},
 		{
 			"name": "Outlet Exutoire",
 			"description": "Exutoire du bassin versant de Kervidy",
 			"encodingType": "application/geo+json",
-			"location": {
-				"type": "Point",
-				"coordinates": [
-					-2.831291,
-					48.0057694
-				]
-			}
+			"location": geo.Brest.geometry
 		},
 		{
 			"name": "Piezo F5b",
 			"description": "Piézomètre du bassin versant de Kerrien",
 			"encodingType": "application/geo+json",
-			"location": {
-				"type": "Point",
-				"coordinates": [
-					-4.1235308,
-					47.9402973
-				]
-			}
+			"location": geo.Morlaix.geometry
 		},
 		{
 			"name": "Piezometer F4",
 			"description": "Piézomètre du bassin versant de Kerrien",
 			"encodingType": "application/geo+json",
-			"location": {
-				"type": "Point",
-				"coordinates": [
-					-4.1227251,
-					47.941086
-				]
-			}
+			"location": geo.Guimgamp.geometry
 		},
 		{
 			"name": "Site of BeautifulEyes",
 			"description": "BeautifulEyes",
 			"encodingType": "application/geo+json",
-			"location": {
-				"type": "Point",
-				"coordinates": [
-					-1.699344671117873,
-					48.13680400636883
-				]
-			}
+			"location": geo["Saint-Brieuc"].geometry
 		}
 	],
 	"ObservedProperties": [

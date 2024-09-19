@@ -34,14 +34,15 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
   if (!decodedUrl) {
     // Get all infos services
     switch (ctx.path.toLocaleUpperCase()) {
+      // get infos
       case "/INFOS":
           ctx.body = config.getInfosForAll(ctx);        
           return;
-        // metrics for moinoring
+        // service assistant
         case "/SERVICE": 
           await firstInstall(ctx);  
           return;
-        // metrics for moinoring
+        // logging for all 
         case "/LOGGING": 
           const bodyLogs = new HtmlLogs(ctx, "../../" + EFileName.logs);
           ctx.type = returnFormats.html.type;

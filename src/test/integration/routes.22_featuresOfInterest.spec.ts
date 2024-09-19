@@ -16,6 +16,8 @@ import { Ientity } from "../../server/types";
 import { testsKeys as observations_testsKeys } from "./routes.21_observations.spec";
 import { count, executeQuery, last } from "./executeQuery";
 import { addStartNewTest, addTest, writeLog } from "./tests";
+import geo from './files/geo.json';
+
 
 const testsKeys = ["@iot.id", "@iot.selfLink", "Observations@iot.navigationLink", "name", "description", "encodingType", "feature"];
 chai.use(chaiHttp);
@@ -245,7 +247,7 @@ addToApiDoc({
                 "encodingType": "application/geo+json",
                 "feature": {
                     "type": "Point",
-                    "coordinates": [48.11829243294942, -1.717928984533772]
+                    "feature": geo.Rennes.geometry
                 }
             };
             const infos = addTest({
@@ -308,7 +310,7 @@ addToApiDoc({
                         "name": "My New Name",
                         "feature": {
                             "type": "Point",
-                            "coordinates": [48.11829243294942, -1.717928984533772]
+                            "feature": geo.Rennes.geometry
                         }
                     };
                     const infos = addTest({

@@ -10,9 +10,11 @@
 import { Ientity } from "../../types";
 import { createEntity } from ".";
 import { _idBig, _text } from "./constants";
+import { ETable } from "../../enums";
 
   export const User:Ientity  = createEntity("Users", {
     createOrder: -1,
+    type: ETable.table,
     order: 21,
     orderBy: `"name"`,
     columns: {

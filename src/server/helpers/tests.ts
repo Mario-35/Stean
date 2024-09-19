@@ -17,6 +17,7 @@ export const isTest = () => process.env.NODE_ENV?.trim() === "test" || false;
 export const isProduction = () => process.env.NODE_ENV?.trim() === "production" || false;
 export const isCsvOrArray = (input: RootPgVisitor |PgVisitor) => [returnFormats.dataArray, returnFormats.csv].includes(input.returnFormat) ? true : undefined;
 export const isGraph = (input: RootPgVisitor |PgVisitor) => [returnFormats.graph, returnFormats.graphDatas].includes(input.returnFormat) ? true : undefined;
+export const isGeoJson = (inputE: Ientity | string, input: RootPgVisitor |PgVisitor) => (typeof inputE === "string" ? ["Locations", "FeaturesOfInterest"].includes(inputE) : ["Locations", "FeaturesOfInterest"].includes(inputE.name)) && input.returnFormat === returnFormats.GeoJSON ? true : undefined;
 export const isObservation = (input: Ientity | string) => typeof input === "string" ? input === "Observations": input.name === "Observations";
 export const isAdmin = (ctx: koaContext): boolean => ctx.config && ctx.config.name === ADMIN;
 export const isAllowedTo = (ctx: koaContext, what: EUserRights): boolean => ctx.config.extensions.includes(EExtensions.users) ? true : ctx.user && ctx.user.PDCUAS[what];

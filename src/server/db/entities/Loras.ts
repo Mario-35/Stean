@@ -193,7 +193,7 @@ export class Loras extends Common {
       const insertObject: Record<string, any> = {
         featureofinterest_id: getFeatureOfInterest
           ? `SELECT COALESCE((SELECT "id" FROM "featureofinterest" WHERE "id" = ${getFeatureOfInterest}), ${getFeatureOfInterest})`
-          : `(SELECT multidatastream1._default_foi FROM multidatastream1)`,
+          : `(SELECT multidatastream1._default_featureofinterest FROM multidatastream1)`,
         multidatastream_id: "(SELECT multidatastream1.id FROM multidatastream1)",
       phenomenonTime: `to_timestamp('${this.stean["timestamp"]}','${EDatesType.dateWithOutTimeZone}')::timestamp`,
       resultTime: `to_timestamp('${this.stean["timestamp"]}','${EDatesType.dateWithOutTimeZone}')::timestamp`,
@@ -207,7 +207,7 @@ export class Loras extends Common {
         .join("");
 
       const sql = `WITH "${VOIDTABLE}" AS (SELECT srid FROM "${VOIDTABLE}" LIMIT 1)
-                , multidatastream1 AS (SELECT id, thing_id, _default_foi, ${searchMulti} LIMIT 1)
+                , multidatastream1 AS (SELECT id, thing_id, _default_featureofinterest, ${searchMulti} LIMIT 1)
                 , myValues ( "${Object.keys(insertObject).join(
                   DOUBLEQUOTEDCOMA
                 )}") AS (values (${Object.values(insertObject).join()}))
@@ -265,7 +265,7 @@ export class Loras extends Common {
       const searchFOI: Record<string, any>  = await executeSql(this.ctx.config, 
         getFeatureOfInterest
           ? `SELECT coalesce((SELECT "id" FROM "${this.ctx.model.FeaturesOfInterest.table}" WHERE "id" = ${getFeatureOfInterest}), ${getFeatureOfInterest}) AS id `
-          : stream["_default_foi"] ? `SELECT id FROM "${this.ctx.model.FeaturesOfInterest.table}" WHERE id = ${stream["_default_foi"]}` : ""
+          : stream["_default_featureofinterest"] ? `SELECT id FROM "${this.ctx.model.FeaturesOfInterest.table}" WHERE id = ${stream["_default_featureofinterest"]}` : ""
       );
       
       if (searchFOI[0].length < 1) {
@@ -288,7 +288,7 @@ export class Loras extends Common {
 
       const resultCreate = `'${JSON.stringify({ value: value })}'::jsonb`;
       const insertObject: Record<string, any>  = {
-        featureofinterest_id: "(SELECT datastream1._default_foi from datastream1)",
+        featureofinterest_id: "(SELECT datastream1._default_featureofinterest from datastream1)",
         datastream_id: "(SELECT datastream1.id from datastream1)",
       phenomenonTime: `to_timestamp('${this.stean["timestamp"]}','${EDatesType.dateWithOutTimeZone}')::timestamp`,
       resultTime: `to_timestamp('${this.stean["timestamp"]}}','${EDatesType.dateWithOutTimeZone}')::timestamp`,
@@ -304,7 +304,7 @@ export class Loras extends Common {
       console.log(log.debug_infos("searchDuplicate", searchDuplicate));
 
       const sql = `WITH "${VOIDTABLE}" AS (SELECT srid FROM "${VOIDTABLE}" LIMIT 1)
-               , datastream1 AS (SELECT id, _default_foi, thing_id FROM "${
+               , datastream1 AS (SELECT id, _default_featureofinterest, thing_id FROM "${
                  this.ctx.model.Datastreams.table
                }" WHERE id =${stream["id"]})
                , myValues ( "${Object.keys(insertObject).join(

@@ -20,7 +20,7 @@ import { config } from "../configuration";
 import { createDatabase, testDatas } from "../db/createDb";
 import { executeAdmin, executeSql, exportService } from "../db/helpers";
 import { models } from "../models";
-import { sqlStopDbName } from "./helper";
+import { getTest, sqlStopDbName } from "./helper";
 import { createService } from "../db/helpers";
 import { HtmlError, Login, Status, Query } from "../views/";
 import { createQueryParams } from "../views/helpers";
@@ -38,6 +38,11 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
       ctx.body = models.getRoot(ctx);
       ctx.type = returnFormats.json.type;
       return;    
+    // tests only for testing wip features
+    case "TEST":
+      ctx.type = returnFormats.json.type;
+      ctx.body = await getTest(ctx);
+      return;
     // metrics for moinoring
     case "METRICS":
       ctx.type = returnFormats.json.type;

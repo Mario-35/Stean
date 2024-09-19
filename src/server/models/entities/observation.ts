@@ -8,7 +8,7 @@
 // onsole.log("!----------------------------------- entity Observation -----------------------------------!");
 
 import { createEntity } from ".";
-import { ERelations } from "../../enums";
+import { ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { doubleQuotesString } from "../../helpers";
 import { _idBig } from "./constants";
@@ -16,6 +16,7 @@ import { _ID } from "../../db/constants";
 
   export const Observation:Ientity  = createEntity("Observations", {
     createOrder: 12,
+    type: ETable.table,
     order: 7,
     orderBy: `"phenomenonTime"`,
     columns: {
@@ -105,35 +106,13 @@ import { _ID } from "../../db/constants";
     },
     relations: {
       Datastream: {
-        type: ERelations.belongsTo,
-        expand: `"datastream"."id" = "observation"."datastream_id"`,
-        link: `"datastream"."id" = (SELECT "observation"."datastream_id" FROM "observation" WHERE "observation"."id" = $ID)`,
-        entityName: "Datastreams",
-        tableName: "observation",
-        relationKey: "id",
-        entityColumn: "datastream_id",
-        tableKey: "id",
+        type: ERelations.belongsTo
       },
       MultiDatastream: {
-        type: ERelations.belongsTo,
-        expand: `"multidatastream"."id" = "observation"."multidatastream_id"`,
-        link: `"multidatastream"."id" = (SELECT "observation"."multidatastream_id" FROM "observation" WHERE "observation"."id" = $ID)`,
-        entityName: "MultiDatastreams",
-        tableName: "observation",
-        relationKey: "id",
-        entityColumn: "multidatastream_id",
-        tableKey: "id",
+        type: ERelations.belongsTo
       },
       FeatureOfInterest: {
-        type: ERelations.belongsTo,
-        expand: `"featureofinterest"."id" = "observation"."featureofinterest_id"`,
-        // link: "err: 501 : Not Implemented.",
-        link: `"featureofinterest"."id" = (SELECT "observation"."featureofinterest_id" FROM "observation" WHERE "observation"."id" = $ID)`,        
-        entityName: "FeaturesOfInterest",
-        tableName: "featureofinterest",
-        relationKey: "id",
-        entityColumn: "featureofinterest_id",
-        tableKey: "id",
+        type: ERelations.belongsTo
       },
     },
   });

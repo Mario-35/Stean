@@ -6,8 +6,9 @@
  *
  */
 // onsole.log("!----------------------------------- entity ObservedProperty -----------------------------------!");
+
 import { createEntity } from ".";
-import { ERelations } from "../../enums";
+import { ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _text } from "./constants";
 import { doubleQuotesString } from "../../helpers";
@@ -15,6 +16,7 @@ import { _ID } from "../../db/constants";
 
 export const ObservedProperty:Ientity  = createEntity("ObservedProperties", {
     createOrder: 5,
+    type: ETable.table,
     order: 8,
     orderBy: `"id"`,
     columns: {
@@ -47,25 +49,11 @@ export const ObservedProperty:Ientity  = createEntity("ObservedProperties", {
     },
     relations: {
         Datastreams: {
-            type: ERelations.hasMany,
-            // expand: "err: 501 : Not Implemented.",
-            expand: `"datastream"."id" in (SELECT "datastream"."id" from "datastream" WHERE "datastream"."observedproperty_id" = "observedproperty"."id")`,
-            link: `"datastream"."id" in (SELECT "datastream"."id" FROM "datastream" WHERE "datastream"."observedproperty_id" = $ID)`,
-            entityName: "Datastreams",
-            tableName: "datastream",
-            relationKey: "observedproperty_id",
-            entityColumn: "id",
-            tableKey: "id",
+            type: ERelations.hasMany
         },
         MultiDatastreams: {
             type: ERelations.hasMany,
-            expand: `"multidatastream"."id" in (SELECT "multidatastreamobservedproperty"."multidatastream_id" FROM "multidatastreamobservedproperty" WHERE "multidatastreamobservedproperty"."observedproperty_id" = "observedproperty"."id")`,
-            link: `"multidatastream"."id" in (SELECT "multidatastreamobservedproperty"."multidatastream_id" FROM "multidatastreamobservedproperty" WHERE "multidatastreamobservedproperty"."observedproperty_id" = $ID)`,
-            entityName: "MultiDatastreams",
-            tableName: "multidatastreamobservedproperty",
-            relationKey: "observedproperty_id",
-            entityColumn: "multidatastream_id",
-            tableKey: "multidatastream_id",
+            entityRelation: "MultiDatastreamObservedProperties",
         },
     },
 });

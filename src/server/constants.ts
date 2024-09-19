@@ -9,6 +9,7 @@
 
 import util from "util";
 import { getKey } from "./helpers";
+import { EColor } from "./enums";
 export const ADMIN:string = "admin";
 export const APP_NAME = process.env.npm_package_name || "_STEAN";
 export const APP_VERSION = process.env.version || process.env.npm_package_version || "0";
@@ -38,3 +39,10 @@ export function addToStrings(input: string[], data: string) { if (input) input.p
 export const APP_KEY = getKey() ;
 
 export const STRINGEXC = ["CONCAT", "CASE", "COALESCE"];
+
+export const infoMessage = (message: string) => process.stdout.write(`${color(EColor.Green)} ------INFOS------${message} ${color(EColor.Reset)}` + "\n");
+export const errorMessage = (message: string) => process.stdout.write(`${color(EColor.Red)} ------ERROR------${message} ${color(EColor.Reset)}` + "\n");
+export const toast = (col: EColor, a: any, b : any, c?:any) => {
+  process.stdout.write(`${color(col)} -----------${a}----------->--${b}--------${c}---------- ${color(EColor.Reset)}` + "\n");
+
+}

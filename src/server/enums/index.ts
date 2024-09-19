@@ -11,6 +11,7 @@ import { EExtensions } from "./extensions";
 import { EOptions } from "./options";
 
 export { EChar } from "./chars";
+export { ETable } from "./table";
 export { EColor } from "./colors";
 export { EColumnType } from "./colType";
 export { EDatesType } from "./datesType";

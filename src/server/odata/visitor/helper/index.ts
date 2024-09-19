@@ -10,3 +10,5 @@
 export { postSqlFromPgVisitor } from "./postSqlFromPgVisitor";
 export { oDataDateFormat } from "./oDataDateFormat";
 export { blankRootPgVisitor } from "./blankRootPgVisitor";
+export { OdataGeoColumn } from "./formatOdataGeoColumn";
+

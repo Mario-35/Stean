@@ -8,7 +8,7 @@
 // onsole.log("!----------------------------------- entity HistoricalLocation -----------------------------------!");
 
 import { createEntity } from ".";
-import {  ERelations } from "../../enums";
+import {  ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _idRel, _tz } from "./constants";
 import { doubleQuotesString } from "../../helpers";
@@ -17,6 +17,7 @@ import { _ID } from "../../db/constants";
 export const HistoricalLocation:Ientity  = createEntity("HistoricalLocations", {
   createOrder: -1,
   order: 5,
+  type: ETable.table,
   orderBy: `"id"`,
   columns: {
     id: {
@@ -48,24 +49,11 @@ export const HistoricalLocation:Ientity  = createEntity("HistoricalLocations", {
   },
   relations: {
     Thing: {
-      type: ERelations.belongsTo,
-      expand: `"thing"."id" = "historicallocation"."thing_id"`,
-      link: `"thing"."id" = (SELECT "historicallocation"."thing_id" from "historicallocation" WHERE "historicallocation"."id" = $ID)`,
-      entityName: "Things",
-      tableName: "thing",
-      relationKey: "thing_id",
-      entityColumn: "id",
-      tableKey: "id",
+      type: ERelations.belongsTo
     },
     Locations: {
-      type: ERelations.belongsToMany,
-      expand: `"location"."id" in (SELECT "location"."id" from "location" WHERE "location"."id" in (SELECT "thinglocation"."location_id" from "thinglocation" WHERE "thinglocation"."thing_id" = "historicallocation"."thing_id"))`,
-      link: `"location"."id" in (SELECT "location"."id" from "location" WHERE "location"."id" in (SELECT "thinglocation"."location_id" from "thinglocation" WHERE "thinglocation"."thing_id" in (SELECT "historicallocation"."thing_id" from "historicallocation" WHERE "historicallocation"."id" = $ID)))`,
-      entityName: "locationsHistoricalLocations",
-      tableName: "locationhistoricallocation",
-      relationKey: "historicallocation_id",
-      entityColumn: "location_id",
-      tableKey: "location_id",
+      type: ERelations.belongsTo,
+      entityRelation: "ThingsLocations"
     },
   },
 });

@@ -14,7 +14,7 @@ import { EOperation, EOptions } from "../../../enums";
 import { asJson } from "../../../db/queries";
 import { models } from "../../../models";
 import { log } from "../../../log";
-import { createInsertValues, createUpdateValues } from "../../../models/helpers";
+import { createInsertValues, createUpdateValues, relationInfos } from "../../../models/helpers";
 import { apiAccess } from "../../../db/dataAccess";
 import * as entities from "../../../db/entities";
 import { PgVisitor } from "..";
@@ -207,31 +207,27 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
              * @param subParentEntity {Ientity} entity parent
              */
         const addAssociation = (subEntity: Ientity, subParentEntity: Ientity) => {
-            console.log(log.debug_infos(`addAssociation in ${subEntity.name} for parent`, subParentEntity.name));
-// onsole.log("!----------------------------------- postSqlFromPgVisitor. -----------------------------------!");
+            console.log(log.debug_infos(`addAssociation in ${subEntity.name} for parent`, subParentEntity.name));            
             const relationName = getRelationNameFromEntity(subEntity, subParentEntity);
             const parentRelationName = getRelationNameFromEntity(subParentEntity, subEntity);
-            
             if (parentRelationName && relationName) {
-                const relation = subEntity.relations[relationName];
-                const parentRelation = subParentEntity.relations[parentRelationName];
-                console.log(log.debug_infos(`Found a parent relation in ${subEntity.name}`, subParentEntity.name));
-                
-                if (relation.tableName == parentRelation.tableName && relation.tableName == subEntity.table) {
+                const relCardinality = relationInfos(src.ctx.config, subEntity.name, relationName);
+                const parentCardinality = relationInfos(src.ctx.config, subParentEntity.name, subEntity.name);
+                console.log(log.debug_infos(`Found a parent relation in ${subEntity.name}`, subParentEntity.name));                
+                if (relCardinality.table == parentCardinality.table && relCardinality.table == subEntity.table) {
                     console.log(log.debug_infos("Found a relation to do in sub query", subParentEntity.name));
                     const tableName = names[subEntity.table];
                     const parentTableName = names[subParentEntity.table];
-                    
                     addToQueryMaker(
                         EOperation.Relation,
                         tableName,
                         subEntity.table,
                         `@(select ${parentTableName}.id from ${parentTableName})@`,
-                        parentRelation.tableKey,
-                        parentRelation.relationKey
+                        parentCardinality.leftKey,
+                        parentCardinality.rightKey
                         );
-                    } else if (relation.tableName == parentRelation.tableName) {
-                        if (relation.tableName == subParentEntity.table) {
+                    } else if (relCardinality.table == parentCardinality.table) {
+                        if (relCardinality.table == subParentEntity.table) {
                             const tableName = names[subEntity.table];
                             const parentTableName = names[subParentEntity.table];
                             console.log(log.debug_infos(`Add parent relation ${tableName} in`, parentTableName));                            
@@ -240,22 +236,22 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
                                 parentTableName,
                                 subParentEntity.table,
                                 `@(select ${tableName}.id from ${tableName})@`,
-                                parentRelation.tableKey,
-                                relation.relationKey
+                                parentCardinality.leftKey,
+                                relCardinality.rightKey
                                 );
-                            } else if (relation.tableName != subParentEntity.table && relation.tableName != subEntity.table) {
+                            } else if (relCardinality.table != subParentEntity.table && relCardinality.table != subEntity.table) {
                                 const tableName = names[subEntity.table];
                                 const parentTableName = names[subParentEntity.table];
                                 console.log(log.debug_infos(`Add Table association ${tableName} in`, parentTableName));
                                 addToQueryMaker(
                                     EOperation.Association,
-                                    relation.tableName,
-                                    relation.tableName,
+                                    relCardinality.table,
+                                    relCardinality.table,
                                     {
                                         [`${subEntity.table}_id`]: `@(select ${tableName}.id from ${tableName})@`,
                                         [`${subParentEntity.table}_id`]: `@(select ${parentTableName}.id from ${parentTableName})@`
                                     },
-                                    relation.tableKey,
+                                    relCardinality.leftKey,
                                     undefined
                                     );
                                 }
@@ -268,9 +264,9 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
                         parentTableName,
                         subParentEntity.table,
                         {
-                            [relation.relationKey]: `@(select ${tableName}.id from ${tableName})@`
+                            [relCardinality.rightKey]: `@(select ${tableName}.id from ${tableName})@`
                         },
-                        relation.tableKey,
+                        relCardinality.leftKey,
                         undefined
                         );
                     }

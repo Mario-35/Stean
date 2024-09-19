@@ -11,5 +11,6 @@ export enum EQuery {
     Where = "where",
     Select = "select",
     GroubBy = "groubBy",
+    Geo = "Geo",
     OrderBy = "orderBy"
 }

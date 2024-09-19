@@ -39,7 +39,7 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
  };
  
  addToApiDoc({
-     api: `{infos} ${entity.name} Extension.`,
+     api: `{infos} ${entity.name} Extension`,
      apiName: `Infos${entity.name}`,
      apiDescription: infos[entity.name].definition,
      apiReference: infos[entity.name].reference,

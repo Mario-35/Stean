@@ -17,6 +17,8 @@ import { Ientity } from "../../server/types";
 import { executeQuery, last } from "./executeQuery";
 import { testDatas } from "../../server/db/createDb";
 import { addStartNewTest, addTest, writeLog, } from "./tests";
+import geo from './files/geo.json';
+
 
 chai.use(chaiHttp);
 
@@ -842,34 +844,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 				});
 		});
 
-		// it(`Return ${entity.name} double complex nested filter search`, (done) => {
-		//     const infos = addTest({
-		//         api: `{get} ${entity.name} Get double complex filter nested resource path`,
-		//         apiName: `Get${entity.name}DoubleComplexNestedFilter`,
-		//         apiDescription: `Get Things that's have a datastream Wich have an observed property with description equal to ...`,
-		//         apiReference: "",
-		//         apiExample: {
-		//             http: `${testVersion}/${entity.name}?$filter=Datastreams/Observations/resultTime ge 2016-11-12 and Datastreams/Observations/resultTime le 2016-11-15`,
-		//             curl: defaultGet("curl", "KEYHTTP"),
-		//             javascript: defaultGet("javascript", "KEYHTTP"),
-		//             python: defaultGet("python", "KEYHTTP")
-		//         }
-		//     };
-		//     chai.request(server)
-		//         .get(`/test/${infos.apiExample.http}`)
-		//         .end((err: Error, res: any) => {                    
-		//             should.not.exist(err);
-		//             res.status.should.equal(200);
-		//             res.type.should.equal("application/json");
-		//             res.body["@iot.count"].should.eql(2);
-		//             res.body.value.length.should.eql(2);
-		//             res.body.value[0]["@iot.id"].should.eql(4);
-		//             res.body.value[0]["@iot.selfLink"].should.contain("/Things(4)");
-		//             addToApiDoc({ ...infos, result: limitResult(res) });
-		//             done();
-		//         });
-		// });
-
 	});
 
 	describe(`{post} ${entity.name} ${nbColorTitle}[10.2]`, () => {
@@ -947,13 +921,10 @@ describe("endpoint : Thing [8.2.1]", () => {
 					"Case Used": "Radiation shield"
 				},
 				"Locations": {
-					"name": "Au Comptoir Vénitie",
-					"description": "Restaurant next to office",
+					"name": "Saint-Malo",
+					"description": "City of Saint-Malo",
 					"encodingType": "application/geo+json",
-					"location": {
-						"type": "Point",
-						"coordinates": [48.11829243294942, -1.717928984533772]
-					}
+					"location": geo["Saint-Brieuc"].geometry
 				}
 			};
 			const infos = addTest({
@@ -1107,13 +1078,10 @@ describe("endpoint : Thing [8.2.1]", () => {
 					"Case Used": "Radiation shield"
 				},
 				"Locations": [{
-					"name": "Glaz Arena",
-					"description": "Glaz Arena sport complex",
+					"name": "Fougères",
+					"description": "City of Fougères",
 					"encodingType": "application/geo+json",
-					"location": {
-						"type": "Point",
-						"coordinates": [48.11472599868096, -1.594679622929148]
-					}
+					"location": geo["Saint-Malo"].geometry
 				}],
 				"Datastreams": [{
 					"name": "Air Temperature DS",
@@ -1194,13 +1162,7 @@ describe("endpoint : Thing [8.2.1]", () => {
 				"Locations": [{
 					"name": "location for Thing test",
 					"description": "location for Thing test For inner Post",
-					"location": {
-						"type": "Point",
-						"coordinates": [
-							-117.05,
-							51.05
-						]
-					},
+					"location": geo.Guimgamp.geometry,
 					"encodingType": "application/geo+json"
 				}],
 				"Datastreams": [{

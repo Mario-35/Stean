@@ -6,8 +6,9 @@
  *
  */
 // onsole.log("!----------------------------------- entity Location -----------------------------------!");
+
 import { createEntity } from ".";
-import { ERelations } from "../../enums";
+import { ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _text } from "./constants";
 import { doubleQuotesString } from "../../helpers";
@@ -15,6 +16,7 @@ import { _ID } from "../../db/constants";
 
 export const Location:Ientity  = createEntity("Locations", {
     createOrder: 2,
+    type: ETable.table,
     order: 6,
     orderBy: `"id"`,
     columns: {
@@ -46,7 +48,6 @@ export const Location:Ientity  = createEntity("Locations", {
       location: {
         create: "jsonb NOT NULL",
         alias() {},
-
         type: "json",
         test: "encodingType",
       }
@@ -58,23 +59,11 @@ export const Location:Ientity  = createEntity("Locations", {
     relations: {
       Things: {
         type: ERelations.belongsToMany,
-        expand: `"thing"."id" in (SELECT "thinglocation"."thing_id" from "thinglocation" WHERE "thinglocation"."location_id" = "location"."id")`,
-        link: `"thing"."id" in (SELECT "thinglocation"."thing_id" from "thinglocation" WHERE "thinglocation"."location_id" = $ID)`,
-        entityName: "Things",
-        tableName: "thinglocation",
-        relationKey: "location_id",
-        entityColumn: "thing_id",
-        tableKey: "thing_id",
+        entityRelation: "ThingsLocations"
       },
       HistoricalLocations: {
         type: ERelations.belongsToMany,
-        expand: `"historicallocation"."id" in (SELECT "historicallocation"."id" from "historicallocation" WHERE "historicallocation"."thing_id" in (SELECT "thinglocation"."thing_id" from "thinglocation" WHERE "thinglocation"."location_id" = "location"."id"))`,
-        link: `"historicallocation"."id" in (SELECT "historicallocation"."id" from "historicallocation" WHERE "historicallocation"."thing_id" in (SELECT "thinglocation"."thing_id" from "thinglocation" WHERE "thinglocation"."location_id" = $ID))`,
-        entityName: "HistoricalLocations",
-        tableName: "locationhistoricallocation",
-        relationKey: "location_id",
-        entityColumn: "id",
-        tableKey: "id",
+        entityRelation: "ThingsLocations"
       },
     },
   });

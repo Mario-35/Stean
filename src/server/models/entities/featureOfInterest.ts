@@ -8,7 +8,7 @@
 // onsole.log("!----------------------------------- entity FeatureOfInterest -----------------------------------!");
 
 import { createEntity } from ".";
-import { ERelations } from "../../enums";
+import { ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _text } from "./constants";
 import { doubleQuotesString } from "../../helpers";
@@ -16,6 +16,7 @@ import { _ID } from "../../db/constants";
 
 export const FeatureOfInterest:Ientity  = createEntity("FeaturesOfInterest", {
             createOrder: 4,
+            type: ETable.table,
             order: 4,
             orderBy: `"id"`,
             columns: {
@@ -50,24 +51,13 @@ export const FeatureOfInterest:Ientity  = createEntity("FeaturesOfInterest", {
             },
             relations: {
               Observations: {
-                type: ERelations.hasMany,
-                expand: `"observation"."id" in (SELECT "observation"."id" from "observation" WHERE "observation"."featureofinterest_id" = "featureofinterest"."id")`,
-                link: `"observation"."id" in (SELECT "observation"."id" from "observation" WHERE "observation"."featureofinterest_id" = $ID)`,
-                entityName: "Observations",
-                tableName: "observation",
-                relationKey: "featureofinterest_id",
-                entityColumn: "id",
-                tableKey: "id",
+                type: ERelations.hasMany
               },
               Datastreams: {
-                type: ERelations.hasMany,
-                expand: `"datastream"."id" in (SELECT "datastream"."id" from "datastream" WHERE "datastream"."_default_foi" = "featureofinterest"."id")`,
-                link: `"datastream"."id" in (SELECT "datastream"."id" from "datastream" WHERE "datastream"."_default_foi" = $ID)`,
-                entityName: "Datastreams",
-                tableName: "datastream",
-                relationKey: "_default_foi",
-                entityColumn: "id",
-                tableKey: "id",
+                type: ERelations.hasMany
+              },
+              MultiDatastreams: {
+                type: ERelations.hasMany
               },
             },
             constraints: {

@@ -7,7 +7,7 @@
  */
 // onsole.log("!----------------------------------- Index Entity -----------------------------------!");
 
-import { allEntities } from "../../enums";
+import { allEntities, ETable } from "../../enums";
 import { errors, msg } from "../../messages";
 import { Ientity, IentityCore } from "../../types";
 
@@ -29,17 +29,18 @@ export const createEntity = (name: string, datas: IentityCore | number) : Ientit
         table: t.toLowerCase(),
         ... datas
       } :  {
-        name: name,
-        singular: t,
-        table: "",
-        createOrder: 99,
-        order: datas,
-        orderBy: "",
-        columns: {},
-        relations: {},
-        constraints: {},
-        indexes: {},
-      };
+          type: ETable.blank,
+          name: name,
+          singular: t,
+          table: "",
+          createOrder: 99,
+          order: datas,
+          orderBy: "",
+          columns: {},
+          relations: {},
+          constraints: {},
+          indexes: {},
+        };
     }
     throw new Error(msg( errors.noValidEntity, name));
 };
@@ -51,7 +52,6 @@ export { Datastream } from "./datastream";
 export { Decoder } from "./decoder";
 export { FeatureOfInterest } from "./featureOfInterest";
 export { HistoricalLocation } from "./historicalLocation";
-export { HistoricalObservation } from "./historicalObservation";
 export { Location } from "./location";
 export { LocationHistoricalLocation } from "./locationHistoricalLocation";
 export { Log } from "./log";

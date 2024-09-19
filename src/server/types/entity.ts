@@ -8,9 +8,11 @@
 // onsole.log("!----------------------------------- Entity interface -----------------------------------!");
 
 import { IentityColumn, IentityRelation, IKeyString } from ".";
+import { ETable } from "../enums";
 
 export interface IentityCore {
      createOrder:   number;
+     type:          ETable;
      order:         number;
      orderBy:       string;
      columns:       IentityColumn;

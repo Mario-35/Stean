@@ -9,7 +9,7 @@
 
 export interface IpgQuery { // postgresSql query simple Interface
     select:     string;
-    from:       string; 
+    from:       string[]; 
     count?:     string;
     where?:     string;
     orderBy?:   string;

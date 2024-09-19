@@ -7,8 +7,8 @@
  */
 // onsole.log("!----------------------------------- Query builder -----------------------------------!");
 
-import { _COLUMNSEPARATOR } from "../../../constants";
-import { doubleQuotesString, cleanStringComma, containsAll, isCsvOrArray, isGraph, isObservation, removeAllQuotes, removeFirstEndDoubleQuotes, formatPostgresString } from "../../../helpers";
+import { _COLUMNSEPARATOR, STRINGEXC } from "../../../constants";
+import { doubleQuotesString, cleanStringComma, containsAll, isCsvOrArray, isGraph, isGeoJson, isObservation, removeAllQuotes, removeFirstEndDoubleQuotes, formatPgString } from "../../../helpers";
 import { asJson } from "../../../db/queries";
 import { Iservice, Ientity, IKeyBoolean, IpgQuery } from "../../../types";
 import { PgVisitor, RootPgVisitor } from "..";
@@ -18,8 +18,10 @@ import { GroupBy, Key, OrderBy, Select, Where, Join } from ".";
 import { errors } from "../../../messages";
 import { _NAVLINK, _SELFLINK } from "../../../db/constants";
 import { log } from "../../../log";
+import { expand, relationInfos } from "../../../models/helpers";
 
 export class Query  {
+    from: string;
     where: Where;
     select: Select;
     join: Join;
@@ -40,7 +42,7 @@ export class Query  {
     }
 
     private columnList(tableName: string, main: PgVisitor, element: PgVisitor): string[] | undefined  {
-        const testIn = (input: string): boolean => ["CONCAT", "CASE", "COALESCE"].map(e => input.includes(e) ? true : false).filter(e => e === true).length > 0;
+        const isCalcColumn = (input: string): boolean => STRINGEXC.map(e => input.includes(e) ? true : false).filter(e => e === true).length > 0;
 
         /**
          * 
@@ -53,20 +55,24 @@ export class Query  {
         
         function formatedColumn(service: Iservice , entity : Ientity, column: string, options?: IKeyBoolean): string | undefined {   
             console.log(log.whereIam(column));
+            // verify column exist
             if (entity.columns[column]) {
                 // is column have alias
-                const alias = entity.columns[column].alias(service, options ? options : undefined);
-                if (testIn(alias || column) === true) return alias || column;
-                if (options) {
-                    if (alias && options["alias"] === true) return alias;
+                const alias = entity.columns[column].alias(service, options);
+                // const alias = entity.columns[column].alias(service, options ? options : undefined);
+                if (isCalcColumn(alias || column) === true) return alias || column;                
+                if (options) {                    
+                if (alias && options["alias"] === true) return column === "id" ? `${doubleQuotesString(entity.table)}.${alias}` : alias;
                     let result: string = "";
-                    if (options["table"] === true && (testIn(alias || column) === false)) result += `${doubleQuotesString(entity.table)}.`;
+                    if (options["table"] === true) result += `${doubleQuotesString(entity.table)}.`;
+                    // if (options["table"] === true && (testIn(alias || column) === false)) result += `${doubleQuotesString(entity.table)}.`;
                     result += alias || options["quoted"] === true ? doubleQuotesString(column) : column;
                     if (options["as"] === true || (alias && alias.includes("->")) ) result += ` AS ${doubleQuotesString(column)}`;
                     return result;
                 } else return column;
-            } else if (testIn(column) === true) return column;
+            } else if (isCalcColumn(column) === true) return column;
             if  (column === "selfLink") return  column; 
+            if  (column.startsWith( "(SELECT")) return  column; 
         };
 
         function extractColumnName(input: string): string{   
@@ -89,6 +95,12 @@ export class Query  {
                 ? `timestamp_ceil("resultTime", interval '${main.interval}') AS srcdate`
                 : `@GRAPH@`];
         }
+
+        if (isGeoJson(tempEntity, main)) {
+            const col = tempEntity.name === "Locations" ? "location" : "feature";
+            main.query.where.add(`"${col}"::text LIKE '%coordinates%'`);
+            return [ `${col} AS "geometry"`];
+        }
         
         // If array result add id 
         const returnValue: string[] = isCsvOrArray(main) && !element.query.select.toString().includes(`"id"${_COLUMNSEPARATOR}`) ? ["id"] : []; 
@@ -108,7 +120,7 @@ export class Query  {
         columns.map((column: string) => {
             const force = ["id", "result"].includes(column) ? true : false;
             return formatedColumn(main.ctx.config, tempEntity, column, { valueskeys: element.valueskeys, quoted: true, table: true, alias: force, as: isGraph(main) ? false : true } ) || "";
-        }) .filter(e => e != "" ).forEach((e: string) => {   
+        }) .filter(e => e != "" ).forEach((e: string) => {             
             if (e === "selfLink") e = selfLink;             
             const testIisCsvOrArray = isCsvOrArray(element);            
             if (testIisCsvOrArray) this.keyNames.add(e);
@@ -128,7 +140,7 @@ export class Query  {
             if (element.splitResult && main.parentEntity === "MultiDatastreams") element.splitResult.forEach((elem: string) => {
                 const one = element && element.splitResult && element.splitResult.length === 1;
                 const alias: string = one ? "result" : elem;
-                returnValue.push( `(result->>'valueskeys')::json->'${element.splitResult && formatPostgresString(one ? element.splitResult[0] : alias)}' AS "${removeAllQuotes(one ? elem : alias)}"` );
+                returnValue.push( `(result->>'valueskeys')::json->'${element.splitResult && formatPgString(one ? element.splitResult[0] : alias)}' AS "${removeAllQuotes(one ? elem : alias)}"` );
                 this.keyNames.add(one ? elem : alias);
             });
         }
@@ -156,7 +168,7 @@ export class Query  {
                         // if is relation
                         if (index >= 0) {
                             item.entity = name;
-                            item.query.where.add(`${item.query.where.notNull() === true ?  " AND " : ''}${main.ctx.model[realEntityName].relations[name].expand}`); 
+                            item.query.where.add(`${item.query.where.notNull() === true ?  " AND " : ''}${expand(main.ctx, realEntityName, name)}`); 
                             // create sql query    for this relatiion (IN JSON result)   
                             const query = this.pgQueryToString(this.create(item, false));
                             if (query) relations[index] = `(${asJson({ 
@@ -175,16 +187,17 @@ export class Query  {
                             else if (element.showRelations == true && main.onlyRef == false ) {
                                 const tempTable = models.getEntityName(main.ctx.config, rel);
                                 let stream: string | undefined = undefined;
-                                if (tempTable && !main.ctx.model[realEntityName].relations[rel].relationKey.startsWith("_"))
+                                const relation = relationInfos(main.ctx.config, realEntityName, rel);
+                                if (tempTable && !relation.rightKey.startsWith("_"))
                                     if ( main.ctx.config.options.includes(EOptions.stripNull) && realEntityName === main.ctx.model[allEntities.Observations].name &&  tempTable.endsWith(main.ctx.model[allEntities.Datastreams].name)) stream = `CASE WHEN ${main.ctx.model[tempTable].table}_id NOTNULL THEN`;
                                         select.push(`${stream ? stream : ""} CONCAT('${main.ctx.decodedUrl.root}/${main.ctx.model[realEntityName].name}(', ${doubleQuotesString(main.ctx.model[realEntityName].table)}."id", ')/${rel}') ${stream ? "END ": ""}AS "${rel}${_NAVLINK}"`);                            
                                         main.addToIntervalColumns(`'${main.ctx.decodedUrl.root}/${main.ctx.model[realEntityName].name}(0)/${rel}' AS "${rel}${_NAVLINK}"`);
                             }
                         });
 
-                    return { 
+                    const res = { 
                         select: select.join(",\n\t\t"), 
-                        from: main.ctx.model[realEntityName].table , 
+                        from: [doubleQuotesString(main.ctx.model[realEntityName].table)],
                         where: element.query.where.toString(), 
                         groupBy: element.query.groupBy.notNull() === true ?  element.query.groupBy.toString() : undefined,
                         orderBy: element.query.orderBy.notNull() === true ?  element.query.orderBy.toString() : main.ctx.model[realEntityName].orderBy,
@@ -193,6 +206,8 @@ export class Query  {
                         keys: this.keyNames.toArray(),
                         count: `SELECT COUNT (DISTINCT ${Object.keys(main.ctx.model[realEntityName].columns)[0]}) FROM (SELECT ${Object.keys(main.ctx.model[realEntityName].columns)[0]} FROM "${main.ctx.model[realEntityName].table}"${element.query.where.notNull() === true ? ` WHERE ${element.query.where.toString()}` : ''}) AS c`
                     };
+                    if (main.subQuery.from.length > 0 && main.subQuery.from[1] != "")   res.from.push(`( ${this.pgQueryToString(main.subQuery)}) AS src`);
+                    return res
                 }    
             }
         }
@@ -201,7 +216,7 @@ export class Query  {
 
     private pgQueryToString(input: IpgQuery | undefined): string | undefined{    
         return input ? 
-            `SELECT ${input.select}\n FROM "${input.from}"\n ${input.where 
+            `SELECT ${input.select}\n FROM ${input.from}\n ${input.where 
                 ? `WHERE ${input.where}\n` 
                 : ''}${input.groupBy 
                 ? `GROUP BY ${cleanStringComma(input.groupBy)}\n` 
@@ -219,7 +234,7 @@ export class Query  {
         console.log(log.whereIam());
         this._pgQuery = this.create(main, true, _element);
         if (this._pgQuery) {
-            const query = `SELECT ${this._pgQuery.select}\n FROM "${this._pgQuery.from}"\n ${this._pgQuery.where ? `WHERE ${this._pgQuery.where}\n` : '' }`;
+            const query = `SELECT ${this._pgQuery.select}\n FROM ${this._pgQuery.from}\n ${this._pgQuery.where ? `WHERE ${this._pgQuery.where}\n` : '' }`;
             if (query) {
                 this._pgQuery = undefined;
                 return query;
@@ -241,5 +256,10 @@ export class Query  {
         if(!this._pgQuery) this._pgQuery = this.create(main, false, _element);
         return this._pgQuery;
     }
+
+    addFrom(input: string) {
+        this.from = input;
+    }
+
 
 }

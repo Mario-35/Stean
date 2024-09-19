@@ -55,6 +55,11 @@ debug.onclick = () => {
 btnShowLinks.onclick = () => {
 	const temp = createUrl();
 	updateWinLinks(JSON.parse(` { "direct" : "${temp.direct}", "query" : "${temp.query}"}`));
+	
+};
+
+btnShowGeo.onclick = () => {	
+	if (valueGeo.startsWith("http://geojson")) window.location.href = valueGeo;
 };
 
 btnPostTemplate.onclick = () => {
@@ -140,7 +145,11 @@ go.onclick = async (e) => {
 					updateWinGraph(jsonObj);
 				else if (resultFormatOption.value === "logs")
 					updateWinLogs(jsonObj);
-				else updateWinJsonResult(jsonObj, `[${methodOption.value}]:${url}`);
+				else if (resultFormatOption.value === "GeoJSON") {
+					updateWinJsonResult(jsonObj, `[${methodOption.value}]:${url}`);
+					show(btnShowGeo);
+					valueGeo = `http://geojson.io/#data=data:application/json,${encodeURIComponent(JSON.stringify(jsonObj))}`;					
+				} else updateWinJsonResult(jsonObj, `[${methodOption.value}]:${url}`);
 			} catch (err) {
 				notifyError("Error", err);
 			} finally {

@@ -15,6 +15,8 @@ import { server } from "../../server/index";
 import { Ientity } from "../../server/types";
 import { executeQuery, last } from "./executeQuery";
 import { addStartNewTest, addTest, writeLog, } from "./tests";
+import geo from './files/geo.json';
+
 
 export const testsKeys = [
 	"@iot.selfLink",
@@ -344,10 +346,7 @@ describe("endpoint : Locations [8.2.2]", () => {
 				"name": "Inrae - Saint-Gilles",
 				"description": "New location test Inrae - Saint-Gilles",
 				"encodingType": "application/geo+json",
-				"location": {
-					"type": "Point",
-					"coordinates": [48.14523718972358, -1.8305352019940178]
-				}
+				"location": geo["Saint-Malo"].geometry
 			};
 			const infos = addTest({
 				api : `{post} ${entity.name} Post basic`,
@@ -408,10 +407,7 @@ describe("endpoint : Locations [8.2.2]", () => {
 				"name": `Au Comptoir Vénitien ${getNB(entity.name)}`,
 				"description": "Au Comptoir Vénitien",
 				"encodingType": "application/geo+json",
-				"location": {
-					"type": "Point",
-					"coordinates": [48.11829243294942, -1.717928984533772]
-				}
+				"location": geo.Guimgamp.geometry
 			};
 			const infos = addTest({
 				api : `{post} ${entity.name} Post with existing Thing`,				
@@ -501,10 +497,7 @@ describe("endpoint : Locations [8.2.2]", () => {
 				"name": "My Location has changed",
 				"description": "Inrae - Site De Saint-Gilles",
 				"encodingType": "application/geo+json",
-				"location": {
-					"type": "Point",
-					"coordinates": [48.14523718972358, -1.8305352019940178]
-				}
+				"location": geo["Saint-Brieuc"].geometry
 			};
 			const infos = addTest({
 				api: `{patch} return Error if the ${entity.name} not exist`,

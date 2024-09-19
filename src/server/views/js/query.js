@@ -36,6 +36,7 @@ function getFormatOptions() {
 		temp.push("graphDatas");
 	}
 	if (entityOption.value === "Logs") temp.push("logs");
+	if (entityOption.value === "Locations" || entityOption.value === "FeaturesOfInterest") temp.push("GeoJSON");
 	return temp;
 }
 
@@ -135,6 +136,7 @@ function clear() {
 function init() {
 	header("==== Init ====");
 	hide(datas);
+	hide(btnShowGeo);
 	isAdmin = _PARAMS.decodedUrl.service === "admin";
 	if (isDebug) console.log(_PARAMS);
 	new SplitterBar(container, first, two);

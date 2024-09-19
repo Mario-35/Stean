@@ -8,7 +8,7 @@
 // onsole.log("!----------------------------------- entity Sensor -----------------------------------!");
 
 import { createEntity } from ".";
-import { ERelations } from "../../enums";
+import { ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _text } from "./constants";
 import { doubleQuotesString } from "../../helpers";
@@ -16,6 +16,7 @@ import { _ID } from "../../db/constants";
 
   export const Sensor:Ientity  = createEntity("Sensors", {
     createOrder: 6,
+    type: ETable.table,
     order: 9,
     orderBy: `"id"`,
     columns: {
@@ -57,24 +58,10 @@ import { _ID } from "../../db/constants";
     },
     relations: {
       Datastreams: {
-        type: ERelations.hasMany,
-        expand: `"datastream"."id" in (SELECT "datastream"."id" from "datastream" WHERE "datastream"."sensor_id" = "sensor"."id")`,
-        link: `"datastream"."id" in (SELECT "datastream"."id" from "datastream" WHERE "datastream"."sensor_id" = $ID)`,
-        entityName: "Datastreams",
-        tableName: "datastream",
-        relationKey: "sensor_id",
-        entityColumn: "id",
-        tableKey: "id",
+        type: ERelations.hasMany
       },
       MultiDatastreams: {
-        type: ERelations.hasMany,
-        expand: `"multidatastream"."id" in (SELECT "multidatastream"."id" from "multidatastream" WHERE "multidatastream"."sensor_id" = "sensor"."id")`,
-        link: `"multidatastream"."id" in (SELECT "multidatastream"."id" from "multidatastream" WHERE "multidatastream"."sensor_id" = $ID)`,
-        entityName: "MultiDatastreams",
-        tableName: "multidatastream",
-        relationKey: "sensor_id",
-        entityColumn: "id",
-        tableKey: "id",
+        type: ERelations.hasMany
       }
     },
   });

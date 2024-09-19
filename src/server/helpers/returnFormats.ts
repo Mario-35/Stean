@@ -7,7 +7,7 @@
  */
 // onsole.log("!----------------------------------- returnFormats -----------------------------------!");
 
-import { asDataArray, asJson, graphDatastream, graphMultiDatastream, interval, } from "../db/queries";
+import { asDataArray, asGeoJSON, asJson, graphDatastream, graphMultiDatastream, interval, } from "../db/queries";
 import { Parser } from "json2csv";
 import { IreturnFormat, koaContext } from "../types";
 import { addCssFile } from "../views/css";
@@ -135,6 +135,15 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
     format: defaultFunction,
     generateSql(input: PgVisitor) {      
       return asDataArray(input);
+    },
+  },
+
+  GeoJSON: {
+    name: "GeoJSON",
+    type: "application/json",
+    format: defaultFunction,
+    generateSql(input: PgVisitor) {      
+      return asGeoJSON(input);
     },
   },
 

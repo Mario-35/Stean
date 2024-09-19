@@ -7,11 +7,13 @@
  */
 // onsole.log("!----------------------------------- entity MultiDatastreamObservedProperty -----------------------------------!");
 import { createEntity } from ".";
+import { ETable } from "../../enums";
 import { Ientity } from "../../types";
 import { _idRel } from "./constants";
 
     export const MultiDatastreamObservedProperty:Ientity  = createEntity("MultiDatastreamObservedProperties", {
     createOrder: 9,
+    type: ETable.link,
     order: -1,
     orderBy: "",
     columns: {

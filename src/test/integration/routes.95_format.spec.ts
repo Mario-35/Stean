@@ -26,7 +26,7 @@ const addToApiDoc = (input: IApiInput) => {
 };
 
 addToApiDoc({
-    api: `{infos} /Format Extension.`,
+    api: `{infos} /Format Extension`,
     apiName: "FormatInfos",
     apiDescription: `Format result json as default, dataArray, csv, txt,  graph or graphDatas, note that $value return result as text.`,
     result: ""
@@ -195,6 +195,29 @@ describe("Output formats", () => {
                     res.status.should.equal(200);
                     res.type.should.equal("application/json");
                     addToApiDoc({ ...infos, result: res });
+                    done();
+                });
+        });
+    });
+
+    describe("{get} resultFormat GeoJSON", () => {
+        it("Return result in GeoJSON format.", (done) => {
+            const infos = addTest({
+                api: `{get} ResultFormat as GeoJSON`,
+                apiName: "FormatGeoJSON",
+                apiDescription: "Use $resultFormat=GeoJSON to get datas into GeoJSON compatible format.",
+                apiReference: "https://geojson.org/",
+                apiExample: {
+                    http: `${testVersion}/Locations?$resultFormat=GeoJSON&$top=3`,
+				}, 
+            });
+            chai.request(server)
+                .get(`/test/${infos.apiExample.http}`)
+                .end((err: Error, res: any) => {
+                    should.not.exist(err);
+                    res.status.should.equal(200);
+                    res.type.should.equal("application/json");
+                    addToApiDoc({ ...infos, result: limitResult(res) });
                     done();
                 });
         });

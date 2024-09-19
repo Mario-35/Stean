@@ -8,7 +8,7 @@
 // onsole.log("!----------------------------------- entity Lora -----------------------------------!");
 
 import { createEntity } from ".";
-import { ERelations } from "../../enums";
+import { ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _idRel, _text } from "./constants";
 import { doubleQuotesString } from "../../helpers";
@@ -16,6 +16,7 @@ import { _ID } from "../../db/constants";
 
 export const Lora:Ientity  = createEntity("Loras", {
   createOrder: 11,
+  type: ETable.table,
   order: 11,
   orderBy: `"id"`,
   columns: {
@@ -92,34 +93,13 @@ export const Lora:Ientity  = createEntity("Loras", {
   },
   relations: {
     Datastream: {
-      type: ERelations.belongsTo,
-      expand: `"datastream"."id" = "lora"."datastream_id"`,
-      link: `"datastream"."id" = (SELECT "lora"."datastream_id" FROM "lora" WHERE "lora"."id" = $ID)`,
-      entityName: "Datastreams",
-      tableName: "lora",
-      relationKey: "id",
-      entityColumn: "datastream_id",
-      tableKey: "id",
+      type: ERelations.belongsTo
     },
     MultiDatastream: {
-      type: ERelations.belongsTo,
-      expand: `"multidatastream"."id" = "lora"."multidatastream_id"`,
-      link: `"multidatastream"."id" = (SELECT "lora"."multidatastream_id" FROM "lora" WHERE "lora"."id" = $ID)`,
-      entityName: "MultiDatastreams",
-      tableName: "lora",
-      relationKey: "id",
-      entityColumn: "multidatastream_id",
-      tableKey: "id",
+      type: ERelations.belongsTo
     },
     Decoder: {
-      type: ERelations.belongsTo,
-      expand: `"decoder"."id" = "lora"."decoder_id"`,
-      link: `"decoder"."id" = (SELECT "lora"."decoder_id" FROM "lora" WHERE "lora"."id" = $ID)`,
-      entityName: "Decoders",
-      tableName: "lora",
-      relationKey: "id",
-      entityColumn: "decoder_id",
-      tableKey: "id",
+      type: ERelations.belongsTo
     },
   },
 });

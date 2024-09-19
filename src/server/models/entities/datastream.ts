@@ -8,7 +8,7 @@
 // onsole.log("!----------------------------------- entity Datastream -----------------------------------!");
 
 import { createEntity } from ".";
-import { EDatesType, EObservationType, ERelations } from "../../enums";
+import { EDatesType, EObservationType, ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _idRel, _text, _tz } from "./constants";
 import { doubleQuotesString } from "../../helpers";
@@ -16,6 +16,7 @@ import { _ID } from "../../db/constants";
 
 export const Datastream:Ientity  = createEntity("Datastreams", {
   createOrder: 7,
+    type: ETable.table,
     order: 1,
     orderBy: `"id"`,
     columns: {
@@ -106,7 +107,7 @@ export const Datastream:Ientity  = createEntity("Datastreams", {
         alias() {},
         type: "relation:Sensor",
       },
-      _default_foi: {
+      _default_featureofinterest: {
         create: "BIGINT NOT NULL DEFAULT 1",
         alias() {},
         type: "relation:FeaturesOfInterest",
@@ -114,64 +115,22 @@ export const Datastream:Ientity  = createEntity("Datastreams", {
     },
     relations: {
       Thing: {
-        type: ERelations.belongsTo,
-        expand: `"thing"."id" = "datastream"."thing_id"`,
-        link: `"thing"."id" = (SELECT "datastream"."thing_id" from "datastream" WHERE "datastream"."id" =$ID)`,
-        entityName: "Things",
-        tableName: "datastream",
-        relationKey: "id",
-        entityColumn: "thing_id",
-        tableKey: "id",
+        type: ERelations.belongsTo        
       },
       Sensor: {
-        type: ERelations.belongsTo,
-        expand: `"sensor"."id" = "datastream"."sensor_id"`,
-        link: `"sensor"."id" = (SELECT "datastream"."sensor_id" from "datastream" WHERE "datastream"."id" =$ID)`,        
-        entityName: "Sensors",
-        tableName: "datastream",
-        relationKey: "id",
-        entityColumn: "sensor_id",
-        tableKey: "id",
+        type: ERelations.belongsTo
       },
       ObservedProperty: {
-        type: ERelations.belongsTo,
-        expand: `"observedproperty"."id" = "datastream"."observedproperty_id"`,
-        link: `"observedproperty"."id" = (SELECT "datastream"."observedproperty_id" from "datastream" WHERE "datastream"."id" =$ID)`,
-        entityName: "ObservedProperties",
-        tableName: "datastream",
-        relationKey: "id",
-        entityColumn: "observedproperty_id",
-        tableKey: "id",
+        type: ERelations.belongsTo      
       },
       Observations: {
-        type: ERelations.hasMany,
-        expand: `"observation"."id" in (SELECT "observation"."id" from "observation" WHERE "observation"."datastream_id" = "datastream"."id" ORDER BY "observation"."resultTime" ASC)`,
-        link: `"observation"."id" in (SELECT "observation"."id" from "observation" WHERE "observation"."datastream_id" = $ID ORDER BY "observation"."resultTime" ASC)`,
-        entityName: "Observations",
-        tableName: "observation",
-        relationKey: "datastream_id",
-        entityColumn: "id",
-        tableKey: "id",
+        type: ERelations.hasMany
       },
       Lora: {
-        type: ERelations.belongsTo,
-        expand: `"lora"."id" = (SELECT "lora"."id" from "lora" WHERE "lora"."datastream_id" = "datastream"."id")`,
-        link: `"lora"."id" = (SELECT "lora"."id" from "lora" WHERE "lora"."datastream_id" = $ID)`,
-        entityName: "Loras",
-        tableName: "lora",
-        relationKey: "datastream_id",
-        entityColumn: "id",
-        tableKey: "id",
+        type: ERelations.belongsTo
       },
       FeatureOfInterest: {
-        type: ERelations.belongsTo,
-        expand: "",
-        link: "",
-        entityName: "FeaturesOfInterest",
-        tableName: "featureofinterest",
-        relationKey: "_default_foi",
-        entityColumn: "id",
-        tableKey: "id",
+        type: ERelations.defaultUnique
       },
     },
     constraints: {
@@ -184,7 +143,7 @@ export const Datastream:Ientity  = createEntity("Datastreams", {
       datastream_thing_id_fkey:
         'FOREIGN KEY ("thing_id") REFERENCES "thing"("id") ON UPDATE CASCADE ON DELETE CASCADE',
       datastream_featureofinterest_id_fkey:
-        'FOREIGN KEY ("_default_foi") REFERENCES "featureofinterest"("id") ON UPDATE CASCADE ON DELETE CASCADE',
+        'FOREIGN KEY ("_default_featureofinterest") REFERENCES "featureofinterest"("id") ON UPDATE CASCADE ON DELETE CASCADE',
     },
     indexes: {
       datastream_observedproperty_id:

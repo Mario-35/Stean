@@ -18,6 +18,7 @@ import { PgVisitor } from "../.";
 import { doubleQuotesString } from "../../../helpers";
 import { models } from "../../../models";
 import { errors } from "../../../messages";
+import { link } from "../../../models/helpers";
 
 export class RootPgVisitor extends PgVisitor {
   static root = true;
@@ -38,6 +39,7 @@ export class RootPgVisitor extends PgVisitor {
       if (this.debugOdata) {
         console.log(log.debug_infos("VisitRessources",`VisitRessources${node.type}`));
         console.log(log.debug_infos("node.raw", node.raw));
+        console.log(log._result("this.query.where", this.query.where.toString()));
       }
     } else {
       log.error(`Ressource Not Found ============> VisitRessources${node.type}`);
@@ -119,21 +121,9 @@ export class RootPgVisitor extends PgVisitor {
 	}
 
   protected VisitRessourcesEntityCollectionNavigationProperty(node:Token, context:any){
-          // if(this.parentEntity) {
-      //   const temp = this.query.toWhere(this);
-      //   const tmpLink = this.ctx.model[this.entity].relations[node.value.name].link
-      //   .split("$ID")
-      //   .join(<string>`(SELECT ID FROM (${temp}) as g)`);
-      //   this.query.where.init(tmpLink);
-      //   const tempEntity =  models.getEntity(this.ctx.config, node.value.name);
-      //   if (tempEntity) {
-      //     this.swapEntity(tempEntity.name);
-      //     this.single = tempEntity.singular === node.value.name || BigInt(this.id) > 0  ? true : false;
-      //   }
-
     if (this.ctx.model[this.entity].relations[node.value.name]) {
          const where = (this.parentEntity) ? `(SELECT ID FROM (${this.query.toWhere(this)}) as nop)` : this.id;
-        const whereSql = this.ctx.model[this.entity].relations[node.value.name].link
+         const whereSql = link(this.ctx, this.entity, node.value.name)   
         .split("$ID")
         .join(<string>where);
         this.query.where.init(whereSql);

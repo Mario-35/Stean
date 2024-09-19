@@ -15,7 +15,7 @@ export const streamFromDeveui = ( input: string ): string =>
       SELECT 
         id as multidatastream, 
         id, 
-        _default_foi, 
+        _default_featureofinterest, 
         thing_id, 
         (
           SELECT 
@@ -47,7 +47,7 @@ datastream as (
       SELECT 
         id as datastream, 
         id, 
-        _default_foi, 
+        _default_featureofinterest, 
         thing_id, 
         '{}' :: jsonb as keys 
       FROM 

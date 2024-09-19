@@ -8,14 +8,16 @@
 // onsole.log("!----------------------------------- entity Thing -----------------------------------!");
 
 import { createEntity } from ".";
-import { ERelations } from "../../enums";
+import { ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _text } from "./constants";
 import { doubleQuotesString } from "../../helpers";
 import { _ID } from "../../db/constants";
 
+
 export const Thing: Ientity = createEntity("Things", {
     createOrder: 1,
+    type: ETable.table,
     order: 10,
     orderBy: `"id"`,
     columns: {
@@ -44,43 +46,16 @@ export const Thing: Ientity = createEntity("Things", {
     relations: {
       Locations: {
         type: ERelations.belongsToMany,
-        expand: `"location"."id" in (SELECT "thinglocation"."location_id" from "thinglocation" WHERE "thinglocation"."thing_id" = "thing"."id")`,
-        link: `"location"."id" in (SELECT "thinglocation"."location_id" from "thinglocation" WHERE "thinglocation"."thing_id" = $ID)`,
-        entityName: "Locations",
-        tableName: "thinglocation",
-        relationKey: "location_id",
-        entityColumn: "thing_id",
-        tableKey: "thing_id",
+        entityRelation: "ThingsLocations",
       },
       HistoricalLocations: {
-        type: ERelations.hasMany,
-        expand: `"historicallocation"."id" in (SELECT "historicallocation"."id" from "historicallocation" WHERE "historicallocation"."thing_id" = "thing"."id")`,
-        link: `"historicallocation"."id" in (SELECT "historicallocation"."id" from "historicallocation" WHERE "historicallocation"."thing_id" = $ID)`,
-        entityName: "HistoricalLocations",
-        tableName: "historicalLocation",
-        relationKey: "thing_id",
-        entityColumn: "id",
-        tableKey: "id",
+        type: ERelations.hasMany
       },
       Datastreams: {
-        type: ERelations.hasMany,
-        expand: `"datastream"."id" in (SELECT "datastream"."id" from "datastream" WHERE "datastream"."thing_id" = "thing"."id")`,
-        link: `"datastream"."id" in (SELECT "datastream"."id" from "datastream" WHERE "datastream"."thing_id" = $ID)`,
-        entityName: "Datastreams",
-        tableName: "datastream",
-        relationKey: "thing_id",
-        entityColumn: "id",
-        tableKey: "id",
+        type: ERelations.hasMany
       },
       MultiDatastreams: {
-        type: ERelations.hasMany,
-        expand: `"multidatastream"."id" in (SELECT "multidatastream"."id" from "multidatastream" WHERE "multidatastream"."thing_id" = "thing"."id")`,
-        link: `"multidatastream"."id" in (SELECT "multidatastream"."id" from "multidatastream" WHERE "multidatastream"."thing_id" = $ID)`,
-        entityName: "MultiDatastreams",
-        tableName: "multidatastream",
-        relationKey: "thing_id",
-        entityColumn: "id",
-        tableKey: "id",
+        type: ERelations.hasMany
       },
     },
   });

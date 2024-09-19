@@ -14,7 +14,7 @@ enum EnumBaseEntities {
     FeaturesOfInterest = 'FeaturesOfInterest',
     Locations = 'Locations',
     HistoricalLocations = 'HistoricalLocations',
-    locationsHistoricalLocations = 'locationsHistoricalLocations',
+    LocationsHistoricalLocations = 'LocationsHistoricalLocations',
     ObservedProperties = 'ObservedProperties',
     Sensors = 'Sensors',
     Datastreams = 'Datastreams',

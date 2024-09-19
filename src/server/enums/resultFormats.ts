@@ -17,6 +17,7 @@ export const enum EReturnFormats {
     graph = "graph", 
     graphDatas = "graphDatas", 
     dataArray = "dataArray", 
+    GeoJSON = "GeoJSON", 
     css = "css", 
     js = "js", 
     png = "png", 

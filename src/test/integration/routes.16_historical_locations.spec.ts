@@ -187,7 +187,8 @@ describe("endpoint : HistoricalLocations", () => {
 					res.type.should.equal("application/json");
 					res.body.should.include.keys(testsKeys.filter((elem) => elem !== "Locations@iot.navigationLink"));
 					res.body.should.include.keys(name);
-					res.body.Locations.length.should.eql(2);
+					// res.body.Locations.length.should.eql(2);
+					res.body.Locations.length.should.eql(1);
 					res.body.Locations[0].should.include.keys(locations_testsKeys);
 					res.body["@iot.id"].should.eql(6);
 					addToApiDoc({

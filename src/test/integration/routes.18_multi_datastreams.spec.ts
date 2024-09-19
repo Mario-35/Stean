@@ -630,7 +630,7 @@ describe("endpoint : MultiDatastream", () => {
                 name: `Air quality readings ${getNB(entity.name)}`,
                 Thing: {
                     description: "A New SensorWeb thing",
-                    name:`"SensorWebThing ${getNB("Thing")}`,
+                    name:`SensorWebThing ${getNB("Thing")}`,
                     properties: {
                         organization: "Mozilla",
                         owner: "Mozilla"

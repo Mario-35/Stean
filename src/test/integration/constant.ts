@@ -322,10 +322,10 @@ export const infos: Record<string, any>  = {
         }
     },
 
-    locationsHistoricalLocations: {
-        name: "locationsHistoricalLocations",
-        singular: "locationHistoricalLocation",
-        table: "locationhistoricallocation",
+    LocationsHistoricalLocations: {
+        name: "LocationsHistoricalLocations",
+        singular: "LocationHistoricalLocation",
+        table: "Locationhistoricallocation",
         order: -1,
         columns: {
             location_id: "BIGINT NOT NULL",

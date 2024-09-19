@@ -7,9 +7,9 @@ import { asJson } from "../db/queries";
 import { EColumnType, EExtensions, EVersion, filterEntities } from "../enums";
 import { doubleQuotesString, deepClone, isTest } from "../helpers";
 import { errors, msg } from "../messages";
-import { Iservice, Ientities, Ientity, IstreamInfos, koaContext } from "../types";
+import { Iservice, Ientities, Ientity, IstreamInfos, koaContext, IentityRelation } from "../types";
 import fs from "fs";
-import { FeatureOfInterest, Thing, Location, Service, CreateFile, CreateObservation, Datastream, Decoder, HistoricalLocation, HistoricalObservation, Log, Lora, MultiDatastream, MultiDatastreamObservedProperty, Observation, Sensor, User, LocationHistoricalLocation, ObservedProperty, ThingLocation } from "./entities";
+import { FeatureOfInterest, Thing, Location, Service, CreateFile, CreateObservation, Datastream, Decoder, HistoricalLocation, Log, Lora, MultiDatastream, MultiDatastreamObservedProperty, Observation, Sensor, User, LocationHistoricalLocation, ObservedProperty, ThingLocation } from "./entities";
 
 const testVersion = (input: string) => Object.keys(Models.models).includes(input);
 
@@ -22,14 +22,13 @@ class Models {
           FeaturesOfInterest: FeatureOfInterest,        
           Locations: Location,        
           HistoricalLocations: HistoricalLocation,        
-          locationsHistoricalLocations: LocationHistoricalLocation,        
+          LocationsHistoricalLocations: LocationHistoricalLocation,        
           ObservedProperties: ObservedProperty,        
           Sensors: Sensor,        
           Datastreams: Datastream,        
           MultiDatastreams: MultiDatastream,        
           MultiDatastreamObservedProperties: MultiDatastreamObservedProperty,        
-          Observations: Observation,        
-          HistoricalObservations: HistoricalObservation,        
+          Observations: Observation,      
           ThingsLocations: ThingLocation,        
           Decoders: Decoder,        
           Loras: Lora,        
@@ -123,14 +122,14 @@ class Models {
     const searchKey = input[models.DBFull(service)[streamEntity].name] || input[models.DBFull(service)[streamEntity].singular];
     const streamId: string | undefined = isNaN(searchKey) ? searchKey["@iot.id"] : searchKey;
     if (streamId) {
-      const query = `SELECT "id", "observationType", "_default_foi" FROM ${doubleQuotesString(models.DBFull(service)[streamEntity].table)} WHERE "id" = ${BigInt(streamId)} LIMIT 1`;
+      const query = `SELECT "id", "observationType", "_default_featureofinterest" FROM ${doubleQuotesString(models.DBFull(service)[streamEntity].table)} WHERE "id" = ${BigInt(streamId)} LIMIT 1`;
       return executeSqlValues(service, asJson({ query: query, singular: true, strip: false, count: false }))
         .then((res: object) => {        
           return res ? {
             type: stream,
             id: res[0 as keyof object]["id"],
             observationType: res[0 as keyof object]["observationType"],
-            FoId: foiId ? foiId : res[0 as keyof object]["_default_foi"],
+            FoId: foiId ? foiId : res[0 as keyof object]["_default_featureofinterest"],
           } : undefined;
         })
         .catch((error) => {
@@ -247,6 +246,22 @@ class Models {
       return (typeof entity === "string") ? Models.models[service.apiVersion][entity] : Models.models[service.apiVersion][entity.name];
     }
   };
+
+  public getRelationName = (entity: Ientity, searchs: string[]): string | undefined => {
+    let res: string | undefined = undefined;    
+    searchs.forEach(e => {
+        if (entity.relations[e]) {
+            res = e;
+            return;
+        }
+    });
+    return res;
+  }
+  
+  public getRelation = (service: Iservice , entity: Ientity, relation: Ientity | string): IentityRelation | undefined => {
+    const entityRelation = this.getEntity(service, relation);
+    return entityRelation ? entity.relations[entityRelation.name] ||  entity.relations[entityRelation.singular] : undefined;
+  };
   
   public getRelationColumnTable = (service: Iservice , entity: Ientity | string, test: string): EColumnType | undefined => {
     if (config && entity) {
@@ -279,7 +294,7 @@ class Models {
   public getRoot(ctx: koaContext) {
     console.log(log.whereIam());
     let expectedResponse: object[] = [];
-    Object. keys(ctx.model)
+    Object.keys(ctx.model)
     .filter((elem: string) => ctx.model[elem].order > 0)
     .sort((a, b) => (ctx.model[a].order > ctx.model[b].order ? 1 : -1))
     .forEach((value: string) => {
@@ -349,6 +364,15 @@ class Models {
           break;
       }
   }
+
+  public extractEntityNames(input: string, search: string | string[]): string[] {    
+    if (typeof search === "string") search = [search];
+    return search.map(e => (input.replace(e, ""))).filter(e => e != input);
+  }
+
+
+
+
 
   public init() {    
     if (isTest()) {      

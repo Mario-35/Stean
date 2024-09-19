@@ -8,7 +8,7 @@
 // onsole.log("!----------------------------------- entity MultiDatastream -----------------------------------!");
 
 import { createEntity } from ".";
-import { EDatesType, EObservationType, ERelations } from "../../enums";
+import { EDatesType, EObservationType, ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _idRel, _text, _tz } from "./constants";
 import { doubleQuotesString } from "../../helpers";
@@ -16,6 +16,7 @@ import { _ID } from "../../db/constants";
 
 export const MultiDatastream:Ientity  = createEntity("MultiDatastreams", {
     createOrder: 8,
+    type: ETable.table,
     order: 2,
     orderBy: `"id"`,
     columns: {
@@ -105,7 +106,7 @@ export const MultiDatastream:Ientity  = createEntity("MultiDatastreams", {
         alias() {},
         type: "relation:Sensors",
       },
-      _default_foi: {
+      _default_featureofinterest: {
         create: "BIGINT NOT NULL DEFAULT 1",
         alias() {},
         type: "bigint"
@@ -113,65 +114,23 @@ export const MultiDatastream:Ientity  = createEntity("MultiDatastreams", {
     },
     relations: {
       Thing: {
-        type: ERelations.belongsTo,
-        expand: `"thing"."id" = "multidatastream"."thing_id"`,
-        link: `"thing"."id" = (SELECT "multidatastream"."thing_id" from "multidatastream" WHERE "multidatastream"."id" =$ID)`,        
-        entityName: "Things",
-        tableName: "multidatastream",
-        relationKey: "id",
-        entityColumn: "thing_id",
-        tableKey: "id",
+        type: ERelations.belongsTo
       },
       Sensor: {
-        type: ERelations.belongsTo,
-        expand: `"sensor"."id" = "multidatastream"."sensor_id"`,
-        link: `"sensor"."id" = (SELECT "multidatastream"."sensor_id" from "multidatastream" WHERE "multidatastream"."id" =$ID)`,
-        entityName: "Sensors",
-        tableName: "multidatastream",
-        relationKey: "id",
-        entityColumn: "sensor_id",
-        tableKey: "id",
+        type: ERelations.belongsTo
       },
       Observations: {
-        type: ERelations.hasMany,
-        expand: `"observation"."id" in (SELECT "observation"."id" from "observation" WHERE "observation"."multidatastream_id" = "multidatastream"."id")`,
-        link: `"observation"."id" in (SELECT "observation"."id" from "observation" WHERE "observation"."multidatastream_id" = $ID)`,
-
-        entityName: "Observations",
-        tableName: "observation",
-        relationKey: "multidatastream_id",
-        entityColumn: "id",
-        tableKey: "id",
+        type: ERelations.hasMany
       },
       ObservedProperties: {
-        type: ERelations.belongsTo,
-        expand: `"observedproperty"."id" in (SELECT "multidatastreamobservedproperty"."observedproperty_id" FROM "multidatastreamobservedproperty" WHERE "multidatastreamobservedproperty"."multidatastream_id" = "multidatastream"."id")`,
-        link: `"observedproperty"."id" in (SELECT "multidatastreamobservedproperty"."observedproperty_id" FROM "multidatastreamobservedproperty" WHERE "multidatastreamobservedproperty"."multidatastream_id" = $ID)`,
-        entityName: "ObservedProperties",
-        tableName: "multidatastreamobservedproperty",
-        relationKey: "observedproperty_id",
-        entityColumn: "multidatastream_id",
-        tableKey: "multidatastream_id",
+        type: ERelations.hasMany,
+        entityRelation: "MultiDatastreamObservedProperties",
       },
       Lora: {
-        type: ERelations.belongsTo,
-        expand: `"lora"."id" = (SELECT "lora"."id" from "lora" WHERE "lora"."multidatastream_id" = "multidatastream"."id")`,
-        link: `"lora"."id" = (SELECT "lora"."id" from "lora" WHERE "lora"."multidatastream_id" = $ID)`,
-        entityName: "loras",
-        tableName: "lora",
-        relationKey: "multidatastream_id",
-        entityColumn: "id",
-        tableKey: "id",
+        type: ERelations.belongsTo
       },
       FeatureOfInterest: {
-        type: ERelations.belongsTo,
-        expand: "",
-        link: "",
-        entityName: "FeaturesOfInterest",
-        tableName: "featureofinterest",
-        relationKey: "_default_foi",
-        entityColumn: "id",
-        tableKey: "id",
+        type: ERelations.defaultUnique
       },
     },
     constraints: {
@@ -182,7 +141,7 @@ export const MultiDatastream:Ientity  = createEntity("MultiDatastreams", {
       multidatastream_thing_id_fkey:
         'FOREIGN KEY ("thing_id") REFERENCES "thing"("id") ON UPDATE CASCADE ON DELETE CASCADE',
       multidatastream_featureofinterest_id_fkey:
-        'FOREIGN KEY ("_default_foi") REFERENCES "featureofinterest"("id") ON UPDATE CASCADE ON DELETE CASCADE',
+        'FOREIGN KEY ("_default_featureofinterest") REFERENCES "featureofinterest"("id") ON UPDATE CASCADE ON DELETE CASCADE',
     },
     indexes: {
       multidatastream_sensor_id:

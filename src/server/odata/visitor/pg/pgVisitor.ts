@@ -7,21 +7,22 @@
  */
 // onsole.log("!----------------------------------- pgVisitor for odata -----------------------------------!");
 
-import { doubleQuotesString, simpleQuotesString, isGraph, isObservation, isTest, removeAllQuotes, returnFormats } from "../../../helpers";
+import { doubleQuotesString, simpleQuotesString, isGraph, isObservation, isTest, removeAllQuotes, returnFormats, formatPgTableColumn } from "../../../helpers";
 import { IodataContext, IKeyString, Ientity, IKeyBoolean, IpgQuery, koaContext, IvisitRessource } from "../../../types";
 import { Token } from "../../parser/lexer";
 import { Literal } from "../../parser/literal";
 import { SQLLiteral } from "../../parser/sqlLiteral";
 import { SqlOptions } from "../../parser/sqlOptions";
-import { oDataDateFormat } from "../helper";
+import { oDataDateFormat, OdataGeoColumn } from "../helper";
 import { errors, msg } from "../../../messages";
 import { EColumnType, EQuery } from "../../../enums";
 import { models } from "../../../models";
 import { log } from "../../../log";
 import { _COLUMNSEPARATOR, _DEBUG } from "../../../constants";
 import { Visitor } from "./visitor";
-import { _ID, _NAVLINK } from "../../../db/constants";
+import { _ID, _NAVLINK, _TESTENCODING } from "../../../db/constants";
 import { Query } from "../builder";
+import { relationInfos } from "../../../models/helpers";
 
 export class PgVisitor extends Visitor {
   public entity = "";
@@ -34,6 +35,7 @@ export class PgVisitor extends Visitor {
   parentEntity: string | undefined = undefined;  
   id: bigint | string = BigInt(0);
   parentId: bigint | string = BigInt(0);
+  subQuery: IpgQuery = { select:"", from:[], keys:[] }
   intervalColumns: string[] | undefined = undefined;
   splitResult: string[] | undefined;
   interval: string | undefined;
@@ -70,13 +72,14 @@ export class PgVisitor extends Visitor {
     this.id = id ? id : BigInt(0);
 
   }
-testo(input: string) {
-  console.log(`******************* ${input} ********************`);
-  console.log(`entity  =====> ${this.entity}  id : [${this.id}]`);
-  console.log(`parent  =====> ${this.parentEntity}  id : [${this.parentId}]`);
-  console.log("***************************************");
-  
-}
+
+  testo(input: string) {
+    console.log(`******************* ${input} ********************`);
+    console.log(`entity  =====> ${this.entity}  id : [${this.id}]`);
+    console.log(`parent  =====> ${this.parentEntity}  id : [${this.parentId}]`);
+    console.log("***************************************");
+    
+  }
 
   addToIntervalColumns(input: string) {
     // TODO test with create    
@@ -303,7 +306,7 @@ testo(input: string) {
 
   protected VisitFilter(node: Token, context: IodataContext) {
     context.target = EQuery.Where;
-    if (this.query.where.toString().trim() != "") this.query.where.add(" AND ");
+    if (this.query.where.toString().trim() != "") this.addToWhere(" AND ", context);
     this.Visit(node.value, context);
   }
 
@@ -346,25 +349,25 @@ testo(input: string) {
 
   protected VisitAndExpression(node: Token, context: IodataContext) {
     this.Visit(node.value.left, context);
-    this.query.where.add(context.in && context.in === true ? " INTERSECT " : " AND ");
+    this.addToWhere(context.in && context.in === true ? " INTERSECT " : " AND ", context);
     this.Visit(node.value.right, context);
   }
 
   protected VisitOrExpression(node: Token, context: IodataContext) {
     this.Visit(node.value.left, context);
-    this.query.where.add(" OR ");
+    this.addToWhere(" OR ", context);
     this.Visit(node.value.right, context);
   }
 
   protected VisitNotExpression(node: Token, context: IodataContext) {
-    this.query.where.add(" NOT ");
+    this.addToWhere(" NOT ", context);
     this.Visit(node.value, context);
   }
 
   protected VisitBoolParenExpression(node: Token, context: IodataContext) {
-    this.query.where.add("(");
+    this.addToWhere("(", context);
     this.Visit(node.value, context);
-    this.query.where.add(")");
+    this.addToWhere(")", context);
   }
 
   protected VisitCommonExpression(node: Token, context: IodataContext) {
@@ -385,7 +388,7 @@ testo(input: string) {
       if (models.getRelationColumnTable(this.ctx.config, this.ctx.model[this.entity], node.value.current.raw) === EColumnType.Column
             && models.isColumnType(this.ctx.config, this.ctx.model[this.entity], node.value.current.raw, "json") 
             && node.value.next.raw[0] == "/" ) {
-              this.query.where.add(`${doubleQuotesString(node.value.current.raw)}->>${simpleQuotesString(node.value.next.raw.slice(1))}`);
+              this.addToWhere(`${doubleQuotesString(node.value.current.raw)}->>${simpleQuotesString(node.value.next.raw.slice(1))}`, context);
       } else if (node.value.next.raw[0] == "/") {       
         this.Visit(node.value.current, context);
         context.identifier += ".";
@@ -428,9 +431,9 @@ testo(input: string) {
       const testIsDate = oDataDateFormat(node, context.sign);
       const columnName = this.getColumnNameOrAlias(this.ctx.model[context.identifier || this.entity], node.value.left.raw, {table: true, as: true, cast: false, ...this.createDefaultOptions()});
       if (testIsDate) {
-        this.query.where.add(`${columnName 
+        this.addToWhere(`${columnName 
                           ? columnName 
-                          : `${doubleQuotesString(node.value.left.raw)}`}${testIsDate}`);
+                          : `${doubleQuotesString(node.value.left.raw)}`}${testIsDate}`, context);
         return true;
       }
     }
@@ -447,12 +450,19 @@ testo(input: string) {
         return input;
     }
   }
+
+  addToWhere(value: string, context: IodataContext) {
+    if (context.target === EQuery.Geo) this.subQuery.where ? this.subQuery.where += value : this.subQuery.where = value; else this.query.where.add(value);
+  }
+
+
+
   protected addExpressionToWhere(node: Token, context: IodataContext) {
     if (this.query.where.toString().includes("@EXPRESSION@") ) 
       this.query.where.replace("@EXPRESSION@",`@EXPRESSION@ ${this.inverseSign(context.sign)}`);
       else if (!this.query.where.toString().includes("@EXPRESSIONSTRING@") && this.inverseSign(context.sign)) 
       // Important to keep space
-        this.query.where.add(" " + context.sign);
+    this.addToWhere(" " + context.sign, context);
   }
 
   protected VisitGreaterThanExpression(node: Token, context: IodataContext) {
@@ -482,37 +492,21 @@ testo(input: string) {
 
   public createComplexWhere(entity: string, node: Token, context: IodataContext) {
     if (context.target) {
-      const tempEntity = models.getEntity(this.ctx.config, entity);
-      if (!tempEntity) return;
-      const colType = models.getRelationColumnTable(this.ctx.config, tempEntity, node.value.name);
-      if (colType === EColumnType.Column) {
+
+      if (! models.getEntity(this.ctx.config, entity)) return;
+      const tempEntity = models.getEntity(this.ctx.config, node.value.name);
+      if (tempEntity) {
+        const relation = relationInfos(this.ctx.config, entity, node.value.name);
         if (context.relation) {
-          if ( Object.keys(tempEntity.relations).includes(context.relation) ) {
-            if (!context.key) {
-              context.key = tempEntity.relations[context.relation].entityColumn; 
-      // @ts-ignore
-
-              this.query[context.target].add(context.key);
-              // this[context.target] += doubleQuotesString(context.key);
-            }
-          }
+          context.sql = `${formatPgTableColumn(this.ctx.model[entity].table, relation.column)} IN (SELECT ${formatPgTableColumn(tempEntity.table, relation.rightKey)} FROM ${formatPgTableColumn(tempEntity.table)}`;
+        } else {
+          context.relation = node.value.name;
+          context.table = tempEntity.table;
         }
-      } else if (colType === EColumnType.Relation) {
-        const tempEntity = models.getEntity(this.ctx.config, node.value.name);
-        if (tempEntity) {
-          if (context.relation) {
-            context.sql = `${doubleQuotesString(this.ctx.model[entity].table)}.${doubleQuotesString(this.ctx.model[entity].relations[node.value.name].entityColumn)} IN (SELECT ${doubleQuotesString(tempEntity.table)}.${doubleQuotesString(this.ctx.model[entity].relations[node.value.name].relationKey)} FROM ${doubleQuotesString(tempEntity.table)}`;
-          } else {
-            context.relation = node.value.name;
-            context.table = tempEntity.table;
-          }
-          if (!context.key && context.relation) {
-            context.key = this.ctx.model[entity].relations[context.relation].entityColumn; 
-      // @ts-ignore
-
-            this.query[context.target].add(doubleQuotesString(this.ctx.model[entity].relations[context.relation].entityColumn));
-          }
-          return;
+        if (!context.key && context.relation) {          
+          context.key = relation.column;
+          // @ts-ignore
+          this.query[context.target].add(doubleQuotesString(relation.column));
         }
       }
     }
@@ -571,99 +565,130 @@ testo(input: string) {
       const temp = this.query.where.toString().split(" ").filter(e => e != "");      
       context.sign = temp.pop(); 
       this.query.where.init(temp.join(" "));
-      this.query.where.add(` ${context.in && context.in === true ? '' : ' IN @START@'}(SELECT ${this.ctx.model[this.entity].relations[context.relation] ? doubleQuotesString(this.ctx.model[this.entity].relations[context.relation]["relationKey"]) : `${doubleQuotesString(context.table)}."id"`} FROM ${doubleQuotesString(context.table)} WHERE `);
+      const relation = relationInfos(this.ctx.config, this.entity, context.relation);
+      this.addToWhere(` ${context.in && context.in === true ? '' : ' IN @START@'}(SELECT ${this.ctx.model[this.entity].relations[context.relation] ? doubleQuotesString(relation.rightKey) : `${doubleQuotesString(context.table)}."id"`} FROM ${doubleQuotesString(context.table)} WHERE `, context);
       context.in = true;
       if (context.identifier) {
         if (context.identifier.startsWith("CASE") || context.identifier.startsWith("("))
-          this.query.where.add(`${context.identifier} ${context.sign} ${SQLLiteral.convert(node.value, node.raw)})`);
+          this.addToWhere(`${context.identifier} ${context.sign} ${SQLLiteral.convert(node.value, node.raw)})`, context);
         else if (context.identifier.includes("@EXPRESSION@")) {
             const tempEntity = models.getEntity(this.ctx.config, context.relation);    
             const alias = tempEntity ? this.getColumnNameOrAlias(tempEntity, context.identifier , this.createDefaultOptions()) : undefined;
-            this.query.where.add((context.sql)
+            this.addToWhere((context.sql)
               ? `${context.sql} ${context.target} ${doubleQuotesString(context.identifier)}))@END@`
-              : `${alias ? alias : `${ context.identifier.replace("@EXPRESSION@", ` ${SQLLiteral.convert(node.value, node.raw)} ${this.inverseSign(context.sign)}`) }`})`);
+              : `${alias ? alias : `${ context.identifier.replace("@EXPRESSION@", ` ${SQLLiteral.convert(node.value, node.raw)} ${this.inverseSign(context.sign)}`) }`})`, context);
         } else {
           const tempEntity = models.getEntity(this.ctx.config, context.relation);    
 
           const quotes = context.identifier[0] === '"' ? '' : '"';
           const alias = tempEntity ? this.getColumnNameOrAlias(tempEntity, context.identifier , this.createDefaultOptions()) : undefined;
 
-
-          this.query.where.add((context.sql)
+          this.addToWhere((context.sql)
             ? `${context.sql} ${context.target} ${doubleQuotesString(context.identifier)} ${context.sign} ${SQLLiteral.convert(node.value, node.raw)}))@END@`
-            : `${alias ? '' : `${context.table}.`}${alias ? alias : `${quotes}${ context.identifier }${quotes}`} ${context.sign} ${SQLLiteral.convert(node.value, node.raw)})`);
+            : `${alias ? '' : `${context.table}.`}${alias ? alias : `${quotes}${ context.identifier }${quotes}`} ${context.sign} ${SQLLiteral.convert(node.value, node.raw)})`, context);
         }
       }
     } else {
       const temp = context.literal = node.value == "Edm.Boolean" ? node.raw : SQLLiteral.convert(node.value, node.raw);
       if (this.query.where.toString().includes("@EXPRESSION@")) this.query.where.replace("@EXPRESSION@", temp); 
       else if (this.query.where.toString().includes("@EXPRESSIONSTRING@")) this.query.where.replace("@EXPRESSIONSTRING@", `${temp} ${this.inverseSign(context.sign)}`);       
-      else this.query.where.add(temp);
+      else this.addToWhere(temp, context);
       
     }
   }
 
   protected VisitInExpression(node: Token, context: IodataContext): void {
     this.Visit(node.value.left, context);
-    this.query.where.add(" IN (");
+    this.addToWhere(" IN (", context);
     this.Visit(node.value.right, context);
-    this.query.where.add(":list)");
+    this.addToWhere(":list)", context);
   }
 
   protected VisitArrayOrObject(node: Token, context: IodataContext): void {
-    this.query.where.add(context.literal = SQLLiteral.convert(node.value, node.raw));
+    this.addToWhere(context.literal = SQLLiteral.convert(node.value, node.raw), context);
   }
 
-  protected createGeoColumn(entity: string | Ientity, column: string): string {    
-    column = removeAllQuotes(column);
-    let test: string | undefined = undefined;
-    const tempEntity: Ientity = (typeof entity === "string") ? this.ctx.model[entity] : entity ;
-    if (column.includes("/")) {
-      const temp = column.split("/");
-      if (tempEntity.relations.hasOwnProperty(temp[0])) {
-        const rel = tempEntity.relations[temp[0]];
-        column = `(SELECT ${doubleQuotesString(temp[1])} FROM ${doubleQuotesString(rel.tableName)} WHERE ${rel.expand} AND length(${doubleQuotesString(temp[1])}::text) > 2)`;
-        test = this.ctx.model[rel.entityName].columns[temp[1]].test;
-        if (test)  test = `(SELECT ${doubleQuotesString(test)} FROM ${doubleQuotesString(rel.tableName)} WHERE ${rel.expand})`;
-      }
-    } else if (!tempEntity.columns.hasOwnProperty(column)) {
-      if (tempEntity.relations.hasOwnProperty(column)) {
-        const rel = tempEntity.relations[column];
-        column = `(SELECT ${doubleQuotesString(rel.entityColumn)} FROM ${doubleQuotesString(rel.tableName)} WHERE ${rel.expand} AND length(${doubleQuotesString(rel.entityColumn)}::text) > 2)`;
-        test = this.ctx.model[rel.entityName].columns[rel.entityColumn].test;
-      } else throw new Error(`Invalid column ${column}`);
-    } else {      
-      // TODO ADD doubleQuotesString
-      const temp = tempEntity.columns[column].test;
-      if (temp) test = doubleQuotesString(temp);
-      column = doubleQuotesString(column);
-    }
-    if (test)
-      column = `CASE WHEN ${test} LIKE '%geo+json' THEN ST_GeomFromEWKT(ST_GeomFromGeoJSON(coalesce(${column}->'geometry',${column}))) ELSE ST_GeomFromEWKT(${column}::text) END`;
-    return column;
-  }
+  // protected createGeoColumn(entity: string | Ientity, column: string): string | undefined{
+  //   console.log(log.whereIam());    
+  //   column = removeAllQuotes(column);
+  //   let test: string | undefined = undefined;
+  //   const tempEntity =  models.getEntity(this.ctx.config, entity);
+  //   if (tempEntity) {
+  //     if (column.includes(".")) {
+  //       const temp = column.split(".");
+  //       const tm = models.getEntity(this.ctx.config, temp[0]);
+  //       if (tm && tm.columns.hasOwnProperty(temp[1])) {
+  //         this.subQuery.select = `"featureofinterest"."id"`;
+  //         this.subQuery.where = `CASE WHEN "${_TESTENCODING}" LIKE '%geo+json' THEN ST_GeomFromEWKT(ST_GeomFromGeoJSON(coalesce(${doubleQuotesString(temp[1])}->'geometry',${doubleQuotesString(temp[1])}))) ELSE ST_GeomFromEWKT(${doubleQuotesString(temp[1])}::text) END`;
+  //         this.subQuery.keys[0] = `"${temp[1]}"->>'type'`;
+  //         return undefined;
+  //       }
+  //     } else if (column.includes("/")) {
+  //       const temp = column.split("/");        
+  //       if (tempEntity.relations.hasOwnProperty(temp[0])) {
+  //         const relation = relationInfos(this.ctx.config, tempEntity.name, temp[0]);
+  //         column = `(SELECT ${doubleQuotesString(temp[1])} FROM ${doubleQuotesString(relation.table)} WHERE ${expand(this.ctx,tempEntity.name, temp[0])} AND length(${doubleQuotesString(temp[1])}::text) > 2)`;
+  //         if (tempEntity.columns.hasOwnProperty(_TESTENCODING))  test = `(SELECT ${doubleQuotesString(_TESTENCODING)} FROM ${doubleQuotesString(relation.table)} WHERE ${expand(this.ctx,tempEntity.name, temp[0])})`;
+  //       }
+  //     } else if (!tempEntity.columns.hasOwnProperty(column)) {        
+  //       if (tempEntity.relations.hasOwnProperty(column)) {
+  //         const relation = relationInfos(this.ctx.config, tempEntity.name, column);        
+  //         column = `(SELECT ${doubleQuotesString(relation.column)} FROM ${doubleQuotesString(relation.table)} WHERE ${expand(this.ctx,tempEntity.name, column)} AND length(${doubleQuotesString(relation.column)}::text) > 2)`;
+  //         if (tempEntity.columns.hasOwnProperty(_TESTENCODING))  test = _TESTENCODING;
+
+  //       } else if (this.ctx.model[this.parentEntity as keyof object].columns.hasOwnProperty(column)) {
+  //         const relation = relationInfos(this.ctx.config, tempEntity.name, column);        
+  //         column = `(SELECT ${doubleQuotesString(relation.column)} FROM ${doubleQuotesString(relation.table)} WHERE ${expand(this.ctx,tempEntity.name, column)} AND length(${doubleQuotesString(relation.column)}::text) > 2)`;
+  //         if (tempEntity.columns.hasOwnProperty(_TESTENCODING))  test = _TESTENCODING;
+
+  //       } else throw new Error(`Invalid column ${column}`);
+  //     } else {      
+  //       // TODO ADD doubleQuotesString
+  //       const temp = tempEntity.columns.hasOwnProperty(_TESTENCODING);
+  //       if (temp) test = doubleQuotesString(_TESTENCODING);
+  //       column = doubleQuotesString(column);
+  //     }
+  //   }    
+  //   if (test) 
+  //     return `CASE WHEN "${_TESTENCODING}" LIKE '%geo+json' THEN ST_GeomFromEWKT(ST_GeomFromGeoJSON(coalesce(${column}->'geometry',${column}))) ELSE ST_GeomFromEWKT(${column}::text) END`
+  // }
   
   protected VisitMethodCallExpression(node: Token, context: IodataContext) {
     const method = node.value.method;
     const params = node.value.parameters || [];
 
+    
     const isColumn = (input: number | string): string | undefined => {
       const entity: Ientity = this.ctx.model[this.entity];
       const column = typeof input === "string" ? input : decodeURIComponent( Literal.convert(params[input].value, params[input].raw) );
 
       if (column.includes("/")) {
         const temp = column.split("/");
-        if (entity.relations.hasOwnProperty(temp[0])) 
-          return this.ctx.model[entity.relations[temp[0]].entityName].columns[temp[1]].test;
+        if (entity.relations.hasOwnProperty(temp[0])) {
+          const tempEntity = models.getEntity(this.ctx.config, temp[0]);
+          if (tempEntity) return temp[1];
+        }
       } 
       else if (entity.columns.hasOwnProperty(column)) 
         return column;
-      else if (entity.relations.hasOwnProperty(column)) 
-        return this.ctx.model[entity.relations[column].entityName].columns[entity.relations[column].entityColumn].test;
+      else if (entity.relations.hasOwnProperty(_TESTENCODING)) 
+        return _TESTENCODING;
     }
 
     const columnOrData = (index: number, operation: string, ForceString: boolean): string => {
+      // convert into string
       const test = decodeURIComponent( Literal.convert(params[index].value, params[index].raw) );
+      // if (FeatureOfInterest/feature)
+      if (test.includes("/")) {
+        const tests = test.split("/");
+        const relation =  relationInfos(this.ctx.config, this.entity, tests[0]);
+        if (relation) {
+          const relationEntity = models.getEntity(this.ctx.config, tests[0]);
+          if (relationEntity) this.subQuery.from.push(relationEntity.table);
+          this.query.where.add(`${formatPgTableColumn(relation.table, relation.leftKey)} = "src"."id"`);
+          return formatPgTableColumn(tests[0], tests[1]);
+        }
+      }
       if (test === "result") return this.formatColumnResult(context, operation, ForceString);
       const column = isColumn(test);       
       return column ? doubleQuotesString(column) : simpleQuotesString(geoColumnOrData(index, false));
@@ -677,6 +702,8 @@ testo(input: string) {
         ? temp
         : `${srid === true ? "SRID=4326;" : ""}${removeAllQuotes(temp)}`;
     };
+    
+
 
     const cleanData = (index: number): string =>
       params[index].value == "Edm.String"
@@ -684,47 +711,47 @@ testo(input: string) {
         : Literal.convert(params[index].value, params[index].raw);
 
     const order = params.length === 2 ? isColumn(0) ? [0,1] : [1,0] : [0];
-    switch (method) {
+    switch (String(method.split(".")[0])) {
       case "contains":
         this.Visit(params[0], context);
-        this.query.where.add(` ~* '${SQLLiteral.convert(params[1].value, params[1].raw).slice(1, -1)}'`);
+        this.addToWhere(` ~* '${SQLLiteral.convert(params[1].value, params[1].raw).slice(1, -1)}'`, context);
         break;
       case "containsAny":
-        this.query.where.add("array_to_string(");
+        this.addToWhere("array_to_string(", context);
         this.Visit(params[0], context);
-        this.query.where.add(`, ' ') ~* '${SQLLiteral.convert(params[1].value, params[1].raw).slice(1, -1)}'`);
+        this.addToWhere(`, ' ') ~* '${SQLLiteral.convert(params[1].value, params[1].raw).slice(1, -1)}'`, context);
         break;
       case "endswith":
-        this.query.where.add(`${columnOrData(0, "", true)}  ILIKE '%${cleanData(1)}'`);
+        this.addToWhere(`${columnOrData(0, "", true)}  ILIKE '%${cleanData(1)}'`, context);
         break;
       case "startswith":
-        this.query.where.add(`${columnOrData(0, "", true)} ILIKE '${cleanData(1)}%'`);
+        this.addToWhere(`${columnOrData(0, "", true)} ILIKE '${cleanData(1)}%'`, context);
         break;
       case "substring":
-        this.query.where.add((params.length == 3) 
+        this.addToWhere((params.length == 3) 
             ? ` SUBSTR(${columnOrData(0, "", true)}, ${cleanData( 1 )} + 1, ${cleanData(2)})`
-            : ` SUBSTR(${columnOrData(0, "", true)}, ${cleanData(1)} + 1)`);
+            : ` SUBSTR(${columnOrData(0, "", true)}, ${cleanData(1)} + 1)`, context);
         break;
       case "substringof":
-        this.query.where.add(`${columnOrData(0, "", true)} ILIKE '%${cleanData(1)}%'`);
+        this.addToWhere(`${columnOrData(0, "", true)} ILIKE '%${cleanData(1)}%'`, context);
         break;
       case "indexof":
-        this.query.where.add(` POSITION('${cleanData(1)}' IN ${columnOrData(0, "", true)})`);
+        this.addToWhere(` POSITION('${cleanData(1)}' IN ${columnOrData(0, "", true)})`, context);
         break;
       case "concat":
-        this.query.where.add(`(${columnOrData(0, "concat", true)} || '${cleanData(1)}')`);
+        this.addToWhere(`(${columnOrData(0, "concat", true)} || '${cleanData(1)}')`, context);
         break;
       case "length":
         // possibilty calc length string of each result or result 
-        this.query.where.add((decodeURIComponent( Literal.convert(params[0].value, params[0].raw) ) === "result") 
+        this.addToWhere((decodeURIComponent( Literal.convert(params[0].value, params[0].raw) ) === "result") 
         ? `${columnOrData(0, "CHAR_LENGTH", true)}`
-        :  `CHAR_LENGTH(${columnOrData(0, "CHAR_LENGTH", true)})`);
+        :  `CHAR_LENGTH(${columnOrData(0, "CHAR_LENGTH", true)})`, context);
         break;
       case "tolower":
-        this.query.where.add(`LOWER(${columnOrData(0, "", true)})`);
+        this.addToWhere(`LOWER(${columnOrData(0, "", true)})`, context);
         break;
       case "toupper":
-        this.query.where.add(`UPPER(${columnOrData(0, "", true)})`);
+        this.addToWhere(`UPPER(${columnOrData(0, "", true)})`, context);
         break;
       case "year":
       case "month":
@@ -732,46 +759,37 @@ testo(input: string) {
       case "hour":
       case "minute":
       case "second":
-        this.query.where.add(`EXTRACT(${method.toUpperCase()} FROM ${columnOrData( 0, "", false )})`);
+        this.addToWhere(`EXTRACT(${method.toUpperCase()} FROM ${columnOrData( 0, "", false )})`, context);
         break;
       case "round":
       case "floor":
       case "ceiling":
-        this.query.where.add(columnOrData(0, method.toUpperCase(),false));
+        this.addToWhere(columnOrData(0, method.toUpperCase(),false), context);
         break;
       case "now":
-        this.query.where.add("NOW()");
+        this.addToWhere("NOW()", context);
         break;
       case "date":
-        this.query.where.add(`${method.toUpperCase()}(`);
+        this.addToWhere(`${method.toUpperCase()}(`, context);
         this.Visit(params[0], context);
-        this.query.where.add(")");
+        this.addToWhere(")", context);
         break;
       case "time":
-        this.query.where.add(`(${columnOrData(0, "", true)})::time`);
+        this.addToWhere(`(${columnOrData(0, "", true)})::time`, context);
         break;
-      case "geo.distance":
-      case "geo.contains":
-      case "geo.crosses":
-      case "geo.disjoint":
-      case "geo.equals":
-      case "geo.overlaps":
-      case "geo.relate":
-      case "geo.touches":
-      case "geo.within":
-        this.query.where.add(`${method .toUpperCase() .replace("GEO.", "ST_")}(${this.createGeoColumn(this.entity, columnOrData(order[0], "", true) )}), ${columnOrData(order[1], "", true)}')`);
-        break;
-      case "geo.length":
-        this.query.where.add(`ST_Length(ST_MakeLine(ST_AsText(${this.createGeoColumn(this.entity, columnOrData(order[0], "", true) )}), ${columnOrData(order[1], "", true)}'))`);
-        break;
-      case "geo.intersects":        
-        this.query.where.add(`st_intersects(ST_AsText(${this.createGeoColumn(this.entity, columnOrData(order[0], "", true) )}), ${columnOrData(order[1], "", true)})`);
+      case "geo":
+        const tmpGeo =  new OdataGeoColumn(this, method, columnOrData(order[0], "", true) );
+        context = tmpGeo.createColumn(columnOrData(order[1], "", true), context);
+        // if (method === "geo.length")
+        //   context = tmpGeo.createColumn(`ST_Length(ST_MakeLine(ST_AsText(@GEO@), ${columnOrData(order[1], "", true)}))`, context);
+        // else 
+        //   context = tmpGeo.createColumn(`${method.toUpperCase().replace("GEO.", "ST_")}(ST_AsText(@GEO@), ${columnOrData(order[1], "", true)})`, context);
         break;
       case "trim":
-        this.query.where.add(`TRIM(BOTH '${ params.length == 2 ? cleanData(1) : " " }' FROM ${columnOrData(0, "", true)})`);
+        this.addToWhere(`TRIM(BOTH '${ params.length == 2 ? cleanData(1) : " " }' FROM ${columnOrData(0, "", true)})`, context);
         break;
       case "mindatetime":
-        this.query.where.add(`MIN(${this.query.where.toString().split('" ')[0]}")`);
+        this.addToWhere(`MIN(${this.query.where.toString().split('" ')[0]}")`, context);
         break;
     }
   }

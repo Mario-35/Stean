@@ -8,12 +8,14 @@
 // onsole.log("!----------------------------------- entity ThingLocation -----------------------------------!");
 
 import { createEntity } from ".";
+import { ETable } from "../../enums";
 import { Ientity } from "../../types";
 import { _idRel } from "./constants";
 
 
   export const ThingLocation:Ientity  = createEntity("ThingsLocations", {
     createOrder: 3,
+    type: ETable.link,
     order: -1,
     orderBy: `"thing_id"`,
     columns: {

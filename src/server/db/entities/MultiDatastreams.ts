@@ -22,7 +22,7 @@ export class MultiDatastreams extends Common {
     console.log(log.whereIam());
     if (!input) this.ctx.throw(400, { code: 400, detail: errors.noData });
     const temp = this.getKeysValue(input, ["FeaturesOfInterest", "foi"]);
-    if (temp) input["_default_foi"] = temp;
+    if (temp) input["_default_featureofinterest"] = temp;
     if ( input["multiObservationDataTypes"] && input["unitOfMeasurements"] && input["ObservedProperties"] ) {
       if ( input["multiObservationDataTypes"].length != input["unitOfMeasurements"].length )
         this.ctx.throw(400, {

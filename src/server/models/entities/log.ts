@@ -12,9 +12,11 @@ import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _text } from "./constants";
 import { doubleQuotesString } from "../../helpers";
 import { _ID } from "../../db/constants";
+import { ETable } from "../../enums";
 
 export const Log:Ientity  = createEntity("Logs", {
     createOrder: -1,
+    type: ETable.table,
     order: -1,
     orderBy: `"date DESC"`,
     columns: {

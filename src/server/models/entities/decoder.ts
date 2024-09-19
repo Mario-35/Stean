@@ -8,7 +8,7 @@
 // onsole.log("!----------------------------------- entity Decoder -----------------------------------!");
 
 import { createEntity } from ".";
-import { ERelations } from "../../enums";
+import { ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _text } from "./constants";
 import { doubleQuotesString } from "../../helpers";
@@ -16,6 +16,7 @@ import { _ID } from "../../db/constants";
 
 export const Decoder:Ientity  = createEntity("Decoders", {
     createOrder: 10,
+    type: ETable.table,
     order: 12,
     orderBy: `"id"`,
     columns: {
@@ -58,14 +59,7 @@ export const Decoder:Ientity  = createEntity("Decoders", {
     },
     relations: {
       Loras: {
-        type: ERelations.hasMany,
-        expand: `"lora"."id" in (SELECT "lora"."id" from "lora" WHERE "lora"."decoder_id" = "decoder"."id")`,
-        link: `"lora"."id" in (SELECT "lora"."id" from "lora" WHERE "lora"."decoder_id" = $ID)`,
-        entityName: "Loras",
-        tableName: "lora",
-        relationKey: "decoder_id",
-        entityColumn: "id",
-        tableKey: "id",
+        type: ERelations.hasMany       
       },
     },
   });
