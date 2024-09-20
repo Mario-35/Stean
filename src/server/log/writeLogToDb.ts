@@ -20,8 +20,8 @@ export const writeLogToDb = async ( ctx: koaContext, ...error: any[] ): Promise<
   if (ctx.log && ctx.log.method != "GET") {
     ctx.log.code = error && error["code" as keyobj] ? +error["code" as keyobj] : +ctx.response.status;
     ctx.log.error = error;
+    ctx.log.datas = ctx.body;
     ctx.log.datas = hidePassword(ctx.log.datas);
-
     try {
       if (ctx.body && typeof ctx.body === "string") ctx.log.returnid = JSON.parse(ctx.body)[_ID];       
     } catch (error) {

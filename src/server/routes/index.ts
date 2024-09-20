@@ -68,6 +68,8 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
       ? ctx.originalUrl.replace(decodedUrl.version, ctx.config.apiVersion)
       : `${ctx.decodedUrl.linkbase}/v${ctx.config.apiVersion}/`);
   }
+
+  
   
   // try to clean query string
   ctx.querystring = decodeURIComponent(querystring.unescape(ctx.querystring));

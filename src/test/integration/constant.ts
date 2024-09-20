@@ -514,9 +514,6 @@ export const infos: Record<string, any>  = {
     Users: {
     },
 
-    Logs: {
-    },
-
     Services: {
         definition: `Service is an extension that  represent the configuration of one service and the possibility to create a new service with an assistant with the route /service:<br><table><tr><td class="noBorder">The screen below appear</td><td class="noBorder">and after admin postgres connection ok</td><tr><td class="noBorder"><img src="./assets/admin.jpg" alt="admin login"></td><td class="noBorder"><img src="./assets/service.jpg" alt="service"></td></tr></table>`,
         columns: {
@@ -557,7 +554,24 @@ export const infos: Record<string, any>  = {
     },    
 
     CreateFile: {
-    }    
+    }   ,
+    
+    Logs: {
+        definition: "Logs is an extension for adding Logs to trace errors, note that order is desc to view last logs on top.",
+        reference: "",
+        columns: {
+            id: definitions.id,
+            date: "The Date time of the logs.",
+            method: "Verb method GET, POST, PATCH, DELETE",
+            code: "HTTP return code.",
+            url: "Original url.",
+            datas: "Datas posted.",
+            database: "Name of the database.",
+            returnid: "Id return.",
+            error: "API error.",
+        },
+        relations: {}
+    },
 };
 
 export const listOfColumns = (inputEntity: Ientity) => {    

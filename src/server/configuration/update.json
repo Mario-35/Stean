@@ -1,8 +1,5 @@
 {
-  "beforeAll": [
-    "ALTER TABLE datastream RENAME COLUMN _default_foi TO _default_featureofinterest",
-    "ALTER TABLE multidatastream RENAME COLUMN _default_foi TO _default_featureofinterest"
-  ],
+  "beforeAll": [],
   "afterAll": [],
   "decoders": [],
   "decoders2": {
