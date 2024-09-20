@@ -9,6 +9,7 @@
 
 
 import {   executeSqlValues } from "../../db/helpers";
+import { getKey } from "../../helpers";
 import { koaContext } from "../../types";
 
 const geo = {
@@ -245,7 +246,7 @@ export const getTest = async (ctx: koaContext): Promise<string[] | { [key: strin
     const locations:Record<string, any> = await executeSqlValues(ctx.config, `  SELECT coalesce( json_agg(t), '[]') AS results FROM ( select location as geometry FROM "location" WHERE "location"::text LIKE '%coordinates%' ) as t`);
 
 
-
+	result["key"] = getKey();
 
     result["featureofinterest"] = `http://geojson.io/#data=data:application/json,${encodeURIComponent(JSON.stringify({
         "type": "FeatureCollection",
@@ -257,11 +258,6 @@ export const getTest = async (ctx: koaContext): Promise<string[] | { [key: strin
         "features": locations[0]
     }))}`;
     
-	console.log({
-        "type": "FeatureCollection",
-        "features": locations[0]
-    });
-	
       
     result["geo"] = `http://geojson.io/#data=data:application/json,${encodeURIComponent(JSON.stringify({
         "type": "FeatureCollection",

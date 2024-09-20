@@ -14,7 +14,7 @@ import { doubleQuotesString } from "../../helpers";
 import { _ID } from "../../db/constants";
 import { ETable } from "../../enums";
 
-export const Log:Ientity  = createEntity("Logs", {
+export const Log:Ientity = createEntity("Logs", {
     createOrder: -1,
     type: ETable.table,
     order: -1,

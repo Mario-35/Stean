@@ -17,7 +17,7 @@ export const executeSqlValues = async (service: Iservice | string, query: string
     if (typeof query === "string") {
         return new Promise(async function (resolve, reject) {
             await config.connection(typeof service === "string" ? service : service.name).unsafe(query).values().then((res: Record<string, any>) => {
-      resolve(res[0]);
+                resolve(res[0]);
             }).catch((err: Error) => {
                 if (!isTest() && +err["code" as keyof object] === 23505) config.writeLog(log.queryError(query, err));
                 reject(err);

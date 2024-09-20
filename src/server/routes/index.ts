@@ -91,10 +91,7 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     // Init config context
     if (!ctx.config) return;    
     ctx.user = decodeToken(ctx);
-    // Write in logs
-    await next().then(async () => {  
-      if (ctx.config.extensions.includes(EExtensions.logs)) await writeLogToDb(ctx);
-    });
+    await next().then(async () => {});
   } catch (error: any) {
     console.log(error);
     if (ctx.config && ctx.config.extensions.includes(EExtensions.logs))
