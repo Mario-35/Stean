@@ -46,8 +46,8 @@ export const createEntity = (name: string, datas: IentityCore | number) : Ientit
 };
   
 export const Service: Ientity = createEntity("Services", 0);
-export const CreateFile: Ientity = createEntity("CreateFile", 99);
 export const CreateObservation:Ientity = createEntity("CreateObservations", 0);
+export const CreateFile: Ientity = createEntity("CreateFile", 0);
 export { Datastream } from "./datastream";
 export { Decoder } from "./decoder";
 export { FeatureOfInterest } from "./featureOfInterest";

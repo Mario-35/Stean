@@ -110,7 +110,7 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
                     else
                         returnValue.push(`UPDATE "${queryMaker[element].table}" SET ${createUpdateValues(queryMaker[element].datas)} WHERE "${queryMaker[element].table}"."${queryMaker[element].keyId}" = (select verifyId('${queryMaker[element].table}', ${src.id}) as id)`);
                 } else returnValue.push(`INSERT INTO "${queryMaker[element].table}" ${createInsertValues(src.ctx.config, formatInsertEntityData(queryMaker[element].table, queryMaker[element].datas, src))}`);                            
-                    returnValue.push(`RETURNING ${postEntity.table == queryMaker[element].table ? allFields : queryMaker[element].keyId})`);
+                returnValue.push(`RETURNING ${postEntity.table == queryMaker[element].table ? allFields : queryMaker[element].keyId})`);
             }
         });
         return returnValue.join("\n").replace(/\'@/g, "").replace(/\@'/g, "");

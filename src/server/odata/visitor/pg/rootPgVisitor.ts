@@ -120,7 +120,7 @@ export class RootPgVisitor extends PgVisitor {
 		this.VisitRessources(node.value.navigation, context);
 	}
 
-  protected VisitRessourcesEntityCollectionNavigationProperty(node:Token, context:any){
+  protected VisitRessourcesEntityCollectionNavigationProperty(node:Token, context:any) {    
     if (this.ctx.model[this.entity].relations[node.value.name]) {
          const where = (this.parentEntity) ? `(SELECT ID FROM (${this.query.toWhere(this)}) as nop)` : this.id;
          const whereSql = link(this.ctx, this.entity, node.value.name)   

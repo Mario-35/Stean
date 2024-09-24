@@ -7,3 +7,5 @@
     Add GeoJSON in query to map geojson.io
     geo.function adding
     add geo fuctions outside location
+## version 0.9.12
+    Add File extension

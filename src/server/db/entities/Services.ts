@@ -12,7 +12,6 @@ import { IreturnResult, koaContext } from "../../types";
 import { config } from "../../configuration";
 import { hideKeysInJson, hidePassword } from "../../helpers";
 import { addToService, createService } from "../helpers";
-import { setDebug } from "../../constants";
 import { userAuthenticated } from "../../authentication";
 import { log } from "../../log";
 import { EExtensions, EHttpCode } from "../../enums";
@@ -78,7 +77,6 @@ export class Services extends Common {
 
     // Update an item
     async update( idInput: bigint | string, dataInput: Record<string, any>  | undefined ): Promise<IreturnResult | undefined | void> {
-      setDebug(true);
       console.log(log.whereIam());      
     }
   // Delete an item

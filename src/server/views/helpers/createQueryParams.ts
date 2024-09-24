@@ -28,9 +28,7 @@ export async function createQueryParams(ctx: koaContext): Promise<IqueryOptions|
                 ? Object.keys(model).filter((elem: string) => ctx.model[elem].order > 0 || ctx.model[elem].createOrder === 99 || ctx.model[elem].createOrder === -1)
                 : Object.keys(model).filter((elem: string) => ctx.model[elem].order > 0 );
 
-    listEntities.push("Configs");
-    listEntities.push("CreateFile");    
-
+    listEntities.push("Services");    
     const decodedUrl = decodeUrl(ctx);
     if (decodedUrl) return {
         methods: ["GET"],
@@ -41,6 +39,6 @@ export async function createQueryParams(ctx: koaContext): Promise<IqueryOptions|
         graph: ctx.url.includes("$resultFormat=graph"),
         admin: ctx.config.name === 'admin',
         services: config.getInfosForAll(ctx),
-        _DATAS:  Object.fromEntries(Object.entries(model).filter( ([k, v]) => listEntities.includes(k) && v.order > 0)) as Ientities,
+        _DATAS:  Object.fromEntries(Object.entries(model).filter( ([k, v]) => listEntities.includes(k) && v.order >= 0)) as Ientities,
     };
 };

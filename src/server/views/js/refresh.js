@@ -18,8 +18,6 @@ function updateForm() {
 function refresh() {
 	header("refresh");
 	const tempEntity = SubOrNot();
-	console.log("--------------------> tempEntity");
-	console.log(tempEntity);
 	populateMultiSelect("selectOption", getColumnsList(tempEntity).filter(e => !e.includes("_")), "all");
 	populateMultiSelect("orderbyOption", getColumnsList(tempEntity));
 	populateSelect(propertyOption, getColumnsList(tempEntity), _PARAMS.property != undefined ? _PARAMS.property : _NONE, true);

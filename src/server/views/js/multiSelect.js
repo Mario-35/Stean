@@ -30,3 +30,4 @@
   	const element = getElement(obj);
   	if (element) multiSelects[element.id].loadSourceArray(list, selected);
   }
+  

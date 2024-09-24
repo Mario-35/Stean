@@ -551,10 +551,10 @@ export const infos: Record<string, any>  = {
     },
     
     CreateObservations: {
-    },    
-
+    },
+    
     CreateFile: {
-    }   ,
+    },
     
     Logs: {
         definition: "Logs is an extension for adding Logs to trace errors, note that order is desc to view last logs on top.",

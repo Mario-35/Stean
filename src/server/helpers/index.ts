@@ -45,4 +45,5 @@ export const formatPgString = (input: string): string => escapeSimpleQuotes(trim
 export const doubleQuotesString = (input: string): string => `"${escapeDoubleQuotes(trimDoubleQuotes(input))}"`;
 export const simpleQuotesString = (input: string): string => `'${escapeSimpleQuotes(trimSimpleQuotes(input))}'`;
 export const formatPgTableColumn = (table: string, column?: string) => `\"${table}\"${column ? `.\"${column}\"`:''}`;
+export const formatPgSelectTableColumn = (table: string, column?: string) => `SELECT ${column === "*" ? '*' : formatPgTableColumn(table, column)} FROM \"${table}\"`;
 

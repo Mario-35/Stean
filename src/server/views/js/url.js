@@ -40,9 +40,14 @@
               }
             });
       
-      myOptions.split('&').filter(e => e.trim() !== "").forEach((element) => {
+      myOptions.split('&$').filter(e => e.trim() !== "").forEach((element) => {
         const temp = element.split('=');
+        console.log(`===========> ${temp}`);
+        
         switch (temp[0]) {
+          case "resultFormat":
+            getFormatOptions();
+            populateSelect(resultFormatOption, getFormatOptions(),temp[1] ,temp[1] );
           default:
             const element = getElement(`${temp[0]}Option`);
             if(element) {
@@ -54,12 +59,14 @@
                   multiSelects[element.id].setValue(temp[1].split(","));
                   break;
                 default:
+                  console.log(`element.type: ${element.type}`);                  
                   element.value = temp[1];
                   break;
               }
             }
 
         }
+
       });
       canShowQueryButton();
       return decode;
@@ -189,7 +196,9 @@
     directLink = `${directLink}${addMark}${queryOptions.join("&$")}`;
     queryLink = `${queryLink}&${encodeURI(queryOptions.join("&"))}`;
     directLink = cleanUrl(directLink);
-    queryLink = cleanUrl(queryLink);
+    queryLink = cleanUrl(queryLink).split("&").join("&$");
+    console.log(queryLink);
+    
     if (isDebug) {
       console.log(`direct : ${directLink}`);
       console.log(`query : ${queryLink}`);

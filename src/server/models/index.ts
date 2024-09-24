@@ -9,7 +9,7 @@ import { doubleQuotesString, deepClone, isTest } from "../helpers";
 import { errors, msg } from "../messages";
 import { Iservice, Ientities, Ientity, IstreamInfos, koaContext, IentityRelation } from "../types";
 import fs from "fs";
-import { FeatureOfInterest, Thing, Location, Service, CreateFile, CreateObservation, Datastream, Decoder, HistoricalLocation, Log, Lora, MultiDatastream, MultiDatastreamObservedProperty, Observation, Sensor, User, LocationHistoricalLocation, ObservedProperty, ThingLocation } from "./entities";
+import { FeatureOfInterest, Thing, Location, Service, CreateObservation, CreateFile, Datastream, Decoder, HistoricalLocation, Log, Lora, MultiDatastream, MultiDatastreamObservedProperty, Observation, Sensor, User, LocationHistoricalLocation, ObservedProperty, ThingLocation } from "./entities";
 
 const testVersion = (input: string) => Object.keys(Models.models).includes(input);
 
@@ -35,7 +35,7 @@ class Models {
           Logs: Log,        
           Users: User,        
           Services: Service,        
-          CreateObservations: CreateObservation,        
+          CreateObservations: CreateObservation,
           CreateFile: CreateFile,
       };                
   }

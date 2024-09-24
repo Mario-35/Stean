@@ -10,11 +10,11 @@ process.env.NODE_ENV = "test";
 
 import chai from "chai";
 import chaiHttp from "chai-http";
-import { IApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, limitResult, generateApiDoc, testVersion, _RAWDB } from "./constant";
+import { IApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, limitResult, testVersion, generateApiDoc, _RAWDB, testLog } from "../integration/constant";
 import { server } from "../../server/index";
 import { Ientity } from "../../server/types";
-import { executeQuery } from "./executeQuery";
-import { addStartNewTest, addTest } from "./tests";
+import { executeQuery } from "../integration/executeQuery";
+import { addStartNewTest, addTest } from "../integration/tests";
 
 chai.use(chaiHttp);
 
@@ -22,7 +22,7 @@ const should = chai.should();
 
 const docs: IApiDoc[] = [];
 const entity: Ientity = _RAWDB.CreateFile;
-
+let id = 0;
 
 const addToApiDoc = (input: IApiInput) => {
     docs.push(prepareToApiDoc(input, "CreateFile"));
@@ -47,7 +47,6 @@ describe(`CSV ${entity.name}`, function () {
     let thingId = 0;
     before((done) => {        
         addStartNewTest(entity.name);
-
         chai.request(server)
             .post(`/test/${testVersion}/login`)
             .send(identification)
@@ -59,7 +58,7 @@ describe(`CSV ${entity.name}`, function () {
 
     it(`Create Thing For createFile`, (done) => {
         const datas = {
-            "name": "Thing createFile",
+            "name": "Thing createFile2",
             "description": "Create Thing for testing createFile",
             "properties": {
                 "organization": "Mozilla",
@@ -81,15 +80,15 @@ describe(`CSV ${entity.name}`, function () {
 
     it("Should return The Datastreams create to ingest csv file", (done) => {
         const infos = addTest({
-            api: `{post} CreateFile with csv attached file`,
-            apiName: "CreateFilePost",
+            api: `{post} ${entity.name} with csv attached file`,
+            apiName: `${entity.name}Post`,
             apiDescription: "Import csv file",
             apiExample: { 
-                http: `/${testVersion}/Things(${thingId})/CreateFile`
+                http: `/${testVersion}/${entity.name}(${thingId})`
             }
         });
         chai.request(server)
-            .post(`/test/${info.apiExample.http}`)
+            .post(`/test/${infos.apiExample.http}`)
             .field("Content-Type", "multipart/form-data")
             .field("method", "POST")
             .field("nb", "1")
@@ -100,27 +99,27 @@ describe(`CSV ${entity.name}`, function () {
                 else {
                     should.not.exist(err);
                     res.should.have.status(201);
-                    res.body["@iot.id"].should.eql(16);
-                    await executeQuery(`SELECT count(*)::int FROM ${_RAWDB.Observations.table} WHERE "datastream_id"=16`).then((test: Record<string, any>) => {
+                    id = res.body["@iot.id"];
+                    res.body["description"].should.contain("file.csv");
+                    await executeQuery(`SELECT count(*)::int FROM ${_RAWDB.Observations.table} WHERE "datastream_id"=${id}`).then((test: Record<string, any>) => {
                         test["count"].should.eql(25);
                         addToApiDoc({ ...infos, result: limitResult(res) });
                         done();
                     })
                     .catch((err) => console.log(err));
-
                 }
             });
     });
 
     it("Should return The Datastreams updated for file", (done) => {
         const infos = addTest({
-            api: `{post} CreateFile with same csv attached file [duplicate]`,
-            apiName: "CreateFilePostDuplicate",
+            api: `{post} ${entity.name} with same csv attached file [duplicate]`,
+            apiName: `${entity.name}PostDuplicate`,
             apiDescription: "Import csv file [duplicate]",
-            apiExample: { http: `/${testVersion}/Things(${thingId})/CreateFile` },
+            apiExample: { http: `/${testVersion}/${entity.name}(${thingId})` },
         });
         chai.request(server)
-            .post(`/test${info.apiExample.http}`)
+            .post(`/test${infos.apiExample.http}`)
             .field("Content-Type", "multipart/form-data")
             .field("method", "POST")
             .field("nb", "22")
@@ -128,13 +127,15 @@ describe(`CSV ${entity.name}`, function () {
             .set("Cookie", `${keyTokenName}=${token}`)
             .end(async (err: Error, res: any) => {
                 console.log(res.body);
-                
+                testLog(res.body);
+
+                if (err) testLog(err);
                 if (err) console.log(err);
                 else {
                     should.not.exist(err);
                     res.should.have.status(201);
-                    res.body["@iot.id"].should.eql(16);
-                    executeQuery(`SELECT count(*)::int FROM "${_RAWDB.Observations.table}" WHERE "datastream_id" = 16`).then((test: Record<string, any>) => {
+                    res.body["@iot.id"].should.eql(id);
+                    executeQuery(`SELECT count(*)::int FROM "${_RAWDB.Observations.table}" WHERE "datastream_id" = ${id}`).then((test: Record<string, any>) => {
                         test["count"].should.eql(24);
                         addToApiDoc({ ...infos, result: limitResult(res) });
                         generateApiDoc(docs, `apiDoc${entity.name}.js`);

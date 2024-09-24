@@ -17,6 +17,7 @@ import { triggers } from "./triggers";
 import { models } from "../../models";
 import { log } from "../../log";
 import { createRole } from "../helpers/createRole";
+import { info } from "../../messages";
 
 export const createDatabase = async (configName: string): Promise<IKeyString> => {
   console.log(log.debug_head("createDatabase", configName));
@@ -117,6 +118,26 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
   returnValue[`Create user`] = await createUser(config.getService(configName))
     .then(() => EChar.ok)
     .catch((err: Error) => err.message);
+
+
+    if (config.getService(configName).extensions.includes(EExtensions.file)) {
+      const files: string[] =
+      [`INSERT INTO sensor ("name", description, "encodingType", metadata) VALUES('${info.csvFile}', '${info.csvFile}', 'application/pdf', 'https://www.rfc-editor.org/rfc/pdfrfc/rfc4180.txt.pdf');`
+      ,`WITH thing AS (INSERT INTO "thing" ("name","description","properties") VALUES ('${info.csvFile}','${info.csvFile}','{}') RETURNING *) , location1 AS ( INSERT INTO "location" ("name","description","encodingType","location") VALUES ('${info.csvFile}','${info.csvFile}','application/geo+json','{}') RETURNING id) , thinglocation AS ( INSERT INTO "thinglocation" ("location_id","thing_id") VALUES ((select location1.id from location1),(select thing.id from thing))) select id from thing`
+      ,`INSERT INTO observedproperty ("name", definition, description) VALUES('${info.csvFile}', '${info.csvFile}', '${info.csvFile}');`]
+      await asyncForEach( files, async (query: string) => {
+        await config.connection(configName).unsafe(query)
+          .then(() => {
+            log.create("name", EChar.ok);
+          }).catch((error: Error) => {
+            console.log(query);
+            console.log(error);
+            process.exit(111);
+          });    
+        }
+      );
+    }
+
 
   await dbConnection.unsafe(`SELECT COUNT(*) FROM pg_user WHERE usename = ${simpleQuotesString(servicePg.user)};`)
     .then(() => { returnValue["ALL finished ..."] = EChar.ok; })

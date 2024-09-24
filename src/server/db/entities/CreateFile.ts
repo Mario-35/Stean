@@ -37,43 +37,29 @@ export class CreateFile extends Common {
     const createDataStream = async () => {
       const nameOfFile = paramsFile.filename.split("/").reverse()[0];
       const copyCtx = Object.assign({}, ctx.odata);
-      const tempId = ctx.odata.id.toString();
       ctx.odata.entity = this.ctx.model.Datastreams.name;
 
       // IMPORTANT TO ADD instead update
-      ctx.odata.id = "";
       ctx.odata.returnFormat = returnFormats.json;
       ctx.log = undefined;
       // @ts-ignore
       const objectDatastream = new entities[this.ctx.model.Datastreams.name]( ctx );
       const myDatas = {
-        name: `${this.ctx.model.Datastreams.name} import file ${nameOfFile}`,
-        description: "Description in meta ?",
-        observationType:
-          "http://www.opengis.net/def/observation-type/ogc-omxml/2.0/swe-array-observation",
-        Thing: { "@iot.id": tempId },
-        unitOfMeasurement: {
-          name: headers.join(),
-          symbol: "csv",
-          definition: "https://www.rfc-editor.org/rfc/pdfrfc/rfc4180.txt.pdf",
+        "name": `file ${nameOfFile}`,
+        "description": `${this.ctx.model.Datastreams.name} import file ${nameOfFile}`,
+        "observationType": "http://www.opengis.net/def/observation-type/ogc-omxml/2.0/swe-array-observation",
+        "Thing": { "@iot.id": 1 },
+        "unitOfMeasurement": {
+          "name": headers.join(),
+          "symbol": "csv",
+          "definition": "https://www.rfc-editor.org/rfc/pdfrfc/rfc4180.txt.pdf",
         },
-        ObservedProperty: {
-          name: `is Generik ${nameOfFile}`,
-          description: "KOIKE observe",
-          definition:
-            "http://www.qudt.org/qudt/owl/1.0.0/quantity/Instances.html#AreaTemperature",
-        },
-        Sensor: {
-          name: `Nom du Kapteur${nameOfFile}`,
-          description: "Capte heures a la seconde",
-          encodingType: "application/pdf",
-          metadata: "https://time.com/datasheets/capteHour.pdf",
-        },
+        "ObservedProperty": { "@iot.id": 1 },
+        "Sensor": { "@iot.id": 1 },
       };
       try {
         return await objectDatastream.post(myDatas);
-      } catch (error) {
-        // ctx.odata.where = `"name" ~* '${nameOfFile}'`;
+      } catch (err) {                
         ctx.odata.query.where.init(`"name" ~* '${nameOfFile}'`);
         const returnValueError = await objectDatastream.getAll();
         ctx.odata = copyCtx;
@@ -88,24 +74,22 @@ export class CreateFile extends Common {
         ctx.odata = copyCtx;
       }
     };
-
-    const returnValue = await createDataStream();
-    
-      const controller = new AbortController();
-      const readable = createReadStream(paramsFile.filename);
-      const cols:string[] = [];
-      headers.forEach((value) => cols.push(`"${value}" varchar(255) NULL`));
+    const returnValue = await createDataStream().catch((err: Error) => console.log(err));    
+    const controller = new AbortController();
+    const readable = createReadStream(paramsFile.filename);
+    const cols:string[] = [];
+    headers.forEach((value) => cols.push(`"${value}" varchar(255) NULL`));
   
-      const createTable = `CREATE TABLE public."${paramsFile.tempTable}" (
-        id serial4 NOT NULL,
-        "date" varchar(255) NULL,
-        "hour" varchar(255) NULL,
-        ${cols}, 
-        CONSTRAINT ${paramsFile.tempTable}_pkey PRIMARY KEY (id));`;
-        await executeSqlValues(ctx.config, createTable);
-      const writable = config.connection(ctx.config.name).unsafe(`COPY ${paramsFile.tempTable}  (${headers.join( "," )}) FROM STDIN WITH(FORMAT csv, DELIMITER ';'${ paramsFile.header })`).writable();
-      return await new Promise<string | undefined>(async (resolve, reject) => {
-      
+    const createTable = `CREATE TABLE public."${paramsFile.tempTable}" (
+      id serial4 NOT NULL,
+      "date" varchar(255) NULL,
+      "hour" varchar(255) NULL,
+      ${cols}, 
+      CONSTRAINT ${paramsFile.tempTable}_pkey PRIMARY KEY (id));`;
+
+    await executeSqlValues(ctx.config, createTable);
+    const writable = config.connection(ctx.config.name).unsafe(`COPY ${paramsFile.tempTable}  (${headers.join( "," )}) FROM STDIN WITH(FORMAT csv, DELIMITER ';'${ paramsFile.header })`).writable();
+    return await new Promise<string | undefined>(async (resolve, reject) => {      
       readable
         .pipe(addAbortSignal(controller.signal, await writable))
         .on('close', async () => {
@@ -114,11 +98,11 @@ export class CreateFile extends Common {
                     ("datastream_id", "phenomenonTime", "resultTime", "result") 
                     SELECT '${String(
                       returnValue.body["@iot.id"]
-                    )}', '2021-09-17T14:56:36+02:00', '2021-09-17T14:56:36+02:00', json_build_object('value',ROW_TO_JSON(p)) FROM (SELECT * FROM ${
+                    )}', (SELECT current_timestamp), (SELECT current_timestamp), json_build_object('value',ROW_TO_JSON(p)) FROM (SELECT * FROM ${
                       paramsFile.tempTable
-                    }) AS p`;
+                    }) AS p ON CONFLICT DO NOTHING`;
           await config.connection(this.ctx.config.name).unsafe(sql);          
-          resolve(returnValue["body"]);
+          if (returnValue) resolve(returnValue);
         })
         .on('error', (err) => {
           log.error('ABORTED-STREAM');
@@ -126,7 +110,8 @@ export class CreateFile extends Common {
         });
       // await finished(stream);
       });
-  }; 
+  };
+  
   async getAll(): Promise<IreturnResult | undefined> {
     this.ctx.throw(400, { code: 400 });
   }
@@ -138,7 +123,7 @@ export class CreateFile extends Common {
     
   async post(dataInput: Record<string, string>): Promise<IreturnResult | undefined> {
     console.log(log.whereIam(dataInput));
-    if (this.ctx.datas) {
+    if (this.ctx.datas) {      
       const myColumns: IcsvColumn[] = [];
         return this.formatReturnResult({
           body: await this.streamCsvFileInPostgreSqlFileInDatastream( this.ctx, {
@@ -146,7 +131,7 @@ export class CreateFile extends Common {
             filename: this.ctx.datas["file"],
             columns: myColumns,
             header: ", HEADER",
-            stream: [], // only for interface
+            stream: [], 
           }),
         });      
     } else {

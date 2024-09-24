@@ -22,7 +22,6 @@ enum EnumBaseEntities {
     HistoricalObservations = 'HistoricalObservations',
     ThingsLocations = 'ThingsLocations',
     CreateObservations = 'CreateObservations',
-    CreateFile = 'CreateFile',
     Services = 'Services' 
 }
 
@@ -44,6 +43,11 @@ enum EnumLogEntities {
     Logs = 'Logs'
 }
 
+enum EnumFileEntities {
+    CreateFile = 'CreateFile'
+}
+
+
 export const filterEntities = (exts: string[], name?: string) => {    
     // const exts = (typeof input === "string") ? input === "ALL" ? Object.keys(EExtensions) : config.getService(input).extensions : input.extensions;
     let res = EnumBaseEntities;
@@ -51,9 +55,10 @@ export const filterEntities = (exts: string[], name?: string) => {
     if (exts.includes(EExtensions.multiDatastream)) res = {... res, ... EnumMultiDatastreamEntities};
     if (exts.includes(EExtensions.lora)) res = {... res, ... EnumLoraEntities};
     if (exts.includes(EExtensions.users)) res = {... res, ... EnumUsersEntities};
+    if (exts.includes(EExtensions.file)) res = {... res, ... EnumFileEntities};
     return res;
 }
 
-export type allEntitiesType = EnumBaseEntities | EnumMultiDatastreamEntities | EnumUsersEntities |  EnumLoraEntities | EnumLogEntities;
-export const allEntities: Record<string, any> = { ...EnumBaseEntities, ... EnumMultiDatastreamEntities , ... EnumUsersEntities , ... EnumLoraEntities , ... EnumLogEntities};
+export type allEntitiesType = EnumBaseEntities | EnumMultiDatastreamEntities | EnumUsersEntities |  EnumLoraEntities | EnumLogEntities | EnumFileEntities;
+export const allEntities: Record<string, any> = { ...EnumBaseEntities, ... EnumMultiDatastreamEntities , ... EnumUsersEntities , ... EnumLoraEntities , ... EnumLogEntities, ... EnumFileEntities};
 

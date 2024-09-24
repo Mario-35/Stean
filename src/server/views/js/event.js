@@ -281,6 +281,8 @@ function addToResultList(key, value, plus) {
 function prepareForm() {
 	if (importFile === true) {
 		const text = jsonDatas.innerText.replace(/[^\x00-\x7F]/g, '');
+		if (idOption.value != "" && idOption.value != "0") 
+			getElement("actionForm").action = `${getElement("actionForm").action}(${idOption.value })`;
 		datas.innerText = text;
 		document.getElementById("actionForm").requestSubmit();
 	}
