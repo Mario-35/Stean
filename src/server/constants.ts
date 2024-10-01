@@ -7,12 +7,13 @@
  */
 // onsole.log("!----------------------------------- Constants of API -----------------------------------!");
 
+import packageJson from "../../package.json";
 import util from "util";
 import { getKey } from "./helpers";
 import { EColor } from "./enums";
 export const ADMIN:string = "admin";
 export const APP_NAME = process.env.npm_package_name || "_STEAN";
-export const APP_VERSION = process.env.version || process.env.npm_package_version || "0";
+export const APP_VERSION = process.env.version || process.env.npm_package_version || packageJson.version || "0";
 export const _UPLOADPATH = "./upload";
 export const color = (col: number) => `\x1b[${col}m`;
 export const DEFAULT_DB = "postgres";

@@ -22,7 +22,7 @@ export const doSomeWorkAfterCreateAst = async (input: RootPgVisitor, ctx: koaCon
     
     const col = input.valueskeys === true ? "result->'valueskeys'" : "result->'value'"; 
     await config.connection(ctx.config.name).unsafe(resultKeys(col, input)).then((res) => {
-      if (res.length > 0) input.mario["result"] = res.map(e => `${col}->'${e.k}' AS "${e.k}"`);
+      if (res.length > 0) input.columnSpecials["result"] = res.map(e => `${col}->'${e.k}' AS "${e.k}"`);
     });
   } else  if (input.returnFormat === returnFormats.csv 
     && input.entity
@@ -32,14 +32,16 @@ export const doSomeWorkAfterCreateAst = async (input: RootPgVisitor, ctx: koaCon
     && <bigint>input.parentId > 0) {
       if (input.ctx.config.extensions.includes(EExtensions.file)) {
         await config.connection(ctx.config.name).unsafe(datastreamUoM(input)).then((res) => {
-          input.mario["result"] = res[0].keys.split(",").map((e: string) => `"result"->'value'->'${e}' AS "${e}"`);
+          input.columnSpecials["result"] = res[0].keys.split(",").map((e: string) => `("result"->>'value')::json->'${e}' AS "${e}"`);
         });        
-      } else if (input.parentEntity.name === "Datastreams") input.mario["result"]  = [`"result"->'value'`];
+      } else if (input.parentEntity.name === "Datastreams") input.columnSpecials["result"]  = [`"result"->'value'`];
       if (input.parentEntity.name === "MultiDatastreams") {
+        console.log(multiDatastreamUoM(input));
+        
         await config.connection(ctx.config.name).unsafe(multiDatastreamUoM(input)).then((res) => {
           if (res[0] && res[0].keys && res[0].keys.map)
-            input.mario["result"]  =  res[0].keys.map((e: string) => `"result"->'valueskeys'->'${e}' AS "${e}"`);
+            input.columnSpecials["result"]  =  res[0].keys.map((e: string) => `("result"->>'valueskeys')::json->'${e}' AS "${e}"`);
         });
       }   
-  }
+  }  
 };

@@ -11,13 +11,10 @@
 
 import fs from "fs";
 import crypto from "crypto";
-import { isString } from "../helpers/";
-import { APP_KEY } from "../constants";
-import { EFileName } from "../enums";
 
 const decrypt = (input: string, key: string): string => {
   input = input.split("\r\n").join("");     
-  if (isString(input) && input[32] == ".") {      
+  if (typeof input === 'string' && input[32] == ".") {      
     try {
       const decipher = crypto.createDecipheriv( "aes-256-ctr", key, Buffer.from(input.substring(32, 0), "hex") );
       const decrpyted = Buffer.concat([ decipher.update(Buffer.from(input.slice(33), "hex")), decipher.final(), ]);
@@ -30,8 +27,9 @@ const decrypt = (input: string, key: string): string => {
 };
 
 function decode(file: fs.PathOrFileDescriptor) {
-  const fileTemp = fs.readFileSync(file, "utf8");  
-  return decrypt(fileTemp, APP_KEY); 
+  const fileTemp = fs.readFileSync(file, "utf8");
+  const key = fs.readFileSync(__dirname +"/.key", "utf-8");
+  return decrypt(fileTemp, key); 
 }
 
-process.stdout.write(decode(__dirname + `/${EFileName.config}`) + "\n");
+process.stdout.write(decode(__dirname + `/configuration.json`) + "\n");

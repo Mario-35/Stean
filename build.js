@@ -11,6 +11,7 @@ var archiver = require("archiver");
 var crypto = require("crypto");
 process.env.NODE_ENV = "build";
 const updateJson = require("./src/server/configuration/update.json");
+const _DEST = "build/src/server/";
 updateJson["decoders"] = {
   "rhf1s001" : require("./sandbox/loras/RHF1S001"),
   "senscap" : require("./sandbox/loras/Sensecap.js"),
@@ -99,13 +100,6 @@ function extend() {
 	return target;
 };
 
-const encrypt = (text, key) => {
-  const iv = crypto.randomBytes(16);
-  const cipher = crypto.createCipheriv("aes-256-ctr", String(key), iv);
-  const encrypted = Buffer.concat([cipher.update(text), cipher.final()]);
-  return `${iv.toString("hex")}.${encrypted.toString("hex")}`;
-};
-
 function isEmpty(str) {
   if (typeof str !== "string" || str.trim() === "") {
     return true;
@@ -113,21 +107,12 @@ function isEmpty(str) {
   return false;
   }
 
-  function readFile(path) {
+function readFile(path) {
   try {
     return fs.readFileSync(path, "utf-8");
   } catch (e) {
     console.error("UGLIFYJS FOLDER ERROR: ", path, "was not found !");
     return "";
-  }
-}
-
-function deleteFileSync(path) {
-  try {
-    fs.unlinkSync(path);
-    //file removed
-  } catch(err) {
-    console.error(err);
   }
 }
 
@@ -148,7 +133,14 @@ function copyFolderRecursiveSync( source, target ) {
   // Check if folder needs to be created or integrated
   var targetFolder = path.join( target, path.basename( source ) );
   if ( !fs.existsSync( targetFolder ) ) {
-      fs.mkdirSync( targetFolder );
+    fs.mkdirSync(targetFolder,
+      { recursive: true },
+      (err) => {
+        if (err) {
+          return console.error(err);
+        }
+        console.log(`\x1b[31m Create Folder \x1b[34m : \x1b[33m ${targetFolder}\x1b[0m`);
+    });
   }
 
   // Copy
@@ -172,18 +164,12 @@ function messageWrite(message, action) {
 }
 
 function writeFile(filePath, code, action) {
-  mkdirp(path.dirname(filePath)).then(function () {
     fs.writeFile(filePath, code, function (err) {
       if (err) {
         console.error("Error: " + err);
         return;
       }
     });
-  })
-  .catch(function (err) {
-    console.log(`\x1b[31m Error \x1b[34m : \x1b[33m ${err}\x1b[0m`);
-    return;
-  });
   // if (silent && silent === true) return;
   messageWrite(filePath, action);
 } 
@@ -241,7 +227,6 @@ function ugly (dirPath, options) {
 
 }
 
-
 function uglyJs (dirPath) {
   var files = globby.sync(["**/*.js"], {
     cwd: dirPath
@@ -265,8 +250,7 @@ function uglyJs (dirPath) {
       const originalCode = readFile(path.join(dirPath, fileName));
       const temp = UglifyJS.minify(originalCode, options);
       if (temp.error) console.log(`\x1b[31m Error \x1b[34m : \x1b[33m ${temp.error}\x1b[0m`);
-      else process.stdout.write(".");
-      writeFile(newName, temp.code, "uglyJs");
+      else writeFile(newName, temp.code, "uglyJs");
     }
   });
 }
@@ -278,23 +262,21 @@ const mode = ["build"];
 if (process.argv.includes("dev")) mode.push("dev");
 if (process.argv.includes("docker")) mode.push("docker");
 
-copyFolderRecursiveSync("./src/server/apidoc", "build/");
-copyFolderRecursiveSync("./scripts", "build/");
-copyFolderRecursiveSync("./src/server/views/js", "build/views/");
-copyFolderRecursiveSync( "./src/server/views/css", "build/views/" );
-copyFolderRecursiveSync( "./src/server/db/createDb/triggers", "build/db/createDb/" );
-copyFileSync( "./src/server/favicon.ico", "build/" );
-copyFileSync("./src/server/models/model.drawio", "build/models/");
+copyFolderRecursiveSync("./scripts", _DEST);
+copyFolderRecursiveSync("./src/server/apidoc", _DEST);
+copyFolderRecursiveSync("./src/server/views", _DEST);
+copyFolderRecursiveSync("./src/server/views/js", _DEST + "views/");
+copyFolderRecursiveSync( "./src/server/views/css", _DEST + "views/" );
+copyFolderRecursiveSync( "./src/server/db/createDb/triggers", _DEST + "db/createDb/" );
+copyFileSync( "./src/server/favicon.ico", _DEST );
+copyFileSync("./src/server/models/model.drawio", _DEST + "models/");
 
 const packageJson = require("./package.json");
-const { log } = require("console");
 delete packageJson.scripts;
 delete packageJson.devDependencies;
 delete packageJson.apidoc;
   
-fs.writeFile("build/package.json", JSON.stringify(packageJson, null, 2), {
-    encoding: "utf-8"
-},function (err) {
+fs.writeFile(_DEST + "package.json", JSON.stringify(packageJson, null, 2), { encoding: "utf-8" },function (err) {
   if (err) console.log(err);
   messageWrite("package.json", "user mode");
   if (!mode.includes("dev")) {  
@@ -337,12 +319,12 @@ fs.writeFile("build/package.json", JSON.stringify(packageJson, null, 2), {
             "retry": 10,
         }
       };
-      if (mode.includes("docker")) writeFile("./build/configuration/config.json", JSON.stringify(conf, null, 2));
-      writeFile("./build/configuration/.key", key);
-      writeFile("./build/configuration/update.json", JSON.stringify(updateJson, null, 2));
+      if (mode.includes("docker")) writeFile(_DEST + "configuration/config.json", JSON.stringify(conf, null, 2));
+      writeFile(_DEST + "configuration/.key", key, "Write .Key");
+      writeFile(_DEST + "configuration/update.json", JSON.stringify(updateJson, null, 2), "Write update json file");
 
       minify({ compressor: htmlMinifier, content: queryHtml.replace("@version@", packageJson.version) }).then(function (min) {
-        writeFile("./build/views/html/query.html", min, "minify HTML");
+        writeFile(_DEST + "views/html/query.html", min, "minify HTML");
       });
 
     } catch (error) {
@@ -356,10 +338,10 @@ fs.writeFile("build/package.json", JSON.stringify(packageJson, null, 2), {
 
   const fileRelease = `stean_${packageJson.version}.zip`
     
-  if (!mode.includes("docker")) zipDirectory("./build", `./builds/${fileRelease}`).then(function (e) {
-    console.log(`\x1b[32m ./build \x1b[36m zip to ==> \x1b[35m ${fileRelease} \x1b[0m`);
-    zipDirectory("./build", `./builds/stean_latest.zip`).then(function (e) {
-      console.log(`\x1b[32m ./build \x1b[36m zip to ==> \x1b[35m stean_latest.zip \x1b[0m`);
+  if (!mode.includes("docker")) zipDirectory(_DEST , `./builds/${fileRelease}`).then(function (e) {
+    console.log(`\x1b[34m ${_DEST} \x1b[36m zip to ==> \x1b[37m ${fileRelease} \x1b[0m`);
+    zipDirectory(_DEST , `./builds/stean_latest.zip`).then(function (e) {
+      console.log(`\x1b[34m ${_DEST} \x1b[36m zip to ==> \x1b[37m stean_latest.zip \x1b[0m`);
     }); 
   }); 
   

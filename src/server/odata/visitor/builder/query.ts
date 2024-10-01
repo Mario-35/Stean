@@ -128,7 +128,7 @@ export class Query  {
             : element.query.select.toString().split(_COLUMNSEPARATOR).filter((word: string) => word.trim() != "").map(e => removeFirstEndDoubleQuotes(e));
             // loop on columns            
         columns.map((column: string) => {
-            if (element.mario.hasOwnProperty(column)) return element.mario[column].join();
+            if (element.columnSpecials.hasOwnProperty(column)) return element.columnSpecials[column].join();
             return this.formatedColumn(main.ctx.config, tempEntity, column, { valueskeys: element.valueskeys, quoted: true, table: true, alias: ["id", "result"].includes(column), as: isGraph(main) ? false : true } ) || "";
         }) .filter(e => e != "" ).forEach((e: string) => {             
             if (e === "selfLink") e = selfLink;             

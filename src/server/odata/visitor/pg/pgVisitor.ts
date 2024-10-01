@@ -27,7 +27,7 @@ import { _isObservation } from "../../../helpers/tests";
 
 export class PgVisitor extends Visitor {
   entity: Ientity | undefined = undefined;
-  mario:  { [key: string]: string[] } = {} ;
+  columnSpecials:  { [key: string]: string[] } = {} ;
   // columns:  string[] = this.valueskeys === true ? ["result->'valueskeys' AS result"] : ["result->'value' AS result"] ;
   
   navigation : [{
