@@ -10,7 +10,7 @@
 import { Iservice } from "../../types";
 import { _RIGHTS } from "../constants";
 import { userAccess } from "../dataAccess";
-// onsole.log("!----------------------------------- createUser -----------------------------------!");
+// onsole.log("!----------------------------------- createUser -----------------------------------!\n");
 
 export const createUser = async (service: Iservice ): Promise<string> => {
   return new Promise(async function (resolve, reject) {

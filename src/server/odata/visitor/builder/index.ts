@@ -6,7 +6,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Index of PgVisitor. -----------------------------------!");
+// onsole.log("!----------------------------------- Index of PgVisitor. -----------------------------------!\n");
 
 export { Core } from "./core";
 export { GroupBy } from "./groupBy";

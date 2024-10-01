@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- IserviceInfos interface -----------------------------------!");
+// onsole.log("!----------------------------------- IserviceInfos interface -----------------------------------!\n");
 
 export interface IserviceInfos {
     protocol: string; // protocol http or https

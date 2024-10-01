@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Api dataAccess -----------------------------------!");
+// onsole.log("!----------------------------------- Api dataAccess -----------------------------------!\n");
 
 import * as entities from "../entities/index";
 import { Common } from "../entities/common";

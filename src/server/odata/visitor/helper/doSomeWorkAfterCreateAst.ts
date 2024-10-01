@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- doSomeWorkAfterCreateAst -----------------------------------!");
+// onsole.log("!----------------------------------- doSomeWorkAfterCreateAst -----------------------------------!\n");
 
 import { RootPgVisitor } from "..";
 import { config } from "../../../configuration";

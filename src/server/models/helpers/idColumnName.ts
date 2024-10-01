@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- idColumnName -----------------------------------!");
+// onsole.log("!----------------------------------- idColumnName -----------------------------------!\n");
 
 import { Ientity } from "../../types";
 

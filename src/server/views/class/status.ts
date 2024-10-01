@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- HTML Views Status for API -----------------------------------!");
+// onsole.log("!----------------------------------- HTML Views Status for API -----------------------------------!\n");
 
 import { config } from "../../configuration";
 import { EChar, EExtensions } from "../../enums";

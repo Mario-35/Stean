@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Query builder -----------------------------------!");
+// onsole.log("!----------------------------------- Query builder -----------------------------------!\n");
 
 import { _COLUMNSEPARATOR, STRINGEXC } from "../../../constants";
 import { doubleQuotesString, cleanStringComma, containsAll, isCsvOrArray, isGraph, isGeoJson, removeAllQuotes, removeFirstEndDoubleQuotes, formatPgString } from "../../../helpers";

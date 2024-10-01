@@ -6,7 +6,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- EOptions Enum -----------------------------------!");
+// onsole.log("!----------------------------------- EOptions Enum -----------------------------------!\n");
 
 export enum EOptions { 
     forceHttps = "forceHttps",

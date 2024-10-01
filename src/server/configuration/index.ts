@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Configuration class -----------------------------------!");
+// onsole.log("!----------------------------------- Configuration class -----------------------------------!\n");
 
 import { addToStrings, ADMIN, APP_NAME, APP_VERSION, color, DEFAULT_DB, NODE_ENV, setReady, TEST, _DEBUG } from "../constants";
 import { asyncForEach, decrypt, encrypt, isProduction, isTest, logToHtml, } from "../helpers";

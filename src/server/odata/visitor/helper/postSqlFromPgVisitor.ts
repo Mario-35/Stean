@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- postSqlFromPgVisitor -----------------------------------!");
+// onsole.log("!----------------------------------- postSqlFromPgVisitor -----------------------------------!\n");
 
 import { VOIDTABLE } from "../../../constants";
 import { doubleQuotesString, getBigIntFromString } from "../../../helpers";

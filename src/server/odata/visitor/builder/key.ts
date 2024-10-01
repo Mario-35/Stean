@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- GroupBy builder -----------------------------------!");
+// onsole.log("!----------------------------------- GroupBy builder -----------------------------------!\n");
 
 import { Core } from ".";
 

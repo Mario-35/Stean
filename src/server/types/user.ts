@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- user interface -----------------------------------!");
+// onsole.log("!----------------------------------- user interface -----------------------------------!\n");
 
 export interface Iuser {
     id?:            number; // id in database

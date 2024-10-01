@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- forwardConnection interface -----------------------------------!");
+// onsole.log("!----------------------------------- forwardConnection interface -----------------------------------!\n");
 
 export interface IforwardConnection {
   /*

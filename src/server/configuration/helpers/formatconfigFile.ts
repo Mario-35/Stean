@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- formatconfigFile -----------------------------------!");
+// onsole.log("!----------------------------------- formatconfigFile -----------------------------------!\n");
 
 import { ADMIN, TEST } from "../../constants";
 import util from "util";

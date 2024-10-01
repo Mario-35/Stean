@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- getAuthenticatedUser -----------------------------------!");
+// onsole.log("!----------------------------------- getAuthenticatedUser -----------------------------------!\n");
 
 import { decodeToken } from ".";
 import { userAccess } from "../db/dataAccess";

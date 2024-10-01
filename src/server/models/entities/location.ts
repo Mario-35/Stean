@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- entity Location -----------------------------------!");
+// onsole.log("!----------------------------------- entity Location -----------------------------------!\n");
 
 import { createEntity } from ".";
 import { ERelations, ETable } from "../../enums";

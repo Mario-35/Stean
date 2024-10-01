@@ -6,7 +6,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Index of The API -----------------------------------!");
+// onsole.log("!----------------------------------- Index of The API -----------------------------------!\n");
 
 import path from "path";
 import Koa from "koa";

@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- cardinality -----------------------------------!");
+// onsole.log("!----------------------------------- cardinality -----------------------------------!\n");
 
 import { idColumnName } from ".";
 import { models } from "..";

@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- oData NameOrIdentifier -----------------------------------!")
+// onsole.log("!----------------------------------- oData NameOrIdentifier -----------------------------------!\n");
 
 import Utils from "./utils";
 import Lexer from "./lexer";

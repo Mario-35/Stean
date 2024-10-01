@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Locations entity -----------------------------------!");
+// onsole.log("!----------------------------------- Locations entity -----------------------------------!\n");
 
 import { log } from "../../log";
 import { koaContext } from "../../types";

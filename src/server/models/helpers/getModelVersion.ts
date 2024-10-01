@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- getModelVersion -----------------------------------!");
+// onsole.log("!----------------------------------- getModelVersion -----------------------------------!\n");
 
 import { EVersion } from "../../enums"
 

@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Entity interface -----------------------------------!");
+// onsole.log("!----------------------------------- Entity interface -----------------------------------!\n");
 
 import { IentityColumn, IentityRelation, IKeyString } from ".";
 import { ETable } from "../enums";

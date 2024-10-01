@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- removeKeyFromUrl -----------------------------------!");
+// onsole.log("!----------------------------------- removeKeyFromUrl -----------------------------------!\n");
 
 import { cleanUrl } from "../../helpers";
 

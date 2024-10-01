@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- oData Utils -----------------------------------!")
+// onsole.log("!----------------------------------- oData Utils -----------------------------------!\n");
 
 namespace Utils {
     export type SourceArray = number[] | Uint16Array;

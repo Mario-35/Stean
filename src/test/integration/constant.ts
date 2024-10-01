@@ -6,7 +6,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Constant for TDD -----------------------------------!");
+// onsole.log("!----------------------------------- Constant for TDD -----------------------------------!\n");
 
 import fs from "fs";
 import path from "path";

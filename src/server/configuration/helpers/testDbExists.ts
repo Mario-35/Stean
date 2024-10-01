@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- testDbExists -----------------------------------!");
+// onsole.log("!----------------------------------- testDbExists -----------------------------------!\n");
 
 import postgres from "postgres";
 import { APP_NAME, APP_VERSION, _DEBUG } from "../../constants";

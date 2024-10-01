@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- validJSONConfig -----------------------------------!");
+// onsole.log("!----------------------------------- validJSONConfig -----------------------------------!\n");
 
 import { ADMIN } from "../../constants";
 import { keyobj } from "../../types";

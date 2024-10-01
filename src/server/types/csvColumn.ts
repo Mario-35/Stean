@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- IcsvColumn interface -----------------------------------!");
+// onsole.log("!----------------------------------- IcsvColumn interface -----------------------------------!\n");
 
 import { IstreamInfos } from "./streamInfos";
 

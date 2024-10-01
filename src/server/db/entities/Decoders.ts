@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Decoders entity -----------------------------------!");
+// onsole.log("!----------------------------------- Decoders entity -----------------------------------!\n");
 
 import { IreturnResult, koaContext } from "../../types";
 import { Common } from "./common";

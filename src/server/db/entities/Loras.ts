@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Loras entity. -----------------------------------!");
+// onsole.log("!----------------------------------- Loras entity. -----------------------------------!\n");
 import { Common } from "./common";
 import { getBigIntFromString, notNull, } from "../../helpers/index";
 import { DOUBLEQUOTEDCOMA, ESCAPE_SIMPLE_QUOTE, VOIDTABLE } from "../../constants";

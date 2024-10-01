@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- entityRelation interface -----------------------------------!");
+// onsole.log("!----------------------------------- entityRelation interface -----------------------------------!\n");
 import { ERelations } from "../enums";
 
 export interface IentityRelation {

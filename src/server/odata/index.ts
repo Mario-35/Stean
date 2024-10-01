@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- pgVisitor index. -----------------------------------!");
+// onsole.log("!----------------------------------- pgVisitor index. -----------------------------------!\n");
 import { query, resourcePath } from "./parser/parser";
 import { Token } from "./parser/lexer";
 import { cleanUrl } from "../helpers";

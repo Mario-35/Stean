@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- entities Enum -----------------------------------!");
+// onsole.log("!----------------------------------- entities Enum -----------------------------------!\n");
 
 import { EExtensions } from ".";
 

@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- createService -----------------------------------!");
+// onsole.log("!----------------------------------- createService -----------------------------------!\n");
 
 import { addToService, createDatabase, executeAdmin, executeSqlValues } from ".";
 import { config } from "../../configuration";

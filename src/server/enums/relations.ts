@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- relations Enum -----------------------------------!");
+// onsole.log("!----------------------------------- relations Enum -----------------------------------!\n");
 
 export enum ERelations {
     nop, // for not use index 0

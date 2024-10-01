@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- oData QueryOptionsNode -----------------------------------!")
+// onsole.log("!----------------------------------- oData QueryOptionsNode -----------------------------------!\n");
 
 import { Token } from './lexer';
 

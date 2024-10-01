@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- createIndexes -----------------------------------!");
+// onsole.log("!----------------------------------- createIndexes -----------------------------------!\n");
 
 import { config } from "../../configuration";
 import { EChar, EExtensions } from "../../enums";

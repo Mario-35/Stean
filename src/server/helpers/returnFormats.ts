@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- returnFormats -----------------------------------!");
+// onsole.log("!----------------------------------- returnFormats -----------------------------------!\n");
 
 import { asDataArray, asGeoJSON, asJson, graphDatastream, graphMultiDatastream, interval, } from "../db/queries";
 import { IreturnFormat, koaContext } from "../types";

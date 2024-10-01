@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- userToken interface -----------------------------------!");
+// onsole.log("!----------------------------------- userToken interface -----------------------------------!\n");
 
 
 export interface IuserToken {

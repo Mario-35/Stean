@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- createToken -----------------------------------!");
+// onsole.log("!----------------------------------- createToken -----------------------------------!\n");
 
 import { Iuser } from "../types";
 import jsonwebtoken from "jsonwebtoken";

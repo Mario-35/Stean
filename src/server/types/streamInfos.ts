@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- streamInfos interface -----------------------------------!");
+// onsole.log("!----------------------------------- streamInfos interface -----------------------------------!\n");
 
 import { _STREAM } from "../db/constants";
 import { EObservationType } from "../enums";

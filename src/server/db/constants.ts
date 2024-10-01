@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Constants for DataBase -----------------------------------!");
+// onsole.log("!----------------------------------- Constants for DataBase -----------------------------------!\n");
 
 export const _RIGHTS = "SUPERUSER CREATEDB NOCREATEROLE INHERIT LOGIN NOREPLICATION NOBYPASSRLS CONNECTION LIMIT -1";
 export const _ID = '@iot.id';

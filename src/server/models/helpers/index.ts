@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Index Models Helpers -----------------------------------!");
+// onsole.log("!----------------------------------- Index Models Helpers -----------------------------------!\n");
 
 import { koaContext } from "../../types";
 import { relationInfos } from "./relationInfos";

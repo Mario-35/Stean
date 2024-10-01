@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Logs entity. -----------------------------------!");
+// onsole.log("!----------------------------------- Logs entity. -----------------------------------!\n");
 import { log } from "../../log";
 import { koaContext } from "../../types";
 import { Common } from "./common";

@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Protected Routes for API -----------------------------------!");
+// onsole.log("!----------------------------------- Protected Routes for API -----------------------------------!\n");
 
 import Router from "koa-router";
 import { apiAccess, userAccess } from "../db/dataAccess";

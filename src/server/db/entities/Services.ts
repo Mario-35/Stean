@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Services entity -----------------------------------!");
+// onsole.log("!----------------------------------- Services entity -----------------------------------!\n");
 
 import { Common } from "./common";
 import { IreturnResult, koaContext } from "../../types";

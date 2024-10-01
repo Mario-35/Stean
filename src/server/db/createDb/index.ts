@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- createDatabase Index -----------------------------------!");
+// onsole.log("!----------------------------------- createDatabase Index -----------------------------------!\n");
 
 export { createDatabase } from "./createDatabase";
 export { testDatas } from "./tests";

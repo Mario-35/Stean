@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- entity ObservedProperty -----------------------------------!");
+// onsole.log("!----------------------------------- entity ObservedProperty -----------------------------------!\n");
 
 import { createEntity } from ".";
 import { ERelations, ETable } from "../../enums";

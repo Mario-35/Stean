@@ -6,7 +6,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- firstInstall -----------------------------------!");
+// onsole.log("!----------------------------------- firstInstall -----------------------------------!\n");
 
 import postgres from "postgres";
 import { config } from "../../configuration";

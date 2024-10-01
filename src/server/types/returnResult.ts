@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- returnResult interface -----------------------------------!");
+// onsole.log("!----------------------------------- returnResult interface -----------------------------------!\n");
 
 export interface IreturnResult { // return format api
     id:         bigint | undefined; // id for single

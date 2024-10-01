@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- MultiDatastreams entity -----------------------------------!");
+// onsole.log("!----------------------------------- MultiDatastreams entity -----------------------------------!\n");
 
 import { koaContext } from "../../types";
 import { Common } from "./common";

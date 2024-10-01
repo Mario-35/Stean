@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- pgVisitor for odata -----------------------------------!");
+// onsole.log("!----------------------------------- pgVisitor for odata -----------------------------------!\n");
 
 import { IodataContext, IvisitRessource, koaContext } from "../../../types";
 import { Token } from "../../parser/lexer";

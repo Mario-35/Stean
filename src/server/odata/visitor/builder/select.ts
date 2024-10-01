@@ -6,7 +6,7 @@
  *
  */
 import { Core } from ".";
-// onsole.log("!----------------------------------- select for query builder. -----------------------------------!");
+// onsole.log("!----------------------------------- select for query builder. -----------------------------------!\n");
 export class Select extends Core{  
   constructor(input?: string | string[]) {
     super(input);

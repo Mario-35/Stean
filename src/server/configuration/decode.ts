@@ -7,7 +7,7 @@
  * NOT Use in API use to decode in command line
  *
  */
-// onsole.log("!----------------------------------- decode Tool -----------------------------------!");
+// onsole.log("!----------------------------------- decode Tool -----------------------------------!\n");
 
 import fs from "fs";
 import crypto from "crypto";

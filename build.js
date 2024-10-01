@@ -11,9 +11,9 @@ var archiver = require("archiver");
 var crypto = require("crypto");
 process.env.NODE_ENV = "build";
 const updateJson = require("./src/server/configuration/update.json");
-const _DEST = "build/src/server/";
+const _DEST = "build/";
 updateJson["decoders"] = {
-  "rhf1s001" : require("./sandbox/loras/RHF1S001"),
+  "rhf1s001" : require("./sandbox/loras/RHF1S001.js"),
   "senscap" : require("./sandbox/loras/Sensecap.js"),
   "wattEco" : require("./sandbox/loras/Watteco.js") 
 };

@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- unique -----------------------------------!");
+// onsole.log("!----------------------------------- unique -----------------------------------!\n");
 
 
 export function unique(input: string[]): string[]  {

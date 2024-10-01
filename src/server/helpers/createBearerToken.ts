@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- createBearerToken -----------------------------------!");
+// onsole.log("!----------------------------------- createBearerToken -----------------------------------!\n");
 
 import cookieParser from "cookie-parser";
 import { APP_KEY } from "../constants";

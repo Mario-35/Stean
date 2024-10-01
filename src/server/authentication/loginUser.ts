@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- loginUser -----------------------------------!");
+// onsole.log("!----------------------------------- loginUser -----------------------------------!\n");
 
 import { createToken } from ".";
 import { config } from "../configuration";

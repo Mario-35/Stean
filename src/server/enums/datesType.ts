@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- datesType Enum -----------------------------------!");
+// onsole.log("!----------------------------------- datesType Enum -----------------------------------!\n");
 
 export enum EDatesType {    
     date = 'YYYY-MM-DD"T"HH24:MI:SSZ',

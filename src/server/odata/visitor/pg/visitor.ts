@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Visitor for odata -----------------------------------!");
+// onsole.log("!----------------------------------- Visitor for odata -----------------------------------!\n");
 
 import { SqlOptions } from "../../parser/sqlOptions";
 import { _COLUMNSEPARATOR } from "../../../constants";

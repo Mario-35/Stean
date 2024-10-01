@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- oData Expressions -----------------------------------!");
+// onsole.log("!----------------------------------- oData Expressions -----------------------------------!\n");
 
 import Utils from "./utils";
 import Lexer from "./lexer";

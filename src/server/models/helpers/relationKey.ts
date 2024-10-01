@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- getModelVersion -----------------------------------!");
+// onsole.log("!----------------------------------- getModelVersion -----------------------------------!\n");
 
 import { models } from "..";
 import { Ientity, Iservice } from "../../types";

@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- createQueryParams -----------------------------------!");
+// onsole.log("!----------------------------------- createQueryParams -----------------------------------!\n");
 
 import { getAuthenticatedUser } from "../../authentication";
 import { config } from "../../configuration";

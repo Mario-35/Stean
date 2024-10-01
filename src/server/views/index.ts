@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- HTML Views Index for API -----------------------------------!");
+// onsole.log("!----------------------------------- HTML Views Index for API -----------------------------------!\n");
 
 export { Admin } from './class/admin';
 export { First } from './class/first';

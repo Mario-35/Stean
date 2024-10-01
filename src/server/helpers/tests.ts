@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- tests Is -----------------------------------!");
+// onsole.log("!----------------------------------- tests Is -----------------------------------!\n");
 
 import { ADMIN } from "../constants";
 import { EExtensions, EUserRights } from "../enums";

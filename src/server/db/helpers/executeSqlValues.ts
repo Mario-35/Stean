@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- executeSqlValues. -----------------------------------!");
+// onsole.log("!----------------------------------- executeSqlValues. -----------------------------------!\n");
 
 import { config } from "../../configuration";
 import { log } from "../../log";

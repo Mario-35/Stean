@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- decodeloraDeveuiPayload for odata -----------------------------------!");
+// onsole.log("!----------------------------------- decodeloraDeveuiPayload for odata -----------------------------------!\n");
 
 import { decodingPayload } from ".";
 import { executeSql } from "../db/helpers";

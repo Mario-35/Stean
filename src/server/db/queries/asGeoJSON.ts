@@ -6,7 +6,8 @@
  * @author formatPgString.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- asDataArray. -----------------------------------!");
+// onsole.log("!----------------------------------- asDataArray. -----------------------------------!\n");
+
 import { asJson } from ".";
 import { _COLUMNSEPARATOR, _NEWLINE } from "../../constants";
 import { PgVisitor } from "../../odata/visitor";

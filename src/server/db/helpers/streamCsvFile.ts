@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- streamCsvFile -----------------------------------!");
+// onsole.log("!----------------------------------- streamCsvFile -----------------------------------!\n");
 
 import { IcsvFile, IcsvImport, koaContext } from "../../types";
 import { createReadStream } from 'fs';

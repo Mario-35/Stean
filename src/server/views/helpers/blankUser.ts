@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- blankUser -----------------------------------!");
+// onsole.log("!----------------------------------- blankUser -----------------------------------!\n");
 
 import { EExtensions } from "../../enums";
 import { Iuser, koaContext } from "../../types";

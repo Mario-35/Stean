@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Index User -----------------------------------!");
+// onsole.log("!----------------------------------- Index User -----------------------------------!\n");
 
 export { createToken } from "./createToken";
 export { decodeToken } from "./decodeToken";

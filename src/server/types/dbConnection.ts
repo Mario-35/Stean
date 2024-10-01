@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- dbConnection interface -----------------------------------!");
+// onsole.log("!----------------------------------- dbConnection interface -----------------------------------!\n");
 
 
 export interface IdbConnection { //postgresSqlconnection

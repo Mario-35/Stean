@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Index Enums -----------------------------------!");
+// onsole.log("!----------------------------------- Index Enums -----------------------------------!\n");
 
 import { EExtensions } from "./extensions";
 import { EOptions } from "./options";

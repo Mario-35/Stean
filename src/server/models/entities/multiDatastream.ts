@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- entity MultiDatastream -----------------------------------!");
+// onsole.log("!----------------------------------- entity MultiDatastream -----------------------------------!\n");
 
 import { createEntity } from ".";
 import { EDatesType, EObservationType, ERelations, ETable } from "../../enums";

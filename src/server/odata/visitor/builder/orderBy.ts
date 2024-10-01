@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- OrderBy builder -----------------------------------!");
+// onsole.log("!----------------------------------- OrderBy builder -----------------------------------!\n");
 
 import { Core } from ".";
 

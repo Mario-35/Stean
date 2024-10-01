@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- FeaturesOfInterest entity -----------------------------------!");
+// onsole.log("!----------------------------------- FeaturesOfInterest entity -----------------------------------!\n");
 
 import { log } from "../../log";
 import { koaContext } from "../../types";

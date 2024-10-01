@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- entity User -----------------------------------!");
+// onsole.log("!----------------------------------- entity User -----------------------------------!\n");
 
 import { Ientity } from "../../types";
 import { createEntity } from ".";

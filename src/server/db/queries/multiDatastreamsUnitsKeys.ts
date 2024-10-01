@@ -5,7 +5,7 @@
 * @author mario.adam@inrae.fr
 *
 */
-// onsole.log("!----------------------------------- multiDatastreamsUnitsKeys. -----------------------------------!");
+// onsole.log("!----------------------------------- multiDatastreamsUnitsKeys. -----------------------------------!\n");
 export const multiDatastreamsUnitsKeys = (searchId: bigint | string): string => 
 `SELECT 
     jsonb_agg(tmp.units -> 'name') AS keys 

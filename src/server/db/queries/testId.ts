@@ -5,7 +5,7 @@
 * @author mario.adam@inrae.fr
 *
 */
-// onsole.log("!----------------------------------- testId -----------------------------------!");
+// onsole.log("!----------------------------------- testId -----------------------------------!\n");
 
 export const testId = (table: string, id: bigint | string): string => 
 `SELECT 

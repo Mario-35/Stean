@@ -6,7 +6,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Query interface -----------------------------------!");
+// onsole.log("!----------------------------------- Query interface -----------------------------------!\n");
 
 import { IdecodedUrl, Ientities, IserviceInfos, Iuser } from ".";
 

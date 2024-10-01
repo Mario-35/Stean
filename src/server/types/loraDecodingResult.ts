@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- ILoraDecodingResult interface -----------------------------------!");
+// onsole.log("!----------------------------------- ILoraDecodingResult interface -----------------------------------!\n");
 
 export interface ILoraDecodingResult { // decoding return result
     decoder:  string; // name of decoder 

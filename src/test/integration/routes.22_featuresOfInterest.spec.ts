@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- TDD for things API. -----------------------------------!");
+// onsole.log("!----------------------------------- TDD for things API. -----------------------------------!\n");
 process.env.NODE_ENV = "test";
 
 import chai from "chai";

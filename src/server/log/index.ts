@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Log class -----------------------------------!");
+// onsole.log("!----------------------------------- Log class -----------------------------------!\n");
 
 import util from "util";
 import { EChar, EColor } from "../enums";

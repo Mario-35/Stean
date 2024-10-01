@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- entity FeatureOfInterest -----------------------------------!");
+// onsole.log("!----------------------------------- entity FeatureOfInterest -----------------------------------!\n");
 
 import { createEntity } from ".";
 import { ERelations, ETable } from "../../enums";

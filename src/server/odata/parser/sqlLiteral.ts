@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- oData SQLLiteral -----------------------------------!")
+// onsole.log("!----------------------------------- oData SQLLiteral -----------------------------------!\n");
 
 import { Literal } from "./literal";
 

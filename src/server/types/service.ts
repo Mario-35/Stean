@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- service interface -----------------------------------!");
+// onsole.log("!----------------------------------- service interface -----------------------------------!\n");
 
 import postgres from "postgres";
 import { typeExtensions, typeOptions } from ".";

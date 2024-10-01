@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- userAuthenticated -----------------------------------!");
+// onsole.log("!----------------------------------- userAuthenticated -----------------------------------!\n");
 
 import { decodeToken } from ".";
 import { EExtensions } from "../enums";

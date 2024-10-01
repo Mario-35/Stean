@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Index messages -----------------------------------!");
+// onsole.log("!----------------------------------- Index messages -----------------------------------!\n");
 
 import { EHttpCode } from "../enums";
 import jsonErrors from "./error.json";

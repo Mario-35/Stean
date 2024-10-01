@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- OdataGeoColumn class -----------------------------------!");
+// onsole.log("!----------------------------------- OdataGeoColumn class -----------------------------------!\n");
 
 import { _TESTENCODING } from "../../../db/constants";
 import { EQuery } from "../../../enums";

@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Index Queries. -----------------------------------!");
+// onsole.log("!----------------------------------- Index Queries. -----------------------------------!\n");
 export { createIdList } from "./createIdList";
 export { asDataArray } from "./asDataArray";
 export { asCsv } from "./asCsv";

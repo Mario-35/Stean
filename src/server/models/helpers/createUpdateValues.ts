@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- createUpdateValues -----------------------------------!");
+// onsole.log("!----------------------------------- createUpdateValues -----------------------------------!\n");
 
 import { ESCAPE_SIMPLE_QUOTE } from "../../constants";
 import { doubleQuotesString, simpleQuotesString } from "../../helpers";

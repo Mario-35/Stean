@@ -6,7 +6,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- extensions Enums -----------------------------------!");
+// onsole.log("!----------------------------------- extensions Enums -----------------------------------!\n");
 
 export enum EExtensions { 
     base = "base",

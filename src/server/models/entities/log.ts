@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- entity Log -----------------------------------!");
+// onsole.log("!----------------------------------- entity Log -----------------------------------!\n");
 
 import { createEntity } from ".";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";

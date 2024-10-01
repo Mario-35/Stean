@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Observations entity. -----------------------------------!");
+// onsole.log("!----------------------------------- Observations entity. -----------------------------------!\n");
 import { Common } from "./common";
 import { executeSqlValues, getDBDateNow } from "../helpers";
 import { IreturnResult, keyobj, koaContext } from "../../types";

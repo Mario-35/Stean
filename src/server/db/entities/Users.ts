@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Users entity. -----------------------------------!");
+// onsole.log("!----------------------------------- Users entity. -----------------------------------!\n");
 import { keyobj, koaContext } from "../../types";
 import { Common } from "./common";
 import { IreturnResult } from "../../types";

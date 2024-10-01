@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Index Routes -----------------------------------!");
+// onsole.log("!----------------------------------- Index Routes -----------------------------------!\n");
 
 import { decodeToken } from "../authentication";
 import { _DEBUG } from "../constants";

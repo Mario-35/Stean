@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- removeEmpty -----------------------------------!");
+// onsole.log("!----------------------------------- removeEmpty -----------------------------------!\n");
 
 export function removeEmpty(obj: object): object {
     if (Array.isArray(obj))  

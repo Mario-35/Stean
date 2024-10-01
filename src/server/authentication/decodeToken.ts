@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- decodeToken -----------------------------------!");
+// onsole.log("!----------------------------------- decodeToken -----------------------------------!\n");
 
 import jsonwebtoken from "jsonwebtoken";
 import { IuserToken, keyobj, koaContext } from "../types";

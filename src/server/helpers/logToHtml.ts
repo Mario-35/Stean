@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- logToHtml -----------------------------------!");
+// onsole.log("!----------------------------------- logToHtml -----------------------------------!\n");
 
 import { EChar } from "../enums";
 import util from "util";

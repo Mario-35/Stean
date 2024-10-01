@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- IvisitRessource interface -----------------------------------!");
+// onsole.log("!----------------------------------- IvisitRessource interface -----------------------------------!\n");
 
 import { IodataContext } from ".";
 import { Token } from "../odata/parser";

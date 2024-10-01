@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- entity LocationHistoricalLocation -----------------------------------!");
+// onsole.log("!----------------------------------- entity LocationHistoricalLocation -----------------------------------!\n");
 
 import { createEntity } from ".";
 import { ETable } from "../../enums";

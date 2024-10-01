@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- entity Thing -----------------------------------!");
+// onsole.log("!----------------------------------- entity Thing -----------------------------------!\n");
 
 export const _idBig = "BIGINT GENERATED ALWAYS AS IDENTITY";
 export const _idRel = "BIGINT NOT NULL";

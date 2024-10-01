@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- hidePassword -----------------------------------!");
+// onsole.log("!----------------------------------- hidePassword -----------------------------------!\n");
 
 import { isObject } from "./tests";
 

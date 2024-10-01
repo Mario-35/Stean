@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- fileName Enum -----------------------------------!");
+// onsole.log("!----------------------------------- fileName Enum -----------------------------------!\n");
 
 export enum EFrom {    
     unknown = 'unknown',

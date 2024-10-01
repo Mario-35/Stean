@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Index Helpers -----------------------------------!");
+// onsole.log("!----------------------------------- Index Helpers -----------------------------------!\n");
 
 import { koaContext } from "../../types";
 import { exportToJson } from "./exportToJson";

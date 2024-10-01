@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- HTML Views First for API. -----------------------------------!");
+// onsole.log("!----------------------------------- HTML Views First for API. -----------------------------------!\n");
 
 import { APP_VERSION } from "../../constants";
 import { removeAllQuotes } from "../../helpers";

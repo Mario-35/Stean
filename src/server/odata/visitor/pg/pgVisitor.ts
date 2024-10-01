@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- pgVisitor for odata -----------------------------------!");
+// onsole.log("!----------------------------------- pgVisitor for odata -----------------------------------!\n");
 
 import { doubleQuotesString, simpleQuotesString, isGraph, isTest, removeAllQuotes, returnFormats, formatPgTableColumn } from "../../../helpers";
 import { IodataContext, IKeyString, Ientity, IKeyBoolean, IpgQuery, koaContext, IvisitRessource } from "../../../types";

@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- core builder -----------------------------------!");
+// onsole.log("!----------------------------------- core builder -----------------------------------!\n");
 
 import { removeAllQuotes } from "../../../helpers";
 

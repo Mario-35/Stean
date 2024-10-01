@@ -6,7 +6,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- version Enum -----------------------------------!");
+// onsole.log("!----------------------------------- version Enum -----------------------------------!\n");
 
 
 export enum EVersion { 

@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- http ccde Enum -----------------------------------!");
+// onsole.log("!----------------------------------- http ccde Enum -----------------------------------!\n");
 
 export const enum EHttpCode {
     ok = 200,

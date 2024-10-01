@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- HTML Views Logs for API -----------------------------------!");
+// onsole.log("!----------------------------------- HTML Views Logs for API -----------------------------------!\n");
 
 import { koaContext } from "../../types";
 import { CoreHtmlView } from "./core";

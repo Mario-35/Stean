@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- hideKeysInJson -----------------------------------!");
+// onsole.log("!----------------------------------- hideKeysInJson -----------------------------------!\n");
 
 import { isObject } from "./tests";
 

@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- context interface -----------------------------------!");
+// onsole.log("!----------------------------------- context interface -----------------------------------!\n");
 
 import { EColumnType } from "../enums";
 

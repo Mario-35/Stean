@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- operation Enum -----------------------------------!");
+// onsole.log("!----------------------------------- operation Enum -----------------------------------!\n");
 
 export enum EOperation { 
     Table,

@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Index Entity -----------------------------------!");
+// onsole.log("!----------------------------------- Index Entity -----------------------------------!\n");
 
 import { allEntities, ETable } from "../../enums";
 import { errors, msg } from "../../messages";

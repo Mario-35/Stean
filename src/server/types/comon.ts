@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Comon interface -----------------------------------!");
+// onsole.log("!----------------------------------- Comon interface -----------------------------------!\n");
 import { IreturnResult } from "./returnResult";
 import { Iuser } from "./user";
 

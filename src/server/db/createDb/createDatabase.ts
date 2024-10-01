@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- createSTDB -----------------------------------!");
+// onsole.log("!----------------------------------- createSTDB -----------------------------------!\n");
 
 import { createTable, createUser } from "../helpers";
 import { config } from "../../configuration";

@@ -6,7 +6,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- multiDatastreamUnitOfMeasurements -----------------------------------!");
+// onsole.log("!----------------------------------- multiDatastreamUnitOfMeasurements -----------------------------------!\n");
 
 import { RootPgVisitor } from "../../odata/visitor";
 

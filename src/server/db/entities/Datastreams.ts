@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Datastreams entity -----------------------------------!");
+// onsole.log("!----------------------------------- Datastreams entity -----------------------------------!\n");
 
 import { log } from "../../log";
 import { errors } from "../../messages";

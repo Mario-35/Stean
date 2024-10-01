@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- exportToJson -----------------------------------!");
+// onsole.log("!----------------------------------- exportToJson -----------------------------------!\n");
 
 import { config } from "../../configuration";
 import { doubleQuotesString, asyncForEach, getUrlKey, hidePassword, removeEmpty } from "../../helpers";

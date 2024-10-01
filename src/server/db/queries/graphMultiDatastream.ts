@@ -5,7 +5,7 @@
 * @author results.adam@inrae.fr
 *
 */
-// onsole.log("!----------------------------------- graphMultiDatastream. -----------------------------------!");
+// onsole.log("!----------------------------------- graphMultiDatastream. -----------------------------------!\n");
 import { createIdList, interval } from ".";
 import { SIMPLEQUOTEDCOMA } from "../../constants";
 import { cleanStringComma } from "../../helpers";

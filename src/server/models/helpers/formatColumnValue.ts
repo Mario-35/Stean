@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- formatColumnValue -----------------------------------!");
+// onsole.log("!----------------------------------- formatColumnValue -----------------------------------!\n");
 
 import { ESCAPE_ARRAY_JSON, ESCAPE_SIMPLE_QUOTE } from "../../constants";
 import { doubleQuotesString, simpleQuotesString, removeFirstEndSimpleQuotes } from "../../helpers";

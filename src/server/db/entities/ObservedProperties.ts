@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- ObservedProperties entity. -----------------------------------!");
+// onsole.log("!----------------------------------- ObservedProperties entity. -----------------------------------!\n");
 import { log } from "../../log";
 import { koaContext } from "../../types";
 import { Common } from "./common";

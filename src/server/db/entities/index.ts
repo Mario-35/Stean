@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Index entities -----------------------------------!");
+// onsole.log("!----------------------------------- Index entities -----------------------------------!\n");
 
 export { Services } from "./Services";
 export { Datastreams } from "./Datastreams";

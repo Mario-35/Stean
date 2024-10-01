@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- createRole -----------------------------------!");
+// onsole.log("!----------------------------------- createRole -----------------------------------!\n");
 
 import { config } from "../../configuration";
 import { EChar } from "../../enums";

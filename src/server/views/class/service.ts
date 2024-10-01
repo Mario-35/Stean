@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- HTML Views New Service for API. -----------------------------------!");
+// onsole.log("!----------------------------------- HTML Views New Service for API. -----------------------------------!\n");
 
 import { EExtensions, enumKeys, EOptions, EVersion } from "../../enums";
 import { info } from "../../messages";

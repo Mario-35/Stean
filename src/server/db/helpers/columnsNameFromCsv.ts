@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- columnsNameFromCsv -----------------------------------!");
+// onsole.log("!----------------------------------- columnsNameFromCsv -----------------------------------!\n");
 
 import fs from "fs";
 import readline from "readline";

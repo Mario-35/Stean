@@ -6,7 +6,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Common class entity -----------------------------------!");
+// onsole.log("!----------------------------------- Common class entity -----------------------------------!\n");
 
 import { doubleQuotesString, returnFormats } from "../../helpers/index";
 import { IreturnResult, keyobj, koaContext } from "../../types";

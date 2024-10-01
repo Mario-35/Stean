@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- writeLogToDb -----------------------------------!");
+// onsole.log("!----------------------------------- writeLogToDb -----------------------------------!\n");
 
 import { doubleQuotesString, hidePassword } from "../helpers";
 import { models } from "../models";

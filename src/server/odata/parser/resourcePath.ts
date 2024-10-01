@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- oData ResourcePath -----------------------------------!")
+// onsole.log("!----------------------------------- oData ResourcePath -----------------------------------!\n");
 
 import Utils from "./utils";
 import Lexer from "./lexer";

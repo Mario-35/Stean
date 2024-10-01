@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Index Types -----------------------------------!");
+// onsole.log("!----------------------------------- Index Types -----------------------------------!\n");
 
 import Koa from "koa";
 import { allEntitiesType, EExtensions, EOptions } from "../enums";

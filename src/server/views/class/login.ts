@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- HTML Views Login for API. -----------------------------------!");
+// onsole.log("!----------------------------------- HTML Views Login for API. -----------------------------------!\n");
 import { info } from "../../messages";
 import { IKeyString, koaContext } from "../../types";
 import { CoreHtmlView } from "./core";

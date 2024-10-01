@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- getDBDateNow -----------------------------------!");
+// onsole.log("!----------------------------------- getDBDateNow -----------------------------------!\n");
 
 import { executeSqlValues } from ".";
 import { Iservice } from "../../types";

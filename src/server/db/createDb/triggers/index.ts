@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Index triggers -----------------------------------!");
+// onsole.log("!----------------------------------- Index triggers -----------------------------------!\n");
 
 import fs from "fs";
 import path from "path";

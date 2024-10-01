@@ -5,6 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-  // onsole.log("!----------------------------------- containsAll -----------------------------------!");
+  // onsole.log("!----------------------------------- containsAll -----------------------------------!\n");
 
   export  const containsAll =(arr1: string[] | undefined, arr2: string[] | undefined) =>  arr1 && arr2 ?  arr1.every(i => arr2.includes(i)) : false;

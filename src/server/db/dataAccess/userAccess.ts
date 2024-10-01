@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- User dataAccess -----------------------------------!");
+// onsole.log("!----------------------------------- User dataAccess -----------------------------------!\n");
 
 import { Iuser } from "../../types";
 import { encrypt } from "../../helpers";
