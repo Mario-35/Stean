@@ -8,7 +8,7 @@
 // onsole.log("!----------------------------------- Configuration class -----------------------------------!");
 
 import { addToStrings, ADMIN, APP_NAME, APP_VERSION, color, DEFAULT_DB, NODE_ENV, setReady, TEST, _DEBUG } from "../constants";
-import { asyncForEach, createTunnel, decrypt, encrypt, isProduction, isTest, logToHtml, } from "../helpers";
+import { asyncForEach, decrypt, encrypt, isProduction, isTest, logToHtml, } from "../helpers";
 import { Iservice, IdbConnection, IserviceInfos, koaContext, keyobj } from "../types";
 import { errors, info, infos, msg } from "../messages";
 import { createIndexes, createService} from "../db/helpers";
@@ -237,25 +237,6 @@ class Configuration {
       }
     );
   }
-  
-  // connect ssh tunnel
-  private async connectionTunnel(input: IdbConnection): Promise<boolean> {    
-    if (input.tunnel) {
-      this.messageListen("Tunneling to", input.tunnel.sshConnection.host);
-      return await createTunnel(
-        { autoClose: true },
-        { port: 1111 }, 
-        input.tunnel.sshConnection, 
-        input.tunnel.forwardConnection) .then(() => {          
-          this.writeLog(log.booting(msg( info.tunnel, `${input.tunnel?.sshConnection.host}` ), EChar.ok ));
-          return true;
-        }).catch((error: Error) => {
-          this.writeLog(log.booting(msg( errors.tunnelError, `${input.tunnel?.sshConnection.host}` ), EChar.notOk ));
-          console.log(error);        
-          return false;
-        });
-    } else return false;
-  }
 
   /**
    * 
@@ -264,9 +245,7 @@ class Configuration {
    */
   private createDbConnection(input: IdbConnection): postgres.Sql<Record<string, unknown>> {
     return postgres( 
-      input.tunnel 
-      ? `postgres://${input.user}:${input.password}@${input.host}:${1111}/${input.database}`
-      : `postgres://${input.user}:${input.password}@${input.host}:${input.port || 5432}/${input.database}`,
+      `postgres://${input.user}:${input.password}@${input.host}:${input.port || 5432}/${input.database}`,
       {
         debug: _DEBUG,
         max : 2000,            
@@ -361,10 +340,7 @@ class Configuration {
         Object.keys(Configuration.services).filter(e => e.toUpperCase() !== TEST.toUpperCase()),
         async (key: string) => {
           try {
-            if (Configuration.services[key].pg.tunnel) {
-              const test = await this.connectionTunnel(Configuration.services[key].pg);
-              if(test === true) await this.addToServer(key);
-            } else await this.addToServer(key);
+            await this.addToServer(key);
           } catch (error) {
             console.log(error);
             status = false;

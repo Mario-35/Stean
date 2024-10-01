@@ -173,7 +173,7 @@ export async function firstInstall(ctx: koaContext): Promise<IdecodedUrl | undef
           "options": src["options"]
         }
         await config.addConfig(confJson);     
-        if (ctx.decodedUrl.origin) ctx.redirect(`${ctx.decodedUrl.origin}/${src["name"]}/${src["version"]}`);  
+        if (ctx.decodedUrl && ctx.decodedUrl.origin) ctx.redirect(`${ctx.decodedUrl.origin}/${src["name"]}/${src["version"]}`);  
       } else {
         returnBody(true);
       }

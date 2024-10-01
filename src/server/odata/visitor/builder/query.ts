@@ -8,7 +8,7 @@
 // onsole.log("!----------------------------------- Query builder -----------------------------------!");
 
 import { _COLUMNSEPARATOR, STRINGEXC } from "../../../constants";
-import { doubleQuotesString, cleanStringComma, containsAll, isCsvOrArray, isGraph, isGeoJson, isObservation, removeAllQuotes, removeFirstEndDoubleQuotes, formatPgString } from "../../../helpers";
+import { doubleQuotesString, cleanStringComma, containsAll, isCsvOrArray, isGraph, isGeoJson, removeAllQuotes, removeFirstEndDoubleQuotes, formatPgString } from "../../../helpers";
 import { asJson } from "../../../db/queries";
 import { Iservice, Ientity, IKeyBoolean, IpgQuery } from "../../../types";
 import { PgVisitor, RootPgVisitor } from "..";
@@ -19,6 +19,7 @@ import { errors } from "../../../messages";
 import { _NAVLINK, _SELFLINK } from "../../../db/constants";
 import { log } from "../../../log";
 import { expand, relationInfos } from "../../../models/helpers";
+import { _isObservation } from "../../../helpers/tests";
 
 export class Query  {
     from: string;
@@ -41,46 +42,49 @@ export class Query  {
       this.keyNames = new Key([]);
     }
 
+    private isCalcColumn(input: string): boolean {
+        return STRINGEXC.map(e => input.includes(e) ? true : false).filter(e => e === true).length > 0;
+    }
+
+    private extractColumnName(input: string): string {   
+        const elem = input.split(input.includes(' AS ') ? ' AS ' : ".");
+        elem.shift();
+        return elem.join("."); 
+    }
+
+    /**
+     * 
+     * @param service service
+     * @param entity entity name
+     * @param column column name
+     * @param options options
+     * @returns formated column or 
+     */
+    private formatedColumn(service: Iservice , entity : Ientity, column: string, options?: IKeyBoolean): string | undefined {   
+        console.log(log.whereIam(column));
+        // verify column exist
+        if (entity.columns[column]) {
+            // is column have alias
+            const alias = entity.columns[column].alias(service, options);
+            // const alias = entity.columns[column].alias(service, options ? options : undefined);
+            if (this.isCalcColumn(alias || column) === true) return alias || column;                
+            if (options) {                    
+            if (alias && options["alias"] === true) return column === "id" ? `${doubleQuotesString(entity.table)}.${alias}` : alias;
+                let result: string = "";
+                if (options["table"] === true) result += `${doubleQuotesString(entity.table)}.`;
+                // if (options["table"] === true && (testIn(alias || column) === false)) result += `${doubleQuotesString(entity.table)}.`;
+                result += alias || options["quoted"] === true ? doubleQuotesString(column) : column;
+                if (options["as"] === true || (alias && alias.includes("->")) ) result += ` AS ${doubleQuotesString(column)}`;
+                return result;
+            } else return column;
+        } else if (this.isCalcColumn(column) === true) return column;
+        if  (column === "selfLink") return  column; 
+        if  (column.startsWith( "(SELECT")) return  column; 
+    };
+
     private columnList(tableName: string, main: PgVisitor, element: PgVisitor): string[] | undefined  {
-        const isCalcColumn = (input: string): boolean => STRINGEXC.map(e => input.includes(e) ? true : false).filter(e => e === true).length > 0;
+        console.log(log.whereIam());
 
-        /**
-         * 
-         * @param config config
-         * @param entity entity name
-         * @param column column name
-         * @param options options
-         * @returns formated column or 
-         */
-        
-        function formatedColumn(service: Iservice , entity : Ientity, column: string, options?: IKeyBoolean): string | undefined {   
-            console.log(log.whereIam(column));
-            // verify column exist
-            if (entity.columns[column]) {
-                // is column have alias
-                const alias = entity.columns[column].alias(service, options);
-                // const alias = entity.columns[column].alias(service, options ? options : undefined);
-                if (isCalcColumn(alias || column) === true) return alias || column;                
-                if (options) {                    
-                if (alias && options["alias"] === true) return column === "id" ? `${doubleQuotesString(entity.table)}.${alias}` : alias;
-                    let result: string = "";
-                    if (options["table"] === true) result += `${doubleQuotesString(entity.table)}.`;
-                    // if (options["table"] === true && (testIn(alias || column) === false)) result += `${doubleQuotesString(entity.table)}.`;
-                    result += alias || options["quoted"] === true ? doubleQuotesString(column) : column;
-                    if (options["as"] === true || (alias && alias.includes("->")) ) result += ` AS ${doubleQuotesString(column)}`;
-                    return result;
-                } else return column;
-            } else if (isCalcColumn(column) === true) return column;
-            if  (column === "selfLink") return  column; 
-            if  (column.startsWith( "(SELECT")) return  column; 
-        };
-
-        function extractColumnName(input: string): string{   
-            const elem = input.split(input.includes(' AS ') ? ' AS ' : ".");
-            elem.shift();
-            return elem.join("."); 
-        }
-        
         // get good entity name
         const tempEntity = models.getEntity(main.ctx.config, tableName);
         if (!tempEntity) {
@@ -101,7 +105,13 @@ export class Query  {
             main.query.where.add(`"${col}"::text LIKE '%coordinates%'`);
             return [ `${col} AS "geometry"`];
         }
-        
+
+        // if (main.ctx.config.extensions.includes(EExtensions.file) && isObservation(main) === true)  {
+        //     element.showRelations = false;
+        //     main.onlyRef = false;
+        //     return [`(result->'value') AS result`];
+        // }
+
         // If array result add id 
         const returnValue: string[] = isCsvOrArray(main) && !element.query.select.toString().includes(`"id"${_COLUMNSEPARATOR}`) ? ["id"] : []; 
         // create selfLink                                   
@@ -116,16 +126,16 @@ export class Query  {
                 .filter(e => !(e === "result" && element.splitResult))
                 .filter(e => !tempEntity.columns[e].extensions || tempEntity.columns[e].extensions && containsAll(main.ctx.config.extensions, tempEntity.columns[e].extensions) === true || "")
             : element.query.select.toString().split(_COLUMNSEPARATOR).filter((word: string) => word.trim() != "").map(e => removeFirstEndDoubleQuotes(e));
-            // loop on columns
+            // loop on columns            
         columns.map((column: string) => {
-            const force = ["id", "result"].includes(column) ? true : false;
-            return formatedColumn(main.ctx.config, tempEntity, column, { valueskeys: element.valueskeys, quoted: true, table: true, alias: force, as: isGraph(main) ? false : true } ) || "";
+            if (element.mario.hasOwnProperty(column)) return element.mario[column].join();
+            return this.formatedColumn(main.ctx.config, tempEntity, column, { valueskeys: element.valueskeys, quoted: true, table: true, alias: ["id", "result"].includes(column), as: isGraph(main) ? false : true } ) || "";
         }) .filter(e => e != "" ).forEach((e: string) => {             
             if (e === "selfLink") e = selfLink;             
             const testIisCsvOrArray = isCsvOrArray(element);            
             if (testIisCsvOrArray) this.keyNames.add(e);
             returnValue.push(e);
-            if (main.interval) main.addToIntervalColumns(extractColumnName(e));
+            if (main.interval) main.addToIntervalColumns(this.extractColumnName(e));
             if (e === "id" && (element.showRelations == true || isCsvOrArray(main))) {
                 if (testIisCsvOrArray) this.keyNames.add("id"); 
                 else returnValue.push(selfLink);    
@@ -135,9 +145,9 @@ export class Query  {
         // add interval if requested
         if (main.interval) main.addToIntervalColumns(`CONCAT('${main.ctx.decodedUrl.root}/${tempEntity.name}(', COALESCE("@iot.id", '0')::text, ')') AS ${doubleQuotesString(_SELFLINK)}`);
         // If observation entity
-        if (isObservation(tempEntity) === true && element.onlyRef === false ) {
+        if (_isObservation(tempEntity) === true && element.onlyRef === false ) {
             if (main.interval && !isGraph(main)) returnValue.push(`timestamp_ceil("resultTime", interval '${main.interval}') AS srcdate`);
-            if (element.splitResult && main.parentEntity === "MultiDatastreams") element.splitResult.forEach((elem: string) => {
+            if (element.splitResult && main.parentEntity && main.parentEntity.name === "MultiDatastreams") element.splitResult.forEach((elem: string) => {
                 const one = element && element.splitResult && element.splitResult.length === 1;
                 const alias: string = one ? "result" : elem;
                 returnValue.push( `(result->>'valueskeys')::json->'${element.splitResult && formatPgString(one ? element.splitResult[0] : alias)}' AS "${removeAllQuotes(one ? elem : alias)}"` );
@@ -151,24 +161,24 @@ export class Query  {
     private create(main: RootPgVisitor | PgVisitor, toWhere: boolean, _element?: PgVisitor): IpgQuery | undefined {        
         const element = _element ? _element : main;
         console.log(log.whereIam(element.entity || "blank"));
-        if (element.entity.trim() !== "") {
+        if (element.entity) {
             // get columns
-            const select = toWhere === true ? ["id"] : this.columnList(element.entity, main, element);
-            // if not null
+            const select = toWhere === true ? ["id"] : this.columnList(element.entity.name, main, element);
+            // if not null            
             if (select) {
                 // Get real entity name (plural)
-                const realEntityName = models.getEntityName(main.ctx.config, element.entity);                
-                if (realEntityName) {
+                // const element.entity.name = models.getEntityName(main.ctx.config, element.entity.name);                
+                if (element.entity) {
                     // Create relations list
-                    const relations: string[] = Object.keys(main.ctx.model[realEntityName].relations);
+                    const relations: string[] = Object.keys(element.entity.relations);
                     // loop includes
                     if (element.includes) element.includes.forEach((item) => {
                         const name = item.navigationProperty;
                         const index = relations.indexOf(name);
                         // if is relation
-                        if (index >= 0) {
-                            item.entity = name;
-                            item.query.where.add(`${item.query.where.notNull() === true ?  " AND " : ''}${expand(main.ctx, realEntityName, name)}`); 
+                        if (element.entity && index >= 0) {
+                            item.entity = models.getEntity(main.ctx.config, name);    ;
+                            item.query.where.add(`${item.query.where.notNull() === true ?  " AND " : ''}${expand(main.ctx, element.entity.name, name)}`); 
                             // create sql query    for this relatiion (IN JSON result)   
                             const query = this.pgQueryToString(this.create(item, false));
                             if (query) relations[index] = `(${asJson({ 
@@ -184,27 +194,27 @@ export class Query  {
                         .filter(e => e.includes('SELECT') || Object.keys(main.ctx.model).includes(models.getEntityName(main.ctx.config, e) || e))
                         .forEach((rel: string) => {
                             if (rel[0] == "(") select.push(rel);
-                            else if (element.showRelations == true && main.onlyRef == false ) {
+                            else if (element.entity && element.showRelations == true && main.onlyRef == false ) {
                                 const tempTable = models.getEntityName(main.ctx.config, rel);
                                 let stream: string | undefined = undefined;
-                                const relation = relationInfos(main.ctx.config, realEntityName, rel);
+                                const relation = relationInfos(main.ctx.config, element.entity.name, rel);
                                 if (tempTable && !relation.rightKey.startsWith("_"))
-                                    if ( main.ctx.config.options.includes(EOptions.stripNull) && realEntityName === main.ctx.model[allEntities.Observations].name &&  tempTable.endsWith(main.ctx.model[allEntities.Datastreams].name)) stream = `CASE WHEN ${main.ctx.model[tempTable].table}_id NOTNULL THEN`;
-                                        select.push(`${stream ? stream : ""} CONCAT('${main.ctx.decodedUrl.root}/${main.ctx.model[realEntityName].name}(', ${doubleQuotesString(main.ctx.model[realEntityName].table)}."id", ')/${rel}') ${stream ? "END ": ""}AS "${rel}${_NAVLINK}"`);                            
-                                        main.addToIntervalColumns(`'${main.ctx.decodedUrl.root}/${main.ctx.model[realEntityName].name}(0)/${rel}' AS "${rel}${_NAVLINK}"`);
+                                    if ( main.ctx.config.options.includes(EOptions.stripNull) && element.entity.name === main.ctx.model[allEntities.Observations].name && tempTable.endsWith(main.ctx.model[allEntities.Datastreams].name)) stream = `CASE WHEN ${main.ctx.model[tempTable].table}_id NOTNULL THEN`;
+                                        select.push(`${stream ? stream : ""} CONCAT('${main.ctx.decodedUrl.root}/${main.ctx.model[element.entity.name].name}(', ${doubleQuotesString(main.ctx.model[element.entity.name].table)}."id", ')/${rel}') ${stream ? "END ": ""}AS "${rel}${_NAVLINK}"`);                            
+                                        main.addToIntervalColumns(`'${main.ctx.decodedUrl.root}/${main.ctx.model[element.entity.name].name}(0)/${rel}' AS "${rel}${_NAVLINK}"`);
                             }
                         });
 
                     const res = { 
                         select: select.join(",\n\t\t"), 
-                        from: [doubleQuotesString(main.ctx.model[realEntityName].table)],
+                        from: [doubleQuotesString(main.ctx.model[element.entity.name].table)],
                         where: element.query.where.toString(), 
                         groupBy: element.query.groupBy.notNull() === true ?  element.query.groupBy.toString() : undefined,
-                        orderBy: element.query.orderBy.notNull() === true ?  element.query.orderBy.toString() : main.ctx.model[realEntityName].orderBy,
+                        orderBy: element.query.orderBy.notNull() === true ?  element.query.orderBy.toString() : main.ctx.model[element.entity.name].orderBy,
                         skip: element.skip,
                         limit: element.limit,
                         keys: this.keyNames.toArray(),
-                        count: `SELECT COUNT (DISTINCT ${Object.keys(main.ctx.model[realEntityName].columns)[0]}) FROM (SELECT ${Object.keys(main.ctx.model[realEntityName].columns)[0]} FROM "${main.ctx.model[realEntityName].table}"${element.query.where.notNull() === true ? ` WHERE ${element.query.where.toString()}` : ''}) AS c`
+                        count: `SELECT COUNT (DISTINCT ${Object.keys(main.ctx.model[element.entity.name].columns)[0]}) FROM (SELECT ${Object.keys(main.ctx.model[element.entity.name].columns)[0]} FROM "${main.ctx.model[element.entity.name].table}"${element.query.where.notNull() === true ? ` WHERE ${element.query.where.toString()}` : ''}) AS c`
                     };
                     if (main.subQuery.from.length > 0 && main.subQuery.from[1] != "")   res.from.push(`( ${this.pgQueryToString(main.subQuery)}) AS src`);
                     return res

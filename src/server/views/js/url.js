@@ -41,9 +41,7 @@
             });
       
       myOptions.split('&$').filter(e => e.trim() !== "").forEach((element) => {
-        const temp = element.split('=');
-        console.log(`===========> ${temp}`);
-        
+        const temp = element.split('=');        
         switch (temp[0]) {
           case "resultFormat":
             getFormatOptions();
@@ -58,8 +56,7 @@
                 case "select-multiple":
                   multiSelects[element.id].setValue(temp[1].split(","));
                   break;
-                default:
-                  console.log(`element.type: ${element.type}`);                  
+                default:                
                   element.value = temp[1];
                   break;
               }

@@ -20,7 +20,7 @@ import * as entities from "../../../db/entities";
 import { PgVisitor } from "..";
 import { config } from "../../../configuration";
 
-export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor): string {
+export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor): string | undefined {
     const formatInsertEntityData = (entity: string, datas: object, main: PgVisitor): Record<string, any> => {
         const goodEntity = models.getEntityName(main.ctx.config, entity);
         if (goodEntity && goodEntity in entities) {
@@ -46,8 +46,9 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
         };
     } = {};
     const tempEntity = src.entity;
-    const postEntity: Ientity = src.ctx.model[tempEntity == "CreateFile" ? "Datastreams" : tempEntity];
-    const postParentEntity: Ientity | undefined = src.parentEntity ? src.ctx.model[src.parentEntity ] : undefined;
+    const postEntity = tempEntity && tempEntity.name == "CreateFile" ? src.ctx.model["Datastreams"] : tempEntity;
+    if (!postEntity) return;
+    const postParentEntity: Ientity | undefined = src.parentEntity ? src.parentEntity : undefined;
     const names: IKeyString = {
         [postEntity.table]: postEntity.table
     };
@@ -320,7 +321,7 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
 
 
     if (src.parentEntity) {
-        const entityName =models.getEntityName(src.ctx.config, src.parentEntity);
+        const entityName = src.parentEntity.name;
         console.log(log.debug_infos("Found entity : ", entityName));
         const callEntity = entityName ? src.ctx.model[entityName] : undefined;
         const id: bigint | undefined =

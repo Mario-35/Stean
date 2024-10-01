@@ -80,6 +80,7 @@ The configuration.json file must be found by the api in the configuration folder
             "multiDatastream", // SensorThings Multidatastream Extension
             "lora", // Lora Extension
             "logs", // Logs Extension
+            "file" // File csv serve Extension
             "users" // Users Extension
         ],
         "options": [

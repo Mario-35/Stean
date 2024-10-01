@@ -56,7 +56,8 @@ export class RootPgVisitor extends PgVisitor {
   }
   
   protected VisitRessourcesEntitySetName(node: Token, _context: IodataContext) {
-    this.entity = node.value.name;
+    this.entity = models.getEntityStrict(this.ctx.config, node.value.name);
+    if (!this.entity) this.ctx.throw(404, "Not Found");
   }
  
   protected VisitRessourcesRefExpression(node: Token, _context: IodataContext) {
@@ -105,34 +106,35 @@ export class RootPgVisitor extends PgVisitor {
  
 
   protected VisitRessourcesPropertyPathNew(node:Token, context:any) {
-    if (node.type == "PropertyPath") {
+    if (this.entity && node.type == "PropertyPath") {
       if (models.getRelationColumnTable(this.ctx.config, this.entity, node.value.path.raw) === EColumnType.Relation) {
         this.parentId = this.id;
         this.id = BigInt(0);
         if ( node.value.navigation && node.value.navigation.type == "CollectionNavigation" ) {
           this.VisitRessources(node.value.navigation, context);
         }
-      } else if (this.ctx.model[this.entity].columns[node.value.path.raw]) {
+      } else if (this.entity.columns[node.value.path.raw]) {
         this.query.select.add(`${doubleQuotesString(node.value.path.raw )}${_COLUMNSEPARATOR}`);
         this.showRelations = false;
       } else this.entity = node.value.path.raw;
+      this.entity = models.getEntity(this.ctx.config, node.value.path.raw);      
     }
 		this.VisitRessources(node.value.navigation, context);
 	}
 
   protected VisitRessourcesEntityCollectionNavigationProperty(node:Token, context:any) {    
-    if (this.ctx.model[this.entity].relations[node.value.name]) {
+    if (this.entity && this.entity.relations[node.value.name]) {
          const where = (this.parentEntity) ? `(SELECT ID FROM (${this.query.toWhere(this)}) as nop)` : this.id;
-         const whereSql = link(this.ctx, this.entity, node.value.name)   
+         const whereSql = link(this.ctx, this.entity.name, node.value.name)   
         .split("$ID")
         .join(<string>where);
         this.query.where.init(whereSql);
         const tempEntity =  models.getEntity(this.ctx.config, node.value.name);
         if (tempEntity) {
-          this.swapEntity(tempEntity.name);
+          this.swapEntity(tempEntity);
           this.single = tempEntity.singular === node.value.name || BigInt(this.id) > 0  ? true : false;
         }
-    } else if (this.ctx.model[this.entity].columns[node.value.name]) {
+    } else if (this.entity && this.entity.columns[node.value.name]) {
       this.query.select.add(`${doubleQuotesString(node.value.name)}${_COLUMNSEPARATOR}`);
       this.showRelations = false;
     } else this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: errors.notValid });
@@ -159,16 +161,19 @@ export class RootPgVisitor extends PgVisitor {
     return temp;
   }
 
-  getSql(): string {  
+ getSql() {  
     if (this.includes) this.includes.forEach((include) => {
       if (include.navigationProperty.includes("/")) {              
         const names = include.navigationProperty.split("/");
         include.navigationProperty = names[0];
         const visitor = new PgVisitor(this.ctx, {...this.options});
-        if (visitor) {
-          visitor.entity =names[0];
-          visitor.navigationProperty = names[1];
-          if (include.includes) include.includes.push(visitor); else include.includes = [visitor];
+        if (visitor) {         
+          const nameEntity = models.getEntity(this.ctx.config, names[0]);
+          if(nameEntity) {
+            visitor.entity = nameEntity;
+            visitor.navigationProperty = names[1];
+            if (include.includes) include.includes.push(visitor); else include.includes = [visitor];
+          }
         }            
       }
     });

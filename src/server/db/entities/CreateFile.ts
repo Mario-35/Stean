@@ -37,7 +37,7 @@ export class CreateFile extends Common {
     const createDataStream = async () => {
       const nameOfFile = paramsFile.filename.split("/").reverse()[0];
       const copyCtx = Object.assign({}, ctx.odata);
-      ctx.odata.entity = this.ctx.model.Datastreams.name;
+      ctx.odata.entity = this.ctx.model.Datastreams;
 
       // IMPORTANT TO ADD instead update
       ctx.odata.returnFormat = returnFormats.json;

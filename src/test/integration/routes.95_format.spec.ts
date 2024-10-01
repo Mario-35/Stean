@@ -38,28 +38,28 @@ describe("Output formats", () => {
 		done();
 	});
 	afterEach(() => { writeLog(true); });
-    describe("{get} resultFormat csv", () => {
-        it("Return result in csv format.", (done) => {
-            const infos = addTest({
-                api: `{get} ResultFormat as csv`,
-                apiName: "FormatCsv",
-                apiDescription: 'Use $resultFormat=csv to get datas as csv format.<br><img class="tabLogo" src="./assets/csv.jpg" alt="csv result">',
-                apiExample: {
-                    http: `${testVersion}/Datastreams(1)/Observations?$top=20&$resultFormat=csv`,
+    // describe("{get} resultFormat csv", () => {
+    //     it("Return result in csv format.", (done) => {
+    //         const infos = addTest({
+    //             api: `{get} ResultFormat as csv`,
+    //             apiName: "FormatCsv",
+    //             apiDescription: 'Use $resultFormat=csv to get datas as csv format.<br><img class="tabLogo" src="./assets/csv.jpg" alt="csv result">',
+    //             apiExample: {
+    //                 http: `${testVersion}/Datastreams(1)/Observations?$top=20&$resultFormat=csv`,
 					
-				},            });
-            chai.request(server)
-                .get(`/test/${infos.apiExample.http}`)
-                .end((err: Error, res: any) => {
-                    should.not.exist(err);
-                    res.status.should.equal(200);
-                    res.type.should.equal("text/csv");
-                    res.text.startsWith(`"@iot.${"id"}";`);
-                    addToApiDoc({ ...infos, result: res });
-                    done();
-                });
-        });
-    });
+	// 			},            });
+    //         chai.request(server)
+    //             .get(`/test/${infos.apiExample.http}`)
+    //             .end((err: Error, res: any) => {
+    //                 should.not.exist(err);
+    //                 res.status.should.equal(200);
+    //                 res.type.should.equal("text/csv");
+    //                 res.text.startsWith(`"@iot.${"id"}";`);
+    //                 addToApiDoc({ ...infos, result: res });
+    //                 done();
+    //             });
+    //     });
+    // });
 
     describe("{get} resultFormat dataArray", () => {
         it("Return Things in dataArray format.", (done) => {

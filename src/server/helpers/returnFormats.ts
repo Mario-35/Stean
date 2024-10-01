@@ -8,7 +8,6 @@
 // onsole.log("!----------------------------------- returnFormats -----------------------------------!");
 
 import { asDataArray, asGeoJSON, asJson, graphDatastream, graphMultiDatastream, interval, } from "../db/queries";
-import { Parser } from "json2csv";
 import { IreturnFormat, koaContext } from "../types";
 import { addCssFile } from "../views/css";
 import { addJsFile } from "../views/js";
@@ -23,17 +22,15 @@ const defaultFunction = (input: string | object) => input;
 // Default "blank" format function
 const defaultForwat = (input: PgVisitor): string => input.toString();
 
-const generateFields = (input: PgVisitor): string[] => {
-  let fields: string[] = [];
+const generateFields = (input: PgVisitor)=> {
   if (isGraph(input)) {
-    const table = input.ctx.model[input.parentEntity ? input.parentEntity : input.entity].table;
-    fields = [
-      `(SELECT ${table}."description" FROM ${table} WHERE ${table}."id" = ${
+    const entity = input.parentEntity || input.entity;
+    return entity ? [
+      `(SELECT ${entity.table}."description" FROM ${entity.table} WHERE ${entity.table}."id" = ${
         input.parentId ? input.parentId : input.id
       }) AS title, `,
-    ];
+    ] : undefined;
   }
-  return fields;
 };
 
 /**
@@ -42,21 +39,23 @@ const generateFields = (input: PgVisitor): string[] => {
  * @returns sSQL Query for graph
  */
 
-const generateGrahSql = (input: PgVisitor): string => {
+const generateGrahSql = (input: PgVisitor) => {
   input.intervalColumns = ["id", "step as date", "result"];
-  if (isGraph(input)) input.intervalColumns.push("concat"); 
-  const table = input.ctx.model[input.parentEntity ? input.parentEntity : input.entity].table;
-  const id = input.parentId ? input.parentId : input.id;
-  const query = table === input.ctx.model.Datastreams.table
-      ? graphDatastream(table, id, input)
-      : graphMultiDatastream( table, id, input );
-      
-  return asJson({
-    query: query,
-    singular: false,
-    strip: false,
-    count: false,
-  });
+  if (isGraph(input)) input.intervalColumns.push("concat");
+  const entity = input.parentEntity || input.entity;
+  if (entity) {
+    const id = input.parentId ? input.parentId : input.id;
+    const query = entity.table === input.ctx.model.Datastreams.table
+        ? graphDatastream(entity.table, id, input)
+        : graphMultiDatastream( entity.table, id, input );
+        
+    return asJson({
+      query: query,
+      singular: false,
+      strip: false,
+      count: false,
+    });
+  }
 };
 
 // all returns format functions
@@ -150,29 +149,10 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
   csv: {
     name: "csv",
     type: "text/csv",
-    format: (input: string | Record<string, any>) => {
-      const opts = {
-        delimiter: ";",
-        includeEmptyRows: true,
-        escapedQuote: "",
-        header: false,
-      };
-      if (input && typeof input === "object" && input[0].dataArray)
-        try {
-          const parser = new Parser(opts);
-          input[0].dataArray.unshift(input[0].component);
-          return parser.parse(input[0].dataArray);
-        } catch (e) {
-          if (e instanceof Error) {
-            console.log(e);
-            return e.message;
-          }
-        }
-      return "No datas";
-    },
+    format: defaultFunction,
     generateSql(input: PgVisitor) {
-      return asDataArray(input);
-    },
+      return input.toString();
+    }
   },
 
   txt: {

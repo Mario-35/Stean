@@ -24,7 +24,7 @@ export class Observations extends Common {
   async prepareInputResult(dataInput: Record<string, any> ): Promise<object> {    
     console.log(log.whereIam());
     // IF MultiDatastream
-    if ( (dataInput["MultiDatastream"] && dataInput["MultiDatastream"] != null) || (this.ctx.odata.parentEntity && this.ctx.odata.parentEntity.startsWith("MultiDatastream")) ) {
+    if ( (dataInput["MultiDatastream"] && dataInput["MultiDatastream"] != null) || (this.ctx.odata.parentEntity && this.ctx.odata.parentEntity.name.startsWith("MultiDatastream")) ) {
       // get search ID
       const searchID: bigint | undefined = dataInput["MultiDatastream"] && dataInput["MultiDatastream"] != null
           ? BigInt(dataInput["MultiDatastream"]["@iot.id"])
@@ -49,7 +49,7 @@ export class Observations extends Common {
         dataInput["result"] = { value: Object.values(dataInput["result"]), valueskeys: dataInput["result"], };
       }
     } 
-    else if ((dataInput["Datastream"] && dataInput["Datastream"] != null) || (this.ctx.odata.parentEntity && this.ctx.odata.parentEntity.startsWith("Datastream")) ) { 
+    else if ((dataInput["Datastream"] && dataInput["Datastream"] != null) || (this.ctx.odata.parentEntity && this.ctx.odata.parentEntity.name.startsWith("Datastream")) ) { 
       if (dataInput["result"] && typeof dataInput["result"] != "object")
           dataInput["result"] = this.ctx.config.extensions.includes( EExtensions.resultNumeric )
                                 ? dataInput["result"]

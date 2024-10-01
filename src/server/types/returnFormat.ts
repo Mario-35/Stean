@@ -14,5 +14,5 @@ import { PgVisitor } from "../odata/visitor";
     name:                                               string; // name of the format (extension) default JSON
     type:                                               string; // type of format
     format(input: string | object, ctx?: koaContext):   string | object; // formating datas
-    generateSql(input: PgVisitor):                      string; // generate postgresSql query
+    generateSql(input: PgVisitor):                      string | undefined; // generate postgresSql query
 }

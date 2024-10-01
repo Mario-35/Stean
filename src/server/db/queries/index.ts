@@ -8,7 +8,9 @@
 // onsole.log("!----------------------------------- Index Queries. -----------------------------------!");
 export { createIdList } from "./createIdList";
 export { asDataArray } from "./asDataArray";
+export { asCsv } from "./asCsv";
 export { asJson } from "./asJson";
+export { observationResultCsv } from "./observationResultCsv";
 export { asGeoJSON } from "./asGeoJSON";
 export { graphDatastream } from "./graphDatastream";
 export { graphMultiDatastream } from "./graphMultiDatastream";
@@ -18,5 +20,7 @@ export { multiDatastreamKeys } from "./multiDatastreamKeys";
 export { multiDatastreamsUnitsKeys } from "./multiDatastreamsUnitsKeys";
 export { streamFromDeveui } from "./streamFromDeveui";
 export { testId } from "./testId";
+export { resultKeys } from "./resultKeys";
+export { multiDatastreamUoM } from "./multiDatastreamUoM";
 
 

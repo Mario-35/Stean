@@ -33,10 +33,8 @@ export { IstreamInfos } from "./streamInfos";
 export { Iuser } from "./user";
 export { IuserToken } from "./userToken";
 export { IdecodedUrl } from "./decodedUrl";
-export { IsshConnection } from "./sshConnection";
 export { IforwardConnection } from "./forwardConnection";
 export { IvisitRessource } from "./visitRessource";
-export { SshOptions, ServerOptions, TunnelOptions, ForwardOptions } from "./tunnel";
 export interface IKeyBoolean { [key: string]: boolean; }
 export interface IKeyString { [key: string]: string; }
 export type Ientities = { [key in allEntitiesType as string]: Ientity }

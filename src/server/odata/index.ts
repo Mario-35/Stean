@@ -8,36 +8,15 @@
 // onsole.log("!----------------------------------- pgVisitor index. -----------------------------------!");
 import { query, resourcePath } from "./parser/parser";
 import { Token } from "./parser/lexer";
-import { cleanUrl, returnFormats } from "../helpers";
-import { config } from "../configuration";
+import { cleanUrl } from "../helpers";
 import { SqlOptions } from "./parser/sqlOptions";
-import { multiDatastreamKeys } from "../db/queries";
 import { RootPgVisitor } from "./visitor";
 import { koaContext } from "../types";
 import { errors } from "../messages";
 import { EHttpCode } from "../enums";
+import { doSomeWorkAfterCreateAst, escapesOdata } from "./visitor/helper";
 
-const doSomeWorkAfterCreateAst = async (input: RootPgVisitor, ctx: koaContext) => {
-  if (
-    (input.returnFormat === returnFormats.csv && input.entity === "Observations" &&  input.parentEntity?.endsWith('atastreams') && input.parentId && <bigint>input.parentId > 0) ||
-    (input.splitResult && input.splitResult[0].toUpperCase() == "ALL" && input.parentId && <bigint>input.parentId > 0) ) {
-    const temp = await config.connection(ctx.config.name).unsafe(`${multiDatastreamKeys(input.parentId)}`);
-    input.splitResult = temp[0]["keys"];
-  }
-};
 
-const escapesOdata = (input: string) : string => {
-  const codes = { "/" : "%252F", "\\" : "%255C" };
-  if (input.includes("%27")) {
-    const pop:string[] = [];
-    input.split("%27").forEach((v: string, i: number) => {
-      if (i === 1) Object.keys(codes).forEach((code: string) => v = v.split(code).join(codes[code as keyof object]));      
-      pop.push(v);
-    });
-    return pop.join("%27");
-  }
-  return input;
-};
 
 export const createOdata = async (ctx: koaContext): Promise<RootPgVisitor | undefined> => {
   // blank url if not defined

@@ -9,7 +9,6 @@
 
 import { koaContext } from "../../types";
 import { exportToJson } from "./exportToJson";
-import { exportToXlsx } from "./exportToXlsx";
 
 export { addToService } from "./addToService";
 export { createDatabase } from "../createDb";
@@ -27,4 +26,4 @@ export { columnsNameFromCsv } from "./columnsNameFromCsv";
 export { streamCsvFile } from "./streamCsvFile";
 export { createIndexes } from "./createIndexes";
 export { columnsNameFromHydrasCsv } from "./columnsNameFromHydrasCsv";
-export const exportService = async (ctx: koaContext) => { return (ctx.url.includes("xls")) ? exportToXlsx(ctx) : exportToJson(ctx); };
+export const exportService = async (ctx: koaContext) => exportToJson(ctx);

@@ -35,7 +35,7 @@ export class OdataGeoColumn {
     console.log(log.whereIam());    
     this.column = removeAllQuotes(this.column);
     let test: string | undefined = undefined;
-    const tempEntity =  models.getEntity(this.src.ctx.config, this.src.entity);
+    const tempEntity =   this.src.entity;
     if (tempEntity) {
       if (this.column.includes(".")) {
         const temp = this.column.split(".");

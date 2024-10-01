@@ -9,3 +9,5 @@
     add geo fuctions outside location
 ## version 0.9.12
     Add File extension
+## version 0.9.2
+    perform csv 

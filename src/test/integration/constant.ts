@@ -531,20 +531,6 @@ export const infos: Record<string, any>  = {
                 "password": "Postgres password to create",
                 "database": "Name of the database (create it if not exist)",
                 "retry": "number of connection retry",
-                "tunnel": {
-                    "sshConnection": {
-                        "host": "Distant host",
-                        "username": "Distant username",
-                        "password": "Distant password",
-                        "port": "Distant ssh port"
-                    },
-                    "forwardConnection": {
-                        "srcAddr": "forward Connection source address",
-                        "srcPort": "forward Connection source port",
-                        "dstAddr": "forward Connection distant address",
-                        "dstPort": "forward Connection distant port"
-                    }
-                }
             }</pre>
             `,
         }

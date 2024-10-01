@@ -36,20 +36,6 @@ const conf = {
         "password": "newpass",
         "database": "newdb",
         "retry": 2,
-		"tunnel": {
-			"sshConnection": {
-				"host": "147.100.165.4",
-				"username": "madam",
-				"port": 22,
-				"password": "Mario35*"
-			},
-			"forwardConnection": {
-				"srcAddr": "localhost",
-				"srcPort": 1111,
-				"dstAddr": "localhost",
-				"dstPort": 5432
-			}
-		}
     },
     "apiVersion": "v1.1",
     "date_format": "DD/MM/YYYY hh:mi:ss",
@@ -78,20 +64,6 @@ const confPres = {
         "password": "Postgres password to create",
         "database": "Name of the database (create it if not exist)",
         "retry": "[2] number of connection retry",
-		"tunnel": {
-			"sshConnection": {
-				"host": "[8.8.8.8] Distant host",
-				"username": "Distant username",
-				"password": "Distant password",
-				"port": "[22] Distant ssh port"
-			},
-			"forwardConnection": {
-				"srcAddr": "[localhost] forward Connection source",
-				"srcPort": "[1111] forward Connection source",
-				"dstAddr": "[localhost] forward Connection distant",
-				"dstPort": "[5432] forward Connection distant",
-			}
-		}
     },
     "apiVersion": "[v1.1] Model",
     "date_format": "[DD/MM/YYYY hh:mi:ss] Date format",

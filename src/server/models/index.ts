@@ -5,7 +5,7 @@ import { _STREAM } from "../db/constants";
 import { executeSqlValues } from "../db/helpers";
 import { asJson } from "../db/queries";
 import { EColumnType, EExtensions, EVersion, filterEntities } from "../enums";
-import { doubleQuotesString, deepClone, isTest } from "../helpers";
+import { doubleQuotesString, deepClone, isTest, formatPgTableColumn } from "../helpers";
 import { errors, msg } from "../messages";
 import { Iservice, Ientities, Ientity, IstreamInfos, koaContext, IentityRelation } from "../types";
 import fs from "fs";
@@ -236,6 +236,10 @@ class Models {
     }
   }
 
+  public getEntityStrict = (service: Iservice , entity: Ientity | string): Ientity | undefined => {
+    return (typeof entity === "string") ? Models.models[service.apiVersion][entity] : Models.models[service.apiVersion][entity.name];
+  }
+
   public getEntity = (service: Iservice , entity: Ientity | string): Ientity | undefined => {
     if (config && entity) {
       if (typeof entity === "string") {
@@ -275,8 +279,12 @@ class Models {
     }      
   };
 
-  public getSelectColumnList(input: Ientity) {
-      return Object.keys(input.columns).filter((word) => !word.includes("_")).map((e: string) => `${doubleQuotesString(input.table)}.${doubleQuotesString(e)}`);
+  public getSelectColumnList(service: Iservice, entity: Ientity | string, complete: boolean,  exclus?: string[]) {
+      const tempEntity = this.getEntity(service, entity);
+      exclus = exclus || [""];
+      return tempEntity 
+        ? Object.keys(tempEntity.columns).filter((word) => !word.includes("_") && !exclus.includes(word)).map((e: string) => complete ? formatPgTableColumn(tempEntity.table, e) : doubleQuotesString(e))
+        : [];
   }
 
   getColumnListNameWithoutId(input: Ientity) {

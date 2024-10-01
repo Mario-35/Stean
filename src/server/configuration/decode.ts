@@ -29,7 +29,7 @@ const decrypt = (input: string, key: string): string => {
   return input;
 };
 
-export function decode(file: fs.PathOrFileDescriptor) {
+function decode(file: fs.PathOrFileDescriptor) {
   const fileTemp = fs.readFileSync(file, "utf8");  
   return decrypt(fileTemp, APP_KEY); 
 }

@@ -3,7 +3,7 @@
     "description": "SensorThings Enhanced API Node",
     "author": "Adam Mario",
     "license": "ISC",
-    "version": "0.9.11",
+    "version": "0.9.2",
     "lockfileVersion": 1,
     "requires": true,
     "repository": {
@@ -44,8 +44,6 @@
         "busboy": "^0.3.1",
         "cookie": "^0.6.0",
         "cookie-parser": "^1.4.6",
-        "exceljs": "^4.4.0",
-        "json2csv": "^5.0.6",
         "jsonwebtoken": "^9.0.2",
         "koa": "^2.3.0",
         "koa-bodyparser": "^4.3.0",
@@ -56,8 +54,7 @@
         "koa-logger": "^3.2.1",
         "koa-router": "^10.0.0",
         "koa-static": "^5.0.0",
-        "postgres": "^3.4.4",
-        "ssh2": "^1.15.0"
+        "postgres": "^3.4.4"
     },
     "devDependencies": {
         "@node-minify/clean-css": "^6.2.0",
@@ -72,7 +69,6 @@
         "@types/cookie": "^0.5.1",
         "@types/cookie-parser": "^1.4.3",
         "@types/html-minifier-terser": "^7.0.0",
-        "@types/json2csv": "^5.0.1",
         "@types/jsonwebtoken": "^8.5.8",
         "@types/koa": "^2.11.6",
         "@types/koa__cors": "^5.0.0",
@@ -87,8 +83,6 @@
         "@types/mocha": "^9.0.0",
         "@types/nodemailer": "^6.4.4",
         "@types/pg": "^8.6.1",
-        "@types/pg-copy-streams": "^1.2.1",
-        "@types/ssh2": "^1.15.0",
         "@types/superagent": "^4.1.10",
         "@typescript-eslint/parser": "^8.2.0",
         "apidoc": "^0.50.2",

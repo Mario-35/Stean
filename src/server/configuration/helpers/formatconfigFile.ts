@@ -44,20 +44,6 @@ export function formatconfigFile(name: string, input: Record<string, any>): Iser
         password: input["pg"] && input["pg"]["password"] ? input["pg"]["password"] : `ERROR`,
         database: name && name === TEST ? "test" : input["pg"] && input["pg"]["database"] ? input["pg"]["database"] : `ERROR`,
         retry: input["retry"] ? +input["retry"] : 2,
-        tunnel: input["pg"] && input["pg"]["tunnel"] ?  {
-          sshConnection: {
-            host: input["pg"] && input["pg"]["tunnel"] &&  input["pg"]["tunnel"]["sshConnection"]["host"] ? input["pg"]["tunnel"]["sshConnection"]["host"] : `ERROR`,
-            username: input["pg"] && input["pg"]["tunnel"] &&  input["pg"]["tunnel"]["sshConnection"]["username"] ? input["pg"]["tunnel"]["sshConnection"]["username"] : `ERROR`,
-            port: input["pg"] && input["pg"]["tunnel"] &&  input["pg"]["tunnel"]["sshConnection"]["port"] ? input["pg"]["tunnel"]["sshConnection"]["port"] : 22,
-            password: input["pg"] && input["pg"]["tunnel"] &&  input["pg"]["tunnel"]["sshConnection"]["password"] ? input["pg"]["tunnel"]["sshConnection"]["password"] : `ERROR`,
-          },
-          forwardConnection: {
-            srcAddr: input["pg"] && input["pg"]["tunnel"] &&  input["pg"]["tunnel"]["forwardConnection"]["srcAddr"] ? input["pg"]["tunnel"]["forwardConnection"]["srcAddr"] : `ERROR`,
-            srcPort: input["pg"] && input["pg"]["tunnel"] &&  input["pg"]["tunnel"]["forwardConnection"]["srcPort"] ? input["pg"]["tunnel"]["forwardConnection"]["srcPort"] : 22,
-            dstAddr: input["pg"] && input["pg"]["tunnel"] &&  input["pg"]["tunnel"]["forwardConnection"]["dstAddr"] ? input["pg"]["tunnel"]["forwardConnection"]["dstAddr"] : `ERROR`,
-            dstPort: input["pg"] && input["pg"]["tunnel"] &&  input["pg"]["tunnel"]["forwardConnection"]["dstPort"] ? input["pg"]["tunnel"]["forwardConnection"]["dstPort"] : 22
-          }
-        } : undefined 
       },
       apiVersion: getModelVersion(version),
       date_format: input["date_format"] || "DD/MM/YYYY hh:mi:ss",

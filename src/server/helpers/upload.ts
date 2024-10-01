@@ -13,6 +13,7 @@ import path from "path";
 import util from "util";
 import fs from "fs";
 import { koaContext } from "../types";
+import { _UPLOADPATH } from "../constants";
 
 /**
  *
@@ -25,12 +26,11 @@ export const upload = (ctx: koaContext): Promise<object> => {
   const data: Record<string, any> = {};
   // Create promise
   return new Promise(async (resolve, reject) => {
-    const uploadPath = "./upload";
     const allowedExtName = ["csv", "txt", "json"];
     // Init path
-    if (!fs.existsSync(uploadPath)) {
+    if (!fs.existsSync(_UPLOADPATH)) {
       const mkdir = util.promisify(fs.mkdir);
-      await mkdir(uploadPath).catch((error) => {
+      await mkdir(_UPLOADPATH).catch((error) => {
         data["state"] = "ERROR";
         reject(error);
       });
@@ -45,8 +45,8 @@ export const upload = (ctx: koaContext): Promise<object> => {
         file.resume();
         reject(data);
       } else {
-        file.pipe(fs.createWriteStream(uploadPath + "/" + filename));
-        data["file"] = uploadPath + "/" + filename;
+        file.pipe(fs.createWriteStream(_UPLOADPATH + "/" + filename));
+        data["file"] = _UPLOADPATH + "/" + filename;
         file.on("data", (chunk) => {
           data["state"] = `GET ${chunk.length} bytes`;
         });
@@ -57,7 +57,7 @@ export const upload = (ctx: koaContext): Promise<object> => {
 
         file.on("end", () => {
           data["state"] = "UPLOAD FINISHED";
-          data[fieldname] = uploadPath + "/" + filename;
+          data[fieldname] = _UPLOADPATH + "/" + filename;
         });
       }
     });
