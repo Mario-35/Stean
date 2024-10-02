@@ -6,15 +6,17 @@
  * @author formatPgString.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- asDataArray. -----------------------------------!\n");
+// onsole.log("!----------------------------------- asDataArray -----------------------------------!\n");
+
 import { asJson } from ".";
 import { ESCAPE_SIMPLE_QUOTE, _COLUMNSEPARATOR, _NEWLINE } from "../../constants";
 import { doubleQuotesString, simpleQuotesString, formatPgString } from "../../helpers";
 import { PgVisitor } from "../../odata/visitor";
 
 export const asDataArray = (input: PgVisitor): string => {  
-  const names:string[] = input.toPgQuery()?.keys.map((e: string) => formatPgString(e)) || [];
   // create names
+  const names:string[] = input.toPgQuery()?.keys.map((e: string) => formatPgString(e)) || [];
+  // loop subQuery
   if (input.includes) input.includes.forEach((include: PgVisitor) => { if (include.entity) names.push(include.entity.singular); });
   // Return SQL query  
   return asJson({

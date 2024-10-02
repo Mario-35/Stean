@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Test Helpers. -----------------------------------!\n");
+// onsole.log("!----------------------------------- Test Helpers -----------------------------------!\n");
 
 
 import {   executeSqlValues } from "../../db/helpers";

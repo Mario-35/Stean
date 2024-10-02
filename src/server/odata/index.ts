@@ -5,7 +5,8 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- pgVisitor index. -----------------------------------!\n");
+// onsole.log("!----------------------------------- pgVisitor index -----------------------------------!\n");
+
 import { query, resourcePath } from "./parser/parser";
 import { Token } from "./parser/lexer";
 import { cleanUrl } from "../helpers";
@@ -15,8 +16,6 @@ import { koaContext } from "../types";
 import { errors } from "../messages";
 import { EHttpCode } from "../enums";
 import { doSomeWorkAfterCreateAst, escapesOdata } from "./visitor/helper";
-
-
 
 export const createOdata = async (ctx: koaContext): Promise<RootPgVisitor | undefined> => {
   // blank url if not defined

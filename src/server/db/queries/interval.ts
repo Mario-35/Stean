@@ -5,7 +5,8 @@
 * @author mario.adam@inrae.fr
 *
 */
-// onsole.log("!----------------------------------- interval. -----------------------------------!\n");
+// onsole.log("!----------------------------------- interval -----------------------------------!\n");
+
 import { PgVisitor } from "../../odata/visitor";
 
 

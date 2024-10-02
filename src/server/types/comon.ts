@@ -6,6 +6,7 @@
  *
  */
 // onsole.log("!----------------------------------- Comon interface -----------------------------------!\n");
+
 import { IreturnResult } from "./returnResult";
 import { Iuser } from "./user";
 

@@ -6,6 +6,7 @@
  *
  */
 // onsole.log("!----------------------------------- entity MultiDatastreamObservedProperty -----------------------------------!\n");
+
 import { createEntity } from ".";
 import { ETable } from "../../enums";
 import { Ientity } from "../../types";

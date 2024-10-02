@@ -27,7 +27,9 @@ import { MqttServer } from "../mqtt";
 
 // class to logCreate configs environements
 class Configuration {
+  // store all services
   static services: { [key: string]: Iservice } = {};
+  // configuration complete file path
   static filePath: string;
   static MqttServer: MqttServer;
   static queries: { [key: string]: string[] } = {};

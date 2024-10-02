@@ -31,9 +31,4 @@ export class Visitor {
     this.valueskeys = options.valueskeys;
     this.returnFormat = (options.onlyValue === true) ? returnFormats.txt : returnFormats.json;
   }
-
-  addInclude(input: PgVisitor) {
-    this.includes.push(input);
-  }
-
 }

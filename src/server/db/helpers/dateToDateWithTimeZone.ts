@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- dateToDateWithTimeZone. -----------------------------------!\n");
+// onsole.log("!----------------------------------- dateToDateWithTimeZone -----------------------------------!\n");
 
 import { log } from "../../log";
 

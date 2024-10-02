@@ -6,7 +6,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Helpers for user admin. -----------------------------------!\n");
+// onsole.log("!----------------------------------- Helpers for user admin -----------------------------------!\n");
 
 import { config } from "../../configuration";
 import { ADMIN, setDebug } from "../../constants";

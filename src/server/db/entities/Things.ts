@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Things entity. -----------------------------------!\n");
+// onsole.log("!----------------------------------- Things entity -----------------------------------!\n");
 
 import { log } from "../../log";
 import { koaContext } from "../../types";

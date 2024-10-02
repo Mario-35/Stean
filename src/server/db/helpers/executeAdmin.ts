@@ -5,7 +5,8 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- executeAdmin. -----------------------------------!\n");
+// onsole.log("!----------------------------------- executeAdmin -----------------------------------!\n");
+
 import { config } from "../../configuration";
 import { ADMIN } from "../../constants";
 import { log } from "../../log";

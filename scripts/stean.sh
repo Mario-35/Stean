@@ -9,8 +9,10 @@
 
 clear
 
-# Name of cnfigs datas
+# Name of configs datas
 CONF=.steanpath
+# Name of configs saved datas
+SAVEDCONF=.confs
 # Name of the file downladed
 FILEDIST=./dist.zip
 # Name of the backup
@@ -189,15 +191,27 @@ download_dist() {
     sudo curl -o $FILEDIST -L https://github.com/Mario-35/Stean/raw/main/builds/stean_latest.zip
 }
 
+
+
 # Function to install stean
 install_stean() {
-    # remove bak
-    if [ -f $APIDEST/apiBak ]; then
-        rm -r $APIDEST/apiBak
-        echo "Delete => $APIDEST/apiBak"
-    fi
     # save actual to bak
     if [ -f $APIDEST/api ]; then
+        # remove bak
+        if [ -f $APIDEST/apiBak ]; then
+            rm -r $APIDEST/apiBak
+            echo "Delete => $APIDEST/apiBak"
+        fi
+        DATEFOLDER=$(date -r "save" "+%Y%m%d-%H%M%S")
+        mkdir "$SAVEDCONF/$DATEFOLDER"
+        # Save config
+        if [ -f $APIDEST/api/configuration/configuration.json ]; then
+            cp $APIDEST/api/configuration/configuration.json $SAVEDCONF/$DATEFOLDER
+        fi
+        # Save key
+        if [ -f $APIDEST/api/configuration/.key ]; then    
+            cp $APIDEST/api/configuration/.key $SAVEDCONF/$DATEFOLDER    
+        fi
         mv $APIDEST/api $APIDEST/apiBak
         echo "Move $APIDEST/api => $APIDEST/apiBak"
     fi
@@ -209,16 +223,16 @@ install_stean() {
     echo "unzip $FILEDIST => $APIDEST/api"
     # Save config
     if [ -f $APIDEST/apiBak/configuration/configuration.json ]; then
-        cp $APIDEST/apiBak/configuration/configuration.json $FILECFG
-        echo "Move $APIDEST/apiBak/configuration/configuration.json => $FILECFG"
+        cp $APIDEST/apiBak/configuration/configuration.json $$FILEDIS/configuration/
     fi
     # Save key
-    if [ -f $APIDEST/apiBak/configuration/.key ]; then
-        cp $APIDEST/apiBak/configuration/.key $APIDEST/api/configuration/.key
-        echo "Move $APIDEST/apiBak/configuration/.key => $APIDEST/api/configuration/.key"        
+    if [ -f $APIDEST/apiBak/configuration/.key ]; then    
+        cp $APIDEST/apiBak/configuration/.key $$FILEDIS/configuration/    
     fi
     save_dist
     npm install --silent --omit=dev --prefix $APIDEST/api/
+    logo
+    exit
 }
 
 # Function to stop stean
@@ -520,6 +534,7 @@ infos;
     }
 
     POS() { 
+        if [[ $cur == esc ]];then exit;fi
         if [[ $cur == up ]];then ((i--));fi
         if [[ $cur == dn ]];then ((i++));fi
         if [[ $i -lt 0   ]];then i=$LM;fi
@@ -575,9 +590,9 @@ infos;
 
     ES() { 
         MARK;
-        $e "ENTER = main menu ";
+        $e "space = main menu ";
         $b;
-        read;
+        read -r -s -d ' '
         INIT;
     };
 
@@ -586,7 +601,7 @@ infos;
     CIVIS;
     NULL=/dev/null
     INIT;
-    while [[ "$O" != " " ]]; do 
+    while [[ "$O" != "" ]]; do 
         case $i in
             0) S=M0;SC;if [[ $cur == "" ]];then R;selectOption 0;INIT;fi;;
             1) S=M1;SC;if [[ $cur == "" ]];then R;selectOption 1;ES;fi;;

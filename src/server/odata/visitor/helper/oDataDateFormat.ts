@@ -6,6 +6,7 @@
  *
  */
 // onsole.log("!----------------------------------- oDataDateFormat -----------------------------------!\n");
+
 import { Token } from "../../parser";
 
 export function oDataDateFormat(node: Token, test: string): string | undefined {

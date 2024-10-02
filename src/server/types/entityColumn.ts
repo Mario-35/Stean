@@ -6,6 +6,7 @@
  *
  */
 // onsole.log("!----------------------------------- entityColumn interface -----------------------------------!\n");
+
 import { IKeyString, IKeyBoolean, Iservice, typeExtensions } from ".";
 
 export interface IentityColumn {

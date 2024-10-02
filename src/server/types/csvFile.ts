@@ -6,6 +6,7 @@
  *
  */
 // onsole.log("!----------------------------------- csvFile interface -----------------------------------!\n");
+
 import { IcsvColumn, IstreamInfos } from ".";
 
 export interface IcsvFile {

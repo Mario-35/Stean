@@ -5,7 +5,8 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- queryInsertFromCsv. -----------------------------------!\n");
+// onsole.log("!----------------------------------- queryInsertFromCsv -----------------------------------!\n");
+
 import { IcsvColumn, IcsvFile, koaContext } from "../../types";
 import { columnsNameFromHydrasCsv, streamCsvFile } from ".";
 import { log } from "../../log";

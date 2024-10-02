@@ -5,7 +5,8 @@
 * @author results.adam@inrae.fr
 *
 */
-// onsole.log("!----------------------------------- graphDatastream. -----------------------------------!\n");
+// onsole.log("!----------------------------------- graphDatastream -----------------------------------!\n");
+
 import { createIdList, interval } from ".";
 import { cleanStringComma } from "../../helpers";
 import { PgVisitor } from "../../odata/visitor";

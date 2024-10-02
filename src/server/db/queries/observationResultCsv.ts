@@ -1,3 +1,12 @@
+/**
+ * observationResultCsv.
+*
+* @copyright 2020-present Inrae
+* @author mario.adam@inrae.fr
+*
+*/
+// onsole.log("!----------------------------------- observationResultCsv -----------------------------------!\n");
+
 export const observationResultCsv = (column: string): string => `SELECT
     concat_ws(
         ' ',
