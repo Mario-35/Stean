@@ -1,6 +1,6 @@
 ![Logo](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/logo.png "Logo")
 
-# SensorThings Enhanced API Node [![version](https://img.shields.io/badge/version-0.9.1-red)](https://github.com/Mario-35/Stean/blob/main/realease.md) [![licence](https://img.shields.io/badge/licence-MIT-red)](https://github.com/Mario-35/Stean?tab=MIT-1-ov-file#readme)
+# SensorThings Enhanced API Node [![version](https://img.shields.io/badge/version-0.9.2-red)](https://github.com/Mario-35/Stean/blob/main/realease.md) [![licence](https://img.shields.io/badge/licence-MIT-red)](https://github.com/Mario-35/Stean?tab=MIT-1-ov-file#readme)
 
 ## Installation / Deploy  [![node](https://img.shields.io/badge/NodeJs-%20>16-blue)](https://nodejs.org/) [![postgreSql](https://img.shields.io/badge/PostgreSQL-%20>14-blue)](https://www.postgresql.org/) [![postGIS](https://img.shields.io/badge/postGIS-%20>3-blue)](https://postgis.net/) [![pm2](https://img.shields.io/badge/pm2-%20>5-blue)](https://pm2.keymetrics.io/)
 
