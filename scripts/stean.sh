@@ -601,7 +601,7 @@ infos;
     CIVIS;
     NULL=/dev/null
     INIT;
-    while [[ "$O" != "" ]]; do 
+    while [[ "$O" != " " ]]; do 
         case $i in
             0) S=M0;SC;if [[ $cur == "" ]];then R;selectOption 0;INIT;fi;;
             1) S=M1;SC;if [[ $cur == "" ]];then R;selectOption 1;ES;fi;;
