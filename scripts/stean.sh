@@ -191,6 +191,25 @@ download_dist() {
     sudo curl -o $FILEDIST -L https://github.com/Mario-35/Stean/raw/main/builds/stean_latest.zip
 }
 
+# Function to save configuration
+save_configuration() {
+    DATEFOLDER="save$(date +"%FT%H%M")"
+    SAVEDCONF=$SAVEDCONF/$DATEFOLDER
+    echo $SAVEDCONF
+    mkdir $SAVEDCONF
+    # Save config
+    if [ -f $APIDEST/api/configuration/configuration.json ]; then
+        cp $APIDEST/api/configuration/configuration.json $SAVEDCONF/
+    else
+        echo "No configuration file found"
+    fi
+    # Save key
+    if [ -f $APIDEST/api/configuration/.key ]; then    
+        cp $APIDEST/api/configuration/.key $SAVEDCONF/
+    else
+        echo "No key file found"
+    fi
+}
 
 
 # Function to install stean
@@ -202,16 +221,7 @@ install_stean() {
             rm -r $APIDEST/apiBak
             echo "Delete => $APIDEST/apiBak"
         fi
-        DATEFOLDER=$(date -r "save" "+%Y%m%d-%H%M%S")
-        mkdir "$SAVEDCONF/$DATEFOLDER"
-        # Save config
-        if [ -f $APIDEST/api/configuration/configuration.json ]; then
-            cp $APIDEST/api/configuration/configuration.json $SAVEDCONF/$DATEFOLDER
-        fi
-        # Save key
-        if [ -f $APIDEST/api/configuration/.key ]; then    
-            cp $APIDEST/api/configuration/.key $SAVEDCONF/$DATEFOLDER    
-        fi
+        save_configuration
         mv $APIDEST/api $APIDEST/apiBak
         echo "Move $APIDEST/api => $APIDEST/apiBak"
     fi
@@ -222,12 +232,16 @@ install_stean() {
     unzip -qq -o $FILEDIST -d $APIDEST/api/  
     echo "unzip $FILEDIST => $APIDEST/api"
     # Save config
-    if [ -f $APIDEST/apiBak/configuration/configuration.json ]; then
-        cp $APIDEST/apiBak/configuration/configuration.json $$FILEDIS/configuration/
+    if [ -f $SAVEDCONF/configuration.json ]; then
+        cp $SAVEDCONF/configuration.json $$APIDEST/configuration/
+    else
+        echo "No configuration file found"        
     fi
     # Save key
-    if [ -f $APIDEST/apiBak/configuration/.key ]; then    
-        cp $APIDEST/apiBak/configuration/.key $$FILEDIS/configuration/    
+    if [ -f $SAVEDCONF/.key ]; then    
+        cp $SAVEDCONF/.key $$APIDEST/configuration/    
+    else
+        echo "No key file found"
     fi
     save_dist
     npm install --silent --omit=dev --prefix $APIDEST/api/
@@ -377,6 +391,12 @@ selectOption() {
             echo "│                     create configuration                      │"
             echo "└───────────────────────────────────────────────────────────────┘"
             create_configuration_json
+            ;;
+        "Save configuration")
+            echo "┌───────────────────────────────────────────────────────────────┐"
+            echo "│                      Save configuration                       │"
+            echo "└───────────────────────────────────────────────────────────────┘"
+            save_configuration
             ;;            
         "Decode configuration")
             echo "┌───────────────────────────────────────────────────────────────┐"
@@ -433,7 +453,7 @@ infos() {
 
     if [[ "$STEANVER" != "not installed" ]]; then
         if [ -f $FILECFG ]; then
-                options+=('Decode configuration')
+                options+=('Save configuration')
             else 
                 options+=("Create blank configuration")
         fi    
