@@ -10,8 +10,7 @@
 import Aedes, { AedesPublishPacket, Client, PublishPacket, Subscription } from 'aedes';
 import { config } from '../configuration';
 import { log } from '../log';
-import { color } from '../constants';
-import { EColor } from '../enums';
+import { color, EColor } from '../enums';
 import { errors, infos } from '../messages';
 import { loginUser } from '../authentication';
 import { createServer } from 'aedes-server-factory';

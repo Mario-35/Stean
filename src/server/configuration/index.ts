@@ -7,13 +7,13 @@
  */
 // onsole.log("!----------------------------------- Configuration class -----------------------------------!\n");
 
-import { addToStrings, color, setReady, _DEBUG } from "../constants";
+import { setReady, _DEBUG } from "../constants";
 import { asyncForEach, decrypt, encrypt, isProduction, isTest, logToHtml, } from "../helpers";
 import { Iservice, IdbConnection, IserviceInfos, koaContext, keyobj } from "../types";
 import { errors, info, infos, msg } from "../messages";
 import { createIndexes, createService} from "../db/helpers";
 import { app } from "..";
-import { EChar, EColor, EConstant, EExtensions, EFileName, EOptions, EUpdate } from "../enums";
+import { color, EChar, EColor, EConstant, EExtensions, EFileName, EOptions, EUpdate } from "../enums";
 import fs from "fs";
 import update from "./update.json";
 import postgres from "postgres";
@@ -265,7 +265,10 @@ class Configuration {
   }
 
   addToQueries(connectName: string, query: string) {
-    addToStrings(Configuration.queries[connectName], query);
+    if (Configuration.queries[connectName]) 
+      Configuration.queries[connectName].push(query);
+    else
+      Configuration.queries[connectName] = [query];
   }
 
   private clearQueries() { 

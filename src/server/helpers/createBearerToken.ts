@@ -7,11 +7,11 @@
  */
 // onsole.log("!----------------------------------- createBearerToken -----------------------------------!\n");
 
-import cookieParser from "cookie-parser";
-import { APP_KEY } from "../constants";
+import cookieParser from "cookie-parser";;
 import { errors } from "../messages";
 import cookieModule from "cookie";
 import { keyobj, koaContext } from "../types";
+import { EConstant } from "../enums";
 
 export const createBearerToken = (ctx: koaContext) => {  
     const getCookie = (serializedCookies: string, key: string) => cookieModule.parse(serializedCookies)[key] ?? false;
@@ -20,7 +20,7 @@ export const createBearerToken = (ctx: koaContext) => {
     const headerKey = "Bearer";
     const cookie = true;
   
-    if (cookie && !APP_KEY) {
+    if (cookie && !EConstant.key) {
       throw new Error(errors.tokenMissing);
     }
   
@@ -52,7 +52,7 @@ export const createBearerToken = (ctx: koaContext) => {
         const plainCookie = getCookie(header.cookie, "jwt-session"); // seeks the key
         if (plainCookie) {
           
-          const cookieToken = cookieParser.signedCookie(plainCookie, APP_KEY);
+          const cookieToken = cookieParser.signedCookie(plainCookie, EConstant.key);
           
           if (cookieToken) {
             token = cookieToken;

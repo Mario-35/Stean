@@ -8,8 +8,8 @@
 // onsole.log("!----------------------------------- Log class -----------------------------------!\n");
 
 import util from "util";
-import { EChar, EColor } from "../enums";
-import { color, showAll, _DEBUG } from "../constants";
+import { color, EChar, EColor } from "../enums";
+import { showAll, _DEBUG } from "../constants";
 import { Lexer } from "../odata/parser";
 import { _ID } from "../db/constants";
 

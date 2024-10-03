@@ -30,7 +30,6 @@ export { unique } from "./unique";
 export { removeEmpty } from "./removeEmpty";
 export { upload } from "./upload";
 export { logToHtml } from "./logToHtml";
-export { getKey } from "./getKey";
 export { Csv } from "./csv";
 
 export const removeAllQuotes = (input: string): string => input.replace(/['"]+/g, "");

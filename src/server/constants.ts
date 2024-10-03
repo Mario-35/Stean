@@ -8,8 +8,6 @@
 // onsole.log("!----------------------------------- Constants of API -----------------------------------!\n");
 
 import util from "util";
-import { getKey } from "./helpers";
-export const color = (col: number) => `\x1b[${col}m`;
 export const ESCAPE_ARRAY_JSON = (input: string) => input ? input.replace("[", "{") .replace("]", "}") : undefined;
 export const ESCAPE_SIMPLE_QUOTE = (input: string) => input.replace(/[']+/g, "''");
 export const TIMESTAMP = (): string => { const d = new Date(); return d.toLocaleTimeString(); };
@@ -19,6 +17,4 @@ export function setReady(input: boolean) { _READY = input; }
 export function showAll<T>(input: T, colors?: boolean) { return typeof input === "object" ? util.inspect(input, { showHidden: false, depth: null, colors: colors || false, }) : input; }
 export let _DEBUG = false;
 export let _READY = false;
-export function addToStrings(input: string[], data: string) { if (input) input.push(data); else input = [data]; }
-export const APP_KEY = getKey() ;
 

@@ -25,7 +25,6 @@ import { RootPgVisitor } from "./odata/visitor";
 import { EChar, EConstant } from "./enums";
 import { protectedRoutes, routerHandle, unProtectedRoutes } from "./routes/";
 import { Iservice, IdecodedUrl, Ientities, Ilog, IuserToken, koaContext } from "./types";
-import { APP_KEY } from "./constants";
 
 // Extend koa context 
 declare module "koa" {
@@ -76,7 +75,6 @@ app.use(unProtectedRoutes.routes());
 
 // app key
 app.use((ctx: koaContext, next) => {
-  ctx.state.secret = APP_KEY;
   ctx.body = ctx.request.body;
   return next();
 });
