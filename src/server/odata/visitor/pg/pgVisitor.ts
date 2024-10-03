@@ -8,7 +8,7 @@
 // onsole.log("!----------------------------------- pgVisitor for odata -----------------------------------!\n");
 
 import { doubleQuotesString, simpleQuotesString, isGraph, isTest, removeAllQuotes, returnFormats, formatPgTableColumn } from "../../../helpers";
-import { IodataContext, IKeyString, Ientity, IKeyBoolean, IpgQuery, koaContext, IvisitRessource } from "../../../types";
+import { IodataContext, Ientity, IKeyBoolean, IpgQuery, koaContext, IvisitRessource } from "../../../types";
 import { Token } from "../../parser/lexer";
 import { Literal } from "../../parser/literal";
 import { SQLLiteral } from "../../parser/sqlLiteral";
@@ -53,7 +53,6 @@ export class PgVisitor extends Visitor {
   parameters: unknown[] = [];
   ast: Token;
   showRelations = true;
-  results: IKeyString = {};
   debugOdata = isTest() ? false : _DEBUG;
   single: boolean = false;
   constructor(ctx: koaContext, options = <SqlOptions>{}) {

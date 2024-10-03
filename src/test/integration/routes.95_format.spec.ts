@@ -38,34 +38,34 @@ describe("Output formats", () => {
 		done();
 	});
 	afterEach(() => { writeLog(true); });
-    // describe("{get} resultFormat csv", () => {
-    //     it("Return result in csv format.", (done) => {
-    //         const infos = addTest({
-    //             api: `{get} ResultFormat as csv`,
-    //             apiName: "FormatCsv",
-    //             apiDescription: 'Use $resultFormat=csv to get datas as csv format.<br><img class="tabLogo" src="./assets/csv.jpg" alt="csv result">',
-    //             apiExample: {
-    //                 http: `${testVersion}/Datastreams(1)/Observations?$top=20&$resultFormat=csv`,
+    describe("{get} resultFormat csv", () => {
+        it("Return result in csv format.", (done) => {
+            const infos = addTest({
+                api: `{get} ResultFormat as csv`,
+                apiName: "FormatCsv",
+                apiDescription: 'Use $resultFormat=csv to get datas as csv format.<br><img class="tabLogo" src="./assets/csv.jpg" alt="csv result">',
+                apiExample: {
+                    http: `${testVersion}/Datastreams(1)/Observations?$top=20&$resultFormat=csv`,
 					
-	// 			},            });
-    //         chai.request(server)
-    //             .get(`/test/${infos.apiExample.http}`)
-    //             .end((err: Error, res: any) => {
-    //                 should.not.exist(err);
-    //                 res.status.should.equal(200);
-    //                 res.type.should.equal("text/csv");
-    //                 res.text.startsWith(`"@iot.${"id"}";`);
-    //                 addToApiDoc({ ...infos, result: res });
-    //                 done();
-    //             });
-    //     });
-    // });
+				},            });
+            chai.request(server)
+                .get(`/test/${infos.apiExample.http}`)
+                .end((err: Error, res: any) => {
+                    should.not.exist(err);
+                    res.status.should.equal(200);
+                    res.type.should.equal("text/csv");
+                    res.text.startsWith(`"@iot.${"id"}";`);
+                    addToApiDoc({ ...infos, result: res });
+                    done();
+                });
+        });
+    });
 
     describe("{get} resultFormat dataArray", () => {
         it("Return Things in dataArray format.", (done) => {
             const infos = addTest({
-                api: `{get} Things Things as dataArray`,
-                apiName: "FormatThingdataArray",
+                api: `{get} Things as dataArray`,
+                apiName: "FormatDataArray",
                 apiDescription: 'Use $resultFormat=dataArray to get datas as dataArray format.',
                 apiExample: {
                     http: `${testVersion}/Things?$resultFormat=dataArray`,
@@ -79,7 +79,7 @@ describe("Output formats", () => {
                     res.status.should.equal(200);
                     res.type.should.equal("application/json");
                     res.body[0].component.length.should.eql(4);
-                    res.body[0].component[0].should.eql("id");  
+                    res.body[0].component[0].should.eql("@iot.id");  
                     res.body[0].dataArray.length.should.eql(16);
                     res.body[0].dataArray = [res.body[0].dataArray[0], res.body[0].dataArray[1], " ... "];
                     addToApiDoc({ ...infos, result: res });
@@ -87,30 +87,29 @@ describe("Output formats", () => {
                 });
         });
         
-        // it("Return Datastream/Observations in dataArray format.", (done) => {
-        //     const infos = addTest({
-        //         api: `{get} Datastream Observations as dataArray`,
-        //         apiName: "FormatDataStreamdataArray",
-        //         apiDescription: 'Use $resultFormat=dataArray to get datas as dataArray format.',
-        //         http: `${testVersion}/Datastreams(1)/Observations?$resultFormat=dataArray&$select=id,result`,
-        //         apiExample: {
-		// 			
-		// 		}, 
-        //     });
-        //     chai.request(server)
-        //         .get(`/test/${infos.apiExample.http}`)
-        //         .end((err: Error, res: any) => { 
-        //             should.not.exist(err);
-        //             res.status.should.equal(200);
-        //             res.type.should.equal("application/json");
-        //             res.body[0].component.length.should.eql(2);
-        //             res.body[0]['dataArray@iot.count'].should.eql(33);
-        //             res.body[0].dataArray.length.should.eql(33);
-        //             res.body[0].dataArray = [res.body[0].dataArray[0], res.body[0].dataArray[1], " ... "];
-        //             addToApiDoc({ ...infos, result: res});
-        //             done();
-        //         });
-        // });
+        it("Return Datastream/Observations in dataArray format.", (done) => {
+            const infos = addTest({
+                api: `{get} Observations as dataArray`,
+                apiName: "FormatDataArrayStream",
+                apiDescription: 'Use $resultFormat=dataArray to get datas as dataArray format.',
+                apiExample: {
+                    http: `${testVersion}/Datastreams(1)/Observations?$resultFormat=dataArray&$select=id,result`,					
+				}, 
+            });
+            chai.request(server)
+                .get(`/test/${infos.apiExample.http}`)
+                .end((err: Error, res: any) => { 
+                    should.not.exist(err);
+                    res.status.should.equal(200);
+                    res.type.should.equal("application/json");
+                    res.body[0].component.length.should.eql(2);
+                    res.body[0]['dataArray@iot.count'].should.eql(33);
+                    res.body[0].dataArray.length.should.eql(33);
+                    res.body[0].dataArray = [res.body[0].dataArray[0], res.body[0].dataArray[1], " ... "];
+                    addToApiDoc({ ...infos, result: res});
+                    done();
+                });
+        });
 
         it("Return Observations expand Datastream name in dataArray format.", (done) => {
             chai.request(server)
@@ -124,35 +123,35 @@ describe("Output formats", () => {
                     done();
                 });
         });
-        // it("Return Observations expand Datastream id in dataArray format.", (done) => {
-        //     chai.request(server)
-        //         .get(`/test/${testVersion}/Observations?$expand=Datastream($select=id)&$select=phenomenonTime,result&$resultFormat=dataArray`)
-        //         .end((err: Error, res: any) => {
-        //             should.not.exist(err);
-        //             res.status.should.equal(200);
-        //             res.type.should.equal("application/json");
-        //             res.body[0]["component"].should.includes('Datastream');
-        //             res.body[0]['dataArray@iot.count'].should.eql(552);
-        //             res.body[0]["dataArray"][0][2]["id"].should.equal(1);
-        //             done();
-        //         });
-        // });
-        // it("Return Observations expand Datastream id and name in dataArray format.", (done) => {
-        //     chai.request(server)
-        //         .get(`/test/${testVersion}/Observations?$expand=Datastream($select=id,name)&$select=phenomenonTime,result&$resultFormat=dataArray`)
-        //         .end((err: Error, res: any) => {
-                    
-        //             testLog(res.body);
-        //             should.not.exist(err);
-        //             res.status.should.equal(200);
-        //             res.type.should.equal("application/json");
-        //             res.body[0]["component"].should.includes('Datastream');
-        //             Object.keys(res.body[0]["dataArray"][0][2]).should.include("id");
-        //             Object.keys(res.body[0]["dataArray"][0][2]).should.include("name");
-        //             res.body[0]['dataArray@iot.count'].should.eql(552);
-        //             done();
-        //         });
-        // });
+
+        it("Return Observations expand Datastream id in dataArray format.", (done) => {
+            chai.request(server)
+                .get(`/test/${testVersion}/Observations?$expand=Datastream($select=id)&$select=phenomenonTime,result&$resultFormat=dataArray`)
+                .end((err: Error, res: any) => {
+                    should.not.exist(err);
+                    res.status.should.equal(200);
+                    res.type.should.equal("application/json");
+                    res.body[0]["component"].should.includes('Datastream');
+                    res.body[0]['dataArray@iot.count'].should.eql(552);
+                    res.body[0]["dataArray"][0][2]["@iot.id"].should.equal(1);
+                    done();
+                });
+        });
+
+        it("Return Observations expand Datastream id and name in dataArray format.", (done) => {
+            chai.request(server)
+                .get(`/test/${testVersion}/Observations?$expand=Datastream($select=id,name)&$select=phenomenonTime,result&$resultFormat=dataArray`)
+                .end((err: Error, res: any) => {
+                    should.not.exist(err);
+                    res.status.should.equal(200);
+                    res.type.should.equal("application/json");
+                    res.body[0]["component"].should.includes('Datastream');
+                    Object.keys(res.body[0]["dataArray"][0][2]).should.include("@iot.id");
+                    Object.keys(res.body[0]["dataArray"][0][2]).should.include("name");
+                    res.body[0]['dataArray@iot.count'].should.eql(552);
+                    done();
+                });
+        });
     });
 
     describe("{get} resultFormat graph", () => {

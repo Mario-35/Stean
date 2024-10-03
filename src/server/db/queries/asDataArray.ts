@@ -14,7 +14,7 @@ import { doubleQuotesString, simpleQuotesString, formatPgString } from "../../he
 import { PgVisitor } from "../../odata/visitor";
 
 export const asDataArray = (input: PgVisitor): string => {  
-  // create names
+  // create names  
   const names:string[] = input.toPgQuery()?.keys.map((e: string) => formatPgString(e)) || [];
   // loop subQuery
   if (input.includes) input.includes.forEach((include: PgVisitor) => { if (include.entity) names.push(include.entity.singular); });

@@ -105,7 +105,6 @@ export class Common {
           const readableStream =  await config.connection(this.ctx.config.name).unsafe(sql).readable();
           this.ctx.body = "";
           for await (const chunk of readableStream) {
-            process.stdout.write('.');
             this.ctx.body += chunk.toString();
           }
           return this.formatReturnResult({

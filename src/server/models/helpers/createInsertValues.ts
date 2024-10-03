@@ -48,6 +48,7 @@ export function createInsertValues(service: Iservice , input: Record<string, any
                   if (input[e].startsWith && input[e].startsWith('"{') && input[e].endsWith('}"')) input[e] = removeFirstEndDoubleQuotes(input[e]);
                   else if (input[e].startsWith && input[e].startsWith('{"@iot.name"')) input[e] = `(SELECT "id" FROM "${e.split("_")[0]}" WHERE "name" = '${JSON.parse(removeFirstEndDoubleQuotes(input[e]))["@iot.name"]}')`;
                   keys.push(doubleQuotesString(e));
+                  
                   values.push(typeof input[e] === "string" 
                                               ? input[e].startsWith("(SELECT")
                                               ? input[e]

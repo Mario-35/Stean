@@ -34,7 +34,7 @@ export const doSomeWorkAfterCreateAst = async (input: RootPgVisitor, ctx: koaCon
         await config.connection(ctx.config.name).unsafe(datastreamUoM(input)).then((res) => {
           input.columnSpecials["result"] = res[0].keys.split(",").map((e: string) => `("result"->>'value')::json->'${e}' AS "${e}"`);
         });        
-      } else if (input.parentEntity.name === "Datastreams") input.columnSpecials["result"]  = [`"result"->'value'`];
+      } else if (input.parentEntity.name === "Datastreams") input.columnSpecials["result"]  = [`"result"->'value' AS result`];
       if (input.parentEntity.name === "MultiDatastreams") {
         console.log(multiDatastreamUoM(input));
         

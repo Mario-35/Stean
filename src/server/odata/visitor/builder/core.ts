@@ -20,7 +20,7 @@ export class Core {
     const addTo = (input: string[]) => {
       input.forEach(key =>  {
         key = key.includes(" AS ") ? key.split(" AS ")[1] : key;
-        key = key.includes(".") ? key.split(".")[1] : key;
+        key = key.includes(".") && !key.includes("@iot") ? key.split(".")[1] : key;
         if (!this._src.includes(key) && key.trim() !== "") this._src.push(removeAllQuotes(key));      
       });
     }

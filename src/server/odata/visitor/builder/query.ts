@@ -41,6 +41,9 @@ export class Query  {
       this.groupBy = new GroupBy();
       this.keyNames = new Key([]);
     }
+    // private columnAsName(input: string): string {
+    //     return input.includes(" AS ") ? input.split(" AS ")[1] : input;
+    // }
 
     private isCalcColumn(input: string): boolean {
         return STRINGEXC.map(e => input.includes(e) ? true : false).filter(e => e === true).length > 0;
@@ -132,15 +135,15 @@ export class Query  {
             return this.formatedColumn(main.ctx.config, tempEntity, column, { valueskeys: element.valueskeys, quoted: true, table: true, alias: ["id", "result"].includes(column), as: isGraph(main) ? false : true } ) || "";
         }) .filter(e => e != "" ).forEach((e: string) => {             
             if (e === "selfLink") e = selfLink;             
-            const testIisCsvOrArray = isCsvOrArray(element);            
-            if (testIisCsvOrArray) this.keyNames.add(e);
+            const testIsCsvOrArray = isCsvOrArray(element);
+            if (testIsCsvOrArray) this.keyNames.add(e);
             returnValue.push(e);
             if (main.interval) main.addToIntervalColumns(this.extractColumnName(e));
             if (e === "id" && (element.showRelations == true || isCsvOrArray(main))) {
-                if (testIisCsvOrArray) this.keyNames.add("id"); 
+                if (testIsCsvOrArray) this.keyNames.add("id"); 
                 else returnValue.push(selfLink);    
             }     
-             if (testIisCsvOrArray && ["payload", "deveui", "phenomenonTime"].includes(removeAllQuotes(e))) this.keyNames.add(e);
+             if (testIsCsvOrArray && ["payload", "deveui", "phenomenonTime"].includes(removeAllQuotes(e))) this.keyNames.add(e);
         });
         // add interval if requested
         if (main.interval) main.addToIntervalColumns(`CONCAT('${main.ctx.decodedUrl.root}/${tempEntity.name}(', COALESCE("@iot.id", '0')::text, ')') AS ${doubleQuotesString(_SELFLINK)}`);
@@ -200,21 +203,21 @@ export class Query  {
                                 const relation = relationInfos(main.ctx.config, element.entity.name, rel);
                                 if (tempTable && !relation.rightKey.startsWith("_"))
                                     if ( main.ctx.config.options.includes(EOptions.stripNull) && element.entity.name === main.ctx.model[allEntities.Observations].name && tempTable.endsWith(main.ctx.model[allEntities.Datastreams].name)) stream = `CASE WHEN ${main.ctx.model[tempTable].table}_id NOTNULL THEN`;
-                                        select.push(`${stream ? stream : ""} CONCAT('${main.ctx.decodedUrl.root}/${main.ctx.model[element.entity.name].name}(', ${doubleQuotesString(main.ctx.model[element.entity.name].table)}."id", ')/${rel}') ${stream ? "END ": ""}AS "${rel}${_NAVLINK}"`);                            
-                                        main.addToIntervalColumns(`'${main.ctx.decodedUrl.root}/${main.ctx.model[element.entity.name].name}(0)/${rel}' AS "${rel}${_NAVLINK}"`);
+                                        select.push(`${stream ? stream : ""} CONCAT('${main.ctx.decodedUrl.root}/${element.entity.name}(', ${doubleQuotesString(element.entity.table)}."id", ')/${rel}') ${stream ? "END ": ""}AS "${rel}${_NAVLINK}"`);                            
+                                        main.addToIntervalColumns(`'${main.ctx.decodedUrl.root}/${element.entity.name}(0)/${rel}' AS "${rel}${_NAVLINK}"`);
                             }
                         });
 
                     const res = { 
                         select: select.join(",\n\t\t"), 
-                        from: [doubleQuotesString(main.ctx.model[element.entity.name].table)],
+                        from: [doubleQuotesString(element.entity.table)],
                         where: element.query.where.toString(), 
                         groupBy: element.query.groupBy.notNull() === true ?  element.query.groupBy.toString() : undefined,
-                        orderBy: element.query.orderBy.notNull() === true ?  element.query.orderBy.toString() : main.ctx.model[element.entity.name].orderBy,
+                        orderBy: element.query.orderBy.notNull() === true ?  element.query.orderBy.toString() : element.entity.orderBy,
                         skip: element.skip,
                         limit: element.limit,
                         keys: this.keyNames.toArray(),
-                        count: `SELECT COUNT (DISTINCT ${Object.keys(main.ctx.model[element.entity.name].columns)[0]}) FROM (SELECT ${Object.keys(main.ctx.model[element.entity.name].columns)[0]} FROM "${main.ctx.model[element.entity.name].table}"${element.query.where.notNull() === true ? ` WHERE ${element.query.where.toString()}` : ''}) AS c`
+                        count: `SELECT COUNT (DISTINCT ${Object.keys(element.entity.columns)[0]}) FROM (SELECT ${Object.keys(element.entity.columns)[0]} FROM "${element.entity.table}"${element.query.where.notNull() === true ? ` WHERE ${element.query.where.toString()}` : ''}) AS c`
                     };
                     if (main.subQuery.from.length > 0 && main.subQuery.from[1] != "")   res.from.push(`( ${this.pgQueryToString(main.subQuery)}) AS src`);
                     return res
