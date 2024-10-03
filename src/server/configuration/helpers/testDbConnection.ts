@@ -8,7 +8,8 @@
 // onsole.log("!----------------------------------- testDbConnection -----------------------------------!\n");
 
 import postgres from "postgres";
-import { APP_NAME, APP_VERSION, _DEBUG } from "../../constants";
+import { _DEBUG } from "../../constants";
+import { EConstant } from "../../enums";
 
 // test if database exist with admin connection
 export async function testDbConnection(host: string, username: string, password: string, port?: number, database?: string): Promise<boolean> {
@@ -16,7 +17,7 @@ export async function testDbConnection(host: string, username: string, password:
       {
         debug: _DEBUG,          
         connection: { 
-          application_name : `${APP_NAME} ${APP_VERSION}`
+          application_name : `${EConstant.appName} ${EConstant.appVersion}`
         }
       })`select 1+1 AS result`.then(async () => true)
     .catch((error: Error) => {

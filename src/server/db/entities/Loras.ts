@@ -9,10 +9,10 @@
 
 import { Common } from "./common";
 import { getBigIntFromString, notNull, } from "../../helpers/index";
-import { DOUBLEQUOTEDCOMA, ESCAPE_SIMPLE_QUOTE, VOIDTABLE } from "../../constants";
+import { ESCAPE_SIMPLE_QUOTE } from "../../constants";
 import { IreturnResult, keyobj, koaContext } from "../../types";
 import { errors, msg } from "../../messages/";
-import { EDatesType } from "../../enums";
+import { EConstant, EDatesType } from "../../enums";
 import { multiDatastreamFromDeveui, streamFromDeveui } from "../queries";
 import { decodeloraDeveuiPayload } from "../../lora";
 import { executeSql, executeSqlValues } from "../helpers";
@@ -207,10 +207,10 @@ export class Loras extends Common {
         .concat(`"result" = ${resultCreate}`)
         .join("");
 
-      const sql = `WITH "${VOIDTABLE}" AS (SELECT srid FROM "${VOIDTABLE}" LIMIT 1)
+      const sql = `WITH "${EConstant.voidtable}" AS (SELECT srid FROM "${EConstant.voidtable}" LIMIT 1)
                 , multidatastream1 AS (SELECT id, thing_id, _default_featureofinterest, ${searchMulti} LIMIT 1)
                 , myValues ( "${Object.keys(insertObject).join(
-                  DOUBLEQUOTEDCOMA
+                  EConstant.doubleQuotedComa
                 )}") AS (values (${Object.values(insertObject).join()}))
                 , searchDuplicate AS (SELECT * FROM "${
                   this.ctx.model.Observations.table
@@ -218,7 +218,7 @@ export class Loras extends Common {
                 , observation1 AS (INSERT INTO  "${
                   this.ctx.model.Observations.table
                 }" ("${Object.keys(insertObject).join(
-                  DOUBLEQUOTEDCOMA
+                  EConstant.doubleQuotedComa
       )}") SELECT * FROM myValues WHERE NOT EXISTS (SELECT * FROM searchDuplicate)
                                   AND (SELECT id FROM multidatastream1) IS NOT NULL
                                   RETURNING *)
@@ -304,12 +304,12 @@ export class Loras extends Common {
 
       console.log(log.debug_infos("searchDuplicate", searchDuplicate));
 
-      const sql = `WITH "${VOIDTABLE}" AS (SELECT srid FROM "${VOIDTABLE}" LIMIT 1)
+      const sql = `WITH "${EConstant.voidtable}" AS (SELECT srid FROM "${EConstant.voidtable}" LIMIT 1)
                , datastream1 AS (SELECT id, _default_featureofinterest, thing_id FROM "${
                  this.ctx.model.Datastreams.table
                }" WHERE id =${stream["id"]})
                , myValues ( "${Object.keys(insertObject).join(
-                DOUBLEQUOTEDCOMA
+                EConstant.doubleQuotedComa
                )}") AS (values (${Object.values(insertObject).join()}))
                , searchDuplicate AS (SELECT * FROM "${
                  this.ctx.model.Observations.table
@@ -317,7 +317,7 @@ export class Loras extends Common {
                , observation1 AS (INSERT INTO  "${
                  this.ctx.model.Observations.table
                }" ("${Object.keys(insertObject).join(
-                DOUBLEQUOTEDCOMA
+                EConstant.doubleQuotedComa
       )}") SELECT * FROM myValues
                                 WHERE NOT EXISTS (SELECT * FROM searchDuplicate)
                                AND (SELECT id from datastream1) IS NOT NULL

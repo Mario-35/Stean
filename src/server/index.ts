@@ -22,10 +22,10 @@ import { config } from "./configuration";
 import { models } from "./models";
 import { isTest, logToHtml } from "./helpers";
 import { RootPgVisitor } from "./odata/visitor";
-import { EChar } from "./enums";
+import { EChar, EConstant } from "./enums";
 import { protectedRoutes, routerHandle, unProtectedRoutes } from "./routes/";
 import { Iservice, IdecodedUrl, Ientities, Ilog, IuserToken, koaContext } from "./types";
-import { HELMET_CONFIG, APP_KEY, APP_NAME, APP_VERSION, ADMIN } from "./constants";
+import { APP_KEY } from "./constants";
 
 // Extend koa context 
 declare module "koa" {
@@ -49,7 +49,7 @@ app.use(favicon(__dirname + '/favicon.ico'));
 app.use(serve(path.join(__dirname, "/apidoc")));
 
 // helmet protection https://github.com/venables/koa-helmet
-app.use(helmet.contentSecurityPolicy({ directives: HELMET_CONFIG }));
+app.use(helmet.contentSecurityPolicy({ directives: EConstant.helmetConfig }));
 
 // bodybarser https://github.com/koajs/bodyparser
 app.use(bodyParser({ enableTypes: ["json", "text", "form"] }));;
@@ -90,13 +90,13 @@ models.init();
 // Start server initialisaion
 export const server = isTest()
   // Tdd init
-  ? app.listen(config.getService(ADMIN).ports?.http || 8029, async () => {    
+  ? app.listen(config.getService(EConstant.admin).ports?.http || 8029, async () => {    
     await config
-          .connection(ADMIN)`SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname = 'test'`
+          .connection(EConstant.admin)`SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname = 'test'`
           .then(async () => {
-            await config.connection(ADMIN)`DROP DATABASE IF EXISTS test`;
+            await config.connection(EConstant.admin)`DROP DATABASE IF EXISTS test`;
           });
-      console.log(log.message(`${APP_NAME} version : ${APP_VERSION}`, "ready " + EChar.ok));
+      console.log(log.message(`${EConstant.appName} version : ${EConstant.appVersion}`, "ready " + EChar.ok));
     })
   // Production or dev init
   : config.init();

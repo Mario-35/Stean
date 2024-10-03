@@ -9,7 +9,6 @@
 // onsole.log("!----------------------------------- asDataArray -----------------------------------!\n");
 
 import { asJson } from ".";
-import { _COLUMNSEPARATOR, _NEWLINE } from "../../constants";
 import { PgVisitor } from "../../odata/visitor";
 
 export const asGeoJSON = (input: PgVisitor): string =>  `SELECT jsonb_build_object(

@@ -7,10 +7,9 @@
  */
 // onsole.log("!----------------------------------- postSqlFromPgVisitor -----------------------------------!\n");
 
-import { VOIDTABLE } from "../../../constants";
 import { doubleQuotesString, getBigIntFromString } from "../../../helpers";
 import { Ientity, IKeyString } from "../../../types";
-import { EOperation, EOptions } from "../../../enums";
+import { EConstant, EOperation, EOptions } from "../../../enums";
 import { asJson } from "../../../db/queries";
 import { models } from "../../../models";
 import { log } from "../../../log";
@@ -337,7 +336,7 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
     if ((names[postEntity.table] && queryMaker[postEntity.table] && queryMaker[postEntity.table].datas) || root === undefined) {
         queryMaker[postEntity.table].datas = Object.assign(root as object, queryMaker[postEntity.table].datas);
         queryMaker[postEntity.table].keyId = src.id ? "id" : "*";
-        sqlResult = queryMakerToString(`WITH "log_request" AS (SELECT srid FROM ${doubleQuotesString(VOIDTABLE)} LIMIT 1)`);
+        sqlResult = queryMakerToString(`WITH "log_request" AS (SELECT srid FROM ${doubleQuotesString(EConstant.voidtable)} LIMIT 1)`);
     } else {
         sqlResult = queryMakerToString(
             src.id

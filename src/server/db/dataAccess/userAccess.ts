@@ -10,10 +10,10 @@
 import { Iuser } from "../../types";
 import { encrypt } from "../../helpers";
 import { config } from "../../configuration";
-import { ADMIN } from "../../constants";
 import { models } from "../../models";
+import { EConstant } from "../../enums";
 
-const cols = () => Object.keys(models.DBAdmin(config.getService(ADMIN)).Users.columns);
+const cols = () => Object.keys(models.DBAdmin(config.getService(EConstant.admin)).Users.columns);
 
 export const userAccess = {
   getAll: async (configName: string, ) => {

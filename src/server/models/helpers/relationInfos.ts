@@ -9,10 +9,10 @@
 
 import { idColumnName } from ".";
 import { models } from "..";
-import { errorMessage } from "../../constants";
 import { ERelations } from "../../enums";
 import { formatPgTableColumn } from "../../helpers";
 import { log } from "../../log";
+import { errorMessage } from "../../messages";
 import { IrelationInfos, Ientity, Iservice } from "../../types";
 
 const _Key = (entity: Ientity, search: Ientity) => {  

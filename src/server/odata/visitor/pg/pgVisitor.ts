@@ -15,10 +15,10 @@ import { SQLLiteral } from "../../parser/sqlLiteral";
 import { SqlOptions } from "../../parser/sqlOptions";
 import { oDataDateFormat, OdataGeoColumn } from "../helper";
 import { errors, msg } from "../../../messages";
-import { EColumnType, EQuery } from "../../../enums";
+import { EColumnType, EConstant, EQuery } from "../../../enums";
 import { models } from "../../../models";
 import { log } from "../../../log";
-import { _COLUMNSEPARATOR, _DEBUG } from "../../../constants";
+import { _DEBUG } from "../../../constants";
 import { Visitor } from "./visitor";
 import { _ID, _NAVLINK, _TESTENCODING } from "../../../db/constants";
 import { Query } from "../builder";
@@ -346,7 +346,7 @@ export class PgVisitor extends Visitor {
     context.identifier = tempColumn ? tempColumn : node.raw;
     if (context.target)
       // @ts-ignore
-      (this.query[context.target as keyof object] as Query).add(tempColumn ? `${tempColumn}${_COLUMNSEPARATOR}` : `${doubleQuotesString(node.raw)}${_COLUMNSEPARATOR}`); 
+      (this.query[context.target as keyof object] as Query).add(tempColumn ? `${tempColumn}${EConstant.columnSeparator}` : `${doubleQuotesString(node.raw)}${EConstant.columnSeparator}`); 
       this.showRelations = false;
   }
 

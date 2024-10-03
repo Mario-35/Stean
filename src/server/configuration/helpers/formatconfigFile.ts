@@ -7,9 +7,8 @@
  */
 // onsole.log("!----------------------------------- formatconfigFile -----------------------------------!\n");
 
-import { ADMIN, TEST } from "../../constants";
 import util from "util";
-import { EVersion } from "../../enums";
+import { EConstant, EVersion } from "../../enums";
 import { unikeList, unique } from "../../helpers";
 import { errors } from "../../messages";
 import { Iservice, typeExtensions, typeOptions } from "../../types";
@@ -25,11 +24,11 @@ export function formatconfigFile(name: string, input: Record<string, any>): Iser
       : ["base"];
 
     if (input["extensions"]["users"]) extensions.includes("users");
-    const version = name === ADMIN ? EVersion.v1_1  : String(input["apiVersion"]).trim();
+    const version = name === EConstant.admin ? EVersion.v1_1  : String(input["apiVersion"]).trim();
 
     const returnValue: Iservice = {
       name: name,
-      ports: name === ADMIN
+      ports: name === EConstant.admin
           ? {
             "http": input["ports"]["http"] || 8029,
             "tcp": input["ports"]["tcp"] || 9000,
@@ -42,7 +41,7 @@ export function formatconfigFile(name: string, input: Record<string, any>): Iser
         port: input["pg"] && input["pg"]["port"] ? input["pg"]["port"] : 5432,
         user: input["pg"] && input["pg"]["user"] ? input["pg"]["user"] : `ERROR`,
         password: input["pg"] && input["pg"]["password"] ? input["pg"]["password"] : `ERROR`,
-        database: name && name === TEST ? "test" : input["pg"] && input["pg"]["database"] ? input["pg"]["database"] : `ERROR`,
+        database: name && name === EConstant.test ? "test" : input["pg"] && input["pg"]["database"] ? input["pg"]["database"] : `ERROR`,
         retry: input["retry"] ? +input["retry"] : 2,
       },
       apiVersion: getModelVersion(version),

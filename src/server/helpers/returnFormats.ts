@@ -12,9 +12,8 @@ import { IreturnFormat, koaContext } from "../types";
 import { addCssFile } from "../views/css";
 import { addJsFile } from "../views/js";
 import util from "util";
-import { EOptions, EReturnFormats } from "../enums";
+import { EConstant, EOptions, EReturnFormats } from "../enums";
 import { isGraph } from ".";
-import { DOUBLEQUOTEDCOMA } from "../constants";
 import { PgVisitor } from "../odata/visitor";
 
 // Default "blank" function
@@ -108,7 +107,7 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
            <div id="graph${index}" style="width:95%; height:${height}%;"></div>` );
           const infos = element[1]["description"]
             ? `${[ element[1]["description"], element[1]["name"], element[1]["symbol"], ].join('","')}`
-            : `${element[1]["infos"].split("|").join(DOUBLEQUOTEDCOMA)}`;
+            : `${element[1]["infos"].split("|").join(EConstant.doubleQuotedComa)}`;
           const formatedData = `const value${index} = [${element[1]["datas"]}]; 
           const infos${index} = ["${infos}"];`;
           formatedDatas.push(` ${formatedData} showGraph("graph${index}", infos${index}, value${index})`);

@@ -1,10 +1,9 @@
 import { config } from "../configuration";
-import { ADMIN } from "../constants";
 import { log } from "../log";
 import { _STREAM } from "../db/constants";
 import { executeSqlValues } from "../db/helpers";
 import { asJson } from "../db/queries";
-import { EColumnType, EExtensions, EVersion, filterEntities } from "../enums";
+import { EColumnType, EConstant, EExtensions, EVersion, filterEntities } from "../enums";
 import { doubleQuotesString, deepClone, isTest, formatPgTableColumn } from "../helpers";
 import { errors, msg } from "../messages";
 import { Iservice, Ientities, Ientity, IstreamInfos, koaContext, IentityRelation } from "../types";
@@ -190,7 +189,7 @@ class Models {
 
   public filteredModelFromConfig(service: Iservice  ): Ientities {
     if (testVersion(service.apiVersion) === false) this.createVersion(service.apiVersion);
-    return service.name === ADMIN ? this.DBAdmin(service) : this.filtering(service);
+    return service.name === EConstant.admin ? this.DBAdmin(service) : this.filtering(service);
   }
   
   public DBFull(service: Iservice | string): Ientities {
@@ -363,7 +362,7 @@ class Models {
         temp[`${ctx.decodedUrl.linkbase}/${ctx.config.apiVersion}/req/receive-updates-via-mqtt/receive-updates`] = 
         {
           "endpoints": [
-            `mqtt://server.example.com:${config.getService(ADMIN).ports?.ws}`,
+            `mqtt://server.example.com:${config.getService(EConstant.admin).ports?.ws}`,
             "ws://server.example.com/sensorThings",
           ]
         }

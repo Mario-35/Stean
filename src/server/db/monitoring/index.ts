@@ -7,7 +7,7 @@
  */
 
 import { config } from "../../configuration";
-import { APP_NAME } from "../../constants";
+import { EConstant } from "../../enums";
 import { asyncForEach } from "../../helpers";
 import { log } from "../../log";
 import { koaContext } from "../../types";
@@ -30,7 +30,7 @@ export const getMetrics = async (ctx: koaContext): Promise<string[] | { [key: st
     get_partitionned_implementation: `SELECT DISTINCT CASE WHEN pro.oid IS NOT NULL THEN pro.prosrc WHEN r.oid IS NOT NULL THEN pg_get_ruledef(r.oid) ELSE 'Unknown' END FROM pg_inherits i JOIN pg_class p ON p.oid = i.inhparent JOIN pg_namespace pn ON pn.oid = p.relnamespace LEFT JOIN pg_trigger t ON t.tgrelid = p.oid LEFT JOIN pg_proc pro ON pro.oid = t.tgfoid LEFT JOIN pg_rewrite r ON r.ev_class = p.oid WHERE p.oid = r.oid`,
     has_pg_buffercache: `SELECT proname FROM pg_proc WHERE proname = 'pg_buffercache_pages';`,
     is_superuser: `SELECT 1 FROM pg_user WHERE pg_user.usename='${username}' AND usesuper`,
-    dump_pgstatactivity: ` SELECT date_trunc('seconds', now()), datid, datname, pid, usesysid, usename, application_name, client_addr, client_hostname, client_port, date_trunc('seconds', backend_start) AS backend_start, date_trunc('seconds', xact_start) AS xact_start, date_trunc('seconds', query_start) AS query_start, state_change, wait_event, "query" FROM pg_stat_activity WHERE application_name != '${APP_NAME}'`,
+    dump_pgstatactivity: ` SELECT date_trunc('seconds', now()), datid, datname, pid, usesysid, usename, application_name, client_addr, client_hostname, client_port, date_trunc('seconds', backend_start) AS backend_start, date_trunc('seconds', xact_start) AS xact_start, date_trunc('seconds', query_start) AS query_start, state_change, wait_event, "query" FROM pg_stat_activity WHERE application_name != '${EConstant.appName}'`,
     dump_pgstatbgwriter: `SELECT date_trunc('seconds', now()), checkpoints_timed, checkpoints_req,  checkpoint_write_time, checkpoint_sync_time, buffers_checkpoint, buffers_clean, maxwritten_clean, buffers_backend, buffers_backend_fsync, buffers_alloc, date_trunc('seconds', stats_reset) AS stats_reset FROM pg_stat_bgwriter`,
     dump_pgstatdatabase: `SELECT date_trunc('seconds', now()), datid, datname, numbackends, xact_commit, xact_rollback, blks_read, blks_hit, tup_returned, tup_fetched, tup_inserted, tup_updated, tup_deleted, conflicts, date_trunc('seconds', stats_reset) AS stats_reset, temp_files, temp_bytes, deadlocks, blk_read_time, blk_write_time FROM pg_stat_database`,
     dump_pgtablespace_size: `SELECT date_trunc('seconds', now()), spcname, pg_tablespace_size(spcname), CASE WHEN pg_tablespace_location(oid) = '' THEN CASE WHEN spcname = 'pg_default' THEN (select setting from pg_settings where name='data_directory')||'/base' ELSE (select setting from pg_settings where name='data_directory')||'/global' END ELSE pg_tablespace_location(oid) END AS tablespace_location FROM pg_tablespace`,

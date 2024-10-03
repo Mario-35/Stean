@@ -7,7 +7,7 @@
  */
 // onsole.log("!----------------------------------- Index messages -----------------------------------!\n");
 
-import { EHttpCode } from "../enums";
+import { color, EColor, EHttpCode } from "../enums";
 import jsonErrors from "./error.json";
 import jsonInfos from "./infos.json";
 
@@ -21,4 +21,4 @@ export const getErrorCode = (err: Error | any, actual: number): number => {
     return actual;
 };
  
-
+export const errorMessage = (message: string) => process.stdout.write(`${color(EColor.Red)} ------ERROR------${message} ${color(EColor.Reset)}` + "\n");

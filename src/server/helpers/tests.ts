@@ -6,9 +6,8 @@
  *
  */
 // onsole.log("!----------------------------------- tests Is -----------------------------------!\n");
-
-import { ADMIN } from "../constants";
-import { EExtensions, EUserRights } from "../enums";
+;
+import { EConstant, EExtensions, EUserRights } from "../enums";
 import { PgVisitor, RootPgVisitor } from "../odata/visitor";
 import { Ientity, koaContext } from "../types";
 import { returnFormats } from "./returnFormats";
@@ -20,7 +19,7 @@ export const isGraph = (input: RootPgVisitor |PgVisitor) => [returnFormats.graph
 export const isGeoJson = (inputE: Ientity | string, input: RootPgVisitor |PgVisitor) => (typeof inputE === "string" ? ["Locations", "FeaturesOfInterest"].includes(inputE) : ["Locations", "FeaturesOfInterest"].includes(inputE.name)) && input.returnFormat === returnFormats.GeoJSON ? true : undefined;
 export const _isObservation = (input: Ientity | string) => typeof input === "string" ? input === "Observations": input.name === "Observations";
 export const isObservation = (input: RootPgVisitor |PgVisitor):boolean => (input.entity && _isObservation(input.entity)) || (input.parentEntity && _isObservation(input.parentEntity)) ? true : false;
-export const isAdmin = (ctx: koaContext): boolean => ctx.config && ctx.config.name === ADMIN;
+export const isAdmin = (ctx: koaContext): boolean => ctx.config && ctx.config.name === EConstant.admin;
 export const isAllowedTo = (ctx: koaContext, what: EUserRights): boolean => ctx.config.extensions.includes(EExtensions.users) ? true : ctx.user && ctx.user.PDCUAS[what];
 
 export function isString(obj: any) {

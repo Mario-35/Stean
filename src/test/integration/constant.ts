@@ -10,7 +10,6 @@
 
 import fs from "fs";
 import path from "path";
-import { TEST } from "../../server/constants";
 import { Ientity } from "../../server/types";
 import util from "util";
 import apidocJson from "../apidoc.json";
@@ -21,7 +20,7 @@ export const identification = { "username": "stean", "password": "stean" };
 export const testVersion = "v1.1";
 let nb = 0;
 export function getNB(message: string): string {nb +=1; return `${message} ${String(nb)}`;} 
-export const _RAWDB = models.DBFull(TEST);
+export const _RAWDB = models.DBFull("test");
 export const nbColor = "\x1b[36m";
 export const nbColorTitle = "\x1b[35m";
 export const testLog = (input: any) => {

@@ -8,7 +8,7 @@
 // onsole.log("!----------------------------------- graphMultiDatastream -----------------------------------!\n");
 
 import { createIdList, interval } from ".";
-import { SIMPLEQUOTEDCOMA } from "../../constants";
+import { EConstant } from "../../enums";
 import { cleanStringComma } from "../../helpers";
 import { PgVisitor } from "../../odata/visitor";
 
@@ -43,7 +43,7 @@ export const graphMultiDatastream = (table: string, id: string | bigint, input: 
           "multidatastream" 
         INNER JOIN src ON multidatastream.id = src.id
       ) 
-      SELECT * FROM results ${input.splitResult ? `WHERE name in ('${input.splitResult.join(SIMPLEQUOTEDCOMA)}')` :``}`
+      SELECT * FROM results ${input.splitResult ? `WHERE name in ('${input.splitResult.join(EConstant.simpleQuotedComa)}')` :``}`
   : `WITH 
   src AS (
     SELECT 

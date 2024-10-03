@@ -9,7 +9,7 @@
 
 import Router from "koa-router";
 import { userAuthenticated, getAuthenticatedUser, } from "../authentication";
-import { ADMIN, _READY } from "../constants";
+import { _READY } from "../constants";
 import { simpleQuotesString, getUrlKey, returnFormats } from "../helpers";
 import { apiAccess } from "../db/dataAccess";
 import { IreturnResult } from "../types";
@@ -24,7 +24,7 @@ import { getTest, sqlStopDbName } from "./helper";
 import { createService } from "../db/helpers";
 import { HtmlError, Login, Status, Query } from "../views/";
 import { createQueryParams } from "../views/helpers";
-import { EFileName, EOptions, EHttpCode } from "../enums";
+import { EFileName, EOptions, EHttpCode, EConstant } from "../enums";
 import { getMetrics } from "../db/monitoring";
 import { HtmlLogs } from "../views/class/logs";
 import { log } from "../log";
@@ -115,7 +115,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
       let sql = getUrlKey(ctx.request.url, "query");
       if (sql) {
         sql = atob(sql);
-        const resultSql = await executeSql(sql.includes("log_request") ? config.getService(ADMIN) : ctx.config, sql);
+        const resultSql = await executeSql(sql.includes("log_request") ? config.getService(EConstant.admin) : ctx.config, sql);
         ctx.status = EHttpCode.created;
         ctx.body = [resultSql];
       }
@@ -151,7 +151,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
     case "CREATEDBTEST":
       console.log(log.debug_head("GET createDB"));
       try {
-        await config.connection(ADMIN)`DROP DATABASE IF EXISTS test`;
+        await config.connection(EConstant.admin)`DROP DATABASE IF EXISTS test`;
         ctx.body = await createService(testDatas),    
         ctx.status = EHttpCode.created;
       } catch (error) {
@@ -163,9 +163,9 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
     case "REMOVEDBTEST":
       console.log(log.debug_head("GET remove DB test"));
       const returnDel = await config
-        .connection(ADMIN)`${sqlStopDbName('test')}`
+        .connection(EConstant.admin)`${sqlStopDbName('test')}`
         .then(async () => {
-          await config.connection(ADMIN)`DROP DATABASE IF EXISTS test`;
+          await config.connection(EConstant.admin)`DROP DATABASE IF EXISTS test`;
           return true;
         });
       if (returnDel) {

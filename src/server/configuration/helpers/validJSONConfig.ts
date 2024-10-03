@@ -7,15 +7,15 @@
  */
 // onsole.log("!----------------------------------- validJSONConfig -----------------------------------!\n");
 
-import { ADMIN } from "../../constants";
+import { EConstant } from "../../enums";
 import { keyobj } from "../../types";
 
 // verify is valid config
 
 export function validJSONConfig(input: Record<string, any> ): boolean {    
-    if (!input.hasOwnProperty(ADMIN)) return false;
-    if (!input[ADMIN].hasOwnProperty("pg")) return false;
-    const admin = input[ADMIN]["pg" as keyobj] as JSON;
+    if (!input.hasOwnProperty(EConstant.admin)) return false;
+    if (!input[EConstant.admin].hasOwnProperty("pg")) return false;
+    const admin = input[EConstant.admin]["pg" as keyobj] as JSON;
     if (!admin.hasOwnProperty("host")) return false;
     if (!admin.hasOwnProperty("user")) return false;
     if (!admin.hasOwnProperty("password")) return false;

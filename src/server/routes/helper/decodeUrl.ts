@@ -9,8 +9,8 @@
 // onsole.log("!----------------------------------- Helpers for user admin -----------------------------------!\n");
 
 import { config } from "../../configuration";
-import { ADMIN, setDebug } from "../../constants";
-import { EFrom, EVersion } from "../../enums";
+import { setDebug } from "../../constants";
+import { EConstant, EFrom, EVersion } from "../../enums";
 import { cleanUrl } from "../../helpers";
 import { log } from "../../log";
 import { errors } from "../../messages";
@@ -58,7 +58,7 @@ export const decodeUrl = (ctx: koaContext, input?: string): IdecodedUrl | undefi
       origin: url.origin,
       search: url.search,
       service: paths[0],
-      version: paths[0] === ADMIN ? EVersion.v1_0 : paths[1],
+      version: paths[0] === EConstant.admin ? EVersion.v1_0 : paths[1],
       path: idStr ? path.replace(String(id), '0') : path,
       id: (isNaN(+id)) ? BigInt(0) : BigInt(id),
       idStr: idStr,

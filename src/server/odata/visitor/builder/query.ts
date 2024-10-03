@@ -7,13 +7,12 @@
  */
 // onsole.log("!----------------------------------- Query builder -----------------------------------!");
 
-import { _COLUMNSEPARATOR, STRINGEXC } from "../../../constants";
 import { doubleQuotesString, cleanStringComma, containsAll, isCsvOrArray, isGraph, isGeoJson, removeAllQuotes, removeFirstEndDoubleQuotes, formatPgString } from "../../../helpers";
 import { asJson } from "../../../db/queries";
 import { Iservice, Ientity, IKeyBoolean, IpgQuery } from "../../../types";
 import { PgVisitor, RootPgVisitor } from "..";
 import { models } from "../../../models";
-import { allEntities, EOptions } from "../../../enums";
+import { allEntities, EConstant, EOptions } from "../../../enums";
 import { GroupBy, Key, OrderBy, Select, Where, Join } from ".";
 import { errors } from "../../../messages";
 import { _NAVLINK, _SELFLINK } from "../../../db/constants";
@@ -46,7 +45,7 @@ export class Query  {
     // }
 
     private isCalcColumn(input: string): boolean {
-        return STRINGEXC.map(e => input.includes(e) ? true : false).filter(e => e === true).length > 0;
+        return EConstant.stringException.map(e => input.includes(e) ? true : false).filter(e => e === true).length > 0;
     }
 
     private extractColumnName(input: string): string {   
@@ -109,14 +108,8 @@ export class Query  {
             return [ `${col} AS "geometry"`];
         }
 
-        // if (main.ctx.config.extensions.includes(EExtensions.file) && isObservation(main) === true)  {
-        //     element.showRelations = false;
-        //     main.onlyRef = false;
-        //     return [`(result->'value') AS result`];
-        // }
-
         // If array result add id 
-        const returnValue: string[] = isCsvOrArray(main) && !element.query.select.toString().includes(`"id"${_COLUMNSEPARATOR}`) ? ["id"] : []; 
+        const returnValue: string[] = isCsvOrArray(main) && !element.query.select.toString().includes(`"id"${EConstant.columnSeparator}`) ? ["id"] : []; 
         // create selfLink                                   
         const selfLink = `CONCAT('${main.ctx.decodedUrl.root}/${tempEntity.name}(', "${tempEntity.table}"."id", ')') AS ${doubleQuotesString(_SELFLINK)}`; 
         // if $ref return only selfLink
@@ -128,7 +121,7 @@ export class Query  {
                 .filter((word) => !word.includes("_"))
                 .filter(e => !(e === "result" && element.splitResult))
                 .filter(e => !tempEntity.columns[e].extensions || tempEntity.columns[e].extensions && containsAll(main.ctx.config.extensions, tempEntity.columns[e].extensions) === true || "")
-            : element.query.select.toString().split(_COLUMNSEPARATOR).filter((word: string) => word.trim() != "").map(e => removeFirstEndDoubleQuotes(e));
+            : element.query.select.toString().split(EConstant.columnSeparator).filter((word: string) => word.trim() != "").map(e => removeFirstEndDoubleQuotes(e));
             // loop on columns            
         columns.map((column: string) => {
             if (element.columnSpecials.hasOwnProperty(column)) return element.columnSpecials[column].join();

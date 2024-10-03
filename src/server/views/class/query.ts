@@ -7,7 +7,7 @@
  */
 // onsole.log("!----------------------------------- HTML Views First for API -----------------------------------!\n");
 
-import { APP_VERSION } from "../../constants";
+import { EConstant } from "../../enums";
 import { removeAllQuotes } from "../../helpers";
 import { log } from "../../log";
 import { IqueryOptions, koaContext } from "../../types";
@@ -99,7 +99,7 @@ export class Query extends CoreHtmlView {
         // execute a start of query
         .replace("// @start@", this.params.results ? "jsonObj = JSON.parse(`" + this.params.results + "`); jsonViewer.showJSON(jsonObj);" : "")
         // App version on query
-        .replace("@version@", APP_VERSION)
+        .replace("@version@", EConstant.appVersion)
         // default action form
         .replace("@action@", `${this.params.decodedUrl.root}/${this.params.decodedUrl.version}/CreateObservations`);
       }

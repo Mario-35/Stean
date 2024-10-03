@@ -7,13 +7,13 @@
  */
 // onsole.log("!----------------------------------- Configuration class -----------------------------------!\n");
 
-import { addToStrings, ADMIN, APP_NAME, APP_VERSION, color, DEFAULT_DB, NODE_ENV, setReady, TEST, _DEBUG } from "../constants";
+import { addToStrings, color, setReady, _DEBUG } from "../constants";
 import { asyncForEach, decrypt, encrypt, isProduction, isTest, logToHtml, } from "../helpers";
 import { Iservice, IdbConnection, IserviceInfos, koaContext, keyobj } from "../types";
 import { errors, info, infos, msg } from "../messages";
 import { createIndexes, createService} from "../db/helpers";
 import { app } from "..";
-import { EChar, EColor, EExtensions, EFileName, EOptions, EUpdate } from "../enums";
+import { EChar, EColor, EConstant, EExtensions, EFileName, EOptions, EUpdate } from "../enums";
 import fs from "fs";
 import update from "./update.json";
 import postgres from "postgres";
@@ -63,7 +63,7 @@ class Configuration {
   }
   // Read string (or default configuration file) as configuration file
   public readConfigFile(input?: string) {
-    this.writeLog(`${color(EColor.Red)}${"▬".repeat(24)} ${color( EColor.Cyan )} ${`START ${APP_NAME} ${info.ver} : ${APP_VERSION} [${NODE_ENV}]`} ${color( EColor.White )} ${new Date().toLocaleDateString()} : ${new Date().toLocaleTimeString()} ${color( EColor.Red )} ${"▬".repeat(24)}${color(EColor.Reset)}`);
+    this.writeLog(`${color(EColor.Red)}${"▬".repeat(24)} ${color( EColor.Cyan )} ${`START ${EConstant.appName} ${info.ver} : ${EConstant.appVersion} [${EConstant.nodeEnv}]`} ${color( EColor.White )} ${new Date().toLocaleDateString()} : ${new Date().toLocaleTimeString()} ${color( EColor.Red )} ${"▬".repeat(24)}${color(EColor.Reset)}`);
     this.writeLog(log.message(infos(["read", "config"]), input ? "content" : Configuration.filePath));
     try {
       // load File
@@ -76,8 +76,8 @@ class Configuration {
       Configuration.services = JSON.parse(decrypt(fileContent));
       if (validJSONConfig(Configuration.services)) {
         if (isTest()) {
-          Configuration.services[ADMIN] = this.formatConfig(ADMIN);
-          Configuration.services[TEST] = this.formatConfig(testDatas["create"]);
+          Configuration.services[EConstant.admin] = this.formatConfig(EConstant.admin);
+          Configuration.services[EConstant.test] = this.formatConfig(testDatas["create"]);
           
         } else {
           Object.keys(Configuration.services).forEach((element: string) => {
@@ -97,11 +97,11 @@ class Configuration {
   }
 
   public defaultHttp() {
-    return Configuration.services[ADMIN] && Configuration.services[ADMIN].ports ? Configuration.services[ADMIN].ports?.http || 8029 : 8029;
+    return Configuration.services[EConstant.admin] && Configuration.services[EConstant.admin].ports ? Configuration.services[EConstant.admin].ports?.http || 8029 : 8029;
   }
 
   public initMqtt() {
-    Configuration.MqttServer = new MqttServer({wsPort : Configuration.services[ADMIN].ports?.ws || 1883, tcpPort  : Configuration.services[ADMIN].ports?.tcp || 9000});
+    Configuration.MqttServer = new MqttServer({wsPort : Configuration.services[EConstant.admin].ports?.ws || 1883, tcpPort  : Configuration.services[EConstant.admin].ports?.tcp || 9000});
   }
 
   getBrokerId() {
@@ -136,7 +136,7 @@ class Configuration {
       protocol: protocol,
       linkBase: linkBase,
       version: version,
-      root : process.env.NODE_ENV?.trim() === TEST ? `proxy/${version}` : `${linkBase}/${version}`,
+      root : process.env.NODE_ENV?.trim() === EConstant.test ? `proxy/${version}` : `${linkBase}/${version}`,
       model : `https://app.diagrams.net/?lightbox=1&edit=_blank#U${linkBase}/${version}/draw`
     };
   };
@@ -159,7 +159,7 @@ class Configuration {
   }
 
   public getServices() {
-    return Object.keys(Configuration.services).filter(e => e !== ADMIN);
+    return Object.keys(Configuration.services).filter(e => e !== EConstant.admin);
   }
 
   // Write an encrypt config file in json file
@@ -167,7 +167,7 @@ class Configuration {
     this.writeLog(log.message(infos(["write","config"]), Configuration.filePath));
     const result: Record<string, any> = {};
     Object.entries(Configuration.services).forEach(([k, v]) => {
-      if (k !== TEST) result[k] = Object.keys(v).filter(e => !e.startsWith("_")) .reduce((obj, key) => { obj[key as keyobj] = v[key as keyobj]; return obj; }, {} );
+      if (k !== EConstant.test) result[k] = Object.keys(v).filter(e => !e.startsWith("_")) .reduce((obj, key) => { obj[key as keyobj] = v[key as keyobj]; return obj; }, {} );
     });
     // in some case of crash config is blank so prevent to overrite it
     if (Object.keys(result).length > 0) fs.writeFile(
@@ -227,14 +227,14 @@ class Configuration {
     return Configuration.services[name]._connection || this.createDbConnection(Configuration.services[name].pg);
   }
   
-  // return postgres.js connection with ADMIN rights
+  // return postgres.js connection with EConstant.admin rights
   public adminConnection(): postgres.Sql<Record<string, unknown>> {
-    const input = Configuration.services[ADMIN].pg;    
-    return postgres(`postgres://${input.user}:${input.password}@${input.host}:${input.port || 5432}/${DEFAULT_DB}`,
+    const input = Configuration.services[EConstant.admin].pg;    
+    return postgres(`postgres://${input.user}:${input.password}@${input.host}:${input.port || 5432}/${EConstant.defaultDb}`,
       {
         debug: _DEBUG,          
         connection: { 
-          application_name : `${APP_NAME} ${APP_VERSION}`
+          application_name : `${EConstant.appName} ${EConstant.appVersion}`
         }
       }
     );
@@ -252,7 +252,7 @@ class Configuration {
         debug: _DEBUG,
         max : 2000,            
         connection : { 
-          application_name : `${APP_NAME} ${APP_VERSION}`
+          application_name : `${EConstant.appName} ${EConstant.appVersion}`
         },
       }
     );
@@ -285,13 +285,13 @@ class Configuration {
     return true;
   }
 
-  // initialisation serve NOT IN TEST
+  // initialisation serve NOT IN EConstant.test
   async afterAll(): Promise<boolean> {
     // Updates database after init
     if ( update && update[EUpdate.afterAll] && Object.entries(update[EUpdate.afterAll]).length > 0 ) {
       this.clearQueries();
       Object.keys(Configuration.services)
-        .filter((e) => e != ADMIN)
+        .filter((e) => e != EConstant.admin)
         .forEach(async (connectName: string) => {
           update[EUpdate.afterAll].forEach((operation: string) => { this.addToQueries(connectName, operation); });
         });
@@ -301,7 +301,7 @@ class Configuration {
     if (update && update[EUpdate.decoders] && Object.entries(update[EUpdate.decoders]).length > 0) {
       this.clearQueries();
       Object.keys(Configuration.services)
-        .filter( (e) => e != ADMIN && Configuration.services[e].extensions.includes(EExtensions.lora) )
+        .filter( (e) => e != EConstant.admin && Configuration.services[e].extensions.includes(EExtensions.lora) )
         .forEach((connectName: string) => {
           if(Configuration.services[connectName].extensions.includes(EExtensions.lora)) {
             const decs:string[] = [];
@@ -331,7 +331,7 @@ class Configuration {
       this.messageListen(message, String(port));
     });
   }
-  // initialisation serve NOT IN TEST
+  // initialisation serve NOT IN EConstant.test
   async init(input?: string): Promise<boolean> {
     if (this.configFileExist() === true || input) {
       this.readConfigFile(input);
@@ -339,7 +339,7 @@ class Configuration {
       let status = true;
       await asyncForEach(
         // Start connection ALL entries in config file
-        Object.keys(Configuration.services).filter(e => e.toUpperCase() !== TEST.toUpperCase()),
+        Object.keys(Configuration.services).filter(e => e.toUpperCase() !== EConstant.test.toUpperCase()),
         async (key: string) => {
           try {
             await this.addToServer(key);
@@ -356,13 +356,13 @@ class Configuration {
         this.afterAll();
       }
       if(!isTest()) {
-        if( await testDbExists(Configuration.services[ADMIN].pg, TEST) ) {
-          Configuration.services[TEST] = this.formatConfig(testDatas["create"]);
+        if( await testDbExists(Configuration.services[EConstant.admin].pg, EConstant.test) ) {
+          Configuration.services[EConstant.test] = this.formatConfig(testDatas["create"]);
         } else await createService(testDatas);
-        this.messageListen(TEST, String(this.defaultHttp()) , true);
+        this.messageListen(EConstant.test, String(this.defaultHttp()) , true);
       }
       this.writeLog(log._head("Ready", EChar.ok));
-      this.writeLog(log.logo(APP_VERSION));
+      this.writeLog(log.logo(EConstant.appVersion));
       return status;
     // no configuration file so First install    
     } else {
@@ -445,7 +445,7 @@ class Configuration {
             superAdmin: false,
             admin: false
           });
-          if(![ADMIN, TEST].includes(key)) createIndexes(key);
+          if(![EConstant.admin as String, EConstant.test as String].includes(key)) createIndexes(key);
           this.messageListen(key, res ? EChar.web : EChar.notOk, true);
           this.addListening(this.defaultHttp(), key);
         }
@@ -488,13 +488,13 @@ class Configuration {
           }).then(() => EChar.ok)
             .catch((err: Error) => err.message)
         ));
-        if (update[EUpdate.triggers] && update[EUpdate.triggers] === true && connectName !== ADMIN) await this.relogCreateTrigger(connectName);
+        if (update[EUpdate.triggers] && update[EUpdate.triggers] === true && connectName !== EConstant.admin) await this.relogCreateTrigger(connectName);
         if (update[EUpdate.beforeAll] && Object.entries(update[EUpdate.beforeAll]).length > 0 ) {
           if (update[EUpdate.beforeAll] && Object.entries(update[EUpdate.beforeAll]).length > 0 ) {
             console.log(log._head(EUpdate.beforeAll));
             try {              
               Object.keys(Configuration.services)
-                .filter((e) => ![ADMIN, TEST].includes(e))
+                .filter((e) => ![EConstant.admin as String, EConstant.test as String].includes(e))
                 .forEach((connectName: string) => {
                   update[EUpdate.beforeAll].forEach((operation: string) => {
                     this.addToQueries(connectName, operation);
@@ -519,7 +519,7 @@ class Configuration {
           // Database does not exist
         } else if (error["code" as keyobj] === "3D000" && create == true) {
           console.log(log._infos(msg(info.tryCreate, info.db), Configuration.services[connectName].pg.database ));
-          if (connectName !== TEST) return await this.tryToCreateDB(connectName);
+          if (connectName !== EConstant.test) return await this.tryToCreateDB(connectName);
         } else console.log(error);
         return false;
       });

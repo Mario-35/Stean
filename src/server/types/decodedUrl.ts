@@ -10,7 +10,7 @@ import { EFrom } from "../enums";
 
 // onsole.log("!----------------------------------- decodedUrl interface -----------------------------------!\n");
 export interface IdecodedUrl {
-    origin:   string;
+    origin:     string;
     linkbase:   string;
     root:       string;
     search:     string;

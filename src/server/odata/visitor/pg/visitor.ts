@@ -8,7 +8,6 @@
 // onsole.log("!----------------------------------- Visitor for odata -----------------------------------!\n");
 
 import { SqlOptions } from "../../parser/sqlOptions";
-import { _COLUMNSEPARATOR } from "../../../constants";
 import { IreturnFormat, koaContext } from "../../../types";
 import { returnFormats } from "../../../helpers";
 import { PgVisitor } from "../";
