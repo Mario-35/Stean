@@ -8,7 +8,6 @@
 
  import { EChar } from "../../enums";
 import { Iservice } from "../../types";
-import { _RIGHTS } from "../constants";
 import { userAccess } from "../dataAccess";
 // onsole.log("!----------------------------------- createUser -----------------------------------!\n");
 

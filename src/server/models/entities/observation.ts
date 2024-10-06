@@ -8,13 +8,12 @@
 // onsole.log("!----------------------------------- entity Observation -----------------------------------!\n");
 
 import { createEntity } from ".";
-import { ERelations, ETable } from "../../enums";
+import { EConstant, ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { doubleQuotesString } from "../../helpers";
 import { _idBig } from "./constants";
-import { _ID } from "../../db/constants";
 
-  export const Observation:Ientity  = createEntity("Observations", {
+export const Observation:Ientity  = createEntity("Observations", {
     createOrder: 12,
     type: ETable.table,
     order: 7,
@@ -23,7 +22,7 @@ import { _ID } from "../../db/constants";
       id: {
         create: _idBig,
         alias(service: Iservice , test: IKeyBoolean) {
-           return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotesString(_ID)}`: ''}` ;
+           return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotesString(EConstant.id)}`: ''}` ;
         },
         type: "number",
       },
@@ -115,4 +114,4 @@ import { _ID } from "../../db/constants";
         type: ERelations.belongsTo
       },
     },
-  });
+});

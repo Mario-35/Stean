@@ -2,23 +2,13 @@
 // |                                   EVENTS                                    |
 // ===============================================================================
 
-submit.onclick = () => {
-	wait(true);
-	try {
-		const text = jsonDatas.innerText.replace(/[^\x00-\x7F]/g, '');
-		datas.innerText = text;
-		document.getElementById("actionForm").requestSubmit();
-	} catch (error) {
-		console.error(error);
-	}
-};
+
 
 services.addEventListener("change", () => {
 	window.location.href = `${_PARAMS.services[services.value].root}/Query`;
 });
 
 expandOption.addEventListener("exit", () => {
-	console.log("=====================================================");
 	show(subExpandOption);
 	populateMultiSelect("subExpandOption", getRelationsList(expandOption.value));
 });
@@ -278,12 +268,24 @@ function addToResultList(key, value, plus) {
 	}
 }
 
-function prepareForm() {
-	if (importFile === true) {
+function runForm() {
+	wait(true);
+	try {
 		const text = jsonDatas.innerText.replace(/[^\x00-\x7F]/g, '');
-		if (idOption.value != "" && idOption.value != "0") 
-			getElement("actionForm").action = `${getElement("actionForm").action}(${idOption.value })`;
 		datas.innerText = text;
 		document.getElementById("actionForm").requestSubmit();
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+submit.onclick = () => {
+	runForm();
+};
+
+function prepareForm() {
+	if (importFile === true) {
+		getElement("actionForm").action = `${getElement("actionForm").action}`;
+		runForm();
 	}
 }

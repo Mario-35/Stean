@@ -12,8 +12,8 @@ import { models } from "../models";
 import { log } from ".";
 import { createInsertValues } from "../models/helpers";
 import { keyobj, koaContext } from "../types";
-import { _ID } from "../db/constants";
 import { config } from "../configuration";
+import { EConstant } from "../enums";
 
 export const writeLogToDb = async ( ctx: koaContext, ...error: any[] ): Promise<void> => {
   console.log(log.whereIam());
@@ -23,7 +23,7 @@ export const writeLogToDb = async ( ctx: koaContext, ...error: any[] ): Promise<
     ctx.log.datas = ctx.body;
     ctx.log.datas = hidePassword(ctx.log.datas);
     try {
-      if (ctx.body && typeof ctx.body === "string") ctx.log.returnid = JSON.parse(ctx.body)[_ID];       
+      if (ctx.body && typeof ctx.body === "string") ctx.log.returnid = JSON.parse(ctx.body)[EConstant.id];       
     } catch (error) {
       ctx.log.returnid = undefined;
     }

@@ -119,7 +119,7 @@ class Models {
     if (!streamEntity) return undefined;
     const foiId: bigint | undefined = input["FeaturesOfInterest"] ? input["FeaturesOfInterest"] : undefined;
     const searchKey = input[models.DBFull(service)[streamEntity].name] || input[models.DBFull(service)[streamEntity].singular];
-    const streamId: string | undefined = isNaN(searchKey) ? searchKey["@iot.id"] : searchKey;
+    const streamId: string | undefined = isNaN(searchKey) ? searchKey[EConstant.id] : searchKey;
     if (streamId) {
       const query = `SELECT "id", "observationType", "_default_featureofinterest" FROM ${doubleQuotesString(models.DBFull(service)[streamEntity].table)} WHERE "id" = ${BigInt(streamId)} LIMIT 1`;
       return executeSqlValues(service, asJson({ query: query, singular: true, strip: false, count: false }))
@@ -346,8 +346,6 @@ class Models {
         if (ctx.config.extensions.includes(EExtensions.multiDatastream)) list.push("https://docs.ogc.org/is/18-088/18-088.html#multidatastream-extension");
         if (ctx.config.extensions.includes(EExtensions.mqtt)) list.push("https://docs.ogc.org/is/18-088/18-088.html#req-create-observations-via-mqtt-observations-creation",
                                                                         "https://docs.ogc.org/is/18-088/18-088.html#mqtt-extension");
-        console.log(ctx.config.extensions);
-        
         const temp: Record<string, any>  =  {
           "value" : expectedResponse.filter((elem) => Object.keys(elem).length),
           "serverSettings" : {

@@ -14,7 +14,7 @@ import { SqlOptions } from "./parser/sqlOptions";
 import { RootPgVisitor } from "./visitor";
 import { koaContext } from "../types";
 import { errors } from "../messages";
-import { EHttpCode } from "../enums";
+import { EConstant, EHttpCode } from "../enums";
 import { doSomeWorkAfterCreateAst, escapesOdata } from "./visitor/helper";
 
 export const createOdata = async (ctx: koaContext): Promise<RootPgVisitor | undefined> => {
@@ -44,7 +44,7 @@ export const createOdata = async (ctx: koaContext): Promise<RootPgVisitor | unde
   replaceElement("@iot.");
   
   // clean id in url
-  urlSrc = cleanUrl(replaceElement("@iot.id", "id"));
+  urlSrc = cleanUrl(replaceElement(EConstant.id, "id"));
 
   // if nothing to do return
   if (urlSrc === "/") return;

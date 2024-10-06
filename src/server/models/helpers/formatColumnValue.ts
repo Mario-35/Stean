@@ -8,6 +8,7 @@
 // onsole.log("!----------------------------------- formatColumnValue -----------------------------------!\n");
 
 import { ESCAPE_ARRAY_JSON, ESCAPE_SIMPLE_QUOTE } from "../../constants";
+import { EConstant } from "../../enums";
 import { doubleQuotesString, simpleQuotesString, removeFirstEndSimpleQuotes } from "../../helpers";
 import { log } from "../../log";
 
@@ -18,8 +19,8 @@ import { log } from "../../log";
       case "object" :        
         return value.hasOwnProperty("@iot.name") 
         ? `(SELECT "id" FROM "${columnName.split("_")[0]}" WHERE "name" = '${ESCAPE_SIMPLE_QUOTE(value["@iot.name"])}')`
-        : value.hasOwnProperty("@iot.id") 
-        ? value["@iot.id"]
+        : value.hasOwnProperty(EConstant.id) 
+        ? value[EConstant.id]
         : type === 'text[]' 
           ? simpleQuotesString(`{${value.map((e: string) => doubleQuotesString(removeFirstEndSimpleQuotes(e))).join(",")}}`) 
           : `'${ESCAPE_SIMPLE_QUOTE(JSON.stringify(value))}'`;

@@ -55,7 +55,6 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
   // set decodedUrl context
   ctx.decodedUrl = decodedUrl;
   if (_DEBUG) console.log(log.object("decodedUrl", decodedUrl));
-
   if (!decodedUrl.service) throw new Error(errors.noNameIdentified);
   if (decodedUrl.service && decodedUrl.configName) 
     ctx.config = config.getService(decodedUrl.configName);

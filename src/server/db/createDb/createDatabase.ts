@@ -10,9 +10,8 @@
 import { createTable, createUser } from "../helpers";
 import { config } from "../../configuration";
 import { doubleQuotesString, simpleQuotesString, asyncForEach } from "../../helpers";
-import { _RIGHTS } from "../constants";
 import { IKeyString } from "../../types";
-import { EChar, EExtensions } from "../../enums";
+import { EChar, EConstant, EExtensions } from "../../enums";
 import { triggers } from "./triggers";
 import { models } from "../../models";
 import { log } from "../../log";
@@ -39,11 +38,11 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
       await adminConnection.unsafe(`SELECT COUNT(*) FROM pg_user WHERE usename = ${simpleQuotesString(servicePg.user)};`)
         .then(async (res: Record<string, any>) => {
           if (res[0].count == 0) {            
-            returnValue[`CREATE ROLE ${servicePg.user}`] = await adminConnection.unsafe(`CREATE ROLE ${servicePg.user} WITH PASSWORD ${simpleQuotesString(servicePg.password)} ${_RIGHTS}`)
+            returnValue[`CREATE ROLE ${servicePg.user}`] = await adminConnection.unsafe(`CREATE ROLE ${servicePg.user} WITH PASSWORD ${simpleQuotesString(servicePg.password)} ${EConstant.rights}`)
               .then(() => EChar.ok)
               .catch((err: Error) => err.message);
           } else {
-            await adminConnection.unsafe(`ALTER ROLE ${servicePg.user} WITH PASSWORD ${simpleQuotesString(servicePg.password)}  ${_RIGHTS}`)
+            await adminConnection.unsafe(`ALTER ROLE ${servicePg.user} WITH PASSWORD ${simpleQuotesString(servicePg.password)}  ${EConstant.rights}`)
               .then(() => {
                 returnValue[`Create/Alter ROLE`] = `${servicePg.user} ${EChar.ok}`;
               })
@@ -124,6 +123,9 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
       const files: string[] =
       [`INSERT INTO sensor ("name", description, "encodingType", metadata) VALUES('${info.csvFile}', '${info.csvFile}', 'application/pdf', 'https://www.rfc-editor.org/rfc/pdfrfc/rfc4180.txt.pdf');`
       ,`WITH thing AS (INSERT INTO "thing" ("name","description","properties") VALUES ('${info.csvFile}','${info.csvFile}','{}') RETURNING *) , location1 AS ( INSERT INTO "location" ("name","description","encodingType","location") VALUES ('${info.csvFile}','${info.csvFile}','application/geo+json','{}') RETURNING id) , thinglocation AS ( INSERT INTO "thinglocation" ("location_id","thing_id") VALUES ((select location1.id from location1),(select thing.id from thing))) select id from thing`
+      ,`ALTER TABLE "observation" DROP CONSTRAINT "observation_unik_datastream_result";`
+      ,`ALTER TABLE "observation" DROP CONSTRAINT "observation_unik_multidatastream_result";`
+      ,`CREATE INDEX "observation_result" ON observation USING gin (result);`
       ,`INSERT INTO observedproperty ("name", definition, description) VALUES('${info.csvFile}', '${info.csvFile}', '${info.csvFile}');`]
       await asyncForEach( files, async (query: string) => {
         await config.connection(configName).unsafe(query)

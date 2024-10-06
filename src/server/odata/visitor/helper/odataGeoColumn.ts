@@ -7,8 +7,7 @@
  */
 // onsole.log("!----------------------------------- OdataGeoColumn class -----------------------------------!\n");
 
-import { _TESTENCODING } from "../../../db/constants";
-import { EQuery } from "../../../enums";
+import { EConstant, EQuery } from "../../../enums";
 import { doubleQuotesString, removeAllQuotes } from "../../../helpers";
 import { log } from "../../../log";
 import { models } from "../../../models";
@@ -42,7 +41,7 @@ export class OdataGeoColumn {
         const tm = models.getEntity(this.src.ctx.config, temp[0]);
         if (tm && tm.columns.hasOwnProperty(temp[1])) {
           this.src.subQuery.select = `"featureofinterest"."id"`;
-          this.src.subQuery.where = `CASE WHEN "${_TESTENCODING}" LIKE '%geo+json' THEN ST_GeomFromEWKT(ST_GeomFromGeoJSON(coalesce(${doubleQuotesString(temp[1])}->'geometry',${doubleQuotesString(temp[1])}))) ELSE ST_GeomFromEWKT(${doubleQuotesString(temp[1])}::text) END`;
+          this.src.subQuery.where = `CASE WHEN "${EConstant.encoding}" LIKE '%geo+json' THEN ST_GeomFromEWKT(ST_GeomFromGeoJSON(coalesce(${doubleQuotesString(temp[1])}->'geometry',${doubleQuotesString(temp[1])}))) ELSE ST_GeomFromEWKT(${doubleQuotesString(temp[1])}::text) END`;
           this.key = `"${temp[1]}"->>'type'`;
           return undefined;
         }
@@ -51,29 +50,29 @@ export class OdataGeoColumn {
         if (tempEntity.relations.hasOwnProperty(temp[0])) {
           const relation = relationInfos(this.src.ctx.config, tempEntity.name, temp[0]);
           this.column = `(SELECT ${doubleQuotesString(temp[1])} FROM ${doubleQuotesString(relation.table)} WHERE ${expand(this.src.ctx,tempEntity.name, temp[0])} AND length(${doubleQuotesString(temp[1])}::text) > 2)`;
-          if (tempEntity.columns.hasOwnProperty(_TESTENCODING))  test = `(SELECT ${doubleQuotesString(_TESTENCODING)} FROM ${doubleQuotesString(relation.table)} WHERE ${expand(this.src.ctx,tempEntity.name, temp[0])})`;
+          if (tempEntity.columns.hasOwnProperty(EConstant.encoding))  test = `(SELECT ${doubleQuotesString(EConstant.encoding)} FROM ${doubleQuotesString(relation.table)} WHERE ${expand(this.src.ctx,tempEntity.name, temp[0])})`;
         }
       } else if (!tempEntity.columns.hasOwnProperty(this.column)) {        
         if (tempEntity.relations.hasOwnProperty(this.column)) {
           const relation = relationInfos(this.src.ctx.config, tempEntity.name, this.column);        
           this.column = `(SELECT ${doubleQuotesString(relation.column)} FROM ${doubleQuotesString(relation.table)} WHERE ${expand(this.src.ctx,tempEntity.name, this.column)} AND length(${doubleQuotesString(relation.column)}::text) > 2)`;
-          if (tempEntity.columns.hasOwnProperty(_TESTENCODING))  test = _TESTENCODING;
+          if (tempEntity.columns.hasOwnProperty(EConstant.encoding))  test = EConstant.encoding;
 
         } else if (this.src.ctx.model[this.src.parentEntity as keyof object].columns.hasOwnProperty(this.column)) {
           const relation = relationInfos(this.src.ctx.config, tempEntity.name, this.column);        
           this.column = `(SELECT ${doubleQuotesString(relation.column)} FROM ${doubleQuotesString(relation.table)} WHERE ${expand(this.src.ctx,tempEntity.name, this.column)} AND length(${doubleQuotesString(relation.column)}::text) > 2)`;
-          if (tempEntity.columns.hasOwnProperty(_TESTENCODING))  test = _TESTENCODING;
+          if (tempEntity.columns.hasOwnProperty(EConstant.encoding))  test = EConstant.encoding;
 
         } else throw new Error(`Invalid this.column ${this.column}`);
       } else {      
         // TODO ADD doubleQuotesString
-        const temp = tempEntity.columns.hasOwnProperty(_TESTENCODING);
-        if (temp) test = doubleQuotesString(_TESTENCODING);
+        const temp = tempEntity.columns.hasOwnProperty(EConstant.encoding);
+        if (temp) test = doubleQuotesString(EConstant.encoding);
         this.column = doubleQuotesString(this.column);
       }
     }    
     if (test) 
-      return `CASE WHEN "${_TESTENCODING}" LIKE '%geo+json' THEN ST_GeomFromEWKT(ST_GeomFromGeoJSON(coalesce(${this.column}->'geometry',${this.column}))) ELSE ST_GeomFromEWKT(${this.column}::text) END`
+      return `CASE WHEN "${EConstant.encoding}" LIKE '%geo+json' THEN ST_GeomFromEWKT(ST_GeomFromGeoJSON(coalesce(${this.column}->'geometry',${this.column}))) ELSE ST_GeomFromEWKT(${this.column}::text) END`
   }
 
   toString() {

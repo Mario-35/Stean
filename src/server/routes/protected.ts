@@ -132,7 +132,6 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
         });
       };
       ctx.datas = await getDatas();
-      
       const odataVisitor = await createOdata(ctx);
       if (odataVisitor) ctx.odata = odataVisitor;
       if (ctx.odata) {

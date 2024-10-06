@@ -39,6 +39,5 @@ export async function streamCsvFile( ctx: koaContext, paramsFile: IcsvFile, sqlR
       console.log(error);    
       resolve(-1);
     });
-});
-
+  });
 }

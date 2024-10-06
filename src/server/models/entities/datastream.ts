@@ -8,11 +8,10 @@
 // onsole.log("!----------------------------------- entity Datastream -----------------------------------!\n");
 
 import { createEntity } from ".";
-import { EDatesType, EObservationType, ERelations, ETable } from "../../enums";
+import { EConstant, EDatesType, EObservationType, ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _idRel, _text, _tz } from "./constants";
 import { doubleQuotesString } from "../../helpers";
-import { _ID } from "../../db/constants";
 
 export const Datastream:Ientity  = createEntity("Datastreams", {
   createOrder: 7,
@@ -23,7 +22,7 @@ export const Datastream:Ientity  = createEntity("Datastreams", {
       id: {
         create: _idBig,
         alias(service: Iservice , test: IKeyBoolean) {
-           return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotesString(_ID)}`: ''}` ;
+           return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotesString(EConstant.id)}`: ''}` ;
         },
         type: "number",
       },

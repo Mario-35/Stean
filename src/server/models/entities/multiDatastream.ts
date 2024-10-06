@@ -8,11 +8,10 @@
 // onsole.log("!----------------------------------- entity MultiDatastream -----------------------------------!\n");
 
 import { createEntity } from ".";
-import { EDatesType, EObservationType, ERelations, ETable } from "../../enums";
+import { EConstant, EDatesType, EObservationType, ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _idRel, _text, _tz } from "./constants";
 import { doubleQuotesString } from "../../helpers";
-import { _ID } from "../../db/constants";
 
 export const MultiDatastream:Ientity  = createEntity("MultiDatastreams", {
     createOrder: 8,
@@ -23,7 +22,7 @@ export const MultiDatastream:Ientity  = createEntity("MultiDatastreams", {
       id: {
         create: _idBig,
         alias(service: Iservice , test: IKeyBoolean) {
-           return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotesString(_ID)}`: ''}` ;
+           return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotesString(EConstant.id)}`: ''}` ;
         },
         type: "number",
       },

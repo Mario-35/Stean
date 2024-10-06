@@ -14,6 +14,7 @@ import { executeSqlValues, removeKeyFromUrl } from "../helpers";
 import { getErrorCode, info } from "../../messages";
 import { log } from "../../log";
 import { config } from "../../configuration";
+import { EConstant, EExtensions } from "../../enums";
 import { asCsv } from "../queries";
 
 // Common class
@@ -33,7 +34,7 @@ export class Common {
   private getKeyValue(input: Record<string, any>, key: string): string | undefined {
     let result: string | undefined = undefined;
     if (input[key]) {
-      result = input[key]["@iot.id"] ? input[key]["@iot.id"] : input[key];
+      result = input[key][EConstant.id] ? input[key][EConstant.id] : input[key];
       delete input[key];
     }
     return result;
@@ -87,6 +88,8 @@ export class Common {
       return `${encodeURI(this.nextLinkBase)}${ this.nextLinkBase.includes("?") ? "&" : "?" }$top=${this.ctx.odata.limit}&$skip=${prev}`;
   };
 
+
+
   // Return all items
   async getAll(): Promise<IreturnResult | undefined> {
     console.log(log.whereIam());
@@ -99,32 +102,44 @@ export class Common {
        case returnFormats.sql:
          return this.formatReturnResult({ body: sql }); 
        case returnFormats.csv:
-        try {
-          sql =  asCsv(sql);
-          config.writeLog(log.query(sql));
-          const readableStream =  await config.connection(this.ctx.config.name).unsafe(sql).readable();
-          this.ctx.body = "";
-          for await (const chunk of readableStream) {
-            this.ctx.body += chunk.toString();
-          }
-          return this.formatReturnResult({
-            body: this.ctx.body,
-          });
- 
-         } catch (error) {
-           console.log(error);
-           this.ctx.body = error;
-         }
-         return
+         if (!this.ctx.config.extensions.includes(EExtensions.file)) sql =  asCsv(sql);
+            try {            
+              config.writeLog(log.query(sql));
+              this.ctx.attachment(`${this.ctx.odata.entity?.name || "export"}.csv`)
+              return this.formatReturnResult({
+                body: await config
+                .connection(this.ctx.config.name)
+                .unsafe(sql)
+                .readable()
+                .catch(err => {
+                  return err
+                }).then(async (e: any) => {
+                  this.ctx.body = "";
+                  for await (const chunk of e) {
+                    if (chunk.json) {
+                      const data = chunk.json;
+                      if (this.ctx.body)
+                        this.ctx.body += `${Object.keys(data).map(key => data[key]).join(";")}\n`;
+                      else this.ctx.body = `${Object.keys(data).map(key => key).join(";")}\n`;
+                    } else  this.ctx.body += chunk;
+                  }
+                  return this.ctx.body;
+                })
+              });
+            } catch (error) {
+              return this.formatReturnResult({ body: error });
+            }
+
        case returnFormats.graph:
-        return await executeSqlValues(this.ctx.config, sql).then(async (res: Record<string, any>) => {         
-          return (res[0] > 0) 
+         return await executeSqlValues(this.ctx.config, sql).then(async (res: Record<string, any>) => {         
+           return (res[0] > 0) 
           ? this.formatReturnResult({ 
              id: isNaN(res[0][0]) ? undefined : +res[0], 
              nextLink: this.nextLink(res[0]), 
              prevLink: this.prevLink(res[0]), 
-             body: res[1], }) 
-           : this.formatReturnResult({ body: res[0] == 0 ? [] : res[0]});
+             body: res[1],
+          }) 
+          : this.formatReturnResult({ body: res[0] == 0 ? [] : res[0]});
         }).catch((err: Error) => this.ctx.throw(400, { code: 400, detail: err.message }) );
        default:        
          return await executeSqlValues(this.ctx.config, sql).then(async (res: Record<string, any>) => {         
@@ -158,7 +173,7 @@ export class Common {
          return await executeSqlValues(this.ctx.config, sql).then((res: Record<string, any>) => {
            if (this.ctx.odata.query.select && this.ctx.odata.onlyValue  === true) {
              return this.formatReturnResult({ 
-               body: String(res[ this.ctx.odata.query.select[0 as keyobj] == "id" ? "@iot.id" : 0 ]),
+               body: String(res[ this.ctx.odata.query.select[0 as keyobj] == "id" ? EConstant.id : 0 ]),
              });
            }
              return this.formatReturnResult({ 

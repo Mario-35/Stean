@@ -11,7 +11,6 @@ import util from "util";
 import { color, EChar, EColor } from "../enums";
 import { showAll, _DEBUG } from "../constants";
 import { Lexer } from "../odata/parser";
-import { _ID } from "../db/constants";
 
 // class to logCreate configs environements
 class Log {

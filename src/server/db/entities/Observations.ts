@@ -13,7 +13,7 @@ import { IreturnResult, keyobj, koaContext } from "../../types";
 import { getBigIntFromString } from "../../helpers";
 import { errors, msg } from "../../messages";
 import { multiDatastreamsUnitsKeys } from "../queries";
-import { EExtensions, EHttpCode } from "../../enums";
+import { EConstant, EExtensions, EHttpCode } from "../../enums";
 import { log } from "../../log";
 
 export class Observations extends Common {
@@ -28,7 +28,7 @@ export class Observations extends Common {
     if ( (dataInput["MultiDatastream"] && dataInput["MultiDatastream"] != null) || (this.ctx.odata.parentEntity && this.ctx.odata.parentEntity.name.startsWith("MultiDatastream")) ) {
       // get search ID
       const searchID: bigint | undefined = dataInput["MultiDatastream"] && dataInput["MultiDatastream"] != null
-          ? BigInt(dataInput["MultiDatastream"]["@iot.id"])
+          ? BigInt(dataInput["MultiDatastream"][EConstant.id])
           : getBigIntFromString(this.ctx.odata.parentId);
 
       if (!searchID) this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: msg(errors.noFound, "MultiDatastreams"), });

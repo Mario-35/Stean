@@ -20,7 +20,6 @@ import { models } from "../../../models";
 import { log } from "../../../log";
 import { _DEBUG } from "../../../constants";
 import { Visitor } from "./visitor";
-import { _ID, _NAVLINK, _TESTENCODING } from "../../../db/constants";
 import { Query } from "../builder";
 import { relationInfos } from "../../../models/helpers";
 import { _isObservation } from "../../../helpers/tests";
@@ -86,7 +85,7 @@ export class PgVisitor extends Visitor {
   addToIntervalColumns(input: string) {
     // TODO test with create    
     if (input.endsWith('Time"')) input = `step AS ${input}`;
-      else if (input === doubleQuotesString(_ID)) input = `coalesce(${doubleQuotesString(_ID)}, 0) AS ${doubleQuotesString(_ID)}`;
+      else if (input === doubleQuotesString(EConstant.id)) input = `coalesce(${doubleQuotesString(EConstant.id)}, 0) AS ${doubleQuotesString(EConstant.id)}`;
         else if (input.startsWith("CONCAT")) input = `${input}`;
           else if (input[0] !== "'") input = `${input}`;
     if (this.intervalColumns) this.intervalColumns.push(input); 
@@ -102,6 +101,11 @@ export class PgVisitor extends Visitor {
           ? models.getEntity(this.ctx.config, this.entity || this.parentEntity || this.navigationProperty) 
           : undefined;
           
+    if (input.startsWith( "result/")) {
+        this.columnSpecials["result"] = input.split("result/")[1].split(",").map(e => `"result"->'value'->'${e}' AS "${e}"`);
+        return "result";
+    }
+
     const columnName = input === "result" 
                         ? this.formatColumnResult(context, operation) 
                         : tempEntity 
@@ -112,7 +116,7 @@ export class PgVisitor extends Visitor {
     if (this.isSelect(context) && tempEntity && tempEntity.relations[input]) {
       const entityName = models.getEntityName(this.ctx.config ,input);       
       return tempEntity && entityName 
-        ? `CONCAT('${this.ctx.decodedUrl.root}/${tempEntity.name}(', "${tempEntity.table}"."id", ')/${entityName}') AS "${entityName}${_NAVLINK}"` 
+        ? `CONCAT('${this.ctx.decodedUrl.root}/${tempEntity.name}(', "${tempEntity.table}"."id", ')/${entityName}') AS "${entityName}${EConstant.navLink}"` 
         : undefined;    
     }   
   }
@@ -346,7 +350,7 @@ export class PgVisitor extends Visitor {
     context.identifier = tempColumn ? tempColumn : node.raw;
     if (context.target)
       // @ts-ignore
-      (this.query[context.target as keyof object] as Query).add(tempColumn ? `${tempColumn}${EConstant.columnSeparator}` : `${doubleQuotesString(node.raw)}${EConstant.columnSeparator}`); 
+    (this.query[context.target as keyof object] as Query).add(tempColumn ? `${tempColumn}${EConstant.columnSeparator}` : `${doubleQuotesString(node.raw)}${EConstant.columnSeparator}`); 
       this.showRelations = false;
   }
 
@@ -674,8 +678,8 @@ export class PgVisitor extends Visitor {
       } 
       else if (entity && entity.columns.hasOwnProperty(column)) 
         return column;
-      else if (entity && entity.relations.hasOwnProperty(_TESTENCODING)) 
-        return _TESTENCODING;
+      else if (entity && entity.relations.hasOwnProperty(EConstant.encoding)) 
+        return EConstant.encoding;
     }
 
     const columnOrData = (index: number, operation: string, ForceString: boolean): string => {

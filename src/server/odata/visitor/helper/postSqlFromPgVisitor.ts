@@ -96,8 +96,8 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
         });
         // LOOP on sorting
         sorting.forEach((element: string) => {
-            if (queryMaker[element].datas.hasOwnProperty("@iot.id")) {
-                const searchId = queryMaker[element].datas["@iot.id" as keyof object];
+            if (queryMaker[element].datas.hasOwnProperty(EConstant.id)) {
+                const searchId = queryMaker[element].datas[EConstant.id as keyof object];
                 returnValue.push( `, ${element} AS (select verifyId('${queryMaker[element].table}', ${searchId}) as id)` );
             } else if (queryMaker[element].datas.hasOwnProperty("@iot.name")) {
                 const searchByName = queryMaker[element].datas["@iot.name" as keyof object];

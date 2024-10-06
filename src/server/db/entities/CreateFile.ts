@@ -9,7 +9,7 @@
 
 import { Common } from "./common";
 import { IcsvColumn, IcsvFile, IreturnResult, koaContext } from "../../types";
-import { columnsNameFromCsv, executeSqlValues } from "../helpers";
+import { getColumnsNamesFromCsvFile, executeSqlValues } from "../helpers";
 import { errors } from "../../messages/";
 import * as entities from "../entities/index";
 import { returnFormats } from "../../helpers";
@@ -17,6 +17,7 @@ import { createReadStream } from 'fs';
 import { addAbortSignal } from 'stream';
 import { config } from "../../configuration";
 import { log } from "../../log";
+import { EConstant } from "../../enums";
 
 export class CreateFile extends Common {
   constructor(ctx: koaContext) {
@@ -26,7 +27,7 @@ export class CreateFile extends Common {
 
   streamCsvFileInPostgreSqlFileInDatastream = async ( ctx: koaContext, paramsFile: IcsvFile ): Promise<string | undefined> => {
     console.log(log.debug_head("streamCsvFileInPostgreSqlFileInDatastream"));
-    const headers = await columnsNameFromCsv(paramsFile.filename);
+    const headers = await getColumnsNamesFromCsvFile(paramsFile.filename);
 
     if (!headers) {
       ctx.throw(400, {
@@ -34,8 +35,8 @@ export class CreateFile extends Common {
         detail: errors.noHeaderCsv + paramsFile.filename,
       });
     }
+    const nameOfFile = paramsFile.filename.split("/").reverse()[0];
     const createDataStream = async () => {
-      const nameOfFile = paramsFile.filename.split("/").reverse()[0];
       const copyCtx = Object.assign({}, ctx.odata);
       ctx.odata.entity = this.ctx.model.Datastreams;
 
@@ -45,21 +46,22 @@ export class CreateFile extends Common {
       // @ts-ignore
       const objectDatastream = new entities[this.ctx.model.Datastreams.name]( ctx );
       const myDatas = {
-        "name": `file ${nameOfFile}`,
+        "name": nameOfFile,
         "description": `${this.ctx.model.Datastreams.name} import file ${nameOfFile}`,
         "observationType": "http://www.opengis.net/def/observation-type/ogc-omxml/2.0/swe-array-observation",
         "Thing": { "@iot.id": 1 },
         "unitOfMeasurement": {
-          "name": headers.join(),
+          "name": headers.join().replace(/"+/g, ''),
           "symbol": "csv",
           "definition": "https://www.rfc-editor.org/rfc/pdfrfc/rfc4180.txt.pdf",
         },
         "ObservedProperty": { "@iot.id": 1 },
         "Sensor": { "@iot.id": 1 },
-      };
+      };      
       try {
         return await objectDatastream.post(myDatas);
-      } catch (err) {                
+      } catch (err) {
+        console.log(err);        
         ctx.odata.query.where.init(`"name" ~* '${nameOfFile}'`);
         const returnValueError = await objectDatastream.getAll();
         ctx.odata = copyCtx;
@@ -67,7 +69,7 @@ export class CreateFile extends Common {
           returnValueError.body = returnValueError.body
             ? returnValueError.body[0]
             : {};
-          if (returnValueError.body) await executeSqlValues(ctx.config, `DELETE FROM "${this.ctx.model.Observations.table}" WHERE "datastream_id" = ${returnValueError.body["@iot.id"]}`);
+          if (returnValueError.body) await executeSqlValues(ctx.config, `DELETE FROM "${this.ctx.model.Observations.table}" WHERE "datastream_id" = ${returnValueError.body[EConstant.id]}`);
           return returnValueError;
         }
       } finally {
@@ -78,14 +80,8 @@ export class CreateFile extends Common {
     const controller = new AbortController();
     const readable = createReadStream(paramsFile.filename);
     const cols:string[] = [];
-    headers.forEach((value) => cols.push(`"${value}" varchar(255) NULL`));
-  
-    const createTable = `CREATE TABLE public."${paramsFile.tempTable}" (
-      id serial4 NOT NULL,
-      "date" varchar(255) NULL,
-      "hour" varchar(255) NULL,
-      ${cols}, 
-      CONSTRAINT ${paramsFile.tempTable}_pkey PRIMARY KEY (id));`;
+    headers.forEach((value: string) => cols.push(`${value} TEXT NULL`));  
+    const createTable = `CREATE TABLE public."${paramsFile.tempTable}" (${cols});`;
 
     await executeSqlValues(ctx.config, createTable);
     const writable = config.connection(ctx.config.name).unsafe(`COPY ${paramsFile.tempTable}  (${headers.join( "," )}) FROM STDIN WITH(FORMAT csv, DELIMITER ';'${ paramsFile.header })`).writable();
@@ -93,22 +89,25 @@ export class CreateFile extends Common {
       readable
         .pipe(addAbortSignal(controller.signal, await writable))
         .on('close', async () => {
-          // TODO DATES !!!!
           const sql = `INSERT INTO "${ this.ctx.model.Observations.table }" 
-                    ("datastream_id", "phenomenonTime", "resultTime", "result") 
-                    SELECT '${String(
-                      returnValue.body["@iot.id"]
-                    )}', (SELECT current_timestamp), (SELECT current_timestamp), json_build_object('value',ROW_TO_JSON(p)) FROM (SELECT * FROM ${
-                      paramsFile.tempTable
-                    }) AS p ON CONFLICT DO NOTHING`;
+                    (
+                    "datastream_id", 
+                    "phenomenonTime", 
+                    "resultTime", 
+                    "result") 
+                    SELECT '${Number( returnValue.body[EConstant.id] )}', 
+                    (SELECT current_timestamp), 
+                    (SELECT current_timestamp), 
+                    json_build_object('value',ROW_TO_JSON(p)) FROM (SELECT * FROM ${ paramsFile.tempTable }) AS p 
+                    ON CONFLICT DO NOTHING`;
+                    
           await config.connection(this.ctx.config.name).unsafe(sql);          
           if (returnValue) resolve(returnValue);
         })
-        .on('error', (err) => {
+        .on('error', (err) => {          
           log.error('ABORTED-STREAM');
           reject(err);
         });
-      // await finished(stream);
       });
   };
   

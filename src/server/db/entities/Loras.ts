@@ -16,7 +16,6 @@ import { EConstant, EDatesType } from "../../enums";
 import { multiDatastreamFromDeveui, streamFromDeveui } from "../queries";
 import { decodeloraDeveuiPayload } from "../../lora";
 import { executeSql, executeSqlValues } from "../helpers";
-import { _ID, _NAVLINK, _SELFLINK } from "../constants";
 import { log } from "../../log";
 
 export class Loras extends Common {
@@ -239,10 +238,10 @@ export class Loras extends Common {
             resultTime: `"${tempResult.resultTime}"`,
             result: tempResult["result"]["value"],
           };
-          result[_ID] = tempResult.id;
-          result[_SELFLINK] = `${this.ctx.decodedUrl.root}/Observations(${tempResult.id})`;
+          result[EConstant.id] = tempResult.id;
+          result[EConstant.selfLink] = `${this.ctx.decodedUrl.root}/Observations(${tempResult.id})`;
           Object.keys(this.ctx.model["Observations"].relations).forEach((word) => {
-      result[ `${word}${_NAVLINK}` ] = `${this.ctx.decodedUrl.root}/Observations(${tempResult.id})/${word}`;
+      result[ `${word}${EConstant.navLink}` ] = `${this.ctx.decodedUrl.root}/Observations(${tempResult.id})/${word}`;
           });
 
           return this.formatReturnResult({ body: result, query: sql, });
@@ -339,11 +338,11 @@ export class Loras extends Common {
             resultTime: `"${tempResult.resultTime}"`,
             result: tempResult["result"]["value"],
           };
-          result[_ID] = tempResult.id;
-          result[_SELFLINK] = `${this.ctx.decodedUrl.root}/Observations(${tempResult.id})`;
+          result[EConstant.id] = tempResult.id;
+          result[EConstant.selfLink] = `${this.ctx.decodedUrl.root}/Observations(${tempResult.id})`;
 
           Object.keys(this.ctx.model["Observations"].relations).forEach((word) => {
-      result[ `${word}${_NAVLINK}` ] = `${this.ctx.decodedUrl.root}/Observations(${tempResult.id})/${word}`;
+      result[ `${word}${EConstant.navLink}` ] = `${this.ctx.decodedUrl.root}/Observations(${tempResult.id})/${word}`;
           });
 
           return this.formatReturnResult({

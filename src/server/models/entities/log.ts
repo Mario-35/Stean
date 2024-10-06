@@ -11,8 +11,7 @@ import { createEntity } from ".";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _text } from "./constants";
 import { doubleQuotesString } from "../../helpers";
-import { _ID } from "../../db/constants";
-import { ETable } from "../../enums";
+import { EConstant, ETable } from "../../enums";
 
 export const Log:Ientity = createEntity("Logs", {
     createOrder: -1,
@@ -23,7 +22,7 @@ export const Log:Ientity = createEntity("Logs", {
       id: {
         create: _idBig,
         alias(service: Iservice , test: IKeyBoolean) {
-           return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotesString(_ID)}`: ''}` ;
+           return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotesString(EConstant.id)}`: ''}` ;
         },
         type: "number",
       },

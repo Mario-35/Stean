@@ -8,10 +8,9 @@
 // onsole.log("!----------------------------------- createRole -----------------------------------!\n");
 
 import { config } from "../../configuration";
-import { EChar } from "../../enums";
+import { EChar, EConstant } from "../../enums";
 import { simpleQuotesString } from "../../helpers";
 import { Iservice } from "../../types";
-import { _RIGHTS } from "../constants";
 
 export const createRole = async (service: Iservice ): Promise<string> => {
   const connection = config.connection(service.name);
@@ -19,12 +18,12 @@ export const createRole = async (service: Iservice ): Promise<string> => {
     await connection.unsafe(`SELECT COUNT(*) FROM pg_user WHERE usename = ${simpleQuotesString(service.pg.user)};`)
         .then(async (res: Record<string, any>) => {
         if (res[0].count == 0) {            
-            await connection.unsafe(`CREATE ROLE ${service.pg.user} WITH PASSWORD ${simpleQuotesString(service.pg.password)} ${_RIGHTS}`)
+            await connection.unsafe(`CREATE ROLE ${service.pg.user} WITH PASSWORD ${simpleQuotesString(service.pg.password)} ${EConstant.rights}`)
             .catch((err: Error) => {
               reject(err);
             });
         } else {
-            await connection.unsafe(`ALTER ROLE ${service.pg.user} WITH PASSWORD ${simpleQuotesString(service.pg.password)}  ${_RIGHTS}`)
+            await connection.unsafe(`ALTER ROLE ${service.pg.user} WITH PASSWORD ${simpleQuotesString(service.pg.password)}  ${EConstant.rights}`)
             .catch((err: Error) => {
               reject(err);
             });

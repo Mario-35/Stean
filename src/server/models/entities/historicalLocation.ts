@@ -8,11 +8,10 @@
 // onsole.log("!----------------------------------- entity HistoricalLocation -----------------------------------!\n");
 
 import { createEntity } from ".";
-import {  ERelations, ETable } from "../../enums";
+import {  EConstant, ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _idRel, _tz } from "./constants";
 import { doubleQuotesString } from "../../helpers";
-import { _ID } from "../../db/constants";
 
 export const HistoricalLocation:Ientity  = createEntity("HistoricalLocations", {
   createOrder: -1,
@@ -23,7 +22,7 @@ export const HistoricalLocation:Ientity  = createEntity("HistoricalLocations", {
     id: {
       create: _idBig,
       alias(service: Iservice , test: IKeyBoolean) {
-          return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotesString(_ID)}`: ''}` ;
+          return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotesString(EConstant.id)}`: ''}` ;
       },
       type: "bigint"
     },

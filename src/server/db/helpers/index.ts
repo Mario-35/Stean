@@ -22,7 +22,7 @@ export { executeSqlValues } from "./executeSqlValues";
 export { getDBDateNow } from "./getDBDateNow";
 export { removeKeyFromUrl } from "./removeKeyFromUrl";
 export { queryInsertFromCsv } from "./queryInsertFromCsv";
-export { columnsNameFromCsv } from "./columnsNameFromCsv";
+export { getColumnsNamesFromCsvFile } from "./getColumnsNamesFromCsvFile";
 export { streamCsvFile } from "./streamCsvFile";
 export { createIndexes } from "./createIndexes";
 export { columnsNameFromHydrasCsv } from "./columnsNameFromHydrasCsv";

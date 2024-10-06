@@ -23,4 +23,8 @@ export { testId } from "./testId";
 export { resultKeys } from "./resultKeys";
 export { multiDatastreamUoM } from "./multiDatastreamUoM";
 
+export const queries = Object.freeze({
+    datastreamByName : `SELECT id FROM "datastream" WHERE "name" = '@STR@' LIMIT 1`
+});
+
 

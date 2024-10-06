@@ -32,16 +32,16 @@ export const doSomeWorkAfterCreateAst = async (input: RootPgVisitor, ctx: koaCon
     && <bigint>input.parentId > 0) {
       if (input.ctx.config.extensions.includes(EExtensions.file)) {
         await config.connection(ctx.config.name).unsafe(datastreamUoM(input)).then((res) => {
-          input.columnSpecials["result"] = res[0].keys.split(",").map((e: string) => `("result"->>'value')::json->'${e}' AS "${e}"`);
+        //  input.columnSpecials["result"] = res[0].keys.split(",").map((e: string) => `("result"->>'value')::json->'${e}' AS "${e}"`);
+         input.columnSpecials["result"] = [`("result"->>'value')::json`];
         });        
       } else if (input.parentEntity.name === "Datastreams") input.columnSpecials["result"]  = [`"result"->'value' AS result`];
-      if (input.parentEntity.name === "MultiDatastreams") {
-        console.log(multiDatastreamUoM(input));
-        
+      if (input.parentEntity.name === "MultiDatastreams") {        
         await config.connection(ctx.config.name).unsafe(multiDatastreamUoM(input)).then((res) => {
           if (res[0] && res[0].keys && res[0].keys.map)
             input.columnSpecials["result"]  =  res[0].keys.map((e: string) => `("result"->>'valueskeys')::json->'${e}' AS "${e}"`);
         });
       }   
-  }  
+  }
+
 };

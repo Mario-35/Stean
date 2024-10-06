@@ -1,17 +1,17 @@
 /**
- * columnsNameFromCsv
+ * getColumnsNamesFromCsvFile
  *
  * @copyright 2020-present Inrae
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- columnsNameFromCsv -----------------------------------!\n");
+// onsole.log("!----------------------------------- getColumnsNamesFromCsvFile -----------------------------------!\n");
 
 import fs from "fs";
 import readline from "readline";
 import { log } from "../../log";
 
-export const columnsNameFromCsv = async ( filename: string ): Promise<string[] | undefined> => {
+export const getColumnsNamesFromCsvFile = async ( filename: string ): Promise<string[] | undefined> => {
   console.log(log.whereIam());
   const fileStream = fs.createReadStream(filename);
 
