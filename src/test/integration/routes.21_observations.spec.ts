@@ -760,7 +760,7 @@ describe("endpoint : Observations", () => {
                         "resultTime": "2016-11-18T11:04:15.790Z"
                     };
 					const infos = addTest({
-                        api : `{patch} ${entity.name} Patch a Thing`,
+                        api : `{patch} ${entity.name} Patch ${entity.name}`,
                         apiName: `Patch${entity.name}`,
                         apiDescription: `Patch a ${entity.singular}.${showHide(`Patch${entity.name}`, apiInfos["10.3"])}`,
                         apiReference: "https://docs.ogc.org/is/18-088/18-088.html#_request_2",

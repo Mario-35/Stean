@@ -113,6 +113,7 @@ class Models {
   }
     // Get multiDatastream or Datastrems infos
   public async getStreamInfos(service: Iservice , input: Record<string, any> ): Promise<IstreamInfos | undefined> {
+    console.log(log.whereIam());
     const stream: _STREAM = input["Datastream"] ? "Datastream" : input["MultiDatastream"] ? "MultiDatastream" : undefined;
     if (!stream) return undefined;
     const streamEntity = models.getEntityName(service, stream); 

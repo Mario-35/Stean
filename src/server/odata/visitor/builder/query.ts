@@ -12,12 +12,12 @@ import { asJson } from "../../../db/queries";
 import { Iservice, Ientity, IKeyBoolean, IpgQuery } from "../../../types";
 import { PgVisitor, RootPgVisitor } from "..";
 import { models } from "../../../models";
-import { allEntities, EConstant, EExtensions, EOptions } from "../../../enums";
+import { allEntities, EConstant, EOptions } from "../../../enums";
 import { GroupBy, Key, OrderBy, Select, Where, Join } from ".";
 import { errors } from "../../../messages";
 import { log } from "../../../log";
 import { expand, relationInfos } from "../../../models/helpers";
-import { _isObservation } from "../../../helpers/tests";
+import { _isObservation, isFile } from "../../../helpers/tests";
 
 export class Query  {
     from: string;
@@ -85,7 +85,7 @@ export class Query  {
 
     private columnList(tableName: string, main: PgVisitor, element: PgVisitor): string[] | undefined  {
         console.log(log.whereIam());
-        if (element.ctx.config.extensions.includes(EExtensions.file) && element.returnFormat === returnFormats.csv) return element.columnSpecials["result"] 
+        if (isFile(element.ctx) && element.returnFormat === returnFormats.csv) return element.columnSpecials["result"] 
         // get good entity name
         const tempEntity = models.getEntity(main.ctx.config, tableName);
         if (!tempEntity) {

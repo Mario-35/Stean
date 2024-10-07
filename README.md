@@ -14,8 +14,10 @@ The menu differs depending on the progress of the installation but the header an
 ![steanSh](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/steanSh.jpg "steanSh")
 
 - Path: the installation path of the API
+      The best proctice is to install on current folder.
 - The version of stean installed
 - The state of stean (RUN or STOP)
+    The best practice is to create script run and use it by exit this script.
 - At the bottom of the menu the version of node and postgresSql
 - Quit to exit installation script
 - "Indicate path" or "Change path" : indicates the installation path of the api
@@ -28,6 +30,10 @@ The menu differs depending on the progress of the installation but the header an
 </details>
 
 ## STEAN configuration
+
+after install : (if localhost) 
+http://localhost:8029/ show the documentation
+http://localhost:8029/i (any word after will show first install)
 
 The configuration.json file must be found by the api in the configuration folder if the file not exist the api redirect you to th first install page to create that file with your firs service :
 

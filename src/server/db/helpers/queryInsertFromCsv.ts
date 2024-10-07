@@ -37,12 +37,58 @@ export async function queryInsertFromCsv( ctx: koaContext, paramsFile: IcsvFile 
             json_build_object('value', 
             CASE "${paramsFile.tempTable}".value${csvColumn.column}
               WHEN '---' THEN NULL 
+              WHEN '#REF!' THEN NULL 
               ELSE CAST(REPLACE(value${csvColumn.column},',','.') AS float) 
             END),
             '{"import": "${fileImport}","date": "${dateImport}"}'  
            FROM "${ paramsFile.tempTable }" ON CONFLICT DO NOTHING returning 1`);
         }
       );
+
+
+      console.log(paramsFile);
+
+      const essai:string[] = [];
+
+      Object.keys(paramsFile.columns).forEach((myColumn) => {
+        const csvColumn: IcsvColumn = paramsFile.columns[myColumn as keyof object];
+        essai.push(`CASE "${paramsFile.tempTable}".value${csvColumn.column}
+              WHEN '---' THEN NULL 
+              WHEN '#REF!' THEN NULL 
+              ELSE CAST(REPLACE(value${csvColumn.column},',','.') AS float) 
+            END`);
+      });
+
+      console.log(essai);
+      
+      // Object.keys(paramsFile.columns).forEach(
+      //   (myColumn: string, index: number) => {
+      //     const csvColumn: IcsvColumn = paramsFile.columns[myColumn as keyof object];
+      //     scriptSql.push(`INSERT INTO "${ ctx.model.Observations.table }" 
+      //     ("${csvColumn.stream.type?.toLowerCase()}_id", "featureofinterest_id", "phenomenonTime", "resultTime", "result", "resultQuality")
+      //       SELECT 
+      //       ${csvColumn.stream.id}, 
+      //       ${csvColumn.stream.FoId},  
+      //       ${sqlRequest.dateSql}, 
+      //       ${sqlRequest.dateSql},
+      //       json_build_object('value',
+      //       ARRAY [ 
+      //       CASE "${paramsFile.tempTable}".value${csvColumn.column}
+      //         WHEN '---' THEN NULL 
+      //         WHEN '#REF!' THEN NULL 
+      //         ELSE CAST(REPLACE(value${csvColumn.column},',','.') AS float) 
+      //       END
+      //       ]),
+      //       '{"import": "${fileImport}","date": "${dateImport}"}'  
+      //      FROM "${ paramsFile.tempTable }" ON CONFLICT DO NOTHING returning 1`);
+      //   }
+      // );
+
+
+
+
+
+
       return {
         count: stream,
         query: scriptSql

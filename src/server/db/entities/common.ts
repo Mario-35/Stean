@@ -14,8 +14,9 @@ import { executeSqlValues, removeKeyFromUrl } from "../helpers";
 import { getErrorCode, info } from "../../messages";
 import { log } from "../../log";
 import { config } from "../../configuration";
-import { EConstant, EExtensions } from "../../enums";
+import { EConstant } from "../../enums";
 import { asCsv } from "../queries";
+import { isFile } from "../../helpers/tests";
 
 // Common class
 export class Common {
@@ -88,8 +89,6 @@ export class Common {
       return `${encodeURI(this.nextLinkBase)}${ this.nextLinkBase.includes("?") ? "&" : "?" }$top=${this.ctx.odata.limit}&$skip=${prev}`;
   };
 
-
-
   // Return all items
   async getAll(): Promise<IreturnResult | undefined> {
     console.log(log.whereIam());
@@ -102,7 +101,7 @@ export class Common {
        case returnFormats.sql:
          return this.formatReturnResult({ body: sql }); 
        case returnFormats.csv:
-         if (!this.ctx.config.extensions.includes(EExtensions.file)) sql =  asCsv(sql);
+         if (!isFile(this.ctx)) sql =  asCsv(sql);
             try {            
               config.writeLog(log.query(sql));
               this.ctx.attachment(`${this.ctx.odata.entity?.name || "export"}.csv`)

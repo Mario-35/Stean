@@ -11,8 +11,8 @@ import { RootPgVisitor } from "..";
 import { config } from "../../../configuration";
 import { multiDatastreamKeys, resultKeys, multiDatastreamUoM } from "../../../db/queries";
 import { datastreamUoM } from "../../../db/queries/datastreamUoM";
-import { EExtensions } from "../../../enums";
 import { returnFormats, isObservation } from "../../../helpers";
+import { isFile } from "../../../helpers/tests";
 import { koaContext } from "../../../types";
 
 export const doSomeWorkAfterCreateAst = async (input: RootPgVisitor, ctx: koaContext) => {
@@ -30,7 +30,7 @@ export const doSomeWorkAfterCreateAst = async (input: RootPgVisitor, ctx: koaCon
     && input.parentEntity?.name?.endsWith('atastreams') 
     && input.parentId 
     && <bigint>input.parentId > 0) {
-      if (input.ctx.config.extensions.includes(EExtensions.file)) {
+      if (isFile(input.ctx)) {
         await config.connection(ctx.config.name).unsafe(datastreamUoM(input)).then((res) => {
         //  input.columnSpecials["result"] = res[0].keys.split(",").map((e: string) => `("result"->>'value')::json->'${e}' AS "${e}"`);
          input.columnSpecials["result"] = [`("result"->>'value')::json`];

@@ -211,7 +211,6 @@ save_configuration() {
     fi
 }
 
-
 # Function to install stean
 install_stean() {
     # save actual to bak
@@ -245,8 +244,6 @@ install_stean() {
     fi
     save_dist
     npm install --silent --omit=dev --prefix $APIDEST/api/
-    logo
-    exit
 }
 
 # Function to stop stean
@@ -336,7 +333,9 @@ selectOption() {
             check_dist;
             stop_stean;
             install_stean;
-            logo
+            create_run_script;
+            logo;
+            echo -e "\e[35m Execute \e[38m .\run.sh \e[0m"
             ;;
         "Update stean")
             echo "┌───────────────────────────────────────────────────────────────┐"
@@ -345,6 +344,9 @@ selectOption() {
             check_dist
             stop_stean
             install_stean
+            logo;
+            echo -e "\e[35m Execute \e[38m .\run.sh \e[0m"
+            exit
             ;;
         "Back to previous")
             echo "┌───────────────────────────────────────────────────────────────┐"

@@ -21,6 +21,7 @@ export const _isObservation = (input: Ientity | string) => typeof input === "str
 export const isObservation = (input: RootPgVisitor |PgVisitor):boolean => (input.entity && _isObservation(input.entity)) || (input.parentEntity && _isObservation(input.parentEntity)) ? true : false;
 export const isAdmin = (ctx: koaContext): boolean => ctx.config && ctx.config.name === EConstant.admin;
 export const isAllowedTo = (ctx: koaContext, what: EUserRights): boolean => ctx.config.extensions.includes(EExtensions.users) ? true : ctx.user && ctx.user.PDCUAS[what];
+export const isFile = (ctx: koaContext): boolean => ctx.config.extensions.includes(EExtensions.file);
 
 export function isString(obj: any) {
     return (typeof obj) === 'string';

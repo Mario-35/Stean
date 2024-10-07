@@ -22,7 +22,7 @@ import { _DEBUG } from "../../../constants";
 import { Visitor } from "./visitor";
 import { Query } from "../builder";
 import { relationInfos } from "../../../models/helpers";
-import { _isObservation } from "../../../helpers/tests";
+import { _isObservation, isFile } from "../../../helpers/tests";
 
 export class PgVisitor extends Visitor {
   entity: Ientity | undefined = undefined;
@@ -102,7 +102,9 @@ export class PgVisitor extends Visitor {
           : undefined;
           
     if (input.startsWith( "result/")) {
-        this.columnSpecials["result"] = input.split("result/")[1].split(",").map(e => `"result"->'value'->'${e}' AS "${e}"`);
+      console.log(input);
+        
+        this.columnSpecials["result"] = input.split("result/")[1].split("/").map(e => `"result"->'value'->'${e}' AS "${e}"`);
         return "result";
     }
 
@@ -133,7 +135,7 @@ export class PgVisitor extends Visitor {
         const nbs = Array.from({length: 5}, (v, k) => k+1);
         const translate = `TRANSLATE (SUBSTRING ("result"->>'value' FROM '(([0-9]+.*)*[0-9]+)'), '[]','')`;
         const isOperation = operation.trim() != "";
-        return ForceString 
+        return ForceString || isFile(this.ctx)
           ? `@EXPRESSIONSTRING@ ALL (ARRAY_REMOVE( ARRAY[\n${nbs.map(e => `${isOperation ? `${operation} (` : ''} SPLIT_PART ( ${translate}, ',', ${e}))`).join(",\n")}], null))`
           : `@EXPRESSION@ ALL (ARRAY_REMOVE( ARRAY[\n${nbs.map(e => `${isOperation ? `${operation} (` : ''}NULLIF (SPLIT_PART ( ${translate}, ',', ${e}),'')::numeric${isOperation ? `)` : ''}`).join(",\n")}], null))`;
     default:
