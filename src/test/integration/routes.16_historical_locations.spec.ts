@@ -117,8 +117,7 @@ describe("endpoint : HistoricalLocations", () => {
 					addToApiDoc({
 						...infos,
 						result: limitResult(res)
-					});
-					
+					});					
 					done();
 				});
 		});
@@ -319,8 +318,6 @@ describe("endpoint : HistoricalLocations", () => {
 					http: `${testVersion}/${entity.name}(1)?$expand=${name}`,
 				}
 			});
-
-			
 			chai.request(server)
 				.get(`/test/${infos.apiExample.http}`)
 				.end((err: Error, res: any) => {

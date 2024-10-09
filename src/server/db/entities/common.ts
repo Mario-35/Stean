@@ -96,12 +96,12 @@ export class Common {
     let sql = this.ctx.odata.getSql();
     
     // Return results
-    if (sql) {
+    if (sql) {      
       switch (this.ctx.odata.returnFormat) {
        case returnFormats.sql:
          return this.formatReturnResult({ body: sql }); 
        case returnFormats.csv:
-         if (!isFile(this.ctx)) sql =  asCsv(sql);
+         if (!isFile(this.ctx)) sql = asCsv(sql);
             try {            
               config.writeLog(log.query(sql));
               this.ctx.attachment(`${this.ctx.odata.entity?.name || "export"}.csv`)
@@ -113,7 +113,6 @@ export class Common {
                 .catch(err => {
                   return err
                 }).then(async (e: any) => {
-                  this.ctx.body = "";
                   for await (const chunk of e) {
                     if (chunk.json) {
                       const data = chunk.json;
@@ -128,18 +127,6 @@ export class Common {
             } catch (error) {
               return this.formatReturnResult({ body: error });
             }
-
-       case returnFormats.graph:
-         return await executeSqlValues(this.ctx.config, sql).then(async (res: Record<string, any>) => {         
-           return (res[0] > 0) 
-          ? this.formatReturnResult({ 
-             id: isNaN(res[0][0]) ? undefined : +res[0], 
-             nextLink: this.nextLink(res[0]), 
-             prevLink: this.prevLink(res[0]), 
-             body: res[1],
-          }) 
-          : this.formatReturnResult({ body: res[0] == 0 ? [] : res[0]});
-        }).catch((err: Error) => this.ctx.throw(400, { code: 400, detail: err.message }) );
        default:        
          return await executeSqlValues(this.ctx.config, sql).then(async (res: Record<string, any>) => {         
            return (res[0] > 0) 
@@ -258,8 +245,7 @@ export class Common {
     // Return results
     if (sql) switch (this.ctx.odata.returnFormat ) {
       case returnFormats.sql:
-        return this.formatReturnResult({ body: sql });
-        
+        return this.formatReturnResult({ body: sql });        
       default:
         return await executeSqlValues(this.ctx.config, sql) 
         .then((res: Record<string, any>) => {  

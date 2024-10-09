@@ -241,7 +241,7 @@ describe("endpoint : MultiDatastream", () => {
                 apiName: `GetPhenomenonTime${entity.name}`,
                 apiDescription: "Get Datastream(s) from phenomenonTime filter.",
                 apiExample: {
-                    http: `${testVersion}/${entity.name}?$filter=phenomenonTime eq 2023-03-01T10:49:32Z/2023-03-12T21:49:32Z`,                    
+                    http: `${testVersion}/${entity.name}?$filter=phenomenonTime eq 2023-03-01T16:30:01Z/2023-03-01T19:15:01Z`,                    
                     curl: defaultGet("curl", "KEYHTTP"),
                     javascript: defaultGet("javascript", "KEYHTTP"),
                     python: defaultGet("python", "KEYHTTP")
@@ -522,7 +522,7 @@ describe("endpoint : MultiDatastream", () => {
                     res.status.should.equal(200);
                     res.type.should.equal("application/json");
                     res.body["@iot.count"].should.eql(9);
-                    res.body.value[0]["phenomenonTime"].should.eql('2023-10-13T01:01:03Z/2023-10-18T13:27:16Z');
+                    res.body.value[0]["phenomenonTime"].should.eql('2024-06-03T05:15:01Z/2024-06-05T04:15:01Z');
                     addToApiDoc({ ...infos, result: res });
                     
                     done();

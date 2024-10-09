@@ -303,7 +303,7 @@ describe("endpoint : Datastream", () => {
 				apiName: `GetPhenomenonTime${entity.name}`,
 				apiDescription: "Get Datastream(s) from phenomenonTime filter.",
 				apiExample: {
-					http: `${testVersion}/${entity.name}?$filter=resultTime eq 2023-02-08T16:37:11Z/2023-02-11T09:49:32Z`,				
+					http: `${testVersion}/${entity.name}?$filter=resultTime eq 2024-06-01T03:00:01Z/2024-06-03T03:45:01Z`,				
 					curl: defaultGet("curl", "KEYHTTP"),
 					javascript: defaultGet("javascript", "KEYHTTP"),
 					python: defaultGet("python", "KEYHTTP")
@@ -621,7 +621,6 @@ describe("endpoint : Datastream", () => {
 						...infos,
 						result: limitResult(res)
 					});
-					
 					done();
 				});
 		});
@@ -674,7 +673,6 @@ describe("endpoint : Datastream", () => {
 						...infos,
 						result: limitResult(res)
 					});
-					
 					done();
 				});
 		});
@@ -795,7 +793,6 @@ describe("endpoint : Datastream", () => {
 					res.status.should.equal(201);
 					res.type.should.equal("application/json");
 					res.body.should.include.keys(testsKeys);
-					
 					done();
 				});
 		});
@@ -935,7 +932,6 @@ describe("endpoint : Datastream", () => {
 					res.type.should.equal("application/json");
 					docs[docs.length - 1].apiErrorExample = JSON.stringify(res.body, null, 4);
 					generateApiDoc(docs, `apiDoc${entity.name}.js`);
-					
 					done();
 				});
 		});

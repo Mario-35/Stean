@@ -14,7 +14,13 @@ import { doubleQuotesString, simpleQuotesString, removeFirstEndDoubleQuotes } fr
 import { log } from "../../log";
 import { Iservice } from "../../types";
 
-// create postgresSql 
+/**
+ * 
+ * @param service Service
+ * @param input JSON
+ * @param entityName string
+ * @returns string
+*/
 export function createInsertValues(service: Iservice , input: Record<string, any>, entityName?: string): string  {
     console.log(log.whereIam());
     if (service && input) {
@@ -23,18 +29,17 @@ export function createInsertValues(service: Iservice , input: Record<string, any
         if (entityName) {
             const entity = models.getEntity(service, entityName);
             if (!entity) return "";
-            Object.keys(input).forEach((e: string ) => {
-                if (input[e] && entity.columns[e]) {
-                  const temp = formatColumnValue(e, input[e], entity.columns[e].type);
+            Object.keys(input).forEach((elem: string ) => {
+                if (input[elem] && entity.columns[elem]) {
+                  const temp = formatColumnValue(elem, input[elem], entity.columns[elem].type);
                   if (temp) {
-                    keys.push(doubleQuotesString(e));
+                    keys.push(doubleQuotesString(elem));
                     values.push(temp);
                   }
-                } else if (input[e] && entity.relations[e]) {
-                    const relation = relationInfos(service, entity.name, e);
-                    
+                } else if (input[elem] && entity.relations[elem]) {
+                  const relation = relationInfos(service, entity.name, elem);
                   if (entity.columns[relation.column]) {
-                    const temp = formatColumnValue(relation.column, input[e], entity.columns[relation.column].type);
+                    const temp = formatColumnValue(relation.column, input[elem], entity.columns[relation.column].type);
                     if (temp) {
                       keys.push(doubleQuotesString(relation.column));
                       values.push(temp);
@@ -43,18 +48,21 @@ export function createInsertValues(service: Iservice , input: Record<string, any
                 }
               });
             } else {
-              Object.keys(input).forEach((e: string) => {
-                if (input[e]) {
-                  if (input[e].startsWith && input[e].startsWith('"{') && input[e].endsWith('}"')) input[e] = removeFirstEndDoubleQuotes(input[e]);
-                  else if (input[e].startsWith && input[e].startsWith('{"@iot.name"')) input[e] = `(SELECT "id" FROM "${e.split("_")[0]}" WHERE "name" = '${JSON.parse(removeFirstEndDoubleQuotes(input[e]))["@iot.name"]}')`;
-                  keys.push(doubleQuotesString(e));
-                  if (e === "result") {
-                      values.push(`'{"value": ${input[e]}}'::jsonb`);
-                  } else values.push(typeof input[e] === "string" 
-                                              ? input[e].startsWith("(SELECT")
-                                              ? input[e]
-                                              : simpleQuotesString(ESCAPE_SIMPLE_QUOTE(input[e].trim())) 
-                                              : ESCAPE_SIMPLE_QUOTE(input[e].trim()));
+              Object.keys(input).forEach((elem: string) => {
+                
+                if (input[elem]) {
+                  if (input[elem].startsWith && input[elem].startsWith('"{') && input[elem].endsWith('}"')) 
+                    {                      
+                      input[elem] = removeFirstEndDoubleQuotes(input[elem].replace(/\\"+/g, ""));
+                    } else if (input[elem].startsWith && input[elem].startsWith('{"@iot.name"')) {
+                      input[elem] = `(SELECT "id" FROM "${elem.split("_")[0]}" WHERE "name" = '${JSON.parse(removeFirstEndDoubleQuotes(input[elem]))["@iot.name"]}')`;
+                    }
+                  keys.push(doubleQuotesString(elem));
+                  values.push(typeof input[elem] === "string" 
+                    ? input[elem].startsWith("(SELECT")
+                    ? input[elem]
+                    : simpleQuotesString(ESCAPE_SIMPLE_QUOTE(input[elem].trim())) 
+                    : elem === "result" ? `'{"value": ${input[elem]}}'::jsonb`: ESCAPE_SIMPLE_QUOTE(input[elem].trim()));
               }
           });
         }          

@@ -84,10 +84,10 @@ export const Observation:Ientity  = createEntity("Observations", {
     },
     constraints: {
       observation_pkey: 'PRIMARY KEY ("id")',
-      observation_unik_datastream_result:
-        'UNIQUE ("phenomenonTime", "resultTime", "datastream_id", "featureofinterest_id", "result")',
-      observation_unik_multidatastream_result:
-        'UNIQUE ("phenomenonTime", "resultTime", "multidatastream_id", "featureofinterest_id", "result")',
+      observation_unik_datastream:
+        'UNIQUE ("phenomenonTime", "resultTime", "datastream_id", "featureofinterest_id")',
+      observation_unik_multidatastream:
+        'UNIQUE ("phenomenonTime", "resultTime", "multidatastream_id", "featureofinterest_id")',
       observation_datastream_id_fkey:
         'FOREIGN KEY ("datastream_id") REFERENCES "datastream"("id") ON UPDATE CASCADE ON DELETE CASCADE',
       observation_multidatastream_id_fkey:

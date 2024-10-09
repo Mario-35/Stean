@@ -11,8 +11,6 @@ import { EVersion } from "../../enums"
 
 export function  getModelVersion(name: string): EVersion {
     switch (name) {
-      case "v0.0":
-        return EVersion.v0_0
       case "v1.1":
       case "1.1":
         return EVersion.v1_1

@@ -46,11 +46,11 @@ describe("Odata BuiltInMisc", () => {
             apiDescription: "The interval keyword rounds the input postgresSql interval (see reference below) parameter to the nearest interval.",
             apiReference: "https://www.postgresql.org/docs/15/ecpg-pgtypes.html#ECPG-PGTYPES-INTERVAL",
             apiExample: { 
-                http: `${testVersion}/Datastreams(3)/Observations?$interval=1 hour`,
-                            curl: defaultGet("curl", "KEYHTTP"),
-                            javascript: defaultGet("javascript", "KEYHTTP"),
-                            python: defaultGet("python", "KEYHTTP") 
-                        }
+                http: `${testVersion}/Datastreams(7)/Observations?$interval=1 hour`,
+                curl: defaultGet("curl", "KEYHTTP"),
+                javascript: defaultGet("javascript", "KEYHTTP"),
+                python: defaultGet("python", "KEYHTTP") 
+            }
         });
         chai.request(server)
             .get(`/test/${infos.apiExample.http}`)
@@ -58,13 +58,12 @@ describe("Odata BuiltInMisc", () => {
                 should.not.exist(err);
                 res.status.should.equal(200);
                 res.type.should.equal("application/json");
-                res.body["@iot.count"].should.eql(276);
-                res.body["value"][0]["@iot.id"].should.eql(49);
-                res.body["value"][0]["phenomenonTime"].should.eql('2023-03-01T11:00:00');
-                res.body["value"][1]["@iot.id"].should.eql(0);
-                res.body["value"][1]["phenomenonTime"].should.eql('2023-03-01T12:00:00');
+                res.body["@iot.count"].should.eql(67);
+                res.body["value"][0]["@iot.id"].should.eql(122);
+                res.body["value"][0]["phenomenonTime"].should.eql('2024-06-01T03:00:00');
+                res.body["value"][1]["@iot.id"].should.eql(125);
+                res.body["value"][1]["phenomenonTime"].should.eql('2024-06-01T04:00:00');
                 addToApiDoc({ ...infos, result: limitResult(res) });
-                
                 done();
             });
     });
@@ -76,21 +75,20 @@ describe("Odata BuiltInMisc", () => {
             apiDescription: "",
             apiReference: "",
             apiExample: {
-                        http: `${testVersion}/Datastreams(3)/Observations?$interval=15 min`,
-					}
-				});
+                http: `${testVersion}/Datastreams(7)/Observations?$interval=15 min`,
+            }
+        });
         chai.request(server)
             .get(`/test/${infos.apiExample.http}`)
             .end((err: Error, res: any) => { 
                 should.not.exist(err);
                 res.status.should.equal(200);
                 res.type.should.equal("application/json");
-                res.body["@iot.count"].should.eql(1101);
-                res.body["value"][0]["@iot.id"].should.eql(49);
-                res.body["value"][0]["phenomenonTime"].should.eql('2023-03-01T11:00:00');
+                res.body["@iot.count"].should.eql(199);
+                res.body["value"][0]["@iot.id"].should.eql(122);
+                res.body["value"][0]["phenomenonTime"].should.eql('2024-06-01T03:00:00');
                 res.body["value"][1]["@iot.id"].should.eql(0);
-                res.body["value"][1]["phenomenonTime"].should.eql('2023-03-01T11:15:00');
-                
+                res.body["value"][1]["phenomenonTime"].should.eql('2024-06-01T03:15:00');
                 done();
             });
     });
@@ -102,7 +100,7 @@ describe("Odata BuiltInMisc", () => {
             apiDescription: "",
             apiReference: "",
             apiExample: {
-                        http: `${testVersion}/Datastreams(3)/Observations?$interval=1 min`,
+                        http: `${testVersion}/Datastreams(7)/Observations?$interval=1 min`,
 					}
 				});
         chai.request(server)
@@ -111,12 +109,11 @@ describe("Odata BuiltInMisc", () => {
                 should.not.exist(err);
                 res.status.should.equal(200);
                 res.type.should.equal("application/json");
-                res.body["@iot.count"].should.eql(16501);
-                res.body["value"][0]["@iot.id"].should.eql(49);
-                res.body["value"][0]["phenomenonTime"].should.eql('2023-03-01T10:50:00');
+                res.body["@iot.count"].should.eql(2971);
+                res.body["value"][0]["@iot.id"].should.eql(122);
+                res.body["value"][0]["phenomenonTime"].should.eql('2024-06-01T02:46:00');
                 res.body["value"][1]["@iot.id"].should.eql(0);
-                res.body["value"][1]["phenomenonTime"].should.eql('2023-03-01T10:51:00');
-                
+                res.body["value"][1]["phenomenonTime"].should.eql('2024-06-01T02:47:00');                
                 done();
             });
     });
@@ -128,7 +125,7 @@ describe("Odata BuiltInMisc", () => {
             apiDescription: "",
             apiReference: "",
             apiExample: {
-                        http: `${testVersion}/Datastreams(4)/Observations?$interval=1 day`,
+                        http: `${testVersion}/Datastreams(7)/Observations?$interval=1 day`,
 					}
 				});
         chai.request(server)
@@ -137,14 +134,13 @@ describe("Odata BuiltInMisc", () => {
                 should.not.exist(err);
                 res.status.should.equal(200);
                 res.type.should.equal("application/json");
-                res.body["@iot.count"].should.eql(12);
-                res.body["value"][0]["@iot.id"].should.eql(73);
-                res.body["value"][0]["phenomenonTime"].should.eql('2023-04-02T02:00:00');
-                res.body["value"][1]["@iot.id"].should.eql(74);
-                res.body["value"][1]["phenomenonTime"].should.eql('2023-04-03T02:00:00');
-                res.body["value"][5]["@iot.id"].should.eql(78);
-                res.body["value"][5]["phenomenonTime"].should.eql('2023-04-07T02:00:00');
-                
+                res.body["@iot.count"].should.eql(67);
+                res.body["value"][0]["@iot.id"].should.eql(122);
+                res.body["value"][0]["phenomenonTime"].should.eql('2024-06-02T02:00:00');
+                res.body["value"][1]["@iot.id"].should.eql(125);
+                res.body["value"][1]["phenomenonTime"].should.eql('2024-06-02T02:00:00');
+                res.body["value"][5]["@iot.id"].should.eql(137);
+                res.body["value"][5]["phenomenonTime"].should.eql('2024-06-02T02:00:00');
                 done();
             });
     });

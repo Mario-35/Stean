@@ -21,7 +21,7 @@ const _Key = (entity: Ientity, search: Ientity) => {
     : Object.keys(entity.columns).includes(`${search.singular.toLocaleLowerCase()}_id`) 
         ?  `${search.singular.toLocaleLowerCase()}_id`
         : Object.keys(entity.columns).includes(`_default_${search.singular.toLocaleLowerCase()}`) 
-        ?  `_default_${search.singular.toLocaleLowerCase()}`
+        ? `_default_${search.singular.toLocaleLowerCase()}`
         : "id";
 }
 
@@ -63,7 +63,6 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                 return fnError();
             }
 
-            // infoMessage(`PASS [${leftEntity?.name} : ${rightEntity?.name} ${leftRelation.type}]`);
             switch (leftRelation.type) {
                 // === : 1
                 case ERelations.defaultUnique:

@@ -12,7 +12,7 @@ import { koaContext } from "../types";
 const removeFirstAndEnd = (input: string, char: string) => input[0] === char && input[input.length - 1] === char[0] ? input.slice(0, -1).slice(1).trim() : input;
 export const getUserId = (ctx: koaContext): number => ctx.state.user && ctx.state.user.id ? ctx.state.user.id : -1;
 export const unikeList = (input: string[]) => [...new Set(input)];
-export { isTest, isProduction, isCsvOrArray, isGraph, isObservation, isGeoJson, isAdmin,  isAllowedTo, isString , isBoolean , isNumber , isIntegerNumber , isObject, isArray } from "./tests";
+export { isTest, isProduction, isDataArray, isCsv, isGraph, isObservation, isGeoJson, isAdmin,  isAllowedTo, isString , isBoolean , isNumber , isIntegerNumber , isObject, isArray } from "./tests";
 export { asyncForEach } from "./asyncForEach";
 export { cleanStringComma } from "./cleanStringComma";
 export { cleanUrl } from "./cleanUrl";

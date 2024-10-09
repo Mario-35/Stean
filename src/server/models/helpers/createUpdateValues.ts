@@ -12,10 +12,6 @@ import { doubleQuotesString, simpleQuotesString } from "../../helpers";
 import { log } from "../../log";
 
 export function createUpdateValues(input: Record<string, any> ): string  {
-    console.log(log.whereIam());
-    const result:string[] = [];
-    Object.keys(input).forEach((e: string) => {
-          result.push(`${doubleQuotesString(e)} = ${simpleQuotesString(ESCAPE_SIMPLE_QUOTE(input[e]))}`);
-      });
-    return result.join();
-  };
+  console.log(log.whereIam());
+  return  Object.keys(input).map((elem: string) => `${doubleQuotesString(elem)} = ${simpleQuotesString(ESCAPE_SIMPLE_QUOTE(input[elem]))}`).join();
+};

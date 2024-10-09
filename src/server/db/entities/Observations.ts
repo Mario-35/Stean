@@ -24,6 +24,24 @@ export class Observations extends Common {
   // Prepare odservations 
   async prepareInputResult(dataInput: Record<string, any> ): Promise<object> {    
     console.log(log.whereIam());
+    // const getRelationId = getEntityIdInDatas(dataInput, this.ctx.odata);
+    
+
+    // if (this.ctx.odata.entity) {
+    //   process.stdout.write(Object.keys(this.ctx.odata.entity.relations) + "\n");
+    //   Object.keys(this.ctx.odata.entity.relations).forEach((elem) => {        
+    //     if (dataInput[elem]) {
+    //       const searchID: bigint | undefined = dataInput[elem] && dataInput[elem] != null && dataInput[elem][EConstant.id]
+    //       ? BigInt(dataInput[elem][EConstant.id])
+    //       : this.ctx.odata.parentEntity && (this.ctx.odata.parentEntity.singular === elem || this.ctx.odata.parentEntity.name === elem) 
+    //         ? getBigIntFromString(this.ctx.odata.parentId)
+    //         : undefined;
+    //       process.stdout.write(`elem : ${elem} [${searchID}]` + "\n");
+    //     }
+          
+    //   });
+    // }
+
     // IF MultiDatastream
     if ( (dataInput["MultiDatastream"] && dataInput["MultiDatastream"] != null) || (this.ctx.odata.parentEntity && this.ctx.odata.parentEntity.name.startsWith("MultiDatastream")) ) {
       // get search ID
@@ -33,7 +51,10 @@ export class Observations extends Common {
 
       if (!searchID) this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: msg(errors.noFound, "MultiDatastreams"), });
       // Search uint keys
-      const tempSql = await executeSqlValues(this.ctx.config, multiDatastreamsUnitsKeys(searchID) );      
+      console.log(searchID);
+      const tempSql = await executeSqlValues(this.ctx.config, multiDatastreamsUnitsKeys(searchID) );
+      if (tempSql[0 as keyof object] === null) this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: msg(errors.noFound, "MultiDatastreams"), });
+
       const multiDatastream: Record<string, any> = tempSql[0 as keyobj];
       if (dataInput["result"] && typeof dataInput["result"] == "object") {
         console.log(log.debug_infos( "result : keys", `${Object.keys(dataInput["result"]).length} : ${ multiDatastream.length }` ));

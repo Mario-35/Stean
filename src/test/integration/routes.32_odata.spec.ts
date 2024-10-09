@@ -491,7 +491,7 @@ describe("Odata", () => {
             apiDescription: "",
             apiReference: "",
             apiExample: {
-                        http: `${testVersion}/Observations?$filter=phenomenonTime gt '2023-10-13'`,
+                        http: `${testVersion}/Observations?$filter=phenomenonTime gt '2024-06-04'`,
 					}
 				});
         chai.request(server)
@@ -500,7 +500,7 @@ describe("Odata", () => {
                 should.not.exist(err);
                 res.status.should.equal(200);
                 res.type.should.equal("application/json");
-                res.body.value.length.should.eql(5);
+                res.body.value.length.should.eql(26);
                 res.body.should.include.keys("@iot.count", "value");
                                     
                     done();

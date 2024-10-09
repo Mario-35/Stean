@@ -8,8 +8,9 @@
 // onsole.log("!----------------------------------- tests datas -----------------------------------!\n");
 
 import { keyobj } from "../../types";
-
 // Shortcuts for space
+let startDate = new Date('2023-02-11T00:00:01.000Z');
+
 const n = {
 	types: ["classic","apostrophe","accent","special","hack"],
 	"radon": "Radioactivité de l'air, issue de la désintégration naturelle du radon",
@@ -262,14 +263,16 @@ const geo = {
 	  }
   }
 
-const nb = (hr: number) => hr < 10 ? `0${hr}` : `${hr}`;
+// const nb = (hr: number) => hr < 10 ? `0${hr}` : `${hr}`;
 
 const createObservations = () => {
+	addMinutesToDate("2022-01-01T00:00:01.000Z");
+	
 		const datastream = (type: string, month: number) => {
 			const result: Record<string, any>[] = [];
 			for (let i = 0; i < 12; i++) {
 				result.push({
-					"phenomenonTime": `2023-${nb(month)}-${nb(i+1)}T${i+10}:49:32.198898+01:00`,
+					"phenomenonTime": addMinutesToDate(),
 					"result": {
 						"value": 200 + (i * 10)
 					},
@@ -280,6 +283,7 @@ const createObservations = () => {
 			  }
 			  return result;
 		}
+		addMinutesToDate("2023-03-01T00:00:01.000Z");
 		const multiDatastream = (type: string, month: number) => {
 			const result:object[] = [];
 			for (let i = 0; i < 12; i++) {
@@ -288,7 +292,7 @@ const createObservations = () => {
 				values[`${n["unit2"]} ${n[type as keyobj]}`] = i + (i / 100);		
 				result.push(
 					{
-						"phenomenonTime": `2023-${nb(month)}-${nb(i+1)}T${i+10}:49:32.198898+01:00`,
+						"phenomenonTime": addMinutesToDate(),
 						"result": {
 							"value": Object.values(values),
 							"valueskeys": values
@@ -303,8 +307,15 @@ const createObservations = () => {
 			result.push(...datastream(name, index + 1));
 			result.push(...multiDatastream(name, index + 1));
 		});
-		  return result;
+		addMinutesToDate("2024-06-01T00:00:01.000Z");
+		return result;
 }
+
+const addMinutesToDate = (dat?: string) => {
+	if (dat) startDate = new Date(dat);
+	startDate.setTime(startDate.getTime() + 15 * 60_000);
+	return startDate.toISOString();
+  };
 
 export const testDatas:Record<string, any> = {
 	"create": {
@@ -2160,7 +2171,7 @@ export const testDatas:Record<string, any> = {
 	"Observations": [
 		... createObservations(),
 		{
-			"phenomenonTime": "2023-02-11T09:49:32.198898+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 262
 			},
@@ -2169,7 +2180,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T09:49:32.198898+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 55.95
 			},
@@ -2178,7 +2189,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T09:49:32.198898+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 15.9
 			},
@@ -2187,7 +2198,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T08:49:19.318899+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 241
 			},
@@ -2196,7 +2207,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T08:49:19.318899+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 56.15
 			},
@@ -2205,7 +2216,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T08:49:19.318899+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 15.9
 			},
@@ -2214,7 +2225,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T07:49:08.708855+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 273
 			},
@@ -2223,7 +2234,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T07:49:08.708855+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 56.2
 			},
@@ -2232,7 +2243,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T07:49:08.708855+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 15.95
 			},
@@ -2241,7 +2252,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T06:48:58.088862+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 274
 			},
@@ -2250,7 +2261,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T06:48:58.088862+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 56.35
 			},
@@ -2259,7 +2270,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T06:48:58.088862+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 16
 			},
@@ -2268,7 +2279,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T05:48:47.358893+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 287
 			},
@@ -2277,7 +2288,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T05:48:47.358893+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 56.4
 			},
@@ -2286,7 +2297,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T05:48:47.358893+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 16.05
 			},
@@ -2295,7 +2306,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T04:48:36.678883+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 254.5
 			},
@@ -2304,7 +2315,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T04:48:36.678883+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 56.5
 			},
@@ -2313,7 +2324,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T04:48:36.678883+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 16.1
 			},
@@ -2322,7 +2333,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T03:48:23.298873+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 262
 			},
@@ -2331,7 +2342,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T03:48:23.298873+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 56.45
 			},
@@ -2340,7 +2351,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T03:48:23.298873+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 16.15
 			},
@@ -2349,7 +2360,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T02:48:11.878941+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 260
 			},
@@ -2358,7 +2369,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T02:48:11.878941+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 56.5
 			},
@@ -2367,7 +2378,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T02:48:11.878941+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 16.2
 			},
@@ -2376,7 +2387,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T01:47:58.62893+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 297.5
 			},
@@ -2385,7 +2396,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T01:47:58.62893+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 56.65
 			},
@@ -2394,7 +2405,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T01:47:58.62893+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 16.3
 			},
@@ -2403,7 +2414,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T00:47:47.588853+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 271
 			},
@@ -2412,7 +2423,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T00:47:47.588853+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 57
 			},
@@ -2421,7 +2432,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-11T00:47:47.588853+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 16.3
 			},
@@ -2430,7 +2441,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T23:47:36.878899+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 247.5
 			},
@@ -2439,7 +2450,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T23:47:36.878899+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 57.15
 			},
@@ -2448,7 +2459,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T23:47:36.878899+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 16.35
 			},
@@ -2457,7 +2468,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T22:47:26.108953+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 242
 			},
@@ -2466,7 +2477,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T22:47:26.108953+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 57.2
 			},
@@ -2475,7 +2486,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T22:47:26.108953+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 16.4
 			},
@@ -2484,7 +2495,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T21:47:15.568888+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 195
 			},
@@ -2493,7 +2504,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T21:47:15.568888+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 57.3
 			},
@@ -2502,7 +2513,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T21:47:15.568888+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 16.5
 			},
@@ -2511,7 +2522,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T20:47:04.958885+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 109.5
 			},
@@ -2520,7 +2531,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T20:47:04.958885+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 57.3
 			},
@@ -2529,7 +2540,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T20:47:04.958885+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 16.55
 			},
@@ -2538,7 +2549,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T19:46:54.318892+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 81
 			},
@@ -2547,7 +2558,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T19:46:54.318892+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 57.3
 			},
@@ -2556,7 +2567,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T19:46:54.318892+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 16.6
 			},
@@ -2565,7 +2576,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T18:46:43.678908+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 88.5
 			},
@@ -2574,7 +2585,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T18:46:43.678908+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 57.2
 			},
@@ -2583,7 +2594,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T18:46:43.678908+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 16.75
 			},
@@ -2592,7 +2603,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T17:46:33.118912+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 65
 			},
@@ -2601,7 +2612,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T17:46:33.118912+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 57
 			},
@@ -2610,7 +2621,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T17:46:33.118912+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 16.85
 			},
@@ -2619,7 +2630,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T16:46:22.618853+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 81
 			},
@@ -2628,7 +2639,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T16:46:22.618853+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 56.7
 			},
@@ -2637,7 +2648,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T16:46:22.618853+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 16.9
 			},
@@ -2646,7 +2657,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T15:46:11.927092+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 113
 			},
@@ -2655,7 +2666,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T15:46:11.927092+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 56.4
 			},
@@ -2664,7 +2675,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T15:46:11.927092+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 16.95
 			},
@@ -2673,7 +2684,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T14:46:01.458863+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 219.5
 			},
@@ -2682,7 +2693,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T14:46:01.458863+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 56.1
 			},
@@ -2691,7 +2702,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T14:46:01.458863+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 16.9
 			},
@@ -2700,7 +2711,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T13:45:50.898919+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 273
 			},
@@ -2709,7 +2720,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T13:45:50.898919+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 56
 			},
@@ -2718,7 +2729,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T13:45:50.898919+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 16.9
 			},
@@ -2727,7 +2738,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T12:45:40.468864+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 364
 			},
@@ -2736,7 +2747,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T12:45:40.468864+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 56.1
 			},
@@ -2745,7 +2756,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T12:45:40.468864+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 16.8
 			},
@@ -2754,7 +2765,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T11:45:27.208868+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 434.5
 			},
@@ -2763,7 +2774,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T11:45:27.208868+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 56.3
 			},
@@ -2772,7 +2783,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T11:45:27.208868+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 16.75
 			},
@@ -2781,7 +2792,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T10:45:16.638918+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 424.5
 			},
@@ -2790,7 +2801,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T10:45:16.638918+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 56.4
 			},
@@ -2799,7 +2810,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T10:45:16.638918+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 16.7
 			},
@@ -2808,7 +2819,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T09:45:06.088955+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 410
 			},
@@ -2817,7 +2828,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T09:45:06.088955+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 56.45
 			},
@@ -2826,7 +2837,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T09:45:06.088955+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 16.7
 			},
@@ -2835,7 +2846,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T08:44:55.548954+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 314
 			},
@@ -2844,7 +2855,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T08:44:55.548954+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 56.65
 			},
@@ -2853,7 +2864,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T08:44:55.548954+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 16.7
 			},
@@ -2862,7 +2873,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T07:44:44.848893+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 325
 			},
@@ -2871,7 +2882,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T07:44:44.848893+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 56.85
 			},
@@ -2880,7 +2891,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T07:44:44.848893+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 16.75
 			},
@@ -2889,7 +2900,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T06:44:29.328872+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 326
 			},
@@ -2898,7 +2909,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T06:44:29.328872+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 57.25
 			},
@@ -2907,7 +2918,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T06:44:29.328872+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 16.8
 			},
@@ -2916,7 +2927,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T05:44:08.278953+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 335.5
 			},
@@ -2925,7 +2936,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T05:44:08.278953+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 57.9
 			},
@@ -2934,7 +2945,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T05:44:08.278953+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 16.95
 			},
@@ -2943,7 +2954,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T04:43:55.198904+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 343
 			},
@@ -2952,7 +2963,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T04:43:55.198904+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 58.5
 			},
@@ -2961,7 +2972,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T04:43:55.198904+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 17
 			},
@@ -2970,7 +2981,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T03:43:44.578912+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 302
 			},
@@ -2979,7 +2990,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T03:43:44.578912+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 59.15
 			},
@@ -2988,7 +2999,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T03:43:44.578912+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 17.1
 			},
@@ -2997,7 +3008,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T02:43:34.158912+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 265.5
 			},
@@ -3006,7 +3017,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T02:43:34.158912+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 59.6
 			},
@@ -3015,7 +3026,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T02:43:34.158912+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 17.2
 			},
@@ -3024,7 +3035,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T01:43:23.645627+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 268.5
 			},
@@ -3033,7 +3044,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T01:43:23.645627+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 59.9
 			},
@@ -3042,7 +3053,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T01:43:23.645627+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 17.3
 			},
@@ -3051,7 +3062,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T00:43:10.084973+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 257
 			},
@@ -3060,7 +3071,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T00:43:10.084973+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 60
 			},
@@ -3069,7 +3080,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-10T00:43:10.084973+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 17.35
 			},
@@ -3078,7 +3089,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T23:42:56.808923+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 204.5
 			},
@@ -3087,7 +3098,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T23:42:56.808923+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 60.2
 			},
@@ -3096,7 +3107,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T23:42:56.808923+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 17.5
 			},
@@ -3105,7 +3116,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T22:42:46.268901+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 180.5
 			},
@@ -3114,7 +3125,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T22:42:46.268901+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 60.15
 			},
@@ -3123,7 +3134,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T22:42:46.268901+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 17.65
 			},
@@ -3132,7 +3143,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T21:42:35.52891+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 164.5
 			},
@@ -3141,7 +3152,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T21:42:35.52891+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 60.05
 			},
@@ -3150,7 +3161,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T21:42:35.52891+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 17.85
 			},
@@ -3159,7 +3170,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T20:42:25.018862+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 122
 			},
@@ -3168,7 +3179,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T20:42:25.018862+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 59.95
 			},
@@ -3177,7 +3188,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T20:42:25.018862+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 17.95
 			},
@@ -3186,7 +3197,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T19:42:09.321425+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 75
 			},
@@ -3195,7 +3206,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T19:42:09.321425+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 59.6
 			},
@@ -3204,7 +3215,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T19:42:09.321425+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 18.2
 			},
@@ -3213,7 +3224,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T18:41:58.618878+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 56
 			},
@@ -3222,7 +3233,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T18:41:58.618878+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 59.35
 			},
@@ -3231,7 +3242,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T18:41:58.618878+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 18.45
 			},
@@ -3240,7 +3251,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T17:41:45.248884+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 35
 			},
@@ -3249,7 +3260,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T17:41:45.248884+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 59.4
 			},
@@ -3258,7 +3269,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T17:41:45.248884+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 18.7
 			},
@@ -3267,7 +3278,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T16:41:34.288914+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 29
 			},
@@ -3276,7 +3287,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T16:41:34.288914+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 59.5
 			},
@@ -3285,7 +3296,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T16:41:34.288914+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 18.95
 			},
@@ -3294,7 +3305,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T15:41:23.488918+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 39
 			},
@@ -3303,7 +3314,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T15:41:23.488918+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 58.85
 			},
@@ -3312,7 +3323,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T15:41:23.488918+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 19.4
 			},
@@ -3321,7 +3332,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T14:41:12.683806+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 68
 			},
@@ -3330,7 +3341,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T14:41:12.683806+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 60.7
 			},
@@ -3339,7 +3350,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T14:41:12.683806+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 19.25
 			},
@@ -3348,7 +3359,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T13:41:01.771172+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 94
 			},
@@ -3357,7 +3368,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T13:41:01.771172+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 61.35
 			},
@@ -3366,7 +3377,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T13:41:01.771172+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 18.8
 			},
@@ -3375,7 +3386,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T12:40:50.71889+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 170
 			},
@@ -3384,7 +3395,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T12:40:50.71889+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 62.4
 			},
@@ -3393,7 +3404,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T12:40:50.71889+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 18.35
 			},
@@ -3402,7 +3413,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T11:40:39.803987+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 196
 			},
@@ -3411,7 +3422,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T11:40:39.803987+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 64.4
 			},
@@ -3420,7 +3431,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T11:40:39.803987+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 17.65
 			},
@@ -3429,7 +3440,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T10:40:28.868862+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 188
 			},
@@ -3438,7 +3449,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T10:40:28.868862+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 64.8
 			},
@@ -3447,7 +3458,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T10:40:28.868862+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 17.2
 			},
@@ -3456,7 +3467,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T09:40:18.278882+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 112.5
 			},
@@ -3465,7 +3476,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T09:40:18.278882+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 60.6
 			},
@@ -3474,7 +3485,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T09:40:18.278882+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 17.3
 			},
@@ -3483,7 +3494,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T08:40:07.60885+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 85
 			},
@@ -3492,7 +3503,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T08:40:07.60885+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 60.65
 			},
@@ -3501,7 +3512,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T08:40:07.60885+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 17.3
 			},
@@ -3510,7 +3521,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T07:39:57.128902+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 91
 			},
@@ -3519,7 +3530,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T07:39:57.128902+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 60.6
 			},
@@ -3528,7 +3539,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T07:39:57.128902+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 17.35
 			},
@@ -3537,7 +3548,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T06:39:43.788868+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 108
 			},
@@ -3546,7 +3557,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T06:39:43.788868+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 60.65
 			},
@@ -3555,7 +3566,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T06:39:43.788868+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 17.4
 			},
@@ -3564,7 +3575,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T05:39:30.318842+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 129
 			},
@@ -3573,7 +3584,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T05:39:30.318842+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 60.7
 			},
@@ -3582,7 +3593,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T05:39:30.318842+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 17.45
 			},
@@ -3591,7 +3602,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T04:39:19.608882+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 131
 			},
@@ -3600,7 +3611,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T04:39:19.608882+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 60.65
 			},
@@ -3609,7 +3620,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T04:39:19.608882+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 17.55
 			},
@@ -3618,7 +3629,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T03:39:08.908878+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 113
 			},
@@ -3627,7 +3638,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T03:39:08.908878+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 60.6
 			},
@@ -3636,7 +3647,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T03:39:08.908878+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 17.6
 			},
@@ -3645,7 +3656,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T02:38:58.228924+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 107.5
 			},
@@ -3654,7 +3665,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T02:38:58.228924+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 60.75
 			},
@@ -3663,7 +3674,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T02:38:58.228924+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 17.7
 			},
@@ -3672,7 +3683,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T01:38:47.568931+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 124.5
 			},
@@ -3681,7 +3692,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T01:38:47.568931+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 60.8
 			},
@@ -3690,7 +3701,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T01:38:47.568931+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 17.85
 			},
@@ -3699,7 +3710,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T00:38:36.678862+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 142.5
 			},
@@ -3708,7 +3719,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T00:38:36.678862+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 60.8
 			},
@@ -3717,7 +3728,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-09T00:38:36.678862+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 17.95
 			},
@@ -3726,7 +3737,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-08T23:38:26.04887+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 214
 			},
@@ -3735,7 +3746,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-08T23:38:26.04887+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 60.8
 			},
@@ -3744,7 +3755,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-08T23:38:26.04887+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 18.05
 			},
@@ -3753,7 +3764,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-08T22:38:15.458876+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 215
 			},
@@ -3762,7 +3773,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-08T22:38:15.458876+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 60.75
 			},
@@ -3771,7 +3782,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-08T22:38:15.458876+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 18.2
 			},
@@ -3780,7 +3791,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-08T21:38:04.868943+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 259
 			},
@@ -3789,7 +3800,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-08T21:38:04.868943+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 60.2
 			},
@@ -3798,7 +3809,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-08T21:38:04.868943+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 18.5
 			},
@@ -3807,7 +3818,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-08T20:37:54.158894+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 354
 			},
@@ -3816,7 +3827,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-08T20:37:54.158894+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 59.95
 			},
@@ -3825,7 +3836,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-08T20:37:54.158894+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 18.65
 			},
@@ -3834,7 +3845,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-08T19:37:43.558923+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 340
 			},
@@ -3843,7 +3854,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-08T19:37:43.558923+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 60.05
 			},
@@ -3852,7 +3863,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-08T19:37:43.558923+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 19.05
 			},
@@ -3861,7 +3872,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-08T18:37:33.058875+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 230.5
 			},
@@ -3870,7 +3881,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-08T18:37:33.058875+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 62
 			},
@@ -3879,7 +3890,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-08T18:37:33.058875+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 19.45
 			},
@@ -3888,7 +3899,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-08T17:37:22.398889+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 200.5
 			},
@@ -3897,7 +3908,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-08T17:37:22.398889+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 62.9
 			},
@@ -3906,7 +3917,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-08T17:37:22.398889+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 19.4
 			},
@@ -3915,7 +3926,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-08T16:37:11.938865+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 184.5
 			},
@@ -3924,7 +3935,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-08T16:37:11.938865+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 63.15
 			},
@@ -3933,7 +3944,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-08T16:37:11.938865+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 19.25
 			},
@@ -3942,7 +3953,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-08T15:37:01.424251+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 158
 			},
@@ -3951,7 +3962,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-02-08T15:37:01.424251+01:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 62.95
 			},
@@ -3960,7 +3971,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-18T13:15:13+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.713720321655273
 			},
@@ -3969,7 +3980,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-18T13:26:09+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					18.7,
@@ -3988,7 +3999,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-18T13:26:36+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					29.45,
@@ -4007,7 +4018,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-18T13:27:00+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					0.2,
@@ -4026,7 +4037,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-18T13:27:16+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					0.2,
@@ -4045,7 +4056,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T06:40:19+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.634254455566406
 			},
@@ -4054,7 +4065,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T06:37:13+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					0.2,
@@ -4073,7 +4084,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T06:34:18+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					29.3,
@@ -4092,7 +4103,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T06:33:49+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					32.8,
@@ -4111,7 +4122,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T06:30:19+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.638038635253906
 			},
@@ -4120,7 +4131,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T06:29:55+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					17.75,
@@ -4139,7 +4150,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T06:28:48+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					-3.0703125,
@@ -4158,7 +4169,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T06:28:47+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					30.35,
@@ -4177,7 +4188,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T06:25:19+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.6077656745910645
 			},
@@ -4186,7 +4197,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T06:22:05+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					0.2,
@@ -4205,7 +4216,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T06:21:36+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					28.7,
@@ -4224,7 +4235,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T06:20:19+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.621641159057617
 			},
@@ -4233,7 +4244,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T06:19:10+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					29.3,
@@ -4252,7 +4263,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T06:18:41+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					32.75,
@@ -4271,7 +4282,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T06:14:47+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					17.8,
@@ -4290,7 +4301,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T06:13:40+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					-3.0703125,
@@ -4309,7 +4320,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T06:13:39+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					30.2,
@@ -4328,7 +4339,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T06:10:19+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.629209518432617
 			},
@@ -4337,7 +4348,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T05:36:07+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					0.2,
@@ -4356,7 +4367,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T05:35:38+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					28.9,
@@ -4375,7 +4386,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T05:35:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.620379447937012
 			},
@@ -4384,7 +4395,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T05:33:45+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					29.1,
@@ -4403,7 +4414,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T05:33:16+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					32.6,
@@ -4422,7 +4433,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T05:30:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.6468682289123535
 			},
@@ -4431,7 +4442,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T05:29:22+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					17.85,
@@ -4450,7 +4461,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T05:28:15+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					26.2265625,
@@ -4469,7 +4480,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T05:28:14+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					30.25,
@@ -4488,7 +4499,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T05:21:00+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					0.2,
@@ -4507,7 +4518,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T05:20:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.59389066696167
 			},
@@ -4516,7 +4527,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T05:20:16+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					28.95,
@@ -4535,7 +4546,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T05:18:37+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					28.9,
@@ -4554,7 +4565,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T05:18:08+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					32.65,
@@ -4573,7 +4584,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T05:15:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.6039814949035645
 			},
@@ -4582,7 +4593,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T05:14:14+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					17.7,
@@ -4601,7 +4612,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T05:13:07+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					-3.0703125,
@@ -4620,7 +4631,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T05:13:06+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					30.25,
@@ -4639,7 +4650,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T05:10:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.602720737457275
 			},
@@ -4648,7 +4659,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T05:05:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.602720737457275
 			},
@@ -4657,7 +4668,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T05:05:14+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					0.2,
@@ -4676,7 +4687,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T05:05:07+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					28.95,
@@ -4695,7 +4706,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T05:04:57+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					0.2,
@@ -4714,7 +4725,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T05:03:28+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					29,
@@ -4733,7 +4744,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T05:02:59+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					32.85,
@@ -4752,7 +4763,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:59:06+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					17.85,
@@ -4771,7 +4782,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:57:58+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					26.2265625,
@@ -4790,7 +4801,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:57:57+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					30.35,
@@ -4809,7 +4820,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:55:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.660743236541748
 			},
@@ -4818,7 +4829,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:50:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.598936557769775
 			},
@@ -4827,7 +4838,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:49:59+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					28.6,
@@ -4846,7 +4857,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:49:45+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					0.2,
@@ -4865,7 +4876,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:49:07+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					0.2,
@@ -4884,7 +4895,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:48:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					29.3,
@@ -4903,7 +4914,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:47:51+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					32.75,
@@ -4922,7 +4933,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:43:57+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					17.7,
@@ -4941,7 +4952,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:42:50+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					-3.0703125,
@@ -4960,7 +4971,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:42:49+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					30.3,
@@ -4979,7 +4990,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:40:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.61281156539917
 			},
@@ -4988,7 +4999,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:35:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.630470275878906
 			},
@@ -4997,7 +5008,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:34:35+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					28.75,
@@ -5016,7 +5027,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:33:58+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					0.2,
@@ -5035,7 +5046,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:32:43+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					32.9,
@@ -5054,7 +5065,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:30:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.606504917144775
 			},
@@ -5063,7 +5074,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:28:49+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					17.8,
@@ -5082,7 +5093,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:27:42+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					26.2265625,
@@ -5101,7 +5112,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:25:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.614072799682617
 			},
@@ -5110,7 +5121,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:20:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.655697822570801
 			},
@@ -5119,7 +5130,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:19:27+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					28.95,
@@ -5138,7 +5149,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:19:11+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					28.95,
@@ -5157,7 +5168,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:18:50+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					0.2,
@@ -5176,7 +5187,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:18:04+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					29.2,
@@ -5195,7 +5206,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:17:35+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					32.85,
@@ -5214,7 +5225,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:13:41+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					17.8,
@@ -5233,7 +5244,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:12:34+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					55.5234375,
@@ -5252,7 +5263,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:12:33+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					30.2,
@@ -5271,7 +5282,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:10:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.598936557769775
 			},
@@ -5280,7 +5291,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:05:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.606504917144775
 			},
@@ -5289,7 +5300,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:04:02+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					28.6,
@@ -5308,7 +5319,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:03:42+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					0.2,
@@ -5327,7 +5338,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:02:56+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					29.2,
@@ -5346,7 +5357,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:02:27+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					32.7,
@@ -5365,7 +5376,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T04:00:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.660743236541748
 			},
@@ -5374,7 +5385,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:58:33+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					17.75,
@@ -5393,7 +5404,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:57:26+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					55.5234375,
@@ -5412,7 +5423,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:57:25+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					30.15,
@@ -5431,7 +5442,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:50:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.60902738571167
 			},
@@ -5440,7 +5451,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:48:54+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					28.6,
@@ -5459,7 +5470,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:48:34+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					0.2,
@@ -5478,7 +5489,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:47:47+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					29.3,
@@ -5497,7 +5508,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:47:18+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					32.9,
@@ -5516,7 +5527,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:45:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.703629970550537
 			},
@@ -5525,7 +5536,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:43:24+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					17.7,
@@ -5544,7 +5555,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:42:17+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					55.5234375,
@@ -5563,7 +5574,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:42:16+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					30.45,
@@ -5582,7 +5593,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:40:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.631731986999512
 			},
@@ -5591,7 +5602,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:35:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.606504917144775
 			},
@@ -5600,7 +5611,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:33:46+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					28.5,
@@ -5619,7 +5630,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:33:25+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					0.2,
@@ -5638,7 +5649,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:32:39+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					29.3,
@@ -5657,7 +5668,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:32:10+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					32.65,
@@ -5676,7 +5687,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:30:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.688493251800537
 			},
@@ -5685,7 +5696,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:28:16+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					17.85,
@@ -5704,7 +5715,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:27:09+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					55.5234375,
@@ -5723,7 +5734,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:27:08+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					30.25,
@@ -5742,7 +5753,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:25:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.6191182136535645
 			},
@@ -5751,7 +5762,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:20:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.614072799682617
 			},
@@ -5760,7 +5771,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:18:38+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					28.7,
@@ -5779,7 +5790,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:17:31+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					29.1,
@@ -5798,7 +5809,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:12:00+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					30.15,
@@ -5817,7 +5828,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:10:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.632993221282959
 			},
@@ -5826,7 +5837,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:05:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.620379447937012
 			},
@@ -5835,7 +5846,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:02:53+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					28.7,
@@ -5854,7 +5865,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:02:43+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					0.2,
@@ -5873,7 +5884,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:02:23+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					29.1,
@@ -5892,7 +5903,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:01:54+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					32.8,
@@ -5911,7 +5922,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T03:00:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.602720737457275
 			},
@@ -5920,7 +5931,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:58:00+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					17.6,
@@ -5939,7 +5950,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:56:53+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					55.5234375,
@@ -5958,7 +5969,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:56:52+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					30.2,
@@ -5977,7 +5988,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:50:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.606504917144775
 			},
@@ -5986,7 +5997,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:47:45+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					28.6,
@@ -6005,7 +6016,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:47:34+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					0.2,
@@ -6024,7 +6035,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:47:15+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					29.4,
@@ -6043,7 +6054,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:46:45+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					32.65,
@@ -6062,7 +6073,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:45:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.6077656745910645
 			},
@@ -6071,7 +6082,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:42:51+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					17.7,
@@ -6090,7 +6101,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:41:44+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					-3.0703125,
@@ -6109,7 +6120,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:41:43+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					30.1,
@@ -6128,7 +6139,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:40:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.6001973152160645
 			},
@@ -6137,7 +6148,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:35:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.667050361633301
 			},
@@ -6146,7 +6157,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:32:22+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					28.85,
@@ -6165,7 +6176,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:32:07+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					0.2,
@@ -6184,7 +6195,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:32:06+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					29,
@@ -6203,7 +6214,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:31:37+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					32.75,
@@ -6222,7 +6233,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:30:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.66831111907959
 			},
@@ -6231,7 +6242,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:27:43+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					17.7,
@@ -6250,7 +6261,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:26:36+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					55.5234375,
@@ -6269,7 +6280,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:26:35+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					30.25,
@@ -6288,7 +6299,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:25:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.6392998695373535
 			},
@@ -6297,7 +6308,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:20:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.684709072113037
 			},
@@ -6306,7 +6317,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:17:13+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					28.6,
@@ -6325,7 +6336,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:16:58+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					0.2,
@@ -6344,7 +6355,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:16:58+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					29,
@@ -6363,7 +6374,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:16:29+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					32.65,
@@ -6382,7 +6393,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:12:35+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					17.55,
@@ -6401,7 +6412,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:11:28+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					55.5234375,
@@ -6420,7 +6431,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:10:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.624163627624512
 			},
@@ -6429,7 +6440,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:05:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.59767484664917
 			},
@@ -6438,7 +6449,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:02:05+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					28.6,
@@ -6457,7 +6468,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:01:50+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					0.2,
@@ -6476,7 +6487,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:01:21+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					32.8,
@@ -6495,7 +6506,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T02:00:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.614072799682617
 			},
@@ -6504,7 +6515,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:57:27+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					17.65,
@@ -6523,7 +6534,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:56:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					26.2265625,
@@ -6542,7 +6553,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:56:05+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					30.2,
@@ -6561,7 +6572,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:55:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.6392998695373535
 			},
@@ -6570,7 +6581,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:50:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.573709487915039
 			},
@@ -6579,7 +6590,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:47:01+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					28.6,
@@ -6598,7 +6609,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:46:42+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					28.6,
@@ -6617,7 +6628,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:46:42+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					0.2,
@@ -6636,7 +6647,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:46:42+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					29.3,
@@ -6655,7 +6666,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:46:28+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					28.6,
@@ -6674,7 +6685,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:46:12+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					32.8,
@@ -6693,7 +6704,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:45:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.60902738571167
 			},
@@ -6702,7 +6713,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:42:19+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					17.65,
@@ -6721,7 +6732,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:41:11+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					55.5234375,
@@ -6740,7 +6751,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:40:57+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					30.35,
@@ -6759,7 +6770,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:35:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.703629970550537
 			},
@@ -6768,7 +6779,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:31:33+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					29.2,
@@ -6787,7 +6798,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:31:22+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					0.2,
@@ -6806,7 +6817,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:31:04+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					32.65,
@@ -6825,7 +6836,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:30:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.6077656745910645
 			},
@@ -6834,7 +6845,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:27:10+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					17.9,
@@ -6853,7 +6864,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:26:03+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					55.5234375,
@@ -6872,7 +6883,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:25:49+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					30.3,
@@ -6891,7 +6902,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:25:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.6506524085998535
 			},
@@ -6900,7 +6911,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:20:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.67966365814209
 			},
@@ -6909,7 +6920,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:16:25+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					29.35,
@@ -6928,7 +6939,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:16:11+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					28.8,
@@ -6947,7 +6958,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:15:56+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					32.75,
@@ -6966,7 +6977,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:15:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.606504917144775
 			},
@@ -6975,7 +6986,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:12:02+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					18.05,
@@ -6994,7 +7005,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:10:55+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					55.5234375,
@@ -7013,7 +7024,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:10:41+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					30.15,
@@ -7032,7 +7043,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:10:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.60524320602417
 			},
@@ -7041,7 +7052,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:01:17+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					29.1,
@@ -7060,7 +7071,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:01:06+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					0.2,
@@ -7079,7 +7090,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:01:03+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					28.75,
@@ -7098,7 +7109,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:00:48+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					32.85,
@@ -7117,7 +7128,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T01:00:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.59389066696167
 			},
@@ -7126,7 +7137,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T00:56:54+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					17.85,
@@ -7145,7 +7156,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T00:55:47+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					55.5234375,
@@ -7164,7 +7175,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T00:55:32+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					30.4,
@@ -7183,7 +7194,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T00:55:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.617856979370117
 			},
@@ -7192,7 +7203,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T00:50:20+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": 4.602720737457275
 			},
@@ -7201,7 +7212,7 @@ export const testDatas:Record<string, any> = {
 			}
 		},
 		{
-			"phenomenonTime": "2023-10-13T00:46:09+02:00",
+			"phenomenonTime": addMinutesToDate(),
 			"result": {
 				"value": [
 					29.2,

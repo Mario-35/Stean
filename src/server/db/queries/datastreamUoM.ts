@@ -10,9 +10,4 @@
 
 import { RootPgVisitor } from "../../odata/visitor";
 
-export const datastreamUoM = (input: RootPgVisitor) => `SELECT 
-"unitOfMeasurement"->'name' AS keys
-  FROM 
-    "datastream" 
-  WHERE id = ${input.parentId}
-`;
+export const datastreamUoM = (input: RootPgVisitor) => `SELECT\n\t "unitOfMeasurement"->'name' AS keys\n FROM\n\t"datastream" \nWHERE id = ${input.parentId} `;

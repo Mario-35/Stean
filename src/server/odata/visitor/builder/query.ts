@@ -7,7 +7,7 @@
  */
 // onsole.log("!----------------------------------- Query builder -----------------------------------!");
 
-import { doubleQuotesString, cleanStringComma, containsAll, isCsvOrArray, isGraph, isGeoJson, removeAllQuotes, removeFirstEndDoubleQuotes, formatPgString, returnFormats } from "../../../helpers";
+import { doubleQuotesString, cleanStringComma, containsAll, isDataArray, isGraph, isGeoJson, removeAllQuotes, removeFirstEndDoubleQuotes, formatPgString, returnFormats } from "../../../helpers";
 import { asJson } from "../../../db/queries";
 import { Iservice, Ientity, IKeyBoolean, IpgQuery } from "../../../types";
 import { PgVisitor, RootPgVisitor } from "..";
@@ -39,9 +39,6 @@ export class Query  {
       this.groupBy = new GroupBy();
       this.keyNames = new Key([]);
     }
-    // private columnAsName(input: string): string {
-    //     return input.includes(" AS ") ? input.split(" AS ")[1] : input;
-    // }
 
     private isCalcColumn(input: string): boolean {
         return EConstant.stringException.map(e => input.includes(e) ? true : false).filter(e => e === true).length > 0;
@@ -92,6 +89,7 @@ export class Query  {
             console.log(log.error("no entity For", tableName));
             return;
         }
+
         // Add ceil and return if graph
         if (isGraph(main)) {
             if (element.query.orderBy.notNull()) element.query.orderBy.add(', ');
@@ -108,7 +106,7 @@ export class Query  {
         }
 
         // If array result add id 
-        const returnValue: string[] = isCsvOrArray(main) && !element.query.select.toString().includes(`"id"${EConstant.columnSeparator}`) ? ["id"] : []; 
+        const returnValue: string[] = isDataArray(main) && !element.query.select.toString().includes(`"id"${EConstant.columnSeparator}`) ? ["id"] : []; 
         // create selfLink                                   
         const selfLink = `CONCAT('${main.ctx.decodedUrl.root}/${tempEntity.name}(', "${tempEntity.table}"."id", ')') AS ${doubleQuotesString(EConstant.selfLink)}`; 
         // if $ref return only selfLink
@@ -127,11 +125,11 @@ export class Query  {
             return this.formatedColumn(main.ctx.config, tempEntity, column, { valueskeys: element.valueskeys, quoted: true, table: true, alias: ["id", "result"].includes(column), as: isGraph(main) ? false : true } ) || "";
         }) .filter(e => e != "" ).forEach((e: string) => {             
             if (e === "selfLink") e = selfLink;             
-            const testIsCsvOrArray = isCsvOrArray(element);
+            const testIsCsvOrArray = isDataArray(element);
             if (testIsCsvOrArray) this.keyNames.add(e);
             returnValue.push(e);
             if (main.interval) main.addToIntervalColumns(this.extractColumnName(e));
-            if (e === "id" && (element.showRelations == true || isCsvOrArray(main))) {
+            if (e === "id" && (element.showRelations == true || isDataArray(main))) {
                 if (testIsCsvOrArray) this.keyNames.add("id"); 
                 else returnValue.push(selfLink);    
             }     
@@ -158,9 +156,10 @@ export class Query  {
         console.log(log.whereIam(element.entity || "blank"));
         if (element.entity) {
             // get columns
-            const select = toWhere === true ? ["id"] : this.columnList(element.entity.name, main, element);
+            const select = toWhere === true ? ["id"] : this.columnList(element.entity.name, main, element);            
             // if not null            
             if (select) {
+                console.log(log.object("columnList", select));
                 // Get real entity name (plural)
                 // const element.entity.name = models.getEntityName(main.ctx.config, element.entity.name);                
                 if (element.entity) {
@@ -174,7 +173,7 @@ export class Query  {
                         if (element.entity && index >= 0) {
                             item.entity = models.getEntity(main.ctx.config, name);    ;
                             item.query.where.add(`${item.query.where.notNull() === true ?  " AND " : ''}${expand(main.ctx, element.entity.name, name)}`); 
-                            // create sql query    for this relatiion (IN JSON result)   
+                            // create sql query for this relatiion (IN JSON result)   
                             const query = this.pgQueryToString(this.create(item, false));
                             if (query) relations[index] = `(${asJson({ 
                                 query: query, 

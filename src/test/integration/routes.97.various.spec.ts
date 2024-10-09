@@ -19,7 +19,7 @@ const should = chai.should();
 
 const tests: Record<string, any> = {
     "/test/v1.1/Things?$filter=Datastreams/ObservedProperty/description eq 'Description of classic Observed Property'": 1,
-    "/test/v1.1/Observations?$filter=phenomenonTime gt 2023-10-13T06:37:13+02:00": 6,
+    "/test/v1.1/Observations?$filter=phenomenonTime gt 2024-06-05T02:15:01+02:00": 16,
     "/test/v1.1/Things?$filter=Datastreams/unitOfMeasurement/name eq 'Pression'": 1,
     "/test/v1.1/Things?$filter=Datastreams/unitOfMeasurement/name eq 'PM 2.5 Particulates (ug/m3)'": 1,
     "/test/v1.1/Observations?$filter=result gt 290 or result eq 250": 28,

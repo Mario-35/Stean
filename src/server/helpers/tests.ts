@@ -14,7 +14,8 @@ import { returnFormats } from "./returnFormats";
 
 export const isTest = () => process.env.NODE_ENV?.trim() === "test" || false;
 export const isProduction = () => process.env.NODE_ENV?.trim() === "production" || false;
-export const isCsvOrArray = (input: RootPgVisitor |PgVisitor) => [returnFormats.dataArray, returnFormats.csv].includes(input.returnFormat) ? true : undefined;
+export const isCsv = (input: RootPgVisitor |PgVisitor) => input.returnFormat === returnFormats.csv ? true : undefined;
+export const isDataArray = (input: RootPgVisitor |PgVisitor) => input.returnFormat === returnFormats.dataArray ? true : undefined;
 export const isGraph = (input: RootPgVisitor |PgVisitor) => [returnFormats.graph, returnFormats.graphDatas].includes(input.returnFormat) ? true : undefined;
 export const isGeoJson = (inputE: Ientity | string, input: RootPgVisitor |PgVisitor) => (typeof inputE === "string" ? ["Locations", "FeaturesOfInterest"].includes(inputE) : ["Locations", "FeaturesOfInterest"].includes(inputE.name)) && input.returnFormat === returnFormats.GeoJSON ? true : undefined;
 export const _isObservation = (input: Ientity | string) => typeof input === "string" ? input === "Observations": input.name === "Observations";

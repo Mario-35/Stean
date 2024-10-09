@@ -11,8 +11,12 @@
 import { asJson } from ".";
 import { PgVisitor } from "../../odata/visitor";
 
-export const asGeoJSON = (input: PgVisitor): string =>  `SELECT jsonb_build_object(
-    'type', 'FeatureCollection', 'features', (${asJson({
+export const asGeoJSON = (input: PgVisitor): string =>  
+`SELECT jsonb_build_object(
+    'type', 
+    'FeatureCollection', 
+    'features', 
+    (${asJson({
       query: input.toString(),
       singular: false,
       strip: false,

@@ -43,7 +43,7 @@ export const columnsNameFromHydrasCsv = async ( paramsFile: IcsvFile ): Promise<
       returnValue.columns = ["date", "hour"];
       for (let i = 0; i < nbCol - 1; i++) returnValue.columns.push(`value${i + 1}`);
       fileStream.destroy();
-      returnValue.dateSql = `TO_TIMESTAMP(concat("${paramsFile.tempTable}".date, REPLACE("${paramsFile.tempTable}".hour, '24:00:00', '23:59:59')), 'DD/MM/YYYYHH24:MI:SS:MS')`;
+      returnValue.dateSql = `TO_TIMESTAMP(CONCAT("${paramsFile.tempTable}".date, REPLACE("${paramsFile.tempTable}".hour, '24:00:00', '23:59:59')), 'DD/MM/YYYYHH24:MI:SS:MS')`;
       return returnValue;
     }
     returnValue.header = true;

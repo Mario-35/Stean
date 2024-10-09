@@ -167,7 +167,7 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
             apiDescription: "The month function returns the month component of the Date or DateTimeOffset parameter value, evaluated in the time zone of the DateTimeOffset parameter value.",
             apiReference: "https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions",
             apiExample: { 
-                http: `${testVersion}/Observations?$filter=month(resultTime) eq 10`,
+                http: `${testVersion}/Observations?$filter=month(resultTime) eq 2`,
                             curl: defaultGet("curl", "KEYHTTP"),
                             javascript: defaultGet("javascript", "KEYHTTP"),
                             python: defaultGet("python", "KEYHTTP") 
@@ -179,8 +179,8 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
                 should.not.exist(err);
                 res.status.should.equal(200);
                 res.type.should.equal("application/json");
-                res.body.value.length.should.eql(202);
-                res.body["value"][0]["@iot.id"].should.eql(559);
+                res.body.value.length.should.eql(6);
+                res.body["value"][0]["@iot.id"].should.eql(525);
                 addToApiDoc({ ...infos, result: limitResult(res) });
                 
                 done();
@@ -194,7 +194,7 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
             apiDescription: "The day function returns the day component Date or DateTimeOffset parameter value, evaluated in the time zone of the DateTimeOffset parameter value.",
             apiReference: "https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions",
             apiExample: { 
-                http: `${testVersion}/Observations?$filter=day(resultTime) eq 11`,
+                http: `${testVersion}/Observations?$filter=day(resultTime) eq 5`,
                             curl: defaultGet("curl", "KEYHTTP"),
                             javascript: defaultGet("javascript", "KEYHTTP"),
                             python: defaultGet("python", "KEYHTTP") 
@@ -206,8 +206,8 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
                 should.not.exist(err);
                 res.status.should.equal(200);
                 res.type.should.equal("application/json");
-                res.body.value.length.should.eql(40);
-                res.body["value"][0]["@iot.id"].should.eql(11);
+                res.body.value.length.should.eql(26);
+                res.body["value"][0]["@iot.id"].should.eql(495);
                 addToApiDoc({ ...infos, result: limitResult(res) });
                 
                 done();
@@ -233,9 +233,8 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
                 should.not.exist(err);
                 res.status.should.equal(200);
                 res.type.should.equal("application/json");
-                res.body.value.length.should.eql(16);
-                addToApiDoc({ ...infos, result: limitResult(res) });
-                
+                res.body.value.length.should.eql(20);
+                addToApiDoc({ ...infos, result: limitResult(res) });                
                 done();
             });
     });
@@ -247,7 +246,7 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
             apiDescription: "The minute function returns the minute component of the DateTimeOffset or TimeOfDay parameter value, evaluated in the time zone of the DateTimeOffset parameter value.",
             apiReference: "https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions",
             apiExample: { 
-                http: `${testVersion}/Observations?$filter=minute(resultTime) eq 50`,
+                http: `${testVersion}/Observations?$filter=minute(resultTime) eq 45`,
                             curl: defaultGet("curl", "KEYHTTP"),
                             javascript: defaultGet("javascript", "KEYHTTP"),
                             python: defaultGet("python", "KEYHTTP") 
@@ -259,7 +258,7 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
                 should.not.exist(err);
                 res.status.should.equal(200);
                 res.type.should.equal("application/json");
-                res.body.value.length.should.eql(5);
+                res.body.value.length.should.eql(130);
                 addToApiDoc({ ...infos, result: limitResult(res) });
                 
                 done();
@@ -285,7 +284,7 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
                 should.not.exist(err);
                 res.status.should.equal(200);
                 res.type.should.equal("application/json");
-                res.body.value.length.should.eql(125);
+                res.body.value.length.should.eql(2);
                 addToApiDoc({ ...infos, result: limitResult(res) });
                 
                 done();

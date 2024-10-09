@@ -6,6 +6,7 @@
  *
  */
 // onsole.log("!----------------------------------- Index Queries -----------------------------------!\n");
+
 export { createIdList } from "./createIdList";
 export { asDataArray } from "./asDataArray";
 export { asCsv } from "./asCsv";
@@ -22,9 +23,3 @@ export { streamFromDeveui } from "./streamFromDeveui";
 export { testId } from "./testId";
 export { resultKeys } from "./resultKeys";
 export { multiDatastreamUoM } from "./multiDatastreamUoM";
-
-export const queries = Object.freeze({
-    datastreamByName : `SELECT id FROM "datastream" WHERE "name" = '@STR@' LIMIT 1`
-});
-
-

@@ -4,7 +4,7 @@ import { _STREAM } from "../db/constants";
 import { executeSqlValues } from "../db/helpers";
 import { asJson } from "../db/queries";
 import { EColumnType, EConstant, EExtensions, EVersion, filterEntities } from "../enums";
-import { doubleQuotesString, deepClone, isTest, formatPgTableColumn } from "../helpers";
+import { doubleQuotesString, deepClone, isTest, formatPgTableColumn, isString } from "../helpers";
 import { errors, msg } from "../messages";
 import { Iservice, Ientities, Ientity, IstreamInfos, koaContext, IentityRelation } from "../types";
 import fs from "fs";
@@ -242,12 +242,12 @@ class Models {
 
   public getEntity = (service: Iservice , entity: Ientity | string): Ientity | undefined => {
     if (config && entity) {
-      if (typeof entity === "string") {
+      if (isString(entity)) {
         const entityName = this.getEntityName(service, entity.trim());
         if (!entityName) return;
         entity = entityName;
       } 
-      return (typeof entity === "string") ? Models.models[service.apiVersion][entity] : Models.models[service.apiVersion][entity.name];
+      return isString(entity) ? Models.models[service.apiVersion][entity] : Models.models[service.apiVersion][entity.name];
     }
   };
 

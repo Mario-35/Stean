@@ -17,7 +17,6 @@ import { createInsertValues, createUpdateValues, relationInfos } from "../../../
 import { apiAccess } from "../../../db/dataAccess";
 import * as entities from "../../../db/entities";
 import { PgVisitor } from "..";
-import { config } from "../../../configuration";
 
 export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor): string | undefined {
     const formatInsertEntityData = (entity: string, datas: object, main: PgVisitor): Record<string, any> => {
@@ -52,9 +51,7 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
         [postEntity.table]: postEntity.table
     };
     let level = 0;
-    
     const allFields = "*";
-
     const getRelationNameFromEntity = (source: Ientity, from: Ientity): string | undefined => {
         return Object.keys(source.relations).includes(from.name)
         ? from.name
@@ -336,14 +333,14 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
     if ((names[postEntity.table] && queryMaker[postEntity.table] && queryMaker[postEntity.table].datas) || root === undefined) {
         queryMaker[postEntity.table].datas = Object.assign(root as object, queryMaker[postEntity.table].datas);
         queryMaker[postEntity.table].keyId = src.id ? "id" : "*";
-        sqlResult = queryMakerToString(`WITH "log_request" AS (SELECT srid FROM ${doubleQuotesString(EConstant.voidtable)} LIMIT 1)`);
+        sqlResult = queryMakerToString(`WITH "log_request" AS (\n\tSELECT srid FROM ${doubleQuotesString(EConstant.voidtable)} LIMIT 1\n)`);
     } else {
         sqlResult = queryMakerToString(
             src.id
             ? root && Object.entries(root).length > 0
-            ? `WITH ${postEntity.table} AS (UPDATE ${doubleQuotesString(postEntity.table)} set ${createUpdateValues(root)} WHERE "id" = (select verifyId('${postEntity.table}', ${src.id}) as id) RETURNING ${allFields})`
-                : `WITH ${postEntity.table} AS (SELECT * FROM ${doubleQuotesString(postEntity.table)} WHERE "id" = ${src.id.toString()})`
-                : `WITH ${postEntity.table} AS (INSERT INTO ${doubleQuotesString(postEntity.table)} ${createInsertValues(src.ctx.config, formatInsertEntityData(postEntity.name, root, src))} RETURNING ${allFields})`
+            ? `WITH ${postEntity.table} AS (\n\tUPDATE ${doubleQuotesString(postEntity.table)}\n\tSET ${createUpdateValues(root)} WHERE "id" = (\n\tselect verifyId('${postEntity.table}', ${src.id}) as id\n) RETURNING ${allFields})`
+                : `WITH ${postEntity.table} AS (\n\tSELECT * FROM ${doubleQuotesString(postEntity.table)}\n\tWHERE "id" = ${src.id.toString()})`
+                : `WITH ${postEntity.table} AS (\n\tINSERT INTO ${doubleQuotesString(postEntity.table)} ${createInsertValues(src.ctx.config, formatInsertEntityData(postEntity.name, root, src))} RETURNING ${allFields})`
                 );
             }
     const temp = src.toPgQuery(); 
@@ -353,6 +350,5 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
         strip: src.ctx.config.options.includes(EOptions.stripNull),
         count: false
     });
-    config.writeLog(log.query(sqlResult));
     return sqlResult;
 }

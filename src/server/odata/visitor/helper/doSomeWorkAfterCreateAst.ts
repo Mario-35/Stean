@@ -13,9 +13,13 @@ import { multiDatastreamKeys, resultKeys, multiDatastreamUoM } from "../../../db
 import { datastreamUoM } from "../../../db/queries/datastreamUoM";
 import { returnFormats, isObservation } from "../../../helpers";
 import { isFile } from "../../../helpers/tests";
+import { log } from "../../../log";
 import { koaContext } from "../../../types";
 
 export const doSomeWorkAfterCreateAst = async (input: RootPgVisitor, ctx: koaContext) => {
+  console.log(log.whereIam());
+  if (isObservation(input) ) {
+  }
   if (input.entity && input.splitResult && input.splitResult[0].toUpperCase() == "ALL" && input.parentId && <bigint>input.parentId > 0) {
     const temp = await config.connection(ctx.config.name).unsafe(`${multiDatastreamKeys(input.parentId)}`);
     input.splitResult = temp[0]["keys"];

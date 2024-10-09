@@ -22,6 +22,7 @@ export { executeSqlValues } from "./executeSqlValues";
 export { getDBDateNow } from "./getDBDateNow";
 export { removeKeyFromUrl } from "./removeKeyFromUrl";
 export { queryInsertFromCsv } from "./queryInsertFromCsv";
+export { getEntityIdInDatas } from "./getEntityIdInDatas";
 export { getColumnsNamesFromCsvFile } from "./getColumnsNamesFromCsvFile";
 export { streamCsvFile } from "./streamCsvFile";
 export { createIndexes } from "./createIndexes";
