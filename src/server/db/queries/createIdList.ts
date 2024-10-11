@@ -6,8 +6,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- createIdList -----------------------------------!\n");
-
 export const createIdList = (input: string): string[] => {
   let result: string[] = [];
       if (input.includes(":")) {

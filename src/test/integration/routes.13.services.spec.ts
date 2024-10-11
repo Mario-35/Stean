@@ -6,25 +6,19 @@
  *
  */
 process.env.NODE_ENV = "test";
-// onsole.log("!----------------------------------- TDD for ultime tests API -----------------------------------!\n");
-
 import chai from "chai";
 import chaiHttp from "chai-http";
 import { IApiDoc, IApiInput, prepareToApiDoc, generateApiDoc, limitResult, testVersion, _RAWDB, defaultGet, defaultPost, keyTokenName, identification, apiInfos, blank, infos } from "./constant";
 import { server } from "../../server/index";
 import { addStartNewTest, addTest, writeLog } from "./tests";
 import { Ientity } from "../../server/types";
-
 chai.use(chaiHttp);
-
 const should = chai.should();
 const docs: IApiDoc[] = [];
 const entity: Ientity = _RAWDB.Services;
-
 const addToApiDoc = (input: IApiInput) => {
 	docs.push(prepareToApiDoc(input, entity.name));
 };
-
 
 const conf = {
     "name": "newService", 
@@ -53,7 +47,6 @@ const conf = {
     "options": [
         "canDrop"
     ]
-
 };
 const confPres = {
     "name": "[newservice]Name of the service", 
@@ -78,9 +71,7 @@ const confPres = {
     "options": [
         "List of options"
     ]
-
 };
-
 addToApiDoc({
 	api: `{infos} ${entity.name} Extension`,
 	apiName: `Infos${entity.name}`,
@@ -88,7 +79,6 @@ addToApiDoc({
 	apiReference: infos[entity.name].reference,
 	result: ""
 });
-
 describe("endpoint : Service", () => {
 	let token = "";
 	before((done) => {
@@ -102,7 +92,6 @@ describe("endpoint : Service", () => {
 				done();
 			});
 	});
-
 	describe(`{get} ${entity.name}`, () => {
 		afterEach(() => { writeLog(true); });
 		
@@ -133,7 +122,6 @@ describe("endpoint : Service", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} id: 1 `, (done) => {
 			const infos = addTest({
 				api: `{get} ${entity.name}(:id) Get one`,
@@ -161,9 +149,7 @@ describe("endpoint : Service", () => {
 					done();
 				});
 		});
-
 	});
-
 	describe(`{post} ${entity.name}`, () => {
 		afterEach(() => { writeLog(true); });
 		it(`Return added ${entity.name}`, (done) => {
@@ -197,8 +183,6 @@ describe("endpoint : Service", () => {
 					done();
 				});
 		});
-
 	});
-
 
 });

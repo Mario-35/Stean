@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- pgVisitor for odata -----------------------------------!\n");
-
 import { IodataContext, IvisitRessource, koaContext } from "../../../types";
 import { Token } from "../../parser/lexer";
 import { SqlOptions } from "../../parser/sqlOptions";
@@ -18,7 +16,6 @@ import { doubleQuotesString } from "../../../helpers";
 import { models } from "../../../models";
 import { errors } from "../../../messages";
 import { link } from "../../../models/helpers";
-
 export class RootPgVisitor extends PgVisitor {
   static root = true;
   constructor(ctx: koaContext, options = <SqlOptions>{}, node?: Token) {
@@ -26,11 +23,9 @@ export class RootPgVisitor extends PgVisitor {
       super(ctx, options);      
       if (node) this.StartVisitRessources(node);
   }
-
   protected verifyRessources = (): void => {
     console.log(log.debug_head("verifyRessources"));
   };
-
   protected VisitRessources(node: Token, context?: IodataContext) {    
     const ressource: IvisitRessource = this[`VisitRessources${node.type}` as keyof object];
     if (ressource) {
@@ -46,7 +41,6 @@ export class RootPgVisitor extends PgVisitor {
     }
     return this;
   }
-
   protected VisitRessourcesResourcePath(node: Token, context?: IodataContext) {
     if (node.value.resource)
       this.VisitRessources(node.value.resource, context);
@@ -97,13 +91,11 @@ export class RootPgVisitor extends PgVisitor {
     const condition = this.ctx.decodedUrl.idStr ? `"lora"."deveui" = '${this.ctx.decodedUrl.idStr}'` : ` id = ${this.id}`;
     if (this.query.where.notNull() === true)  this.query.where.add(` AND ${condition}`); else this.query.where.init(condition);
   }
-
   protected VisitRessourcesSingleNavigation(node: Token, context: IodataContext) {
     if (node.value.path && node.value.path.type === "PropertyPath")
       this.VisitRessources(node.value.path, context);
   }
  
-
   protected VisitRessourcesPropertyPathNew(node:Token, context:any) {
     if (this.entity && node.type == "PropertyPath") {
       if (models.getRelationColumnTable(this.ctx.config, this.entity, node.value.path.raw) === EColumnType.Relation) {
@@ -120,7 +112,6 @@ export class RootPgVisitor extends PgVisitor {
     }
 		this.VisitRessources(node.value.navigation, context);
 	}
-
   protected VisitRessourcesEntityCollectionNavigationProperty(node:Token, context:any) {    
     if (this.entity && this.entity.relations[node.value.name]) {
          const where = (this.parentEntity) ? `(SELECT ID FROM (${this.query.toWhere(this)}) as nop)` : this.id;
@@ -145,12 +136,10 @@ export class RootPgVisitor extends PgVisitor {
 		if (node.value.navigation)
       this.VisitRessources(node.value.navigation, context);
   }
-
   protected VisitRessourcesODataUri(node: Token, context: IodataContext) {
     this.VisitRessources(node.value.resource, context);
     this.VisitRessources(node.value.query, context);
   }
-
   StartVisitRessources(node: Token) {
     console.log(log.debug_head("INIT PgVisitor"));
     this.limit = this.ctx.config.nb_page || 200;
@@ -159,7 +148,6 @@ export class RootPgVisitor extends PgVisitor {
     this.verifyRessources();
     return temp;
   }
-
  getSql() {  
     if (this.includes) this.includes.forEach((include) => {
       if (include.navigationProperty.includes("/")) {              
@@ -178,7 +166,6 @@ export class RootPgVisitor extends PgVisitor {
     });
     return this.onlyValue ? this.toString() : this.returnFormat.generateSql(this);
   }
-
   patchSql(datas: object): string | undefined {
     try {
       return postSqlFromPgVisitor(datas, this);
@@ -186,7 +173,6 @@ export class RootPgVisitor extends PgVisitor {
       return undefined;
     }
   }
-
   postSql(datas: object): string | undefined {
     try {
       return postSqlFromPgVisitor(datas, this);
@@ -194,5 +180,4 @@ export class RootPgVisitor extends PgVisitor {
       return undefined;
     }
   }
-
 }

@@ -7,22 +7,17 @@
  *
  */
 process.env.NODE_ENV = "test";
-
 import chai from "chai";
 import chaiHttp from "chai-http";
 import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, defaultGet, limitResult, apiInfos, testVersion } from "./constant";
 import { server } from "../../server/index";
 import { addStartNewTest, addTest, writeLog } from "./tests";
 chai.use(chaiHttp);
-
 const should = chai.should();
-
 const docs: IApiDoc[] = [];
-
 const addToApiDoc = (input: IApiInput) => {
     docs.push(prepareToApiDoc(input, "BuiltInOperators"));
 };
-
 addToApiDoc({
     api: `{infos} /BuiltInOperators Infos`,
     apiName: "InfosBuiltInOperators",
@@ -38,7 +33,6 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
 		done();
 	});
 	afterEach(() => { writeLog(true); });
-
     it("Odata Built-in operator eq", (done) => {
         const infos = addTest({
             api: "{get} Observations eq",
@@ -65,7 +59,6 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
             });
     });
 
-
     // it("Odata Built-in operator eq null", (done) => {
     //     chai.request(server)
     //     .get(`/test/${testVersion}/Observations?$filter=result eq null")
@@ -79,7 +72,6 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
     //            done();
     //         });
     // });
-
 
     it("Odata Built-in operator ne", (done) => {
         const infos = addTest({
@@ -106,7 +98,6 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
                 done();
             });
     });
-
     it("Odata Built-in operator gt", (done) => {
         const infos = addTest({
             api: "{get} Observations gt",
@@ -132,7 +123,6 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
                 done();
             });
     });
-
     it("Odata Built-in operator gt AND lt", (done) => {
         const infos = addTest({
             api: `{get} Odata Built-in operator gt AND lt`,
@@ -181,7 +171,6 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
                 done();
             });
     }); 
-
     it("Odata Built-in operator lt", (done) => {
         const infos = addTest({
             api: "{get} Observations lt",
@@ -207,7 +196,6 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
                 done();
             });
     });
-
     it("Odata Built-in operator le", (done) => {
         const infos = addTest({
             api: "{get} Observations le",
@@ -233,7 +221,6 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
                 done();
             });
     });
-
     it("Odata Built-in operator and", (done) => {
         const infos = addTest({
             api: "{get} Thing and",
@@ -247,7 +234,6 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
                 python: defaultGet("python", "KEYHTTP") 
             }
         });
-
         chai.request(server)
             .get(`/test/${infos.apiExample.http}`)
             .end((err, res) => {
@@ -260,7 +246,6 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
                 done();
             });
     });
-
     it("Odata Built-in operator or", (done) => {
         const infos = addTest({
             api: "{get} Thing or",
@@ -274,7 +259,6 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
                 python: defaultGet("python", "KEYHTTP") 
             }
         });
-
         chai.request(server)
             .get(`/test/${infos.apiExample.http}`)
             .end((err, res) => {
@@ -287,7 +271,6 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
                 done();
             });
     });
-
     // it("filter name of thing", (done) => {
     //     const infos = addTest({
     //         api: "{get} Thing filter",
@@ -300,7 +283,6 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
     //         javascript: defaultGet("javascript", "KEYHTTP"),
     //         python: defaultGet("python", "KEYHTTP")  }
     //     };
-
     //     chai.request(server)
     //         .get(`/test/${infos.apiExample.http}`)
     //         .end((err, res) => {
@@ -314,7 +296,6 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
     //            done();
     //         });
     // });
-
     // it("filter Observations whose Datastream’s id is 1.", (done) => {
     //     const infos = addTest({
     //         api: "{get} Observations filter Datastream id 1",
@@ -327,7 +308,6 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
     //         javascript: defaultGet("javascript", "KEYHTTP"),
     //         python: defaultGet("python", "KEYHTTP")  }
     //     };
-
     //     chai.request(server)
     //         .get(`/test/${infos.apiExample.http}`)
     //         .end((err, res) => {
@@ -341,7 +321,6 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
      //           done();
     //         });
     // });
-
     // it("filter Datastreams whose unitOfMeasurement property name = 'Degrees Fahrenheit'.", (done) => {
     //     const infos = addTest({
     //         api: "{get} Thing filter",
@@ -354,7 +333,6 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
     //         javascript: defaultGet("javascript", "KEYHTTP"),
     //         python: defaultGet("python", "KEYHTTP")  }
     //     };
-
     //     chai.request(server)
     //         .get(`/test/${infos.apiExample.http}`)
     //         .end((err, res) => {
@@ -369,7 +347,6 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
     //            done();
     //         });
     // });
-
     // it("filter name STARTWITH", (done) => {
     //     const infos = addTest({
     //         api: "{get} Thing filter startWith",
@@ -382,7 +359,6 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
     //         javascript: defaultGet("javascript", "KEYHTTP"),
     //         python: defaultGet("python", "KEYHTTP")  }
     //     };
-
     //     chai.request(server)
     //         .get(`/test/${infos.apiExample.http}`)
     //         .end((err, res) => {
@@ -396,7 +372,6 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
     //            done();
     //         });
     // });
-
     // it("filter name CONTAINS", (done) => {
     //     const infos = addTest({
     //         api: "{get} Thing filter contains",
@@ -409,7 +384,6 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
     //         javascript: defaultGet("javascript", "KEYHTTP"),
     //         python: defaultGet("python", "KEYHTTP")  }
     //     };
-
     //     chai.request(server)
     //         .get(`/test/${infos.apiExample.http}`)
     //         .end((err, res) => {
@@ -423,7 +397,6 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
     //            done();
     //         });
     // });
-
     // it("filter date greater Than", (done) => {
     //     const infos = addTest({
     //         api: "{get} Thing filter date greater than",
@@ -436,7 +409,6 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
     //         javascript: defaultGet("javascript", "KEYHTTP"),
     //         python: defaultGet("python", "KEYHTTP") }
     //     };
-
     //     chai.request(server)
     //         .get(`/test/${infos.apiExample.http}`)
     //         .end((err, res) => {
@@ -450,7 +422,6 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
     //            done();
     //         });
     // });
-
     // it("filter date eq", (done) => {
     //     const infos = addTest({
     //         api: "{get} Thing filter date equal (1 day)",
@@ -463,7 +434,6 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
     //         javascript: defaultGet("javascript", "KEYHTTP"),
     //         python: defaultGet("python", "KEYHTTP")  }
     //     };
-
     //     chai.request(server)
     //         .get(`/test/${infos.apiExample.http}`)
     //         .end((err, res) => {
@@ -480,7 +450,6 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
      //           done();
     //         });
     // });
-
     // it("filter date interval", (done) => {
     //     const infos = addTest({
     //         api: "{get} Thing filter date greater than and less than",
@@ -493,7 +462,6 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
     //         javascript: defaultGet("javascript", "KEYHTTP"),
     //         python: defaultGet("python", "KEYHTTP")  }
     //     };
-
     //     chai.request(server)
     //         .get(`/test/${infos.apiExample.http}`)
     //         .end((err, res) => {
@@ -507,7 +475,6 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
     //            done();
     //         });
     // });
-
     it("Save and write apiDoc", (done) => {
         generateApiDoc(docs, "apiBuiltInOperators.js");
         done();

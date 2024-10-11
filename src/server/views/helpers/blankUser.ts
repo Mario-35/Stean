@@ -5,11 +5,8 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- blankUser -----------------------------------!\n");
-
 import { EExtensions } from "../../enums";
 import { Iuser, koaContext } from "../../types";
-
 export function blankUser(ctx: koaContext):Iuser  {    
     return {
         id: 0,

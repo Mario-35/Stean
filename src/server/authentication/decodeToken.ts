@@ -5,12 +5,9 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- decodeToken -----------------------------------!\n");
-
 import jsonwebtoken from "jsonwebtoken";
 import { IuserToken, keyobj, koaContext } from "../types";
 import { blankUserToken } from "../types/userToken";
-
 export const decodeToken = (ctx: koaContext): IuserToken => {
   if (ctx.request.hasOwnProperty("token")) {
     const token = jsonwebtoken.decode(ctx.request["token" as keyobj]);    

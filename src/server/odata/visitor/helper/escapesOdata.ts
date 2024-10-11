@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- escapesOdata -----------------------------------!\n");
-
 export const escapesOdata = (input: string) : string => {
     const codes = { "/" : "%252F", "\\" : "%255C" };
     if (input.includes("%27")) {

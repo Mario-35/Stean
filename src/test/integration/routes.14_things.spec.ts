@@ -7,7 +7,6 @@
  *
  */
 process.env.NODE_ENV = "test";
-
 import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, defaultGet, defaultPost, identification, keyTokenName, defaultPatch, defaultDelete, listOfColumns, limitResult, infos, apiInfos, showHide, nbColor, nbColorTitle, testVersion, _RAWDB } from "./constant";
 export const testsKeys = ["@iot.id", "@iot.selfLink", "description", "name", "properties", "Locations@iot.navigationLink", "HistoricalLocations@iot.navigationLink", "Datastreams@iot.navigationLink", "MultiDatastreams@iot.navigationLink"];
 import chai from "chai";
@@ -19,17 +18,13 @@ import { testDatas } from "../../server/db/createDb";
 import { addStartNewTest, addTest, writeLog, } from "./tests";
 import geo from './files/geo.json';
 
-
 chai.use(chaiHttp);
-
 const should = chai.should();
 const docs: IApiDoc[] = [];
 const entity: Ientity = _RAWDB.Things;
-
 const addToApiDoc = (input: IApiInput) => {
 	docs.push(prepareToApiDoc(input, entity.name));
 };
-
 addToApiDoc({
 	api: `{infos} ${entity.name} infos`,
 	apiName: `Infos${entity.name}`,
@@ -37,7 +32,6 @@ addToApiDoc({
 	apiReference: infos[entity.name].reference,
 	result: ""
 });
-
 describe("endpoint : Thing [8.2.1]", () => {
 	const myId = 0;
 	const temp = listOfColumns(entity);
@@ -90,7 +84,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} id: 1 ${nbColor}[9.2.3]`, (done) => {
 			const infos = addTest({
 				api: `{get} ${entity.name}(:id) Get one`,
@@ -145,7 +138,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
-
 		it(`Return error ${entity.singular} not found`, (done) => {
 			const infos = addTest({
 				api : `{get} return error ${entity.singular} not found`,
@@ -165,7 +157,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
-
 		it(`Return property name of Thing id: 1 ${nbColor}[9.2.4]`, (done) => {
 			const infos = addTest({
 				api: `{get} ${entity.name}(:id) Get only a property`,
@@ -199,7 +190,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
-
 		it("Return error if the column does not exist", (done) => {
 			const infos = addTest({
 				api: "Return error if the column does not exist",
@@ -220,7 +210,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
-
 		it(`Return value of property name Thing id: 1 ${nbColor}[9.2.5]`, (done) => {
 			const infos = addTest({
 				api: `{get} ${entity.name}(:id) Get only the value of a property`,
@@ -251,7 +240,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} Select @iot.id ${nbColor}[9.3.3.2]`, (done) => {
 			const infos = addTest({
 				api: `{get} ${entity.name}(:id) Get Select with @iot.id`,
@@ -281,7 +269,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} Select id ${nbColor}[9.3.3.2]`, (done) => {
 			const infos = addTest({
 				api: `{get} Return ${entity.name} Select id`,
@@ -304,7 +291,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} Select with Datastreams navigation link ${nbColor}[9.2.6]`, (done) => {
 			const infos = addTest({
 				api: `{get} ${entity.name}(:id) Get Select with navigation link`,
@@ -334,7 +320,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} Subentity Locations ${nbColor}[9.2.6]`, (done) => {
 			const name = "Locations";
 			const infos = addTest({
@@ -366,7 +351,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} Subentity HistoricalLocations ${nbColor}[9.2.6]`, (done) => {
 			const name = "HistoricalLocations";
 			const infos = addTest({
@@ -391,7 +375,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} Subentity Datastreams ${nbColor}[9.2.6]`, (done) => {
 			const name = "Datastreams";
 			const infos = addTest({
@@ -418,7 +401,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} Subentity MultiDatastreams ${nbColor}[9.2.6]`, (done) => {
 			const name = "MultiDatastreams";
 			const infos = addTest({
@@ -445,7 +427,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} Expand Locations ${nbColor}[9.3.2.1]`, (done) => {
 			const name = "Locations";
 			const infos = addTest({
@@ -477,7 +458,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} Expand Locations With SELECT inside ${nbColor}[9.3.2.1]`, (done) => {
 			const infos = addTest({
 				api: `{get} ${entity.name}(:id) Get Expand with Select`,				
@@ -506,7 +486,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} Expand Locations , HistoricalLocations ${nbColor}[9.3.2.1]`, (done) => {
 			const infos = addTest({
 				api: `{get} ${entity.name}(:id) Get Expand coma separation`,
@@ -537,7 +516,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} Expand Locations / HistoricalLocations ${nbColor}[9.3.2.1]`, (done) => {
 			const infos = addTest({
 				api: `{get} ${entity.name}(:id) Get Expand  slash separation`,				
@@ -566,7 +544,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} Expand HistoricalLocations ${nbColor}[9.3.2.1]`, (done) => {
 			const name = "HistoricalLocations";
 			const infos = addTest({
@@ -591,7 +568,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} Expand Datastreams ${nbColor}[9.3.2.1]`, (done) => {
 			const name = "Datastreams";
 			const infos = addTest({
@@ -618,7 +594,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} Select with Expand Datastreams ${nbColor}[9.3.2.1]`, (done) => {
 			const infos = addTest({
 				api: `{get} return ${entity.name} Select with Expand Datastreams`,
@@ -639,7 +614,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} Expand MultiDatastreams ${nbColor}[9.3.2.1]`, (done) => {
 			const name = "MultiDatastreams";
 			const infos = addTest({
@@ -666,7 +640,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} association link ${nbColor}[9.2.7]`, (done) => {
 			const infos = addTest({
 				api: `{get} ${entity.name}(:id) Get only references`,
@@ -695,7 +668,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} nested resource path ${nbColor}[9.2.8]`, (done) => {
 			const infos = addTest({
 				api: `{get} ${entity.name}(:id)/entity(:id) Get nested resource path`,				
@@ -724,7 +696,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} nested resource path property ${nbColor}[9.2.8]`, (done) => {
 			const infos = addTest({
 				api: `{get} ${entity.name}(:id)/entity(:id) Get nested resource path property`,				
@@ -752,7 +723,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});		
-
 		it(`Return ${entity.name} nested resource path entity ${nbColor}[9.2.8]`, (done) => {
 			const infos = addTest({
 				api: `{get} ${entity.name}(:id)/entity(:id) Get nested resource path entity`,				
@@ -781,7 +751,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} nested filter search`, (done) => {
 			const infos = addTest({
 				api: `{get} ${entity.name}(:id)/entity(:id) Get filter nested resource path`,				
@@ -812,7 +781,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} complex nested filter search`, (done) => {
 			const infos = addTest({
 				api: `{get} ${entity.name}(:id)/entity(:id) Get complex filter nested resource path`,				
@@ -843,9 +811,7 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
-
 	});
-
 	describe(`{post} ${entity.name} ${nbColorTitle}[10.2]`, () => {
 		afterEach(() => { writeLog(true); });
 		it(`Return added ${entity.name} ${nbColor}[10.2.1]`, (done) => {
@@ -1254,7 +1220,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 				});
 		});
 	});
-
 	describe(`{patch} ${entity.name} ${nbColorTitle}[10.3]`, () => {
 		afterEach(() => { writeLog(true); });
 		it(`Return updated ${entity.name} ${nbColor}[10.3.1]`, (done) => {
@@ -1299,7 +1264,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 						});
 				});
 		});
-
 		it(`Return Error if the ${entity.name} not exist`, (done) => {
 			const datas = {
 				"name": "New SensorWebThing Patch",
@@ -1329,7 +1293,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
-
 		it(`Return updated ${entity.name} with new location`, (done) => {
 			const datas = {
 				"name": "New SensorWebThing back",
@@ -1389,7 +1352,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 						});
 				});
 		});
-
 		it(`Return updated ${entity.name} with only location (relation only)`, (done) => {
 			executeQuery(`SELECT * FROM "${entity.table}" ORDER BY id desc LIMIT 1`)
 				.then((things: Record<string, any>) => {
@@ -1445,7 +1407,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 				});
 		});
 	});
-
 	describe(`{delete} ${entity.name} ${nbColorTitle}[10.4]`, () => {
 		afterEach(() => { writeLog(true); });
 		it(`Delete ${entity.name} return no content with code 204 ${nbColor}[10.4.1]`, (done) => {
@@ -1483,7 +1444,6 @@ describe("endpoint : Thing [8.2.1]", () => {
 					});
 			});
 		});
-
 		it(`Return Error if the ${entity.name} not exist`, (done) => {
 			const infos = addTest({
 				api: `{delete} return Error if the ${entity.name} not exist`,

@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- createService -----------------------------------!\n");
-
 import { addToService, createDatabase, executeAdmin, executeSqlValues } from ".";
 import { config } from "../../configuration";
 import { doubleQuotesString, simpleQuotesString, asyncForEach } from "../../helpers";
@@ -16,7 +14,6 @@ import { sqlStopDbName } from "../../routes/helper";
 import { keyobj, koaContext } from "../../types";
 import { log } from "../../log";
 import { EChar } from "../../enums";
-
 const prepareDatas = (dataInput: Record<string, string>, entity: string): object => {
   if (entity === "Observations") {
     if (!dataInput["resultTime"] && dataInput["phenomenonTime"] ) dataInput["resultTime"]  = dataInput["phenomenonTime"] 
@@ -24,11 +21,9 @@ const prepareDatas = (dataInput: Record<string, string>, entity: string): object
   }
   return dataInput;
 }
-
 const getConvertedData = async (url: string): Promise<object | unknown> => {
   return await fetch(url, { method: 'GET', headers: {}, }).then((response) => response.json());
 }
-
 const addToServiceFromUrl = async (url: string | undefined, ctx: koaContext): Promise<string> => {
   while(url) {
     try {      
@@ -42,7 +37,6 @@ const addToServiceFromUrl = async (url: string | undefined, ctx: koaContext): Pr
   }
   return "";
 }
-
 export const createService = async (dataInput: Record<string, any>, ctx?: koaContext): Promise<Record<string, any>> => {
   console.log(log.whereIam());
   if(dataInput && dataInput["create"]) {    
@@ -62,7 +56,6 @@ export const createService = async (dataInput: Record<string, any>, ctx?: koaCon
     }      
   }
   
-
   await executeAdmin(sqlStopDbName(simpleQuotesString(serviceName))).then(async () => {
     await executeAdmin(`DROP DATABASE IF EXISTS ${serviceName}`).then(async () => {
       results[`Drop ${mess}`] = EChar.ok;
@@ -76,7 +69,6 @@ export const createService = async (dataInput: Record<string, any>, ctx?: koaCon
       await createDB();
     }
   });
-
   const tmp = models.filteredModelFromConfig(service);
     
   await asyncForEach( Object.keys(tmp) .filter((elem: string) => tmp[elem].createOrder > 0) .sort((a, b) => (tmp[a].createOrder > tmp[b].createOrder ? 1 : -1)), async (entityName: string) => {

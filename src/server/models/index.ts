@@ -9,9 +9,7 @@ import { errors, msg } from "../messages";
 import { Iservice, Ientities, Ientity, IstreamInfos, koaContext, IentityRelation } from "../types";
 import fs from "fs";
 import { FeatureOfInterest, Thing, Location, Service, CreateObservation, CreateFile, Datastream, Decoder, HistoricalLocation, Log, Lora, MultiDatastream, MultiDatastreamObservedProperty, Observation, Sensor, User, LocationHistoricalLocation, ObservedProperty, ThingLocation } from "./entities";
-
 const testVersion = (input: string) => Object.keys(Models.models).includes(input);
-
 class Models {
   static models : { [key: string]: Ientities; } = {};
   // Create Object FOR v1.0
@@ -38,7 +36,6 @@ class Models {
           CreateFile: CreateFile,
       };                
   }
-
   escape(input: string, ignore?: string) {
     let pattern = "";
     const map = {
@@ -58,7 +55,6 @@ class Models {
       return map[item as keyof object];
     });
   }
-
   // create drawIO Model
   getDraw(ctx: koaContext) {
     const deleteId = (id: string) => {
@@ -79,7 +75,6 @@ class Models {
     Object.keys(entities).forEach((strEntity: string) => {
       fileContent = fileContent.replace(`COLUMNS.${entities[strEntity].name}`, this.getColumnListNameWithoutId(entities[strEntity]).map((colName: string) => `&lt;p style=&quot;margin: 0px; margin-left: 8px;&quot;&gt;${colName}: ${entities[strEntity].columns[colName].type.toUpperCase()}&lt;/p&gt;`).join(""));
     });
-
     return fileContent;
   }
   
@@ -138,7 +133,6 @@ class Models {
         });
     }
   }
-
   private version1_1(input: Ientities): Ientities {
     const makeJson = (name:string) => {
       return {
@@ -168,7 +162,6 @@ class Models {
     if (this.createVersion(nb) === true ) return true;
     throw new Error(msg(errors.wrongVersion, nb));      
   }
-
   public createVersion(nb: string): boolean{
     switch (nb) {
       case "1.1":          
@@ -182,12 +175,10 @@ class Models {
   private filtering(service: Iservice ) {    
     return Object.fromEntries(Object.entries(Models.models[service.apiVersion]).filter(([, v]) => Object.keys(filterEntities(service.extensions)).includes(v.name))) as Ientities;
   }
-
   public version(service: Iservice ): string {
     if (service && service.apiVersion && testVersion(service.apiVersion)) return service.apiVersion;
     throw new Error(msg(errors.wrongVersion, service.apiVersion));
   }
-
   public filteredModelFromConfig(service: Iservice  ): Ientities {
     if (testVersion(service.apiVersion) === false) this.createVersion(service.apiVersion);
     return service.name === EConstant.admin ? this.DBAdmin(service) : this.filtering(service);
@@ -207,7 +198,6 @@ class Models {
     const entities = Models.models[EVersion.v1_0];
     return Object.fromEntries(Object.entries(entities)) as Ientities;
   } 
-
   public isSingular(service: Iservice , input: string): boolean { 
     if (config && input) {
       const entityName = this.getEntityName(service, input); 
@@ -215,7 +205,6 @@ class Models {
     }          
     return false;
   }
-
   public getEntityName(service: Iservice , search: string): string | undefined {
     if (config && search) {        
       const tempModel = Models.models[service.apiVersion];
@@ -223,7 +212,6 @@ class Models {
             .trim()
             .match(/[a-zA-Z_]/g)
             ?.join("");
-
       return tempModel && testString
           ? tempModel.hasOwnProperty(testString)
           ? testString
@@ -235,11 +223,9 @@ class Models {
           : undefined;
     }
   }
-
   public getEntityStrict = (service: Iservice , entity: Ientity | string): Ientity | undefined => {
     return (typeof entity === "string") ? Models.models[service.apiVersion][entity] : Models.models[service.apiVersion][entity.name];
   }
-
   public getEntity = (service: Iservice , entity: Ientity | string): Ientity | undefined => {
     if (config && entity) {
       if (isString(entity)) {
@@ -250,7 +236,6 @@ class Models {
       return isString(entity) ? Models.models[service.apiVersion][entity] : Models.models[service.apiVersion][entity.name];
     }
   };
-
   public getRelationName = (entity: Ientity, searchs: string[]): string | undefined => {
     let res: string | undefined = undefined;    
     searchs.forEach(e => {
@@ -278,7 +263,6 @@ class Models {
               : undefined;
     }      
   };
-
   public getSelectColumnList(service: Iservice, entity: Ientity | string, complete: boolean,  exclus?: string[]) {
       const tempEntity = this.getEntity(service, entity);
       exclus = exclus || [""];
@@ -286,11 +270,9 @@ class Models {
         ? Object.keys(tempEntity.columns).filter((word) => !word.includes("_") && !exclus.includes(word)).map((e: string) => complete ? formatPgTableColumn(tempEntity.table, e) : doubleQuotesString(e))
         : [];
   }
-
   getColumnListNameWithoutId(input: Ientity) {
     return Object.keys(input.columns).filter((word) => !word.includes("_") && !word.includes("id")); 
   }
-
   public isColumnType(service: Iservice , entity: Ientity | string, column: string , test: string): boolean {
     if (config && entity) {
       const tempEntity = this.getEntity(service, entity);
@@ -298,7 +280,6 @@ class Models {
     }
     return false;
   }
-
   public getRoot(ctx: koaContext) {
     console.log(log.whereIam());
     let expectedResponse: object[] = [];
@@ -370,14 +351,10 @@ class Models {
           break;
       }
   }
-
   public extractEntityNames(input: string, search: string | string[]): string[] {    
     if (typeof search === "string") search = [search];
     return search.map(e => (input.replace(e, ""))).filter(e => e != input);
   }
-
-
-
 
 
   public init() {    
@@ -386,5 +363,4 @@ class Models {
     }
   }
 }
-
 export const models = new Models();

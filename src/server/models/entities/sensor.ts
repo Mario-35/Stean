@@ -5,14 +5,11 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- entity Sensor -----------------------------------!\n");
-
 import { createEntity } from ".";
 import { EConstant, ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _text } from "./constants";
 import { doubleQuotesString } from "../../helpers";
-
   export const Sensor:Ientity  = createEntity("Sensors", {
     createOrder: 6,
     type: ETable.table,

@@ -5,15 +5,11 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Test Helpers -----------------------------------!\n");
-
 
 import {   executeSqlValues } from "../../db/helpers";
 import { EConstant } from "../../enums";
 import { koaContext } from "../../types";
-
 const geo = {
-
 	"Angers": {
 		"type": "Feature",
 		"properties": {
@@ -245,14 +241,11 @@ export const getTest = async (ctx: koaContext): Promise<string[] | { [key: strin
     const featureofinterest:Record<string, any> = await executeSqlValues(ctx.config, ` SELECT coalesce( json_agg(t), '[]') AS results FROM ( select feature as geometry FROM "featureofinterest" WHERE "feature"::text LIKE '%coordinates%' ) as t`);
     const locations:Record<string, any> = await executeSqlValues(ctx.config, `  SELECT coalesce( json_agg(t), '[]') AS results FROM ( select location as geometry FROM "location" WHERE "location"::text LIKE '%coordinates%' ) as t`);
 
-
 	result["key"] = EConstant.key;
-
     result["featureofinterest"] = `http://geojson.io/#data=data:application/json,${encodeURIComponent(JSON.stringify({
         "type": "FeatureCollection",
         "features": featureofinterest[0]
     }))}`;
-
     result["locations"] = `http://geojson.io/#data=data:application/json,${encodeURIComponent(JSON.stringify({
         "type": "FeatureCollection",
         "features": locations[0]
@@ -264,7 +257,6 @@ export const getTest = async (ctx: koaContext): Promise<string[] | { [key: strin
         "features": Object.keys(geo).map(e => geo[e as keyof object])
     }))}`;
       
-
     
     return result;
 }

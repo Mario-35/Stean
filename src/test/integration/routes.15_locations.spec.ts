@@ -7,7 +7,6 @@
  *
  */
 process.env.NODE_ENV = "test";
-
 import chai from "chai";
 import chaiHttp from "chai-http";
 import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, defaultGet, defaultPost, defaultPatch, defaultDelete, listOfColumns, limitResult, infos, apiInfos, showHide, nbColor, nbColorTitle, testVersion, _RAWDB, getNB } from "./constant";
@@ -16,7 +15,6 @@ import { Ientity } from "../../server/types";
 import { executeQuery, last } from "./executeQuery";
 import { addStartNewTest, addTest, writeLog, } from "./tests";
 import geo from './files/geo.json';
-
 
 export const testsKeys = [
 	"@iot.selfLink",
@@ -28,20 +26,14 @@ export const testsKeys = [
 	"encodingType",
 	"location"
 ];
-
 chai.use(chaiHttp);
-
 const should = chai.should();
-
 const docs: IApiDoc[] = [];
 const entity: Ientity = _RAWDB.Locations;
-
-
 
 const addToApiDoc = (input: IApiInput) => {
 	docs.push(prepareToApiDoc(input, entity.name));
 };
-
 
 addToApiDoc({
 	api: `{infos} ${entity.name} infos`,
@@ -50,13 +42,11 @@ addToApiDoc({
 	apiReference: infos[entity.name].reference,
 	result: ""
 });
-
 describe("endpoint : Locations [8.2.2]", () => {
 	const temp = listOfColumns(entity);
 	const success = temp.success;
 	const params = temp.params;
 	let token = "";
-
 	before((done) => {
 		addStartNewTest(entity.name);
 		chai.request(server)
@@ -68,7 +58,6 @@ describe("endpoint : Locations [8.2.2]", () => {
 				done();
 			});
 	});
-
 	describe(`{get} ${entity.name} ${nbColorTitle}[9.2]`, () => {
 		afterEach(() => { writeLog(true); });
 		it(`Return all ${entity.name} ${nbColor}[9.2.2]`, (done) => {
@@ -103,7 +92,6 @@ describe("endpoint : Locations [8.2.2]", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} id: 1 ${nbColor}[9.2.3]`, (done) => {
 			const infos = addTest({
 				api :`{get} ${entity.name}(:id) Get one`,
@@ -136,7 +124,6 @@ describe("endpoint : Locations [8.2.2]", () => {
 					done();
 				});
 		});
-
 		it(`Return error if ${entity.name} not exist ${nbColor}[9.2.4]`, (done) => {
 			const infos = addTest({
 				api : `{get} return error if ${entity.name} not exist`,
@@ -158,7 +145,6 @@ describe("endpoint : Locations [8.2.2]", () => {
 					done();
 				});
 		});
-
 		it(`Return error ${entity.singular} not found`, (done) => {
 			const infos = addTest({
 				api : `{get} return error ${entity.singular} not found`,
@@ -178,7 +164,6 @@ describe("endpoint : Locations [8.2.2]", () => {
 					done();
 				});
 		});
-
 		it(`Return error /Location invalid path`, (done) => {
 			const infos = addTest({
 				api : `{get} return error /Location invalid path`,
@@ -198,7 +183,6 @@ describe("endpoint : Locations [8.2.2]", () => {
 					done();
 				});
 		});
-
 		it(`Return all ${entity.name} of a specific Thing ${nbColor}[9.2.6]`, (done) => {
 			const infos = addTest({
 				api : `{get} Things(:id)/${entity.name} Get from specific Thing`,
@@ -228,7 +212,6 @@ describe("endpoint : Locations [8.2.2]", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} Subentity Things ${nbColor}[9.2.6]`, (done) => {
 			const name = "Things";
 			const infos = addTest({
@@ -256,7 +239,6 @@ describe("endpoint : Locations [8.2.2]", () => {
 					done();
 				});
 		});
-
 		it(`Return all ${entity.name} Subentity HistoricalLocations ${nbColor}[9.2.6]`, (done) => {
 			const name = "HistoricalLocations";
 			const infos = addTest({
@@ -283,7 +265,6 @@ describe("endpoint : Locations [8.2.2]", () => {
 					done();
 				});
 		});
-
 		it(`Return all ${entity.name} Expand Things ${nbColor}[9.3.2.1]`, (done) => {
 			const name = "Things";
 			const infos = addTest({
@@ -311,7 +292,6 @@ describe("endpoint : Locations [8.2.2]", () => {
 					done();
 				});
 		});
-
 		it(`Return all ${entity.name} Expand HistoricalLocations ${nbColor}[9.3.2.1]`, (done) => {
 			const name = "HistoricalLocations";
 			const infos = addTest({
@@ -337,7 +317,6 @@ describe("endpoint : Locations [8.2.2]", () => {
 				});
 		});
 	});
-
 	describe(`{post} ${entity.name} ${nbColorTitle}[10.2]`, () => {
 		afterEach(() => { writeLog(true); });
 	
@@ -378,7 +357,6 @@ describe("endpoint : Locations [8.2.2]", () => {
 					done();
 				});
 		});
-
         it(`Return Error if the payload is malformed ${nbColor}[10.2.2]`, (done) => {
             const infos = addTest({
                 api : `{post} return Error if the payload is malformed`,
@@ -401,7 +379,6 @@ describe("endpoint : Locations [8.2.2]", () => {
                     done();
                 });
         });
-
 		it(`Return added Location with existing Thing ${nbColor}[10.2.1.1]`, (done) => {
 			const datas = {
 				"name": `Au Comptoir Vénitien ${getNB(entity.name)}`,
@@ -445,7 +422,6 @@ describe("endpoint : Locations [8.2.2]", () => {
 				});
 		});
 	});
-
 	describe(`{patch} ${entity.name} ${nbColorTitle}[10.3]`, () => {
 		afterEach(() => { writeLog(true); });
 		it(`Return updated ${entity.name} ${nbColor}[10.3.1]`, (done) => {
@@ -521,7 +497,6 @@ describe("endpoint : Locations [8.2.2]", () => {
 				});
 		});
 	});
-
 	describe(`{delete} ${entity.name} ${nbColorTitle}[10.4]`, () => {
 		afterEach(() => { writeLog(true); });
 		it(`Delete ${entity.name} return no content with code 204 ${nbColor}[10.4.1]`, (done) => {

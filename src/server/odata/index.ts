@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- pgVisitor index -----------------------------------!\n");
-
 import { query, resourcePath } from "./parser/parser";
 import { Token } from "./parser/lexer";
 import { cleanUrl } from "../helpers";
@@ -16,7 +14,6 @@ import { koaContext } from "../types";
 import { errors } from "../messages";
 import { EConstant, EHttpCode } from "../enums";
 import { doSomeWorkAfterCreateAst, escapesOdata } from "./visitor/helper";
-
 export const createOdata = async (ctx: koaContext): Promise<RootPgVisitor | undefined> => {
   // blank url if not defined
   // init Ressource wich have to be tested first
@@ -25,7 +22,6 @@ export const createOdata = async (ctx: koaContext): Promise<RootPgVisitor | unde
     onlyRef: false,
     valueskeys: false,
   };
-
   // normalize href
   let urlSrc = `${ctx.decodedUrl.path}${ctx.decodedUrl.search}`;  
   
@@ -45,10 +41,8 @@ export const createOdata = async (ctx: koaContext): Promise<RootPgVisitor | unde
   
   // clean id in url
   urlSrc = cleanUrl(replaceElement(EConstant.id, "id"));
-
   // if nothing to do return
   if (urlSrc === "/") return;
-
   // Remove actions that are not odata
   if (urlSrc.includes("$"))
     urlSrc.split("$").forEach((element: string) => {
@@ -70,9 +64,7 @@ export const createOdata = async (ctx: koaContext): Promise<RootPgVisitor | unde
     });
     
   const urlSrcSplit = cleanUrl(urlSrc).split("?");
-
   if (!urlSrcSplit[1]) urlSrcSplit.push(`$top=${ctx.config.nb_page || 200}`);
-
   if (urlSrcSplit[0].split("(").length != urlSrcSplit[0].split(")").length) urlSrcSplit[0] += ")";
   // INIT ressource
   let astRessources: Token;
@@ -85,10 +77,7 @@ export const createOdata = async (ctx: koaContext): Promise<RootPgVisitor | unde
   }
   // INIT query
   const astQuery: Token = <Token>query(decodeURIComponent(urlSrcSplit[1]));
-
   const temp = new RootPgVisitor(ctx, options, astRessources).start(astQuery);
-
   await doSomeWorkAfterCreateAst(temp, ctx);
-
   return temp;
 };

@@ -5,12 +5,9 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Index Types -----------------------------------!\n");
-
 import Koa from "koa";
 import { allEntitiesType, EExtensions, EOptions } from "../enums";
 import { Ientity } from "./entity";
-
 export { IrelationInfos } from "./relationInfos";
 export { Icomon } from "./comon";
 export { Iservice } from "./service";

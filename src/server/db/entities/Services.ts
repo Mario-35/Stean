@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Services entity -----------------------------------!\n");
-
 import { Common } from "./common";
 import { IreturnResult, koaContext } from "../../types";
 import { config } from "../../configuration";
@@ -15,13 +13,11 @@ import { addToService, createService } from "../helpers";
 import { userAuthenticated } from "../../authentication";
 import { log } from "../../log";
 import { EExtensions, EHttpCode } from "../../enums";
-
 export class Services extends Common {
   constructor(ctx: koaContext) {
     console.log(log.whereIam());
     super(ctx);
   }
-
   async getAll(): Promise<IreturnResult | undefined> {
     console.log(log.whereIam());
     let can = userAuthenticated(this.ctx);
@@ -41,7 +37,6 @@ export class Services extends Common {
       })))
     });
   }
-
   async getSingle(): Promise<IreturnResult | undefined> {
     console.log(log.whereIam());
     // Return result If not authorised
@@ -74,7 +69,6 @@ export class Services extends Common {
         });
     }
   }
-
     // Update an item
     async update( idInput: bigint | string, dataInput: Record<string, any>  | undefined ): Promise<IreturnResult | undefined | void> {
       console.log(log.whereIam());      

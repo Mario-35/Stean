@@ -6,10 +6,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Query interface -----------------------------------!\n");
-
 import { IdecodedUrl, Ientities, IserviceInfos, Iuser } from ".";
-
 export interface IqueryOptions {
     user:       Iuser;
     methods:    string[];

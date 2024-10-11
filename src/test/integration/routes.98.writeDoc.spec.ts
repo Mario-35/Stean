@@ -6,15 +6,11 @@
  *
  */
 process.env.NODE_ENV = "test";
-// onsole.log("!----------------------------------- TDD for create and write apidoc -----------------------------------!\n");
-
 import chai from "chai";
 import chaiHttp from "chai-http";
 import path from "path";
 import { createDoc } from "apidoc";
-
 chai.use(chaiHttp);
-
 describe("Create ApiDoc", () => {
     it(`write : ${path.resolve(__dirname, "../../server/apidoc")}`, async (done) => {
         try {
@@ -31,5 +27,4 @@ describe("Create ApiDoc", () => {
         done();
     });
 });
-
 

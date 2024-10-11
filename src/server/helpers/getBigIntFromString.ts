@@ -5,15 +5,12 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- getBigIntFromString -----------------------------------!\n");
-
 
 /**
  *
  * @param input string or number search
  * @returns the bigint extract number
  */
-
 export const getBigIntFromString = ( input: string | bigint | number ): bigint | undefined => {
   if (input) {
     try {

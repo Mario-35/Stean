@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- forwardConnection interface -----------------------------------!\n");
-
 export interface IforwardConnection {
   /*
   * The address or interface we want to listen on.

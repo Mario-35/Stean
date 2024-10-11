@@ -5,13 +5,10 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- queryInsertFromCsv -----------------------------------!\n");
-
 import { IcsvColumn, IcsvFile, koaContext } from "../../types";
 import { columnsNameFromHydrasCsv, streamCsvFile } from ".";
 import { log } from "../../log";
 import { EChar } from "../../enums";
-
 export async function queryInsertFromCsv( ctx: koaContext, paramsFile: IcsvFile ): Promise<{count: number, query: string[]} | undefined> {
   console.log(log.whereIam());
   const sqlRequest = await columnsNameFromHydrasCsv(paramsFile);
@@ -45,11 +42,8 @@ export async function queryInsertFromCsv( ctx: koaContext, paramsFile: IcsvFile 
         }
       );
 
-
       console.log(paramsFile);
-
       const essai:string[] = [];
-
       Object.keys(paramsFile.columns).forEach((myColumn) => {
         const csvColumn: IcsvColumn = paramsFile.columns[myColumn as keyof object];
         essai.push(`CASE "${paramsFile.tempTable}".value${csvColumn.column}
@@ -58,7 +52,6 @@ export async function queryInsertFromCsv( ctx: koaContext, paramsFile: IcsvFile 
               ELSE CAST(REPLACE(value${csvColumn.column},',','.') AS float) 
             END`);
       });
-
       console.log(essai);
       
       // Object.keys(paramsFile.columns).forEach(
@@ -86,9 +79,6 @@ export async function queryInsertFromCsv( ctx: koaContext, paramsFile: IcsvFile 
 
 
 
-
-
-
       return {
         count: stream,
         query: scriptSql
@@ -96,4 +86,3 @@ export async function queryInsertFromCsv( ctx: koaContext, paramsFile: IcsvFile 
     }
   }
 };
-

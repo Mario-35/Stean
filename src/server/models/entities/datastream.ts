@@ -5,14 +5,11 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- entity Datastream -----------------------------------!\n");
-
 import { createEntity } from ".";
 import { EConstant, EDatesType, EObservationType, ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _idRel, _text, _tz } from "./constants";
 import { doubleQuotesString } from "../../helpers";
-
 export const Datastream:Ientity  = createEntity("Datastreams", {
   createOrder: 7,
     type: ETable.table,

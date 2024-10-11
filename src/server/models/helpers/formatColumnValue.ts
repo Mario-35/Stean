@@ -5,13 +5,10 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- formatColumnValue -----------------------------------!\n");
-
 import { ESCAPE_ARRAY_JSON, ESCAPE_SIMPLE_QUOTE } from "../../constants";
 import { EConstant } from "../../enums";
 import { doubleQuotesString, simpleQuotesString, removeFirstEndSimpleQuotes } from "../../helpers";
 import { log } from "../../log";
-
 /**
  * 
  * @param columnName string

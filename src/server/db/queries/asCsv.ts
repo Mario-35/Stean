@@ -6,8 +6,6 @@
  * @author formatPgString.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- asCsv -----------------------------------!\n");
-
 export const asCsv = (sql: string): string => 
 `COPY (
     ${sql}

@@ -5,12 +5,9 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- oData PrimitiveLiteral -----------------------------------!\n");
-
 import Utils from "./utils";
 import Lexer from "./lexer";
 import NameOrIdentifier from "./nameOrIdentifier";
-
 namespace PrimitiveLiteral {
     export function nullValue(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
         if (Utils.equals(value, index, "null")) return Lexer.tokenize(value, index, index + 4, "null", Lexer.TokenType.Literal);
@@ -37,7 +34,6 @@ namespace PrimitiveLiteral {
         const start = index;
         const sign = Lexer.SIGN(value, index);
         if (sign) index = sign;
-
         const next = Utils.required(value, index, Lexer.DIGIT, 1, 3);
         if (next) {
             if (Lexer.DIGIT(value[next])) return;
@@ -57,7 +53,6 @@ namespace PrimitiveLiteral {
         const start = index;
         const sign = Lexer.SIGN(value, index);
         if (sign) index = sign;
-
         const next = Utils.required(value, index, Lexer.DIGIT, 1, 5);
         if (next) {
             if (Lexer.DIGIT(value[next])) return;
@@ -69,7 +64,6 @@ namespace PrimitiveLiteral {
         const start = index;
         const sign = Lexer.SIGN(value, index);
         if (sign) index = sign;
-
         const next = Utils.required(value, index, Lexer.DIGIT, 1, 10);
         if (next) {
             if (Lexer.DIGIT(value[next])) return;
@@ -81,7 +75,6 @@ namespace PrimitiveLiteral {
         const start = index;
         const sign = Lexer.SIGN(value, index);
         if (sign) index = sign;
-
         const next = Utils.required(value, index, Lexer.DIGIT, 1, 19);
         if (next) {
             if (Lexer.DIGIT(value[next])) return;
@@ -94,19 +87,15 @@ namespace PrimitiveLiteral {
         const start = index;
         const sign = Lexer.SIGN(value, index);
         if (sign) index = sign;
-
         const intNext = Utils.required(value, index, Lexer.DIGIT, 1);
         if (!intNext) return;
-
         let end = intNext;
         if (value[intNext] === 0x2e) {
             end = Utils.required(value, intNext + 1, Lexer.DIGIT, 1);
             if (!end || end === intNext + 1) return;
         } else return;
-
         // TODO: detect only decimal value, no double/single detection here
         if (value[end] === 0x65) return;
-
         return Lexer.tokenize(value, start, end, "Edm.Decimal", Lexer.TokenType.Literal);
     }
     export function doubleValue(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
@@ -120,28 +109,23 @@ namespace PrimitiveLiteral {
             // var token = decimalValue(value, index);
             const sign = Lexer.SIGN(value, index);
             if (sign) index = sign;
-
             const intNext = Utils.required(value, index, Lexer.DIGIT, 1);
             if (!intNext) return;
-
             let decimalNext = intNext;
             if (value[intNext] === 0x2e) {
                 decimalNext = Utils.required(value, intNext + 1, Lexer.DIGIT, 1);
                 if (decimalNext === intNext + 1) return;
             } else return;
-
             if (value[decimalNext] === 0x65) {
                 let next = decimalNext + 1;
                 const sign = Lexer.SIGN(value, next);
                 if (sign) next = sign;
-
                 const digitNext = Utils.required(value, next, Lexer.DIGIT, 1);
                 if (digitNext) {
                     end = digitNext;
                 }
             } else end = decimalNext;
         }
-
         return Lexer.tokenize(value, start, end, "Edm.Double", Lexer.TokenType.Literal);
     }
     export function singleValue(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
@@ -181,27 +165,21 @@ namespace PrimitiveLiteral {
                     }
                 }
             }
-
             quote = Lexer.SQUAT(value, index - 1) || Lexer.SQUAT(value, index - 3);
             if (!quote) return;
             index = quote;
-
             return Lexer.tokenize(value, start, index, "Edm.String", Lexer.TokenType.Literal);
         }
     }
-
     export function durationValue(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
         if (!Utils.equals(value, index, "duration")) return;
         const start = index;
         index += 8;
-
         let square = Lexer.SQUAT(value, index);
         if (!square) return;
         index = square;
-
         const sign = Lexer.SIGN(value, index);
         if (sign) index = sign;
-
         if (value[index] !== 0x50) return;
         index++;
         const dayNext = Utils.required(value, index, Lexer.DIGIT, 1);
@@ -239,22 +217,18 @@ namespace PrimitiveLiteral {
             const next = parseTimeFn();
             if (!next) return;
         }
-
         square = Lexer.SQUAT(value, end);
         if (!square) return;
         end = square;
-
         return Lexer.tokenize(value, start, end, "Edm.Duration", Lexer.TokenType.Literal);
     }
     export function binaryValue(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
         const start = index;
         if (!Utils.equals(value, index, "binary")) return;
         index += 6;
-
         let squat = Lexer.SQUAT(value, index);
         if (!squat) return;
         index = squat;
-
         // const valStart = index;
         while (index < value.length && !(squat = Lexer.SQUAT(value, index))) {
             const temp = Lexer.base64b16(value, index);
@@ -273,7 +247,6 @@ namespace PrimitiveLiteral {
             }
         }
         if (squat) index = squat;
-
         return Lexer.tokenize(value, start, index, "Edm.Binary", Lexer.TokenType.Literal);
     }
     export function dateValue(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
@@ -363,14 +336,12 @@ namespace PrimitiveLiteral {
                     } else end = secondEndNext;
                 }
             }
-
             const sign = Lexer.SIGN(value, end);
             if (value[end] === 0x5a) {
                 end++;
             } else if (sign) {
                 const zHourEndNext = Lexer.hour(value, sign);
                 if (!zHourEndNext) return;
-
                 const colon = Lexer.COLON(value, zHourEndNext);
                 if (zHourEndNext === sign || !colon) return;
                 const zMinuteEndNext = Lexer.minute(value, colon);
@@ -384,38 +355,31 @@ namespace PrimitiveLiteral {
     export function timeOfDayValue(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
         const hourNext = Lexer.hour(value, index);
         if (!hourNext) return;
-
         let colon = Lexer.COLON(value, hourNext);
         if (hourNext === index || !colon) return;
         const minuteNext = Lexer.minute(value, colon);
         if (!minuteNext || minuteNext === colon) return;
-
         let end = minuteNext;
         colon = Lexer.COLON(value, minuteNext);
         if (colon) {
             const secondNext = Lexer.second(value, colon);
             if (!secondNext || secondNext === colon) return;
-
             if (value[secondNext] === 0x2e) {
                 const fractionalSecondsNext = Lexer.fractionalSeconds(value, secondNext + 1);
                 if (!fractionalSecondsNext || fractionalSecondsNext === secondNext + 1) return;
                 end = fractionalSecondsNext;
             } else end = secondNext;
         }
-
         return Lexer.tokenize(value, index, end, "Edm.TimeOfDay", Lexer.TokenType.Literal);
     }
     // geography and geometry literals
     export function positionLiteral(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
         const longitude = PrimitiveLiteral.doubleValue(value, index);
         if (!longitude) return;
-
         const next = Lexer.RWS(value, longitude.next);
         if (!next || next === longitude.next) return;
-
         const latitude = PrimitiveLiteral.doubleValue(value, next);
         if (!latitude) return;
-
         return Lexer.tokenize(value, index, latitude.next, { longitude, latitude }, Lexer.TokenType.Literal);
     }
     export function pointData(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
@@ -423,15 +387,12 @@ namespace PrimitiveLiteral {
         if (!open) return;
         const start = index;
         index = open;
-
         const position = PrimitiveLiteral.positionLiteral(value, index);
         if (!position) return;
         index = position.next;
-
         const close = Lexer.CLOSE(value, index);
         if (!close) return;
         index = close;
-
         return Lexer.tokenize(value, start, index, position, Lexer.TokenType.Literal);
     }
     export function lineStringData(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
@@ -450,19 +411,15 @@ namespace PrimitiveLiteral {
         if (!Utils.equals(value, index, "SRID")) return;
         const start = index;
         index += 4;
-
         const eq = Lexer.EQ(value, index);
         if (!eq) return;
         index++;
-
         const digit = Utils.required(value, index, Lexer.DIGIT, 1, 5);
         if (!digit) return;
         index = digit;
-
         const semi = Lexer.SEMI(value, index);
         if (!semi) return;
         index = semi;
-
         return Lexer.tokenize(value, start, index, "SRID", Lexer.TokenType.Literal);
     }
     export function pointLiteral(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
@@ -471,17 +428,14 @@ namespace PrimitiveLiteral {
         index += 5;
         const data = PrimitiveLiteral.pointData(value, index);
         if (!data) return;
-
         return Lexer.tokenize(value, start, data.next, data, Lexer.TokenType.Literal);
     }
     export function polygonLiteral(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
         if ( !( Utils.equals(value, index, 'Polygon') || Utils.equals(value, index, 'POLYGON') ) ) return;
         const start = index;
         index += 7;
-
         const data = PrimitiveLiteral.polygonData(value, index);
         if (!data) return;
-
         return Lexer.tokenize(value, start, data.next, data, Lexer.TokenType.Literal);
     }
     export function collectionLiteral(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
@@ -491,11 +445,9 @@ namespace PrimitiveLiteral {
         if ( !( Utils.equals(value, index, 'LineString') || Utils.equals(value, index, 'LINESTRING') ) ) return;
         const start = index;
         index += 10;
-
         const data = PrimitiveLiteral.lineStringData(value, index);
         if (!data) return;
         index = data.next;
-
         return Lexer.tokenize(value, start, index, data, Lexer.TokenType.Literal);
     }
     export function multiLineStringLiteral(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
@@ -511,63 +463,51 @@ namespace PrimitiveLiteral {
         if (!Utils.equals(value, index, prefix + "(")) return;
         const start = index;
         index += prefix.length + 1;
-
         const items = [];
         let geo = itemLiteral(value, index);
         if (!geo) return;
         index = geo.next;
-
         while (geo) {
             items.push(geo);
-
             const close = Lexer.CLOSE(value, index);
             if (close) {
                 index = close;
                 break;
             }
-
             const comma = Lexer.COMMA(value, index);
             if (!comma) return;
             index = comma;
-
             geo = itemLiteral(value, index);
             if (!geo) return;
             index = geo.next;
         }
-
         return Lexer.tokenize(value, start, index, { items }, Lexer.TokenType.Literal);
     }
     export function multiGeoLiteralOptionalFactory(value: Utils.SourceArray, index: number, prefix: string, itemLiteral: Function): Lexer.Token | undefined {
         if (!Utils.equals(value, index, prefix + "(")) return;
         const start = index;
         index += prefix.length + 1;
-
         const items = [];
         let close = Lexer.CLOSE(value, index);
         if (!close) {
             let geo = itemLiteral(value, index);
             if (!geo) return;
             index = geo.next;
-
             while (geo) {
                 items.push(geo);
-
                 close = Lexer.CLOSE(value, index);
                 if (close) {
                     index = close;
                     break;
                 }
-
                 const comma = Lexer.COMMA(value, index);
                 if (!comma) return;
                 index = comma;
-
                 geo = itemLiteral(value, index);
                 if (!geo) return;
                 index = geo.next;
             }
         } else index++;
-
         return Lexer.tokenize(value, start, index, { items }, Lexer.TokenType.Literal);
     }
     export function geoLiteral(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
@@ -605,31 +545,24 @@ namespace PrimitiveLiteral {
     export function fullGeoLiteralFactory(value: Utils.SourceArray, index: number, literal: Function): Lexer.Token | undefined {
         const srid = PrimitiveLiteral.sridLiteral(value, index);
         if (!srid) return;
-
         const token = literal(value, srid.next);
         if (!token) return;
-
         return Lexer.tokenize(value, index, token.next, { srid, value: token }, Lexer.TokenType.Literal);
     }
-
     export function geographyCollection(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
         const prefix = Lexer.geographyPrefix(value, index);
         if (!prefix || prefix === index) return;
         const start = index;
         index = prefix;
-
         let quoted = Lexer.SQUAT(value, index);
         if (!quoted) return;
         index = quoted;
-
         const point = PrimitiveLiteral.fullCollectionLiteral(value, index);
         if (!point) return;
         index = point.next;
-
         quoted = Lexer.SQUAT(value, index);
         if (!quoted) return;
         index = quoted;
-
         return Lexer.tokenize(value, start, index, "Edm.GeographyCollection", Lexer.TokenType.Literal);
     }
     export function geographyLineString(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
@@ -689,22 +622,17 @@ namespace PrimitiveLiteral {
         if (prefixNext === index) return;
         const start = index;
         index = prefixNext;
-
         let quote = Lexer.SQUAT(value, index);
         if (!quote) return;
         index = quote;
-
         const data = literal(value, index);
         if (!data) return;
         index = data.next;
-
         quote = Lexer.SQUAT(value, index);
         if (!quote) return;
         index = quote;
-
         return Lexer.tokenize(value, start, index, type, Lexer.TokenType.Literal);
     }
-
     export function primitiveLiteral(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
         return (
             PrimitiveLiteral.nullValue(value, index) ||
@@ -742,5 +670,4 @@ namespace PrimitiveLiteral {
         );
     }
 }
-
 export default PrimitiveLiteral;

@@ -5,13 +5,10 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- createRole -----------------------------------!\n");
-
 import { config } from "../../configuration";
 import { EChar, EConstant } from "../../enums";
 import { simpleQuotesString } from "../../helpers";
 import { Iservice } from "../../types";
-
 export const createRole = async (service: Iservice ): Promise<string> => {
   const connection = config.connection(service.name);
   return new Promise(async function (resolve, reject) {

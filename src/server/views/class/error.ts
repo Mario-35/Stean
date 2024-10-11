@@ -5,18 +5,13 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- HTML Views Error for API -----------------------------------!\n");
-
 import { koaContext } from "../../types";
 import { CoreHtmlView } from "./core";
-
 export class HtmlError extends CoreHtmlView {
-
     constructor(ctx: koaContext, datas: string) {
         super(ctx);
         this.error(datas);
     }
-
     private error(message: string) {
         this._HTMLResult = [`
         <!DOCTYPE html>

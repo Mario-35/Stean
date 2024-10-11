@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- CreateFile entity -----------------------------------!\n");
-
 import { Common } from "./common";
 import { IcsvColumn, IcsvFile, IreturnResult, koaContext } from "../../types";
 import { getColumnsNamesFromCsvFile, executeSqlValues } from "../helpers";
@@ -18,17 +16,14 @@ import { addAbortSignal } from 'stream';
 import { config } from "../../configuration";
 import { log } from "../../log";
 import { EConstant } from "../../enums";
-
 export class CreateFile extends Common {
   constructor(ctx: koaContext) {
     console.log(log.whereIam());
     super(ctx);
   }
-
   streamCsvFileInPostgreSqlFileInDatastream = async ( ctx: koaContext, paramsFile: IcsvFile ): Promise<string | undefined> => {
     console.log(log.debug_head("streamCsvFileInPostgreSqlFileInDatastream"));
     const headers = await getColumnsNamesFromCsvFile(paramsFile.filename);
-
     if (!headers) {
       ctx.throw(400, {
         code: 400,
@@ -39,7 +34,6 @@ export class CreateFile extends Common {
     const createDataStream = async () => {
       const copyCtx = Object.assign({}, ctx.odata);
       ctx.odata.entity = this.ctx.model.Datastreams;
-
       // IMPORTANT TO ADD instead update
       ctx.odata.returnFormat = returnFormats.json;
       ctx.log = undefined;
@@ -82,7 +76,6 @@ export class CreateFile extends Common {
     const cols:string[] = [];
     headers.forEach((value: string) => cols.push(`${value} TEXT NULL`));  
     const createTable = `CREATE TABLE public."${paramsFile.tempTable}" (${cols});`;
-
     await executeSqlValues(ctx.config, createTable);
     const writable = config.connection(ctx.config.name).unsafe(`COPY ${paramsFile.tempTable}  (${headers.join( "," )}) FROM STDIN WITH(FORMAT csv, DELIMITER ';'${ paramsFile.header })`).writable();
     return await new Promise<string | undefined>(async (resolve, reject) => {      
@@ -138,6 +131,5 @@ export class CreateFile extends Common {
       return;
     }
   }
-
 
 }

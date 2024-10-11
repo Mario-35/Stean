@@ -5,10 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- hidePassword -----------------------------------!\n");
-
 import { isObject } from "./tests";
-
 export function hidePassword(obj: object): object {
     if (Array.isArray(obj))  
       return obj

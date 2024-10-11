@@ -5,10 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- oData Lexer -----------------------------------!\n");
-
 import Utils from "./utils";
-
 export enum TokenType {
     Literal = "Literal",
     ArrayOrObject = "ArrayOrObject",
@@ -180,10 +177,8 @@ export enum TokenType {
     Entity = "Entity",
     Metadata = "Metadata"
 }
-
 export const LexerTokenType = TokenType;
 export type LexerTokenType = TokenType;
-
 export class Token {
     position: number;
     next: number;
@@ -200,16 +195,13 @@ export class Token {
         if (token.metadata) this.metadata = token.metadata;
     }
 }
-
 export const LexerToken = Token;
 export type LexerToken = Token;
-
 export namespace Lexer {
     export type Token = LexerToken;
     export const Token: typeof LexerToken = exports.Token;
     export type TokenType = LexerTokenType;
     export const TokenType: typeof LexerTokenType = exports.TokenType;
-
     export function tokenize(
         value: Utils.SourceArray,
         index: number,
@@ -231,7 +223,6 @@ export namespace Lexer {
         }
         return token;
     }
-
     export function clone(token: Token): Token {
         return new exports.Token({
             position: token.position,
@@ -241,7 +232,6 @@ export namespace Lexer {
             raw: token.raw
         });
     }
-
     // core definitions
     export function ALPHA(value: number): boolean {
         return (value >= 0x41 && value <= 0x5a) || (value >= 0x61 && value <= 0x7a) || value >= 0x80;
@@ -267,13 +257,11 @@ export namespace Lexer {
     export function VCHAR(value: number): boolean {
         return value >= 0x21 && value <= 0x7e;
     }
-
     // punctuation
     export function whitespaceLength(value: any, index: number) {
         if (Utils.equals(value, index, "%20") || Utils.equals(value, index, "%09")) return 3;
         else if (Lexer.SP(value[index]) || Lexer.HTAB(value[index]) || value[index] === 0x20 || value[index] === 0x09) return 1;
     }
-
     export function OWS(value: Utils.SourceArray, index: number): number | undefined {
         index = index || 0;
         let inc = Lexer.whitespaceLength(value, index);
@@ -289,7 +277,6 @@ export namespace Lexer {
     export function BWS(value: Utils.SourceArray, index: number): number | undefined {
         return Lexer.OWS(value, index);
     }
-
     export function AT(value: Utils.SourceArray, index: number): number | undefined {
         if (value[index] === 0x40) return index + 1;
         else if (Utils.equals(value, index, "%40")) return index + 3;
@@ -412,10 +399,8 @@ export namespace Lexer {
         const start = index;
         if (!Lexer.base64char(value[index]) && !Lexer.base64char(value[index + 1])) return start;
         index += 2;
-
         if (!Utils.is(value[index], "AEIMQUYcgkosw048")) return start;
         index++;
-
         if (value[index] === 0x3d) index++;
         return index;
     }
@@ -423,10 +408,8 @@ export namespace Lexer {
         const start = index;
         if (!Lexer.base64char(value[index])) return start;
         index++;
-
         if (value[index] !== 0x41 || value[index] !== 0x51 || value[index] !== 0x67 || value[index] !== 0x77) return start;
         index++;
-
         if (value[index] === 0x3d && value[index + 1] === 0x3d) index += 2;
         return index;
     }
@@ -502,7 +485,6 @@ export namespace Lexer {
         if (Utils.equals(value, index, "{")) index++;
         else if (Utils.equals(value, index, "%7B")) index += 3;
         if (index === bws) return start;
-
         bws = Lexer.BWS(value, index);
         return bws;
     }
@@ -514,7 +496,6 @@ export namespace Lexer {
         if (Utils.equals(value, index, "}")) index++;
         else if (Utils.equals(value, index, "%7D")) index += 3;
         if (index === bws) return start;
-
         bws = Lexer.BWS(value, index);
         return bws;
     }
@@ -526,7 +507,6 @@ export namespace Lexer {
         if (Utils.equals(value, index, "[")) index++;
         else if (Utils.equals(value, index, "%5B")) index += 3;
         if (index === bws) return start;
-
         bws = Lexer.BWS(value, index);
         return bws;
     }
@@ -575,5 +555,4 @@ export namespace Lexer {
         return index;
     }
 }
-
 export default Lexer;

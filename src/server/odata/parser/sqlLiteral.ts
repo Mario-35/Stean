@@ -5,10 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- oData SQLLiteral -----------------------------------!\n");
-
 import { Literal } from "./literal";
-
 export class SQLLiteral extends Literal {
     static convert(type: string, value: string): any {
         return new SQLLiteral(type, value).valueOf();

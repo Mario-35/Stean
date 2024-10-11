@@ -5,11 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- context interface -----------------------------------!\n");
-
 import { EColumnType } from "../enums";
-
-
 export interface IodataContext { //odata context pass to token
     key:            string | undefined;
     entity:         string | undefined;

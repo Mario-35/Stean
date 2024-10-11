@@ -5,14 +5,11 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- entity Observation -----------------------------------!\n");
-
 import { createEntity } from ".";
 import { EConstant, ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { doubleQuotesString } from "../../helpers";
 import { _idBig } from "./constants";
-
 export const Observation:Ientity  = createEntity("Observations", {
     createOrder: 12,
     type: ETable.table,

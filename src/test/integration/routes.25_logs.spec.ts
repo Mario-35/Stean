@@ -7,7 +7,6 @@
  *
  */
 process.env.NODE_ENV = "test";
-
 import chai from "chai";
 import chaiHttp from "chai-http";
 import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, defaultGet, listOfColumns, limitResult, infos, apiInfos, nbColor, nbColorTitle, testVersion, _RAWDB } from "./constant";
@@ -15,19 +14,14 @@ import { server } from "../../server/index";
 import { Ientity } from "../../server/types";
 import { addTest, writeLog} from "./tests";
 export const testsKeys = ["@iot.id", "@iot.selfLink", "date", "method", "code", "url", "datas", "database", "returnid"];
-
 chai.use(chaiHttp);
-
 const should = chai.should();
-
 const docs: IApiDoc[] = [];
 const entity: Ientity = _RAWDB.Logs;
-
 
 const addToApiDoc = (input: IApiInput) => {
 	docs.push(prepareToApiDoc(input, entity.name));
 };
-
 addToApiDoc({
 	api: `{infos} ${entity.name} infos`,
 	apiName: `Infos${entity.name}`,
@@ -35,11 +29,9 @@ addToApiDoc({
 	apiReference: infos[entity.name].reference,
 	result: ""
 });
-
 describe("endpoint : Logs", () => {
 	const temp = listOfColumns(entity);
 	const success = temp.success;
-
 	describe(`{get} ${entity.name} ${nbColorTitle}[9.2]`, () => {
 		afterEach(() => { writeLog(true); });
 		let nb = 0;
@@ -76,7 +68,6 @@ describe("endpoint : Logs", () => {
 					done();
 				});
 		});
-
 		it(`Return Log id: ${nb} ${nbColor}[9.2.3]`, (done) => {
 			const infos = addTest({
 				api :`{get} ${entity.name}(:id) Get one`,
@@ -107,6 +98,5 @@ describe("endpoint : Logs", () => {
 					done();
 				});
 		});
-
 	});
 });

@@ -5,14 +5,11 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- entity Log -----------------------------------!\n");
-
 import { createEntity } from ".";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _text } from "./constants";
 import { doubleQuotesString } from "../../helpers";
 import { EConstant, ETable } from "../../enums";
-
 export const Log:Ientity = createEntity("Logs", {
     createOrder: -1,
     type: ETable.table,

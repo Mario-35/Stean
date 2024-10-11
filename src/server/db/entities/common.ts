@@ -6,8 +6,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Common class entity -----------------------------------!\n");
-
 import { doubleQuotesString, returnFormats } from "../../helpers/index";
 import { IreturnResult, keyobj, koaContext } from "../../types";
 import { executeSqlValues, removeKeyFromUrl } from "../helpers";
@@ -17,20 +15,17 @@ import { config } from "../../configuration";
 import { EConstant } from "../../enums";
 import { asCsv } from "../queries";
 import { isFile } from "../../helpers/tests";
-
 // Common class
 export class Common {
   readonly ctx: koaContext;
   public nextLinkBase: string;
   public linkBase: string;
-
   constructor(ctx: koaContext) {
     console.log(log.whereIam());
     this.ctx = ctx;
     this.nextLinkBase = removeKeyFromUrl(`${this.ctx.decodedUrl.root}/${ this.ctx.href.split(`${ctx.config.apiVersion}/`)[1] }`, ["top", "skip"] );
     this.linkBase = `${this.ctx.decodedUrl.root}/${this.constructor.name}`;     
   }
-
   // Get a key value
   private getKeyValue(input: Record<string, any>, key: string): string | undefined {
     let result: string | undefined = undefined;
@@ -49,12 +44,10 @@ export class Common {
     });
     return undefined;
   }
-
   // Only for override
   formatDataInput(input: Record<string, any> | undefined ): Record<string, any> | undefined {    
     return input;
   }
-
   // create a blank ReturnResult
   public formatReturnResult(args: Record<string, any>): IreturnResult {
     console.log(log.whereIam());
@@ -69,7 +62,6 @@ export class Common {
       ...args,
     };
   }
-
   // Create the nextLink
   public nextLink = (resLength: number): string | undefined => {
     if (this.ctx.odata.limit < 1) return;
@@ -80,7 +72,6 @@ export class Common {
     if (resLength >= max) 
      return `${encodeURI(this.nextLinkBase)}${this.nextLinkBase.includes("?") ? "&" : "?" }$top=${this.ctx.odata.limit}&$skip=${this.ctx.odata.skip + this.ctx.odata.limit }`;
   };
-
   // Create the prevLink
   public prevLink = (resLength: number): string | undefined => {
     if (this.ctx.odata.limit < 1) return;
@@ -88,7 +79,6 @@ export class Common {
     if ( ((this.ctx.config.nb_page && resLength >= this.ctx.config.nb_page) || this.ctx.odata.limit) && prev >= 0 )
       return `${encodeURI(this.nextLinkBase)}${ this.nextLinkBase.includes("?") ? "&" : "?" }$top=${this.ctx.odata.limit}&$skip=${prev}`;
   };
-
   // Return all items
   async getAll(): Promise<IreturnResult | undefined> {
     console.log(log.whereIam());
@@ -140,7 +130,6 @@ export class Common {
      }
     }
   }
-
   // Return one item
   async getSingle(): Promise<IreturnResult | undefined> {
     console.log(log.whereIam());
@@ -171,7 +160,6 @@ export class Common {
          }).catch((err: Error) => this.ctx.throw(400, { code: 400, detail: err }) );
      }
   }
-
   // Execute multilines SQL in one query
   async addWultipleLines(dataInput: Record<string, any>  | undefined): Promise<IreturnResult | undefined> {
     console.log(log.whereIam());
@@ -198,7 +186,6 @@ export class Common {
       body: results,
     });
   }
-
   // Post an item
   async post(dataInput: Record<string, any> | undefined): Promise<IreturnResult | undefined | void> {
     console.log(log.whereIam());
@@ -233,7 +220,6 @@ export class Common {
           });
     }
   }
-
   // Update an item
   async update( idInput: bigint | string, dataInput: Record<string, any>  | undefined ): Promise<IreturnResult | undefined | void> {
     console.log(log.whereIam()); 
@@ -262,7 +248,6 @@ export class Common {
         });
     }
   }
-
   // Delete an item
   async delete(idInput: bigint | string): Promise<IreturnResult | undefined> {
     console.log(log.whereIam());

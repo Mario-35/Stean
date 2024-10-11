@@ -5,19 +5,15 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Datastreams entity -----------------------------------!\n");
-
 import { log } from "../../log";
 import { errors } from "../../messages";
 import { koaContext } from "../../types";
 import { Common } from "./common";
-
 export class Datastreams extends Common {
   constructor(ctx: koaContext) {
     console.log(log.whereIam());
     super(ctx);
   }
-
   formatDataInput(input: Record<string, any> | undefined): Record<string, any>  | undefined {
     console.log(log.whereIam());
     if (input) {

@@ -7,24 +7,18 @@
  *
  */
 process.env.NODE_ENV = "test";
-
 import chai from "chai";
 import chaiHttp from "chai-http";
 import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, defaultGet, limitResult, testVersion } from "./constant";
 import { server } from "../../server/index";
 import { addStartNewTest, addTest, writeLog } from "./tests";
 
-
 chai.use(chaiHttp);
-
 const should = chai.should();
-
 const docs: IApiDoc[] = [];
-
 const addToApiDoc = (input: IApiInput) => {
     docs.push(prepareToApiDoc(input, "BuiltInDate"));
 };
-
 addToApiDoc({
     api: `{infos} /BuiltInDate Infos`,
     apiName: "InfosBuiltInDate",
@@ -64,7 +58,6 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     it("search by resultTime eq 13-01-2017", (done) => {
         const infos = addTest({
             api: `{get} search by resultTime eq 01-13-2017`,
@@ -87,7 +80,6 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     it("search by resultTime gt 13-01-2017", (done) => {
         const infos = addTest({
             api: `{get} search by resultTime gt 13-01-2017`,
@@ -110,7 +102,6 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     it("search by resultTime lt 15-10-2021", (done) => {
         const infos = addTest({
             api: `{get} search by resultTime lt 15-10-2021`,
@@ -133,7 +124,6 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
                 done();
             });
     });    
-
     it("year(resultTime) eq 2017", (done) => {
         const infos = addTest({
             api: "{get} Observations Year",
@@ -159,7 +149,6 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     it("month(resultTime) eq 10", (done) => {
         const infos = addTest({
             api: "{get} Observations Month",
@@ -186,7 +175,6 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     it("day(resultTime) eq 11", (done) => {
         const infos = addTest({
             api: "{get} Observations Day",
@@ -213,7 +201,6 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     it("hour(resultTime) eq 12", (done) => {
         const infos = addTest({
             api: "{get} Observations Hour",
@@ -238,7 +225,6 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     it("minute(resultTime) eq 50", (done) => {
         const infos = addTest({
             api: "{get} Observations minute",
@@ -264,7 +250,6 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     it("second(resultTime) ge 40", (done) => {
         const infos = addTest({
             api: "{get} Observations second",
@@ -290,7 +275,6 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     it("date(resultTime) eq date(validTime)", (done) => {
         const infos = addTest({
             api: "{get} Observations date",
@@ -316,7 +300,6 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     it("time(resultTime) ne time(phenomenonTime)", (done) => {
         const infos = addTest({
             api: "{get} Observations time",
@@ -342,7 +325,6 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     // it("totaloffsetminutes(resultTime) eq 330", (done) => {
     //     const infos = addTest({
     //         api: "{get} Observations Now",
@@ -369,7 +351,6 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
     //            done();
     //         });
     // });      
-
     it("resultTime le now()", (done) => {
         const infos = addTest({
             api: "{get} Observations Now()",
@@ -395,7 +376,6 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     // it("fractionalseconds(resultTime) ne 0", (done) => {
     //     const infos = addTest({
     //         api: "{get} Observations fractionalseconds",
@@ -422,7 +402,6 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
     //            done();
     //         });
     // });
-
     // it("mindatetime(resultTime) ne 0", (done) => {
     //     const infos = addTest({
     //         api: "{get} Observations mindatetime",
@@ -449,7 +428,6 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
      //           done();
     //         });
     // });  
-
     it("Save and write apiDoc", (done) => {
         generateApiDoc(docs, "apiDocBuiltInDate.js");
                 done();

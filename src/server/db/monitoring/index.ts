@@ -5,13 +5,11 @@
  * @author mario.adam@inrae.fr
  *
  */
-
 import { config } from "../../configuration";
 import { EConstant } from "../../enums";
 import { asyncForEach } from "../../helpers";
 import { log } from "../../log";
 import { koaContext } from "../../types";
-
 export const getMetrics = async (ctx: koaContext): Promise<string[] | { [key: string]: any }> => {
   console.log(log.whereIam());
   const username = "postgres";
@@ -67,7 +65,6 @@ export const getMetrics = async (ctx: koaContext): Promise<string[] | { [key: st
     dump_preparedxactstats: `SELECT date_trunc('seconds', now()), database, count(*) AS num_prepared, max(coalesce(extract('epoch' FROM date_trunc('second', current_timestamp-prepared)), 0)) oldest FROM pg_prepared_xacts GROUP BY database`,
     dump_statisticsext: `SELECT date_trunc('seconds', now()), current_database(), cn.nspname AS schemaname, c.relname AS tablename, sn.nspname AS stat_schemaname, s.stxname AS stat_name, pg_get_userbyid(s.stxowner) AS stat_owner, (SELECT array_agg(a.attname ORDER BY a.attnum) AS array_agg FROM unnest(s.stxkeys) k(k) JOIN pg_attribute a ON a.attrelid = s.stxrelid AND a.attnum = k.k) AS attnames, s.stxkind AS kinds FROM pg_statistic_ext s JOIN pg_class c ON c.oid = s.stxrelid LEFT JOIN pg_namespace cn ON cn.oid = c.relnamespace LEFT JOIN pg_namespace sn ON sn.oid = s.stxnamespace WHERE NOT (EXISTS (SELECT 1 FROM unnest(s.stxkeys) k(k) JOIN pg_attribute a ON a.attrelid = s.stxrelid AND a.attnum = k.k WHERE NOT has_column_privilege(c.oid, a.attnum, 'select'::text))) AND (c.relrowsecurity = false OR NOT row_security_active(c.oid))`,
   };
-
   let res: Record<string, any> = {};
   await asyncForEach(
     Object.keys(metrics),

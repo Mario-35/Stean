@@ -5,14 +5,11 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- entity HistoricalLocation -----------------------------------!\n");
-
 import { createEntity } from ".";
 import {  EConstant, ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _idRel, _tz } from "./constants";
 import { doubleQuotesString } from "../../helpers";
-
 export const HistoricalLocation:Ientity  = createEntity("HistoricalLocations", {
   createOrder: -1,
   order: 5,

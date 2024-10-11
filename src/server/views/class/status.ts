@@ -5,13 +5,10 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- HTML Views Status for API -----------------------------------!\n");
-
 import { config } from "../../configuration";
 import { EChar, EExtensions } from "../../enums";
 import { Iuser, koaContext } from "../../types";
 import { CoreHtmlView } from "./core";
-
 export class Status extends CoreHtmlView {
     constructor(ctx: koaContext, datas: Iuser) {
         super(ctx);

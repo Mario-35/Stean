@@ -5,13 +5,11 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- tests Is -----------------------------------!\n");
 ;
 import { EConstant, EExtensions, EUserRights } from "../enums";
 import { PgVisitor, RootPgVisitor } from "../odata/visitor";
 import { Ientity, koaContext } from "../types";
 import { returnFormats } from "./returnFormats";
-
 export const isTest = () => process.env.NODE_ENV?.trim() === "test" || false;
 export const isProduction = () => process.env.NODE_ENV?.trim() === "production" || false;
 export const isCsv = (input: RootPgVisitor |PgVisitor) => input.returnFormat === returnFormats.csv ? true : undefined;
@@ -23,7 +21,6 @@ export const isObservation = (input: RootPgVisitor |PgVisitor):boolean => (input
 export const isAdmin = (ctx: koaContext): boolean => ctx.config && ctx.config.name === EConstant.admin;
 export const isAllowedTo = (ctx: koaContext, what: EUserRights): boolean => ctx.config.extensions.includes(EExtensions.users) ? true : ctx.user && ctx.user.PDCUAS[what];
 export const isFile = (ctx: koaContext): boolean => ctx.config.extensions.includes(EExtensions.file);
-
 export function isString(obj: any) {
     return (typeof obj) === 'string';
  }

@@ -5,13 +5,10 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- columnsNameFromHydrasCsv -----------------------------------!\n");
-
 import fs from "fs";
 import { IcsvFile, IcsvImport } from "../../types";
 import readline from "readline";
 import { log } from "../../log";
-
 export const columnsNameFromHydrasCsv = async ( paramsFile: IcsvFile ): Promise<IcsvImport | undefined> => {
   console.log(log.whereIam());
   const returnValue: IcsvImport = { header: false, dateSql: "", columns: [] };
@@ -23,10 +20,8 @@ export const columnsNameFromHydrasCsv = async ( paramsFile: IcsvFile ): Promise<
     input: fileStream,
     crlfDelay: Infinity,
   });
-
   // Note: we use the crlfDelay option to recognize all instances of CR LF
   // ('\r\n') in filename as a single line break.
-
   for await (const line of rl) {
     const splitColumns = line.split(";");
     if (regexDateHour.test(splitColumns[0]) == true) {

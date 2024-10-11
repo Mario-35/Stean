@@ -5,31 +5,24 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- oData NameOrIdentifier -----------------------------------!\n");
-
 import Utils from "./utils";
 import Lexer from "./lexer";
 import PrimitiveLiteral from "./primitiveLiteral";
-
 namespace NameOrIdentifier {
     export function enumeration(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
         const type = qualifiedEnumTypeName(value, index);
         if (!type) return;
         const start = index;
         index = type.next;
-
         let squote = Lexer.SQUAT(value, index);
         if (!squote) return;
         index = squote;
-
         const enumVal = NameOrIdentifier.enumValue(value, index);
         if (!enumVal) return;
         index = enumVal.next;
-
         squote = Lexer.SQUAT(value, index);
         if (!squote) return;
         index = squote;
-
         return Lexer.tokenize(
             value,
             start,
@@ -45,7 +38,6 @@ namespace NameOrIdentifier {
         let val = NameOrIdentifier.singleEnumValue(value, index);
         if (!val) return;
         const start = index;
-
         const arr = [];
         while (val) {
             arr.push(val);
@@ -56,7 +48,6 @@ namespace NameOrIdentifier {
                 val = NameOrIdentifier.singleEnumValue(value, index);
             } else break;
         }
-
         return Lexer.tokenize(value, start, index, { values: arr }, Lexer.TokenType.EnumValue);
     }
     export function singleEnumValue(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
@@ -82,19 +73,15 @@ namespace NameOrIdentifier {
         if (Utils.equals(value, index, "Collection")) {
             const start = index;
             index += 10;
-
             let squote = Lexer.SQUAT(value, index);
             if (!squote) return;
             index = squote;
-
             const token = NameOrIdentifier.singleQualifiedTypeName(value, index);
             if (!token) return;
             else index = token.next;
-
             squote = Lexer.SQUAT(value, index);
             if (!squote) return;
             index = squote;
-
             token.position = start;
             token.next = index;
             token.raw = Utils.stringify(value, token.position, token.next);
@@ -104,7 +91,6 @@ namespace NameOrIdentifier {
     export function qualifiedEntityTypeName(value: Utils.SourceArray, index: number, metadataContext?: any): Lexer.Token | undefined {
         const start = index;
         const namespaceNext = NameOrIdentifier.namespace(value, index);
-
         if (namespaceNext === index || value[namespaceNext] !== 0x2e) return;
         let schema;
         if (typeof metadataContext === "object") {
@@ -115,7 +101,6 @@ namespace NameOrIdentifier {
         const name = NameOrIdentifier.entityTypeName(value, namespaceNext + 1, schema);
         if (!name) return;
         name.value.namespace = Utils.stringify(value, start, namespaceNext);
-
         return Lexer.tokenize(value, start, name.next, name, Lexer.TokenType.QualifiedEntityTypeName);
     }
     export function qualifiedComplexTypeName(value: Utils.SourceArray, index: number, metadataContext?: any): Lexer.Token | undefined {
@@ -131,7 +116,6 @@ namespace NameOrIdentifier {
         const name = NameOrIdentifier.complexTypeName(value, namespaceNext + 1, schema);
         if (!name) return;
         name.value.namespace = Utils.stringify(value, start, namespaceNext);
-
         return Lexer.tokenize(value, start, name.next, name, Lexer.TokenType.QualifiedComplexTypeName);
     }
     export function qualifiedTypeDefinitionName(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
@@ -140,7 +124,6 @@ namespace NameOrIdentifier {
         if (namespaceNext === index || value[namespaceNext] !== 0x2e) return;
         const nameNext = NameOrIdentifier.typeDefinitionName(value, namespaceNext + 1);
         if (!nameNext || (nameNext && nameNext.next === namespaceNext + 1)) return;
-
         return Lexer.tokenize(value, start, nameNext.next, "TypeDefinitionName", Lexer.TokenType.Identifier);
     }
     export function qualifiedEnumTypeName(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
@@ -149,7 +132,6 @@ namespace NameOrIdentifier {
         if (namespaceNext === index || value[namespaceNext] !== 0x2e) return;
         const nameNext = NameOrIdentifier.enumerationTypeName(value, namespaceNext + 1);
         if (!nameNext || (nameNext && nameNext.next === namespaceNext + 1)) return;
-
         return Lexer.tokenize(value, start, nameNext.next, "EnumTypeName", Lexer.TokenType.Identifier);
     }
     export function namespace(value: Utils.SourceArray, index: number): number {
@@ -162,7 +144,6 @@ namespace NameOrIdentifier {
                 if (part && value[part.next] !== 0x2e) return index - 1;
             }
         }
-
         return index - 1;
     }
     export function odataIdentifier(value: Utils.SourceArray, index: number, tokenType?: Lexer.TokenType): Lexer.Token | undefined {
@@ -173,7 +154,6 @@ namespace NameOrIdentifier {
                 index++;
             }
         }
-
         if (index > start)
             return Lexer.tokenize(value, start, index, { name: Utils.stringify(value, start, index) }, tokenType || Lexer.TokenType.ODataIdentifier);
     }
@@ -183,7 +163,6 @@ namespace NameOrIdentifier {
     export function entitySetName(value: Utils.SourceArray, index: number, metadataContext?: any): Lexer.Token | undefined {
         const token = NameOrIdentifier.odataIdentifier(value, index, Lexer.TokenType.EntitySetName);
         if (!token) return;
-
         if (typeof metadataContext === "object") {
             let entitySet: any;
             metadataContext.dataServices.schemas.forEach((schema: any) =>
@@ -196,7 +175,6 @@ namespace NameOrIdentifier {
                 )
             );
             if (!entitySet) return;
-
             let entityType;
             metadataContext.dataServices.schemas.forEach(
                 (schema: any) =>
@@ -208,10 +186,8 @@ namespace NameOrIdentifier {
                     })
             );
             if (!entityType) return;
-
             token.metadata = entityType;
         }
-
         return token;
     }
     export function singletonEntity(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
@@ -220,25 +196,21 @@ namespace NameOrIdentifier {
     export function entityTypeName(value: Utils.SourceArray, index: number, schema?: any): Lexer.Token | undefined {
         const token = NameOrIdentifier.odataIdentifier(value, index, Lexer.TokenType.EntityTypeName);
         if (!token) return;
-
         if (typeof schema === "object") {
             const type = schema.entityTypes.filter((it: any) => it.name === token.raw)[0];
             if (!type) return;
             token.metadata = type;
         }
-
         return token;
     }
     export function complexTypeName(value: Utils.SourceArray, index: number, schema?: any): Lexer.Token | undefined {
         const token = NameOrIdentifier.odataIdentifier(value, index, Lexer.TokenType.ComplexTypeName);
         if (!token) return;
-
         if (typeof schema === "object") {
             const type = schema.complexTypes.filter((it: any) => it.name === token.raw)[0];
             if (!type) return;
             token.metadata = type;
         }
-
         return token;
     }
     export function typeDefinitionName(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
@@ -291,7 +263,6 @@ namespace NameOrIdentifier {
                 Utils.equals(value, index, "GeometryMultiPolygon") ||
                 Utils.equals(value, index, "GeometryPoint") ||
                 Utils.equals(value, index, "GeometryPolygon"));
-
         if (end > index) return Lexer.tokenize(value, start, end, "PrimitiveTypeName", Lexer.TokenType.Identifier);
     }
     const primitiveTypes: string[] = [
@@ -368,7 +339,6 @@ namespace NameOrIdentifier {
     export function primitiveProperty(value: Utils.SourceArray, index: number, metadataContext?: any): Lexer.Token | undefined {
         const token = NameOrIdentifier.odataIdentifier(value, index, Lexer.TokenType.PrimitiveProperty);
         if (!token) return;
-
         if (typeof metadataContext === "object") {
             for (let i = 0; i < metadataContext.properties.length; i++) {
                 const prop = metadataContext.properties[i];
@@ -381,10 +351,8 @@ namespace NameOrIdentifier {
                     break;
                 }
             }
-
             if (!token.metadata) return;
         }
-
         return token;
     }
     export function primitiveKeyProperty(value: Utils.SourceArray, index: number, metadataContext?: any): Lexer.Token | undefined {
@@ -398,31 +366,25 @@ namespace NameOrIdentifier {
     export function primitiveColProperty(value: Utils.SourceArray, index: number, metadataContext?: any): Lexer.Token | undefined {
         const token = NameOrIdentifier.odataIdentifier(value, index, Lexer.TokenType.PrimitiveCollectionProperty);
         if (!token) return;
-
         if (typeof metadataContext === "object") {
             for (let i = 0; i < metadataContext.properties.length; i++) {
                 const prop = metadataContext.properties[i];
                 if (prop.name === token.raw) {
                     if (prop.type.indexOf("Collection") === -1 || !NameOrIdentifier.isPrimitiveTypeName(prop.type.slice(11, -1), metadataContext)) return;
                     token.metadata = prop;
-
                     if (metadataContext.key.propertyRefs.filter((it: any) => it.name === prop.name).length > 0) {
                         token.type = Lexer.TokenType.PrimitiveKeyProperty;
                     }
-
                     break;
                 }
             }
-
             if (!token.metadata) return;
         }
-
         return token;
     }
     export function complexProperty(value: Utils.SourceArray, index: number, metadataContext?: any): Lexer.Token | undefined {
         const token = NameOrIdentifier.odataIdentifier(value, index, Lexer.TokenType.ComplexProperty);
         if (!token) return;
-
         if (typeof metadataContext === "object") {
             for (let i = 0; i < metadataContext.properties.length; i++) {
                 const prop = metadataContext.properties[i];
@@ -431,24 +393,19 @@ namespace NameOrIdentifier {
                     const root = NameOrIdentifier.getMetadataRoot(metadataContext);
                     const schema = root.schemas.filter((it: any) => prop.type.indexOf(it.namespace + ".") === 0)[0];
                     if (!schema) return;
-
                     const complexType = schema.complexTypes.filter((it: any) => it.name === prop.type.split(".").pop())[0];
                     if (!complexType) return;
-
                     token.metadata = complexType;
                     break;
                 }
             }
-
             if (!token.metadata) return;
         }
-
         return token;
     }
     export function complexColProperty(value: Utils.SourceArray, index: number, metadataContext?: any): Lexer.Token | undefined {
         const token = NameOrIdentifier.odataIdentifier(value, index, Lexer.TokenType.ComplexCollectionProperty);
         if (!token) return;
-
         if (typeof metadataContext === "object") {
             for (let i = 0; i < metadataContext.properties.length; i++) {
                 const prop = metadataContext.properties[i];
@@ -457,24 +414,19 @@ namespace NameOrIdentifier {
                     const root = NameOrIdentifier.getMetadataRoot(metadataContext);
                     const schema = root.schemas.filter((it: any) => prop.type.slice(11, -1).indexOf(it.namespace + ".") === 0)[0];
                     if (!schema) return;
-
                     const complexType = schema.complexTypes.filter((it: any) => it.name === prop.type.slice(11, -1).split(".").pop())[0];
                     if (!complexType) return;
-
                     token.metadata = complexType;
                     break;
                 }
             }
-
             if (!token.metadata) return;
         }
-
         return token;
     }
     export function streamProperty(value: Utils.SourceArray, index: number, metadataContext?: any): Lexer.Token | undefined {
         const token = NameOrIdentifier.odataIdentifier(value, index, Lexer.TokenType.StreamProperty);
         if (!token) return;
-
         if (typeof metadataContext === "object") {
             for (let i = 0; i < metadataContext.properties.length; i++) {
                 const prop = metadataContext.properties[i];
@@ -484,13 +436,10 @@ namespace NameOrIdentifier {
                     break;
                 }
             }
-
             if (!token.metadata) return;
         }
-
         return token;
     }
-
     export function navigationProperty(value: Utils.SourceArray, index: number, metadataContext?: any): Lexer.Token | undefined {
         return (
             NameOrIdentifier.entityNavigationProperty(value, index, metadataContext) ||
@@ -500,7 +449,6 @@ namespace NameOrIdentifier {
     export function entityNavigationProperty(value: Utils.SourceArray, index: number, metadataContext?: any): Lexer.Token | undefined {
         const token = NameOrIdentifier.odataIdentifier(value, index, Lexer.TokenType.EntityNavigationProperty);
         if (!token) return;
-
         if (typeof metadataContext === "object") {
             for (let i = 0; i < metadataContext.navigationProperties.length; i++) {
                 const prop = metadataContext.navigationProperties[i];
@@ -512,22 +460,18 @@ namespace NameOrIdentifier {
                     const root = NameOrIdentifier.getMetadataRoot(metadataContext);
                     const schema = root.schemas.filter((it: any) => prop.type.indexOf(it.namespace + ".") === 0)[0];
                     if (!schema) return;
-
                     const entityType = schema.entityTypes.filter((it: any) => it.name === prop.type.split(".").pop())[0];
                     if (!entityType) return;
-
                     token.metadata = entityType;
                 }
             }
             if (!token.metadata) return;
         }
-
         return token;
     }
     export function entityColNavigationProperty(value: Utils.SourceArray, index: number, metadataContext?: any): Lexer.Token | undefined {
         const token = NameOrIdentifier.odataIdentifier(value, index, Lexer.TokenType.EntityCollectionNavigationProperty);
         if (!token) return;
-
         if (typeof metadataContext === "object") {
             for (let i = 0; i < metadataContext.navigationProperties.length; i++) {
                 const prop = metadataContext.navigationProperties[i];
@@ -539,42 +483,33 @@ namespace NameOrIdentifier {
                     const root = NameOrIdentifier.getMetadataRoot(metadataContext);
                     const schema = root.schemas.filter((it: any) => prop.type.slice(11, -1).indexOf(it.namespace + ".") === 0)[0];
                     if (!schema) return;
-
                     const entityType = schema.entityTypes.filter((it: any) => it.name === prop.type.slice(11, -1).split(".").pop())[0];
                     if (!entityType) return;
-
                     token.metadata = entityType;
                 }
             }
             if (!token.metadata) return;
         }
-
         return token;
     }
-
     export function action(value: Utils.SourceArray, index: number, isCollection?: boolean, metadataContext?: any): Lexer.Token | undefined {
         const token = NameOrIdentifier.odataIdentifier(value, index, Lexer.TokenType.Action);
         if (!token) return;
-
         if (isCollection && typeof metadataContext === "object") {
             const type = NameOrIdentifier.getEOperation("action", metadataContext, token, isCollection, false, false, "entityTypes");
             if (!type) return;
         }
-
         return token;
     }
     export function actionImport(value: Utils.SourceArray, index: number, metadataContext?: any): Lexer.Token | undefined {
         const token = NameOrIdentifier.odataIdentifier(value, index, Lexer.TokenType.ActionImport);
         if (!token) return;
-
         if (typeof metadataContext === "object") {
             const type = NameOrIdentifier.getOperationImportType("action", metadataContext, token);
             if (!type) return;
         }
-
         return token;
     }
-
     export function odataFunction(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
         return (
             NameOrIdentifier.entityFunction(value, index) ||
@@ -585,7 +520,6 @@ namespace NameOrIdentifier {
             NameOrIdentifier.primitiveColFunction(value, index)
         );
     }
-
     export function getEOperation(
         operation: string,
         metadataContext: any,
@@ -597,7 +531,6 @@ namespace NameOrIdentifier {
     ) {
         let bindingParameterType = metadataContext.parent.namespace + "." + metadataContext.name;
         if (isBoundCollection) bindingParameterType = "Collection(" + bindingParameterType + ")";
-
         let fnDef;
         const root = NameOrIdentifier.getMetadataRoot(metadataContext);
         for (let i = 0; i < root.schemas.length; i++) {
@@ -618,15 +551,12 @@ namespace NameOrIdentifier {
             if (fnDef) break;
         }
         if (!fnDef) return;
-
         if (operation === "action") return fnDef;
-
         if (fnDef.returnType.type.indexOf("Collection") === isCollection ? -1 : 0) return;
         const elementType = isCollection ? fnDef.returnType.type.slice(11, -1) : fnDef.returnType.type;
         if (NameOrIdentifier.isPrimitiveTypeName(elementType, metadataContext) && !isPrimitive) return;
         if (!NameOrIdentifier.isPrimitiveTypeName(elementType, metadataContext) && isPrimitive) return;
         if (isPrimitive) return elementType;
-
         let type;
         if (types)
             for (let i = 0; i < root.schemas.length; i++) {
@@ -642,82 +572,68 @@ namespace NameOrIdentifier {
                 }
                 if (type) break;
             }
-
         return type;
     }
     export function entityFunction(value: Utils.SourceArray, index: number, isCollection?: boolean, metadataContext?: any): Lexer.Token | undefined {
         const token = NameOrIdentifier.odataIdentifier(value, index, Lexer.TokenType.EntityFunction);
         if (!token) return;
-
         if (isCollection && typeof metadataContext === "object") {
             const type = NameOrIdentifier.getEOperation("function", metadataContext, token, isCollection, false, false, "entityTypes");
             if (!type) return;
             token.metadata = type;
         }
-
         return token;
     }
     export function entityColFunction(value: Utils.SourceArray, index: number, isCollection?: boolean, metadataContext?: any): Lexer.Token | undefined {
         const token = NameOrIdentifier.odataIdentifier(value, index, Lexer.TokenType.EntityCollectionFunction);
         if (!token) return;
-
         if (isCollection && typeof metadataContext === "object") {
             const type = NameOrIdentifier.getEOperation("function", metadataContext, token, isCollection, true, false, "entityTypes");
             if (!type) return;
             token.metadata = type;
         }
-
         return token;
     }
     export function complexFunction(value: Utils.SourceArray, index: number, isCollection?: boolean, metadataContext?: any): Lexer.Token | undefined {
         const token = NameOrIdentifier.odataIdentifier(value, index, Lexer.TokenType.ComplexFunction);
         if (!token) return;
-
         if (isCollection && typeof metadataContext === "object") {
             const type = NameOrIdentifier.getEOperation("function", metadataContext, token, isCollection, false, false, "complexTypes");
             if (!type) return;
             token.metadata = type;
         }
-
         return token;
     }
     export function complexColFunction(value: Utils.SourceArray, index: number, isCollection?: boolean, metadataContext?: any): Lexer.Token | undefined {
         const token = NameOrIdentifier.odataIdentifier(value, index, Lexer.TokenType.ComplexCollectionFunction);
         if (!token) return;
-
         if (isCollection && typeof metadataContext === "object") {
             const type = NameOrIdentifier.getEOperation("function", metadataContext, token, isCollection, true, false, "complexTypes");
             if (!type) return;
             token.metadata = type;
         }
-
         return token;
     }
     export function primitiveFunction(value: Utils.SourceArray, index: number, isCollection?: boolean, metadataContext?: any): Lexer.Token | undefined {
         const token = NameOrIdentifier.odataIdentifier(value, index, Lexer.TokenType.PrimitiveFunction);
         if (!token) return;
-
         if (isCollection && typeof metadataContext === "object") {
             const type = NameOrIdentifier.getEOperation("function", metadataContext, token, isCollection, false, true);
             if (!type) return;
             token.metadata = type;
         }
-
         return token;
     }
     export function primitiveColFunction(value: Utils.SourceArray, index: number, isCollection?: boolean, metadataContext?: any): Lexer.Token | undefined {
         const token = NameOrIdentifier.odataIdentifier(value, index, Lexer.TokenType.PrimitiveCollectionFunction);
         if (!token) return;
-
         if (isCollection && typeof metadataContext === "object") {
             const type = NameOrIdentifier.getEOperation("function", metadataContext, token, isCollection, true, true);
             if (!type) return;
             token.metadata = type;
         }
-
         return token;
     }
-
     export function getOperationImportType(
         operation: string,
         metadataContext: any,
@@ -727,7 +643,6 @@ namespace NameOrIdentifier {
         types?: string
     ) {
         let fnImport;
-
         for (let i = 0; i < metadataContext.dataServices.schemas.length; i++) {
             const schema = metadataContext.dataServices.schemas[i];
             for (let j = 0; j < schema.entityContainer.length; j++) {
@@ -744,7 +659,6 @@ namespace NameOrIdentifier {
             if (fnImport) break;
         }
         if (!fnImport) return;
-
         let fn;
         for (let i = 0; i < metadataContext.dataServices.schemas.length; i++) {
             const schema = metadataContext.dataServices.schemas[i];
@@ -760,14 +674,12 @@ namespace NameOrIdentifier {
             if (fn) break;
         }
         if (!fn) return;
-
         if (operation === "action") return fn;
         if (fn.returnType.type.indexOf("Collection") === isCollection ? -1 : 0) return;
         const elementType = isCollection ? fn.returnType.type.slice(11, -1) : fn.returnType.type;
         if (NameOrIdentifier.isPrimitiveTypeName(elementType, metadataContext) && !isPrimitive) return;
         if (!NameOrIdentifier.isPrimitiveTypeName(elementType, metadataContext) && isPrimitive) return;
         if (isPrimitive) return elementType;
-
         let type;
         if (types)
             for (let i = 0; i < metadataContext.dataServices.schemas.length; i++) {
@@ -783,81 +695,67 @@ namespace NameOrIdentifier {
                 }
                 if (type) break;
             }
-
         return type;
     }
     export function entityFunctionImport(value: Utils.SourceArray, index: number, metadataContext?: any): Lexer.Token | undefined {
         const token = NameOrIdentifier.odataIdentifier(value, index, Lexer.TokenType.EntityFunctionImport);
         if (!token) return;
-
         if (typeof metadataContext === "object") {
             const type = NameOrIdentifier.getOperationImportType("function", metadataContext, token, false, false, "entityTypes");
             if (!type) return;
             token.metadata = type;
         }
-
         return token;
     }
     export function entityColFunctionImport(value: Utils.SourceArray, index: number, metadataContext?: any): Lexer.Token | undefined {
         const token = NameOrIdentifier.odataIdentifier(value, index, Lexer.TokenType.EntityCollectionFunctionImport);
         if (!token) return;
-
         if (typeof metadataContext === "object") {
             const type = NameOrIdentifier.getOperationImportType("function", metadataContext, token, true, false, "entityTypes");
             if (!type) return;
             token.metadata = type;
         }
-
         return token;
     }
     export function complexFunctionImport(value: Utils.SourceArray, index: number, metadataContext?: any): Lexer.Token | undefined {
         const token = NameOrIdentifier.odataIdentifier(value, index, Lexer.TokenType.ComplexFunctionImport);
         if (!token) return;
-
         if (typeof metadataContext === "object") {
             const type = NameOrIdentifier.getOperationImportType("function", metadataContext, token, false, false, "complexTypes");
             if (!type) return;
             token.metadata = type;
         }
-
         return token;
     }
     export function complexColFunctionImport(value: Utils.SourceArray, index: number, metadataContext?: any): Lexer.Token | undefined {
         const token = NameOrIdentifier.odataIdentifier(value, index, Lexer.TokenType.ComplexCollectionFunctionImport);
         if (!token) return;
-
         if (typeof metadataContext === "object") {
             const type = NameOrIdentifier.getOperationImportType("function", metadataContext, token, true, false, "complexTypes");
             if (!type) return;
             token.metadata = type;
         }
-
         return token;
     }
     export function primitiveFunctionImport(value: Utils.SourceArray, index: number, metadataContext?: any): Lexer.Token | undefined {
         const token = NameOrIdentifier.odataIdentifier(value, index, Lexer.TokenType.PrimitiveFunctionImport);
         if (!token) return;
-
         if (typeof metadataContext === "object") {
             const type = NameOrIdentifier.getOperationImportType("function", metadataContext, token, false, true);
             if (!type) return;
             token.metadata = type;
         }
-
         return token;
     }
     export function primitiveColFunctionImport(value: Utils.SourceArray, index: number, metadataContext?: any): Lexer.Token | undefined {
         const token = NameOrIdentifier.odataIdentifier(value, index, Lexer.TokenType.PrimitiveCollectionFunctionImport);
         if (!token) return;
-
         if (typeof metadataContext === "object") {
             const type = NameOrIdentifier.getOperationImportType("function", metadataContext, token, true, true);
             if (!type) return;
             token.metadata = type;
         }
-
         return token;
     }
 }
-
 export default NameOrIdentifier;

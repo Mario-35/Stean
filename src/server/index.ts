@@ -6,8 +6,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Index of The API -----------------------------------!\n");
-
 import path from "path";
 import Koa from "koa";
 import bodyParser from "koa-bodyparser";
@@ -25,7 +23,6 @@ import { RootPgVisitor } from "./odata/visitor";
 import { EChar, EConstant } from "./enums";
 import { protectedRoutes, routerHandle, unProtectedRoutes } from "./routes/";
 import { Iservice, IdecodedUrl, Ientities, Ilog, IuserToken, koaContext } from "./types";
-
 // Extend koa context 
 declare module "koa" {
   export interface DefaultContext {
@@ -39,23 +36,17 @@ declare module "koa" {
     body: any;
   }
 }
-
 // new koa server https://koajs.com/
 export const app = new Koa();
 app.use(favicon(__dirname + '/favicon.ico'));
-
 // add public folder [static]
 app.use(serve(path.join(__dirname, "/apidoc")));
-
 // helmet protection https://github.com/venables/koa-helmet
 app.use(helmet.contentSecurityPolicy({ directives: EConstant.helmetConfig }));
-
 // bodybarser https://github.com/koajs/bodyparser
 app.use(bodyParser({ enableTypes: ["json", "text", "form"] }));;
-
 // router
 app.use(routerHandle);
-
 // logger https://github.com/koajs/logger
 if (!isTest())
   app.use(logger((str) => {
@@ -64,27 +55,21 @@ if (!isTest())
     process.stdout.write(str + "\n");
     if (config.logFile) config.logFile.write(logToHtml(str));
   }));
-
 // add json capabilities to KOA server
 app.use(json());
 // add cors capabilities to KOA server
 app.use(cors());
-
 // free routes
 app.use(unProtectedRoutes.routes());
-
 // app key
 app.use((ctx: koaContext, next) => {
   ctx.body = ctx.request.body;
   return next();
 });
-
 // authenticated routes
 app.use(protectedRoutes.routes());
-
 // Initialisation of models
 models.init();
-
 // Start server initialisaion
 export const server = isTest()
   // Tdd init

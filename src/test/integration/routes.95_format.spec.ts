@@ -8,30 +8,23 @@
  *
  */
 process.env.NODE_ENV = "test";
-
 import chai from "chai";
 import chaiHttp from "chai-http";
 import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, limitResult, testVersion } from "./constant";
 import { server } from "../../server/index";
 import { addStartNewTest, addTest, writeLog } from "./tests";
-
 chai.use(chaiHttp);
-
 const should = chai.should();
-
 const docs: IApiDoc[] = [];
-
 const addToApiDoc = (input: IApiInput) => {
     docs.push(prepareToApiDoc(input, "Format"));
 };
-
 addToApiDoc({
     api: `{infos} /Format Extension`,
     apiName: "FormatInfos",
     apiDescription: `Format result json as default, dataArray, csv, txt,  graph or graphDatas, note that $value return result as text.`,
     result: ""
 });
-
 describe("Output formats", () => {
     before((done) => {
         addStartNewTest("Output formats");
@@ -60,7 +53,6 @@ describe("Output formats", () => {
                 });
         });
     });
-
     describe("{get} resultFormat dataArray", () => {
         it("Return Things in dataArray format.", (done) => {
             const infos = addTest({
@@ -110,7 +102,6 @@ describe("Output formats", () => {
                     done();
                 });
         });
-
         it("Return Observations expand Datastream name in dataArray format.", (done) => {
             chai.request(server)
                 .get(`/test/${testVersion}/Observations?$expand=Datastream($select=name)&$select=phenomenonTime,result&$resultFormat=dataArray`)
@@ -123,7 +114,6 @@ describe("Output formats", () => {
                     done();
                 });
         });
-
         it("Return Observations expand Datastream id in dataArray format.", (done) => {
             chai.request(server)
                 .get(`/test/${testVersion}/Observations?$expand=Datastream($select=id)&$select=phenomenonTime,result&$resultFormat=dataArray`)
@@ -137,7 +127,6 @@ describe("Output formats", () => {
                     done();
                 });
         });
-
         it("Return Observations expand Datastream id and name in dataArray format.", (done) => {
             chai.request(server)
                 .get(`/test/${testVersion}/Observations?$expand=Datastream($select=id,name)&$select=phenomenonTime,result&$resultFormat=dataArray`)
@@ -153,7 +142,6 @@ describe("Output formats", () => {
                 });
         });
     });
-
     describe("{get} resultFormat graph", () => {
         it("Return result in graph format.", (done) => {
             const infos = addTest({
@@ -198,7 +186,6 @@ describe("Output formats", () => {
                 });
         });
     });
-
     describe("{get} resultFormat GeoJSON", () => {
         it("Return result in GeoJSON format.", (done) => {
             const infos = addTest({
@@ -221,7 +208,6 @@ describe("Output formats", () => {
                 });
         });
     });
-
     describe("Save apiDocFormat.", () => {
         it("Do not test only for save apiDoc", (done) => {
             generateApiDoc(docs, "apiDocFormat.js");

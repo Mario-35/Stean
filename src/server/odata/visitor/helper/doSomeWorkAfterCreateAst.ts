@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- doSomeWorkAfterCreateAst -----------------------------------!\n");
-
 import { RootPgVisitor } from "..";
 import { config } from "../../../configuration";
 import { multiDatastreamKeys, resultKeys, multiDatastreamUoM } from "../../../db/queries";
@@ -15,7 +13,6 @@ import { returnFormats, isObservation } from "../../../helpers";
 import { isFile } from "../../../helpers/tests";
 import { log } from "../../../log";
 import { koaContext } from "../../../types";
-
 export const doSomeWorkAfterCreateAst = async (input: RootPgVisitor, ctx: koaContext) => {
   console.log(log.whereIam());
   if (isObservation(input) ) {
@@ -47,5 +44,4 @@ export const doSomeWorkAfterCreateAst = async (input: RootPgVisitor, ctx: koaCon
         });
       }   
   }
-
 };

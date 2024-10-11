@@ -28,26 +28,21 @@ export function writeLog(ok: boolean) {
     if (ok === true) _LOG[_INDEX] = _LOG[_INDEX].replace('❌', '✔️');
     fs.writeFile(path.resolve(__dirname, "../tests.md"), _LOG.join('\r'), function (err: any) { });
 }
-
 export function closeLog() {
     _HTML.push(`</body> </html><tbody></tbody></table>`);
     fs.writeFile(path.resolve(__dirname, "../../server/apidoc/assets/tests.html"), _HTML.join('\r'), function () {});
 }
-
 const _SEP = '```';
 export const AddToTestFile = (datas: string): void => {
     _LOG.push(datas);
 };
-
 export function addStartNewTest(title: string) {
     _LOG.push(`\r\r## <a id="${title.replace(/[ ]+/g, "")}">${title}</a>           [🚧](#start)\r\r`);
 };
-
 export function addSimpleTest(messsage: string) {
     _INDEX = _LOG.length - 1;
     _LOG.push(`   ${nbAdd()}. ${messsage} ✔️`);
 };
-
 export function addTest(infos: Iinfos): Iinfos {    
     const verb = infos.api.split("}")[0].split("{")[1] || "get";
     _LOG.push(`   ${nbAdd()}. ${infos.api}\r [${verb ? verb.toUpperCase() : "GET"} ${infos.apiExample.http}](${proxy(true)}${encodeURI(infos.apiExample.http)}) ❌`);
@@ -59,13 +54,10 @@ export function addTest(infos: Iinfos): Iinfos {
     writeLog(false);
     return infos;
 };
-
 export function addPostFile(infos: Iinfos) {
     _LOG.push(`  ${nbAdd()}. ${infos.api}\r [POST ${infos.apiExample.url}](${proxy(true)}${encodeURI(infos.apiExample.url)}) ✔️\r\n`);
 };
-
 export const postDatas = (input: any): string =>  `${_SEP}js\r\n${util.inspect(input, { breakLength: Infinity, showHidden: true, depth: Infinity })} \r\n${_SEP}\r\n`;
-
 export const addToTests = (options: {
     title:  string;
     verb:  string;

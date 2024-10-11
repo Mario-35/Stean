@@ -1,20 +1,16 @@
 process.env.NODE_ENV = "test";
 import chai from "chai";
 import chaiHttp from "chai-http";
-
 chai.use(chaiHttp);
 const cases = require('./files/primitive-cases.json');
-
 const expect = require('chai').expect;
 import PrimitiveLiteral from '../../server/odata/parser/primitiveLiteral';
 import { addSimpleTest, addStartNewTest, writeLog } from "./tests";
-
 describe("Primitive literals", () => {
   before((done) => {
       addStartNewTest("literals");
     done();
   });
-
 
 cases.forEach((item: any, index: number, array: any) => {
   const title = 'Should parse ' + item['-Name'] + ': ' + item.input;
@@ -38,9 +34,6 @@ cases.forEach((item: any, index: number, array: any) => {
 
 
 
-
-
-
   //   Object.keys(tests).forEach((test: string) => {
   //       it(test, (done) => {
   //           addTest({ api: `result => ${+tests[test]} : `, apiName: "", apiDescription: "", apiReference: "", apiExample: { http: test, } });
@@ -54,13 +47,8 @@ cases.forEach((item: any, index: number, array: any) => {
   //                   done();
   //               });
   //       });
-
   //   });
   // });
-
-
-
-
 
 
 

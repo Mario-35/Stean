@@ -5,11 +5,8 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- crypto -----------------------------------!\n");
-
 import crypto from "crypto";
 import { EConstant } from "../enums";
-
 /**
  * 
  * @param input string 
@@ -21,7 +18,6 @@ export const encrypt = (input: string): string => {
   const encrypted = Buffer.concat([cipher.update(input), cipher.final()]);
   return `${iv.toString("hex")}.${encrypted.toString("hex")}`;
 };
-
 /**
  * 
  * @param input string 

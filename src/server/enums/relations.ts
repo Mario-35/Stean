@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- relations Enum -----------------------------------!\n");
-
 export enum ERelations {
     nop, // for not use index 0
     defaultUnique, // par défaut Unique

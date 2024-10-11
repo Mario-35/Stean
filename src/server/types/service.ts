@@ -5,13 +5,10 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- service interface -----------------------------------!\n");
-
 import postgres from "postgres";
 import { typeExtensions, typeOptions } from ".";
 import { EVersion } from "../enums";
 import { IdbConnection } from "./dbConnection";
-
 export interface Iservice {
     name:           string; // name of the config file
     key?:           string; // key for crypto

@@ -7,7 +7,6 @@
  *
  */
 process.env.NODE_ENV = "test";
-
 import chai from "chai";
 import chaiHttp from "chai-http";
 import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, defaultPost, defaultPatch, defaultDelete, defaultGet, getNB, listOfColumns, limitResult, infos, apiInfos, showHide, nbColor, nbColorTitle, testVersion, _RAWDB } from "./constant";
@@ -17,19 +16,14 @@ import { testsKeys as datastreams_testsKeys } from "./routes.17_datastreams.spec
 import { executeQuery, last } from "./executeQuery";
 import { addStartNewTest, addTest, writeLog} from "./tests";
 export const testsKeys = ["@iot.id", "@iot.selfLink", "Datastreams@iot.navigationLink", "MultiDatastreams@iot.navigationLink", "name", "description"];
-
 chai.use(chaiHttp);
-
 const should = chai.should();
-
 const docs: IApiDoc[] = [];
 const entity: Ientity = _RAWDB.Sensors;
-
 
 const addToApiDoc = (input: IApiInput) => {
 	docs.push(prepareToApiDoc(input, entity.name));
 };
-
 addToApiDoc({
 	api: `{infos} ${entity.name} infos`,
 	apiName: `Infos${entity.name}`,
@@ -37,14 +31,12 @@ addToApiDoc({
 	apiReference: infos[entity.name].reference,
 	result: ""
 });
-
 const _PARAMS: string[] = [
 	"{String} [name] name of the Thing.",
 	"{String} description description of the Thing.",
 	"{ValueCode} encodingType encodingType ValueCode.",
 	"{metadata} metadata depending on the value of the encodingType"
 ];
-
 describe("endpoint : Sensors", () => {
 	const temp = listOfColumns(entity);
 	const success = temp.success;
@@ -61,7 +53,6 @@ describe("endpoint : Sensors", () => {
 			done();
 		});
 	});
-
 	describe(`{get} ${entity.name} ${nbColorTitle}[9.2]`, () => {
 		afterEach(() => { writeLog(true); });
 		
@@ -97,7 +88,6 @@ describe("endpoint : Sensors", () => {
 					done();
 				});
 		});
-
 		it(`Return Sensor id: 1 ${nbColor}[9.2.3]`, (done) => {
 			const infos = addTest({
 				api :`{get} ${entity.name}(:id) Get one`,
@@ -129,7 +119,6 @@ describe("endpoint : Sensors", () => {
 					done();
 				});
 		});
-
 		it(`Return error if ${entity.name} not exist ${nbColor}[9.2.4]`, (done) => {
 			const infos = addTest({
 				api : `{get} return error if ${entity.name} not exist`,
@@ -151,7 +140,6 @@ describe("endpoint : Sensors", () => {
 					done();
 				});
 		});
-
 		it(`Return error ${entity.singular} not found`, (done) => {
 			const infos = addTest({
 				api : `{get} return error ${entity.singular} not found`,
@@ -171,7 +159,6 @@ describe("endpoint : Sensors", () => {
 					done();
 				});
 		});
-
 		it(`Return Sensor using $expand query option ${nbColor}[9.3.2.1]`, (done) => {
             const name = "Datastreams";
 			const infos = addTest({
@@ -203,7 +190,6 @@ describe("endpoint : Sensors", () => {
 					done();
 				});
 		});
-
 		it("Return Sensor with select=description", (done) => {
 			const infos = addTest({
 				api : `{get} ${entity.name}(:id) Get Select`,				
@@ -232,7 +218,6 @@ describe("endpoint : Sensors", () => {
 					done();
 				});
 		});
-
 		it(`Return Sensor Subentity Datastreams ${nbColor}[9.2.6]`, (done) => {
 			const name = "Datastreams";
 			const infos = addTest({
@@ -260,7 +245,6 @@ describe("endpoint : Sensors", () => {
 					done();
 				});
 		});
-
 		it(`Return Sensor Subentity MultiDatastreams ${nbColor}[9.2.6]`, (done) => {
 			const name = "MultiDatastreams";
 			const infos = addTest({
@@ -288,7 +272,6 @@ describe("endpoint : Sensors", () => {
 					done();
 				});
 		});
-
 		it(`Return Sensor Expand Datastreams ${nbColor}[9.3.2.1]`, (done) => {
 			const name = "Datastreams";
 			const infos = addTest({
@@ -316,7 +299,6 @@ describe("endpoint : Sensors", () => {
 					done();
 				});
 		});
-
 		it(`Return Sensor Expand MultiDatastreams ${nbColor}[9.3.2.1]`, (done) => {
 			const name = "MultiDatastreams";
 			const infos = addTest({
@@ -345,7 +327,6 @@ describe("endpoint : Sensors", () => {
 				});
 		});
 	});
-
 	describe(`{post} ${entity.name} ${nbColorTitle}[10.2]`, () => {
 		afterEach(() => { writeLog(true); });
 		
@@ -386,7 +367,6 @@ describe("endpoint : Sensors", () => {
 					done();
 				});
 		});
-
 		it(`Return Error if the payload is malformed ${nbColor}[10.2.2]`, (done) => {
 			const infos = addTest({
 				api: `{post} ${entity.name} return Error if the payload is malformed`,
@@ -410,10 +390,8 @@ describe("endpoint : Sensors", () => {
 				});
 		});
 	});
-
 	describe(`{patch} ${entity.name} ${nbColorTitle}[10.3]`, () => {
 		afterEach(() => { writeLog(true); });
-
 		it(`Return updated ${entity.name} ${nbColor}[10.3.1]`, (done) => {
 			executeQuery(last(entity.table, true)).then((result: Record<string, any>) => {
 				const datas = {
@@ -455,7 +433,6 @@ describe("endpoint : Sensors", () => {
 					});
 			});
 		});
-
 		it(`Return Error if the ${entity.name} not exist`, (done) => {
 			const datas = {
                 description: "This is a new PM 2.5 sensor"
@@ -482,10 +459,8 @@ describe("endpoint : Sensors", () => {
 				});
 		});
 	});
-
 	describe(`{delete} ${entity.name} ${nbColorTitle}[10.4]`, () => {
 		afterEach(() => { writeLog(true); });
-
 		it(`Delete ${entity.name} return no content with code 204 ${nbColor}[10.4.1]`, (done) => {
 			executeQuery(`SELECT (SELECT count(id) FROM "${entity.table}")::int as count, (${last(entity.table)})::int as id `).then((beforeDelete: Record<string, any>)  => {
 				const infos = addTest({
@@ -518,7 +493,6 @@ describe("endpoint : Sensors", () => {
 					});
 			});
 		});
-
 		it(`Return Error if the ${entity.name} not exist`, (done) => {
 			const infos = addTest({
 				api: `{delete} return Error if the ${entity.name} not exist`,

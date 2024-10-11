@@ -5,12 +5,9 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- exportToJson -----------------------------------!\n");
-
 import { config } from "../../configuration";
 import { doubleQuotesString, asyncForEach, getUrlKey, hidePassword, removeEmpty } from "../../helpers";
 import { koaContext } from "../../types";
-
 export const exportToJson = async (ctx: koaContext) => {
   // get config with hidden password
   const result: Record<string, any> = { "create": hidePassword(config.getService(ctx.config.name))};

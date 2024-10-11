@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- multiDatastreamFromDeveui -----------------------------------!\n");
-
 export const multiDatastreamFromDeveui = ( input: string ): string => 
 `(SELECT 
       jsonb_agg(tmp.units -> 'name') AS keys 

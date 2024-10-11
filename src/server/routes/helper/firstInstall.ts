@@ -6,21 +6,17 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- firstInstall -----------------------------------!\n");
-
 import postgres from "postgres";
 import { config } from "../../configuration";
 import { returnFormats, unique } from "../../helpers";
 import { koaContext, IdecodedUrl, IKeyString } from "../../types";
 import { Admin, First, Service } from "../../views";
 import { EHttpCode } from "../../enums";
-
 export async function firstInstall(ctx: koaContext): Promise<IdecodedUrl | undefined>  { 
   
   // If Configuration file Not exist first Install
   const why: IKeyString = {};
   const src = JSON.parse(JSON.stringify(ctx.request.body, null, 2));
-
   function verifyItems(src: any, search: string[]): boolean {
     let error = false;
     function verifyItem(search: string) {
@@ -33,7 +29,6 @@ export async function firstInstall(ctx: koaContext): Promise<IdecodedUrl | undef
     });
     return error;
   }
-
   function returnBody(connection: boolean) {
     const bodyFirst = 
       connection === true
@@ -45,7 +40,6 @@ export async function firstInstall(ctx: koaContext): Promise<IdecodedUrl | undef
     ctx.body = bodyFirst.toString();
     return undefined;
   }  
-
   if (src["_src"]) {        
     if (src["_host"]) why["_host"] = src["_host"];
     if (src["_username"]) why["_username"] = src["_username"];
@@ -183,4 +177,3 @@ export async function firstInstall(ctx: koaContext): Promise<IdecodedUrl | undef
   returnBody(false);
   return;
 }
-

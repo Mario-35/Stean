@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Protected Routes for API -----------------------------------!\n");
-
 import Router from "koa-router";
 import { apiAccess, userAccess } from "../db/dataAccess";
 import { isAllowedTo, returnFormats, upload } from "../helpers";
@@ -23,9 +21,7 @@ import { checkPassword, emailIsValid } from "./helper";
 import { Login, Query } from "../views";
 import { createQueryParams } from "../views/helpers";
 import { log } from "../log";
-
 export const protectedRoutes = new Router<DefaultState, Context>();
-
 protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {  
   switch (ctx.decodedUrl.path.toUpperCase()) {
     // login html page or connection login
@@ -78,7 +74,6 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
             why["password"] = msg(errors.invalid, "password");
         }
       }
-
       if (Object.keys(why).length === 0) {
         try {
           await userAccess.post(ctx.config.name, ctx.body);
@@ -96,7 +91,6 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
       }
       return;
   }
-
   if(!ctx.decodedUrl.version && ctx.decodedUrl.path === "/" &&ctx.decodedUrl.service.toUpperCase() ==="CREATE") {
     // intercept create
     return;
@@ -170,7 +164,6 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
     }
   } else ctx.throw(EHttpCode.Unauthorized);
 });
-
 protectedRoutes.patch("/(.*)", async (ctx) => {
   if (
     isAllowedTo(ctx, EUserRights.Post) === true &&
@@ -199,7 +192,6 @@ protectedRoutes.patch("/(.*)", async (ctx) => {
     ctx.throw(EHttpCode.Unauthorized);
   }
 });
-
 protectedRoutes.delete("/(.*)", async (ctx) => {
   if (isAllowedTo(ctx, EUserRights.Delete) === true) {
     const odataVisitor = await createOdata(ctx);

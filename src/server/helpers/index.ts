@@ -5,10 +5,7 @@
  * @author mario.adam@inrae.fr
  *
 */
-// onsole.log("!----------------------------------- Main Helpers -----------------------------------!\n");
-
 import { koaContext } from "../types";
-
 const removeFirstAndEnd = (input: string, char: string) => input[0] === char && input[input.length - 1] === char[0] ? input.slice(0, -1).slice(1).trim() : input;
 export const getUserId = (ctx: koaContext): number => ctx.state.user && ctx.state.user.id ? ctx.state.user.id : -1;
 export const unikeList = (input: string[]) => [...new Set(input)];
@@ -31,7 +28,6 @@ export { removeEmpty } from "./removeEmpty";
 export { upload } from "./upload";
 export { logToHtml } from "./logToHtml";
 export { Csv } from "./csv";
-
 export const removeAllQuotes = (input: string): string => input.replace(/['"]+/g, "");
 export const escapeSimpleQuotes = (input: string) => input.replace(/[']+/g, "''");
 export const escapeDoubleQuotes = (input: string) => input.replace(/["]+/g, '\\"');
@@ -45,4 +41,3 @@ export const doubleQuotesString = (input: string): string => `"${escapeDoubleQuo
 export const simpleQuotesString = (input: string): string => `'${escapeSimpleQuotes(trimSimpleQuotes(input))}'`;
 export const formatPgTableColumn = (table: string, column?: string) => `\"${table}\"${column ? `.\"${column}\"`:''}`;
 export const formatPgSelectTableColumn = (table: string, column?: string) => `SELECT ${column === "*" ? '*' : formatPgTableColumn(table, column)} FROM \"${table}\"`;
-

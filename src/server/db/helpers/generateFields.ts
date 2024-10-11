@@ -5,11 +5,8 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- addToService -----------------------------------!\n");
-
 import { isGraph } from "../../helpers";
 import { PgVisitor } from "../../odata/visitor";
-
 export const generateFields = (input: PgVisitor): string[] => {
     let fields: string[] = [];
     if (isGraph(input)) {

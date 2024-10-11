@@ -5,9 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- TDD for things API -----------------------------------!\n");
 process.env.NODE_ENV = "test";
-
 import chai from "chai";
 import chaiHttp from "chai-http";
 import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, defaultGet, defaultPost, defaultPatch, defaultDelete, listOfColumns, limitResult, infos, apiInfos, showHide, nbColorTitle, nbColor, testVersion, _RAWDB } from "./constant";
@@ -18,19 +16,14 @@ import { count, executeQuery, last } from "./executeQuery";
 import { addStartNewTest, addTest, writeLog } from "./tests";
 import geo from './files/geo.json';
 
-
 const testsKeys = ["@iot.id", "@iot.selfLink", "Observations@iot.navigationLink", "name", "description", "encodingType", "feature"];
 chai.use(chaiHttp);
-
 const should = chai.should();
-
 const docs: IApiDoc[] = [];
 const entity: Ientity = _RAWDB.FeaturesOfInterest;
-
 const addToApiDoc = (input: IApiInput) => {
     docs.push(prepareToApiDoc(input, entity.name));
 };
-
 addToApiDoc({
     api: `{infos} ${entity.name} infos`,
     apiName: `Infos${entity.name}`,    
@@ -38,13 +31,11 @@ addToApiDoc({
     apiReference: infos[entity.name].reference,
     result: ""
 });
-
     describe("endpoint : Features of Interest", () => {
     const temp = listOfColumns(entity);
     const success = temp.success;
     const params = temp.params;
     let token = "";
-
     before((done) => {
         chai.request(server)
             .post(`/test/${testVersion}/login`)
@@ -54,7 +45,6 @@ addToApiDoc({
                 done();
             });
     });
-
 	describe(`{get} ${entity.name} ${nbColorTitle}[9.2]`, () => {
 		afterEach(() => { writeLog(true); });
 		it(`Return all ${entity.name} ${nbColor}[9.2.2]`, (done) => {
@@ -76,7 +66,6 @@ addToApiDoc({
                         .get(`/test/${testVersion}/${entity.name}`)
                         .end((err, res) => {
 					addStartNewTest(entity.name);
-
                             should.not.exist(err);
                             res.status.should.equal(200);
                             res.type.should.equal("application/json");
@@ -89,7 +78,6 @@ addToApiDoc({
                         });
                 });
         });
-
         it(`Return Feature of interest ${nbColor}[9.2.3]`, (done) => {
             const infos = addTest({
                 api: `{get} ${entity.name}(:id) Get one`,
@@ -115,7 +103,6 @@ addToApiDoc({
                     done();
                 });
         });
-
 		it(`Return error if ${entity.name} not exist ${nbColor}[9.2.4]`, (done) => {
 			const infos = addTest({
 				api : `{get} return error if ${entity.name} not exist`,
@@ -137,7 +124,6 @@ addToApiDoc({
 					done();
 				});
 		});
-
         it(`Return error ${entity.singular} not found`, (done) => {
 			const infos = addTest({
 				api : `{get} return error ${entity.singular} not found`,
@@ -157,7 +143,6 @@ addToApiDoc({
 					done();
 				});
 		});
-
         it(`Return all features of interests using $expand query option ${nbColor}[9.3.2.1]`, (done) => {
             const infos = addTest({
                 api: `{get} ${entity.name}(:id) Get one and expand`,
@@ -182,7 +167,6 @@ addToApiDoc({
                     done();
                 });
         });
-
         it(`Return Datastreams Subentity Observations ${nbColor}[9.2.6]`, (done) => {
             const name = "Observations";
 			const infos = addTest({
@@ -209,7 +193,6 @@ addToApiDoc({
                     done();
                 });
         });
-
         it(`Return Datastreams Expand Observations ${nbColor}[9.3.2.1]`, (done) => {
             const name = "Observations";
             const infos = addTest({
@@ -237,7 +220,6 @@ addToApiDoc({
                 });
         });
     });
-
 	describe(`{post} ${entity.name} ${nbColorTitle}[10.2]`, () => {
 		afterEach(() => { writeLog(true); });
 		it(`Return added ${entity.name} ${nbColor}[10.2.1]`, (done) => {
@@ -277,7 +259,6 @@ addToApiDoc({
                     done();
                 });
         });
-
         it(`Return Error if the payload is malformed ${nbColor}[10.2.2]`, (done) => {
             const infos = addTest({
                 api : `{post} return Error if the payload is malformed`,
@@ -301,7 +282,6 @@ addToApiDoc({
                 });
         });
     });
-
 	describe(`{patch} ${entity.name} ${nbColorTitle}[10.3]`, () => {
 		afterEach(() => { writeLog(true); });
 		it(`Return updated ${entity.name} ${nbColor}[10.3.1]`, (done) => {
@@ -348,7 +328,6 @@ addToApiDoc({
                         });
                 });
         });
-
 		it(`Return Error if the ${entity.name} not exist`, (done) => {
 			const datas = {
                 "name": "My New Name",
@@ -379,7 +358,6 @@ addToApiDoc({
 				});
 		});
 	});
-
 	describe(`{delete} ${entity.name} ${nbColorTitle}[10.4]`, () => {
 		afterEach(() => { writeLog(true); });
 		it(`Delete ${entity.name} return no content with code 204 ${nbColor}[10.4.1]`, (done) => {
@@ -414,7 +392,6 @@ addToApiDoc({
 					});
 			});
 		});
-
 		it(`Return Error if the ${entity.name} not exist`, (done) => {
 			const infos = addTest({
 				api: `{delete} return Error if the ${entity.name} not exist`,

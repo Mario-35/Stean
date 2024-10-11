@@ -5,10 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- getModelVersion -----------------------------------!\n");
-
 import { EVersion } from "../../enums"
-
 export function  getModelVersion(name: string): EVersion {
     switch (name) {
       case "v1.1":

@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Users entity -----------------------------------!\n");
-
 import { keyobj, koaContext } from "../../types";
 import { Common } from "./common";
 import { IreturnResult } from "../../types";
@@ -17,7 +15,6 @@ import { EConstant, EHttpCode, EUserRights } from "../../enums";
 import { executeSqlValues } from "../helpers";
 import { models } from "../../models";
 import { log } from "../../log";
-
 export class Users extends Common {
   constructor(ctx: koaContext) {
     console.log(log.whereIam());

@@ -11,3 +11,6 @@
     Add File extension
 ## version 0.9.2
     perform csv 
+## version 0.9.3
+    remove result contraint
+    

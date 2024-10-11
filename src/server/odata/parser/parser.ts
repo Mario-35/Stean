@@ -5,15 +5,12 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- oData parser -----------------------------------!\n");
-
 import Lexer from "./lexer";
 import PrimitiveLiteral from "./primitiveLiteral";
 import Expressions from "./expressions";
 import Query from "./query";
 import ResourcePath from "./resourcePath";
 import ODataUri from "./odataUri";
-
 // Odata Main parser
 export const parserFactory = function(fn: any) {
     return function (source: any, options: any) {
@@ -29,7 +26,6 @@ export const parserFactory = function(fn: any) {
         return result;
     };
 };
-
 export function odataUri(source: string, options?: any): Lexer.Token {
     return parserFactory(ODataUri.odataUri)(source, options);
 }
@@ -48,5 +44,4 @@ export function keys(source: string, options?: any): Lexer.Token {
 export function literal(source: string, options?: any): Lexer.Token {
     return parserFactory(PrimitiveLiteral.primitiveLiteral)(source, options);
 }
-
 export * from './types';

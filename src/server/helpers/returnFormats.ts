@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- returnFormats -----------------------------------!\n");
-
 import { asDataArray, asGeoJSON, asJson, graphDatastream, graphMultiDatastream, interval, } from "../db/queries";
 import { IreturnFormat, koaContext } from "../types";
 import { addCssFile } from "../views/css";
@@ -15,12 +13,10 @@ import util from "util";
 import { EConstant, EOptions, EReturnFormats } from "../enums";
 import { isGraph } from ".";
 import { PgVisitor } from "../odata/visitor";
-
 // Default "blank" function
 const defaultFunction = (input: string | object) => input;
 // Default "blank" format function
 const defaultForwat = (input: PgVisitor): string => input.toString();
-
 const generateFields = (input: PgVisitor)=> {
   if (isGraph(input)) {
     const entity = input.parentEntity || input.entity;
@@ -31,13 +27,11 @@ const generateFields = (input: PgVisitor)=> {
     ] : undefined;
   }
 };
-
 /**
  * 
  * @param input PgVisitor
  * @returns sSQL Query for graph
  */
-
 const generateGrahSql = (input: PgVisitor) => {
   input.intervalColumns = ["id", "step as date", "result"];
   if (isGraph(input)) input.intervalColumns.push("concat");
@@ -56,7 +50,6 @@ const generateGrahSql = (input: PgVisitor) => {
     });
   }
 };
-
 // all returns format functions
 const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
   xlsx: {
@@ -65,7 +58,6 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
     format: defaultFunction,
     generateSql: defaultForwat,
   }, 
-
   // IMPORTANT TO HAVE THIS BEFORE GRAPHDATAS
   json: {
     name: "json",
@@ -92,7 +84,6 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
     format: defaultFunction,
     generateSql(input: PgVisitor) { return generateGrahSql(input); },
   },
-
   graph: {
     name: "graph",
     type: "text/html;charset=utf8",
@@ -126,7 +117,6 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
       return generateGrahSql(input);
     },
   },
-
   dataArray: {
     name: "dataArray",
     type: "application/json",
@@ -135,7 +125,6 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
       return asDataArray(input);
     },
   },
-
   GeoJSON: {
     name: "GeoJSON",
     type: "application/json",
@@ -144,7 +133,6 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
       return asGeoJSON(input);
     },
   },
-
   csv: {
     name: "csv",
     type: "text/csv",
@@ -153,7 +141,6 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
       return input.toString();
     }
   },
-
   txt: {
     name: "txt",
     type: "text/plain",
@@ -165,42 +152,36 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
       return asJson({ query: input.toString(), singular: false, strip: false, count: false });
     },
   },
-
   sql: {
     name: "sql",
     type: "text/plain",
     format: defaultFunction,
     generateSql: defaultForwat,
   },
-
   html: {
     name: "html",
     type: "text/html;charset=utf8",
     format: defaultFunction,
     generateSql: defaultForwat,
   },
-
   css: {
     name: "css",
     type: "text/css;charset=utf8",
     format: defaultFunction,
     generateSql: defaultForwat,
   },
-
   js: {
     name: "js",
     type: "application/javascript;charset=utf8",
     format: defaultFunction,
     generateSql: defaultForwat,
   },
-
   png: {
     name: "png",
     type: "image/png",
     format: defaultFunction,
     generateSql: defaultForwat,
   },
-
   jpeg: {
     name: "jpeg",
     type: "image/jpeg",
@@ -213,14 +194,12 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
     format: defaultFunction,
     generateSql: defaultForwat,
   },
-
   icon: {
     name: "icon",
     type: "image/x-icon",
     format: defaultFunction,
     generateSql: defaultForwat,
   },
-
   ico: {
     name: "ico",
     type: "image/x-icon",
@@ -235,5 +214,4 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
     generateSql: defaultForwat,
   },
 };
-
 export const returnFormats = Object.freeze(_returnFormats);

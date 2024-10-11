@@ -5,12 +5,9 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- oData Literal -----------------------------------!\n");
-
 function integer(value: string): number {
     return +value;
 }
-
 function float(value: string): number {
     switch (value) {
         case "INF":
@@ -21,7 +18,6 @@ function float(value: string): number {
             return +value;
     }
 }
-
 export class Literal {
     constructor(type: string, value: string) {
       // @ts-ignore
@@ -107,7 +103,6 @@ export class Literal {
                         continue;
                 }
             }
-
             return d.getTime();
         }
         throw new Error("Invalid Duration");

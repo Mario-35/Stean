@@ -5,11 +5,9 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- constant Enum -----------------------------------!\n");
  
 import fs from "fs";
 import path from "path";
-
 
 const getKey = () => {
   let res= "zLwX893Mtt9Rc0TKvlInDXuZTFj9rxDV";
@@ -20,7 +18,6 @@ const getKey = () => {
   }
   return res;
 };
-
 export const EConstant = Object.freeze({
     rights : "SUPERUSER CREATEDB NOCREATEROLE INHERIT LOGIN NOREPLICATION NOBYPASSRLS CONNECTION LIMIT -1",
     id : '@iot.id',

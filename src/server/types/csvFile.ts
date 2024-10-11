@@ -5,10 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- csvFile interface -----------------------------------!\n");
-
 import { IcsvColumn, IstreamInfos } from ".";
-
 export interface IcsvFile {
     filename:   string;
     tempTable:  string;

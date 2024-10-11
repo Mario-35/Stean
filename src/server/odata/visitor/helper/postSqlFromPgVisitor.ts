@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- postSqlFromPgVisitor -----------------------------------!\n");
-
 import { doubleQuotesString, getBigIntFromString } from "../../../helpers";
 import { Ientity, IKeyString } from "../../../types";
 import { EConstant, EOperation, EOptions } from "../../../enums";
@@ -17,7 +15,6 @@ import { createInsertValues, createUpdateValues, relationInfos } from "../../../
 import { apiAccess } from "../../../db/dataAccess";
 import * as entities from "../../../db/entities";
 import { PgVisitor } from "..";
-
 export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor): string | undefined {
     const formatInsertEntityData = (entity: string, datas: object, main: PgVisitor): Record<string, any> => {
         const goodEntity = models.getEntityName(main.ctx.config, entity);
@@ -32,7 +29,6 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
         }
         return datas;
     } 
-
     console.log(log.whereIam());
     let sqlResult = "";
     const queryMaker: {
@@ -269,7 +265,6 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
                     }
             }
         };
-
         /**
          *
          * @param key key Name
@@ -315,7 +310,6 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
         return returnValue;
     };
 
-
     if (src.parentEntity) {
         const entityName = src.parentEntity.name;
         console.log(log.debug_infos("Found entity : ", entityName));
@@ -328,7 +322,6 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
         }
     }
     const root = start(datas);
-
     
     if ((names[postEntity.table] && queryMaker[postEntity.table] && queryMaker[postEntity.table].datas) || root === undefined) {
         queryMaker[postEntity.table].datas = Object.assign(root as object, queryMaker[postEntity.table].datas);

@@ -5,14 +5,11 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- createBearerToken -----------------------------------!\n");
-
 import cookieParser from "cookie-parser";;
 import { errors } from "../messages";
 import cookieModule from "cookie";
 import { keyobj, koaContext } from "../types";
 import { EConstant } from "../enums";
-
 export const createBearerToken = (ctx: koaContext) => {  
     const getCookie = (serializedCookies: string, key: string) => cookieModule.parse(serializedCookies)[key] ?? false;
     const queryKey = "access_token";

@@ -7,13 +7,11 @@
  *
  */
 process.env.NODE_ENV = "test";
-
 import chai from "chai";
 import chaiHttp from "chai-http";
 import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, defaultGet, limitResult, testVersion } from "./constant";
 import { server } from "../../server/index";
 import { addStartNewTest, addTest, writeLog } from "./tests";
-
 const geoPos: { [key: string]: number[] } = {
     "Centre commercial Grand Quartier" : [48.13765198324515, -1.6956051932646596],
     "Polyclinic Saint Laurent" : [48.139101133693764, -1.6571222811169917],
@@ -27,24 +25,17 @@ const geoPos: { [key: string]: number[] } = {
     "Kenedy": [48.123242161802274, -1.7127016234011674],
     "Institut Agro Rennes-Angers": [48.1140652783794, -1.7062956999598533 ]
 };
-
 const positions = Object.values(geoPos);
-
 const point:string[] = [];
 positions.forEach((e: number[]) => {
     point.push(`${e[0]} ${e[1]}`);
 });
-
 chai.use(chaiHttp);
-
 const should = chai.should();
-
 const docs: IApiDoc[] = [];
-
 const addToApiDoc = (input: IApiInput) => {
     docs.push(prepareToApiDoc(input, "BuiltInGeospatial"));
 };
-
 addToApiDoc({
     api: `{infos} /BuiltInGeospatial Infos`,
     apiName: "InfosBuiltInGeospatial",
@@ -59,7 +50,6 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
 		done();
 	});
     afterEach(() => { writeLog(true); });
-
     it(`geo.distance(location, geography'POINT(-1.6567440482485551 48.11256463781973)') lt 0.11`, (done) => {
         const infos = addTest({
             api: "{get} Location Distance location",
@@ -85,7 +75,6 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     it(`geo.distance(FeatureOfInterest/feature, geography'POINT(-4.108433416883344 47.99535576613954)') lt 0.11`, (done) => {
         const infos = addTest({
             api: "{get} FOI Distance Foi",
@@ -112,7 +101,6 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     it(`geo.length(location,'POINT(-1.6571736839366906 48.112731020713284)') lt 1`, (done) => {
         const infos = addTest({
             api: "{get} Location Length location",
@@ -139,7 +127,6 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     it(`geo.length(FeatureOfInterest/feature,'POINT(-1.6571736839366906 48.112731020713284)') lt 1`, (done) => {
         const infos = addTest({
             api: "{get} Location Length Foi",
@@ -165,7 +152,6 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
                 done();
             });
     });    
-
     it("geo.intersects(location,'LINESTRING(-1.6567440482485551 48.11256463781973, -4.108433416883344 47.99535576613954)')", (done) => {
         const infos = addTest({
             api: "{get} Location Intersects location",
@@ -191,7 +177,6 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     it("geo.intersects(FeatureOfInterest/feature, 'LINESTRING(-1.6567440482485551 48.11256463781973, -4.108433416883344 47.99535576613954)')", (done) => {
         const infos = addTest({
             api: "{get} FOI Intersects Foi",
@@ -217,7 +202,6 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
                 done();
             });
     }); 
-
     it(`geo.within(location, geography'POINT(-4.108433416883344 47.99535576613954)')`, (done) => {
         const infos = addTest({
             api: "{get} Location Within location",
@@ -271,7 +255,6 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
                 done();
             });
     }); 
-
     it(`geo.disjoint(location,'MULTIPOINT(-3.377509239138959 47.74736066059859, -1.6567440482485551 48.11256463781973, -4.108433416883344 47.99535576613954)')`, (done) => {
         const infos = addTest({
             api: "{get} Location Disjoint location",
@@ -298,7 +281,6 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
                 done();
             });
     });    
-
     it(`geo.disjoint(FeatureOfInterest/feature,'MULTIPOINT(-3.377509239138959 47.74736066059859, -1.6567440482485551 48.11256463781973, -4.108433416883344 47.99535576613954)')`, (done) => {
         const infos = addTest({
             api: "{get} Location Disjoint Observations",
@@ -324,7 +306,6 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
                 done();
             });
     });   
-
     it(`geo.equals(location,'POINT(-3.377509239138959 47.74736066059859)')`, (done) => {
         const infos = addTest({
             api: "{get} Location Equals location",
@@ -351,7 +332,6 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
                 done();
             });
     }); 
-
     it(`geo.equals(FeatureOfInterest/feature,'POINT(-1.202481228298467 48.35475608212215)')`, (done) => {
         const infos = addTest({
             api: "{get} Location Equals Foi",
@@ -377,7 +357,6 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
                 done();
             });
     });     
-
     // it(`geo.contains(location, geography'POINT(${startPoint[0]} ${startPoint[1]})')`, (done) => {
     //     const infos = addTest({
     //         api: "{get} Location Contains location",
@@ -404,7 +383,6 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
     //             done();
     //         });
     // });
-
     // it(`geo.contains(FeatureOfInterest/feature, geography'POINT(${startPoint[0]} ${startPoint[1]})')`, (done) => {
     //     const infos = addTest({
     //         api: "{get} Location Contains location",
@@ -431,7 +409,6 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
     //             done();
     //         });
     // });    
-
     // it(`geo.crosses(location, geography'MULTIPOINT(${point.join()})')`, (done) => {
     //     const infos = addTest({
     //         api: "{get} Location Crosses location",
@@ -461,7 +438,6 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
     //         });
     // });
  
-
     // it(`geo.overlaps(location, geography'MULTIPOINT(${point.join()})')`, (done) => {
     //     const infos = addTest({
     //         api: "{get} Location overlaps location",
@@ -489,8 +465,6 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
     //            done();
     //         });
     // }); 
-
-
 
     // it(`geo.overlaps(location, geography'POINT(-4.108433416883344 47.99535576613954)')`, (done) => {
     //     const infos = addTest({
@@ -545,10 +519,8 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
     //             done();
     //         });
     // });
-
     it("Save and write apiDoc", (done) => {
         generateApiDoc(docs, "apiDocBuiltInGeospatial.js");
         done();
     });
-
 });

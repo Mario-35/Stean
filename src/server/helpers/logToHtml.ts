@@ -5,11 +5,8 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- logToHtml -----------------------------------!\n");
-
 import { EChar } from "../enums";
 import util from "util";
-
 export function logToHtml(input: string): string {
   if (input) {
     if (typeof input !== "string")

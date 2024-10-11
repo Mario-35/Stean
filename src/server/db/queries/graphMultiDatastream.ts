@@ -5,13 +5,10 @@
 * @author results.adam@inrae.fr
 *
 */
-// onsole.log("!----------------------------------- graphMultiDatastream -----------------------------------!\n");
-
 import { createIdList, interval } from ".";
 import { EConstant } from "../../enums";
 import { cleanStringComma } from "../../helpers";
 import { PgVisitor } from "../../odata/visitor";
-
 export const graphMultiDatastream = (table: string, id: string | bigint, input: PgVisitor): string => {
   const query = interval(input);
   const ids = (typeof id === "string" ) ? createIdList(id) : [String(id)];  
@@ -120,4 +117,3 @@ export const graphMultiDatastream = (table: string, id: string | bigint, input: 
   ) 
   SELECT * FROM results`;
   }
-

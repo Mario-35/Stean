@@ -5,12 +5,9 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Odatas Helpers -----------------------------------!\n");
-
 export { postSqlFromPgVisitor } from "./postSqlFromPgVisitor";
 export { oDataDateFormat } from "./oDataDateFormat";
 export { blankRootPgVisitor } from "./blankRootPgVisitor";
 export { doSomeWorkAfterCreateAst } from "./doSomeWorkAfterCreateAst";
 export { escapesOdata } from "./escapesOdata";
 export { OdataGeoColumn } from "./odataGeoColumn";
-

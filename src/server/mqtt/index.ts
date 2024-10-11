@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- MqttServer Routes for API -----------------------------------!\n");
-
 import Aedes, { AedesPublishPacket, Client, PublishPacket, Subscription } from 'aedes';
 import { config } from '../configuration';
 import { log } from '../log';
@@ -14,7 +12,6 @@ import { color, EColor } from '../enums';
 import { errors, infos } from '../messages';
 import { loginUser } from '../authentication';
 import { createServer } from 'aedes-server-factory';
-
 
 export class MqttServer {
     broker: Aedes;
@@ -43,7 +40,6 @@ export class MqttServer {
             console.log(e);            
         });
     }
-
     apiCaller(packet: PublishPacket, client: Client) {
         console.log(log.whereIam());
         return new Promise(async (resolve, reject) => {
@@ -69,7 +65,6 @@ export class MqttServer {
             }
         });
     }
-
     init() {
         // authenticate the connecting client
         this.broker.authenticate = async (client: Client | null, username: any, password: any, callback: any) => {
@@ -107,14 +102,12 @@ export class MqttServer {
             console.log(log.whereIam("authorizePublish"));
             return callback( (client && packet.topic.trim() !== "")  ? null : new Error('You are not authorized to publish on this message topic.'));
         }
-
         this.broker.published = (packet: AedesPublishPacket, client: Client | null, callback: any) => {
             if (client) {
                 console.log(log.whereIam('published'));
                 if (client) config.writeLog(log.debug_infos(`${color(EColor.Green)}[PUBLISHED] ${color(EColor.Cyan)}${(client ? client.id : client)}`, packet.payload.toString()));
             }
         }
-
         // emitted when a client connects to the broker
         this.broker.on('client', (client: Client | null) => {
             if (client) {
@@ -168,11 +161,8 @@ export class MqttServer {
                     });
                 }).catch((err) =>   {
                     console.log(err);
-
                 })
             }
         })
     }
-
 }
-

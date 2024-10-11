@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- fileName Enum -----------------------------------!\n");
-
 export enum EFileName {    
     logs = 'logs.html',
     logsBak = 'logs.bak',

@@ -5,14 +5,10 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- userToken interface -----------------------------------!\n");
-
-
 export interface IuserToken {
     id:         number;
     username:   string;
     password:   string;
     PDCUAS:     [boolean, boolean, boolean, boolean, boolean, boolean];
 }
-
 export const blankUserToken:  IuserToken  = { id: 0, username: "", password: "", PDCUAS: [false, false, false, false, false, false] };

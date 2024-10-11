@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- deepClone -----------------------------------!\n");
-
 export const deepClone = (obj: any) => {
     if (obj === null) return null;
     const clone = { ...obj };

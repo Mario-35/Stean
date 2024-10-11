@@ -5,10 +5,7 @@
 * @author mario.adam@inrae.fr
 *
 */
-// onsole.log("!----------------------------------- interval -----------------------------------!\n");
-
 import { PgVisitor } from "../../odata/visitor";
-
 export const interval = (input: PgVisitor): string =>  input.interval 
 ? `WITH src as (
     ${input.toString()}
@@ -31,5 +28,4 @@ SELECT
 FROM 
     src RIGHT JOIN time_range on srcdate = step`
 : input.toString();
-
 

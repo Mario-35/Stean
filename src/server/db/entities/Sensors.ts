@@ -5,12 +5,9 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Sensors entity -----------------------------------!\n");
-
 import { log } from "../../log";
 import { koaContext } from "../../types";
 import { Common } from "./common";
-
 export class Sensors extends Common {
   constructor(ctx: koaContext) {
     console.log(log.whereIam());

@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- createQueryParams -----------------------------------!\n");
-
 import { getAuthenticatedUser } from "../../authentication";
 import { config } from "../../configuration";
 import { log } from "../../log";
@@ -14,7 +12,6 @@ import { models } from "../../models";
 import { decodeUrl } from "../../routes/helper/decodeUrl";
 import { Ientities, IqueryOptions, koaContext } from "../../types";
 import { blankUser } from "./";
-
 export async function createQueryParams(ctx: koaContext): Promise<IqueryOptions| undefined> {
     console.log(log.whereIam());
     const model = models.filteredModelFromConfig(ctx.config);
@@ -27,7 +24,6 @@ export async function createQueryParams(ctx: koaContext): Promise<IqueryOptions|
             : user.canPost === true
                 ? Object.keys(model).filter((elem: string) => ctx.model[elem].order > 0 || ctx.model[elem].createOrder === 99 || ctx.model[elem].createOrder === -1)
                 : Object.keys(model).filter((elem: string) => ctx.model[elem].order > 0 );
-
     listEntities.push("Services");    
     const decodedUrl = decodeUrl(ctx);
     if (decodedUrl) return {

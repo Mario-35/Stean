@@ -5,26 +5,21 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- HTML Views New Service for API -----------------------------------!\n");
-
 import { EExtensions, enumKeys, EOptions, EVersion } from "../../enums";
 import { info } from "../../messages";
 import { IKeyString, koaContext } from "../../types";
 import { CoreHtmlView } from "./core";
-
 interface Idatas { 
   login: boolean; 
   url: string; 
   body?: any; 
   why?: IKeyString
 }
-
 export class Service extends CoreHtmlView {
     constructor(ctx: koaContext, datas: Idatas) {
       super(ctx);
       this.service(datas);
     }
-
     private service(datas: Idatas) {
       const alert = (name: string): string => (datas.why && datas.why[name] ? `<div class="alert">${datas.why[name]}</div>` : "");
         this._HTMLResult = [`

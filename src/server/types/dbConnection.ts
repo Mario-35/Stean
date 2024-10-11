@@ -5,9 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- dbConnection interface -----------------------------------!\n");
-
-
 export interface IdbConnection { //postgresSqlconnection
     host:       string; // host name
     user:       string; // user name

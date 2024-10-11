@@ -6,7 +6,5 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Index of PgVisitor -----------------------------------!\n");
-
 export { PgVisitor } from "./pg/pgVisitor";
 export { RootPgVisitor } from "./pg/rootPgVisitor";

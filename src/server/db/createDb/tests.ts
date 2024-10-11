@@ -5,12 +5,9 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- tests datas -----------------------------------!\n");
-
 import { keyobj } from "../../types";
 // Shortcuts for space
 let startDate = new Date('2023-02-11T00:00:01.000Z');
-
 const n = {
 	types: ["classic","apostrophe","accent","special","hack"],
 	"radon": "Radioactivité de l'air, issue de la désintégration naturelle du radon",
@@ -34,9 +31,7 @@ const n = {
 		"70B3D5E75E014F06"
 	]
 }
-
 const geo = {
-
 	"Angers": {
 		"type": "Feature",
 		"properties": {
@@ -262,61 +257,58 @@ const geo = {
 		"id": 15
 	  }
   }
-
-// const nb = (hr: number) => hr < 10 ? `0${hr}` : `${hr}`;
-
+  
 const createObservations = () => {
 	addMinutesToDate("2022-01-01T00:00:01.000Z");
 	
-		const datastream = (type: string, month: number) => {
-			const result: Record<string, any>[] = [];
-			for (let i = 0; i < 12; i++) {
-				result.push({
+	const datastream = (type: string, month: number) => {
+		const result: Record<string, any>[] = [];
+		for (let i = 0; i < 12; i++) {
+			result.push({
+				"phenomenonTime": addMinutesToDate(),
+				"result": {
+					"value": 200 + (i * 10)
+				},
+				"datastream_id": {
+					"@iot.name": `${n[type as keyobj]} Datastream`
+				}
+			});
+			}
+			return result;
+	}
+	addMinutesToDate("2023-03-01T00:00:01.000Z");
+	const multiDatastream = (type: string, month: number) => {
+		const result:object[] = [];
+		for (let i = 0; i < 12; i++) {
+			const values: Record<string, any> = {};
+			values[`${n["unit1"]} ${n[type as keyobj]}`] = 20 + i;
+			values[`${n["unit2"]} ${n[type as keyobj]}`] = i + (i / 100);		
+			result.push(
+				{
 					"phenomenonTime": addMinutesToDate(),
 					"result": {
-						"value": 200 + (i * 10)
+						"value": Object.values(values),
+						"valueskeys": values
 					},
-					"datastream_id": {
-						"@iot.name": `${n[type as keyobj]} Datastream`
-					}
+					"multidatastream_id": { "@iot.name": `${n[type as keyobj]} MultiDatastream` }
 				});
-			  }
-			  return result;
-		}
-		addMinutesToDate("2023-03-01T00:00:01.000Z");
-		const multiDatastream = (type: string, month: number) => {
-			const result:object[] = [];
-			for (let i = 0; i < 12; i++) {
-				const values: Record<string, any> = {};
-				values[`${n["unit1"]} ${n[type as keyobj]}`] = 20 + i;
-				values[`${n["unit2"]} ${n[type as keyobj]}`] = i + (i / 100);		
-				result.push(
-					{
-						"phenomenonTime": addMinutesToDate(),
-						"result": {
-							"value": Object.values(values),
-							"valueskeys": values
-						},
-						"multidatastream_id": { "@iot.name": `${n[type as keyobj]} MultiDatastream` }
-					});
-			  }
-			  return result;
-		}
-		const result:object[] = [];
-		n.types.forEach((name: string, index: number) => {
-			result.push(...datastream(name, index + 1));
-			result.push(...multiDatastream(name, index + 1));
-		});
-		addMinutesToDate("2024-06-01T00:00:01.000Z");
-		return result;
+			}
+			return result;
+	}
+	
+	const result:object[] = [];
+	n.types.forEach((name: string, index: number) => {
+		result.push(...datastream(name, index + 1));
+		result.push(...multiDatastream(name, index + 1));
+	});
+	addMinutesToDate("2024-06-01T00:00:01.000Z");
+	return result;
 }
-
 const addMinutesToDate = (dat?: string) => {
 	if (dat) startDate = new Date(dat);
 	startDate.setTime(startDate.getTime() + 15 * 60_000);
 	return startDate.toISOString();
   };
-
 export const testDatas:Record<string, any> = {
 	"create": {
 		"name": "test",
@@ -1992,7 +1984,6 @@ export const testDatas:Record<string, any> = {
 				"@iot.name": "Relative humidity"
 			}
 		},
-
 	],
 	"ThingsLocations": [
 		{

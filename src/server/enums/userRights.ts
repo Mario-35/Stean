@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- userRights Enum -----------------------------------!\n");
-
 export enum EUserRights {
     Post = 0,
     Delete = 1,

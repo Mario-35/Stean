@@ -7,7 +7,6 @@
  *
  */
 process.env.NODE_ENV = "test";
-
 import chai from "chai";
 import chaiHttp from "chai-http";
 import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, defaultDelete, defaultPatch, defaultGet, listOfColumns, limitResult, infos, apiInfos, showHide, nbColorTitle, nbColor, testVersion, _RAWDB } from "./constant";
@@ -16,20 +15,14 @@ import { Ientity } from "../../server/types";
 import { testsKeys as locations_testsKeys } from "./routes.15_locations.spec";
 import { executeQuery, last } from "./executeQuery";
 import { addStartNewTest, addTest, writeLog } from "./tests";
-
 const testsKeys = ["@iot.selfLink", "@iot.id", "Thing@iot.navigationLink", "Locations@iot.navigationLink", "time"];
-
 chai.use(chaiHttp);
-
 const should = chai.should();
-
 const docs: IApiDoc[] = [];
 const entity: Ientity = _RAWDB.HistoricalLocations;
-
 const addToApiDoc = (input: IApiInput) => {
 	docs.push(prepareToApiDoc(input, entity.name));
 };
-
 addToApiDoc({
 	api: `{infos} ${entity.name} infos`,
 	apiName: `Infos${entity.name}`,
@@ -37,7 +30,6 @@ addToApiDoc({
 	apiReference: infos[entity.name].reference,
 	result: ""
 });
-
 describe("endpoint : HistoricalLocations", () => {
 	const temp = listOfColumns(entity);
 	const success = temp.success;
@@ -54,7 +46,6 @@ describe("endpoint : HistoricalLocations", () => {
 				done();
 			});
 	});
-
 	describe(`{get} ${entity.name} ${nbColorTitle}[9.2]`, () => {
 		afterEach(() => { writeLog(true); });
 		it(`Return all ${entity.name} ${nbColor}[9.2.2]`, (done) => {
@@ -88,7 +79,6 @@ describe("endpoint : HistoricalLocations", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} id: 1 ${nbColor}[9.2.3]`, (done) => {
 			api : `{get} ${entity.name}(:id) Get One`;
 			http: `${testVersion}/${entity.name}(1)`;
@@ -121,7 +111,6 @@ describe("endpoint : HistoricalLocations", () => {
 					done();
 				});
 		});
-
 		it(`Return error if ${entity.name} not exist ${nbColor}[9.2.4]`, (done) => {
 			const infos = addTest({
 				api: `Return error if ${entity.name} not exist`,
@@ -143,7 +132,6 @@ describe("endpoint : HistoricalLocations", () => {
 					done();
 				});
 		});
-
 		it(`Return error ${entity.singular} not found`, (done) => {
 			const infos = addTest({
 				api : `{get} return error ${entity.singular} not found`,
@@ -163,7 +151,6 @@ describe("endpoint : HistoricalLocations", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} id: 6 and $expand Locations ${nbColor}[9.3.2.1]`, (done) => {
             const name = "Locations";
 			const infos = addTest({
@@ -198,7 +185,6 @@ describe("endpoint : HistoricalLocations", () => {
 					done();
 				});
 		});
-
 		it(`Return specified time of ${entity.name} id: 6`, (done) => {
 			const infos = addTest({
 				api : `{get} ${entity.name}(:id) Get Select`,
@@ -226,7 +212,6 @@ describe("endpoint : HistoricalLocations", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} Subentity Thing ${nbColor}[9.2.6]`, (done) => {
 			const name = "Thing";
 			const infos = addTest({
@@ -253,7 +238,6 @@ describe("endpoint : HistoricalLocations", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} Subentity Locations ${nbColor}[9.2.6]`, (done) => {
 			const name = "Locations";
 			const infos = addTest({
@@ -278,7 +262,6 @@ describe("endpoint : HistoricalLocations", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} Expand Thing ${nbColor}[9.3.2.1]`, (done) => {
 			const name = "Thing";
 			const infos = addTest({
@@ -306,7 +289,6 @@ describe("endpoint : HistoricalLocations", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} Expand Locations ${nbColor}[9.3.2.1]`, (done) => {
 			const name = "Locations";
 			const infos = addTest({
@@ -332,7 +314,6 @@ describe("endpoint : HistoricalLocations", () => {
 				});
 		});
 	});
-
 	describe(`{patch} ${entity.name} ${nbColorTitle}[10.3]`, () => {
 		afterEach(() => { writeLog(true); });
 		it(`Return updated ${entity.name} ${nbColor}[10.3.1]`, (done) => {
@@ -367,7 +348,6 @@ describe("endpoint : HistoricalLocations", () => {
 					});
 			});
 		});
-
 		it(`Return Error if the ${entity.name} not exist`, (done) => {
 			const datas = {
 				"time": "2015-02-07T19:22:11.297Z"
@@ -394,7 +374,6 @@ describe("endpoint : HistoricalLocations", () => {
 				});
 		});
 	});
-
 	describe(`{delete} ${entity.name} ${nbColorTitle}[10.4]`, () => {
 		afterEach(() => { writeLog(true); });
 		it(`Delete ${entity.name} return no content with code 204 ${nbColor}[10.4.1]`, (done) => {
@@ -429,7 +408,6 @@ describe("endpoint : HistoricalLocations", () => {
 					});
 			});
 		});
-
 		it(`Return Error if the ${entity.name} not exist`, (done) => {
 			addTest({
 				api: `{delete} return Error if the ${entity.name} not exist`,
@@ -454,4 +432,3 @@ describe("endpoint : HistoricalLocations", () => {
 		});
 	});
 });
-

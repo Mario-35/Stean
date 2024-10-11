@@ -5,19 +5,15 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- MultiDatastreams entity -----------------------------------!\n");
-
 import { koaContext } from "../../types";
 import { Common } from "./common";
 import { errors, msg } from "../../messages/";
 import { log } from "../../log";
-
 export class MultiDatastreams extends Common {
   constructor(ctx: koaContext) {
     console.log(log.whereIam());
     super(ctx);
   }
-
   formatDataInput(input: Record<string, any>  | undefined): Record<string, any>  | undefined {
     console.log(log.whereIam());
     if (!input) this.ctx.throw(400, { code: 400, detail: errors.noData });
@@ -53,7 +49,6 @@ export class MultiDatastreams extends Common {
     } else
       input["observationType"] =
       this.ctx.model.MultiDatastreams.columns["observationType"].verify?.default;
-
     return input;
   }
 }

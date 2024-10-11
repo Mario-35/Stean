@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Loras entity -----------------------------------!\n");
-
 import { Common } from "./common";
 import { getBigIntFromString, notNull, } from "../../helpers/index";
 import { ESCAPE_SIMPLE_QUOTE } from "../../constants";
@@ -17,7 +15,6 @@ import { multiDatastreamFromDeveui, streamFromDeveui } from "../queries";
 import { decodeloraDeveuiPayload } from "../../lora";
 import { executeSql, executeSqlValues } from "../helpers";
 import { log } from "../../log";
-
 export class Loras extends Common {
   synonym: Record<string, any>  = {};
   stean: Record<string, any>  = {};
@@ -37,7 +34,6 @@ export class Loras extends Common {
       result["timestamp"] = new Date( dataInput["timestamp"] * 1000 ).toISOString();
     return result;
   }
-
   createListQuery(input: string[], columnListString: string): string {
     console.log(log.whereIam());
     const tempList = columnListString.split("COLUMN");
@@ -48,15 +44,12 @@ export class Loras extends Common {
     console.log(log.whereIam());
       const addToStean = (key: string) => (this.stean[key] = dataInput[key]);
     if (dataInput) this.stean = await this.prepareInputResult(dataInput);
-
     if (this.stean["frame"] === "000000000000000000") this.ctx.throw(400, { code: 400, detail: errors.frameNotConform });
-
     function gedataInputtDate(): string | undefined {
       if (dataInput["datetime"]) return String(dataInput["datetime"]);
       if (dataInput["phenomenonTime"]) return String(dataInput["phenomenonTime"]);
       if (dataInput["timestamp"]) return String(new Date(dataInput["timestamp"] * 1000));
     }
-
     // search for MultiDatastream
       if (notNull(dataInput["MultiDatastream"])) {
       if (!notNull(this.stean["deveui"])) {
@@ -66,7 +59,6 @@ export class Loras extends Common {
       addToStean("MultiDatastream");
       return await super.post(this.stean);
     }
-
     // search for Datastream 
       if (notNull(dataInput["Datastream"])) {
       if (!notNull(dataInput["deveui"])) {
@@ -76,7 +68,6 @@ export class Loras extends Common {
       addToStean("Datastream");
       return await super.post(this.stean);
     }
-
     // search for deveui
       if (!notNull(this.stean["deveui"])) {
       if (silent) return this.formatReturnResult({ body: errors.deveuiMessage });
@@ -89,7 +80,6 @@ export class Loras extends Common {
     });
     
     console.log(log.debug_infos("stream", stream));
-
     // search for frame and decode payload if found
       if (notNull(this.stean["frame"])) {
       const temp = await decodeloraDeveuiPayload( this.ctx, this.stean["deveui"], this.stean["frame"] );
@@ -101,7 +91,6 @@ export class Loras extends Common {
       this.stean["decodedPayload"] = temp["result"];
       if (this.stean["decodedPayload"].valid === false) this.ctx.throw(400, { code: 400, detail: errors.InvalidPayload });
     }
-
       const searchMulti = multiDatastreamFromDeveui(this.stean["deveui"]);
       this.stean["formatedDatas"] = {};
     
@@ -131,9 +120,7 @@ export class Loras extends Common {
           else this.ctx.throw(400, { code: 400, detail: errors.dataMessage });
         }
     }
-
       console.log(log.debug_infos("Formated datas", this.stean["formatedDatas"]));
-
       this.stean["date"] = gedataInputtDate();
       if (!this.stean["date"]) {
       if (silent) return this.formatReturnResult({ body: errors.noValidDate });
@@ -160,20 +147,16 @@ export class Loras extends Common {
       });
       
       console.log(log.debug_infos("Values", listOfSortedValues));
-
       if ( Object.values(listOfSortedValues).filter((word) => word != null) .length < 1 ) {
       const errorMessage = `${errors.dataNotCorresponding} [${stream["keys"]}] with [${Object.keys(this.stean["formatedDatas"])}]`;
         if (silent) return this.formatReturnResult({ body: errorMessage });
         else this.ctx.throw(400, { code: 400, detail: errorMessage });
       }
-
       const getFeatureOfInterest = getBigIntFromString( dataInput["FeatureOfInterest"] );
-
       const temp = listOfSortedValues;
       if (temp && typeof temp == "object") {
         const tempLength = Object.keys(temp).length;
         console.log(log.debug_infos( "data : Keys", `${tempLength} : ${stream["keys"].length}` ));
-
         if (tempLength != stream["keys"].length) {
           const errorMessage = msg(
             errors.sizeListKeys,
@@ -184,7 +167,6 @@ export class Loras extends Common {
           else this.ctx.throw(400, { code: 400, detail: errorMessage });
         }
       }
-
       const resultCreate = `'${JSON.stringify({
         value: Object.values(listOfSortedValues),
         valueskeys: ESCAPE_SIMPLE_QUOTE(JSON.stringify(listOfSortedValues)),
@@ -199,13 +181,11 @@ export class Loras extends Common {
       resultTime: `to_timestamp('${this.stean["timestamp"]}','${EDatesType.dateWithOutTimeZone}')::timestamp`,
         result: resultCreate,
       };
-
       const searchDuplicate = Object.keys(insertObject)
         .slice(0, -1)
       .map((elem: string) => `"${elem}" = ${insertObject[elem]} AND `)
         .concat(`"result" = ${resultCreate}`)
         .join("");
-
       const sql = `WITH "${EConstant.voidtable}" AS (SELECT srid FROM "${EConstant.voidtable}" LIMIT 1)
                 , multidatastream1 AS (SELECT id, thing_id, _default_featureofinterest, ${searchMulti} LIMIT 1)
                 , myValues ( "${Object.keys(insertObject).join(
@@ -243,7 +223,6 @@ export class Loras extends Common {
           Object.keys(this.ctx.model["Observations"].relations).forEach((word) => {
       result[ `${word}${EConstant.navLink}` ] = `${this.ctx.decodedUrl.root}/Observations(${tempResult.id})/${word}`;
           });
-
           return this.formatReturnResult({ body: result, query: sql, });
         } else {
           if (silent) return this.formatReturnResult({ body: errors.observationExist });
@@ -272,7 +251,6 @@ export class Loras extends Common {
         if (silent) return this.formatReturnResult({ body: errors.noFoi });
         else this.ctx.throw(400, { code: 400, detail: errors.noFoi });
       }
-
       const value = this.stean["value"] 
       ? this.stean["value"]
       : this.stean["decodedPayload"]["datas"]
@@ -280,12 +258,10 @@ export class Loras extends Common {
       : this.stean["data"]["Data"]
       ? this.stean["data"]["Data"]
       : undefined;
-
       if (!value) {
         if (silent) return this.formatReturnResult({ body: errors.noValue });
         else this.ctx.throw(400, { code: 400, detail: errors.noValue });
       }
-
       const resultCreate = `'${JSON.stringify({ value: value })}'::jsonb`;
       const insertObject: Record<string, any>  = {
         featureofinterest_id: "(SELECT datastream1._default_featureofinterest from datastream1)",
@@ -294,15 +270,12 @@ export class Loras extends Common {
       resultTime: `to_timestamp('${this.stean["timestamp"]}}','${EDatesType.dateWithOutTimeZone}')::timestamp`,
         result: resultCreate,
       };
-
       const searchDuplicate = Object.keys(insertObject)
         .slice(0, -1)
       .map((elem: string) => `"${elem}" = ${insertObject[elem]} AND `)
         .concat(`"result" = ${resultCreate}`)
         .join("");
-
       console.log(log.debug_infos("searchDuplicate", searchDuplicate));
-
       const sql = `WITH "${EConstant.voidtable}" AS (SELECT srid FROM "${EConstant.voidtable}" LIMIT 1)
                , datastream1 AS (SELECT id, _default_featureofinterest, thing_id FROM "${
                  this.ctx.model.Datastreams.table
@@ -329,7 +302,6 @@ export class Loras extends Common {
                       "(SELECT observation1.COLUMN from observation1), "
                     )} (SELECT datastream1.id from datastream1) AS datastream, (SELECT datastream1.thing_id from datastream1) AS thing)
                 SELECT coalesce(json_agg(t), '[]') AS result FROM result1 AS t`;
-
       return await executeSql(this.ctx.config, sql).then(async (res: object) => {
       const tempResult: Record<string, any>  = res[0 as keyobj]["result"][0];
         if (tempResult.id != null) {
@@ -340,11 +312,9 @@ export class Loras extends Common {
           };
           result[EConstant.id] = tempResult.id;
           result[EConstant.selfLink] = `${this.ctx.decodedUrl.root}/Observations(${tempResult.id})`;
-
           Object.keys(this.ctx.model["Observations"].relations).forEach((word) => {
       result[ `${word}${EConstant.navLink}` ] = `${this.ctx.decodedUrl.root}/Observations(${tempResult.id})/${word}`;
           });
-
           return this.formatReturnResult({
             body: result,
             query: sql,

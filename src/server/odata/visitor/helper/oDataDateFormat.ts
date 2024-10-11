@@ -5,10 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- oDataDateFormat -----------------------------------!\n");
-
 import { Token } from "../../parser";
-
 export function oDataDateFormat(node: Token, test: string): string | undefined {
     const input = node.value.right.raw.replace(/\//g, "-").replace(/'/g, "").replace(/%27/g, "");
     const regexDateStartDay = /^[0-9]{2}[-][0-9]{2}[-][0-9]{4}$/g;

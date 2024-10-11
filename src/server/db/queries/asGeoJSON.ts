@@ -6,11 +6,8 @@
  * @author formatPgString.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- asDataArray -----------------------------------!\n");
-
 import { asJson } from ".";
 import { PgVisitor } from "../../odata/visitor";
-
 export const asGeoJSON = (input: PgVisitor): string =>  
 `SELECT jsonb_build_object(
     'type', 

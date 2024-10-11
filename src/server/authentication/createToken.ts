@@ -5,12 +5,9 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- createToken -----------------------------------!\n");
-
 import { EConstant } from "../enums";
 import { Iuser } from "../types";
 import jsonwebtoken from "jsonwebtoken";
-
 export const createToken = (input: Iuser, password: string) => {  
   return jsonwebtoken.sign(
     {

@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- EQuery Enum -----------------------------------!\n");
-
 export enum EQuery { 
     Where = "where",
     Select = "select",

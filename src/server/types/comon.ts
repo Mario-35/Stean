@@ -5,11 +5,8 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Comon interface -----------------------------------!\n");
-
 import { IreturnResult } from "./returnResult";
 import { Iuser } from "./user";
-
 export interface Icomon {
     formatDataInput(input: object | undefined): object | undefined // formating data before use it
     getAll()                                  : Promise<IreturnResult | Iuser | undefined | void> // get all items with pagination

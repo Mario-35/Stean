@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- addToService -----------------------------------!\n");
-
 import { doubleQuotesString, asyncForEach } from "../../helpers";
 import { log } from "../../log";
 import { models } from "../../models";
@@ -15,7 +13,6 @@ import { blankRootPgVisitor } from "../../odata/visitor/helper";
 import { Ilog, koaContext } from "../../types";
 import { apiAccess } from "../dataAccess";
 import { executeSqlValues } from "./executeSqlValues";
-
 export const addToService = async (ctx: koaContext, dataInput: Record<string, any>): Promise<Record<string, any>> => {
   console.log(log.whereIam());
   const results = {};    

@@ -6,9 +6,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- version Enum -----------------------------------!\n");
-
-
 export enum EVersion {
     v1_0 = "v1.0",
     v1_1 = "v1.1"

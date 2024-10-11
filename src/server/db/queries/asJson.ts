@@ -6,8 +6,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- asJson -----------------------------------!\n");
-
 export const asJson = (input: { query: string; 
                                 singular: boolean; 
                                 count: boolean; 

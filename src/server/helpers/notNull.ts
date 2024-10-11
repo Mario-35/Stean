@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- isNullOrNotNull -----------------------------------!\n");
-
 const isNullOrNotNull = (input: any, ret: boolean): boolean => {
     switch (typeof input) {
       case "string":
@@ -20,4 +18,3 @@ const isNullOrNotNull = (input: any, ret: boolean): boolean => {
   
 export const notNull = (input: any): boolean => isNullOrNotNull(input, true);
   
-

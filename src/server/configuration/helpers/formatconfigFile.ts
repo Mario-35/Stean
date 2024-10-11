@@ -5,27 +5,21 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- formatconfigFile -----------------------------------!\n");
-
 import util from "util";
 import { EConstant, EVersion } from "../../enums";
 import { unikeList, unique } from "../../helpers";
 import { errors } from "../../messages";
 import { Iservice, typeExtensions, typeOptions } from "../../types";
 import { getModelVersion } from "../../models/helpers";
-
 export function formatconfigFile(name: string, input: Record<string, any>): Iservice {
     const options: typeof typeOptions = input["options"]
     ? unique([... String(input["options"]).split(",")]) as typeof typeOptions 
     : [];
-
     const extensions: typeof typeExtensions = input["extensions"]
       ? unique(["base", ... String(input["extensions"]).split(",")]) as typeof typeExtensions 
       : ["base"];
-
     if (input["extensions"]["users"]) extensions.includes("users");
     const version = name === EConstant.admin ? EVersion.v1_1  : String(input["apiVersion"]).trim();
-
     const returnValue: Iservice = {
       name: name,
       ports: name === EConstant.admin

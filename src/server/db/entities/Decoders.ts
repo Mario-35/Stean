@@ -5,15 +5,12 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Decoders entity -----------------------------------!\n");
-
 import { IreturnResult, koaContext } from "../../types";
 import { Common } from "./common";
 import { doubleQuotesString, asyncForEach } from "../../helpers";
 import { decodingPayload } from "../../lora";
 import { executeSql, executeSqlValues } from "../helpers";
 import { log } from "../../log";
-
 export class Decoders extends Common {
   constructor(ctx: koaContext) {
     console.log(log.whereIam());

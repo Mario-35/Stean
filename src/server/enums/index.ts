@@ -5,11 +5,8 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Index Enums -----------------------------------!\n");
-
 import { EExtensions } from "./extensions";
 import { EOptions } from "./options";
-
 export { EChar } from "./chars";
 export { ETable } from "./table";
 export { EColor } from "./colors";

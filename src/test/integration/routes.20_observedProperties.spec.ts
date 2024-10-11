@@ -7,7 +7,6 @@
  *
  */
 process.env.NODE_ENV = "test";
-
 import chai from "chai";
 import chaiHttp from "chai-http";
 import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, defaultGet, defaultPost, defaultPatch, defaultDelete, getNB, listOfColumns, limitResult, infos, showHide, apiInfos, nbColorTitle, nbColor, testVersion, _RAWDB } from "./constant";
@@ -16,21 +15,15 @@ import { Ientity } from "../../server/types";
 import { testsKeys as datastreams_testsKeys } from "./routes.17_datastreams.spec"; 
 import { executeQuery, last } from "./executeQuery"; 
 import { addStartNewTest, addTest, writeLog } from "./tests";
-
 export const testsKeys = ["@iot.id", "@iot.selfLink", "Datastreams@iot.navigationLink", "name", "description", "definition"];
-
 chai.use(chaiHttp);
-
 const should = chai.should();
-
 const docs: IApiDoc[] = [];
 const entity: Ientity = _RAWDB.ObservedProperties;
-
 
 const addToApiDoc = (input: IApiInput) => {
 	docs.push(prepareToApiDoc(input, entity.name));
 };
-
 addToApiDoc({
 	api: `{infos} ${entity.name} infos`,
 	apiName: `Infos${entity.name}`,
@@ -38,7 +31,6 @@ addToApiDoc({
 	apiReference: infos[entity.name].reference,
 	result: ""
 });
-
 describe("endpoint : ObservedProperties", () => {
 	const myId = "";
 	const temp = listOfColumns(entity);
@@ -56,10 +48,8 @@ describe("endpoint : ObservedProperties", () => {
 				done();
 			});
 	});
-
 	describe(`{get} ${entity.name} ${nbColorTitle}[9.2]`, () => {
 		afterEach(() => { writeLog(true); });
-
 		it(`Return all ${entity.name} ${nbColor}[9.2.2]`, (done) => {
 			const infos = addTest({
 				api: `{get} ${entity.name} Get all`,
@@ -92,7 +82,6 @@ describe("endpoint : ObservedProperties", () => {
 					done();
 				});
 		});
-
 		it(`Return observedProperty id: 2 ${nbColor}[9.2.3]`, (done) => {
 			const infos = addTest({
 				api: `{get} ${entity.name}(:id) Get one`,
@@ -124,7 +113,6 @@ describe("endpoint : ObservedProperties", () => {
 					done();
 				});
 		});
-
 		it(`Return error if ${entity.name} not exist ${nbColor}[9.2.4]`, (done) => {
 			const infos = addTest({
 				api: `Return error if ${entity.name} not exist`,
@@ -146,7 +134,6 @@ describe("endpoint : ObservedProperties", () => {
 					done();
 				});
 		});
-
 		it(`Return error ${entity.singular} not found`, (done) => {
 			const infos = addTest({
 				api : `{get} return error ${entity.singular} not found`,
@@ -166,7 +153,6 @@ describe("endpoint : ObservedProperties", () => {
 					done();
 				});
 		});
-
 		it("Return observedProperty of a specific Datastream", (done) => {
 			const infos = addTest({
 				api : `{get} Datastream(10/${entity.name} Get from a specific Datastream`,
@@ -198,7 +184,6 @@ describe("endpoint : ObservedProperties", () => {
 					done();
 				});
 		});
-
 		it("Return observedProperty with inline related entities using $expand query option", (done) => {
 			const infos = addTest({
 				api : `{get} ${entity.name}(:id) Get Expand Datastreams`,
@@ -228,7 +213,6 @@ describe("endpoint : ObservedProperties", () => {
 					done();
 				});
 		});
-
 		it(`Retrieve specified properties for a specific ${entity.name}`, (done) => {
 			const infos = addTest({
 				api : `{get} ${entity.name}(:id) Get from a Select`,
@@ -255,7 +239,6 @@ describe("endpoint : ObservedProperties", () => {
 					});					
 					done();
 				});
-
 			it("Return Sensor Subentity Datastreams", (done) => {
 				const name = "Datastreams";
 				const infos = addTest({
@@ -284,7 +267,6 @@ describe("endpoint : ObservedProperties", () => {
 						done();
 					});
 			});
-
 			it("Return Sensor Subentity MultiDatastreams", (done) => {
 				const name = "MultiDatastreams";
 				const infos = addTest({
@@ -312,7 +294,6 @@ describe("endpoint : ObservedProperties", () => {
 						done();
 					});
 			});
-
 			it("Return Sensor Expand Datastreams", (done) => {
 				const name = "Datastreams";
 				const infos = addTest({
@@ -340,7 +321,6 @@ describe("endpoint : ObservedProperties", () => {
 						done();
 					});
 			});
-
 			it("Return Sensor Expand MultiDatastreams", (done) => {
 				const name = "MultiDatastreams";
 				const infos = addTest({
@@ -369,10 +349,8 @@ describe("endpoint : ObservedProperties", () => {
 			});
 		});
 	});
-
 	describe(`{post} ${entity.name} ${nbColorTitle}[10.2]`, () => {
 		afterEach(() => { writeLog(true); });
-
 		it(`Return added ${entity.name} ${nbColor}[10.2.1]`, (done) => {
 			const datas = {
 				name: `Area ${getNB(entity.name)}`,
@@ -409,7 +387,6 @@ describe("endpoint : ObservedProperties", () => {
 					done();
 				});
 		});
-
         it(`Return Error if the payload is malformed ${nbColor}[10.2.2]`, (done) => {
             const infos = addTest({
                 api : `{post} return Error if the payload is malformed`,
@@ -433,10 +410,8 @@ describe("endpoint : ObservedProperties", () => {
                 });
         });
 	});
-
 	describe(`{patch} ${entity.name} ${nbColorTitle}[10.3]`, () => {
 		afterEach(() => { writeLog(true); });
-
 		it(`Return updated ${entity.name} ${nbColor}[10.3.1]`, (done) => {
 			executeQuery(last(entity.table, true)).then((result: Record<string, any>) => {
 				const datas = {
@@ -473,7 +448,6 @@ describe("endpoint : ObservedProperties", () => {
 					});
 			});
 		});
-
 		it(`Return Error if the ${entity.name} not exist`, (done) => {
 			const datas = {
 				"name": "New SensorWebThing Patch",
@@ -504,10 +478,8 @@ describe("endpoint : ObservedProperties", () => {
 				});
 		});
 	});
-
 	describe(`{delete} ${entity.name} ${nbColorTitle}[10.4]`, () => {
 		afterEach(() => { writeLog(true); });
-
 		it(`Delete ${entity.name} return no content with code 204 ${nbColor}[10.4.1]`, (done) => {
 			executeQuery(`SELECT (SELECT count(id) FROM "${entity.table}")::int as count, (${last(entity.table)})::int as id `).then((beforeDelete: Record<string, any>)  => {
 				const infos = addTest({
@@ -540,7 +512,6 @@ describe("endpoint : ObservedProperties", () => {
 					});
 			});
 		});
-
 		it(`Return Error if the ${entity.name} not exist`, (done) => {
 			const infos = addTest({
 				api: `{delete} return Error if the ${entity.name} not exist`,

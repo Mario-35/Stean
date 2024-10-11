@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Query builder -----------------------------------!");
-
 import { doubleQuotesString, cleanStringComma, containsAll, isDataArray, isGraph, isGeoJson, removeAllQuotes, removeFirstEndDoubleQuotes, formatPgString, returnFormats } from "../../../helpers";
 import { asJson } from "../../../db/queries";
 import { Iservice, Ientity, IKeyBoolean, IpgQuery } from "../../../types";
@@ -18,7 +16,6 @@ import { errors } from "../../../messages";
 import { log } from "../../../log";
 import { expand, relationInfos } from "../../../models/helpers";
 import { _isObservation, isFile } from "../../../helpers/tests";
-
 export class Query  {
     from: string;
     where: Where;
@@ -28,7 +25,6 @@ export class Query  {
     groupBy: GroupBy;
     keyNames: Key;
     _pgQuery: IpgQuery | undefined = undefined;
-
   
     constructor() {
       console.log(log.whereIam());
@@ -39,17 +35,14 @@ export class Query  {
       this.groupBy = new GroupBy();
       this.keyNames = new Key([]);
     }
-
     private isCalcColumn(input: string): boolean {
         return EConstant.stringException.map(e => input.includes(e) ? true : false).filter(e => e === true).length > 0;
     }
-
     private extractColumnName(input: string): string {   
         const elem = input.split(input.includes(' AS ') ? ' AS ' : ".");
         elem.shift();
         return elem.join("."); 
     }
-
     /**
      * 
      * @param service service
@@ -79,7 +72,6 @@ export class Query  {
         if  (column === "selfLink") return  column; 
         if  (column.startsWith( "(SELECT")) return  column; 
     };
-
     private columnList(tableName: string, main: PgVisitor, element: PgVisitor): string[] | undefined  {
         console.log(log.whereIam());
         if (isFile(element.ctx) && element.returnFormat === returnFormats.csv) return element.columnSpecials["result"] 
@@ -89,7 +81,6 @@ export class Query  {
             console.log(log.error("no entity For", tableName));
             return;
         }
-
         // Add ceil and return if graph
         if (isGraph(main)) {
             if (element.query.orderBy.notNull()) element.query.orderBy.add(', ');
@@ -98,13 +89,11 @@ export class Query  {
                 ? `timestamp_ceil("resultTime", interval '${main.interval}') AS srcdate`
                 : `@GRAPH@`];
         }
-
         if (isGeoJson(tempEntity, main)) {
             const col = tempEntity.name === "Locations" ? "location" : "feature";
             main.query.where.add(`"${col}"::text LIKE '%coordinates%'`);
             return [ `${col} AS "geometry"`];
         }
-
         // If array result add id 
         const returnValue: string[] = isDataArray(main) && !element.query.select.toString().includes(`"id"${EConstant.columnSeparator}`) ? ["id"] : []; 
         // create selfLink                                   
@@ -149,7 +138,6 @@ export class Query  {
         }
         return returnValue;
     }
-
     // Create SQL Query
     private create(main: RootPgVisitor | PgVisitor, toWhere: boolean, _element?: PgVisitor): IpgQuery | undefined {        
         const element = _element ? _element : main;
@@ -198,7 +186,6 @@ export class Query  {
                                         main.addToIntervalColumns(`'${main.ctx.decodedUrl.root}/${element.entity.name}(0)/${rel}' AS "${rel}${EConstant.navLink}"`);
                             }
                         });
-
                     const res = { 
                         select: select.join(",\n\t\t"), 
                         from: [doubleQuotesString(element.entity.table)],
@@ -217,7 +204,6 @@ export class Query  {
         }
         return undefined;
     }
-
     private pgQueryToString(input: IpgQuery | undefined): string | undefined{    
         return input ? 
             `SELECT ${input.select}\n FROM ${input.from}\n ${input.where 
@@ -233,7 +219,6 @@ export class Query  {
                 : ''}` 
             : undefined;
     }
-
     toWhere(main: RootPgVisitor | PgVisitor, _element?: PgVisitor): string {
         console.log(log.whereIam());
         this._pgQuery = this.create(main, true, _element);
@@ -246,7 +231,6 @@ export class Query  {
         }
         throw new Error(errors.invalidQuery);
     }
-
     toString(main: RootPgVisitor | PgVisitor, _element?: PgVisitor): string {
         console.log(log.whereIam());
         if(!this._pgQuery) this._pgQuery = this.create(main, false, _element);
@@ -260,10 +244,8 @@ export class Query  {
         if(!this._pgQuery) this._pgQuery = this.create(main, false, _element);
         return this._pgQuery;
     }
-
     addFrom(input: string) {
         this.from = input;
     }
-
 
 }

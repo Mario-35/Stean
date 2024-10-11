@@ -1,23 +1,16 @@
 process.env.NODE_ENV = "test";
-
 import chai from "chai";
 import chaiHttp from "chai-http";
 const mqtt = require('mqtt');
 import { IApiDoc, prepareToApiDoc, IApiInput, identification, generateApiDoc, testVersion, _RAWDB } from "../integration/constant";
-
 chai.use(chaiHttp);
-
 const should = chai.should();
-
 import { server } from "../../server/index";
 import { addStartNewTest, addTest, writeLog } from "../integration/tests";
-
 const docs: IApiDoc[] = [];
-
 const addToApiDoc = (input: IApiInput) => {
     docs.push(prepareToApiDoc(input, "Mqtt"));
 };
-
 
 addToApiDoc({
     api: `{infos} /Identification Infos`,
@@ -35,7 +28,6 @@ addToApiDoc({
             it("should return id subscribe", (done) => {     
                 addStartNewTest("Mqtt");
                 const mqttClient = mqtt.connect('ws://localhost:1883/test/v1.1/login', { username: "zobi", password: "zobi"});
-
             const infos = addTest({
                 api: `{post} login get a new token`,
                 apiName: `TokenLogin`,

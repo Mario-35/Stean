@@ -5,8 +5,6 @@
 * @author mario.adam@inrae.fr
 *
 */
-// onsole.log("!----------------------------------- testId -----------------------------------!\n");
-
 export const testId = (table: string, id: bigint | string): string => 
 `SELECT 
 CASE WHEN EXISTS(
@@ -24,5 +22,4 @@ CASE WHEN EXISTS(
   WHERE 
     "id" = ${id}
 ) END AS "id"`;
-
 

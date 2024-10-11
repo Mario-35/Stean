@@ -6,8 +6,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Helpers for user admin -----------------------------------!\n");
-
 import { config } from "../../configuration";
 import { setDebug } from "../../constants";
 import { EConstant, EFrom, EVersion } from "../../enums";
@@ -15,7 +13,6 @@ import { cleanUrl } from "../../helpers";
 import { log } from "../../log";
 import { errors } from "../../messages";
 import { IdecodedUrl, koaContext  } from "../../types";
-
 //   service root URI                   resource path     query options
 // __________|______________________________|___________ _______|____________
 //                                 \                   \                  \
@@ -23,7 +20,6 @@ import { IdecodedUrl, koaContext  } from "../../types";
 // _____/________________/____/____/___________________/___________________/
 //   |           |         |    |         |                |
 // protocol    host   service  version  pathname         search
-
 export const decodeUrl = (ctx: koaContext, input?: string): IdecodedUrl | undefined => {
   // get input
   input = input || ctx.href;

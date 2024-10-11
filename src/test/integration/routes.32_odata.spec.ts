@@ -7,7 +7,6 @@
  *
  */
 process.env.NODE_ENV = "test";
-
 import chai from "chai";
 import chaiHttp from "chai-http";
 import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, defaultGet, limitResult, apiInfos, testVersion } from "./constant";
@@ -17,17 +16,12 @@ import { testsKeys as datastreams_testsKeys } from "./routes.17_datastreams.spec
 import { testsKeys as sensors_testsKeys } from "./routes.19_sensors.spec";
 import { count, executeQuery } from "./executeQuery";
 import { addStartNewTest, addTest, writeLog } from "./tests";
-
 chai.use(chaiHttp);
-
 const should = chai.should();
-
 const docs: IApiDoc[] = [];
-
 const addToApiDoc = (input: IApiInput) => {
     docs.push(prepareToApiDoc(input, "Odata"));
 };
-
 addToApiDoc({
     api: `{infos} /Odata Infos`,
     apiName: "InfosOdata",
@@ -46,7 +40,6 @@ describe("Odata", () => {
 		done();
 	});
     afterEach(() => { writeLog(true); });
-
     it("Retrieve a specific thing and $expand Datastreams. [9.3.2.1]", (done) => {
         const infos = addTest({
             api: "{get} Things(:id) Expand",
@@ -77,7 +70,6 @@ describe("Odata", () => {
                     done();
             });
     });
-
     it("Retrieve a specific thing and $expand Datastreams and Sensor inside. [9.3.2.1]", (done) => {
         const infos = addTest({
             api: "{get} Things(:id) Expand sub Entity",
@@ -111,7 +103,6 @@ describe("Odata", () => {
                     done();
             });
     });
-
     it("Return void MultiDatastreams list in expand with no datas [9.3.2.1]", (done) => {
         const infos = addTest({
             api: `{get} things(:id) expand with empty result`,
@@ -141,7 +132,6 @@ describe("Odata", () => {
                     done();
             });
     });
-
     it("Return Datastreams with obvervation expand with filter result = 17.5 [9.3.2.1] & [9.3.2.2]", (done) => {
         const infos = addTest({
             api: `{get} things(:id) expand with inner filter`,
@@ -172,7 +162,6 @@ describe("Odata", () => {
                     done();
             });
     });
-
     it("Return Datastreams with obvervation expand complex SELECT [9.3.2.1] & [9.3.2.2]", (done) => {
         const infos = addTest({
             api: `{get} things(:id) expand with inner select`,
@@ -203,7 +192,6 @@ describe("Odata", () => {
                     done();
             });
     });
-
     it("Retrieve description property for a specific Thing. [9.3.2.2]", (done) => {
         const infos = addTest({
             api: "{get} Things(:id) Select",
@@ -228,7 +216,6 @@ describe("Odata", () => {
                     done();
             });
     });
-
     it("Retrieve name and description properties from all Things. [9.3.2.2]", (done) => {
         const infos = addTest({
             api: "{get} Things(:id) Select multi",
@@ -257,7 +244,6 @@ describe("Odata", () => {
                     });
             });
     });
-
     it("Oata orderBy [9.3.3.1]", (done) => {
         const infos = addTest({
             api: "{get} Things OrderBy",
@@ -286,7 +272,6 @@ describe("Odata", () => {
                     });
             });
     });
-
     it("Oata top [9.3.3.2]", (done) => {
         const infos = addTest({
             api: "{get} Observations Top",
@@ -312,7 +297,6 @@ describe("Odata", () => {
                     done();
             });
     });
-
     it("Oata skip [9.3.3.3]", (done) => {
         const infos = addTest({
             api: "{get} Observations Skip",
@@ -340,7 +324,6 @@ describe("Odata", () => {
                     });
             });
     });
-
     it("Oata count [9.3.3.4]", (done) => {
             const infos = addTest({
                 api: "{get} Observations count",
@@ -367,7 +350,6 @@ describe("Odata", () => {
                     done();
                 });
     });
-
     it("filter Datastreams whose unitOfMeasurement property name = 'Degrees Fahrenheit'.", (done) => {
         const infos = addTest({
             api: "{Get} filter Datastreams whose unitOfMeasurement property name = 'Degrees Fahrenheit'",
@@ -391,7 +373,6 @@ describe("Odata", () => {
             done();
     });
     });
-
     it("filter name OR description of thing", (done) => {
         const infos = addTest({
             api: "{Get} filter name OR description of thing",
@@ -414,7 +395,6 @@ describe("Odata", () => {
                     done();
             });
     });
-
     it("filter name AND description of thing", (done) => {
         const infos = addTest({
             api: "{Get} filter name AND description of thing",
@@ -437,7 +417,6 @@ describe("Odata", () => {
                 done();
             });
     });
-
     it("filter name STARTWITH", (done) => {
         const infos = addTest({
             api: "{Get} filter name STARTWITH",
@@ -460,7 +439,6 @@ describe("Odata", () => {
                     done();
             });
     });
-
     it("filter name CONTAINS", (done) => {
         const infos = addTest({
             api: "{Get} filter name CONTAINS",
@@ -483,7 +461,6 @@ describe("Odata", () => {
                     done();
             });
     });
-
     it("filter date greater Than", (done) => {
         const infos = addTest({
             api: "{Get} filter date greater Than",
@@ -506,7 +483,6 @@ describe("Odata", () => {
                     done();
             });
     });
-
     it("filter date eq", (done) => {
         const infos = addTest({
             api: "{Get} filter date eq",
@@ -531,7 +507,6 @@ describe("Odata", () => {
                     done();
             });
     });
-
     it("filter date interval", (done) => {        
         const infos = addTest({
             api: "{get} Thing filter date greater than and less than",
@@ -556,7 +531,6 @@ describe("Odata", () => {
                 done();
             });
     });
-
     it("Save and write apiDoc", (done) => {
         generateApiDoc(docs, "apiDocOdata.js");                 
                     done();

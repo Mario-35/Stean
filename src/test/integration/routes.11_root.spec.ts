@@ -1,28 +1,20 @@
 process.env.NODE_ENV = "test";
-
 import chai from "chai";
 import chaiHttp from "chai-http";
 import fs from "fs";
 import path from "path";
 import { IApiDoc, prepareToApiDoc, generateApiDoc, IApiInput, apiInfos, blank, testVersion } from "./constant";
-
 chai.use(chaiHttp);
-
 const should = chai.should();
-
 import { server } from "../../server/index";
 import { addStartNewTest, addTest, writeLog } from "./tests";
-
 const docs: IApiDoc[] = [];
-
 const addToApiDoc = (input: IApiInput) => {
     docs.push(prepareToApiDoc(input, "SensorThings"));
 };
-
 fs.mkdirSync(path.resolve(__dirname, "../apiDocs/"), {
     recursive: true
 });
-
 addToApiDoc({
     api: `{infos} /SensorThings Infos`,
     apiName: `InfosSensorThings`,
@@ -51,7 +43,6 @@ addToApiDoc({
     apiReference: "https://docs.ogc.org/is/18-088/18-088.html",
     result: ""
 });
-
 describe("endpoint : index", () => {
     describe(`GET /${testVersion}/ [9.1]`, () => {
         afterEach(() => { writeLog(true); });
@@ -75,7 +66,6 @@ describe("endpoint : index", () => {
                 apiExample: { http: `${testVersion}/` },
                 apiSuccess: []
             });
-
             chai.request(server)
             .get(`/test/${infos.apiExample.http}`)
             .end((err, res) => {
@@ -99,7 +89,6 @@ describe("endpoint : index", () => {
             });
         });
     });
-
 
     
     describe(`GET /${testVersion}/ [9.2.1]`, () => {
@@ -126,7 +115,6 @@ describe("endpoint : index", () => {
                     "{relation} Decoders Get all decoders."
                 ]
             });
-
             chai.request(server)
             .get(`/test/${infos.apiExample.http}`)
             .end((err, res) => {

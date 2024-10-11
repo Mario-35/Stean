@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- cardinality -----------------------------------!\n");
-
 import { idColumnName } from ".";
 import { models } from "..";
 import { ERelations } from "../../enums";
@@ -14,7 +12,6 @@ import { formatPgTableColumn } from "../../helpers";
 import { log } from "../../log";
 import { errorMessage } from "../../messages";
 import { IrelationInfos, Ientity, Iservice } from "../../types";
-
 const _Key = (entity: Ientity, search: Ientity) => {  
     return Object.keys(entity.columns).includes(`${search.table}_id`) 
     ? `${search.table}_id`
@@ -24,7 +21,6 @@ const _Key = (entity: Ientity, search: Ientity) => {
         ? `_default_${search.singular.toLocaleLowerCase()}`
         : "id";
 }
-
 export const relationInfos = (service: Iservice, entityName: string, relationName: string, loop?:boolean): IrelationInfos => {
     console.log(log.whereIam());
     let r: IrelationInfos | undefined = undefined;
@@ -42,7 +38,6 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
             const fnError = (): IrelationInfos => {
                 return {type: "ERROR", rightKey: "", leftKey: "", table : "cardinality ERROR", column: "cardinality ERROR", expand :  '', link :  '' };
             }
-
             const fnHasMany = () => {
                 const complexEntity = models.getEntity(service, `${leftEntity.name}${rightEntity.name}`) || models.getEntity(service, `${rightEntity.name}${leftEntity.name}`) || models.getEntity(service, `${leftEntity.singular}${rightEntity.singular}`) || models.getEntity(service, `${rightEntity.singular}${leftEntity.singular}`);
                 if(complexEntity && rightRelation) {
@@ -62,7 +57,6 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                 }
                 return fnError();
             }
-
             switch (leftRelation.type) {
                 // === : 1
                 case ERelations.defaultUnique:
@@ -85,7 +79,6 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                         }
                         errorMessage("defaultUnique");
                         break;
-
                 // === : 2
                 case ERelations.belongsTo:
                     if (rightRelation  && rightRelation.type) {
@@ -101,7 +94,6 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                     link: `${formatPgTableColumn(rightEntity.table, rightKey)} = (SELECT ${formatPgTableColumn(leftEntity.table, leftKey)} FROM ${formatPgTableColumn(leftEntity.table)} WHERE ${formatPgTableColumn(leftEntity.table, rightKey)} =$ID)`,
                                     expand: `${formatPgTableColumn(rightEntity.table, rightKey)} = ${formatPgTableColumn(leftEntity.table, leftKey)}`,
                             }
-
                             // ===> 2.3
                             case ERelations.belongsToMany:                            
                                 if (rightRelationName && !loop) {                                
@@ -121,7 +113,6 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                         }
                                 }
                             }
-
                             // ===> 2.4
                             case ERelations.hasMany:
                                     return {
@@ -137,7 +128,6 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                     }
                     errorMessage("belongsTo");
                     break;
-
                 // === : 3
                 case ERelations.belongsToMany:
                     if (rightRelation  && rightRelation.type) {
@@ -162,7 +152,6 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                                     leftKey: tempCardinality.leftKey,
                                                     rightKey: tempCardinality.rightKey,
                                                     table: tempCardinality.table
-
                                                 },
                                                 table: complexEntity2.table,
                                                 column: idColumnName(leftEntity, rightEntity) || "id",
@@ -191,16 +180,13 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                     r.expand = r.link.replace("$ID", formatPgTableColumn(complexEntity2.table, rightKey));
                                     return r;
                             }
-
                             // ===> 3.3
                             case ERelations.belongsToMany:
                                 return fnHasMany();
-
                         }   
                     }
                     errorMessage("belongsToMany");
                     break;
-
                 // === : 4
                 case ERelations.hasMany:
                     if (rightRelation  && rightRelation.type) {
@@ -218,7 +204,6 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                 }      
                                 r.expand = r.link.replace("$ID", formatPgTableColumn(leftEntity.table, leftKey));
                                 return r;
-
                             // ===> 4.2
                             case ERelations.belongsTo:
                                 r = {
@@ -232,7 +217,6 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                 }      
                                 r.expand = r.link.replace("$ID", formatPgTableColumn(leftEntity.table, "id"));
                                 return r;
-
 
                             // ===> 4.4
                             case ERelations.hasMany:
@@ -267,6 +251,5 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
     }
     
     return {type: "ERROR", rightKey: "", leftKey: "", table : "cardinality ERROR", column: "cardinality ERROR", expand :  '', link :  '' };
-
 
 }

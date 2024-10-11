@@ -5,13 +5,10 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- entity ThingLocation -----------------------------------!\n");
-
 import { createEntity } from ".";
 import { ETable } from "../../enums";
 import { Ientity } from "../../types";
 import { _idRel } from "./constants";
-
 
   export const ThingLocation:Ientity  = createEntity("ThingsLocations", {
     createOrder: 3,

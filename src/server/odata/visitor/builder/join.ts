@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Where builder -----------------------------------!\n");
-
 import { Core } from ".";
 export class Join extends Core {
   constructor(input?: string | string[]) {

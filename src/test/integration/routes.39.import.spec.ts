@@ -6,24 +6,17 @@
  *
  */
 process.env.NODE_ENV = "test";
-// onsole.log("!----------------------------------- TDD for ultime tests API -----------------------------------!\n");
-
 import chai from "chai";
 import chaiHttp from "chai-http";
 import { IApiDoc, IApiInput, prepareToApiDoc, generateApiDoc, identification, keyTokenName, limitResult, testVersion } from "./constant";
 import { server } from "../../server/index";
 import { addPostFile, addStartNewTest, addTest, writeLog } from "./tests";
-
 chai.use(chaiHttp);
-
 const should = chai.should();
-
 const docs: IApiDoc[] = [];
-
 const addToApiDoc = (input: IApiInput) => {
     docs.push(prepareToApiDoc(input, "Import"));
 };
-
 const simple = {
     "header": false,
     "nan": true,
@@ -34,7 +27,6 @@ const simple = {
         }
     }
 };
-
 const multi = {
     "header": true,
     "nan": true,
@@ -49,7 +41,6 @@ const multi = {
         }
     }
 };
-
 addToApiDoc({
     api: `{infos} /Import Extension`,
     apiName: "InfosImport",
@@ -59,7 +50,6 @@ addToApiDoc({
     </div>`,
     result: ""
 });
-
 describe("CSV Import", function () {
     this.timeout(5000);
     let token = "";
@@ -102,7 +92,6 @@ describe("CSV Import", function () {
                 done();
             });
     });
-
     it("should insert 0 observations for duplicates values", (done) => {
         const infos = addTest({
             api: `{post} CreateObservations with simple csv attached file`,
@@ -134,7 +123,6 @@ describe("CSV Import", function () {
                 done();
             });
     });
-
     it("should return 10 observations added from csv file", (done) => {
         const infos = addTest({
             api: `{post} CreateObservations with multi csv attached file`,
@@ -166,7 +154,6 @@ describe("CSV Import", function () {
                 }
             });
     });
-
     it("should insert 0 observations for duplicates values", (done) => {
         const infos = addTest({
             api: `{post} CreateObservations with multi csv attached file`,

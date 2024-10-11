@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Index Css -----------------------------------!\n");
-
 import fs from "fs";
 import path from "path";
   const getCssFile = (name: string):string => (fs.existsSync(__dirname + `/${name}`)) ? fs.readFileSync(__dirname + `/${name}`, "utf-8") : fs.readFileSync(__dirname + `/${name.replace(".css",".min.css")}`, "utf-8");

@@ -5,12 +5,9 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- HTML Views First Install for API -----------------------------------!\n");
-
 import { info } from "../../messages";
 import { IKeyString, koaContext } from "../../types";
 import { CoreHtmlView } from "./core";
-
 interface Idatas { 
   login: boolean; 
   url: string; 
@@ -18,13 +15,11 @@ interface Idatas {
   why?: IKeyString
 }
 
-
 export class First extends CoreHtmlView {
     constructor(ctx: koaContext, datas: Idatas) {
         super(ctx);        
         this.first(datas);
     }
-
     private first(datas: Idatas) {
       const alert = (name: string): string => (datas.why && datas.why[name] ? `<div class="alert">${datas.why[name]}</div>` : "");
         this._HTMLResult = [`

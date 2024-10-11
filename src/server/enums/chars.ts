@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Chars Enum -----------------------------------!\n");
-
 export const enum EChar {
   del = "🗑️",
   forbidden = "⛔️",
@@ -29,4 +27,3 @@ export const enum EChar {
   arrowleft = "🡸",
   arrowright = "🡺",
 }
-

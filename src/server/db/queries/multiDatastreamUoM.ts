@@ -6,10 +6,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- multiDatastreamUnitOfMeasurements -----------------------------------!\n");
-
 import { RootPgVisitor } from "../../odata/visitor";
-
 export const multiDatastreamUoM = (input: RootPgVisitor) => `SELECT 
 jsonb_agg(tmp.units -> 'name') AS keys 
 FROM 

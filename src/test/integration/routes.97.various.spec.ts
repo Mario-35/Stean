@@ -12,11 +12,8 @@ import chaiHttp from "chai-http";
 import { server } from "../../server/index";
 import { addStartNewTest, addTest, writeLog } from "./tests";
 
-
 chai.use(chaiHttp);
-
 const should = chai.should();
-
 const tests: Record<string, any> = {
     "/test/v1.1/Things?$filter=Datastreams/ObservedProperty/description eq 'Description of classic Observed Property'": 1,
     "/test/v1.1/Observations?$filter=phenomenonTime gt 2024-06-05T02:15:01+02:00": 16,
@@ -43,9 +40,7 @@ const tests: Record<string, any> = {
     // "/test/v1.1/Locations?$filter=geo.within(location, geography'POINT(-4.108433416883344 47.99535576613954)')": 16,
     // "/test/v1.1/Observations?$filter=validTime gt 2016-01-02T01:01:01.000Z/2016-01-03T23:59:59.999Z sub duration'P1D'"
 
-
 };
-
 describe("Various Get tests", () => {
     before((done) => {
         addStartNewTest("Various");
@@ -73,8 +68,6 @@ describe("Various Get tests", () => {
                     done();
                 });
         });
-
     });
 });
-
 

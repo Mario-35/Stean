@@ -5,13 +5,10 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- entity User -----------------------------------!\n");
-
 import { Ientity } from "../../types";
 import { createEntity } from ".";
 import { _idBig, _text } from "./constants";
 import { ETable } from "../../enums";
-
   export const User:Ientity  = createEntity("Users", {
     createOrder: -1,
     type: ETable.table,

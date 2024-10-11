@@ -1,28 +1,20 @@
 process.env.NODE_ENV = "test";
-
 import chai from "chai";
 import chaiHttp from "chai-http";
 import fs from "fs";
 import path from "path";
 import { IApiDoc, prepareToApiDoc, IApiInput, identification, generateApiDoc, testVersion, _RAWDB } from "./constant";
-
 chai.use(chaiHttp);
-
 const should = chai.should();
-
 import { server } from "../../server/index";
 import { addStartNewTest, addTest, writeLog } from "./tests";
-
 const docs: IApiDoc[] = [];
-
 const addToApiDoc = (input: IApiInput) => {
     docs.push(prepareToApiDoc(input, "Token"));
 };
-
 fs.mkdirSync(path.resolve(__dirname, "../server/apiDocs/"), {
     recursive: true
 });
-
 addToApiDoc({
     api: `{infos} /Identification Extension`,
     apiName: `InfosToken`,
@@ -38,7 +30,6 @@ addToApiDoc({
             afterEach(() => { writeLog(true); });
             it("should return JWT Identification", (done) => {     
                 addStartNewTest("Token");
-
             const infos = addTest({
                 api: `{post} login get a new token`,
                 apiName: `TokenLogin`,

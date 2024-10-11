@@ -6,21 +6,17 @@
  *
  *
  */
-// onsole.log("!----------------------------------- upload -----------------------------------!\n");
-
 import Busboy from "busboy";
 import path from "path";
 import util from "util";
 import fs from "fs";
 import { koaContext } from "../types";
 import { EConstant } from "../enums";
-
 /**
  *
  * @param ctx Koa context
  * @returns KeyString
  */
-
 export const upload = (ctx: koaContext): Promise<object> => {
   // Init results
   const data: Record<string, any> = {};
@@ -50,18 +46,15 @@ export const upload = (ctx: koaContext): Promise<object> => {
         file.on("data", (chunk) => {
           data["state"] = `GET ${chunk.length} bytes`;
         });
-
         file.on("error", (error: Error) => {
           console.log(error);
         });
-
         file.on("end", () => {
           data["state"] = "UPLOAD FINISHED";
           data[fieldname] = EConstant.uploadPath + "/" + filename;
         });
       }
     });
-
     busboy.on("field", (fieldname, value) => {
       data[fieldname] = value;
     });

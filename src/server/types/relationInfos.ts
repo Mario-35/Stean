@@ -5,9 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Comon Icardinality -----------------------------------!\n");
-
-
 export interface IrelationInfos {
     type:  string; 
     table: string;

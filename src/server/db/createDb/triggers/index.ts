@@ -5,13 +5,10 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Index triggers -----------------------------------!\n");
-
 import fs from "fs";
 import path from "path";
 import { config } from "../../../configuration";
 import { EExtensions } from "../../../enums";
-
 // Return all sql files in directory 
 export const triggers = (configName: string): string[] => {  
     const result: string[] = [];
@@ -25,4 +22,3 @@ export const triggers = (configName: string): string[] => {
       });    
     return result;
 };
-

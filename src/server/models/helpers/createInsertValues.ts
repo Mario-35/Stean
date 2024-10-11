@@ -5,15 +5,12 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- createInsertValues -----------------------------------!\n");
-
 import { formatColumnValue, relationInfos } from ".";
 import { models } from "..";
 import { ESCAPE_SIMPLE_QUOTE } from "../../constants";
 import { doubleQuotesString, simpleQuotesString, removeFirstEndDoubleQuotes } from "../../helpers";
 import { log } from "../../log";
 import { Iservice } from "../../types";
-
 /**
  * 
  * @param service Service

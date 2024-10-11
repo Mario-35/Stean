@@ -5,12 +5,9 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- userAuthenticated -----------------------------------!\n");
-
 import { decodeToken } from ".";
 import { EExtensions } from "../enums";
 import { koaContext } from "../types";
-
 export const userAuthenticated = (ctx: koaContext): boolean => { 
   if (ctx.config && ctx.config.extensions.includes(EExtensions.users)) {
     const token = decodeToken(ctx);

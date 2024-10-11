@@ -5,13 +5,10 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- createIndexes -----------------------------------!\n");
-
 import { config } from "../../configuration";
 import { EChar, EExtensions } from "../../enums";
 import { asyncForEach } from "../../helpers";
 import { log } from "../../log";
-
 
 export const createIndexes = (name: string): void => {
     const exe = async (name: string, queries: string[]): Promise<boolean> => {
@@ -28,7 +25,6 @@ export const createIndexes = (name: string): void => {
         log.create(`Indexes : [${name}]`, EChar.ok);
         return true;
     }
-
     const sqls = [`WITH datastreams AS (
         select distinct "datastream_id" AS id from observation
         ),
@@ -48,7 +44,6 @@ export const createIndexes = (name: string): void => {
             "_resultTimeEnd" = datas.rmax
         FROM datas where "datastream".id = datas.id`
     ] 
-
     if (config.getService(name).extensions.includes(EExtensions.multiDatastream)) {
         sqls.push(`WITH multidatastreams AS (
                 select distinct "multidatastream_id" AS id from observation

@@ -5,25 +5,20 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- HTML Views Login for API -----------------------------------!\n");
-
 import { info } from "../../messages";
 import { IKeyString, koaContext } from "../../types";
 import { CoreHtmlView } from "./core";
-
 interface Idatas { 
   login: boolean; 
   body?: any; 
   why?: IKeyString
 }
 
-
 export class Login extends CoreHtmlView {
     constructor(ctx: koaContext, datas: Idatas) {
         super(ctx);
         this.login(datas);
     }
-
     private login(datas: Idatas) {
         const alert = (name: string): string => {
             return datas.why && datas.why[name] ? `<div class="alert">${datas.why[name]}</div>` : "";

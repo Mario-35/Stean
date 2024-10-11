@@ -5,10 +5,7 @@
 * @author mario.adam@inrae.fr
 *
 */
-// onsole.log("!----------------------------------- resultKeys -----------------------------------!\n");
-
 import { RootPgVisitor } from "../../odata/visitor";
-
 export const resultKeys = (column: string, input: RootPgVisitor): string => `SELECT 
   DISTINCT JSONB_OBJECT_KEYS(${column}) AS k 
 FROM 

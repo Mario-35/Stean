@@ -7,7 +7,6 @@
  *
  */
  process.env.NODE_ENV = "test";
-
  import chai from "chai";
  import chaiHttp from "chai-http";
  import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, defaultPost, limitResult, apiInfos, showHide, nbColor, nbColorTitle, testVersion, _RAWDB, defaultGet, infos, listOfColumns } from "./constant";
@@ -33,7 +32,6 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
  
  const docs: IApiDoc[] = [];
  const entity: Ientity = _RAWDB.Loras;
-
  const addToApiDoc = (input: IApiInput) => {
      docs.push(prepareToApiDoc(input, entity.name));
  };
@@ -98,7 +96,6 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} id: 1 ${nbColor}[9.2.3]`, (done) => {
 			const infos = addTest({
 				api: `{get} ${entity.name}(:id) Get one`,
@@ -132,7 +129,6 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
 					done();
 				});
 		});
-
         it(`Return error ${entity.singular} not found`, (done) => {
 			const infos = addTest({
 				api : `{get} return error ${entity.singular} not found`,
@@ -152,7 +148,6 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} deveui: 2CF7F1202520017E`, (done) => {
 			const infos = addTest({
 				api: `{get} ${entity.name}(:deveui) Get one from deveui`,
@@ -207,7 +202,6 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
 					done();
 				});
 		});
-
         it(`Return error ${entity.singular} not found`, (done) => {
 			const infos = addTest({
 				api : `{get} return error ${entity.singular} not found`,
@@ -227,7 +221,6 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
 					done();
 				});
 		});
-
         it(`Return ${entity.name} Subentity Datastream ${nbColor}[9.2.6]`, (done) => {
             const name = "Datastream";
 			const infos = addTest({
@@ -256,7 +249,6 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
 					done();
 				});
 		});
-
         it(`Return ${entity.name} Subentity MultiDatastream ${nbColor}[9.2.6]`, (done) => {
             const name = "MultiDatastream";
 			const infos = addTest({
@@ -284,7 +276,6 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
 					done();
 				});
 		});
-
         it(`Return ${entity.name} Subentity Decoder ${nbColor}[9.2.6]`, (done) => {
             const name = "Decoder";
 			const infos = addTest({
@@ -308,7 +299,6 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} Expand Datastream ${nbColor}[9.3.2.1]`, (done) => {
 			const name = "Datastream";
 			const infos = addTest({
@@ -336,7 +326,6 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
 					done();
 				});
 		});
-
         it(`Return ${entity.name} Expand MultiDatastream ${nbColor}[9.3.2.1]`, (done) => {
 			const name = "MultiDatastream";
 			const infos = addTest({
@@ -360,7 +349,6 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
 					res.body[name]["Sensor@iot.navigationLink"].should.contain(`/${name}s(${id})/Sensor`);
 					res.body[name]["ObservedProperties@iot.navigationLink"].should.contain(`/${name}s(${id})/ObservedProperties`);
 					res.body[name]["Observations@iot.navigationLink"].should.contain(`/${name}s(${id})/Observations`);
-
                     
 					
 					done();
@@ -391,12 +379,10 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
 					done();
 				});
 		});      
-
      });
  
      describe(`{post} ${entity.name} ${nbColorTitle}[10.2]`, () => {
         afterEach(() => { writeLog(true); });
-
          it("should return the Lora Affected multi that was added", (done) => {
              const datas = {
                  "MultiDatastream": {
@@ -470,7 +456,6 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
                     done();
                  });
          });
-
          it("should return an error because datastream not exist", (done) => {
             const datas = {
                 "Datastream": {
@@ -569,7 +554,6 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
                     done();
                 });
         });
-
          it("should return Error Invalid Payload Message", (done) => {
             const datas = {
                 "deveui": "8CF9574000002D2D",
@@ -601,7 +585,6 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
                     done();
                 });
         });
-
         it(`Return Error if the payload is malformed ${nbColor}[10.2.2]`, (done) => {
             const infos = addTest({
                 api : `{post} return Error if the payload is malformed`,
@@ -624,7 +607,6 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
                     done();
                 });
         });
-
  
          it("should return that Observation already exist", (done) => {
              const datas = {

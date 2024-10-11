@@ -5,13 +5,10 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- executeSql -----------------------------------!\n");
-
 import { config } from "../../configuration";
 import { log } from "../../log";
 import { isTest } from "../../helpers";
 import { Iservice, keyobj } from "../../types";
-
 const executeSqlOne = async (service: Iservice , query: string): Promise<object> => {
     config.writeLog(log.query(query))
     return new Promise(async function (resolve, reject) {
@@ -23,7 +20,6 @@ const executeSqlOne = async (service: Iservice , query: string): Promise<object>
         });
     });
 };
-
 const executeSqlMulti = async (service: Iservice , query: string[]): Promise<object> => {
     config.writeLog(log.query(query));
     return new Promise(async function (resolve, reject) {
@@ -36,7 +32,6 @@ const executeSqlMulti = async (service: Iservice , query: string[]): Promise<obj
         });
     });
 };
-
 export const executeSql = async (service: Iservice , query: string | string[]): Promise<object> => typeof query === "string" 
     ? executeSqlOne(service, query) 
     : executeSqlMulti(service, query);

@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- colors Enum -----------------------------------!\n");
-
 export const enum EColor {
   Reset = 0,
   Black = 30,

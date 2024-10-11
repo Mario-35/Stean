@@ -7,24 +7,18 @@
  *
  */
 process.env.NODE_ENV = "test";
-
 import chai from "chai";
 import chaiHttp from "chai-http";
 import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, defaultGet, limitResult, testVersion } from "./constant";
 import { server } from "../../server/index";
 import { addStartNewTest, addTest, writeLog } from "./tests";
 
-
 chai.use(chaiHttp);
-
 const should = chai.should();
-
 const docs: IApiDoc[] = [];
-
 const addToApiDoc = (input: IApiInput) => {
     docs.push(prepareToApiDoc(input, "BuiltInFunctions"));
 };
-
 addToApiDoc({
     api: `{infos} /BuiltInFunctions Infos`,
     apiName: "InfosBuiltInFunctions",
@@ -65,7 +59,6 @@ describe("Odata BuiltInFunctions [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     it("substringof('name', 'with')", (done) => {
         const infos = addTest({
             api: `{get} substringof('name', 'with')`,
@@ -88,7 +81,6 @@ describe("Odata BuiltInFunctions [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     it("endwith('name', 'Thing') eq true", (done) => {
         const infos = addTest({
             api: "{get} Things(:id) endwith",
@@ -115,7 +107,6 @@ describe("Odata BuiltInFunctions [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     it("endwith('description', 'one')", (done) => {
         const infos = addTest({
             api: `{get} endwith('description', 'one')`,
@@ -138,7 +129,6 @@ describe("Odata BuiltInFunctions [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     it("startswith('name', 'Temperature') eq true", (done) => {
         const infos = addTest({
             api: "{get} Things(:id) startswith",
@@ -165,7 +155,6 @@ describe("Odata BuiltInFunctions [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     it("startswith('name', 'Temperature')", (done) => {
         const infos = addTest({
             api: `{get} endwith(description, 'one')`,
@@ -188,7 +177,6 @@ describe("Odata BuiltInFunctions [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     it("length(description) le 22", (done) => {
         const infos = addTest({
             api: "{get} Things(:id) Length",
@@ -215,7 +203,6 @@ describe("Odata BuiltInFunctions [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     it("indexof('name', 'Temperature') eq 1", (done) => {
         const infos = addTest({
             api: "{get} indexof",
@@ -242,7 +229,6 @@ describe("Odata BuiltInFunctions [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     it("substring('name', 1) eq 'ame of new Things 1'", (done) => {
         const infos = addTest({
             api: "{get} Things substring(str, nb)",
@@ -296,7 +282,6 @@ describe("Odata BuiltInFunctions [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     it("tolower('name') eq 'sensorwebthing 2'", (done) => {
         const infos = addTest({
             api: "{get} Things toLower",
@@ -350,7 +335,6 @@ describe("Odata BuiltInFunctions [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     it("trim('name') eq 'Piezo F5b'", (done) => {
         const infos = addTest({
             api: "{get} Things trim",
@@ -377,7 +361,6 @@ describe("Odata BuiltInFunctions [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     // it("trim('name', 'Piezo ') eq '2'", (done) => {
     //     const infos = addTest({
     //         api: "{get} Things trimParams",
@@ -404,7 +387,6 @@ describe("Odata BuiltInFunctions [9.3.3.5.2]", () => {
     //             done();
     //         });
     // });
-
     it("concat('name', 'test') eq 'MultiDatastreams SensorWebThing 10test'", (done) => {
         const infos = addTest({
             api: "{get} Things concat",
@@ -431,7 +413,6 @@ describe("Odata BuiltInFunctions [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     it("Save and write apiDoc", (done) => {
         generateApiDoc(docs, "apiDocBuiltInFunctions.js");
         done();

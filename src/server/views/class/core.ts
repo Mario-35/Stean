@@ -5,11 +5,8 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- HTML Views Core for API -----------------------------------!\n");
-
 import { koaContext } from "../../types";
 import { addCssFile } from "../css";
-
 export class CoreHtmlView {
     ctx: koaContext;
     _HTMLResult: string[];
@@ -18,7 +15,6 @@ export class CoreHtmlView {
       this.ctx = ctx;
       this._HTMLResult = datas ? typeof datas === 'string' ? [datas] : datas : [];
     }
-
     makeIdName(name: string): string {
       return `reg${name}`;
     }
@@ -30,7 +26,6 @@ export class CoreHtmlView {
     hr(): string {
       return '<div class="hr"></div>';
     }
-
     head (title: string, css?: string | string[]): string {
       return `<head>
                 <meta charset="utf-8">
@@ -38,7 +33,6 @@ export class CoreHtmlView {
                 <title>${title}</title>
               </head>`;
     };
-
     foot( links: { href: string; class: string; name: string; }[] ): string  {
       const returnValue: string[] = [this.hr()];
       links.forEach((element: { href: string; class: string; name: string }) => {
@@ -56,7 +50,6 @@ export class CoreHtmlView {
                 <input type="submit" class="button" value="${label}">
               </div>`;
     }
-
     AddErrorMessage(error: string ) {
       return error === "undefined" ? '' : `<div class="message-container">
         <div class="error">
@@ -64,13 +57,11 @@ export class CoreHtmlView {
         </div>
       </div>`;
     }
-
     addButton(action: string, label: string ) {
       return `<div class="group">
                 <a href="${action}" class="button" >${label}</a>
               </div>`;
     }
-
     addCheckBox(input: { name: string, checked: boolean, label?: string }) {
       const idName = this.makeIdName(input.name);
       return `<div class="group"> 
@@ -81,21 +72,18 @@ export class CoreHtmlView {
                 <label for="${idName}"><span class="icon"></span>${input.label ? input.label : input.name}</label>
               </div>`;
     }
-
     multiSelectItemCheck(name: string, list: string[]): string {
       const res: string[] = [];
       list.forEach((e: string) => {
         res.push(`<label for="${e}"> <input type="checkbox" name="${name}${e}" />${e}</label>`)});
       return res.join("");
     }
-
     multiSelectItem(list: string[]): string {
       const res: string[] = [];
       list.forEach((e: string, n: number) => {
         res.push(`<option value="${e}">${e}</option>`)});
       return res.join("");
     }
-
     addSelect(input: { name: string, message: string, list: string[] , value: any, alert?: string, toolType?: string, password?: boolean }) {
       const idName = this.makeIdName(input.name);
       return `<div class="group">
@@ -107,7 +95,6 @@ export class CoreHtmlView {
                 </select>
               </div>`;
     }
-
     addMultiSelect(input: { name: string, message: string, list: string[] }) {
       const idName = this.makeIdName(input.name);
       return `
@@ -144,16 +131,13 @@ export class CoreHtmlView {
                         ${input.alert ? input.alert : ''}
               </div>`;
     }
-
     addHidden(name: string, value: string) {
       return`<input type="hidden" id="${name}" name="${name}" value="${value}" />`;
     }
 
-
     toArray() {
       return this._HTMLResult;
     }
-
     toString() {
       return this._HTMLResult.filter(e => e !== "").join("");
     }

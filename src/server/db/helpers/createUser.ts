@@ -5,12 +5,9 @@
  * @author mario.adam@inrae.fr
  *
  */
-
  import { EChar } from "../../enums";
 import { Iservice } from "../../types";
 import { userAccess } from "../dataAccess";
-// onsole.log("!----------------------------------- createUser -----------------------------------!\n");
-
 export const createUser = async (service: Iservice ): Promise<string> => {
   return new Promise(async function (resolve, reject) {
     await userAccess.post(service.name, {

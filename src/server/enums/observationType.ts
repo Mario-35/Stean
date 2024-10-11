@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- observationType Enum -----------------------------------!\n");
-
 export enum EObservationType {    
     "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_CategoryObservation" = "_resulttext",
     "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_CountObservation" = "number",

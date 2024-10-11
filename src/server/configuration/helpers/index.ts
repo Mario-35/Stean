@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Index Configuration Helpers -----------------------------------!\n");
-
 export { formatconfigFile } from "./formatconfigFile";
 export { testDbExists } from "./testDbExists";
 export { testDbConnection } from "./testDbConnection";

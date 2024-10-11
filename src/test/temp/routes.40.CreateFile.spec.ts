@@ -6,8 +6,6 @@
  *
  */
 process.env.NODE_ENV = "test";
-// onsole.log("!----------------------------------- TDD for ultime tests API -----------------------------------!\n");
-
 import chai from "chai";
 import chaiHttp from "chai-http";
 import { IApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, limitResult, testVersion, generateApiDoc, _RAWDB, testLog } from "../integration/constant";
@@ -15,19 +13,14 @@ import { server } from "../../server/index";
 import { Ientity } from "../../server/types";
 import { executeQuery } from "../integration/executeQuery";
 import { addStartNewTest, addTest } from "../integration/tests";
-
 chai.use(chaiHttp);
-
 const should = chai.should();
-
 const docs: IApiDoc[] = [];
 const entity: Ientity = _RAWDB.CreateFile;
 let id = 0;
-
 const addToApiDoc = (input: IApiInput) => {
     docs.push(prepareToApiDoc(input, "CreateFile"));
 };
-
 addToApiDoc({
     api: `{infos} /Import info.`,
     apiName: "InfosCreateFile",
@@ -40,7 +33,6 @@ addToApiDoc({
     </div>`,
     result: ""
 });
-
 describe(`CSV ${entity.name}`, function () {
     this.timeout(5000);
     let token = "";
@@ -55,7 +47,6 @@ describe(`CSV ${entity.name}`, function () {
                 done();
             });
     });
-
     it(`Create Thing For createFile`, (done) => {
         const datas = {
             "name": "Thing createFile2",
@@ -77,7 +68,6 @@ describe(`CSV ${entity.name}`, function () {
                 done();
             });
     });    
-
     it("Should return The Datastreams create to ingest csv file", (done) => {
         const infos = addTest({
             api: `{post} ${entity.name} with csv attached file`,
@@ -110,7 +100,6 @@ describe(`CSV ${entity.name}`, function () {
                 }
             });
     });
-
     it("Should return The Datastreams updated for file", (done) => {
         const infos = addTest({
             api: `{post} ${entity.name} with same csv attached file [duplicate]`,
@@ -128,7 +117,6 @@ describe(`CSV ${entity.name}`, function () {
             .end(async (err: Error, res: any) => {
                 console.log(res.body);
                 testLog(res.body);
-
                 if (err) testLog(err);
                 if (err) console.log(err);
                 else {
@@ -146,5 +134,4 @@ describe(`CSV ${entity.name}`, function () {
             });
             
     });
-
 });

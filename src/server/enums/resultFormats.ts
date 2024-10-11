@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- formats Enum -----------------------------------!\n");
-
 export const enum EReturnFormats {    
     json = "json", 
     csv = "csv",

@@ -5,11 +5,8 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Entity interface -----------------------------------!\n");
-
 import { IentityColumn, IentityRelation, IKeyString } from ".";
 import { ETable } from "../enums";
-
 export interface IentityCore {
      createOrder:   number;
      type:          ETable;
@@ -21,7 +18,6 @@ export interface IentityCore {
      indexes?:      IKeyString;
      after?:        string;
 }
-
 export interface Ientity extends IentityCore {
      name:     string; // Entity Name
      singular: string;

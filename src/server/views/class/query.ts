@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- HTML Views First for API -----------------------------------!\n");
-
 import { EConstant } from "../../enums";
 import { removeAllQuotes } from "../../helpers";
 import { log } from "../../log";
@@ -16,7 +14,6 @@ import { addJsFile, listaddJsFiles } from "../js";
 import { CoreHtmlView } from "./core";
 import fs from "fs";
 import path from "path";
-
 export class Query extends CoreHtmlView {
     params: IqueryOptions;
     constructor(ctx: koaContext, datas: IqueryOptions) {
@@ -24,7 +21,6 @@ export class Query extends CoreHtmlView {
         this.params = datas;
         this.createQueryHtmlString();
     }
-
     createQueryHtmlString() {
         console.log(log.debug_head("commonHtml"));
         // if js or css .min
@@ -87,14 +83,10 @@ export class Query extends CoreHtmlView {
         listaddJsFiles().forEach((item: string) => {  
             replaceInReturnResult(`<script src="${fileWithOutMin(item)}"></script>`, `<script>${addJsFile(item)}</script>`);
         });
-
         
-
     };
-
     toString() {
         const bigIntReplacer = <K,V>(key: K, value: V) => typeof value === "bigint" ? value.toString() : value;
-
         return this._HTMLResult.join("").replace("_PARAMS={}", "_PARAMS=" + JSON.stringify(this.params, bigIntReplacer))
         // execute a start of query
         .replace("// @start@", this.params.results ? "jsonObj = JSON.parse(`" + this.params.results + "`); jsonViewer.showJSON(jsonObj);" : "")
@@ -103,5 +95,4 @@ export class Query extends CoreHtmlView {
         // default action form
         .replace("@action@", `${this.params.decodedUrl.root}/${this.params.decodedUrl.version}/CreateObservations`);
       }
-
   }

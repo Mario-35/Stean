@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Index Routes -----------------------------------!\n");
-
 import { decodeToken } from "../authentication";
 import { _DEBUG } from "../constants";
 import { log } from "../log";
@@ -22,7 +20,6 @@ import querystring from "querystring";
 import { koaContext } from "../types";
 import { writeLogToDb } from "../log/writeLogToDb";
 import { HtmlLogs } from "../views/class/logs";
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const routerHandle = async (ctx: koaContext, next: any) => { 
   // First Install 
@@ -59,7 +56,6 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
   if (decodedUrl.service && decodedUrl.configName) 
     ctx.config = config.getService(decodedUrl.configName);
     else return;
-
   // forcing post loras with different version IT'S POSSIBLE BECAUSE COLUMN ARE THE SAME FOR ALL VERSION
   if (decodedUrl.version != ctx.config.apiVersion) {    
     if (!(ctx.request.method === "POST" && ctx.originalUrl.includes(`${decodedUrl.version}/Loras`)))
@@ -67,7 +63,6 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
       ? ctx.originalUrl.replace(decodedUrl.version, ctx.config.apiVersion)
       : `${ctx.decodedUrl.linkbase}/v${ctx.config.apiVersion}/`);
   }
-
   
   
   // try to clean query string

@@ -7,26 +7,20 @@
  *
  */
 process.env.NODE_ENV = "test";
-
 import chai from "chai";
 import chaiHttp from "chai-http";
 import { IApiDoc, IApiInput, prepareToApiDoc, generateApiDoc, identification, keyTokenName, defaultPost, limitResult, blank, testVersion, _RAWDB } from "./constant";
 import { server } from "../../server/index";
 import { Ientity } from "../../server/types";
 import { addStartNewTest, addTest, writeLog } from "./tests";
-
 chai.use(chaiHttp);
-
 const should = chai.should();
-
 const docs: IApiDoc[] = [];
 const entity: Ientity = _RAWDB.CreateObservations;
-
 
 const addToApiDoc = (input: IApiInput) => {
     docs.push(prepareToApiDoc(input, "CreateObservations"));
 };
-
 addToApiDoc({
     api: `{infos} /CreateObservations Infos.`,
     apiName: "InfosCreateObservations",
@@ -37,7 +31,6 @@ addToApiDoc({
     apiReference: "https://docs.ogc.org/is/18-088/18-088.html#create-observation-dataarray",
     result: ""
 });
-
 const datasObs = (datastream: number) => {
     return {"Datastream": { "@iot.id": datastream },
     "components": ["phenomenonTime", "result", "resultTime", "FeatureOfInterest/id"],
@@ -50,7 +43,6 @@ const datasObs = (datastream: number) => {
     ]
     };
 };
-
 const muliDatasObs = (multiDatastream: number) => {
     return {"MultiDatastream": { "@iot.id": multiDatastream },
         "components": ["phenomenonTime", "result", "resultTime", "FeatureOfInterest/id"],
@@ -99,11 +91,9 @@ const muliDatasObs = (multiDatastream: number) => {
         ]
     };
 };
-
 describe(`endpoint : ${entity.name} [13.2]`, () => {
     afterEach(() => { writeLog(true); });
     let token = "";
-
     before((done) => {
         addStartNewTest(entity.name);
         chai.request(server)
@@ -114,9 +104,7 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
                 done();
             });
     });
-
     it("should return 4 observations links added that was added", (done) => {
-
         const infos = addTest({
             api: `{post} CreateObservations Add datastream`,
             apiName: "PostCreateObservationsDatastream",
@@ -129,7 +117,6 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
             },
             apiParamExample: datasObs(1)
         });
-
         chai.request(server)
             .post(`/test/${infos.apiExample.http}`)
             .send(infos.apiParamExample)
@@ -145,7 +132,6 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
                     done();
             });
     });
-
     it("should throw an error if datastream does not exist", (done) => {
         const datas = {
             "Datastream": { "@iot.id": `${BigInt(Number.MAX_SAFE_INTEGER)}` },
@@ -178,7 +164,6 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
                 done();
             });
     });
-
     it("should return 4 observations in datastream 2", (done) => {
         const infos = addTest({
             api : `{post} return Error if datastream does not exist`,
@@ -203,7 +188,6 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
                 done();
             });
     });
-
     it("should return 4 observations duplicate", (done) => {
         const infos = addTest({
             api: `{post} CreateObservations Add datastream duplicate.`,
@@ -263,7 +247,6 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
             done();
         });
     });
-
     it("should return 4 observations with multiDatastream", (done) => {
         const datas = muliDatasObs(2);
         const infos = addTest({
@@ -292,7 +275,6 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
                 done();
             });
     });
-
     it("should return 4 observations in MultiDatastream", (done) => {
         const datas = muliDatasObs(2);
         const infos = addTest({
@@ -321,7 +303,6 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
             done();
         });
     });
-
     it("should return 4 observations duplicate = delete", (done) => {
         const datas = {
             "duplicate": "delete",

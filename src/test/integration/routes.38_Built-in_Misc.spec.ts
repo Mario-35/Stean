@@ -7,24 +7,18 @@
  *
  */
 process.env.NODE_ENV = "test";
-
 import chai from "chai";
 import chaiHttp from "chai-http";
 import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, defaultGet, limitResult, testVersion } from "./constant";
 import { server } from "../../server/index";
 import { addStartNewTest, addTest, writeLog } from "./tests";
 
-
 chai.use(chaiHttp);
-
 const should = chai.should();
-
 const docs: IApiDoc[] = [];
-
 const addToApiDoc = (input: IApiInput) => {
     docs.push(prepareToApiDoc(input, "BuiltInMisc"));
 };
-
 addToApiDoc({
     api: `{infos} /BuiltInMisc Infos`,
     apiName: "InfosBuiltInMisc",
@@ -67,7 +61,6 @@ describe("Odata BuiltInMisc", () => {
                 done();
             });
     });
-
     it("interval(15 min)", (done) => {
         const infos = addTest({
             api: `{get} interval(15 min)`,
@@ -92,7 +85,6 @@ describe("Odata BuiltInMisc", () => {
                 done();
             });
     });
-
     it("interval(1 min)", (done) => {
         const infos = addTest({
             api: `{get} interval(1 min)`,
@@ -117,7 +109,6 @@ describe("Odata BuiltInMisc", () => {
                 done();
             });
     });
-
     it("interval(1 day)", (done) => {
         const infos = addTest({
             api: `{get} interval(1 day)`,
@@ -144,10 +135,8 @@ describe("Odata BuiltInMisc", () => {
                 done();
             });
     });
-
     it("Save and write apiDoc", (done) => {
         generateApiDoc(docs, "apiDocBuiltInMisc.js");
         done();
     });
-
 });

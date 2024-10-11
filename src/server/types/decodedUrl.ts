@@ -5,10 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-
 import { EFrom } from "../enums";
-
-// onsole.log("!----------------------------------- decodedUrl interface -----------------------------------!\n");
 export interface IdecodedUrl {
     origin:     string;
     linkbase:   string;

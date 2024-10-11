@@ -5,10 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- GroupBy builder -----------------------------------!\n");
-
 import { Core } from ".";
-
 export class Key extends Core {
   constructor(input?: string | string[]) {
     super(input);

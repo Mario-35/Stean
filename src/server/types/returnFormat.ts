@@ -5,11 +5,8 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- returnFormat interface -----------------------------------!\n");
-
 import { koaContext } from ".";
 import { PgVisitor } from "../odata/visitor";
-
  export interface IreturnFormat {
     name:                                               string; // name of the format (extension) default JSON
     type:                                               string; // type of format

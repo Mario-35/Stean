@@ -7,7 +7,6 @@
  *
  */
 process.env.NODE_ENV = "test";
-
 import chai from "chai";
 import chaiHttp from "chai-http";
 import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, defaultDelete, defaultPatch, defaultPost, defaultGet, listOfColumns, limitResult, infos, apiInfos, showHide, nbColorTitle, nbColor, testVersion, _RAWDB} from "./constant";
@@ -18,7 +17,6 @@ import { executeQuery, last } from "./executeQuery";
 import { testDatas } from "../../server/db/createDb";
 import { addStartNewTest, addTest, writeLog } from "./tests";
 import geo from './files/geo.json';
-
 
 export const testsKeys = [
     "@iot.id",
@@ -33,19 +31,14 @@ export const testsKeys = [
     "validTime",
     "parameters"
 ];
-
 chai.use(chaiHttp);
-
 const should = chai.should();
-
 const docs: IApiDoc[] = [];
 const entity: Ientity = _RAWDB.Observations;
-
 
 const addToApiDoc = (input: IApiInput) => {
     docs.push(prepareToApiDoc(input, entity.name));
 };
-
 addToApiDoc({
     api: `{infos} ${entity.name} infos`,
     apiName: `Infos${entity.name}`,    
@@ -53,13 +46,11 @@ addToApiDoc({
     apiReference: infos[entity.name].reference,
     result: ""
 });
-
 describe("endpoint : Observations", () => {
     const temp = listOfColumns(entity);
     const success = temp.success;
     const params = temp.params;
     let token = "";
-
     before((done) => {
         addStartNewTest(entity.name);
         chai.request(server)
@@ -70,10 +61,8 @@ describe("endpoint : Observations", () => {
                 done();
             });
     });
-
     describe(`{get} ${entity.name} ${nbColorTitle}[9.2]`, () => {
 		afterEach(() => { writeLog(true); });
-
 		it(`Return all ${entity.name} ${nbColor}[9.2.2]`, (done) => {
 			const infos = addTest({
 				api: `{get} ${entity.name} Get all`,
@@ -106,7 +95,6 @@ describe("endpoint : Observations", () => {
 					done();
 				});
 		});
-
 		it(`Return ${entity.name} id: 1 ${nbColor}[9.2.3]`, (done) => {
 			const infos = addTest({
 				api :`{get} ${entity.name}(:id) Get one`,
@@ -135,7 +123,6 @@ describe("endpoint : Observations", () => {
                     done();
                 });
         });
-
 		it(`Return error if ${entity.name} not exist ${nbColor}[9.2.4]`, (done) => {
 			const infos = addTest({
 				api : `{get} return error if ${entity.name} not exist`,
@@ -157,7 +144,6 @@ describe("endpoint : Observations", () => {
 					done();
 				});
 		});
-
         it(`Return error ${entity.singular} not found`, (done) => {
 			const infos = addTest({
 				api : `{get} return error ${entity.singular} not found`,
@@ -177,7 +163,6 @@ describe("endpoint : Observations", () => {
 					done();
 				});
 		});
-
         it(`Return all Observations in the Datastream that holds the id 2`, (done) => {
             const infos = addTest({
                 api : `{get} Datastreams(2)/${entity.name} Get all from Datastream`,                
@@ -201,7 +186,6 @@ describe("endpoint : Observations", () => {
                     done();
                 });
         });
-
         // it(`Return all Observations references in the Datastream that holds the id 10`, (done) => {
         //     api : `{get} Datastreams(10)/${entity.name}/$ref get references from Datastream`;
 		// 	const url = `GetDatastreams${entity.name}/$ref`;
@@ -230,7 +214,6 @@ describe("endpoint : Observations", () => {
         //             done();
         //         });
         // });
-
         it(`Return all Observations and $expand query option`, (done) => {
             const name = "Datastream";
             const infos = addTest({
@@ -258,7 +241,6 @@ describe("endpoint : Observations", () => {
                     done();
                 });
         });
-
         it("Return Observations with multiple SELECT odata", (done) => {            
             const infos = addTest({
                 api : `{get} ${entity.name}(:id) Get with Multi Select`,
@@ -285,7 +267,6 @@ describe("endpoint : Observations", () => {
                     done();
                 });
         });
-
         it("Return Observations with multiple Standard result from multiDatastreams", (done) => {
             const infos = addTest({
                 api : `{get} Observations with Standard Results`,
@@ -309,7 +290,6 @@ describe("endpoint : Observations", () => {
                     done();
                 });
         });
-
         it("Return Observations with multiple result from multiDatastreams", (done) => {
             const infos = addTest({
                 api : `{get} Observations with Multi keyValue Results`,
@@ -336,7 +316,6 @@ describe("endpoint : Observations", () => {
                     done();
                 });
         });
-
         it("Return errors with spliResult on Observation entity Only", (done) => {
             const infos = addTest({
                 api : `Return error with spliResult on Observation entity Only`,
@@ -384,7 +363,6 @@ describe("endpoint : Observations", () => {
                     done();
                 });
         });
-
         it("Return Observations with multiple result and split result soil temperature", (done) => {
             const infos = addTest({
                 api : `{get} Get with Split Result Property`,
@@ -411,7 +389,6 @@ describe("endpoint : Observations", () => {
                     done();
                 });
         });
-
 
         // it("Return Observations with time intevval", (done) => {
         //     const infos = addTest({
@@ -442,10 +419,8 @@ describe("endpoint : Observations", () => {
         //         });
         // });        
     });
-
     describe(`{post} ${entity.name} ${nbColorTitle}[10.2]`, () => {
         afterEach(() => { writeLog(true); });
-
         it(`Return added ${entity.name} ${nbColor}[10.2.1]`, (done) => {
             const datas = {
                 "phenomenonTime": "2017-02-07T18:02:00.000Z",
@@ -480,7 +455,6 @@ describe("endpoint : Observations", () => {
                     done();
                 });
         });
-
         it(`Return Error if the payload is malformed ${nbColor}[10.2.2]`, (done) => {
             const infos = addTest({
                 api : `{post} return Error if the payload is malformed`,
@@ -503,7 +477,6 @@ describe("endpoint : Observations", () => {
                     done();
                 });
         });
-
         it("Return updated Observation with FeatureOfInterest", (done) => {
             const datas = {
                 "phenomenonTime": "2017-02-07T18:02:00.000Z",
@@ -543,7 +516,6 @@ describe("endpoint : Observations", () => {
                      done();
                 });
         });
-
         it("Return updated from Datastream", (done) => {
             const datas = {
                 "phenomenonTime": "2017-02-07T18:02:00.000Z",
@@ -576,7 +548,6 @@ describe("endpoint : Observations", () => {
                     done();
                 });
         });
-
         it("Return updated Observation from Datastream with FeatureOfInterest", (done) => {
             const datas = {
                 "phenomenonTime": "2017-02-07T18:02:00.000Z",
@@ -620,7 +591,6 @@ describe("endpoint : Observations", () => {
                         .catch((e) => console.log(e));
                 });
         });
-
         it("Return updated Observation from MultiDatastream", (done) => {
             const datas = {
                 "phenomenonTime": "2017-02-07T18:02:00.000Z",
@@ -663,7 +633,6 @@ describe("endpoint : Observations", () => {
                      done();
                 });
         });
-
         it("Return error if There is no Stream", (done) => {
             const datas = {
                 "phenomenonTime": "2017-02-07T18:02:00.000Z",
@@ -703,7 +672,6 @@ describe("endpoint : Observations", () => {
 					done();
                 });
         });
-
         it("Return error results are different of multiObservationDataTypes", (done) => {
             const datas = {
                 "phenomenonTime": "2017-02-07T18:02:00.000Z",
@@ -747,12 +715,9 @@ describe("endpoint : Observations", () => {
                 });
         });
 
-
     });
-
     describe(`{patch} ${entity.name} ${nbColorTitle}[10.3]`, () => {
         afterEach(() => { writeLog(true); });
-
         it(`Return updated ${entity.name} ${nbColor}[10.3.1]`, (done) => {
             executeQuery(last(entity.table, true)).then((result: Record<string, any>) => {
                     const datas = {
@@ -816,7 +781,6 @@ describe("endpoint : Observations", () => {
 					done();
 				});
 		});
-
         it("Return updated Observation and Datastream", (done) => {
             executeQuery(last(entity.table, true)).then((result: Record<string, any>) => {
                     const datas = {
@@ -855,10 +819,8 @@ describe("endpoint : Observations", () => {
                 });
         });
     });
-
 	describe(`{delete} ${entity.name} ${nbColorTitle}[10.4]`, () => {
 		afterEach(() => { writeLog(true); });
-
 		it(`Delete ${entity.name} return no content with code 204 ${nbColor}[10.4.1]`, (done) => {
 			executeQuery(`SELECT (SELECT count(id) FROM "${entity.table}")::int as count, (${last(entity.table)})::int as id `).then((beforeDelete: Record<string, any>)  => {
 				const infos = addTest({
@@ -891,7 +853,6 @@ describe("endpoint : Observations", () => {
 					});
 			});
 		});
-
 		it(`Return Error if the ${entity.name} not exist`, (done) => {
 			const infos = addTest({
 				api: `{delete} return Error if the ${entity.name} not exist`,

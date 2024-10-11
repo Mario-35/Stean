@@ -5,14 +5,11 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Visitor for odata -----------------------------------!\n");
-
 import { SqlOptions } from "../../parser/sqlOptions";
 import { IreturnFormat, koaContext } from "../../../types";
 import { returnFormats } from "../../../helpers";
 import { PgVisitor } from "../";
 import { Query } from "../builder";
-
 export class Visitor {
   public ctx: koaContext;
   public options: SqlOptions;

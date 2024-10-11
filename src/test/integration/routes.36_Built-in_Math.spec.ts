@@ -7,24 +7,18 @@
  *
  */
 process.env.NODE_ENV = "test";
-
 import chai from "chai";
 import chaiHttp from "chai-http";
 import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, defaultGet, limitResult, testVersion } from "./constant";
 import { server } from "../../server/index";
 import { addStartNewTest, addTest, writeLog } from "./tests";
 
-
 chai.use(chaiHttp);
-
 const should = chai.should();
-
 const docs: IApiDoc[] = [];
-
 const addToApiDoc = (input: IApiInput) => {
     docs.push(prepareToApiDoc(input, "BuiltInMath"));
 };
-
 addToApiDoc({
     api: `{infos} /BuiltInMath Infos`,
     apiName: "InfosBuiltInMath",
@@ -63,7 +57,6 @@ describe("Odata BuiltInMath [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     it("floor(result) eq 63", (done) => {
         const infos = addTest({
             api: "{get} Observations Floor",
@@ -89,7 +82,6 @@ describe("Odata BuiltInMath [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     it("ceiling(result) eq 63", (done) => {
         const infos = addTest({
             api: "{get} Observations Ceiling",
@@ -115,11 +107,8 @@ describe("Odata BuiltInMath [9.3.3.5.2]", () => {
                 done();
             });
     });
-
     it("Save and write apiDoc", (done) => {
         generateApiDoc(docs, "apiDocBuiltInMath.js");
                 done();
     });
-
 });
-

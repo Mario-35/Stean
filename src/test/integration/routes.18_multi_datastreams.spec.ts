@@ -7,7 +7,6 @@
  *
  */
 process.env.NODE_ENV = "test";
-
 import chai from "chai";
 import chaiHttp from "chai-http";
 import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, defaultPatch, defaultDelete, defaultGet, defaultPost, getNB, listOfColumns, limitResult, infos, apiInfos, showHide, nbColorTitle, nbColor, testVersion, _RAWDB } from "./constant";
@@ -15,7 +14,6 @@ import { server } from "../../server/index";
 import { Ientity } from "../../server/types";
 import { executeQuery, last } from "./executeQuery";
 import { addStartNewTest, addTest, writeLog } from "./tests";
-
 export const testsKeys = [
     "@iot.id",
     "name",
@@ -29,18 +27,13 @@ export const testsKeys = [
     "observationType",
     "multiObservationDataTypes"
 ];
-
 chai.use(chaiHttp);
-
 const should = chai.should();
-
 const docs: IApiDoc[] = [];
 const entity: Ientity = _RAWDB.MultiDatastreams;
-
 const addToApiDoc = (input: IApiInput) => {
     docs.push(prepareToApiDoc(input, entity.name));
 };
-
 addToApiDoc({
     api: `{infos} ${entity.name} Extension`,
     apiName: `Infos${entity.name}`,    
@@ -48,13 +41,11 @@ addToApiDoc({
     apiReference: infos[entity.name].reference,
     result: ""
 });
-
 describe("endpoint : MultiDatastream", () => {
     const temp = listOfColumns(entity);
     const success = temp.success;
     const params = temp.params;
     let token = "";
-
     before((done) => {
 		addStartNewTest(entity.name);
         chai.request(server)
@@ -65,10 +56,8 @@ describe("endpoint : MultiDatastream", () => {
                 done();
             });
     });
-
     describe(`{get} ${entity.name} ${nbColorTitle}[9.2]`, () => {
 		afterEach(() => { writeLog(true); });
-
         it(`Return all ${entity.name} ${nbColor}[9.2.2]`, (done) => {
 			const infos = addTest({
 				api: `{get} ${entity.name} Get all`,
@@ -100,7 +89,6 @@ describe("endpoint : MultiDatastream", () => {
 					done();
 				});
 		});
-
         it(`Return ${entity.name} id: 1 ${nbColor}[9.2.3]`, (done) => {
 			const infos = addTest({
 				api :`{get} ${entity.name}(:id) Get one`,
@@ -131,7 +119,6 @@ describe("endpoint : MultiDatastream", () => {
                     done();
                 });
         });
-
 		it(`Return error if ${entity.name} not exist ${nbColor}[9.2.4]`, (done) => {
 			const infos = addTest({
 				api : `{get} return error if ${entity.name} not exist`,
@@ -153,7 +140,6 @@ describe("endpoint : MultiDatastream", () => {
 					done();
 				});
 		});
-
         it(`Return error ${entity.singular} not found`, (done) => {
 			const infos = addTest({
 				api : `{get} return error ${entity.singular} not found`,
@@ -173,7 +159,6 @@ describe("endpoint : MultiDatastream", () => {
 					done();
 				});
 		});
-
         it(`Return ${entity.name} of a specific Thing.`, (done) => {
             const id = 11;
             
@@ -206,7 +191,6 @@ describe("endpoint : MultiDatastream", () => {
                     done();
                 });
         });
-
         it(`Return all informations for a ${entity.name}.`, (done) => {
             const infos = addTest({
                 api : `{get} all ${entity.name} informations`,
@@ -234,7 +218,6 @@ describe("endpoint : MultiDatastream", () => {
                     done();
                 });
         });
-
         it(`Return ${entity.name} phenomenonTime search`, (done) => {
             const infos = addTest({
                 api : `{get} ${entity.name} Get From phenomenonTime search`,
@@ -260,7 +243,6 @@ describe("endpoint : MultiDatastream", () => {
                     done();
                 });
         });
-
         // it(`Return ${entity.name} from an observation filter`, (done) => {
         //     const infos = addTest({
         //         api: `{get} ${entity.name} Get From observations filter`,
@@ -292,7 +274,6 @@ describe("endpoint : MultiDatastream", () => {
         //         });
         // });
 
-
         it(`Return ${entity.name} Subentity Thing ${nbColor}[9.2.6]`, (done) => {
             const name = "Thing";
 			const infos = addTest({
@@ -319,7 +300,6 @@ describe("endpoint : MultiDatastream", () => {
                     done();
                 });
         });
-
         it(`Return ${entity.name} Subentity Sensor ${nbColor}[9.2.6]`, (done) => {
             const name = "Sensor";
 			const infos = addTest({
@@ -344,7 +324,6 @@ describe("endpoint : MultiDatastream", () => {
                     done();
                 });
         });
-
         it(`Return ${entity.name} Subentity ObservedProperties ${nbColor}[9.2.6]`, (done) => {
             const name = "ObservedProperties";
 			const infos = addTest({
@@ -369,7 +348,6 @@ describe("endpoint : MultiDatastream", () => {
                     done();
                 });
         });
-
         it(`Return ${entity.name} Subentity Observations ${nbColor}[9.2.6]`, (done) => {
             const name = "Observations";
 			const infos = addTest({
@@ -396,7 +374,6 @@ describe("endpoint : MultiDatastream", () => {
                     done();
                 });
         });
-
         it(`Return ${entity.name} Expand Things ${nbColor}[9.3.2.1]`, (done) => {
             const name = "Thing";
 			const infos = addTest({
@@ -423,7 +400,6 @@ describe("endpoint : MultiDatastream", () => {
                     done();
                 });
         });
-
         it(`Return ${entity.name} Expand Sensor ${nbColor}[9.3.2.1]`, (done) => {
             const name = "Sensor";
 			const infos = addTest({
@@ -449,7 +425,6 @@ describe("endpoint : MultiDatastream", () => {
                     done();
                 });
         });
-
         it(`Return ${entity.name} Expand Observations ${nbColor}[9.3.2.1]`, (done) => {
             const name = "Observations";
 			const infos = addTest({
@@ -476,7 +451,6 @@ describe("endpoint : MultiDatastream", () => {
                     done();
                 });
         });
-
         it(`Return ${entity.name} Expand ObservedProperties ${nbColor}[9.3.2.1]`, (done) => {
             const name = "ObservedProperties";
 			const infos = addTest({
@@ -502,7 +476,6 @@ describe("endpoint : MultiDatastream", () => {
                     done();
                 });
         });
-
         it(`Return ${entity.name} phenomenonTime select & order`, (done) => {
             const infos = addTest({
                 api : `{get} ${entity.name} Get From phenomenonTime select & order`,
@@ -528,12 +501,9 @@ describe("endpoint : MultiDatastream", () => {
                     done();
                 });
         });
-
     });
-
     describe(`{post} ${entity.name} ${nbColorTitle}[10.2]`, () => {
 		afterEach(() => { writeLog(true); });
-
         it(`Return added ${entity.name} ${nbColor}[10.2.1]`, (done) => {
             const datas = {
                 "description": "Air quality readings",
@@ -599,7 +569,6 @@ describe("endpoint : MultiDatastream", () => {
                     done();
                 });
         });
-
         it(`Return Error if the payload is malformed ${nbColor}[10.2.2]`, (done) => {
             const infos = addTest({
                 api : `{post} return Error if the payload is malformed`,
@@ -623,7 +592,6 @@ describe("endpoint : MultiDatastream", () => {
                     done();
                 });
         });
-
         it(`Return added ${entity.name} with created Thing`, (done) => {
             const datas = {
                 description: "Air quality readings",
@@ -696,7 +664,6 @@ describe("endpoint : MultiDatastream", () => {
                     done();
                 });
         });
-
         it("Return Error if ObservedProperties length not equal multiObservationDataTypes", (done) => {
             const datas = {
                 description: "Air quality readings",
@@ -749,7 +716,6 @@ describe("endpoint : MultiDatastream", () => {
                     done();
                 });
         });
-
         it("Return Error if unitOfMeasurements length not equal multiObservationDataTypes", (done) => {
             const datas = {
                 name: `Air quality readings ${getNB(entity.name)}`,
@@ -802,7 +768,6 @@ describe("endpoint : MultiDatastream", () => {
                     done();
                 });
         });
-
         it(`Return added ${entity.name} with default FOI`, (done) => {
             const datas = {
                 description: "Air quality readings",
@@ -867,10 +832,8 @@ describe("endpoint : MultiDatastream", () => {
                 });
         });
     });
-
     describe(`{patch} ${entity.name} ${nbColorTitle}[10.3]`, () => {
 		afterEach(() => { writeLog(true); });
-
         it(`Return updated ${entity.name} ${nbColor}[10.3.1]`, (done) => {
             executeQuery(last(entity.table,true)).then((items: Record<string, any>) => {
                     const datas = {
@@ -905,7 +868,6 @@ describe("endpoint : MultiDatastream", () => {
                         });
                 });
         });
-
 		it(`Return Error if the ${entity.name} not exist`, (done) => {
 			const datas = {
                     observationType: "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement",
@@ -934,7 +896,6 @@ describe("endpoint : MultiDatastream", () => {
 				});
 		});
     });
-
 	describe(`{delete} ${entity.name} ${nbColorTitle}[10.4]`, () => {
 		afterEach(() => { writeLog(true); });
         
@@ -970,7 +931,6 @@ describe("endpoint : MultiDatastream", () => {
 					});
 			});
 		});
-
 		it(`Return Error if the ${entity.name} not exist`, (done) => {
 			const infos = addTest({
 				api: `{delete} return Error if the ${entity.name} not exist`,

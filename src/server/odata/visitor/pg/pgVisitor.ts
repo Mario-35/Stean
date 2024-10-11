@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- pgVisitor for odata -----------------------------------!\n");
-
 import { doubleQuotesString, simpleQuotesString, isGraph, isTest, removeAllQuotes, returnFormats, formatPgTableColumn } from "../../../helpers";
 import { IodataContext, Ientity, IKeyBoolean, IpgQuery, koaContext, IvisitRessource } from "../../../types";
 import { Token } from "../../parser/lexer";
@@ -23,7 +21,6 @@ import { Visitor } from "./visitor";
 import { Query } from "../builder";
 import { relationInfos } from "../../../models/helpers";
 import { _isObservation, isFile } from "../../../helpers/tests";
-
 export class PgVisitor extends Visitor {
   entity: Ientity | undefined = undefined;
   columnSpecials:  { [key: string]: string[] } = {} ;
@@ -66,14 +63,12 @@ export class PgVisitor extends Visitor {
     this.limit = 0;
     this.skip = 0;
   }
-
   swapEntity(newEntity: Ientity, id ?:bigint | string) {
     this.parentEntity = this.entity;
     this.entity = newEntity;
     this.parentId = this.id ;
     this.id = id ? id : BigInt(0);
   }
-
   testo(input: string) {
     console.log(`******************* ${input} ********************`);
     console.log(`entity  =====> ${this.entity}  id : [${this.id}]`);
@@ -81,7 +76,6 @@ export class PgVisitor extends Visitor {
     console.log("***************************************");
     
   }
-
   addToIntervalColumns(input: string) {
     // TODO test with create    
     if (input.endsWith('Time"')) input = `step AS ${input}`;
@@ -91,7 +85,6 @@ export class PgVisitor extends Visitor {
     if (this.intervalColumns) this.intervalColumns.push(input); 
       else this.intervalColumns = [input];
   }
-
   protected getColumn(input: string, operation: string ,context: IodataContext ) {   
     console.log(log.whereIam(input));
     const tempEntity = 
@@ -107,13 +100,11 @@ export class PgVisitor extends Visitor {
         this.columnSpecials["result"] = input.split("result/")[1].split("/").map(e => `"result"->'value'->'${e}' AS "${e}"`);
         return "result";
     }
-
     const columnName = input === "result" 
                         ? this.formatColumnResult(context, operation) 
                         : tempEntity 
                           ? this.getColumnNameOrAlias(tempEntity, input, this.createDefaultOptions()) 
                           : undefined;
-
     if (columnName) return columnName;
     if (this.isSelect(context) && tempEntity && tempEntity.relations[input]) {
       const entityName = models.getEntityName(this.ctx.config ,input);       
@@ -123,12 +114,9 @@ export class PgVisitor extends Visitor {
     }   
   }
 
-
-
   // ***********************************************************************************************************************************************************************
   // ***                                                              QUERY                                                                                              ***
   // ***********************************************************************************************************************************************************************
-
   formatColumnResult(context: IodataContext, operation: string, ForceString?: boolean) {
     switch (context.target) {
       case EQuery.Where:
@@ -146,7 +134,6 @@ export class PgVisitor extends Visitor {
       END${this.isSelect(context) === true ? ' AS "result"' : ''}`;
   }
 }
-
   getColumnNameOrAlias(entity: Ientity, column : string, options: IKeyBoolean): string | undefined {
     let result: string | undefined | void = undefined;
     if (entity && column != "" && entity.columns[column]) {
@@ -155,7 +142,6 @@ export class PgVisitor extends Visitor {
     }
     return result ? `${ options.table === true && result && result[0] === '"' ? `"${entity.table}".${result}` : result }` : undefined;
   }; 
-
   clear(input: string) {    
     if (input.includes('@START@')) {
       input = input.split('@START@').join("(");
@@ -163,7 +149,6 @@ export class PgVisitor extends Visitor {
     }
     return input;    
   }
-
   start(node: Token) {
     console.log(log.debug_head("Start PgVisitor"));
     const temp = this.Visit(node);
@@ -172,7 +157,6 @@ export class PgVisitor extends Visitor {
     temp.query.where.init(this.clear(temp.query.where.toString()));    
     return temp;
   }
-
   verifyQuery = (): void => {
     console.log(log.debug_head("verifyQuery"));
     const expands: string[] = [];
@@ -180,7 +164,6 @@ export class PgVisitor extends Visitor {
       if (element.ast.type === "ExpandItem")
         expands.push(element.ast.raw.split("(")[0]);
     });
-
     expands.forEach((elem: string) => {
       const elems = elem.split("/");
       if (this.entity) elems.unshift(this.entity.name);
@@ -191,16 +174,13 @@ export class PgVisitor extends Visitor {
           });
       } else this.ctx.throw(400, { detail: msg(errors.invalid, "entity") + elems[0] });
     });
-
     if (this.entity && _isObservation(this.entity) === true && this.splitResult !== undefined && Number(this.parentId) == 0 ) {
       this.ctx.throw(400, { detail: errors.splitNotAllowed });
     }
-
     if (this.returnFormat === returnFormats.dataArray && BigInt(this.id) > 0 && !this.parentEntity) {
       this.ctx.throw(400, { detail: errors.dataArrayNotAllowed });
     }
   };
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Visit(node: Token, context?: IodataContext) {
     this.ast = this.ast || node;
@@ -215,14 +195,12 @@ export class PgVisitor extends Visitor {
           console.log(log._result("this.query.where", this.query.where.toString()));
           console.log(log._infos("context", context));
         }
-
       } else {
         log.error(`Node error =================> Visit${node.type}`);
         log.error(node);
         throw new Error(`Unhandled node type: ${node.type}`);
       }
     }
-
     if (this.entity && node == this.ast) {
       if (this.entity.name.startsWith("Lora")) {
         if (typeof this.id == "string") {
@@ -232,9 +210,7 @@ export class PgVisitor extends Visitor {
     }
     return this;
   }
-
   isSelect = (context: IodataContext): boolean => (context.target ? context.target === EQuery.Select : false);
-
  
   protected VisitExpand(node: Token, context: IodataContext) {
     node.value.items.forEach((item: Token) => {
@@ -247,20 +223,17 @@ export class PgVisitor extends Visitor {
       visitor.Visit(item, context);
     });
   }
-
   protected VisitEntity(node: Token, context: IodataContext) {
     this.Visit(node.value.path, context);
     if (node.value.options)
       node.value.options.forEach((item: Token) => this.Visit(item, context));
   }
-
   protected VisitSplitResult(node: Token, context: IodataContext) {
     this.Visit(node.value.path, context);    
     if (node.value.options)
       node.value.options.forEach((item: Token) => this.Visit(item, context));
     this.splitResult = removeAllQuotes(node.value).split(",");
   }
-
   protected VisitInterval(node: Token, context: IodataContext) {
     this.Visit(node.value.path, context);
     if (node.value.options)
@@ -268,14 +241,12 @@ export class PgVisitor extends Visitor {
     this.interval = node.value;
     if (this.interval) this.noLimit();
   }
-
   protected VisitPayload(node: Token, context: IodataContext) {
     this.Visit(node.value.path, context);
     if (node.value.options)
       node.value.options.forEach((item: Token) => this.Visit(item, context));
     this.payload = node.value;
   }
-
   protected VisitDebug(node: Token, context: IodataContext) {
     this.Visit(node.value.path, context);
     if (node.value.options)
@@ -292,7 +263,6 @@ export class PgVisitor extends Visitor {
       this.showRelations = false;
     }
   }
-
   protected VisitExpandItem(node: Token, context: IodataContext) {
     this.Visit(node.value.path, context);
     if (node.value.options)
@@ -302,7 +272,6 @@ export class PgVisitor extends Visitor {
   protected VisitExpandPath(node: Token, context: IodataContext) {
     this.navigationProperty = node.raw;
   }
-
   // Start loop process
   protected VisitQueryOptions(node: Token, context: IodataContext) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -312,13 +281,11 @@ export class PgVisitor extends Visitor {
   protected VisitInlineCount(node: Token, context: IodataContext) {
     this.count = Literal.convert(node.value.value, node.value.raw);
   }
-
   protected VisitFilter(node: Token, context: IodataContext) {
     context.target = EQuery.Where;
     if (this.query.where.toString().trim() != "") this.addToWhere(" AND ", context);
     this.Visit(node.value, context);
   }
-
   protected VisitOrderBy(node: Token, context: IodataContext) {    
     context.target = EQuery.OrderBy;
     node.value.items.forEach((item: Token, i: number) => {
@@ -326,7 +293,6 @@ export class PgVisitor extends Visitor {
       if (i < node.value.items.length - 1) this.query.orderBy.add(", ");
     });
   }
-
   protected VisitOrderByItem(node: Token, context: IodataContext) {
     this.Visit(node.value.expr, context);
     if (this.query.orderBy.notNull()) this.query.orderBy.add(node.value.direction > 0 ? " ASC" : " DESC");
@@ -339,14 +305,12 @@ export class PgVisitor extends Visitor {
   protected VisitTop(node: Token, context: IodataContext) {
     this.limit = +node.value.raw;
   }
-
   protected VisitSelect(node: Token, context: IodataContext) {
     context.target = EQuery.Select;
     node.value.items.forEach((item: Token) => {
       this.Visit(item, context);
     });
   }
-
   protected VisitSelectItem(node: Token, context: IodataContext) {
     const tempColumn = this.getColumn(node.raw, "", context); 
     context.identifier = tempColumn ? tempColumn : node.raw;
@@ -355,42 +319,34 @@ export class PgVisitor extends Visitor {
     (this.query[context.target as keyof object] as Query).add(tempColumn ? `${tempColumn}${EConstant.columnSeparator}` : `${doubleQuotesString(node.raw)}${EConstant.columnSeparator}`); 
       this.showRelations = false;
   }
-
   protected VisitAndExpression(node: Token, context: IodataContext) {
     this.Visit(node.value.left, context);
     this.addToWhere(context.in && context.in === true ? " INTERSECT " : " AND ", context);
     this.Visit(node.value.right, context);
   }
-
   protected VisitOrExpression(node: Token, context: IodataContext) {
     this.Visit(node.value.left, context);
     this.addToWhere(" OR ", context);
     this.Visit(node.value.right, context);
   }
-
   protected VisitNotExpression(node: Token, context: IodataContext) {
     this.addToWhere(" NOT ", context);
     this.Visit(node.value, context);
   }
-
   protected VisitBoolParenExpression(node: Token, context: IodataContext) {
     this.addToWhere("(", context);
     this.Visit(node.value, context);
     this.addToWhere(")", context);
   }
-
   protected VisitCommonExpression(node: Token, context: IodataContext) {
     this.Visit(node.value, context);
   }
-
   protected VisitFirstMemberExpression(node: Token, context: IodataContext) {   
     this.Visit(node.value, context);
   }
-
   protected VisitMemberExpression(node: Token, context: IodataContext) {
     this.Visit(node.value, context);
   }
-
   protected VisitPropertyPathExpression(node: Token, context: IodataContext) {
     if (node.value.current && node.value.next) {
       // deterwine if its column AND JSON
@@ -409,14 +365,12 @@ export class PgVisitor extends Visitor {
       }
     } else this.Visit(node.value, context);
   }
-
   protected VisitSingleNavigationExpression(node: Token, context: IodataContext) {
     if (node.value.current && node.value.next) {
       this.Visit(node.value.current, context);
       this.Visit(node.value.next, context);
     } else this.Visit(node.value, context);
   }
-
   protected VisitLesserThanExpression(node: Token, context: IodataContext) {
     context.sign = "<";
     if (!this.VisitDateType(node, context)) {
@@ -425,7 +379,6 @@ export class PgVisitor extends Visitor {
       this.Visit(node.value.right, context);
     }
   }
-
   protected VisitLesserOrEqualsExpression(node: Token, context: IodataContext) {
     context.sign = "<=";
     if (!this.VisitDateType(node, context)) {
@@ -434,7 +387,6 @@ export class PgVisitor extends Visitor {
       this.Visit(node.value.right, context);
     }
   }
-
   protected VisitDateType(node: Token, context: IodataContext):boolean {  
     if (this.entity && context.sign && models.getRelationColumnTable(this.ctx.config, this.entity, node.value.left.raw) === EColumnType.Column && models.isColumnType(this.ctx.config, this.entity, node.value.left.raw, "date")) {
       const testIsDate = oDataDateFormat(node, context.sign);
@@ -448,7 +400,6 @@ export class PgVisitor extends Visitor {
     }
     return false;
   }
-
   inverseSign(input: string | undefined) {
     if (input) switch (input) {
       case ">": return "<";    
@@ -459,12 +410,9 @@ export class PgVisitor extends Visitor {
         return input;
     }
   }
-
   addToWhere(value: string, context: IodataContext) {
     if (context.target === EQuery.Geo) this.subQuery.where ? this.subQuery.where += value : this.subQuery.where = value; else this.query.where.add(value);
   }
-
-
 
   protected addExpressionToWhere(node: Token, context: IodataContext) {
     if (this.query.where.toString().includes("@EXPRESSION@") ) 
@@ -473,7 +421,6 @@ export class PgVisitor extends Visitor {
       // Important to keep space
     this.addToWhere(" " + context.sign, context);
   }
-
   protected VisitGreaterThanExpression(node: Token, context: IodataContext) {
     context.sign = ">";
     if (!this.VisitDateType(node, context)) {
@@ -482,7 +429,6 @@ export class PgVisitor extends Visitor {
       this.Visit(node.value.right, context);
     }
   }
-
   protected VisitGreaterOrEqualsExpression(node: Token, context: IodataContext) {
     context.sign = ">=";
     if (!this.VisitDateType(node, context)) {
@@ -491,17 +437,14 @@ export class PgVisitor extends Visitor {
       this.Visit(node.value.right, context);
     }
   }
-
   public createDefaultOptions(): IKeyBoolean {
     return {
       valueskeys: this.valueskeys,
       numeric: this.numeric
     };
   }
-
   public createComplexWhere(entity: string, node: Token, context: IodataContext) {
     if (context.target) {
-
       if (! models.getEntity(this.ctx.config, entity)) return;
       const tempEntity = models.getEntity(this.ctx.config, node.value.name);
       if (tempEntity) {
@@ -520,7 +463,6 @@ export class PgVisitor extends Visitor {
       }
     }
   }
-
   protected VisitODataIdentifier(node: Token, context: IodataContext) {    
     const alias = this.getColumn(node.value.name, "", context);
     node.value.name = alias ? alias : node.value.name;
@@ -558,7 +500,6 @@ export class PgVisitor extends Visitor {
       this.query.where.replace(/= null/, "IS NULL");
     }
   }
-
   protected VisitNotEqualsExpression(node: Token, context: IodataContext): void {
     context.sign = "<>";
     if (!this.VisitDateType(node, context)) {
@@ -568,7 +509,6 @@ export class PgVisitor extends Visitor {
       this.query.where.replace(/<> null$/, "IS NOT NULL");
     }
   }
-
   protected VisitLiteral(node: Token, context: IodataContext): void {
     if (this.entity && context.relation && context.table && context.target === EQuery.Where) {
       const temp = this.query.where.toString().split(" ").filter(e => e != "");      
@@ -588,10 +528,8 @@ export class PgVisitor extends Visitor {
               : `${alias ? alias : `${ context.identifier.replace("@EXPRESSION@", ` ${SQLLiteral.convert(node.value, node.raw)} ${this.inverseSign(context.sign)}`) }`})`, context);
         } else {
           const tempEntity = models.getEntity(this.ctx.config, context.relation);    
-
           const quotes = context.identifier[0] === '"' ? '' : '"';
           const alias = tempEntity ? this.getColumnNameOrAlias(tempEntity, context.identifier , this.createDefaultOptions()) : undefined;
-
           this.addToWhere((context.sql)
             ? `${context.sql} ${context.target} ${doubleQuotesString(context.identifier)} ${context.sign} ${SQLLiteral.convert(node.value, node.raw)}))@END@`
             : `${alias ? '' : `${context.table}.`}${alias ? alias : `${quotes}${ context.identifier }${quotes}`} ${context.sign} ${SQLLiteral.convert(node.value, node.raw)})`, context);
@@ -605,18 +543,15 @@ export class PgVisitor extends Visitor {
       
     }
   }
-
   protected VisitInExpression(node: Token, context: IodataContext): void {
     this.Visit(node.value.left, context);
     this.addToWhere(" IN (", context);
     this.Visit(node.value.right, context);
     this.addToWhere(":list)", context);
   }
-
   protected VisitArrayOrObject(node: Token, context: IodataContext): void {
     this.addToWhere(context.literal = SQLLiteral.convert(node.value, node.raw), context);
   }
-
   // protected createGeoColumn(entity: string | Ientity, column: string): string | undefined{
   //   console.log(log.whereIam());    
   //   column = removeAllQuotes(column);
@@ -644,12 +579,10 @@ export class PgVisitor extends Visitor {
   //         const relation = relationInfos(this.ctx.config, tempEntity.name, column);        
   //         column = `(SELECT ${doubleQuotesString(relation.column)} FROM ${doubleQuotesString(relation.table)} WHERE ${expand(this.ctx,tempEntity.name, column)} AND length(${doubleQuotesString(relation.column)}::text) > 2)`;
   //         if (tempEntity.columns.hasOwnProperty(_TESTENCODING))  test = _TESTENCODING;
-
   //       } else if (this.ctx.model[this.parentEntity as keyof object].columns.hasOwnProperty(column)) {
   //         const relation = relationInfos(this.ctx.config, tempEntity.name, column);        
   //         column = `(SELECT ${doubleQuotesString(relation.column)} FROM ${doubleQuotesString(relation.table)} WHERE ${expand(this.ctx,tempEntity.name, column)} AND length(${doubleQuotesString(relation.column)}::text) > 2)`;
   //         if (tempEntity.columns.hasOwnProperty(_TESTENCODING))  test = _TESTENCODING;
-
   //       } else throw new Error(`Invalid column ${column}`);
   //     } else {      
   //       // TODO ADD doubleQuotesString
@@ -665,12 +598,10 @@ export class PgVisitor extends Visitor {
   protected VisitMethodCallExpression(node: Token, context: IodataContext) {
     const method = node.value.method;
     const params = node.value.parameters || [];
-
     
     const isColumn = (input: number | string): string | undefined => {
       const entity = this.entity;
       const column = typeof input === "string" ? input : decodeURIComponent( Literal.convert(params[input].value, params[input].raw) );
-
       if (column.includes("/")) {
         const temp = column.split("/");
         if (entity && entity.relations.hasOwnProperty(temp[0])) {
@@ -683,7 +614,6 @@ export class PgVisitor extends Visitor {
       else if (entity && entity.relations.hasOwnProperty(EConstant.encoding)) 
         return EConstant.encoding;
     }
-
     const columnOrData = (index: number, operation: string, ForceString: boolean): string => {
       // convert into string
       const test = decodeURIComponent( Literal.convert(params[index].value, params[index].raw) );
@@ -702,7 +632,6 @@ export class PgVisitor extends Visitor {
       const column = isColumn(test);       
       return column ? doubleQuotesString(column) : simpleQuotesString(geoColumnOrData(index, false));
     };
-
     const geoColumnOrData = (index: number, srid: boolean): string => {
       const temp = decodeURIComponent(
         Literal.convert(params[index].value, params[index].raw)
@@ -711,12 +640,10 @@ export class PgVisitor extends Visitor {
         ? temp
         : `${srid === true ? "SRID=4326;" : ""}${removeAllQuotes(temp)}`;
     };
-
     const cleanData = (index: number): string =>
       params[index].value == "Edm.String"
         ? removeAllQuotes(Literal.convert(params[index].value, params[index].raw))
         : Literal.convert(params[index].value, params[index].raw);
-
     const order = params.length === 2 ? isColumn(0) ? [0,1] : [1,0] : [0];
     switch (String(method.split(".")[0])) {
       case "contains":
@@ -800,13 +727,10 @@ export class PgVisitor extends Visitor {
         break;
     }
   }
-
   toString(): string {
     return this.query.toString(this);
   }
-
   toPgQuery(): IpgQuery | undefined {
       return this.query.toPgQuery(this);
   }
-
 }

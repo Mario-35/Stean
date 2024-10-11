@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- CreateObservations entity -----------------------------------!\n");
-
 import { Common } from "./common";
 import { IcsvColumn, IcsvFile, IreturnResult, IstreamInfos, koaContext } from "../../types";
 import { queryInsertFromCsv, dateToDateWithTimeZone, executeSql, executeSqlValues } from "../helpers";
@@ -16,14 +14,12 @@ import { EChar, EDatesType, EExtensions, EHttpCode } from "../../enums";
 import util from "util";
 import { models } from "../../models";
 import { log } from "../../log";
-
 export class CreateObservations extends Common {
   public indexResult = -1;
   constructor(ctx: koaContext) {
     console.log(log.whereIam());
     super(ctx);
   }
-
   createListColumnsValues( type: "COLUMNS" | "VALUES", input: string[] ): string[] {
     const res: string[] = [];
     const separateur = type === "COLUMNS" ? '"' : "'";
@@ -54,7 +50,6 @@ export class CreateObservations extends Common {
     });
     return res;
   }
-
   // Override get all to return error Bad request
   async getAll(): Promise<IreturnResult | undefined> {
     console.log(log.whereIam());
@@ -161,13 +156,11 @@ export class CreateObservations extends Common {
     console.log(log.whereIam());
     return (this.ctx.datas) ? await this.postForm(dataInput) : await this.postJson(dataInput);
   }
-
   // Override update to return error Bad request
   async update( idInput: bigint | string, dataInput: Record<string, any>  | undefined ): Promise<IreturnResult | undefined> {
     console.log(log.whereIam(idInput || dataInput));
     this.ctx.throw(400, { code: 400 });
   }
-
   // Override delete to return error Bad request
   async delete(idInput: bigint | string): Promise<IreturnResult | undefined> {
     console.log(log.whereIam(idInput));

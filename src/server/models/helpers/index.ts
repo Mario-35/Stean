@@ -5,11 +5,8 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Index Models Helpers -----------------------------------!\n");
-
 import { koaContext } from "../../types";
 import { relationInfos } from "./relationInfos";
-
 export { idColumnName } from "./idColumnName";
 export { createInsertValues } from "./createInsertValues";
 export { createUpdateValues } from "./createUpdateValues";

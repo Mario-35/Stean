@@ -5,11 +5,8 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- IvisitRessource interface -----------------------------------!\n");
-
 import { IodataContext } from ".";
 import { Token } from "../odata/parser";
-
 export interface IvisitRessource {
     (node: Token, context?: IodataContext): void;
 };

@@ -5,10 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- oData QueryOptionsNode -----------------------------------!\n");
-
 import { Token } from './lexer';
-
 export interface QueryOptionsNode extends Token {
   value: Array<Token>;
 }

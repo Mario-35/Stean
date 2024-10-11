@@ -5,8 +5,6 @@
 * @author mario.adam@inrae.fr
 *
 */
-// onsole.log("!----------------------------------- Unprotected Routes for API -----------------------------------!\n");
-
 import Router from "koa-router";
 import { userAuthenticated, getAuthenticatedUser, } from "../authentication";
 import { _READY } from "../constants";
@@ -28,7 +26,6 @@ import { EFileName, EOptions, EHttpCode, EConstant } from "../enums";
 import { getMetrics } from "../db/monitoring";
 import { HtmlLogs } from "../views/class/logs";
 import { log } from "../log";
-
 export const unProtectedRoutes = new Router<DefaultState, Context>();
 // ALl others
 unProtectedRoutes.get("/(.*)", async (ctx) => {
@@ -188,7 +185,6 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
       }
       return;
     } // END Switch
-
   // API GET REQUEST  
   if (ctx.decodedUrl.path.includes(`/${ctx.config.apiVersion}`) || ctx.decodedUrl.version) {
     console.log(log.debug_head(`unProtected GET ${ctx.config.apiVersion}`));
@@ -230,4 +226,3 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
     }
   }  
 });
-

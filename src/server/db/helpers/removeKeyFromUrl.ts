@@ -5,17 +5,13 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- removeKeyFromUrl -----------------------------------!\n");
-
 import { cleanUrl } from "../../helpers";
-
 /**
  *
  * @param input url string
  * @param keys array of keys to remove
  * @returns clean url string
  * */
-
 export const removeKeyFromUrl = (input: string, keys: string[]): string => {
   // Clean input
   input = decodeURIComponent(input);

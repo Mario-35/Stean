@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- log interface -----------------------------------!\n");
-
 export interface Ilog{ // Log save Interface
     method:     string; // verb method
     returnid?:  string; // id return in result

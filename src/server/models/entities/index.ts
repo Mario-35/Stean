@@ -5,12 +5,9 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Index Entity -----------------------------------!\n");
-
 import { allEntities, ETable } from "../../enums";
 import { errors, msg } from "../../messages";
 import { Ientity, IentityCore } from "../../types";
-
 const singular = (input: string) : string => {
   if (input.endsWith("ies")) input = input.slice(0, -3) + "y";
   if (input.endsWith("s")) input = input.slice(0, -1);
@@ -18,7 +15,6 @@ const singular = (input: string) : string => {
     if (!(e === "s" && /^[A-Z]*$/.test(input[i+1]) ) )return e;      
   }).join("").trim();
 };
-
 export const createEntity = (name: string, datas: IentityCore | number) : Ientity => {
   const entity= allEntities[name];
     if (entity) {

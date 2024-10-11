@@ -6,8 +6,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Constant for TDD -----------------------------------!\n");
-
 import fs from "fs";
 import path from "path";
 import { Ientity } from "../../server/types";
@@ -29,9 +27,7 @@ export const testLog = (input: any) => {
 export const proxy = (moi: boolean) => moi !== true ? 'http://localhost:8029/test' : `${apidocJson.proxy}/`;
 import packageJson from "../../../package.json";
 export const VERSION = packageJson.version;
-
 const createJSON = (data: any) => JSON.stringify(data, null, 4).replace(/[\n]+/g, "|\t");
-
 export interface Iinfos {
     api: string;
     apiName: string;
@@ -43,7 +39,6 @@ export interface Iinfos {
     apiParam?: string[];
     apiParamExample?: Record<string, any>;
 }
-
 export const keyTokenName = "jwt-session";
 export interface IApiInput {
     api: string;
@@ -58,7 +53,6 @@ export interface IApiInput {
     apiParamExample?: Record<string, any>;
     result: any;
 }
-
 export const defaultPostPatch = (lang: string, method: string, request: string, data: any): string => {
     switch (lang.toUpperCase()) {
         case "CURL":
@@ -74,15 +68,12 @@ export const defaultPostPatch = (lang: string, method: string, request: string, 
     }
     return "";
 };
-
 export const defaultPost = (lang: string, request: string, data: any): string => {
     return defaultPostPatch(lang, "post", request, data);
 };
-
 export const defaultPatch = (lang: string, request: string, data: any): string => {
     return defaultPostPatch(lang, "patch", request, data);
 };
-
 export const defaultDelete = (lang: string, request: string): string => {
     switch (lang.toUpperCase()) {
         case "CURL":
@@ -94,7 +85,6 @@ export const defaultDelete = (lang: string, request: string): string => {
     }
     return "";
 };
-
 export const defaultGet = (lang: string, request: string): string => {
     switch (lang.toUpperCase()) {
         case "CURL":
@@ -106,7 +96,6 @@ export const defaultGet = (lang: string, request: string): string => {
     }
     return "";
 };
-
 export interface IApiDoc {
     api: string;
     apiDescription: string;
@@ -125,13 +114,11 @@ export interface IApiDoc {
     text?: string;
     apiSampleRequest?: string;
 }
-
 const _HEADERS: { [key: string]: string } = {
     apiParamExample: "{json} Request-Example:",
     apiSuccessExample: "{json} Success-Response:",
     apiErrorExample: "{json} Error-Response:"
 };
-
 export const prepareToApiDoc = (input: IApiInput, Entity: string): IApiDoc => {
     return {
         api: input.api,
@@ -154,7 +141,6 @@ export const prepareToApiDoc = (input: IApiInput, Entity: string): IApiDoc => {
                 : undefined
     };    
 };
-
 export const generateApiDoc = (input: IApiDoc[], filename: string): boolean => {
     const createExamplesLines = (input: string) => {
         const tempLines = input.split("|");
@@ -163,15 +149,12 @@ export const generateApiDoc = (input: IApiDoc[], filename: string): boolean => {
         });
     };
     const proxy = apidocJson.proxy + "/";
-
     const lines: string[] = [];
-
     lines.push("/**");
     lines.push("* @apiDefine admin:computer User access only");
     lines.push("* This optional description belong to to the group admin.");
     lines.push("*/");
     lines.push("");
-
     input.forEach((element: IApiDoc) => {
         lines.push("/**");
         for (const [key, value] of Object.entries(element)) {
@@ -213,7 +196,6 @@ export const generateApiDoc = (input: IApiDoc[], filename: string): boolean => {
                 lines.push(`*    @${key} ${value}`);
             }
         }
-
         lines.push("*/\n");
     });
     lines.forEach((element, index) => {
@@ -223,16 +205,13 @@ export const generateApiDoc = (input: IApiDoc[], filename: string): boolean => {
     fs.writeFileSync(path.resolve(__dirname, filename), `${lines.join("\n")}`, {
         encoding: "utf-8"
     });
-
     return true;
 };
-
 export const limitResult = (input: Record<string, any>, keyName?: string) => {  
     const key:string = keyName || "value";
     if (input["body"][key]) input["body"][key] = [input["body"][key][0], input["body"][key][1], "..."];
     return input;
 };
-
 const definitions = {
     properties : "A JSON Object containing user-annotated properties as key-value pairs.",
     id : "Is the system-generated identifier of an entity. id is unique among the entities of the same entity type in a SensorThings service.",
@@ -240,7 +219,6 @@ const definitions = {
     navigationLink : "navigationLink is the relative or absolute URL that retrieves content of related entities."
     
 };
-
 const types = {
     id : "BigInt"
 };
@@ -271,7 +249,6 @@ export const infos: Record<string, any>  = {
             MultiDatastreams: "A Thing MAY have zero-to-many MultiDatastreams."
         }
     },
-
     FeaturesOfInterest: {
         definition: "An Observation results in a value being assigned to a phenomenon. The phenomenon is a property of a feature, the latter being the FeatureOfInterest of the Observation [OGC and ISO 19156:2011]. In the context of the Internet of Things, many Observations’ FeatureOfInterest can be the Location of the Thing. For example, the FeatureOfInterest of a wifi-connect thermostat can be the Location of the thermostat (i.e., the living room WHERE the thermostat is located in). In the case of remote sensing, the FeatureOfInterest can be the geographical area or volume that is being sensed.",
         reference: "https://docs.ogc.org/is/18-088/18-088.html#featureofinterest",
@@ -288,7 +265,6 @@ export const infos: Record<string, any>  = {
             Locations: "id",
         },
     },
-
     Locations: {
         definition: `The Location entity locates the Thing(s) it associated with.<br>A Thing’s Location entity is defined as the last known location of the Thing.<br>
         A Thing can have multiple Locations if all Locations are different representations of same Location with different encodingType`,
@@ -307,7 +283,6 @@ export const infos: Record<string, any>  = {
             HistoricalLocations: "A Location can have zero-to-many HistoricalLocations. One HistoricalLocation SHALL have one or many Locations.",
         }
     },
-
     HistoricalLocations: {
         definition: "A Thing’s HistoricalLocation entity set provides the times of the current (last known) and previous locations of the Thing.",
         reference: "https://docs.ogc.org/is/18-088/18-088.html#historicallocation",
@@ -320,7 +295,6 @@ export const infos: Record<string, any>  = {
             Locations: "A Location can have zero-to-many HistoricalLocations. One HistoricalLocation SHALL have one or many Locations."
         }
     },
-
     LocationsHistoricalLocations: {
         name: "LocationsHistoricalLocations",
         singular: "LocationHistoricalLocation",
@@ -332,7 +306,6 @@ export const infos: Record<string, any>  = {
         },
         relations: {}
     },
-
     ObservedProperties: {
         definition: "An ObservedProperty specifies the phenomenon of an Observation.",
         reference: "https://docs.ogc.org/is/18-088/18-088.html#observedproperty",
@@ -348,7 +321,6 @@ export const infos: Record<string, any>  = {
             MultiDatastreams: "The Observations of a MultiDatastreams observe the same ObservedProperty. The Observations of different MultiDatastreams MAY observe the same ObservedProperty."
         }
     },
-
     Sensors: {
         definition: "A Sensor is an instrument that observes a property or phenomenon with the goal of producing an estimate of the value of the property3.",
         reference: "https://docs.ogc.org/is/18-088/18-088.html#sensor",
@@ -365,7 +337,6 @@ export const infos: Record<string, any>  = {
             MultiDatastreams: "The Observations of a MultiDatastreams are measured with the same Sensor. One Sensor MAY produce zero-to-many Observations in different MultiDatastreams."
         }
     },
-
     Datastreams: {
         definition: "A Datastream groups a collection of Observations measuring the same ObservedProperty and produced by the same Sensor.",
         reference: "https://docs.ogc.org/is/18-088/18-088.html#datastream",
@@ -388,7 +359,6 @@ export const infos: Record<string, any>  = {
             Loras: "The Lora of a Datastream SHALL Have only one."
         }
     },
-
     MultiDatastreams: {
         definition: `MultiDatastream entity is an extension to handle complex observations when the result is an array.<br><img src="./assets/multi.jpg" alt="MultiDatastream"></br>multi-datastream constraints</br></br>The size and the order of each element of a MultiDatastream’s unitOfMeasurements array (i.e., MultiDatastream(id)/unitOfMeasurements) SHALL match the size and the order of each element of the related ObservedProperties collection (i.e., MultiDatastreams(id)/ObservedProperties).</br></br>The size and the order of each element of a MultiDatastream’s unitOfMeasurements array (i.e., MultiDatastreams(id)/unitOfMeasurements) SHALL match the size and the order of each element of all related Observations’ result (i.e., MultiDatastreams(id)/Observations?$select=result).</br></br>The size and the order of each element of a MultiDatastream’s unitOfMeasurements array (i.e., MultiDatastreams(id)/unitOfMeasurements) SHALL match the size and the order of each element of the MultiDatastream’s multiObservationDataTypes array (i.e., MultiDatastreams(id)/multiObservationDataTypes).</br></br> When a complex result’s element does not have a unit of measurement (e.g., a OM_TruthObservation type), the corresponding unitOfMeasurement element SHALL have null values.`,
         reference: "https://docs.ogc.org/is/18-088/18-088.html#multidatastream-extension",
@@ -412,7 +382,6 @@ export const infos: Record<string, any>  = {
             Loras: "id"
         }
     },
-
     MultiDatastreamObservedProperties: {
         name: "MultiDatastreamObservedProperties",
         singular: "MultiDatastreamObservedProperty",
@@ -440,11 +409,9 @@ export const infos: Record<string, any>  = {
             multidatastreamobservedproperty_observedproperty_id: 'ON public."multidatastreamobservedproperty" USING btree ("observedproperty_id")'
         }
     },
-
     Observations: {
         definition: `An Observation is the act of measuring or otherwise determining the value of a property.<br>An Observation in SensorThings represents a single Sensor reading of an ObservedProperty.<br>A physical device, a Sensor, sends Observations to a specified Datastream.<br>An Observation requires a FeatureOfInterest entity, if none is provided in the request, the Location of the Thing associated with the Datastream, will be assigned to the new Observation as the FeatureOfInterest`,
         reference: "https://docs.ogc.org/is/18-088/18-088.html#observation",
-
         columns: {
             id: definitions.id,
             phenomenonTime: "The time instant or period of when the Observation happens.</br> Note: Many resource-constrained sensing devices do not have a clock. As a result, a client may omit phenonmenonTime when POST new Observations, even though phenonmenonTime is a mandatory property. When a SensorThings service receives a POST Observations without phenonmenonTime, the service SHALL assign the current server time to the value of the phenomenonTime.",
@@ -460,10 +427,8 @@ export const infos: Record<string, any>  = {
             FeatureOfInterest: "An Observation observes on one-and-only-one FeatureOfInterest. One FeatureOfInterest could be observed by zero-to-many Observations."
         }
     },
-
     HistoricalObservations: {
     },
-
     ThingsLocations: {
         name: "ThingsLocations",
         singular: "ThingLocation",
@@ -489,10 +454,8 @@ export const infos: Record<string, any>  = {
             thinglocation_thing_id: 'ON public."thinglocation" USING btree ("thing_id")'
         }
     },
-
     Decoders: {
     },
-
     Loras: {
         definition: "Lora is an extension for adding observations in sensorThings from LORA sensors, the link with sensor is done by deveui (the unique ID of lora sensor) in things properties",
         reference: "",
@@ -509,10 +472,8 @@ export const infos: Record<string, any>  = {
             Decoder:  "A Decoder can have zero-to-many Lora. One Lora SHALL occur in one-and-only-one Decoder.",
         }
     },
-
     Users: {
     },
-
     Services: {
         definition: `Service is an extension that  represent the configuration of one service and the possibility to create a new service with an assistant with the route /service:<br><table><tr><td class="noBorder">The screen below appear</td><td class="noBorder">and after admin postgres connection ok</td><tr><td class="noBorder"><img src="./assets/admin.jpg" alt="admin login"></td><td class="noBorder"><img src="./assets/service.jpg" alt="service"></td></tr></table>`,
         columns: {
@@ -558,7 +519,6 @@ export const infos: Record<string, any>  = {
         relations: {}
     },
 };
-
 export const listOfColumns = (inputEntity: Ientity) => {    
     const success:string[] = [];
     const params:string[] = [];
@@ -578,7 +538,6 @@ export const listOfColumns = (inputEntity: Ientity) => {
         success, params
     };
 };
-
 export const blank = (nb: number) => '</br>'.repeat(nb);
 export const showHide = (name: string, content: string) => `<input id="show${name}" type=checkbox> <label for="show${name}">Click for Help</label> <span id="content${name}">${content}</span>`;
 export const apiInfos = {

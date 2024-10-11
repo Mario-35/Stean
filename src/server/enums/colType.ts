@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- columnType Enum -----------------------------------!\n");
-
 export enum EColumnType { 
     Null,
     Column,

@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- Configuration class -----------------------------------!\n");
-
 import { setReady, _DEBUG } from "../constants";
 import { asyncForEach, decrypt, encrypt, isProduction, isTest, logToHtml, } from "../helpers";
 import { Iservice, IdbConnection, IserviceInfos, koaContext, keyobj } from "../types";
@@ -24,7 +22,6 @@ import { userAccess } from "../db/dataAccess";
 import path from "path";
 import { formatconfigFile, testDbExists, validJSONConfig } from "./helpers";
 import { MqttServer } from "../mqtt";
-
 // class to logCreate configs environements
 class Configuration {
   // store all services
@@ -48,13 +45,11 @@ class Configuration {
       if (data) this.writeLog(data);
     };
   }
-
   messageListen(what: string, port: string, db?: boolean) {
     if (db)
       this.writeLog(log.booting(`${color(EColor.Magenta)}${info.db} => ${color(EColor.Yellow)}${what}${color(EColor.Default)} ${info.onLine}`, port));
       else this.writeLog(log.booting(`${color(EColor.Yellow)}${what}${color(EColor.Yellow)} ${color(EColor.Green)}${info.listenPort}`, port));
   }
-
   writeLog(input: any) {
     if (input) {
       process.stdout.write(input + "\n");
@@ -95,24 +90,19 @@ class Configuration {
       process.exit(111);      
     }
   }
-
   public defaultHttp() {
     return Configuration.services[EConstant.admin] && Configuration.services[EConstant.admin].ports ? Configuration.services[EConstant.admin].ports?.http || 8029 : 8029;
   }
-
   public initMqtt() {
     Configuration.MqttServer = new MqttServer({wsPort : Configuration.services[EConstant.admin].ports?.ws || 1883, tcpPort  : Configuration.services[EConstant.admin].ports?.tcp || 9000});
   }
-
   getBrokerId() {
     return Configuration.MqttServer.broker.id; 
   }
-
   // verify if configuration file Exist
   public configFileExist(): boolean {
     return fs.existsSync(Configuration.filePath);
   }
-
   // return infos routes
   getInfos = (ctx: koaContext, name: string): IserviceInfos => {
     const protocol:string = ctx.request.headers["x-forwarded-proto"]
@@ -128,7 +118,6 @@ class Configuration {
         : ctx.request.header.host
           ? `${protocol}://${ctx.request.header.host}`
           : "";
-
     // make rootName
     if (!linkBase.includes(name)) linkBase += "/" + name;
     const version = Configuration.services[name].apiVersion;
@@ -140,7 +129,6 @@ class Configuration {
       model : `https://app.diagrams.net/?lightbox=1&edit=_blank#U${linkBase}/${version}/draw`
     };
   };
-
   // return infos routes for all services
   public getInfosForAll(ctx: koaContext): { [key: string]: IserviceInfos } {
         const result:Record<string, any> = {};    
@@ -149,19 +137,15 @@ class Configuration {
     });
     return result;
   }
-
   public isConfig(name: string) {
     return Configuration.services.hasOwnProperty(name);
   }
-
   public getService(name: string) {
     return Configuration.services[name];
   }
-
   public getServices() {
     return Object.keys(Configuration.services).filter(e => e !== EConstant.admin);
   }
-
   // Write an encrypt config file in json file
   writeConfig(): boolean {
     this.writeLog(log.message(infos(["write","config"]), Configuration.filePath));
@@ -185,7 +169,6 @@ class Configuration {
     );
     return true;
   }
-
   async executeMultipleQueries(configName: string, queries: string[], infos: string):Promise<boolean> {
     await asyncForEach( queries, async (query: string) => {
       await config
@@ -199,7 +182,6 @@ class Configuration {
     log.create(`${infos} : [${configName}]`, EChar.ok);
     return true;
   }
-
   async executeQueries(title: string): Promise<boolean> {
     try {
       await asyncForEach(
@@ -213,7 +195,6 @@ class Configuration {
     }
     return true;
   }
-
   public hashCode(s: string): number {
     return s.split("").reduce((a, b) => {
       a = (a << 5) - a + b.charCodeAt(0);
@@ -239,7 +220,6 @@ class Configuration {
       }
     );
   }
-
   /**
    * 
    * @param input IdbConnection
@@ -263,18 +243,15 @@ class Configuration {
     Configuration.services[input]._connection = temp;
     return temp;
   }
-
   addToQueries(connectName: string, query: string) {
     if (Configuration.queries[connectName]) 
       Configuration.queries[connectName].push(query);
     else
       Configuration.queries[connectName] = [query];
   }
-
   private clearQueries() { 
     Configuration.queries = {}; 
   }
-
   async relogCreateTrigger(configName: string): Promise<boolean> {
     await asyncForEach( triggers(configName), async (query: string) => {
       const name = query.split(" */")[0].split("/*")[1].trim();
@@ -287,7 +264,6 @@ class Configuration {
     });
     return true;
   }
-
   // initialisation serve NOT IN EConstant.test
   async afterAll(): Promise<boolean> {
     // Updates database after init
@@ -326,7 +302,6 @@ class Configuration {
       }
      return true;
   }
-
  addListening(port: number, message: string) {
   if (Configuration.listenPorts.includes(port)) this.messageListen(`ADD ${message}`, String(port));
   else app.listen(port, () => {
@@ -374,7 +349,6 @@ class Configuration {
         return true;
     }
   }
-
   // return config name from config name
   public getConfigNameFromDatabase(input: string): string | undefined {
     if (input !== "all") {
@@ -383,7 +357,6 @@ class Configuration {
       throw new Error(`No configuration found for ${input} name`);
     }
   }
-
   public getConfigForExcelExport = (name: string): object=> {
     const result: Record<string, any> = Object.assign({}, Configuration.services[name].pg);
     result["password"] = "*****";
@@ -401,7 +374,6 @@ class Configuration {
       });
     }
   };
-
   // return Iservice Formated for Iservice object or name found in json file
   private formatConfig(input: object | string, name?: string): Iservice {
     if (typeof input === "string") {
@@ -411,10 +383,8 @@ class Configuration {
     const goodDbName = name
     ? name
     : input["pg" as keyobj] && input["pg" as keyobj]["database"] ? input["pg" as keyobj]["database"] : `ERROR` || "ERROR";
-
     return formatconfigFile(goodDbName, input);
   }
-
   // Add config to configuration file
   public async addConfig(addJson: object): Promise<Iservice | undefined> {
     try {
@@ -429,7 +399,6 @@ class Configuration {
       return undefined;
     }
   }
-
   // process to add an entry in server
   public async addToServer(key: string): Promise<boolean> {
     this.writeLog(log._head(key));
@@ -460,7 +429,6 @@ class Configuration {
         process.exit(111);
       });
   }
-
   // test in boolean exist if not and logCreate is true then logCreate DB
   private async tryToCreateDB(connectName: string): Promise<boolean> {
     this.writeLog(log.booting("Try create Database", Configuration.services[connectName].pg.database));
@@ -475,7 +443,6 @@ class Configuration {
         return false;
       });
   }
-
   // verify if database exist and if create is true create database if not exist.
   private async isServiceExist(connectName: string, create: boolean): Promise<boolean> {
     this.writeLog(log.booting(info.dbExist, Configuration.services[connectName].pg.database));
@@ -528,5 +495,4 @@ class Configuration {
       });
   }
 }
-
 export const config = new Configuration();

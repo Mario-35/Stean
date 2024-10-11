@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- EUpdate Enum -----------------------------------!\n");
-
 export enum EUpdate { 
     beforeAll = "beforeAll",
     afterAll = "afterAll",

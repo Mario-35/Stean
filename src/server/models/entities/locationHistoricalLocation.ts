@@ -5,13 +5,10 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- entity LocationHistoricalLocation -----------------------------------!\n");
-
 import { createEntity } from ".";
 import { ETable } from "../../enums";
 import { Ientity } from "../../types";
 import { _idRel } from "./constants";
-
 export const LocationHistoricalLocation:Ientity  = createEntity("LocationsHistoricalLocations", {
   createOrder: -1,
   type: ETable.link,

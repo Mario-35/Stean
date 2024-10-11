@@ -5,10 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-// onsole.log("!----------------------------------- OrderBy builder -----------------------------------!\n");
-
 import { Core } from ".";
-
 export class OrderBy extends Core {
   constructor(input?: string | string[]) {
     super(input);
