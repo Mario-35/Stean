@@ -16,7 +16,7 @@ export interface IdecodedUrl {
     id:         bigint;
     idStr:      string | undefined;
     service:    string;
-    version:    number;
+    version:    string;
     configName: string | undefined;
     from:       EFrom;
 }

@@ -70,10 +70,10 @@ export class Services extends Common {
         });
     }
   }
-    // Update an item
-    async update( idInput: bigint | string, dataInput: Record<string, any>  | undefined ): Promise<IreturnResult | undefined | void> {
-      console.log(log.whereIam());      
-    }
+  // Update an item
+  async update( idInput: bigint | string, dataInput: Record<string, any>  | undefined ): Promise<IreturnResult | undefined | void> {
+    console.log(log.whereIam());      
+  }
   // Delete an item
   async delete(idInput: bigint | string): Promise<IreturnResult | undefined> {
     console.log(log.whereIam(idInput));

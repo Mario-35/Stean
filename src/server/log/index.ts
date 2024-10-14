@@ -8,8 +8,9 @@
 
 import util from "util";
 import { color, EChar, EColor } from "../enums";
-import { showAll, _DEBUG } from "../constants";
 import { Lexer } from "../odata/parser";
+import { _DEBUG } from "../constants";
+
 // class to logCreate configs environements
 class Log {
   private debugFile = false;
@@ -20,19 +21,23 @@ class Log {
   public booting<T>(cle: string, value: T) { 
     return `\x1b[${ EColor.Cyan }m${cle}\x1b[${EColor.White}m ${value}\x1b[${EColor.Reset}m`;
   }
+  public showAll<T>(input: T, colors?: boolean) { 
+    return typeof input === "object" ? util.inspect(input, { showHidden: false, depth: null, colors: colors || false, }) : input;
+  }
+
   public create(cle: string, value: string | number) {
-    return `${color(EColor.White)} -->${color( EColor.Cyan )} ${cle} ${color(EColor.White)} ${showAll(value)}${color(EColor.Reset)}`;
+    return `${color(EColor.White)} -->${color( EColor.Cyan )} ${cle} ${color(EColor.White)} ${this.showAll(value)}${color(EColor.Reset)}`;
   }
   public message<T>(cle: string, infos: T) {
-    return `${color(EColor.Yellow)}${cle} ${color( EColor.White )}:${color(EColor.Cyan)} ${showAll( infos)}${color(EColor.Reset)}`;
+    return `${color(EColor.Yellow)}${cle} ${color( EColor.White )}:${color(EColor.Cyan)} ${this.showAll( infos)}${color(EColor.Reset)}`;
   }
   public query(sql: unknown) {
-    if (_DEBUG) return `${color(EColor.Code)}${"=".repeat(5)}[ Query Start ]${"=".repeat(5)}\n${color(EColor.Sql)} ${showAll(sql)}\n${color(EColor.Sql)}${color(EColor.Code)}\n${color( EColor.Reset )}`;
+    if (_DEBUG) return `${color(EColor.Code)}${"=".repeat(5)}[ Query Start ]${"=".repeat(5)}\n${color(EColor.Sql)} ${this.showAll(sql)}\n${color(EColor.Sql)}${color(EColor.Code)}\n${color( EColor.Reset )}`;
   }
   public queryError<T>(query: unknown, error: T) {  
     return `${color(EColor.Green)} ${"=".repeat(15)} ${color( EColor.Cyan )} ERROR ${color(EColor.Green)} ${"=".repeat(15)}${color( EColor.Reset )}
       ${color(EColor.Red)} ${error} ${color( EColor.Blue )}
-      ${color(EColor.Cyan)} ${showAll(query, false ) }${color(EColor.Reset)}`;
+      ${color(EColor.Cyan)} ${this.showAll(query, false ) }${color(EColor.Reset)}`;
   }
   // Usefull for id not used ;)
   oData(infos: Lexer.Token | undefined) {  

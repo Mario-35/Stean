@@ -18,7 +18,7 @@ export interface Iservice {
                         ws: number, // web socket
                     }; 
     pg:             IdbConnection; // postgresSql connection
-    apiVersion:     number; // api version / model
+    apiVersion:     string; // api version / model
     date_format:    string; // formating date
     nb_page:        number; // number of items by page
     options:        typeof typeOptions; // Options see Enum EOptions

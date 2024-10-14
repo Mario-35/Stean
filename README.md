@@ -73,7 +73,7 @@ The configuration.json file must be found by the api in the configuration folder
             "database": "myservice",
             "retry": 2
         },
-        "apiVersion": "1.1", // model version 1.0 ou 1.1
+        "apiVersion": "v1.1", // model version 1.0 ou 1.1
         "date_format": "DD/MM/YYYY hh:mi:ss", // date format in jsons
         "nb_page": 200, // pagination number by page
         // list of alias name

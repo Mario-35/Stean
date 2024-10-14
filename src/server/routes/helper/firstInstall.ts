@@ -13,11 +13,30 @@ import { returnFormats, unique } from "../../helpers";
 import { koaContext, IdecodedUrl, IKeyString } from "../../types";
 import { Admin, First, Service } from "../../views";
 import { EHttpCode } from "../../enums";
-export async function firstInstall(ctx: koaContext): Promise<IdecodedUrl | undefined>  { 
+export async function firstInstall(ctx: koaContext): Promise<IdecodedUrl | undefined>  {
   
   // If Configuration file Not exist first Install
   const why: IKeyString = {};
-  const src = JSON.parse(JSON.stringify(ctx.request.body, null, 2));
+  function formatSrcBody(): Record<string, any> {    
+    const src = JSON.parse(JSON.stringify(ctx.request.body, null, 2));
+    const opt: string[] =[];
+    const ext: string[] =[];
+    Object.keys(src).forEach((e) => {
+      if (e.startsWith("options")) {
+        if (src[e] === "on") opt.push(e.replace("options",""));
+        delete src[e];
+      }
+      if (e.startsWith("extensions")) {
+        if (src[e] === "on") ext.push(e.replace("extensions",""));
+        delete src[e];
+      }
+    });
+    src["options"] = unique(opt); 
+    src["extensions"] = unique(ext);    
+    return src;
+  }
+  const src = formatSrcBody();
+
   function verifyItems(src: any, search: string[]): boolean {
     let error = false;
     function verifyItem(search: string) {
@@ -40,7 +59,13 @@ export async function firstInstall(ctx: koaContext): Promise<IdecodedUrl | undef
     ctx.type = returnFormats.html.type;
     ctx.body = bodyFirst.toString();
     return undefined;
-  }  
+  } 
+  
+
+
+
+
+
   if (src["_src"]) {        
     if (src["_host"]) why["_host"] = src["_host"];
     if (src["_username"]) why["_username"] = src["_username"];
@@ -86,11 +111,6 @@ export async function firstInstall(ctx: koaContext): Promise<IdecodedUrl | undef
         return returnBody(false);      
       }
     } else if (src["_src"] === "_createService") {
-      const src = JSON.parse(JSON.stringify(ctx.request.body, null, 2));      
-      const ext: string[]= ["base"];
-      const opt: string[]= [""];
-      src["extensions"] = unique(ext);
-      src["options"] =  unique(opt);   
       src["version"] = src["version"].startsWith("v") ? src["version"].replace("v","") : src["version"];
       if (verifyItems(src, ["_host", "_username",  "_password", "password", "host", "name", "port", "database", "extensions", "options"]) === false) {
         const confJson: Record<string, any> = {
@@ -142,11 +162,6 @@ export async function firstInstall(ctx: koaContext): Promise<IdecodedUrl | undef
       }
       return
     } else if (src["_src"] === "_addService") {
-      const src = JSON.parse(JSON.stringify(ctx.request.body, null, 2));      
-      const ext: string[]= ["base"];
-      const opt: string[]= [""];
-      src["extensions"] = unique(ext);
-      src["options"] =  unique(opt);   
       src["version"] = src["version"].startsWith("v") ? src["version"].replace("v","") : src["version"];
       if (verifyItems(src, ["_host", "_username",  "_password", "password", "host", "name", "port", "database", "extensions", "options"]) === false) {
         const confJson: Record<string, any> = {

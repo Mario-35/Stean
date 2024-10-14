@@ -68,9 +68,7 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
     .catch((err: Error) => err.message);
     
   // Get complete model
-  const DB = models.DBFull(configName);
-  console.log(DB);
-  
+  const DB = models.DBFull(configName);  
   // loop to create each table
   await asyncForEach(
     Object.keys(DB),

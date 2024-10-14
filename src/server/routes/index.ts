@@ -36,16 +36,16 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
       case "/INFOS":
           ctx.body = config.getInfosForAll(ctx);        
           return;
-        // service assistant
-        case "/SERVICE": 
-          await firstInstall(ctx);  
-          return;
-        // logging for all 
-        case "/LOGGING": 
-          const bodyLogs = new HtmlLogs(ctx, "../../" + EFileName.logs);
-          ctx.type = returnFormats.html.type;
-          ctx.body = bodyLogs.toString();
-          return;
+      // service assistant
+      case "/SERVICE": 
+        await firstInstall(ctx);  
+        return;
+      // logging for all 
+      case "/LOGGING": 
+        const bodyLogs = new HtmlLogs(ctx, "../../" + EFileName.logs);
+        ctx.type = returnFormats.html.type;
+        ctx.body = bodyLogs.toString();
+        return;
      }
     return;
   };
@@ -62,7 +62,7 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     if (!(ctx.request.method === "POST" && ctx.originalUrl.includes(`${decodedUrl.version}/Loras`)))
     ctx.redirect(ctx.request.method === "GET" 
       ? ctx.originalUrl.replace(String(decodedUrl.version), ctx.config.apiVersion)
-      : `${ctx.decodedUrl.linkbase}/v${ctx.config.apiVersion}/`);
+      : `${ctx.decodedUrl.linkbase}/${ctx.config.apiVersion}/`);
   }
   
   

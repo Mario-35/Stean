@@ -111,8 +111,8 @@ export class Common {
                         this.ctx.body += `${Object.keys(data).map(key => data[key]).join(";")}\n`;
                       else this.ctx.body = `${Object.keys(data).map(key => key).join(";")}\n`;
                     } else  this.ctx.body += chunk;
+                    return this.ctx.body;
                   }
-                  return this.ctx.body;
                 })
               });
             } catch (error) {

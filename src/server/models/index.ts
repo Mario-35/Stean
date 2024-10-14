@@ -9,12 +9,13 @@ import { errors, msg } from "../messages";
 import { Iservice, Ientities, Ientity, IstreamInfos, koaContext, IentityRelation } from "../types";
 import fs from "fs";
 import { FeatureOfInterest, Thing, Location, Service, CreateObservation, CreateFile, Datastream, Decoder, HistoricalLocation, Log, Lora, MultiDatastream, MultiDatastreamObservedProperty, Observation, Sensor, User, LocationHistoricalLocation, ObservedProperty, ThingLocation, File, Line } from "./entities";
-const testVersion = (input: number) => Object.keys(Models.models).includes(`${input}`);
+
+const testVersion = (input: string) => Object.keys(Models.models).includes(`${input}`);
 class Models {
-  static models : { [key: number]: Ientities; } = {};
+  static models : { [key: string]: Ientities; } = {};
   // Create Object FOR v1.0
   constructor() { 
-      Models.models[1.0] = {
+      Models.models["v1.0"] = {
           Things: Thing,        
           FeaturesOfInterest: FeatureOfInterest,        
           Locations: Location,        
@@ -86,7 +87,7 @@ class Models {
     };
     const extensions: Record<string, any> = {};
     switch (ctx.config.apiVersion) {
-      case 1.1:
+      case 11:
           result["Ogc link"] = "https://docs.ogc.org/is/18-088/18-088.html";
         break;
         default:
@@ -133,14 +134,14 @@ class Models {
     }
   }
 
-  private version0_9(): Ientities {
+  private version09(): Ientities {
     return  {
       Files: File,
       Lines: Line,
       CreateFile: CreateFile,
     };
   }
-  private version1_1(input: Ientities): Ientities {
+  private version11(input: Ientities): Ientities {
     const makeJson = (name:string) => {
       return {
         create : "jsonb NULL",
@@ -164,36 +165,37 @@ class Models {
     return input;
   }
   
-  public isVersionExist(nb: number | string): boolean{
-    if (isString(nb)) nb = +nb;
+  public isVersionExist(nb: string): boolean {
     if (testVersion(nb) === true) return true;
     if (this.createVersion(nb) === true ) return true;
     throw new Error(msg(errors.wrongVersion, String(nb)));      
   }
 
-  public createVersion(nb: number | string): boolean{
-    if (isString(nb)) nb = +nb;
+  public createVersion(nb: string): boolean {
     switch (nb) {
-      case 0.9:        
-        Models.models[0.9] = this.version0_9();         
-      case 1.1:          
-        Models.models[1.1] = this.version1_1(deepClone(Models.models[1.0]));
+      case "v0.9":        
+        Models.models[nb] = this.version09();         
+      case "v1.1":          
+        Models.models[nb] = this.version11(deepClone(Models.models["v1.0"]));
     } 
     return testVersion(nb);
   }
   
   public listVersion() {
+    console.log("------------------------");
+    console.log(Object.keys(Models.models));
+    
     return Object.keys(Models.models);
   }
 
 
 
   private filtering(service: Iservice ) {
-    const exts = filterEntities(service.extensions);    
+    const exts = filterEntities(service.extensions);      
     return Object.fromEntries(Object.entries(Models.models[service.apiVersion]).filter(([, v]) => Object.keys(exts).includes(v.name))) as Ientities;
   }
 
-  public version(service: Iservice ): number {
+  public version(service: Iservice ): string {
     if (service && service.apiVersion && testVersion(service.apiVersion)) return service.apiVersion;
     throw new Error(msg(errors.wrongVersion, String(service.apiVersion)));
   }
@@ -214,7 +216,7 @@ class Models {
   }
   
   public DBAdmin(service: Iservice ):Ientities {
-    const entities = Models.models[1.0];
+    const entities = Models.models["v1.0"];
     return Object.fromEntries(Object.entries(entities)) as Ientities;
   } 
 
@@ -310,7 +312,7 @@ class Models {
 
   public getRoot(ctx: koaContext) {
     console.log(log.whereIam());
-    let expectedResponse: object[] = [];
+    let expectedResponse: object[] = [];    
     Object.keys(ctx.model)
     .filter((elem: string) => ctx.model[elem].order > 0)
     .sort((a, b) => (ctx.model[a].order > ctx.model[b].order ? 1 : -1))
@@ -322,12 +324,12 @@ class Models {
       });
     
     switch (ctx.config.apiVersion) {
-      case 0.9:
-      case 1.0:
+      case "v0.9":
+      case "v1.0":
         return {
           value : expectedResponse.filter((elem) => Object.keys(elem).length)
         };    
-      case 1.1:
+      case "v1.1":
         expectedResponse = expectedResponse.filter((elem) => Object.keys(elem).length); 
         // base   
         const list:string[] = [
@@ -388,7 +390,7 @@ class Models {
 
   public init() {    
     if (isTest()) {      
-      this.createVersion(1.1);
+      this.createVersion("v1.1");
     }
   }
 }

@@ -120,14 +120,14 @@ class Configuration {
           ? `${protocol}://${ctx.request.header.host}`
           : "";
     // make rootName
-    if (!linkBase.includes(name)) linkBase += "/" + name;
+    if (!linkBase.includes(name)) linkBase += "/" + name;    
     const version = Configuration.services[name].apiVersion;
     return {
       protocol: protocol,
       linkBase: linkBase,
       version: version,
-      root : process.env.NODE_ENV?.trim() === EConstant.test ? `proxy/v${version}` : `${linkBase}/v${version}`,
-      model : `https://app.diagrams.net/?lightbox=1&edit=_blank#U${linkBase}/v${version}/draw`
+      root : process.env.NODE_ENV?.trim() === EConstant.test ? `proxy/${version}` : `${linkBase}/${version}`,
+      model : `https://app.diagrams.net/?lightbox=1&edit=_blank#U${linkBase}/${version}/draw`
     };
   };
   // return infos routes for all services

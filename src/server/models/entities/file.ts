@@ -33,6 +33,13 @@ export const File:Ientity  = createEntity("Files", {
         create: _text('no description'),
         alias() {},
         type: "text",
+      },
+      properties: {
+        create: "JSONB NULL",
+        alias() {
+          return undefined;
+        },
+        type: "json",
       }
     },
     relations: {

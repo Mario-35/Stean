@@ -18,7 +18,7 @@ export class Status extends CoreHtmlView {
     
     public status(ctx: koaContext, user: Iuser) {        
       const service = config.getConfigNameFromDatabase(user.database);  
-      const url = `${this.ctx.decodedUrl.linkbase}/${this.ctx.config.apiVersion}`;  
+      const url = `${this.ctx.decodedUrl.linkbase}/${ctx.config.apiVersion}`;  
       const sec = ctx.config.extensions.includes(EExtensions.users);     
       this._HTMLResult = [`<!DOCTYPE html>
         <html> 

@@ -186,7 +186,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
       return;
     } // END Switch
   // API GET REQUEST  
-  if (ctx.decodedUrl.path.includes(`/${ctx.config.apiVersion}`) || ctx.decodedUrl.version) {
+  if (ctx.decodedUrl.path.includes(ctx.config.apiVersion) || ctx.decodedUrl.version) {
     console.log(log.debug_head(`unProtected GET ${ctx.config.apiVersion}`));
     // decode odata url infos
     const odataVisitor = await createOdata(ctx);    

@@ -8,7 +8,7 @@
  */
 
 import { config } from "../../configuration";
-import { setDebug, versionNb } from "../../constants";
+import { setDebug } from "../../constants";
 import { EConstant, EFrom } from "../../enums";
 import { cleanUrl } from "../../helpers";
 import { log } from "../../log";
@@ -56,7 +56,7 @@ export const decodeUrl = (ctx: koaContext, input?: string): IdecodedUrl | undefi
       origin: url.origin,
       search: url.search,
       service: paths[0],
-      version: paths[0] === EConstant.admin ? 1.0 : versionNb(paths[1]),
+      version: paths[0] === EConstant.admin ? "v1.0" : paths[1],
       path: idStr ? path.replace(String(id), '0') : path,
       id: (isNaN(+id)) ? BigInt(0) : BigInt(id),
       idStr: idStr,
