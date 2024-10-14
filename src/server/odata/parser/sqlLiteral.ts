@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { Literal } from "./literal";
 export class SQLLiteral extends Literal {
     static convert(type: string, value: string): any {

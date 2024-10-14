@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import Utils from "./utils";
 export enum TokenType {
     Literal = "Literal",

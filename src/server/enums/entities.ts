@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { EExtensions } from ".";
 enum EnumBaseEntities {    
     Things = 'Things',
@@ -36,17 +37,18 @@ enum EnumLogEntities {
     Logs = 'Logs'
 }
 enum EnumFileEntities {
+    Files = 'Files',
+    Lines = 'Lines',
     CreateFile = 'CreateFile'
 }
 
 export const filterEntities = (exts: string[], name?: string) => {    
-    // const exts = (typeof input === "string") ? input === "ALL" ? Object.keys(EExtensions) : config.getService(input).extensions : input.extensions;
-    let res = EnumBaseEntities;
+    let res = (exts.includes(EExtensions.base)) ? EnumBaseEntities : {};
     if (exts.includes(EExtensions.logs)) res = {... res, ... EnumLogEntities};
     if (exts.includes(EExtensions.multiDatastream)) res = {... res, ... EnumMultiDatastreamEntities};
     if (exts.includes(EExtensions.lora)) res = {... res, ... EnumLoraEntities};
-    if (exts.includes(EExtensions.users)) res = {... res, ... EnumUsersEntities};
     if (exts.includes(EExtensions.file)) res = {... res, ... EnumFileEntities};
+    if (exts.includes(EExtensions.users)) res = {... res, ... EnumUsersEntities};
     return res;
 }
 export type allEntitiesType = EnumBaseEntities | EnumMultiDatastreamEntities | EnumUsersEntities |  EnumLoraEntities | EnumLogEntities | EnumFileEntities;

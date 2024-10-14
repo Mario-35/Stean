@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { config } from "../../configuration";
 import { EChar, EConstant } from "../../enums";
 import { simpleQuotesString } from "../../helpers";

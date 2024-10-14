@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { decodeToken } from ".";
 import { userAccess } from "../db/dataAccess";
 import { EExtensions } from "../enums";

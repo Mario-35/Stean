@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { Token, TokenType } from './lexer';
 export interface QueryOptionsToken extends Token {
   type: TokenType.QueryOptions;

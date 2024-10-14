@@ -10,7 +10,6 @@ let isDebug = false;
 let isAdmin = false;
 let valueGeo = "";
 
-
 const _NONE = "none";
 
 // load file json
@@ -19,7 +18,6 @@ var jsonObj = {};
 var listOptions = {};
 var canGo = false;
 let builder = undefined;
-
 
 const wins = {
     SqlQuery: false,
@@ -31,11 +29,9 @@ const wins = {
     Graph: false
 };
 
-
 const cardDatas = {};
 let dragText = "";
 let jsonViewer = undefined; 
-
 
 // replace at execution
 const _PARAMS={};
@@ -53,6 +49,7 @@ function getRelationsList(input) {
     const ent = getEntityName(input);
     return ent ? Object.keys(_PARAMS._DATAS[ent].relations) : undefined;
 }
+
 const getWinActives = () => Object.entries(wins).filter(e => e === true).length > 0;
 
 async function asyncForEach(array, callback) {

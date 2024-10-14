@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { IKeyString, IKeyBoolean, Iservice, typeExtensions } from ".";
 export interface IentityColumn {
     [key: string]: {

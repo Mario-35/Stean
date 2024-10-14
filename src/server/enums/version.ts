@@ -7,6 +7,7 @@
  *
  */
 export enum EVersion {
+    v0_9 = "v0.9",
     v1_0 = "v1.0",
     v1_1 = "v1.1"
 }

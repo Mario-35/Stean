@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import fs from "fs";
 import { IcsvFile, IcsvImport } from "../../types";
 import readline from "readline";

@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { EFrom } from "../enums";
 export interface IdecodedUrl {
     origin:     string;
@@ -15,7 +16,7 @@ export interface IdecodedUrl {
     id:         bigint;
     idStr:      string | undefined;
     service:    string;
-    version:    string;
+    version:    number;
     configName: string | undefined;
     from:       EFrom;
 }

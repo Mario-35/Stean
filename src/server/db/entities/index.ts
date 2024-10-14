@@ -9,6 +9,8 @@ export { Services } from "./Services";
 export { Datastreams } from "./Datastreams";
 export { FeaturesOfInterest } from "./FeaturesOfInterest";
 export { HistoricalLocations } from "./HistoricalLocations";
+export { Files } from "./Files";
+export { Lines } from "./Lines";
 export { Locations } from "./Locations";
 export { MultiDatastreams } from "./MultiDatastreams";
 export { MultiObservedProperties } from "./MultiObservedProperties";

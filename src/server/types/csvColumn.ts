@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { IstreamInfos } from "./streamInfos";
 export interface    IcsvColumn {
     column:         string; 

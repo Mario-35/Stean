@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { EColumnType } from "../enums";
 export interface IodataContext { //odata context pass to token
     key:            string | undefined;

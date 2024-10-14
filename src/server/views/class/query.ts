@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { EConstant } from "../../enums";
 import { removeAllQuotes } from "../../helpers";
 import { log } from "../../log";

@@ -5,21 +5,22 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import util from "util";
-import { EConstant, EVersion } from "../../enums";
+import { EConstant } from "../../enums";
 import { unikeList, unique } from "../../helpers";
 import { errors } from "../../messages";
 import { Iservice, typeExtensions, typeOptions } from "../../types";
-import { getModelVersion } from "../../models/helpers";
+import { versionNb, versionStr } from "../../constants";
 export function formatconfigFile(name: string, input: Record<string, any>): Iservice {
     const options: typeof typeOptions = input["options"]
     ? unique([... String(input["options"]).split(",")]) as typeof typeOptions 
     : [];
     const extensions: typeof typeExtensions = input["extensions"]
-      ? unique(["base", ... String(input["extensions"]).split(",")]) as typeof typeExtensions 
+      ? unique([... String(input["extensions"]).split(",")]) as typeof typeExtensions 
       : ["base"];
     if (input["extensions"]["users"]) extensions.includes("users");
-    const version = name === EConstant.admin ? EVersion.v1_1  : String(input["apiVersion"]).trim();
+    const version = name === EConstant.admin ? versionStr(1.1)  : String(input["apiVersion"]).trim();
     const returnValue: Iservice = {
       name: name,
       ports: name === EConstant.admin
@@ -38,7 +39,7 @@ export function formatconfigFile(name: string, input: Record<string, any>): Iser
         database: name && name === EConstant.test ? "test" : input["pg"] && input["pg"]["database"] ? input["pg"]["database"] : `ERROR`,
         retry: input["retry"] ? +input["retry"] : 2,
       },
-      apiVersion: getModelVersion(version),
+      apiVersion: versionNb(version),
       date_format: input["date_format"] || "DD/MM/YYYY hh:mi:ss",
       nb_page: input["nb_page"] ? +input["nb_page"] : 200,
       alias: input["alias"] ? unikeList(String(input["alias"]).split(",")) : [],

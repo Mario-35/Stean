@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { Core } from ".";
 export class OrderBy extends Core {
   constructor(input?: string | string[]) {

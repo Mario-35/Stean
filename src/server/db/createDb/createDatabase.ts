@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { createTable, createUser } from "../helpers";
 import { config } from "../../configuration";
 import { doubleQuotesString, simpleQuotesString, asyncForEach } from "../../helpers";
@@ -14,7 +15,6 @@ import { triggers } from "./triggers";
 import { models } from "../../models";
 import { log } from "../../log";
 import { createRole } from "../helpers/createRole";
-import { info } from "../../messages";
 import { createExtension } from "../queries";
 export const createDatabase = async (configName: string): Promise<IKeyString> => {
   console.log(log.debug_head("createDatabase", configName));
@@ -69,6 +69,7 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
     
   // Get complete model
   const DB = models.DBFull(configName);
+  console.log(DB);
   
   // loop to create each table
   await asyncForEach(
@@ -78,18 +79,21 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
       Object.keys(res).forEach((e: string) => log.create(e, res[e]));      
     }
   );
-  // loop to create each table
-  await asyncForEach( triggers(configName), async (query: string) => {
-    const name = query.split(" */")[0].split("/*")[1].trim();
-    await config.connection(configName).unsafe(query)
-      .then(() => {
-        log.create(name, EChar.ok);
-      }).catch((error: Error) => {
-        console.log(error);
-        process.exit(111);
-      });    
-    }
-  );
+  // loop to create each triggers
+  if (!config.getService(configName).extensions.includes( EExtensions.file ) ) {
+    await asyncForEach( triggers(configName), async (query: string) => {
+      const name = query.split(" */")[0].split("/*")[1].trim();
+      await config.connection(configName).unsafe(query)
+        .then(() => {
+          log.create(name, EChar.ok);
+        }).catch((error: Error) => {
+          console.log(error);
+          process.exit(111);
+        });    
+      }
+    );
+  }
+
   // If only numeric extension
   if ( config.getService(configName).extensions.includes( EExtensions.highPrecision ) ) {
     await dbConnection.unsafe(`ALTER TABLE ${doubleQuotesString(DB.Observations.table)} ALTER COLUMN 'result' TYPE float4 USING null;`)
@@ -103,6 +107,7 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
         return error;
       });
   }
+
   returnValue[`Create Role`] = await createRole(config.getService(configName))
     .then(() => EChar.ok)
     .catch((err: Error) => err.message);
@@ -110,26 +115,26 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
     .then(() => EChar.ok)
     .catch((err: Error) => err.message);
 
-  if (config.getService(configName).extensions.includes(EExtensions.file)) {
-    const files: string[] =
-    [`INSERT INTO sensor ("name", description, "encodingType", metadata) VALUES('${info.csvFile}', '${info.csvFile}', 'application/pdf', 'https://www.rfc-editor.org/rfc/pdfrfc/rfc4180.txt.pdf');`
-    ,`WITH thing AS (INSERT INTO "thing" ("name","description","properties") VALUES ('${info.csvFile}','${info.csvFile}','{}') RETURNING *) , location1 AS ( INSERT INTO "location" ("name","description","encodingType","location") VALUES ('${info.csvFile}','${info.csvFile}','application/geo+json','{}') RETURNING id) , thinglocation AS ( INSERT INTO "thinglocation" ("location_id","thing_id") VALUES ((select location1.id from location1),(select thing.id from thing))) select id from thing`
-    ,`ALTER TABLE "observation" DROP CONSTRAINT "observation_unik_datastream_result";`
-    ,`ALTER TABLE "observation" DROP CONSTRAINT "observation_unik_multidatastream_result";`
-    ,`CREATE INDEX "observation_result" ON observation USING gin (result);`
-    ,`INSERT INTO observedproperty ("name", definition, description) VALUES('${info.csvFile}', '${info.csvFile}', '${info.csvFile}');`]
-    await asyncForEach( files, async (query: string) => {
-      await config.connection(configName).unsafe(query)
-        .then(() => {
-          log.create("name", EChar.ok);
-        }).catch((error: Error) => {
-          console.log(query);
-          console.log(error);
-          process.exit(111);
-        });    
-      }
-    );
-  }
+  // if (config.getService(configName).extensions.includes(EExtensions.file)) {
+  //   const files: string[] =
+  //   [`INSERT INTO sensor ("name", description, "encodingType", metadata) VALUES('${info.csvFile}', '${info.csvFile}', 'application/pdf', 'https://www.rfc-editor.org/rfc/pdfrfc/rfc4180.txt.pdf');`
+  //   ,`WITH thing AS (INSERT INTO "thing" ("name","description","properties") VALUES ('${info.csvFile}','${info.csvFile}','{}') RETURNING *) , location1 AS ( INSERT INTO "location" ("name","description","encodingType","location") VALUES ('${info.csvFile}','${info.csvFile}','application/geo+json','{}') RETURNING id) , thinglocation AS ( INSERT INTO "thinglocation" ("location_id","thing_id") VALUES ((select location1.id from location1),(select thing.id from thing))) select id from thing`
+  //   ,`ALTER TABLE "observation" DROP CONSTRAINT "observation_unik_datastream_result";`
+  //   ,`ALTER TABLE "observation" DROP CONSTRAINT "observation_unik_multidatastream_result";`
+  //   ,`CREATE INDEX "observation_result" ON observation USING gin (result);`
+  //   ,`INSERT INTO observedproperty ("name", definition, description) VALUES('${info.csvFile}', '${info.csvFile}', '${info.csvFile}');`]
+  //   await asyncForEach( files, async (query: string) => {
+  //     await config.connection(configName).unsafe(query)
+  //       .then(() => {
+  //         log.create("name", EChar.ok);
+  //       }).catch((error: Error) => {
+  //         console.log(query);
+  //         console.log(error);
+  //         process.exit(111);
+  //       });    
+  //     }
+  //   );
+  // }
   await dbConnection.unsafe(`SELECT COUNT(*) FROM pg_user WHERE usename = ${simpleQuotesString(servicePg.user)};`)
     .then(() => { returnValue["ALL finished ..."] = EChar.ok; })
     .catch((err: Error) => err.message);

@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { isGraph } from "../../helpers";
 import { PgVisitor } from "../../odata/visitor";
 export const generateFields = (input: PgVisitor): string[] => {

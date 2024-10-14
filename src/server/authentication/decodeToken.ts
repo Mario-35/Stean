@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import jsonwebtoken from "jsonwebtoken";
 import { IuserToken, keyobj, koaContext } from "../types";
 import { blankUserToken } from "../types/userToken";

@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { config } from "../../configuration";
 import { EChar, EExtensions } from "../../enums";
 import { asyncForEach } from "../../helpers";

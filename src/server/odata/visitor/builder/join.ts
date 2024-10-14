@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { Core } from ".";
 export class Join extends Core {
   constructor(input?: string | string[]) {

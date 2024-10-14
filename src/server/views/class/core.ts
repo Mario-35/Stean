@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { koaContext } from "../../types";
 import { addCssFile } from "../css";
 export class CoreHtmlView {

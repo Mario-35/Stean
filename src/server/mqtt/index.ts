@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import Aedes, { AedesPublishPacket, Client, PublishPacket, Subscription } from 'aedes';
 import { config } from '../configuration';
 import { log } from '../log';

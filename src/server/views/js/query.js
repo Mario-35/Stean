@@ -141,7 +141,7 @@ function init() {
 	if (isDebug) console.log(_PARAMS);
 	new SplitterBar(container, first, two);
 	wait(false);
-	const tempEntity = _PARAMS.entity || isAdmin === true ? "Configs" : "Things";
+	const tempEntity = _PARAMS.entity ? _PARAMS.entity : isAdmin === true ? "Configs" : "Things";	
 	populateSelect(entityOption, getEntityList(), tempEntity);
 	const subs = getRelationsList(tempEntity);
 	header("==== ICI ====");
@@ -155,7 +155,7 @@ function init() {
 	idSubOption.value = 0;
 
 	refresh();
-	optVersion.value = _PARAMS.decodedUrl.version;
+	optVersion.value = `v${_PARAMS.decodedUrl.version}`;
 	optHost.value = _PARAMS.decodedUrl.linkbase;
 	if (_PARAMS.datas) datas.json_value = _PARAMS.datas;
 	queryOptions.value = _PARAMS.options;

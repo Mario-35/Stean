@@ -7,6 +7,7 @@
  * NOT Use in API use to decode in command line
  *
  */
+
 import fs from "fs";
 import crypto from "crypto";
 const decrypt = (input: string, key: string): string => {

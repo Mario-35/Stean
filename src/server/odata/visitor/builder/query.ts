@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { doubleQuotesString, cleanStringComma, containsAll, isDataArray, isGraph, isGeoJson, removeAllQuotes, removeFirstEndDoubleQuotes, formatPgString, returnFormats } from "../../../helpers";
 import { asJson } from "../../../db/queries";
 import { Iservice, Ientity, IKeyBoolean, IpgQuery } from "../../../types";
@@ -73,7 +74,6 @@ export class Query  {
         if  (column.startsWith( "(SELECT")) return  column; 
     };
     private columnList(tableName: string, main: PgVisitor, element: PgVisitor): string[] | undefined  {
-        console.log(log.whereIam());
         if (isFile(element.ctx) && element.returnFormat === returnFormats.csv) return element.columnSpecials["result"] 
         // get good entity name
         const tempEntity = models.getEntity(main.ctx.config, tableName);
@@ -204,7 +204,7 @@ export class Query  {
         }
         return undefined;
     }
-    private pgQueryToString(input: IpgQuery | undefined): string | undefined{    
+    private pgQueryToString(input: IpgQuery | undefined): string | undefined {            
         return input ? 
             `SELECT ${input.select}\n FROM ${input.from}\n ${input.where 
                 ? `WHERE ${input.where}\n` 

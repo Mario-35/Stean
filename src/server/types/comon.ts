@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { IreturnResult } from "./returnResult";
 import { Iuser } from "./user";
 export interface Icomon {

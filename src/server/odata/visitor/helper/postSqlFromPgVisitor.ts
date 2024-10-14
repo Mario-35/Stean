@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { doubleQuotesString, getBigIntFromString } from "../../../helpers";
 import { Ientity, IKeyString } from "../../../types";
 import { EConstant, EOperation, EOptions } from "../../../enums";

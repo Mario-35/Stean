@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { addToService, createDatabase, executeAdmin, executeSqlValues } from ".";
 import { config } from "../../configuration";
 import { doubleQuotesString, simpleQuotesString, asyncForEach } from "../../helpers";
@@ -69,7 +70,7 @@ export const createService = async (dataInput: Record<string, any>, ctx?: koaCon
       await createDB();
     }
   });
-  const tmp = models.filteredModelFromConfig(service);
+  const tmp = models.filteredModel(service);
     
   await asyncForEach( Object.keys(tmp) .filter((elem: string) => tmp[elem].createOrder > 0) .sort((a, b) => (tmp[a].createOrder > tmp[b].createOrder ? 1 : -1)), async (entityName: string) => {
     if (dataInput[entityName]) {

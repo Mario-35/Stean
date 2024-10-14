@@ -5,10 +5,10 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { RootPgVisitor } from "..";
 import { config } from "../../../configuration";
 import { multiDatastreamKeys, resultKeys, multiDatastreamUoM } from "../../../db/queries";
-import { datastreamUoM } from "../../../db/queries/datastreamUoM";
 import { returnFormats, isObservation } from "../../../helpers";
 import { isFile } from "../../../helpers/tests";
 import { log } from "../../../log";
@@ -31,17 +31,14 @@ export const doSomeWorkAfterCreateAst = async (input: RootPgVisitor, ctx: koaCon
     && input.parentEntity?.name?.endsWith('atastreams') 
     && input.parentId 
     && <bigint>input.parentId > 0) {
-      if (isFile(input.ctx)) {
-        await config.connection(ctx.config.name).unsafe(datastreamUoM(input)).then((res) => {
-        //  input.columnSpecials["result"] = res[0].keys.split(",").map((e: string) => `("result"->>'value')::json->'${e}' AS "${e}"`);
-         input.columnSpecials["result"] = [`("result"->>'value')::json`];
-        });        
-      } else if (input.parentEntity.name === "Datastreams") input.columnSpecials["result"]  = [`"result"->'value' AS result`];
+      if (input.parentEntity.name === "Datastreams") input.columnSpecials["result"]  = [`"result"->'value' AS result`];
       if (input.parentEntity.name === "MultiDatastreams") {        
         await config.connection(ctx.config.name).unsafe(multiDatastreamUoM(input)).then((res) => {
           if (res[0] && res[0].keys && res[0].keys.map)
             input.columnSpecials["result"]  =  res[0].keys.map((e: string) => `("result"->>'valueskeys')::json->'${e}' AS "${e}"`);
         });
       }   
+  } else if (isFile(input.ctx)) {
+    input.columnSpecials["result"] = [`("result"->>'valueskeys')::json`];       
   }
 };

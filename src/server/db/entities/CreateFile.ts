@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { Common } from "./common";
 import { IcsvColumn, IcsvFile, IreturnResult, koaContext } from "../../types";
 import { getColumnsNamesFromCsvFile, executeSqlValues } from "../helpers";
@@ -21,7 +22,7 @@ export class CreateFile extends Common {
     console.log(log.whereIam());
     super(ctx);
   }
-  streamCsvFileInPostgreSqlFileInDatastream = async ( ctx: koaContext, paramsFile: IcsvFile ): Promise<string | undefined> => {
+  streamCsvFileInFiles = async ( ctx: koaContext, paramsFile: IcsvFile ): Promise<string | undefined> => {
     console.log(log.debug_head("streamCsvFileInPostgreSqlFileInDatastream"));
     const headers = await getColumnsNamesFromCsvFile(paramsFile.filename);
     if (!headers) {
@@ -33,44 +34,35 @@ export class CreateFile extends Common {
     const nameOfFile = paramsFile.filename.split("/").reverse()[0];
     const createDataStream = async () => {
       const copyCtx = Object.assign({}, ctx.odata);
-      ctx.odata.entity = this.ctx.model.Datastreams;
+      ctx.odata.entity = this.ctx.model.Files;
       // IMPORTANT TO ADD instead update
       ctx.odata.returnFormat = returnFormats.json;
       ctx.log = undefined;
       // @ts-ignore
-      const objectDatastream = new entities[this.ctx.model.Datastreams.name]( ctx );
-      const myDatas = {
-        "name": nameOfFile,
-        "description": `${this.ctx.model.Datastreams.name} import file ${nameOfFile}`,
-        "observationType": "http://www.opengis.net/def/observation-type/ogc-omxml/2.0/swe-array-observation",
-        "Thing": { "@iot.id": 1 },
-        "unitOfMeasurement": {
-          "name": headers.join().replace(/"+/g, ''),
-          "symbol": "csv",
-          "definition": "https://www.rfc-editor.org/rfc/pdfrfc/rfc4180.txt.pdf",
-        },
-        "ObservedProperty": { "@iot.id": 1 },
-        "Sensor": { "@iot.id": 1 },
-      };      
+      const objectFile = new entities[this.ctx.model.Files.name]( ctx );
       try {
-        return await objectDatastream.post(myDatas);
+        return await objectFile.post({
+          "name": nameOfFile,
+          "description": `${this.ctx.model.Files.name} import file ${nameOfFile}`,
+        });
       } catch (err) {
         console.log(err);        
         ctx.odata.query.where.init(`"name" ~* '${nameOfFile}'`);
-        const returnValueError = await objectDatastream.getAll();
+        const returnValueError = await objectFile.getAll();        
         ctx.odata = copyCtx;
         if (returnValueError) {
           returnValueError.body = returnValueError.body
             ? returnValueError.body[0]
             : {};
-          if (returnValueError.body) await executeSqlValues(ctx.config, `DELETE FROM "${this.ctx.model.Observations.table}" WHERE "datastream_id" = ${returnValueError.body[EConstant.id]}`);
+          if (returnValueError.body) await executeSqlValues(ctx.config, `DELETE FROM "${this.ctx.model.Lines.table}" WHERE "file_id" = ${returnValueError.body[EConstant.id]}`);
           return returnValueError;
         }
       } finally {
         ctx.odata = copyCtx;
       }
     };
-    const returnValue = await createDataStream().catch((err: Error) => console.log(err));    
+    const returnValue = await createDataStream().catch((err: Error) => console.log(err));
+    
     const controller = new AbortController();
     const readable = createReadStream(paramsFile.filename);
     const cols:string[] = [];
@@ -82,16 +74,12 @@ export class CreateFile extends Common {
       readable
         .pipe(addAbortSignal(controller.signal, await writable))
         .on('close', async () => {
-          const sql = `INSERT INTO "${ this.ctx.model.Observations.table }" 
+          const sql = `INSERT INTO "${ this.ctx.model.Lines.table }" 
                     (
-                    "datastream_id", 
-                    "phenomenonTime", 
-                    "resultTime", 
+                    "file_id", 
                     "result") 
                     SELECT '${Number( returnValue.body[EConstant.id] )}', 
-                    (SELECT current_timestamp), 
-                    (SELECT current_timestamp), 
-                    json_build_object('value',ROW_TO_JSON(p)) FROM (SELECT * FROM ${ paramsFile.tempTable }) AS p 
+                    json_build_object('valueskeys',ROW_TO_JSON(p)) FROM (SELECT * FROM ${ paramsFile.tempTable }) AS p 
                     ON CONFLICT DO NOTHING`;
                     
           await config.connection(this.ctx.config.name).unsafe(sql);          
@@ -118,7 +106,7 @@ export class CreateFile extends Common {
     if (this.ctx.datas) {      
       const myColumns: IcsvColumn[] = [];
         return this.formatReturnResult({
-          body: await this.streamCsvFileInPostgreSqlFileInDatastream( this.ctx, {
+          body: await this.streamCsvFileInFiles( this.ctx, {
             tempTable: `temp${Date.now().toString()}`,
             filename: this.ctx.datas["file"],
             columns: myColumns,

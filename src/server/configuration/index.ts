@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { setReady, _DEBUG } from "../constants";
 import { asyncForEach, decrypt, encrypt, isProduction, isTest, logToHtml, } from "../helpers";
 import { Iservice, IdbConnection, IserviceInfos, koaContext, keyobj } from "../types";
@@ -125,8 +126,8 @@ class Configuration {
       protocol: protocol,
       linkBase: linkBase,
       version: version,
-      root : process.env.NODE_ENV?.trim() === EConstant.test ? `proxy/${version}` : `${linkBase}/${version}`,
-      model : `https://app.diagrams.net/?lightbox=1&edit=_blank#U${linkBase}/${version}/draw`
+      root : process.env.NODE_ENV?.trim() === EConstant.test ? `proxy/v${version}` : `${linkBase}/v${version}`,
+      model : `https://app.diagrams.net/?lightbox=1&edit=_blank#U${linkBase}/v${version}/draw`
     };
   };
   // return infos routes for all services
@@ -417,7 +418,8 @@ class Configuration {
             superAdmin: false,
             admin: false
           });
-          if(![EConstant.admin as String, EConstant.test as String].includes(key)) createIndexes(key);
+          
+          if(!Configuration.services[key].extensions.includes(EExtensions.file) && ![EConstant.admin as String, EConstant.test as String].includes(key)) createIndexes(key);
           this.messageListen(key, res ? EChar.web : EChar.notOk, true);
           this.addListening(this.defaultHttp(), key);
         }

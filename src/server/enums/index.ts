@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { EExtensions } from "./extensions";
 import { EOptions } from "./options";
 export { EChar } from "./chars";
@@ -19,7 +20,6 @@ export { allEntities, allEntitiesType, filterEntities } from "./entities";
 export { EExtensions } from "./extensions";
 export { EHttpCode } from "./httpCode";
 export { EReturnFormats } from "./resultFormats";
-export { EVersion } from "./version";
 export { EObservationType } from "./observationType";
 export { EOperation } from "./operation";
 export { ERelations } from "./relations";

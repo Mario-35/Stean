@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { createEntity } from ".";
 import { ETable } from "../../enums";
 import { Ientity } from "../../types";

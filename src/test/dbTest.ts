@@ -5,6 +5,7 @@
  * @copyright 2020-present Inrae
  * @author mario.adam@inrae.fr
  */
+
 import postgres from "postgres";
 import config from "../server/configuration/configuration.json";
 import { identification } from "./integration/constant";

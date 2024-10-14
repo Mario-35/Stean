@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { Common } from "./common";
 import { getBigIntFromString, notNull, } from "../../helpers/index";
 import { ESCAPE_SIMPLE_QUOTE } from "../../constants";

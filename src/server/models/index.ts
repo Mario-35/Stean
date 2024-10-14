@@ -3,18 +3,18 @@ import { log } from "../log";
 import { _STREAM } from "../db/constants";
 import { executeSqlValues } from "../db/helpers";
 import { asJson } from "../db/queries";
-import { EColumnType, EConstant, EExtensions, EVersion, filterEntities } from "../enums";
+import { EColumnType, EConstant, EExtensions, filterEntities } from "../enums";
 import { doubleQuotesString, deepClone, isTest, formatPgTableColumn, isString } from "../helpers";
 import { errors, msg } from "../messages";
 import { Iservice, Ientities, Ientity, IstreamInfos, koaContext, IentityRelation } from "../types";
 import fs from "fs";
-import { FeatureOfInterest, Thing, Location, Service, CreateObservation, CreateFile, Datastream, Decoder, HistoricalLocation, Log, Lora, MultiDatastream, MultiDatastreamObservedProperty, Observation, Sensor, User, LocationHistoricalLocation, ObservedProperty, ThingLocation } from "./entities";
-const testVersion = (input: string) => Object.keys(Models.models).includes(input);
+import { FeatureOfInterest, Thing, Location, Service, CreateObservation, CreateFile, Datastream, Decoder, HistoricalLocation, Log, Lora, MultiDatastream, MultiDatastreamObservedProperty, Observation, Sensor, User, LocationHistoricalLocation, ObservedProperty, ThingLocation, File, Line } from "./entities";
+const testVersion = (input: number) => Object.keys(Models.models).includes(`${input}`);
 class Models {
-  static models : { [key: string]: Ientities; } = {};
+  static models : { [key: number]: Ientities; } = {};
   // Create Object FOR v1.0
   constructor() { 
-      Models.models[EVersion.v1_0] = {
+      Models.models[1.0] = {
           Things: Thing,        
           FeaturesOfInterest: FeatureOfInterest,        
           Locations: Location,        
@@ -33,7 +33,6 @@ class Models {
           Users: User,        
           Services: Service,        
           CreateObservations: CreateObservation,
-          CreateFile: CreateFile,
       };                
   }
   escape(input: string, ignore?: string) {
@@ -87,7 +86,7 @@ class Models {
     };
     const extensions: Record<string, any> = {};
     switch (ctx.config.apiVersion) {
-      case EVersion.v1_1:
+      case 1.1:
           result["Ogc link"] = "https://docs.ogc.org/is/18-088/18-088.html";
         break;
         default:
@@ -133,6 +132,14 @@ class Models {
         });
     }
   }
+
+  private version0_9(): Ientities {
+    return  {
+      Files: File,
+      Lines: Line,
+      CreateFile: CreateFile,
+    };
+  }
   private version1_1(input: Ientities): Ientities {
     const makeJson = (name:string) => {
       return {
@@ -157,29 +164,41 @@ class Models {
     return input;
   }
   
-  public isVersionExist(nb: string): boolean{
+  public isVersionExist(nb: number | string): boolean{
+    if (isString(nb)) nb = +nb;
     if (testVersion(nb) === true) return true;
     if (this.createVersion(nb) === true ) return true;
-    throw new Error(msg(errors.wrongVersion, nb));      
+    throw new Error(msg(errors.wrongVersion, String(nb)));      
   }
-  public createVersion(nb: string): boolean{
+
+  public createVersion(nb: number | string): boolean{
+    if (isString(nb)) nb = +nb;
     switch (nb) {
-      case "1.1":          
-      case "v1.1":          
-      case EVersion.v1_1:          
-        Models.models[EVersion.v1_1] = this.version1_1(deepClone(Models.models[EVersion.v1_0]));
+      case 0.9:        
+        Models.models[0.9] = this.version0_9();         
+      case 1.1:          
+        Models.models[1.1] = this.version1_1(deepClone(Models.models[1.0]));
     } 
     return testVersion(nb);
   }
   
-  private filtering(service: Iservice ) {    
-    return Object.fromEntries(Object.entries(Models.models[service.apiVersion]).filter(([, v]) => Object.keys(filterEntities(service.extensions)).includes(v.name))) as Ientities;
+  public listVersion() {
+    return Object.keys(Models.models);
   }
-  public version(service: Iservice ): string {
+
+
+
+  private filtering(service: Iservice ) {
+    const exts = filterEntities(service.extensions);    
+    return Object.fromEntries(Object.entries(Models.models[service.apiVersion]).filter(([, v]) => Object.keys(exts).includes(v.name))) as Ientities;
+  }
+
+  public version(service: Iservice ): number {
     if (service && service.apiVersion && testVersion(service.apiVersion)) return service.apiVersion;
-    throw new Error(msg(errors.wrongVersion, service.apiVersion));
+    throw new Error(msg(errors.wrongVersion, String(service.apiVersion)));
   }
-  public filteredModelFromConfig(service: Iservice  ): Ientities {
+  
+  public filteredModel(service: Iservice  ): Ientities {
     if (testVersion(service.apiVersion) === false) this.createVersion(service.apiVersion);
     return service.name === EConstant.admin ? this.DBAdmin(service) : this.filtering(service);
   }
@@ -195,9 +214,10 @@ class Models {
   }
   
   public DBAdmin(service: Iservice ):Ientities {
-    const entities = Models.models[EVersion.v1_0];
+    const entities = Models.models[1.0];
     return Object.fromEntries(Object.entries(entities)) as Ientities;
   } 
+
   public isSingular(service: Iservice , input: string): boolean { 
     if (config && input) {
       const entityName = this.getEntityName(service, input); 
@@ -205,6 +225,7 @@ class Models {
     }          
     return false;
   }
+
   public getEntityName(service: Iservice , search: string): string | undefined {
     if (config && search) {        
       const tempModel = Models.models[service.apiVersion];
@@ -223,9 +244,11 @@ class Models {
           : undefined;
     }
   }
+
   public getEntityStrict = (service: Iservice , entity: Ientity | string): Ientity | undefined => {
     return (typeof entity === "string") ? Models.models[service.apiVersion][entity] : Models.models[service.apiVersion][entity.name];
   }
+
   public getEntity = (service: Iservice , entity: Ientity | string): Ientity | undefined => {
     if (config && entity) {
       if (isString(entity)) {
@@ -236,6 +259,7 @@ class Models {
       return isString(entity) ? Models.models[service.apiVersion][entity] : Models.models[service.apiVersion][entity.name];
     }
   };
+
   public getRelationName = (entity: Ientity, searchs: string[]): string | undefined => {
     let res: string | undefined = undefined;    
     searchs.forEach(e => {
@@ -263,6 +287,7 @@ class Models {
               : undefined;
     }      
   };
+
   public getSelectColumnList(service: Iservice, entity: Ientity | string, complete: boolean,  exclus?: string[]) {
       const tempEntity = this.getEntity(service, entity);
       exclus = exclus || [""];
@@ -270,9 +295,11 @@ class Models {
         ? Object.keys(tempEntity.columns).filter((word) => !word.includes("_") && !exclus.includes(word)).map((e: string) => complete ? formatPgTableColumn(tempEntity.table, e) : doubleQuotesString(e))
         : [];
   }
+
   getColumnListNameWithoutId(input: Ientity) {
     return Object.keys(input.columns).filter((word) => !word.includes("_") && !word.includes("id")); 
   }
+
   public isColumnType(service: Iservice , entity: Ientity | string, column: string , test: string): boolean {
     if (config && entity) {
       const tempEntity = this.getEntity(service, entity);
@@ -280,6 +307,7 @@ class Models {
     }
     return false;
   }
+
   public getRoot(ctx: koaContext) {
     console.log(log.whereIam());
     let expectedResponse: object[] = [];
@@ -294,11 +322,12 @@ class Models {
       });
     
     switch (ctx.config.apiVersion) {
-      case EVersion.v1_0:
+      case 0.9:
+      case 1.0:
         return {
           value : expectedResponse.filter((elem) => Object.keys(elem).length)
         };    
-      case EVersion.v1_1:
+      case 1.1:
         expectedResponse = expectedResponse.filter((elem) => Object.keys(elem).length); 
         // base   
         const list:string[] = [
@@ -351,15 +380,15 @@ class Models {
           break;
       }
   }
+
   public extractEntityNames(input: string, search: string | string[]): string[] {    
     if (typeof search === "string") search = [search];
     return search.map(e => (input.replace(e, ""))).filter(e => e != input);
   }
 
-
   public init() {    
     if (isTest()) {      
-      this.createVersion(EVersion.v1_1);
+      this.createVersion(1.1);
     }
   }
 }

@@ -6,6 +6,7 @@
  * @author formatPgString.adam@inrae.fr
  *
  */
+
 import { asJson } from ".";
 import { PgVisitor } from "../../odata/visitor";
 export const asGeoJSON = (input: PgVisitor): string =>  

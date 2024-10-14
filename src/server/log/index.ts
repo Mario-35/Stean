@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import util from "util";
 import { color, EChar, EColor } from "../enums";
 import { showAll, _DEBUG } from "../constants";

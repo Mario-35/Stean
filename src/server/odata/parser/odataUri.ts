@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import Utils from "./utils";
 import Lexer from "./lexer";
 import Query from "./query";

@@ -5,9 +5,9 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import postgres from "postgres";
 import { typeExtensions, typeOptions } from ".";
-import { EVersion } from "../enums";
 import { IdbConnection } from "./dbConnection";
 export interface Iservice {
     name:           string; // name of the config file
@@ -18,7 +18,7 @@ export interface Iservice {
                         ws: number, // web socket
                     }; 
     pg:             IdbConnection; // postgresSql connection
-    apiVersion:     EVersion; // api version / model
+    apiVersion:     number; // api version / model
     date_format:    string; // formating date
     nb_page:        number; // number of items by page
     options:        typeof typeOptions; // Options see Enum EOptions

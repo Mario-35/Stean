@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { decodeToken } from ".";
 import { EExtensions } from "../enums";
 import { koaContext } from "../types";

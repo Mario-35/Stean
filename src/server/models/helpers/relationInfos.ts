@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { idColumnName } from ".";
 import { models } from "..";
 import { ERelations } from "../../enums";

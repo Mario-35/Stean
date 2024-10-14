@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { keyobj } from "../../types";
 // Shortcuts for space
 let startDate = new Date('2023-02-11T00:00:01.000Z');

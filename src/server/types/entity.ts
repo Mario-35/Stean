@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { IentityColumn, IentityRelation, IKeyString } from ".";
 import { ETable } from "../enums";
 export interface IentityCore {

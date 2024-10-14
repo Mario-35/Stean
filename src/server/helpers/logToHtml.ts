@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { EChar } from "../enums";
 import util from "util";
 export function logToHtml(input: string): string {

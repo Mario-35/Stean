@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { EConstant, EQuery } from "../../../enums";
 import { doubleQuotesString, removeAllQuotes } from "../../../helpers";
 import { log } from "../../../log";

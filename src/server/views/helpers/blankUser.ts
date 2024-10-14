@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { EExtensions } from "../../enums";
 import { Iuser, koaContext } from "../../types";
 export function blankUser(ctx: koaContext):Iuser  {    

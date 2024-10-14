@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { allEntities, ETable } from "../../enums";
 import { errors, msg } from "../../messages";
 import { Ientity, IentityCore } from "../../types";
@@ -60,3 +61,5 @@ export { Sensor } from "./sensor";
 export { Thing } from "./thing";
 export { ThingLocation } from "./thingLocation";
 export { User } from "./user";
+export { File } from "./file";
+export { Line } from "./line";

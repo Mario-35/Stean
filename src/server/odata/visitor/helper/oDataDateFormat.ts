@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { Token } from "../../parser";
 export function oDataDateFormat(node: Token, test: string): string | undefined {
     const input = node.value.right.raw.replace(/\//g, "-").replace(/'/g, "").replace(/%27/g, "");

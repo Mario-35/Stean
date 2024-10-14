@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { createToken } from ".";
 import { config } from "../configuration";
 import { EHttpCode } from "../enums";

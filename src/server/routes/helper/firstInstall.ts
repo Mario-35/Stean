@@ -6,6 +6,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import postgres from "postgres";
 import { config } from "../../configuration";
 import { returnFormats, unique } from "../../helpers";

@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { ERelations } from "../enums";
 export interface IentityRelation {
     type:            ERelations; // relation Type

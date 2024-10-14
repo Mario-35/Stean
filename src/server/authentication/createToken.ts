@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { EConstant } from "../enums";
 import { Iuser } from "../types";
 import jsonwebtoken from "jsonwebtoken";

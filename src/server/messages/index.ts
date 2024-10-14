@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { color, EColor, EHttpCode } from "../enums";
 import jsonErrors from "./error.json";
 import jsonInfos from "./infos.json";

@@ -94,7 +94,35 @@ describe("endpoint : Service", () => {
 	});
 	describe(`{get} ${entity.name}`, () => {
 		afterEach(() => { writeLog(true); });
-		
+
+		it(`Return Infos`, (done) => {
+			const infos = addTest({
+				api: `{get} ${entity.name} Get infos`,
+				apiName: `GetInfos${entity.name}`,
+				apiDescription: `Retrieve all ${entity.name}}`,
+				apiReference: "",
+				apiExample: {
+					http: `${testVersion}/infos`,
+					curl: defaultGet("curl", "KEYHTTP"),
+					javascript: defaultGet("javascript", "KEYHTTP"),
+					python: defaultGet("python", "KEYHTTP")
+				}
+			});
+			chai.request(server)
+				.get(`/test/${infos.apiExample.http}`)
+				.end((err, res) => {
+					should.not.exist(err);
+					res.status.should.equal(200);
+					res.type.should.equal("application/json");
+					addToApiDoc({
+						...infos,
+						result: res
+					});
+					done();
+				});
+		});		
+
+
 		it(`Return all ${entity.name}`, (done) => {
 			const infos = addTest({
 				api: `{get} ${entity.name} Get all`,
@@ -122,6 +150,7 @@ describe("endpoint : Service", () => {
 					done();
 				});
 		});
+
 		it(`Return ${entity.name} id: 1 `, (done) => {
 			const infos = addTest({
 				api: `{get} ${entity.name}(:id) Get one`,

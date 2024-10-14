@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { models } from "..";
 import { Ientity, Iservice } from "../../types";
 export function relationKey(service: Iservice , entity: Ientity, relation: Ientity | string): string {

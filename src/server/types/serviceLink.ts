@@ -8,7 +8,7 @@
 export interface IserviceInfos {
     protocol: string; // protocol http or https
     linkBase: string; // linkBase of the service
-    version:  string; // api version
+    version:  number; // api version
     root:     string; // root url
     model:    string; // url to drawio
   }

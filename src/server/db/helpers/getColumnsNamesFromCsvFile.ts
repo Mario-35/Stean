@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import fs from "fs";
 import readline from "readline";
 import { log } from "../../log";

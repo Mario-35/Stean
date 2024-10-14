@@ -6,6 +6,7 @@
  * @author formatPgString.adam@inrae.fr
  *
  */
+
 import { asJson } from ".";
 import { ESCAPE_SIMPLE_QUOTE } from "../../constants";
 import { EConstant } from "../../enums";

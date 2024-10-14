@@ -6,6 +6,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { IdecodedUrl, Ientities, IserviceInfos, Iuser } from ".";
 export interface IqueryOptions {
     user:       Iuser;

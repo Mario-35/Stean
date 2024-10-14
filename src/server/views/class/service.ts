@@ -5,8 +5,10 @@
  * @author mario.adam@inrae.fr
  *
  */
-import { EExtensions, enumKeys, EOptions, EVersion } from "../../enums";
+
+import { EExtensions, enumKeys, EOptions } from "../../enums";
 import { info } from "../../messages";
+import { models } from "../../models";
 import { IKeyString, koaContext } from "../../types";
 import { CoreHtmlView } from "./core";
 interface Idatas { 
@@ -58,7 +60,7 @@ export class Service extends CoreHtmlView {
                           ${this.addTextInput({name: "name", label: "Service name", value: datas.body && datas.body.name || "", alert: alert("name"), toolType: `Name ${info.least5Tool}`})}
                           ${this.addTextInput({name: "port", label: info.pg + " port", value: datas.body && datas.body.port || "5432", alert: alert("port"), toolType: info.portTool})}
                           ${this.addTextInput({name: "database", label: `${info.pg} ${info.db} name`, value: "", alert: alert("database"), toolType: `name of ${info.pg} ${info.db}`})} </td>
-                          ${this.addSelect({name: "version", list: enumKeys(EVersion).map(e => e.replace("_", ".")) , message: "Select version", password: true, value: "", alert: alert("repeat"), toolType: info.repTool})}
+                          ${this.addSelect({name: "version", list: models.listVersion().map(e => e.replace("_", ".")) , message: "Select version", password: true, value: "", alert: alert("repeat"), toolType: info.repTool})}
                           ${this.addMultiSelect({name: "extensions", list: enumKeys(EExtensions) , message: "Select extensions"})}                            
                           ${this.addMultiSelect({name: "options", list: enumKeys(EOptions) , message: "Select Options"})}
                         </div> 

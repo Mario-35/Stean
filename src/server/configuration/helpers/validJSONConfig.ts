@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { EConstant } from "../../enums";
 import { keyobj } from "../../types";
 // verify is valid config

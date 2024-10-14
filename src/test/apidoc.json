@@ -13,6 +13,7 @@
     "resultSensorThings",
     "Services",
     "InfosServices",
+    "GetInfosServices",
     "GetAllServices",
     "GetOneServices",
     "PostServices",

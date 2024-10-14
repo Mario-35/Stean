@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { decodeToken } from "../authentication";
 import { _DEBUG } from "../constants";
 import { log } from "../log";
@@ -60,7 +61,7 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
   if (decodedUrl.version != ctx.config.apiVersion) {    
     if (!(ctx.request.method === "POST" && ctx.originalUrl.includes(`${decodedUrl.version}/Loras`)))
     ctx.redirect(ctx.request.method === "GET" 
-      ? ctx.originalUrl.replace(decodedUrl.version, ctx.config.apiVersion)
+      ? ctx.originalUrl.replace(String(decodedUrl.version), ctx.config.apiVersion)
       : `${ctx.decodedUrl.linkbase}/v${ctx.config.apiVersion}/`);
   }
   
@@ -82,7 +83,7 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     ctx.log = undefined;
   }
   // get model
-  ctx.model = models.filteredModelFromConfig(ctx.config);
+  ctx.model = models.filteredModel(ctx.config);
   try {
     // Init config context
     if (!ctx.config) return;    

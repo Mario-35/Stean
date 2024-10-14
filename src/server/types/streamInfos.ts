@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { _STREAM } from "../db/constants";
 import { EObservationType } from "../enums";
 export interface IstreamInfos {

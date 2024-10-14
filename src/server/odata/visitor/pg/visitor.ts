@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 import { SqlOptions } from "../../parser/sqlOptions";
 import { IreturnFormat, koaContext } from "../../../types";
 import { returnFormats } from "../../../helpers";
