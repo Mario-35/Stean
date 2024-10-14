@@ -13,6 +13,7 @@ import { returnFormats, unique } from "../../helpers";
 import { koaContext, IdecodedUrl, IKeyString } from "../../types";
 import { Admin, First, Service } from "../../views";
 import { EHttpCode } from "../../enums";
+
 export async function firstInstall(ctx: koaContext): Promise<IdecodedUrl | undefined>  {
   
   // If Configuration file Not exist first Install
@@ -60,11 +61,6 @@ export async function firstInstall(ctx: koaContext): Promise<IdecodedUrl | undef
     ctx.body = bodyFirst.toString();
     return undefined;
   } 
-  
-
-
-
-
 
   if (src["_src"]) {        
     if (src["_host"]) why["_host"] = src["_host"];
@@ -90,6 +86,14 @@ export async function firstInstall(ctx: koaContext): Promise<IdecodedUrl | undef
       }
     } else if (src["_src"] === "_first") {          
       if (verifyItems(src, ["host", "username", "password", "repeat"]) === false) {
+        if (src["username"].toUpperCase() === "POSTGRES") {
+          why["username"] = "username must not be postgres";
+          return returnBody(false);
+        }
+        if (src["username"].toUpperCase() === config.getService("admin").pg.user) {
+          why["username"] = "username must not be same as admin";
+          return returnBody(false);
+        }
         if (src["password"] === src["repeat"]) {
           const testConnection = await postgres( `postgres://${src["username"]}:${src["password"]}@${src["host"]}:5432/postgres`,
             {})`select 1+1 AS result`.then(async () => true)
@@ -111,7 +115,6 @@ export async function firstInstall(ctx: koaContext): Promise<IdecodedUrl | undef
         return returnBody(false);      
       }
     } else if (src["_src"] === "_createService") {
-      src["version"] = src["version"].startsWith("v") ? src["version"].replace("v","") : src["version"];
       if (verifyItems(src, ["_host", "_username",  "_password", "password", "host", "name", "port", "database", "extensions", "options"]) === false) {
         const confJson: Record<string, any> = {
           "admin": {
@@ -162,7 +165,6 @@ export async function firstInstall(ctx: koaContext): Promise<IdecodedUrl | undef
       }
       return
     } else if (src["_src"] === "_addService") {
-      src["version"] = src["version"].startsWith("v") ? src["version"].replace("v","") : src["version"];
       if (verifyItems(src, ["_host", "_username",  "_password", "password", "host", "name", "port", "database", "extensions", "options"]) === false) {
         const confJson: Record<string, any> = {
           "name": src["name"],
@@ -181,9 +183,10 @@ export async function firstInstall(ctx: koaContext): Promise<IdecodedUrl | undef
           "nb_page": 200,
           "extensions": src["extensions"],
           "options": src["options"]
-        }
-        await config.addConfig(confJson);     
-        if (ctx.decodedUrl && ctx.decodedUrl.origin) ctx.redirect(`${ctx.decodedUrl.origin}/${src["name"]}/${src["version"]}`);  
+        }        
+        const res = `${ctx.request.origin}/${src["name"]}/${src["version"]}`;  
+        if (await config.addConfig(confJson)) ctx.redirect(res);  
+        ctx.redirect(res);  
       } else {
         returnBody(true);
       }

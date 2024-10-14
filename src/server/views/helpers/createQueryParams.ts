@@ -10,7 +10,6 @@ import { getAuthenticatedUser } from "../../authentication";
 import { config } from "../../configuration";
 import { EExtensions } from "../../enums";
 import { log } from "../../log";
-import { decodeUrl } from "../../routes/helper/decodeUrl";
 import { Ientities, IqueryOptions, koaContext } from "../../types";
 import { blankUser } from "./";
 export async function createQueryParams(ctx: koaContext): Promise<IqueryOptions| undefined> {
@@ -24,11 +23,10 @@ export async function createQueryParams(ctx: koaContext): Promise<IqueryOptions|
             : user.canPost === true
                 ? Object.keys(ctx.model).filter((elem: string) => ctx.model[elem].order > 0 || ctx.model[elem].createOrder === 99 || ctx.model[elem].createOrder === -1)
                 : Object.keys(ctx.model).filter((elem: string) => ctx.model[elem].order > 0 );
-    listEntities.push("Services");    
-    const decodedUrl = decodeUrl(ctx);
-    if (decodedUrl) return {
+    listEntities.push("Services");
+    return {
         methods: ["GET"],
-        decodedUrl: decodedUrl,
+        decodedUrl: ctx.decodedUrl,
         entity:  ctx.config.extensions.includes(EExtensions.file) ? "Files" : "",
         options: ctx.querystring ? ctx.querystring : "",
         user: user,

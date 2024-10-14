@@ -134,14 +134,15 @@ class Models {
     }
   }
 
-  private version09(): Ientities {
+  private version0_9(): Ientities {
     return  {
       Files: File,
       Lines: Line,
       CreateFile: CreateFile,
     };
   }
-  private version11(input: Ientities): Ientities {
+
+  private version1_1(input: Ientities): Ientities {
     const makeJson = (name:string) => {
       return {
         create : "jsonb NULL",
@@ -172,23 +173,19 @@ class Models {
   }
 
   public createVersion(nb: string): boolean {
+    console.log(log.whereIam(nb));
     switch (nb) {
       case "v0.9":        
-        Models.models[nb] = this.version09();         
+        Models.models["v0.9"] = this.version0_9();         
       case "v1.1":          
-        Models.models[nb] = this.version11(deepClone(Models.models["v1.0"]));
-    } 
+        Models.models["v1.1"] = this.version1_1(deepClone(Models.models["v1.0"]));
+    }
     return testVersion(nb);
   }
   
   public listVersion() {
-    console.log("------------------------");
-    console.log(Object.keys(Models.models));
-    
-    return Object.keys(Models.models);
+    return ["v0.9","v1.0","v1.1"]
   }
-
-
 
   private filtering(service: Iservice ) {
     const exts = filterEntities(service.extensions);      

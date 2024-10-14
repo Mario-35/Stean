@@ -46,7 +46,7 @@ export class CoreHtmlView {
       return returnValue.join();
     };
     
-    addSubmitButton(label: string ) {
+    addSubmitButton(label: string, ) {
       return `<div class="group">
                 <input type="submit" class="button" value="${label}">
               </div>`;
@@ -76,7 +76,7 @@ export class CoreHtmlView {
     multiSelectItemCheck(name: string, list: string[]): string {
       const res: string[] = [];
       list.forEach((e: string) => {
-        res.push(`<label for="${e}"> <input type="checkbox" name="${name}${e}" />${e}</label>`)});
+        res.push(`<label for="${e}"> <input type="checkbox" id="${name}${e}" name="${name}${e}" />${e}</label>`)});
       return res.join("");
     }
     multiSelectItem(list: string[]): string {

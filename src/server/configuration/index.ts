@@ -310,6 +310,7 @@ class Configuration {
       this.messageListen(message, String(port));
     });
   }
+
   // initialisation serve NOT IN EConstant.test
   async init(input?: string): Promise<boolean> {
     if (this.configFileExist() === true || input) {
@@ -350,6 +351,7 @@ class Configuration {
         return true;
     }
   }
+
   // return config name from config name
   public getConfigNameFromDatabase(input: string): string | undefined {
     if (input !== "all") {
@@ -358,6 +360,7 @@ class Configuration {
       throw new Error(`No configuration found for ${input} name`);
     }
   }
+
   public getConfigForExcelExport = (name: string): object=> {
     const result: Record<string, any> = Object.assign({}, Configuration.services[name].pg);
     result["password"] = "*****";
@@ -375,6 +378,7 @@ class Configuration {
       });
     }
   };
+
   // return Iservice Formated for Iservice object or name found in json file
   private formatConfig(input: object | string, name?: string): Iservice {
     if (typeof input === "string") {
@@ -386,12 +390,13 @@ class Configuration {
     : input["pg" as keyobj] && input["pg" as keyobj]["database"] ? input["pg" as keyobj]["database"] : `ERROR` || "ERROR";
     return formatconfigFile(goodDbName, input);
   }
+
   // Add config to configuration file
   public async addConfig(addJson: object): Promise<Iservice | undefined> {
     try {
-      const addedConfig = this.formatConfig(addJson);      
+      const addedConfig = this.formatConfig(addJson);
       Configuration.services[addedConfig.name] = addedConfig;
-      if(!isTest()) {
+      if(!isTest()) { // For TDD not create service
         await this.addToServer(addedConfig.name);
         this.writeConfig();
       }
@@ -400,6 +405,7 @@ class Configuration {
       return undefined;
     }
   }
+
   // process to add an entry in server
   public async addToServer(key: string): Promise<boolean> {
     this.writeLog(log._head(key));
