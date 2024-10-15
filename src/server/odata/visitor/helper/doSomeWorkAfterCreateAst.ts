@@ -39,6 +39,11 @@ export const doSomeWorkAfterCreateAst = async (input: RootPgVisitor, ctx: koaCon
         });
       }   
   } else if (isFile(input.ctx)) {
-    input.columnSpecials["result"] = [`("result"->>'valueskeys')::json`];       
+    input.columnSpecials["result"] = [`("result"->>'valueskeys')::json`];
+    // const col = "result->'valueskeys'"; 
+
+    // await config.connection(ctx.config.name).unsafe(resultKeys(col, input)).then((res) => {
+    //   if (res.length > 0) input.columnSpecials["result"] = res.map(e => `(${col})::json->'${e.k}' AS "${e.k}"`);
+    // });
   }
 };
