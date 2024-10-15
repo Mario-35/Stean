@@ -15,7 +15,7 @@ import { log } from "../../log";
 import { config } from "../../configuration";
 import { EConstant } from "../../enums";
 import { asCsv } from "../queries";
-import { isFile } from "../../helpers/tests";
+// import { isFile } from "../../helpers/tests";
 // Common class
 export class Common {
   readonly ctx: koaContext;
@@ -92,46 +92,14 @@ export class Common {
        case returnFormats.sql:
          return this.formatReturnResult({ body: sql }); 
        case returnFormats.csv:
-        if (!isFile(this.ctx)) sql = asCsv(sql);
-        try {            
-          config.writeLog(log.query(sql));
-          this.ctx.attachment(`${this.ctx.odata.entity?.name || "export"}.csv`)
-          return this.formatReturnResult({
-            body: await config
-            .connection(this.ctx.config.name)
-            .unsafe(sql)
-            .readable()
-            .catch(err => {
-              return err
-            }).then(async (e: any) => {
-              for await (const chunk of e) {
-                if (chunk.json) {
-                  const data = chunk.json;
-                  if (!this.ctx.body) this.ctx.body = `${Object.keys(data).map(key => key).join(";")}\n`;
-                  this.ctx.body += `${Object.keys(data).map(key => data[key]).join(";")}\n`;
-                } else  this.ctx.body += chunk;
-              }
-              return this.ctx.body;
-            })
-          });
-        } catch (error) {
-          return this.formatReturnResult({ body: error });
-        }
-        //  if (!isFile(this.ctx)) sql = asCsv(sql);
-        //     try {            
-        //       config.writeLog(log.query(sql));
-        //       this.ctx.attachment(`${this.ctx.odata.entity?.name || "export"}.csv`)
-        //       this.ctx.body = await config
-        //         .connection(this.ctx.config.name)
-        //         .unsafe(sql)
-        //         .readable()
-        //         .catch(err => {
-        //           return err
-        //         });
-        //     } catch (error) {
-        //       return this.formatReturnResult({ body: error });
-        //     }
-        //     return this.formatReturnResult({ body: this.ctx.body });
+         sql = asCsv(sql);          
+              config.writeLog(log.query(sql));
+              this.ctx.attachment(`${this.ctx.odata.entity?.name || "export"}.csv`);
+            return this.formatReturnResult({ body:  await config
+              .connection(this.ctx.config.name)
+              .unsafe(sql)
+              .readable()
+            });
        default:        
          return await executeSqlValues(this.ctx.config, sql).then(async (res: Record<string, any>) => {         
            return (res[0] > 0) 

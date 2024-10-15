@@ -39,11 +39,8 @@ export const doSomeWorkAfterCreateAst = async (input: RootPgVisitor, ctx: koaCon
         });
       }   
   } else if (isFile(input.ctx)) {
-    input.columnSpecials["result"] = [`("result"->>'valueskeys')::json`];
-    // const col = "result->'valueskeys'"; 
-
-    // await config.connection(ctx.config.name).unsafe(resultKeys(col, input)).then((res) => {
-    //   if (res.length > 0) input.columnSpecials["result"] = res.map(e => `(${col})::json->'${e.k}' AS "${e.k}"`);
-    // });
+    await config.connection(ctx.config.name).unsafe(`SELECT jsonb_object_keys(("result"->>'valueskeys')::jsonb) As k FROM "line"  WHERE "line"."id" = (SELECT "line"."id" FROM "line" WHERE "line"."file_id" =${input.parentId} limit 1)`).then((res) => {      
+      if (res.length > 0) input.columnSpecials["result"] = res.map(e => `(result->'valueskeys')->>'${e.k}' AS "${e.k}"`);
+    });
   }
 };

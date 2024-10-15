@@ -147,7 +147,6 @@ export class Query  {
             const select = toWhere === true ? ["id"] : this.columnList(element.entity.name, main, element);            
             // if not null            
             if (select) {
-                console.log(log.object("columnList", select));
                 // Get real entity name (plural)
                 // const element.entity.name = models.getEntityName(main.ctx.config, element.entity.name);                
                 if (element.entity) {
