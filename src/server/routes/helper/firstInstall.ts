@@ -20,8 +20,8 @@ export async function firstInstall(ctx: koaContext): Promise<IdecodedUrl | undef
   const why: IKeyString = {};
   function formatSrcBody(): Record<string, any> {    
     const src = JSON.parse(JSON.stringify(ctx.request.body, null, 2));
-    const opt: string[] =[];
-    const ext: string[] =[];
+    const ext: string[] =[src["version"] === "v0.9" ? "file" : "base"];
+    const opt: string[] =  [];
     Object.keys(src).forEach((e) => {
       if (e.startsWith("options")) {
         if (src[e] === "on") opt.push(e.replace("options",""));
@@ -184,9 +184,9 @@ export async function firstInstall(ctx: koaContext): Promise<IdecodedUrl | undef
           "extensions": src["extensions"],
           "options": src["options"]
         }        
-        const res = `${ctx.request.origin}/${src["name"]}/${src["version"]}`;  
-        if (await config.addConfig(confJson)) ctx.redirect(res);  
-        ctx.redirect(res);  
+        const returnUrl = `${ctx.request.origin}/${src["name"]}/${src["version"]}`;
+        if (await config.addConfig(confJson)) ctx.redirect(returnUrl);  
+        // ctx.redirect(res);  
       } else {
         returnBody(true);
       }

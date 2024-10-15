@@ -32,6 +32,7 @@ export class Service extends CoreHtmlView {
                 <script>
                   var expanded = false;
                   function showCheckboxes(checkboxes) {
+                      update();
                       regextensions.style.display = "none";
                       regoptions.style.display = "none";
                     if (!expanded) {
@@ -40,7 +41,6 @@ export class Service extends CoreHtmlView {
                     } else {
                       checkboxes.style.display = "none";
                       expanded = false;
-                      update();
                     }
                   }
                 </script> 
@@ -62,12 +62,12 @@ export class Service extends CoreHtmlView {
                           ${this.addTextInput({name: "port", label: info.pg + " port", value: datas.body && datas.body.port || "5432", alert: alert("port"), toolType: info.portTool})}
                           ${this.addTextInput({name: "database", label: `${info.pg} ${info.db} name`, value: "", alert: alert("database"), toolType: `name of ${info.pg} ${info.db}`})} </td>
                           ${this.addSelect({name: "version", list: models.listVersion().map(e => e.replace("_", ".")) , message: "Select version", value: "", alert: alert("repeat"), toolType: info.repTool})}
-                          ${this.addMultiSelect({name: "extensions", list: enumKeys(EExtensions) , message: "Select extensions"})}                            
+                          ${this.addMultiSelect({name: "extensions", list: enumKeys(EExtensions).filter(e => !["file","base"].includes(e) ) , message: "Select extensions"})}                            
                           ${this.addMultiSelect({name: "options", list: enumKeys(EOptions) , message: "Select Options"})}
                         </div> 
                         <div class="sign-up-htm">
                           ${this.addTextInput({name: "host", label: "host", value: datas.why && datas.why["_host"] ? datas.why["_host"] : "localhost", alert: alert("host"), toolType: `Host ${info.least5Tool}`})}
-                          ${this.addTextInput({name: "username", label: info.firstUser, value: datas.body && datas.body.username || info.newUser, alert: alert("username"), toolType: `Name ${info.least5Tool}`})}
+                          ${this.addTextInput({name: "username", label: info.firstUser, value: "", alert: alert("username"), toolType: `Name ${info.least5Tool}`, disabled: true})}
                           ${this.addTextInput({name: "password", label: `New user ${info.pass}`, password: true, value: datas.body && datas.body.password || "", alert: alert("password"), toolType: info.passTool})}
                           ${this.addTextInput({name: "repeat", label: `${info.rep} ${info.pass}`, password: true, value: "", alert: alert("repeat"), toolType: info.repTool})}
                           ${this.addSubmitButton(info.createServ)}
@@ -79,19 +79,18 @@ export class Service extends CoreHtmlView {
               </body>  
               <script>
                 function update() { 
+                  regusername.value = regdatabase.value;
                   if (regversion.value === 'v0.9') {
-                    extensionsfile.checked = true;
-                    extensionsbase.checked = false;
                     extensionslora.checked = false;
                     extensionstasking.checked = false;
                     extensionsmultiDatastream.checked = false;
                     extensionshighPrecision.checked = false;
                     extensionsresultNumeric.checked = false;
-                  } else {
-                      extensionsfile.checked = false;
-                      extensionsbase.checked = true;
                   }
                 }
+                regusername.addEventListener("change", () => {
+                  update();
+                });
                 regversion.addEventListener("change", () => {
                   update();
                 });

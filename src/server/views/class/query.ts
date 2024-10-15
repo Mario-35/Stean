@@ -44,15 +44,13 @@ export class Query extends CoreHtmlView {
                 index = this._HTMLResult.indexOf(removeAllQuotes(searhText));
                 if (index > 0) this._HTMLResult[index] = content;
             }
-        };
-    
+        };    
         // users possibilities
         if (this.params.user.canPost) {
             this.params.methods.push("POST");
             this.params.methods.push("PATCH");
             if (this.params.user.canDelete) this.params.methods.push("DELETE");
-        } 
-    
+        }
         // Format this.params
         if (this.params.options) {
             let tempOptions = this.params.options;
@@ -74,17 +72,14 @@ export class Query extends CoreHtmlView {
                 }
             });
         }
-    
         // process all css files
         listaddCssFiles().forEach((item: string) => {
             replaceInReturnResult(`<link rel="stylesheet" href="${fileWithOutMin(item)}">`, `<style>${addCssFile(item)}</style>`);
         });
-        
         // process all js files
         listaddJsFiles().forEach((item: string) => {  
             replaceInReturnResult(`<script src="${fileWithOutMin(item)}"></script>`, `<script>${addJsFile(item)}</script>`);
         });
-        
     };
     toString() {
         const bigIntReplacer = <K,V>(key: K, value: V) => typeof value === "bigint" ? value.toString() : value;

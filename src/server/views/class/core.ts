@@ -111,7 +111,7 @@ export class CoreHtmlView {
     }
     
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    addTextInput(input: { name: string, label: string, value: any, alert?: string, toolType?: string, password?: boolean }) {
+    addTextInput(input: { name: string, label: string, value: any, alert?: string, toolType?: string, password?: boolean, disabled?: boolean }) {
       const idName = this.makeIdName(input.name);
       return `<div class="group">
                 <label  for="${idName}" class="label">${input.label} </label>
@@ -128,6 +128,7 @@ export class CoreHtmlView {
                         name="${input.name}" 
                         type="${input.password ? input.password == true ? 'password' : 'text' : 'text' }" 
                         class="input" 
+                        ${input.disabled ? 'disabled' : ''}
                         value="${input.value}">
                         ${input.alert ? input.alert : ''}
               </div>`;
