@@ -314,7 +314,13 @@ export class PgVisitor extends Visitor {
   }
   protected VisitSelectItem(node: Token, context: IodataContext) {
     const tempColumn = this.getColumn(node.raw, "", context); 
-    context.identifier = tempColumn ? tempColumn : node.raw;
+    if (isFile(this.ctx)) {
+      console.log('________________________________________________________');
+      console.log(this.ctx.columnSpecials);
+      
+      context.identifier = `(result->'valueskeys')->>'${node.raw}' AS "${node.raw}"`;  
+      // this.ctx.columnSpecials["result"] =`(result->'valueskeys')->>'${node.raw}' AS "${node.raw}"`;
+    } else context.identifier = tempColumn ? tempColumn : node.raw;
     if (context.target)
       // @ts-ignore
     (this.query[context.target as keyof object] as Query).add(tempColumn ? `${tempColumn}${EConstant.columnSeparator}` : `${doubleQuotesString(node.raw)}${EConstant.columnSeparator}`); 

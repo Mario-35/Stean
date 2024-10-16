@@ -6,7 +6,8 @@
  *
  */
 
-import { doubleQuotesString, cleanStringComma, containsAll, isDataArray, isGraph, isGeoJson, removeAllQuotes, removeFirstEndDoubleQuotes, formatPgString, returnFormats } from "../../../helpers";
+
+import { doubleQuotesString, cleanStringComma, containsAll, isDataArray, isGraph, isGeoJson, removeAllQuotes, removeFirstEndDoubleQuotes, formatPgString } from "../../../helpers";
 import { asJson } from "../../../db/queries";
 import { Iservice, Ientity, IKeyBoolean, IpgQuery } from "../../../types";
 import { PgVisitor, RootPgVisitor } from "..";
@@ -26,6 +27,7 @@ export class Query  {
     groupBy: GroupBy;
     keyNames: Key;
     _pgQuery: IpgQuery | undefined = undefined;
+    isFile: boolean = false;
   
     constructor() {
       console.log(log.whereIam());
@@ -72,10 +74,12 @@ export class Query  {
         } else if (this.isCalcColumn(column) === true) return column;
         if  (column === "selfLink") return  column; 
         if  (column.startsWith( "(SELECT")) return  column; 
+        if (this.isFile === true) return `(result->'valueskeys')->>'${column}' AS "${column}"`;
     };
     private columnList(tableName: string, main: PgVisitor, element: PgVisitor): string[] | undefined  {
-        if (isFile(element.ctx) && element.returnFormat === returnFormats.csv) return element.columnSpecials["result"] 
-        // get good entity name
+        this.isFile = isFile(element.ctx);
+        if (this.isFile === true && element.query.select.toString() === "*" ) return element.columnSpecials["result"];
+         // get good entity name
         const tempEntity = models.getEntity(main.ctx.config, tableName);
         if (!tempEntity) {
             console.log(log.error("no entity For", tableName));

@@ -14,7 +14,7 @@ export class Core {
     this._src = input ? typeof input === "string" ? [input]  : input : [] ;
   }
   
-  addKey(input: string) {      
+  addKey(input: string) {
     const addTo = (input: string[]) => {
       input.forEach(key =>  {
         key = key.includes(" AS ") ? key.split(" AS ")[1] : key;
