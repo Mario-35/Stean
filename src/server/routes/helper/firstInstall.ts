@@ -172,7 +172,7 @@ export async function firstInstall(ctx: koaContext): Promise<IdecodedUrl | undef
           "pg": {
               "host": src["host"],
               "port": 5432,
-              "user": src["username"],
+              "user": src["name"],
               "password": src["password"],
               "database": src["database"] || src["name"],
               "retry": 2

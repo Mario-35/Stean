@@ -77,8 +77,17 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
       Object.keys(res).forEach((e: string) => log.create(e, res[e]));      
     }
   );
+
+  returnValue[`Create Role`] = await createRole(config.getService(configName))
+  .then(() => EChar.ok)
+  .catch((err: Error) => err.message);
+
+  returnValue[`Create user`] = await createUser(config.getService(configName))
+    .then(() => EChar.ok)
+    .catch((err: Error) => err.message);
+    
   // loop to create each triggers
-  if (!config.getService(configName).extensions.includes( EExtensions.file ) ) {
+  if (!config.getService(configName).extensions.includes( EExtensions.file ) ) {   
     await asyncForEach( triggers(configName), async (query: string) => {
       const name = query.split(" */")[0].split("/*")[1].trim();
       await config.connection(configName).unsafe(query)
@@ -105,13 +114,6 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
         return error;
       });
   }
-
-  returnValue[`Create Role`] = await createRole(config.getService(configName))
-    .then(() => EChar.ok)
-    .catch((err: Error) => err.message);
-  returnValue[`Create user`] = await createUser(config.getService(configName))
-    .then(() => EChar.ok)
-    .catch((err: Error) => err.message);
 
   // if (config.getService(configName).extensions.includes(EExtensions.file)) {
   //   const files: string[] =

@@ -290,7 +290,7 @@ export class PgVisitor extends Visitor {
   protected VisitOrderBy(node: Token, context: IodataContext) {    
     context.target = EQuery.OrderBy;
     node.value.items.forEach((item: Token, i: number) => {
-      this.Visit(item, context);
+      this.Visit(item, context); 
       if (i < node.value.items.length - 1) this.query.orderBy.add(", ");
     });
   }

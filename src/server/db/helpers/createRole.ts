@@ -11,7 +11,7 @@ import { EChar, EConstant } from "../../enums";
 import { simpleQuotesString } from "../../helpers";
 import { Iservice } from "../../types";
 export const createRole = async (service: Iservice ): Promise<string> => {
-  const connection = config.connection(service.name);
+  const connection = config.connection(EConstant.admin);
   return new Promise(async function (resolve, reject) {
     await connection.unsafe(`SELECT COUNT(*) FROM pg_user WHERE usename = ${simpleQuotesString(service.pg.user)};`)
         .then(async (res: Record<string, any>) => {

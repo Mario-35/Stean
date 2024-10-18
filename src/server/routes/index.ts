@@ -28,7 +28,7 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
   // create token
   createBearerToken(ctx);
   // decode url
-  const decodedUrl = decodeUrl(ctx); 
+  const decodedUrl = decodeUrl(ctx);
   if (!decodedUrl) {
     // Get all infos services
     switch (ctx.path.toLocaleUpperCase()) {
