@@ -34,12 +34,12 @@ export const addToService = async (ctx: koaContext, dataInput: Record<string, an
           method: "PAYLOADS",
           code: error["code"] ? +error["code"] : +ctx.response.status,
           url: "/Loras",
-          database: ctx.config.pg.database,
+          database: ctx.service.pg.database,
           datas: line,
           user_id: String(ctx.user.id),
           error: error
         } ;
-        await executeSqlValues(ctx.config, `INSERT INTO ${doubleQuotesString(models.DBFull(ctx.config).Logs.table)} ${createInsertValues(ctx.config, datas, models.DBFull(ctx.config).Logs.name)} returning id`);
+        await executeSqlValues(ctx.service, `INSERT INTO ${doubleQuotesString(models.DBFull(ctx.service).Logs.table)} ${createInsertValues(ctx, datas, models.DBFull(ctx.service).Logs.name)} returning id`);
       }
     });
   }

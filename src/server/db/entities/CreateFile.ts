@@ -54,7 +54,7 @@ export class CreateFile extends Common {
           returnValueError.body = returnValueError.body
             ? returnValueError.body[0]
             : {};
-          if (returnValueError.body) await executeSqlValues(ctx.config, `DELETE FROM "${this.ctx.model.Lines.table}" WHERE "file_id" = ${returnValueError.body[EConstant.id]}`);
+          if (returnValueError.body) await executeSqlValues(ctx.service, `DELETE FROM "${this.ctx.model.Lines.table}" WHERE "file_id" = ${returnValueError.body[EConstant.id]}`);
           return returnValueError;
         }
       } finally {
@@ -68,8 +68,8 @@ export class CreateFile extends Common {
     const cols:string[] = [];
     headers.forEach((value: string) => cols.push(`${value} TEXT NULL`));  
     const createTable = `CREATE TABLE public."${paramsFile.tempTable}" (${cols});`;
-    await executeSqlValues(ctx.config, createTable);
-    const writable = config.connection(ctx.config.name).unsafe(`COPY ${paramsFile.tempTable}  (${headers.join( "," )}) FROM STDIN WITH(FORMAT csv, DELIMITER ';'${ paramsFile.header })`).writable();
+    await executeSqlValues(ctx.service, createTable);
+    const writable = config.connection(ctx.service.name).unsafe(`COPY ${paramsFile.tempTable}  (${headers.join( "," )}) FROM STDIN WITH(FORMAT csv, DELIMITER ';'${ paramsFile.header })`).writable();
     return await new Promise<string | undefined>(async (resolve, reject) => {      
       readable
         .pipe(addAbortSignal(controller.signal, await writable))
@@ -82,7 +82,7 @@ export class CreateFile extends Common {
                     json_build_object('valueskeys',ROW_TO_JSON(p)) FROM (SELECT * FROM ${ paramsFile.tempTable }) AS p 
                     ON CONFLICT DO NOTHING`;
                     
-          await config.connection(this.ctx.config.name).unsafe(sql);          
+          await config.connection(this.ctx.service.name).unsafe(sql);          
           if (returnValue) resolve(returnValue);
         })
         .on('error', (err) => {          

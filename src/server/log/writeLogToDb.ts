@@ -25,7 +25,7 @@ export const writeLogToDb = async ( ctx: koaContext, ...error: any[] ): Promise<
     } catch (error) {
       ctx.log.returnid = undefined;
     }
-    await config.connection(ctx.config.name).unsafe(`INSERT INTO ${doubleQuotesString(models.DBFull(ctx.config).Logs.table)} ${createInsertValues(ctx.config, ctx.log, models.DBFull(ctx.config).Logs.name)} returning id`).then((res: object) => {                            
+    await config.connection(ctx.service.name).unsafe(`INSERT INTO ${doubleQuotesString(models.DBFull(ctx.service).Logs.table)} ${createInsertValues(ctx, ctx.log, models.DBFull(ctx.service).Logs.name)} returning id`).then((res: object) => {                            
       }).catch((err: Error) => {
         process.stdout.write( err + "\n");
       });    

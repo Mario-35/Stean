@@ -7,7 +7,7 @@
  */
 
 import { createEntity } from ".";
-import {  EConstant, ERelations, ETable } from "../../enums";
+import {  EConstant, EDataType, ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _idRel, _tz } from "./constants";
 import { doubleQuotesString } from "../../helpers";
@@ -22,17 +22,20 @@ export const HistoricalLocation:Ientity  = createEntity("HistoricalLocations", {
       alias(service: Iservice , test: IKeyBoolean) {
           return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotesString(EConstant.id)}`: ''}` ;
       },
-      type: "bigint"
+      type: "bigint",
+      dataType: EDataType.bigint
     },
     time: {
       create: _tz,
       alias() {},
-      type: "date"
+      type: "date",
+      dataType: EDataType.timestamptz
     },
     thing_id: {
       create: _idRel,
       alias() {},
-      type: "bigint"
+      type: "bigint",
+      dataType: EDataType.bigint
     },
   },
   constraints: {

@@ -11,7 +11,7 @@ import { models } from "..";
 import { ESCAPE_SIMPLE_QUOTE } from "../../constants";
 import { doubleQuotesString, simpleQuotesString, removeFirstEndDoubleQuotes } from "../../helpers";
 import { log } from "../../log";
-import { Iservice } from "../../types";
+import { koaContext } from "../../types";
 /**
  * 
  * @param service Service
@@ -19,13 +19,13 @@ import { Iservice } from "../../types";
  * @param entityName string
  * @returns string
 */
-export function createInsertValues(service: Iservice , input: Record<string, any>, entityName?: string): string  {
+export function createInsertValues(ctx: koaContext | undefined, input: Record<string, any>, entityName?: string): string  {
     console.log(log.whereIam());
-    if (service && input) {
+    if (input) {
         const keys:string[] = [];
         const values:string[] = [];            
-        if (entityName) {
-            const entity = models.getEntity(service, entityName);
+        if (ctx && entityName) {
+            const entity = models.getEntity(ctx.service, entityName);
             if (!entity) return "";
             Object.keys(input).forEach((elem: string ) => {
                 if (input[elem] && entity.columns[elem]) {
@@ -35,7 +35,7 @@ export function createInsertValues(service: Iservice , input: Record<string, any
                     values.push(temp);
                   }
                 } else if (input[elem] && entity.relations[elem]) {
-                  const relation = relationInfos(service, entity.name, elem);
+                  const relation = relationInfos(ctx, entity.name, elem);
                   if (entity.columns[relation.column]) {
                     const temp = formatColumnValue(relation.column, input[elem], entity.columns[relation.column].type);
                     if (temp) {

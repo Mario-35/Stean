@@ -7,12 +7,12 @@
  */
 
 import { createEntity } from ".";
-import { EConstant, EDatesType, EObservationType, ERelations, ETable } from "../../enums";
+import { EConstant, EDataType, EDatesType, EObservationType, ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _idRel, _text, _tz } from "./constants";
 import { doubleQuotesString } from "../../helpers";
 export const Datastream:Ientity  = createEntity("Datastreams", {
-  createOrder: 7,
+    createOrder: 7,
     type: ETable.table,
     order: 1,
     orderBy: `"id"`,
@@ -23,22 +23,26 @@ export const Datastream:Ientity  = createEntity("Datastreams", {
            return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotesString(EConstant.id)}`: ''}` ;
         },
         type: "number",
+        dataType: EDataType.bigint
       },
       name: {
         create: _text('no name'),
         alias() {},
         type: "text",
+        dataType: EDataType.text
       },
       description: {
         create: _text('no description'),
         alias() {},
         type: "text",
+        dataType: EDataType.text
       },
       observationType: {
         create:
         _text('http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement'),
         alias() {},
         type: "list",
+        dataType: EDataType._text,
         verify: {
           list: Object.keys(EObservationType),
           default:
@@ -49,11 +53,13 @@ export const Datastream:Ientity  = createEntity("Datastreams", {
         create: "jsonb NOT NULL",
         alias() {},
         type: "json",
+        dataType: EDataType.jsonb
       },
       observedArea: {
         create: "geometry NULL",
         alias() {},
         type: "json",
+        dataType: EDataType.jsonb
       },
       phenomenonTime: {
         create: "",
@@ -61,6 +67,7 @@ export const Datastream:Ientity  = createEntity("Datastreams", {
           return `CONCAT(to_char("_phenomenonTimeStart",'${EDatesType.date}'),'/',to_char("_phenomenonTimeEnd",'${EDatesType.date}')) AS "phenomenonTime"`;
         },
         type: "text",
+        dataType: EDataType.text
       },
       resultTime: {
         create: "",
@@ -68,45 +75,54 @@ export const Datastream:Ientity  = createEntity("Datastreams", {
           return `CONCAT(to_char("_resultTimeStart",'${EDatesType.date}'),'/',to_char("_resultTimeEnd",'${EDatesType.date}')) AS "resultTime"`;
         },
         type: "text",
+        dataType: EDataType.text
       },
       _phenomenonTimeStart: {
         create: _tz,
         alias() {},
         type: "date",
+        dataType: EDataType.timestamptz
       },
       _phenomenonTimeEnd: {
         create: _tz,
         alias() {},
         type: "date",
+        dataType: EDataType.timestamptz
       },
       _resultTimeStart: {
         create: _tz,
         alias() {},
         type: "date",
+        dataType: EDataType.timestamptz
       },
       _resultTimeEnd: {
         create: _tz,
         alias() {},
         type: "date",
+        dataType: EDataType.timestamptz
       },
       thing_id: {
         create: _idRel,
         alias() {},
+        dataType: EDataType.link,
         type: "relation:Things",
       },
       observedproperty_id: {
         create: _idRel,
         alias() {},
+        dataType: EDataType.link,
         type: "relation:ObservedProperties",
       },
       sensor_id: {
         create: _idRel,
         alias() {},
+        dataType: EDataType.link,
         type: "relation:Sensor",
       },
       _default_featureofinterest: {
         create: "BIGINT NOT NULL DEFAULT 1",
         alias() {},
+        dataType: EDataType.link,
         type: "relation:FeaturesOfInterest",
       },
     },

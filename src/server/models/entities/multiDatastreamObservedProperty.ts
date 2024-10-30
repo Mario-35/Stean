@@ -7,7 +7,7 @@
  */
 
 import { createEntity } from ".";
-import { ETable } from "../../enums";
+import { EDataType, ETable } from "../../enums";
 import { Ientity } from "../../types";
 import { _idRel } from "./constants";
     export const MultiDatastreamObservedProperty:Ientity  = createEntity("MultiDatastreamObservedProperties", {
@@ -19,14 +19,16 @@ import { _idRel } from "./constants";
       multidatastream_id: {
         create: _idRel,
         alias() {},
-        type: "bigint"
+        type: "bigint",
+        dataType: EDataType.bigint
       },
       observedproperty_id: {
         create: _idRel,
         alias() {
           return undefined;
         },
-        type: "bigint"
+        type: "bigint",
+        dataType: EDataType.bigint
       },
     },
     relations: {},

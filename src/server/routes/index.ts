@@ -55,14 +55,14 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
   if (_DEBUG) console.log(log.object("decodedUrl", decodedUrl));
   if (!decodedUrl.service) throw new Error(errors.noNameIdentified);
   if (decodedUrl.service && decodedUrl.configName) 
-    ctx.config = config.getService(decodedUrl.configName);
+    ctx.service = config.getService(decodedUrl.configName);
     else return;
   // forcing post loras with different version IT'S POSSIBLE BECAUSE COLUMN ARE THE SAME FOR ALL VERSION
-  if (decodedUrl.version != ctx.config.apiVersion) {    
+  if (decodedUrl.version != ctx.service.apiVersion) {    
     if (!(ctx.request.method === "POST" && ctx.originalUrl.includes(`${decodedUrl.version}/Loras`)))
     ctx.redirect(ctx.request.method === "GET" 
-      ? ctx.originalUrl.replace(String(decodedUrl.version), ctx.config.apiVersion)
-      : `${ctx.decodedUrl.linkbase}/${ctx.config.apiVersion}/`);
+      ? ctx.originalUrl.replace(String(decodedUrl.version), ctx.service.apiVersion)
+      : `${ctx.decodedUrl.linkbase}/${ctx.service.apiVersion}/`);
   }
   
   
@@ -70,28 +70,28 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
   ctx.querystring = decodeURIComponent(querystring.unescape(ctx.querystring));
   // prepare logs object
   try {
-    if (ctx.config.extensions.includes(EExtensions.logs))
+    if (ctx.service.extensions.includes(EExtensions.logs))
       ctx.log = {
         datas: { ... ctx.body},
         code: -999,
         method: ctx.method,
         url: ctx.url,
-        database: ctx.config.pg.database,
+        database: ctx.service.pg.database,
         user_id: getUserId(ctx).toString(),
       };
   } catch (error: any) { 
     ctx.log = undefined;
   }
   // get model
-  ctx.model = models.filteredModel(ctx.config);
+  ctx.model = models.filteredModel(ctx.service);
   try {
     // Init config context
-    if (!ctx.config) return;    
+    if (!ctx.service) return;    
     ctx.user = decodeToken(ctx);
     await next().then(async () => {});
   } catch (error: any) {
     console.log(error);
-    if (ctx.config && ctx.config.extensions.includes(EExtensions.logs))
+    if (ctx.service && ctx.service.extensions.includes(EExtensions.logs))
     writeLogToDb(ctx, error);      
       const tempError = {
         code: error.statusCode,

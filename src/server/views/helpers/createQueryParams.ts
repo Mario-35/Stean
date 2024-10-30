@@ -27,11 +27,11 @@ export async function createQueryParams(ctx: koaContext): Promise<IqueryOptions|
     return {
         methods: ["GET"],
         decodedUrl: ctx.decodedUrl,
-        entity:  ctx.config.extensions.includes(EExtensions.file) ? "Files" : "",
+        entity:  ctx.service.extensions.includes(EExtensions.file) ? "Files" : "",
         options: ctx.querystring ? ctx.querystring : "",
         user: user,
         graph: ctx.url.includes("$resultFormat=graph"),
-        admin: ctx.config.name === 'admin',
+        admin: ctx.service.name === 'admin',
         services: config.getInfosForAll(ctx),
         _DATAS:  Object.fromEntries(Object.entries(ctx.model).filter( ([k, v]) => listEntities.includes(k) && v.order >= 0)) as Ientities,
     };

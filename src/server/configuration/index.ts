@@ -10,7 +10,6 @@ import { setReady, _DEBUG } from "../constants";
 import { asyncForEach, decrypt, encrypt, isProduction, isTest, logToHtml, } from "../helpers";
 import { Iservice, IdbConnection, IserviceInfos, koaContext, keyobj } from "../types";
 import { errors, info, infos, msg } from "../messages";
-import { createIndexes, createService} from "../db/helpers";
 import { app } from "..";
 import { color, EChar, EColor, EConstant, EExtensions, EFileName, EOptions, EUpdate } from "../enums";
 import fs from "fs";
@@ -230,7 +229,7 @@ class Configuration {
     return postgres( 
       `postgres://${input.user}:${input.password}@${input.host}:${input.port || 5432}/${input.database}`,
       {
-        debug: _DEBUG,
+        debug: true,
         max : 2000,            
         connection : { 
           application_name : `${EConstant.appName} ${EConstant.appVersion}`
@@ -338,7 +337,8 @@ class Configuration {
       if(!isTest()) {
         if( await testDbExists(Configuration.services[EConstant.admin].pg, EConstant.test) ) {
           Configuration.services[EConstant.test] = this.formatConfig(testDatas["create"]);
-        } else await createService(testDatas);
+        } 
+        // else await createService(testDatas);
         this.messageListen(EConstant.test, String(this.defaultHttp()) , true);
       }
       this.writeLog(log._head("Ready", EChar.ok));
@@ -425,7 +425,7 @@ class Configuration {
             admin: false
           });
           
-          if(!Configuration.services[key].extensions.includes(EExtensions.file) && ![EConstant.admin as String, EConstant.test as String].includes(key)) createIndexes(key);
+          // if(!Configuration.services[key].extensions.includes(EExtensions.file) && ![EConstant.admin as String, EConstant.test as String].includes(key)) createIndexes(key);
           this.messageListen(key, res ? EChar.web : EChar.notOk, true);
           this.addListening(this.defaultHttp(), key);
         }

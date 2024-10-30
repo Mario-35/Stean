@@ -47,7 +47,7 @@ export class Observations extends Common {
       if (!searchID) this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: msg(errors.noFound, "MultiDatastreams"), });
       // Search uint keys
       console.log(searchID);
-      const tempSql = await executeSqlValues(this.ctx.config, multiDatastreamsUnitsKeys(searchID) );
+      const tempSql = await executeSqlValues(this.ctx.service, multiDatastreamsUnitsKeys(searchID) );
       if (tempSql[0 as keyof object] === null) this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: msg(errors.noFound, "MultiDatastreams"), });
       const multiDatastream: Record<string, any> = tempSql[0 as keyobj];
       if (dataInput["result"] && typeof dataInput["result"] == "object") {
@@ -67,7 +67,7 @@ export class Observations extends Common {
     } 
     else if ((dataInput["Datastream"] && dataInput["Datastream"] != null) || (this.ctx.odata.parentEntity && this.ctx.odata.parentEntity.name.startsWith("Datastream")) ) { 
       if (dataInput["result"] && typeof dataInput["result"] != "object")
-          dataInput["result"] = this.ctx.config.extensions.includes( EExtensions.resultNumeric )
+          dataInput["result"] = this.ctx.service.extensions.includes( EExtensions.resultNumeric )
                                 ? dataInput["result"]
                                 : { value: dataInput["result"] };
     } else if (this.ctx.request.method === "POST") {
@@ -93,7 +93,7 @@ export class Observations extends Common {
   async update( idInput: bigint, dataInput: Record<string, any> | undefined ): Promise<IreturnResult | undefined | void> {
     console.log(log.whereIam());
     if (dataInput) dataInput = await this.prepareInputResult(dataInput);
-    if (dataInput) dataInput["validTime"] = await getDBDateNow(this.ctx.config);
+    if (dataInput) dataInput["validTime"] = await getDBDateNow(this.ctx.service);
     return await super.update(idInput, dataInput);
   }
 }

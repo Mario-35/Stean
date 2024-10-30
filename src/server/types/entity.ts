@@ -13,7 +13,7 @@ export interface IentityCore {
      type:          ETable;
      order:         number;
      orderBy:       string;
-     columns:       IentityColumn;
+     columns:       { [key: string]: IentityColumn };
      relations:     { [key: string]: IentityRelation };
      constraints?:  IKeyString;
      indexes?:      IKeyString;

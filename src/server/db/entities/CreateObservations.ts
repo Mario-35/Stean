@@ -43,7 +43,7 @@ export class CreateObservations extends Common {
               : `${separateur}${elem}${separateur}`
             : `${separateur}{${elem}}${separateur}`
           : index === this.indexResult && type === "VALUES"
-          ? this.ctx.config.extensions.includes(EExtensions.resultNumeric)
+          ? this.ctx.service.extensions.includes(EExtensions.resultNumeric)
             ? elem
             : `'{"value": ${elem}}'`
           : elem
@@ -75,7 +75,7 @@ export class CreateObservations extends Common {
     await asyncForEach(
       Object.keys(datasJson["columns"]),
       async (key: string) => {
-        const tempStreamInfos = await models.getStreamInfos( this.ctx.config, datasJson["columns"][key] as JSON );
+        const tempStreamInfos = await models.getStreamInfos( this.ctx.service, datasJson["columns"][key] as JSON );
         if (tempStreamInfos) {
           streamInfos.push(tempStreamInfos);
           myColumns.push(
@@ -101,10 +101,10 @@ export class CreateObservations extends Common {
     if (sqlInsert) {
       const sqls = sqlInsert.query.map((e: string, index: number) => `${index === 0 ? 'WITH ' :', '}updated${index+1} as (${e})\n`);
       // Remove logs and triggers for speed insert
-      await executeSql(this.ctx.config, `SET session_replication_role = replica;`);
-      const resultSql:Record<string, any>  = await executeSql(this.ctx.config, `${sqls.join("")}SELECT (SELECT count(*) FROM ${paramsFile.tempTable}) AS total, (SELECT count(*) FROM updated1) AS inserted`);
+      await executeSql(this.ctx.service, `SET session_replication_role = replica;`);
+      const resultSql:Record<string, any>  = await executeSql(this.ctx.service, `${sqls.join("")}SELECT (SELECT count(*) FROM ${paramsFile.tempTable}) AS total, (SELECT count(*) FROM updated1) AS inserted`);
       // Restore logs and triggers
-      await executeSql(this.ctx.config, `SET session_replication_role = DEFAULT;`);
+      await executeSql(this.ctx.service, `SET session_replication_role = DEFAULT;`);
       return this.formatReturnResult({
         total: sqlInsert.count,
         body: [`Add ${ resultSql[0]["inserted"] } on ${resultSql[0]["total"]} lines from ${ paramsFile.filename.split("/").reverse()[0] }`],
@@ -118,14 +118,14 @@ export class CreateObservations extends Common {
     const returnValue: string[] = [];
     let total = 0;
       /// classic Create      
-      const dataStreamId = await models.getStreamInfos(this.ctx.config, dataInput);
+      const dataStreamId = await models.getStreamInfos(this.ctx.service, dataInput);
       if (!dataStreamId)
         this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: errors.noStream });
       else {
         await asyncForEach(dataInput["dataArray"], async (elem: string[]) => {
       const keys = [`"${dataStreamId.type?.toLowerCase()}_id"`].concat( this.createListColumnsValues( "COLUMNS", dataInput["components"] ) );
           const values = this.createListColumnsValues("VALUES", [ String(dataStreamId.id), ...elem, ]);
-          await executeSqlValues(this.ctx.config, `INSERT INTO ${doubleQuotesString(this.ctx.model.Observations.table)} (${keys}) VALUES (${values}) RETURNING id`)
+          await executeSqlValues(this.ctx.service, `INSERT INTO ${doubleQuotesString(this.ctx.model.Observations.table)} (${keys}) VALUES (${values}) RETURNING id`)
             .then((res: Record<string, any> ) => {
               returnValue.push( this.linkBase.replace("Create", "") + "(" + res[0]+ ")" );
               total += 1;
@@ -134,7 +134,7 @@ export class CreateObservations extends Common {
               if (error.code === "23505") {
                 returnValue.push(`Duplicate (${elem})`);
                 if ( dataInput["duplicate"] && dataInput["duplicate"].toUpperCase() === "DELETE" ) {
-                  await executeSqlValues(this.ctx.config, `DELETE FROM ${doubleQuotesString(this.ctx.model.Observations.table)} WHERE 1=1 ` + keys .map((e, i) => `AND ${e} = ${values[i]}`) .join(" ") + ` RETURNING id` ) .then((res: Record<string, any> ) => {
+                  await executeSqlValues(this.ctx.service, `DELETE FROM ${doubleQuotesString(this.ctx.model.Observations.table)} WHERE 1=1 ` + keys .map((e, i) => `AND ${e} = ${values[i]}`) .join(" ") + ` RETURNING id` ) .then((res: Record<string, any> ) => {
                       returnValue.push(`delete id ==> ${res[0]}`);
                       total += 1;
                     }).catch((error) => {

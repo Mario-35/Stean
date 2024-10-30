@@ -24,7 +24,7 @@ export class Login extends CoreHtmlView {
         const alert = (name: string): string => {
             return datas.why && datas.why[name] ? `<div class="alert">${datas.why[name]}</div>` : "";
         };
-      const url = `${this.ctx.decodedUrl.linkbase}/${this.ctx.config.apiVersion}`;  
+      const url = `${this.ctx.decodedUrl.linkbase}/${this.ctx.service.apiVersion}`;  
         this._HTMLResult = [`
           <!DOCTYPE html>
             <html>

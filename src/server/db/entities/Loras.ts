@@ -74,7 +74,7 @@ export class Loras extends Common {
       if (silent) return this.formatReturnResult({ body: errors.deveuiMessage });
       else this.ctx.throw(400, { code: 400, detail: errors.deveuiMessage });
     }
-      const stream = await executeSql(this.ctx.config, streamFromDeveui(this.stean["deveui"])).then((res: Record<string, any> ) => {
+      const stream = await executeSql(this.ctx.service, streamFromDeveui(this.stean["deveui"])).then((res: Record<string, any> ) => {
       if (res[0]["multidatastream"] != null) return res[0]["multidatastream"][0];
       if (res[0]["datastream"] != null) return res[0]["datastream"][0];
       this.ctx.throw(400, { code: 400, detail: msg( errors.deveuiNotFound, this.stean["deveui"] )}); 
@@ -210,7 +210,7 @@ export class Loras extends Common {
                   "(SELECT observation1.COLUMN FROM observation1), "
                 )} (SELECT multidatastream1.id FROM multidatastream1) AS multidatastream, (SELECT multidatastream1.thing_id FROM multidatastream1) AS thing)
                  SELECT coalesce(json_agg(t), '[]') AS result FROM result1 AS t`;
-      return await executeSqlValues(this.ctx.config, sql).then(async (res: object) => {
+      return await executeSqlValues(this.ctx.service, sql).then(async (res: object) => {
         // TODO MULTI 
       const tempResult: Record<string, any>  = res[0 as keyobj][0];
         if (tempResult.id != null) {          
@@ -242,7 +242,7 @@ export class Loras extends Common {
       const getFeatureOfInterest = getBigIntFromString(
       dataInput["FeatureOfInterest"]
       );
-      const searchFOI: Record<string, any>  = await executeSql(this.ctx.config, 
+      const searchFOI: Record<string, any>  = await executeSql(this.ctx.service, 
         getFeatureOfInterest
           ? `SELECT coalesce((SELECT "id" FROM "${this.ctx.model.FeaturesOfInterest.table}" WHERE "id" = ${getFeatureOfInterest}), ${getFeatureOfInterest}) AS id `
           : stream["_default_featureofinterest"] ? `SELECT id FROM "${this.ctx.model.FeaturesOfInterest.table}" WHERE id = ${stream["_default_featureofinterest"]}` : ""
@@ -303,7 +303,7 @@ export class Loras extends Common {
                       "(SELECT observation1.COLUMN from observation1), "
                     )} (SELECT datastream1.id from datastream1) AS datastream, (SELECT datastream1.thing_id from datastream1) AS thing)
                 SELECT coalesce(json_agg(t), '[]') AS result FROM result1 AS t`;
-      return await executeSql(this.ctx.config, sql).then(async (res: object) => {
+      return await executeSql(this.ctx.service, sql).then(async (res: object) => {
       const tempResult: Record<string, any>  = res[0 as keyobj]["result"][0];
         if (tempResult.id != null) {
           const result: Record<string, any>  = {

@@ -7,7 +7,7 @@
  */
 
 import { createEntity } from ".";
-import { EConstant, ERelations, ETable } from "../../enums";
+import { EConstant, EDataType, ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { doubleQuotesString } from "../../helpers";
 import { _idBig } from "./constants";
@@ -23,6 +23,7 @@ export const Line:Ientity  = createEntity("Lines", {
            return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotesString(EConstant.id)}`: ''}` ;
         },
         type: "number",
+        dataType: EDataType.bigint
       },
       result: {
         create: "JSONB NULL",
@@ -30,10 +31,12 @@ export const Line:Ientity  = createEntity("Lines", {
           return `"result"->'line'${test && test["as"] === true ? ` AS "result"`: ''}`;
         },
         type: "result",
+        dataType: EDataType.result
       },
       file_id: {
         create: "BIGINT NULL",
         alias() {},
+        dataType: EDataType.link,
         type: "relation:Files",
       }
     },

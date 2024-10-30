@@ -24,7 +24,7 @@ export class Common {
   constructor(ctx: koaContext) {
     console.log(log.whereIam());
     this.ctx = ctx;
-    this.nextLinkBase = removeKeyFromUrl(`${this.ctx.decodedUrl.root}/${ this.ctx.href.split(`${ctx.config.apiVersion}/`)[1] }`, ["top", "skip"] );
+    this.nextLinkBase = removeKeyFromUrl(`${this.ctx.decodedUrl.root}/${ this.ctx.href.split(`${ctx.service.apiVersion}/`)[1] }`, ["top", "skip"] );
     this.linkBase = `${this.ctx.decodedUrl.root}/${this.constructor.name}`;     
   }
   // Get a key value
@@ -69,7 +69,7 @@ export class Common {
     const max: number =
       this.ctx.odata.limit > 0
         ? +this.ctx.odata.limit
-        : +this.ctx.config.nb_page;
+        : +this.ctx.service.nb_page;
     if (resLength >= max) 
      return `${encodeURI(this.nextLinkBase)}${this.nextLinkBase.includes("?") ? "&" : "?" }$top=${this.ctx.odata.limit}&$skip=${this.ctx.odata.skip + this.ctx.odata.limit }`;
   };
@@ -77,7 +77,7 @@ export class Common {
   public prevLink = (resLength: number): string | undefined => {
     if (this.ctx.odata.limit < 1) return;
     const prev = this.ctx.odata.skip - this.ctx.odata.limit;
-    if ( ((this.ctx.config.nb_page && resLength >= this.ctx.config.nb_page) || this.ctx.odata.limit) && prev >= 0 )
+    if ( ((this.ctx.service.nb_page && resLength >= this.ctx.service.nb_page) || this.ctx.odata.limit) && prev >= 0 )
       return `${encodeURI(this.nextLinkBase)}${ this.nextLinkBase.includes("?") ? "&" : "?" }$top=${this.ctx.odata.limit}&$skip=${prev}`;
   };
   // Return all items
@@ -96,12 +96,12 @@ export class Common {
               config.writeLog(log.query(sql));
               this.ctx.attachment(`${this.ctx.odata.entity?.name || "export"}.csv`);
             return this.formatReturnResult({ body:  await config
-              .connection(this.ctx.config.name)
+              .connection(this.ctx.service.name)
               .unsafe(sql)
               .readable()
             });
        default:        
-         return await executeSqlValues(this.ctx.config, sql).then(async (res: Record<string, any>) => {         
+         return await executeSqlValues(this.ctx.service, sql).then(async (res: Record<string, any>) => {         
            return (res[0] > 0) 
            ? this.formatReturnResult({ 
               id: isNaN(res[0][0]) ? undefined : +res[0], 
@@ -124,11 +124,11 @@ export class Common {
        case returnFormats.sql:
          return this.formatReturnResult({ body: sql }); 
          case returnFormats.GeoJSON:
-           return await executeSqlValues(this.ctx.config, sql).then((res: Record<string, any>) => {
+           return await executeSqlValues(this.ctx.service, sql).then((res: Record<string, any>) => {
              return this.formatReturnResult({ body: res[0] });
            });
        default:
-         return await executeSqlValues(this.ctx.config, sql).then((res: Record<string, any>) => {
+         return await executeSqlValues(this.ctx.service, sql).then((res: Record<string, any>) => {
            if (this.ctx.odata.query.select && this.ctx.odata.onlyValue  === true) {
              return this.formatReturnResult({ 
                body: String(res[ this.ctx.odata.query.select[0 as keyobj] == "id" ? EConstant.id : 0 ]),
@@ -159,7 +159,7 @@ export class Common {
     // return results
     const results: Record<string, any>[] = [];
     // execute query
-    await executeSqlValues(this.ctx.config, sqls.join(";")).then((res: Record<string, any> ) => results.push(res[0 as keyobj]) )
+    await executeSqlValues(this.ctx.service, sqls.join(";")).then((res: Record<string, any> ) => results.push(res[0 as keyobj]) )
         .catch((error: Error) => { 
           console.log(error);           
           this.ctx.throw(400, { code: 400, detail: error["detail" as keyobj] });
@@ -182,7 +182,7 @@ export class Common {
       case returnFormats.sql:
         return this.formatReturnResult({ body: sql }); 
       default:
-        return await executeSqlValues(this.ctx.config, sql) 
+        return await executeSqlValues(this.ctx.service, sql) 
           .then((res: Record<string, any>) => {
             if (res[0]) {
               if (res[0].duplicate)
@@ -216,7 +216,7 @@ export class Common {
       case returnFormats.sql:
         return this.formatReturnResult({ body: sql });        
       default:
-        return await executeSqlValues(this.ctx.config, sql) 
+        return await executeSqlValues(this.ctx.service, sql) 
         .then((res: Record<string, any>) => {  
           if (res[0]) {
             return this.formatReturnResult({
@@ -241,7 +241,7 @@ export class Common {
       case returnFormats.sql:
         return this.formatReturnResult({ body: sql });          
       default:
-        return this.formatReturnResult( { id: await executeSqlValues(this.ctx.config, sql) .then((res) => res[0 as keyobj]) .catch(() => BigInt(0)) } );
+        return this.formatReturnResult( { id: await executeSqlValues(this.ctx.service, sql) .then((res) => res[0 as keyobj]) .catch(() => BigInt(0)) } );
     }
   }
 }

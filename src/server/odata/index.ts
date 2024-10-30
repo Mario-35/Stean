@@ -65,7 +65,7 @@ export const createOdata = async (ctx: koaContext): Promise<RootPgVisitor | unde
     });
     
   const urlSrcSplit = cleanUrl(urlSrc).split("?");
-  if (!urlSrcSplit[1]) urlSrcSplit.push(`$top=${ctx.config.nb_page || 200}`);
+  if (!urlSrcSplit[1]) urlSrcSplit.push(`$top=${ctx.service.nb_page || 200}`);
   if (urlSrcSplit[0].split("(").length != urlSrcSplit[0].split(")").length) urlSrcSplit[0] += ")";
   // INIT ressource
   let astRessources: Token;

@@ -18,9 +18,9 @@ export const isGraph = (input: RootPgVisitor |PgVisitor) => [returnFormats.graph
 export const isGeoJson = (inputE: Ientity | string, input: RootPgVisitor |PgVisitor) => (typeof inputE === "string" ? ["Locations", "FeaturesOfInterest"].includes(inputE) : ["Locations", "FeaturesOfInterest"].includes(inputE.name)) && input.returnFormat === returnFormats.GeoJSON ? true : undefined;
 export const _isObservation = (input: Ientity | string) => typeof input === "string" ? input === "Observations": input.name === "Observations";
 export const isObservation = (input: RootPgVisitor |PgVisitor):boolean => (input.entity && _isObservation(input.entity)) || (input.parentEntity && _isObservation(input.parentEntity)) ? true : false;
-export const isAdmin = (ctx: koaContext): boolean => ctx.config && ctx.config.name === EConstant.admin;
-export const isAllowedTo = (ctx: koaContext, what: EUserRights): boolean => ctx.config.extensions.includes(EExtensions.users) ? true : ctx.user && ctx.user.PDCUAS[what];
-export const isFile = (ctx: koaContext): boolean => ctx.config.extensions.includes(EExtensions.file);
+export const isAdmin = (ctx: koaContext): boolean => ctx.service && ctx.service.name === EConstant.admin;
+export const isAllowedTo = (ctx: koaContext, what: EUserRights): boolean => ctx.service.extensions.includes(EExtensions.users) ? true : ctx.user && ctx.user.PDCUAS[what];
+export const isFile = (ctx: koaContext): boolean => ctx.service.extensions.includes(EExtensions.file);
 export function isString(obj: any) {
     return (typeof obj) === 'string';
  }

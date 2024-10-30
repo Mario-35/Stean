@@ -14,11 +14,11 @@ export function blankUser(ctx: koaContext):Iuser  {
         username: "query",
         password: "",
         email: "",
-        database: ctx.config.pg.database,
-        canPost: !ctx.config.extensions.includes(EExtensions.users),
-        canDelete: !ctx.config.extensions.includes(EExtensions.users),
-        canCreateUser: !ctx.config.extensions.includes(EExtensions.users),
-        canCreateDb: !ctx.config.extensions.includes(EExtensions.users),
+        database: ctx.service.pg.database,
+        canPost: !ctx.service.extensions.includes(EExtensions.users),
+        canDelete: !ctx.service.extensions.includes(EExtensions.users),
+        canCreateUser: !ctx.service.extensions.includes(EExtensions.users),
+        canCreateDb: !ctx.service.extensions.includes(EExtensions.users),
         admin: false,
         superAdmin: false
     }

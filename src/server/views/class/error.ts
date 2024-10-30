@@ -32,7 +32,7 @@ export class HtmlError extends CoreHtmlView {
                                     <a href="/Login" class="button-submit">Login</a>
                                 </div>
                                 <div class="inner">
-                                    <a  href="${ this.ctx.decodedUrl.linkbase + `/${this.ctx.config.apiVersion}/Query`}" class="button">query</a>
+                                    <a  href="${ this.ctx.decodedUrl.linkbase + `/${this.ctx.service.apiVersion}/Query`}" class="button">query</a>
                                 </div>
                             </div>
                         </div>

@@ -7,7 +7,7 @@
  */
 
 import { createEntity } from ".";
-import { EConstant, ERelations, ETable } from "../../enums";
+import { EConstant, EDataType, ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _idRel, _text } from "./constants";
 import { doubleQuotesString } from "../../helpers";
@@ -23,6 +23,7 @@ export const Lora:Ientity  = createEntity("Loras", {
           return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotesString(EConstant.id)}`: ''}` ;
       },
       type: "number",
+        dataType: EDataType.bigint
     },
     name: {
       create: _text('no name'),
@@ -30,6 +31,7 @@ export const Lora:Ientity  = createEntity("Loras", {
         return undefined;
       },
       type: "text",
+        dataType: EDataType.text
     },
     description: {
       create: _text('no description'),
@@ -37,6 +39,7 @@ export const Lora:Ientity  = createEntity("Loras", {
         return undefined;
       },
       type: "text",
+        dataType: EDataType.text
     },
     properties: {
       create: "JSONB NULL",
@@ -44,6 +47,7 @@ export const Lora:Ientity  = createEntity("Loras", {
         return undefined;
       },
       type: "json",
+        dataType: EDataType.jsonb
     },
     deveui: {
       create: _text(), 
@@ -51,27 +55,31 @@ export const Lora:Ientity  = createEntity("Loras", {
         return undefined;
       },
       type: "text",
+        dataType: EDataType.text
     },
     decoder_id: {
       create: _idRel,
       alias() {
         return undefined;
       },
-      type: "relation:Decoders",
+      dataType: EDataType.link,
+        type: "relation:Decoders",
     },
     datastream_id: {
       create: "BIGINT NULL",
       alias() {
         return undefined;
       },
-      type: "relation:Datastreams",
+      dataType: EDataType.link,
+        type: "relation:Datastreams",
     },
     multidatastream_id: {
       create: "BIGINT NULL",
       alias() {
         return undefined;
       },
-      type: "relation:MultiDatastreams",
+      dataType: EDataType.link,
+        type: "relation:MultiDatastreams",
     },
   },
   constraints: {

@@ -12,7 +12,7 @@ import { Token } from "../../parser";
 import { query, resourcePath } from "../../parser/parser";
 export const blankRootPgVisitor = (ctx: koaContext, entity: Ientity): RootPgVisitor | undefined => {  
     const astRessources: Token = <Token>resourcePath(entity.name);  
-    const astQuery: Token = <Token>query(decodeURIComponent(`$top=${ctx.config.nb_page ? ctx.config.nb_page : 200}`));
+    const astQuery: Token = <Token>query(decodeURIComponent(`$top=${ctx.service.nb_page ? ctx.service.nb_page : 200}`));
     try {
       return new RootPgVisitor(ctx, {
         onlyValue: false,

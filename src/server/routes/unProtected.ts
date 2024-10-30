@@ -112,7 +112,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
       let sql = getUrlKey(ctx.request.url, "query");
       if (sql) {
         sql = atob(sql);
-        const resultSql = await executeSql(sql.includes("log_request") ? config.getService(EConstant.admin) : ctx.config, sql);
+        const resultSql = await executeSql(sql.includes("log_request") ? config.getService(EConstant.admin) : ctx.service, sql);
         ctx.status = EHttpCode.created;
         ctx.body = [resultSql];
       }
@@ -131,12 +131,12 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
       process.exit(110);
     case "DROP":
       console.log(log.debug_head("drop database"));
-      if (ctx.config.options.includes(EOptions.canDrop)) {        
-        await executeAdmin(sqlStopDbName(simpleQuotesString(ctx.config.pg.database))).then(async () => {
-            await executeAdmin(`DROP DATABASE IF EXISTS ${ctx.config.pg.database}`);
+      if (ctx.service.options.includes(EOptions.canDrop)) {        
+        await executeAdmin(sqlStopDbName(simpleQuotesString(ctx.service.pg.database))).then(async () => {
+            await executeAdmin(`DROP DATABASE IF EXISTS ${ctx.service.pg.database}`);
             try {
               ctx.status = EHttpCode.created;
-              ctx.body = await createDatabase(ctx.config.pg.database);              
+              ctx.body = await createDatabase(ctx.service.pg.database);              
             } catch (error) {
               ctx.status = EHttpCode.badRequest;
               ctx.redirect(`${ctx.decodedUrl.root}/error`);
@@ -149,7 +149,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
       console.log(log.debug_head("GET createDB"));
       try {
         await config.connection(EConstant.admin)`DROP DATABASE IF EXISTS test`;
-        ctx.body = await createService(testDatas),    
+        ctx.body = await createService(ctx, testDatas),    
         ctx.status = EHttpCode.created;
       } catch (error) {
         ctx.status = EHttpCode.badRequest;
@@ -186,8 +186,8 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
       return;
     } // END Switch
   // API GET REQUEST  
-  if (ctx.decodedUrl.path.includes(ctx.config.apiVersion) || ctx.decodedUrl.version) {
-    console.log(log.debug_head(`unProtected GET ${ctx.config.apiVersion}`));
+  if (ctx.decodedUrl.path.includes(ctx.service.apiVersion) || ctx.decodedUrl.version) {
+    console.log(log.debug_head(`unProtected GET ${ctx.service.apiVersion}`));
     // decode odata url infos
     const odataVisitor = await createOdata(ctx);    
     
@@ -197,7 +197,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
         ctx.body = { values: [] }; 
         return;
       }
-      console.log(log.debug_head(`GET ${ctx.config.apiVersion}`));
+      console.log(log.debug_head(`GET ${ctx.service.apiVersion}`));
       // Create api object
       const objectAccess = new apiAccess(ctx);
       if (objectAccess) {

@@ -1,3 +1,5 @@
+import { Ientity } from "./";
+
 /**
  * IrelationInfos
  *
@@ -7,6 +9,7 @@
  */
 export interface IrelationInfos {
     type:  string; 
+    entity: Ientity | undefined;
     table: string;
     column: string;
     leftKey: string;

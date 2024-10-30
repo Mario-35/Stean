@@ -3,7 +3,7 @@ import { log } from "../log";
 import { _STREAM } from "../db/constants";
 import { executeSqlValues } from "../db/helpers";
 import { asJson } from "../db/queries";
-import { EColumnType, EConstant, EExtensions, filterEntities } from "../enums";
+import { EColumnType, EConstant, EDataType, EExtensions, filterEntities } from "../enums";
 import { doubleQuotesString, deepClone, isTest, formatPgTableColumn, isString } from "../helpers";
 import { errors, msg } from "../messages";
 import { Iservice, Ientities, Ientity, IstreamInfos, koaContext, IentityRelation } from "../types";
@@ -62,11 +62,11 @@ class Models {
       const end = "</mxCell>";
       fileContent = fileContent.replace(`${start}${fileContent.split(start)[1].split(end)[0]}${end}`, "");      
     };
-    const entities = Models.models[ctx.config.apiVersion];
+    const entities = Models.models[ctx.service.apiVersion];
     let fileContent = fs.readFileSync(__dirname + `/model.drawio`, "utf8");
-    fileContent = fileContent.replace('&gt;Version&lt;', `&gt;version : ${ctx.config.apiVersion}&lt;`);
-    if (!ctx.config.extensions.includes(EExtensions.logs)) deleteId("124");
-    if (!ctx.config.extensions.includes(EExtensions.multiDatastream)) {
+    fileContent = fileContent.replace('&gt;Version&lt;', `&gt;version : ${ctx.service.apiVersion}&lt;`);
+    if (!ctx.service.extensions.includes(EExtensions.logs)) deleteId("124");
+    if (!ctx.service.extensions.includes(EExtensions.multiDatastream)) {
       ["114" ,"115" ,"117" ,"118" ,"119" ,"116" ,"120" ,"121"].forEach(e => deleteId(e));
       fileContent = fileContent.replace(`&lt;hr&gt;COLUMNS.${entities.MultiDatastreams.name}`, "");
       fileContent = fileContent.replace(`&lt;hr&gt;COLUMNS.${entities.MultiDatastreams.name}`, "");
@@ -79,27 +79,27 @@ class Models {
   }
   
   async getInfos(ctx: koaContext) {
-    const temp = config.getInfos(ctx, ctx.config.name)
+    const temp = config.getInfos(ctx, ctx.service.name)
     const result: Record<string, any> = {
       ... temp,
-      ready : ctx.config._connection ? true : false,
+      ready : ctx.service._connection ? true : false,
       Postgres: {}
     };
     const extensions: Record<string, any> = {};
-    switch (ctx.config.apiVersion) {
-      case 11:
+    switch (ctx.service.apiVersion) {
+      case "11":
           result["Ogc link"] = "https://docs.ogc.org/is/18-088/18-088.html";
         break;
         default:
           result["Ogc link"] = "https://docs.ogc.org/is/15-078r6/15-078r6.html";
         break;
     }
-    if (ctx.config.extensions.includes(EExtensions.tasking)) extensions["tasking"] = "https://docs.ogc.org/is/17-079r1/17-079r1.html";
-    if (ctx.config.extensions.includes(EExtensions.logs)) extensions["logs"] = `${ctx.decodedUrl.linkbase}/${ctx.config.apiVersion}/Logs`;
+    if (ctx.service.extensions.includes(EExtensions.tasking)) extensions["tasking"] = "https://docs.ogc.org/is/17-079r1/17-079r1.html";
+    if (ctx.service.extensions.includes(EExtensions.logs)) extensions["logs"] = `${ctx.decodedUrl.linkbase}/${ctx.service.apiVersion}/Logs`;
     
     result["extensions"] = extensions;
-    result["options"] = ctx.config.options;
-    await executeSqlValues(ctx.config, ` select version(), (SELECT ARRAY(SELECT extname||'-'||extversion AS extension FROM pg_extension) AS extension), (SELECT c.relname||'.'||a.attname FROM pg_attribute a JOIN pg_class c ON (a.attrelid=c.relfilenode) WHERE a.atttypid = 114) ;`
+    result["options"] = ctx.service.options;
+    await executeSqlValues(ctx.service, ` select version(), (SELECT ARRAY(SELECT extname||'-'||extversion AS extension FROM pg_extension) AS extension), (SELECT c.relname||'.'||a.attname FROM pg_attribute a JOIN pg_class c ON (a.attrelid=c.relfilenode) WHERE a.atttypid = 114) ;`
     ).then(res => {
       result["Postgres"]["version"] = res[0 as keyof object];
       result["Postgres"]["extensions"] = res[1 as keyof object];
@@ -149,7 +149,8 @@ class Models {
         alias() {
           return `"${name}"`;
         },
-        type: "json"
+        type: "json",
+        dataType: EDataType.jsonb
       };
     };
     // add properties to entities
@@ -162,6 +163,7 @@ class Models {
         return `"geom"`;
       },
       type: "json",
+        dataType: EDataType.jsonb
     };
     return input;
   }
@@ -316,11 +318,11 @@ class Models {
     .forEach((value: string) => {
         expectedResponse.push({
           name: ctx.model[value].name,
-          url: `${ctx.decodedUrl.linkbase}/${ctx.config.apiVersion}/${value}`,
+          url: `${ctx.decodedUrl.linkbase}/${ctx.service.apiVersion}/${value}`,
         });
       });
     
-    switch (ctx.config.apiVersion) {
+    switch (ctx.service.apiVersion) {
       case "v0.9":
       case "v1.0":
         return {
@@ -352,9 +354,9 @@ class Models {
         // "https://github.com/INSIDE-information-systems/SensorThingsAPI/blob/master/EntityLinking/Linking.md#Expand",
         // "https://github.com/INSIDE-information-systems/SensorThingsAPI/blob/master/EntityLinking/Linking.md#Filter",
         // "https://github.com/INSIDE-information-systems/SensorThingsAPI/blob/master/EntityLinking/Linking.md#NavigationLinks"],
-        if (ctx.config.extensions.includes(EExtensions.lora)) list.push(`${ctx.decodedUrl.origin}/#api-Loras`);
-        if (ctx.config.extensions.includes(EExtensions.multiDatastream)) list.push("https://docs.ogc.org/is/18-088/18-088.html#multidatastream-extension");
-        if (ctx.config.extensions.includes(EExtensions.mqtt)) list.push("https://docs.ogc.org/is/18-088/18-088.html#req-create-observations-via-mqtt-observations-creation",
+        if (ctx.service.extensions.includes(EExtensions.lora)) list.push(`${ctx.decodedUrl.origin}/#api-Loras`);
+        if (ctx.service.extensions.includes(EExtensions.multiDatastream)) list.push("https://docs.ogc.org/is/18-088/18-088.html#multidatastream-extension");
+        if (ctx.service.extensions.includes(EExtensions.mqtt)) list.push("https://docs.ogc.org/is/18-088/18-088.html#req-create-observations-via-mqtt-observations-creation",
                                                                         "https://docs.ogc.org/is/18-088/18-088.html#mqtt-extension");
         const temp: Record<string, any>  =  {
           "value" : expectedResponse.filter((elem) => Object.keys(elem).length),
@@ -362,12 +364,12 @@ class Models {
             "conformance" : list,
           }
         };
-        if (ctx.config.extensions.includes(EExtensions.logs)) list.push(`${ctx.decodedUrl.origin}/#api-Logs`);
+        if (ctx.service.extensions.includes(EExtensions.logs)) list.push(`${ctx.decodedUrl.origin}/#api-Logs`);
         list.push(`${ctx.decodedUrl.origin}/#api-Services`);
         list.push(`${ctx.decodedUrl.origin}/#api-Token`);
         list.push(`${ctx.decodedUrl.origin}/#api-Import`);
         list.push(`${ctx.decodedUrl.origin}/#api-Format`);        
-        temp[`${ctx.decodedUrl.linkbase}/${ctx.config.apiVersion}/req/receive-updates-via-mqtt/receive-updates`] = 
+        temp[`${ctx.decodedUrl.linkbase}/${ctx.service.apiVersion}/req/receive-updates-via-mqtt/receive-updates`] = 
         {
           "endpoints": [
             `mqtt://server.example.com:${config.getService(EConstant.admin).ports?.ws}`,

@@ -7,7 +7,7 @@
  */
 
 import { createEntity } from ".";
-import { ETable } from "../../enums";
+import { EDataType, ETable } from "../../enums";
 import { Ientity } from "../../types";
 import { _idRel } from "./constants";
 export const LocationHistoricalLocation:Ientity  = createEntity("LocationsHistoricalLocations", {
@@ -19,12 +19,14 @@ export const LocationHistoricalLocation:Ientity  = createEntity("LocationsHistor
     location_id: {
       create: _idRel,
       alias() {},
-      type: "bigint"
+      type: "bigint",
+      dataType: EDataType.bigint
     },
     historicallocation_id: {
       create: _idRel,
       alias() {},
-      type: "bigint"
+      type: "bigint",
+      dataType: EDataType.bigint
     },
   },
   constraints: {

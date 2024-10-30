@@ -6,7 +6,7 @@
  *
  */
 
-import { addToService, createDatabase, executeAdmin, executeSqlValues } from ".";
+import { createDatabase, executeAdmin, executeSqlValues } from ".";
 import { config } from "../../configuration";
 import { doubleQuotesString, simpleQuotesString, asyncForEach } from "../../helpers";
 import { models } from "../../models";
@@ -22,23 +22,8 @@ const prepareDatas = (dataInput: Record<string, string>, entity: string): object
   }
   return dataInput;
 }
-const getConvertedData = async (url: string): Promise<object | unknown> => {
-  return await fetch(url, { method: 'GET', headers: {}, }).then((response) => response.json());
-}
-const addToServiceFromUrl = async (url: string | undefined, ctx: koaContext): Promise<string> => {
-  while(url) {
-    try {      
-      const datas = await getConvertedData(url) as object;
-      await addToService(ctx, datas);
-      return datas["@iot.nextLink" as keyof object];
-    } catch (error) {  
-      console.log(error) ;
-      return "";
-    }
-  }
-  return "";
-}
-export const createService = async (dataInput: Record<string, any>, ctx?: koaContext): Promise<Record<string, any>> => {
+
+export const createService = async (ctx: koaContext, dataInput: Record<string, any>): Promise<Record<string, any>> => {
   console.log(log.whereIam());
   if(dataInput && dataInput["create"]) {    
     config.addConfig(dataInput["create"]);
@@ -77,7 +62,7 @@ export const createService = async (dataInput: Record<string, any>, ctx?: koaCon
       const goodEntity = models.getEntity(service, entityName);
       if (goodEntity) {
         try {
-          const sqls: string[] =dataInput[entityName].map((element: any) =>`INSERT INTO ${doubleQuotesString(goodEntity.table)} ${createInsertValues(service, prepareDatas(element, goodEntity.name), goodEntity.name)}`);
+          const sqls: string[] =dataInput[entityName].map((element: any) =>`INSERT INTO ${doubleQuotesString(goodEntity.table)} ${createInsertValues(ctx, prepareDatas(element, goodEntity.name), goodEntity.name)}`);
           await executeSqlValues(config.getService(serviceName), sqls.join(";")).then((res: Record<string, any>) =>{
             results[entityName] = EChar.ok;
           }).catch((error: any) => {
@@ -91,15 +76,6 @@ export const createService = async (dataInput: Record<string, any>, ctx?: koaCon
       }
     }
   });
-    
-  if (ctx && dataInput["create"]["imports"]) {
-    await asyncForEach(dataInput["create"]["imports"], async (url: string | undefined) => {
-      url = `${url}&$top=1000`; 
-      while(url !+ "") {
-        url = await addToServiceFromUrl(url, ctx);
-      }
-    });
-  }
     
   return results;
 }

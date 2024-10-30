@@ -50,7 +50,7 @@ export class RootPgVisitor extends PgVisitor {
   }
   
   protected VisitRessourcesEntitySetName(node: Token, _context: IodataContext) {
-    this.entity = models.getEntityStrict(this.ctx.config, node.value.name);
+    this.entity = models.getEntityStrict(this.ctx.service, node.value.name);
     if (!this.entity) this.ctx.throw(404, "Not Found");
   }
  
@@ -99,7 +99,7 @@ export class RootPgVisitor extends PgVisitor {
  
   protected VisitRessourcesPropertyPathNew(node:Token, context:any) {
     if (this.entity && node.type == "PropertyPath") {
-      if (models.getRelationColumnTable(this.ctx.config, this.entity, node.value.path.raw) === EColumnType.Relation) {
+      if (models.getRelationColumnTable(this.ctx.service, this.entity, node.value.path.raw) === EColumnType.Relation) {
         this.parentId = this.id;
         this.id = BigInt(0);
         if ( node.value.navigation && node.value.navigation.type == "CollectionNavigation" ) {
@@ -109,7 +109,7 @@ export class RootPgVisitor extends PgVisitor {
         this.query.select.add(`${doubleQuotesString(node.value.path.raw )}${EConstant.columnSeparator}`);
         this.showRelations = false;
       } else this.entity = node.value.path.raw;
-      this.entity = models.getEntity(this.ctx.config, node.value.path.raw);      
+      this.entity = models.getEntity(this.ctx.service, node.value.path.raw);      
     }
 		this.VisitRessources(node.value.navigation, context);
 	}
@@ -120,7 +120,7 @@ export class RootPgVisitor extends PgVisitor {
         .split("$ID")
         .join(<string>where);
         this.query.where.init(whereSql);
-        const tempEntity =  models.getEntity(this.ctx.config, node.value.name);
+        const tempEntity =  models.getEntity(this.ctx.service, node.value.name);
         if (tempEntity) {
           this.swapEntity(tempEntity);
           this.single = tempEntity.singular === node.value.name || BigInt(this.id) > 0  ? true : false;
@@ -143,8 +143,8 @@ export class RootPgVisitor extends PgVisitor {
   }
   StartVisitRessources(node: Token) {
     console.log(log.debug_head("INIT PgVisitor"));
-    this.limit = this.ctx.config.nb_page || 200;
-    this.numeric = this.ctx.config.extensions.includes(EExtensions.resultNumeric);
+    this.limit = this.ctx.service.nb_page || 200;
+    this.numeric = this.ctx.service.extensions.includes(EExtensions.resultNumeric);
     const temp = this.VisitRessources(node);
     this.verifyRessources();
     return temp;
@@ -156,7 +156,7 @@ export class RootPgVisitor extends PgVisitor {
         include.navigationProperty = names[0];
         const visitor = new PgVisitor(this.ctx, {...this.options});
         if (visitor) {         
-          const nameEntity = models.getEntity(this.ctx.config, names[0]);
+          const nameEntity = models.getEntity(this.ctx.service, names[0]);
           if(nameEntity) {
             visitor.entity = nameEntity;
             visitor.navigationProperty = names[1];

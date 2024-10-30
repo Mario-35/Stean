@@ -7,7 +7,7 @@
  */
 
 import { createEntity } from ".";
-import { EConstant, ERelations, ETable } from "../../enums";
+import { EConstant, EDataType, ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { doubleQuotesString } from "../../helpers";
 import { _idBig } from "./constants";
@@ -23,11 +23,13 @@ export const Observation:Ientity  = createEntity("Observations", {
            return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotesString(EConstant.id)}`: ''}` ;
         },
         type: "number",
+        dataType: EDataType.bigint
       },
       phenomenonTime: {
         create: "timestamptz NOT NULL",
         alias() {},
         type: "date",
+        dataType: EDataType.timestamptz
       },
       result: {
         create: "JSONB NULL",
@@ -40,43 +42,51 @@ export const Observation:Ientity  = createEntity("Observations", {
             WHEN jsonb_typeof("result"-> 'value') = 'number' THEN ("result"->>'value')::numeric 
             WHEN jsonb_typeof("result"-> 'value') = 'array' THEN ("result"->>'value')[0]::numeric 
             END${test && test["as"] === true ? ` AS "result"`: ''}`;
-          return `"result"->'value'${test && test["as"] === true ? ` AS "result"`: ''}`;
+          return `COALESCE("result"->'quality', "result"->'value')${test && test["as"] === true ? ` AS "result"`: ''}`;
         },
         type: "result",
+        dataType: EDataType.result
       },
       resultTime: {
         create: "timestamptz NOT NULL",
         alias() {},
         type: "date",
+        dataType: EDataType.timestamptz
       },
       resultQuality: {
         create: "JSONB NULL",
         alias() {},
         type: "json",
+        dataType: EDataType.jsonb
       },
       validTime: {
         create: "timestamptz DEFAULT CURRENT_TIMESTAMP",
         alias() {},
         type: "date",
+        dataType: EDataType.timestamptz
       },
       parameters: {
         create: "JSONB NULL",
         alias() {},
         type: "json",
+        dataType: EDataType.jsonb
       },
       datastream_id: {
         create: "BIGINT NULL",
         alias() {},
+        dataType: EDataType.link,
         type: "relation:Datastreams",
       },
       multidatastream_id: {
         create: "BIGINT NULL",
         alias() {},
+        dataType: EDataType.link,
         type: "relation:MultiDatastreams",
       },
       featureofinterest_id: {
         create: "BIGINT NOT NULL DEFAULT 1",
         alias() {},
+        dataType: EDataType.link,
         type: "relation:FeaturesOfInterest",
       },
     },

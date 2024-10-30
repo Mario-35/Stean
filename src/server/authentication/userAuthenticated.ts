@@ -10,7 +10,7 @@ import { decodeToken } from ".";
 import { EExtensions } from "../enums";
 import { koaContext } from "../types";
 export const userAuthenticated = (ctx: koaContext): boolean => { 
-  if (ctx.config && ctx.config.extensions.includes(EExtensions.users)) {
+  if (ctx.service && ctx.service.extensions.includes(EExtensions.users)) {
     const token = decodeToken(ctx);
     return (token && +token.id > 0);
   } else return true;

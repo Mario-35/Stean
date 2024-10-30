@@ -7,7 +7,7 @@
  */
 
 import { createEntity } from ".";
-import { ETable } from "../../enums";
+import { EDataType, ETable } from "../../enums";
 import { Ientity } from "../../types";
 import { _idRel } from "./constants";
 
@@ -20,12 +20,14 @@ import { _idRel } from "./constants";
       thing_id: {
         create: _idRel,
         alias() {},
-        type: "bigint"
+        type: "bigint",
+        dataType: EDataType.bigint
       },
       location_id: {
         create: _idRel,
         alias() {},
-        type: "bigint"
+        type: "bigint",
+        dataType: EDataType.bigint
       },
     },
     relations: {},

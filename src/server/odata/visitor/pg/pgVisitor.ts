@@ -90,9 +90,9 @@ export class PgVisitor extends Visitor {
     console.log(log.whereIam(input));
     const tempEntity = 
       context.target ===  EQuery.Where && context.identifier
-        ? models.getEntity(this.ctx.config, context.identifier.split(".")[0])
+        ? models.getEntity(this.ctx.service, context.identifier.split(".")[0])
         : this.isSelect(context) 
-          ? models.getEntity(this.ctx.config, this.entity || this.parentEntity || this.navigationProperty) 
+          ? models.getEntity(this.ctx.service, this.entity || this.parentEntity || this.navigationProperty) 
           : undefined;
           
     if (input.startsWith( "result/")) {
@@ -108,7 +108,7 @@ export class PgVisitor extends Visitor {
                           : undefined;
     if (columnName) return columnName;
     if (this.isSelect(context) && tempEntity && tempEntity.relations[input]) {
-      const entityName = models.getEntityName(this.ctx.config ,input);       
+      const entityName = models.getEntityName(this.ctx.service ,input);       
       return tempEntity && entityName 
         ? `CONCAT('${this.ctx.decodedUrl.root}/${tempEntity.name}(', "${tempEntity.table}"."id", ')/${entityName}') AS "${entityName}${EConstant.navLink}"` 
         : undefined;    
@@ -138,7 +138,7 @@ export class PgVisitor extends Visitor {
   getColumnNameOrAlias(entity: Ientity, column : string, options: IKeyBoolean): string | undefined {
     let result: string | undefined | void = undefined;
     if (entity && column != "" && entity.columns[column]) {
-      result = entity.columns[column].alias(this.ctx.config, options);
+      result = entity.columns[column].alias(this.ctx.service, options);
       if (!result) result = doubleQuotesString(column);
     }
     return result ? `${ options.table === true && result && result[0] === '"' ? `"${entity.table}".${result}` : result }` : undefined;
@@ -357,8 +357,8 @@ export class PgVisitor extends Visitor {
   protected VisitPropertyPathExpression(node: Token, context: IodataContext) {
     if (node.value.current && node.value.next) {
       // deterwine if its column AND JSON
-      if (this.entity && models.getRelationColumnTable(this.ctx.config, this.entity, node.value.current.raw) === EColumnType.Column
-            && models.isColumnType(this.ctx.config, this.entity, node.value.current.raw, "json") 
+      if (this.entity && models.getRelationColumnTable(this.ctx.service, this.entity, node.value.current.raw) === EColumnType.Column
+            && models.isColumnType(this.ctx.service, this.entity, node.value.current.raw, "json") 
             && node.value.next.raw[0] == "/" ) {
               this.addToWhere(`${doubleQuotesString(node.value.current.raw)}->>${simpleQuotesString(node.value.next.raw.slice(1))}`, context);
       } else if (node.value.next.raw[0] == "/") {       
@@ -395,7 +395,7 @@ export class PgVisitor extends Visitor {
     }
   }
   protected VisitDateType(node: Token, context: IodataContext):boolean {  
-    if (this.entity && context.sign && models.getRelationColumnTable(this.ctx.config, this.entity, node.value.left.raw) === EColumnType.Column && models.isColumnType(this.ctx.config, this.entity, node.value.left.raw, "date")) {
+    if (this.entity && context.sign && models.getRelationColumnTable(this.ctx.service, this.entity, node.value.left.raw) === EColumnType.Column && models.isColumnType(this.ctx.service, this.entity, node.value.left.raw, "date")) {
       const testIsDate = oDataDateFormat(node, context.sign);
       const columnName = this.getColumnNameOrAlias(this.ctx.model[context.identifier || this.entity.name], node.value.left.raw, {table: true, as: true, cast: false, ...this.createDefaultOptions()});
       if (testIsDate) {
@@ -452,10 +452,10 @@ export class PgVisitor extends Visitor {
   }
   public createComplexWhere(entity: string, node: Token, context: IodataContext) {
     if (context.target) {
-      if (! models.getEntity(this.ctx.config, entity)) return;
-      const tempEntity = models.getEntity(this.ctx.config, node.value.name);
+      if (! models.getEntity(this.ctx.service, entity)) return;
+      const tempEntity = models.getEntity(this.ctx.service, node.value.name);
       if (tempEntity) {
-        const relation = relationInfos(this.ctx.config, entity, node.value.name);
+        const relation = relationInfos(this.ctx, entity, node.value.name);
         if (context.relation) {
           context.sql = `${formatPgTableColumn(this.ctx.model[entity].table, relation.column)} IN (SELECT ${formatPgTableColumn(tempEntity.table, relation.rightKey)} FROM ${formatPgTableColumn(tempEntity.table)}`;
         } else {
@@ -473,7 +473,7 @@ export class PgVisitor extends Visitor {
   protected VisitODataIdentifier(node: Token, context: IodataContext) {    
     const alias = this.getColumn(node.value.name, "", context);
     node.value.name = alias ? alias : node.value.name;
-    if (context.relation && context.identifier && models.isColumnType(this.ctx.config, this.ctx.model[context.relation], removeAllQuotes(context.identifier).split(".")[0], "json")) {
+    if (context.relation && context.identifier && models.isColumnType(this.ctx.service, this.ctx.model[context.relation], removeAllQuotes(context.identifier).split(".")[0], "json")) {
       context.identifier = `${doubleQuotesString(context.identifier.split(".")[0])}->>${simpleQuotesString(node.raw)}`;     
     } else {
       if (context.target ===  EQuery.Where && this.entity) this.createComplexWhere(context.identifier ? context.identifier.split(".")[0] : this.entity.name, node, context);
@@ -521,20 +521,20 @@ export class PgVisitor extends Visitor {
       const temp = this.query.where.toString().split(" ").filter(e => e != "");      
       context.sign = temp.pop(); 
       this.query.where.init(temp.join(" "));
-      const relation = relationInfos(this.ctx.config, this.entity.name, context.relation);
+      const relation = relationInfos(this.ctx, this.entity.name, context.relation);
       this.addToWhere(` ${context.in && context.in === true ? '' : ' IN @START@'}(SELECT ${this.entity.relations[context.relation] ? doubleQuotesString(relation.rightKey) : `${doubleQuotesString(context.table)}."id"`} FROM ${doubleQuotesString(context.table)} WHERE `, context);
       context.in = true;
       if (context.identifier) {
         if (context.identifier.startsWith("CASE") || context.identifier.startsWith("("))
           this.addToWhere(`${context.identifier} ${context.sign} ${SQLLiteral.convert(node.value, node.raw)})`, context);
         else if (context.identifier.includes("@EXPRESSION@")) {
-            const tempEntity = models.getEntity(this.ctx.config, context.relation);    
+            const tempEntity = models.getEntity(this.ctx.service, context.relation);    
             const alias = tempEntity ? this.getColumnNameOrAlias(tempEntity, context.identifier , this.createDefaultOptions()) : undefined;
             this.addToWhere((context.sql)
               ? `${context.sql} ${context.target} ${doubleQuotesString(context.identifier)}))@END@`
               : `${alias ? alias : `${ context.identifier.replace("@EXPRESSION@", ` ${SQLLiteral.convert(node.value, node.raw)} ${this.inverseSign(context.sign)}`) }`})`, context);
         } else {
-          const tempEntity = models.getEntity(this.ctx.config, context.relation);    
+          const tempEntity = models.getEntity(this.ctx.service, context.relation);    
           const quotes = context.identifier[0] === '"' ? '' : '"';
           const alias = tempEntity ? this.getColumnNameOrAlias(tempEntity, context.identifier , this.createDefaultOptions()) : undefined;
           this.addToWhere((context.sql)
@@ -563,11 +563,11 @@ export class PgVisitor extends Visitor {
   //   console.log(log.whereIam());    
   //   column = removeAllQuotes(column);
   //   let test: string | undefined = undefined;
-  //   const tempEntity =  models.getEntity(this.ctx.config, entity);
+  //   const tempEntity =  models.getEntity(this.ctx.service, entity);
   //   if (tempEntity) {
   //     if (column.includes(".")) {
   //       const temp = column.split(".");
-  //       const tm = models.getEntity(this.ctx.config, temp[0]);
+  //       const tm = models.getEntity(this.ctx.service, temp[0]);
   //       if (tm && tm.columns.hasOwnProperty(temp[1])) {
   //         this.subQuery.select = `"featureofinterest"."id"`;
   //         this.subQuery.where = `CASE WHEN "${_TESTENCODING}" LIKE '%geo+json' THEN ST_GeomFromEWKT(ST_GeomFromGeoJSON(coalesce(${doubleQuotesString(temp[1])}->'geometry',${doubleQuotesString(temp[1])}))) ELSE ST_GeomFromEWKT(${doubleQuotesString(temp[1])}::text) END`;
@@ -577,17 +577,17 @@ export class PgVisitor extends Visitor {
   //     } else if (column.includes("/")) {
   //       const temp = column.split("/");        
   //       if (tempEntity.relations.hasOwnProperty(temp[0])) {
-  //         const relation = relationInfos(this.ctx.config, tempEntity.name, temp[0]);
+  //         const relation = relationInfos(this.ctx.service, tempEntity.name, temp[0]);
   //         column = `(SELECT ${doubleQuotesString(temp[1])} FROM ${doubleQuotesString(relation.table)} WHERE ${expand(this.ctx,tempEntity.name, temp[0])} AND length(${doubleQuotesString(temp[1])}::text) > 2)`;
   //         if (tempEntity.columns.hasOwnProperty(_TESTENCODING))  test = `(SELECT ${doubleQuotesString(_TESTENCODING)} FROM ${doubleQuotesString(relation.table)} WHERE ${expand(this.ctx,tempEntity.name, temp[0])})`;
   //       }
   //     } else if (!tempEntity.columns.hasOwnProperty(column)) {        
   //       if (tempEntity.relations.hasOwnProperty(column)) {
-  //         const relation = relationInfos(this.ctx.config, tempEntity.name, column);        
+  //         const relation = relationInfos(this.ctx.service, tempEntity.name, column);        
   //         column = `(SELECT ${doubleQuotesString(relation.column)} FROM ${doubleQuotesString(relation.table)} WHERE ${expand(this.ctx,tempEntity.name, column)} AND length(${doubleQuotesString(relation.column)}::text) > 2)`;
   //         if (tempEntity.columns.hasOwnProperty(_TESTENCODING))  test = _TESTENCODING;
   //       } else if (this.ctx.model[this.parentEntity as keyof object].columns.hasOwnProperty(column)) {
-  //         const relation = relationInfos(this.ctx.config, tempEntity.name, column);        
+  //         const relation = relationInfos(this.ctx.service, tempEntity.name, column);        
   //         column = `(SELECT ${doubleQuotesString(relation.column)} FROM ${doubleQuotesString(relation.table)} WHERE ${expand(this.ctx,tempEntity.name, column)} AND length(${doubleQuotesString(relation.column)}::text) > 2)`;
   //         if (tempEntity.columns.hasOwnProperty(_TESTENCODING))  test = _TESTENCODING;
   //       } else throw new Error(`Invalid column ${column}`);
@@ -612,7 +612,7 @@ export class PgVisitor extends Visitor {
       if (column.includes("/")) {
         const temp = column.split("/");
         if (entity && entity.relations.hasOwnProperty(temp[0])) {
-          const tempEntity = models.getEntity(this.ctx.config, temp[0]);
+          const tempEntity = models.getEntity(this.ctx.service, temp[0]);
           if (tempEntity) return temp[1];
         }
       } 
@@ -627,9 +627,9 @@ export class PgVisitor extends Visitor {
       // if (FeatureOfInterest/feature)
       if (this.entity && test.includes("/")) {
         const tests = test.split("/");
-        const relation =  relationInfos(this.ctx.config, this.entity.name, tests[0]);
+        const relation =  relationInfos(this.ctx, this.entity.name, tests[0]);
         if (relation) {
-          const relationEntity = models.getEntity(this.ctx.config, tests[0]);
+          const relationEntity = models.getEntity(this.ctx.service, tests[0]);
           if (relationEntity) this.subQuery.from.push(relationEntity.table);
           this.query.where.add(`${formatPgTableColumn(relation.table, relation.leftKey)} = "src"."id"`);
           return formatPgTableColumn(tests[0], tests[1]);

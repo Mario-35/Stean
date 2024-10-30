@@ -35,7 +35,7 @@ export class OdataGeoColumn {
     if (tempEntity) {
       if (this.column.includes(".")) {
         const temp = this.column.split(".");
-        const tm = models.getEntity(this.src.ctx.config, temp[0]);
+        const tm = models.getEntity(this.src.ctx.service, temp[0]);
         if (tm && tm.columns.hasOwnProperty(temp[1])) {
           this.src.subQuery.select = `"featureofinterest"."id"`;
           this.src.subQuery.where = `CASE WHEN "${EConstant.encoding}" LIKE '%geo+json' THEN ST_GeomFromEWKT(ST_GeomFromGeoJSON(coalesce(${doubleQuotesString(temp[1])}->'geometry',${doubleQuotesString(temp[1])}))) ELSE ST_GeomFromEWKT(${doubleQuotesString(temp[1])}::text) END`;
@@ -45,17 +45,17 @@ export class OdataGeoColumn {
       } else if (this.column.includes("/")) {
         const temp = this.column.split("/");        
         if (tempEntity.relations.hasOwnProperty(temp[0])) {
-          const relation = relationInfos(this.src.ctx.config, tempEntity.name, temp[0]);
+          const relation = relationInfos(this.src.ctx, tempEntity.name, temp[0]);
           this.column = `(SELECT ${doubleQuotesString(temp[1])} FROM ${doubleQuotesString(relation.table)} WHERE ${expand(this.src.ctx,tempEntity.name, temp[0])} AND length(${doubleQuotesString(temp[1])}::text) > 2)`;
           if (tempEntity.columns.hasOwnProperty(EConstant.encoding))  test = `(SELECT ${doubleQuotesString(EConstant.encoding)} FROM ${doubleQuotesString(relation.table)} WHERE ${expand(this.src.ctx,tempEntity.name, temp[0])})`;
         }
       } else if (!tempEntity.columns.hasOwnProperty(this.column)) {        
         if (tempEntity.relations.hasOwnProperty(this.column)) {
-          const relation = relationInfos(this.src.ctx.config, tempEntity.name, this.column);        
+          const relation = relationInfos(this.src.ctx, tempEntity.name, this.column);        
           this.column = `(SELECT ${doubleQuotesString(relation.column)} FROM ${doubleQuotesString(relation.table)} WHERE ${expand(this.src.ctx,tempEntity.name, this.column)} AND length(${doubleQuotesString(relation.column)}::text) > 2)`;
           if (tempEntity.columns.hasOwnProperty(EConstant.encoding))  test = EConstant.encoding;
         } else if (this.src.ctx.model[this.src.parentEntity as keyof object].columns.hasOwnProperty(this.column)) {
-          const relation = relationInfos(this.src.ctx.config, tempEntity.name, this.column);        
+          const relation = relationInfos(this.src.ctx, tempEntity.name, this.column);        
           this.column = `(SELECT ${doubleQuotesString(relation.column)} FROM ${doubleQuotesString(relation.table)} WHERE ${expand(this.src.ctx,tempEntity.name, this.column)} AND length(${doubleQuotesString(relation.column)}::text) > 2)`;
           if (tempEntity.columns.hasOwnProperty(EConstant.encoding))  test = EConstant.encoding;
         } else throw new Error(`Invalid this.column ${this.column}`);

@@ -31,6 +31,7 @@ export { IstreamInfos } from "./streamInfos";
 export { Iuser } from "./user";
 export { IuserToken } from "./userToken";
 export { IdecodedUrl } from "./decodedUrl";
+export { IqueryMaker } from "./queryMaker";
 export { IforwardConnection } from "./forwardConnection";
 export { IvisitRessource } from "./visitRessource";
 export interface IKeyBoolean { [key: string]: boolean; }

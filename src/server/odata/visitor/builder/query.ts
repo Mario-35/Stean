@@ -80,7 +80,7 @@ export class Query  {
         this.isFile = isFile(element.ctx);
         if (this.isFile === true && element.query.select.toString() === "*" ) return element.columnSpecials["result"];
          // get good entity name
-        const tempEntity = models.getEntity(main.ctx.config, tableName);
+        const tempEntity = models.getEntity(main.ctx.service, tableName);
         if (!tempEntity) {
             console.log(log.error("no entity For", tableName));
             return;
@@ -110,12 +110,12 @@ export class Query  {
             ? Object.keys(tempEntity.columns)
                 .filter((word) => !word.includes("_"))
                 .filter(e => !(e === "result" && element.splitResult))
-                .filter(e => !tempEntity.columns[e].extensions || tempEntity.columns[e].extensions && containsAll(main.ctx.config.extensions, tempEntity.columns[e].extensions) === true || "")
+                .filter(e => !tempEntity.columns[e].extensions || tempEntity.columns[e].extensions && containsAll(main.ctx.service.extensions, tempEntity.columns[e].extensions) === true || "")
             : element.query.select.toString().split(EConstant.columnSeparator).filter((word: string) => word.trim() != "").map(e => removeFirstEndDoubleQuotes(e));
             // loop on columns            
         columns.map((column: string) => {
             if (element.columnSpecials.hasOwnProperty(column)) return element.columnSpecials[column].join();
-            return this.formatedColumn(main.ctx.config, tempEntity, column, { valueskeys: element.valueskeys, quoted: true, table: true, alias: ["id", "result"].includes(column), as: isGraph(main) ? false : true } ) || "";
+            return this.formatedColumn(main.ctx.service, tempEntity, column, { valueskeys: element.valueskeys, quoted: true, table: true, alias: ["id", "result"].includes(column), as: isGraph(main) ? false : true } ) || "";
         }) .filter(e => e != "" ).forEach((e: string) => {             
             if (e === "selfLink") e = selfLink;             
             const testIsCsvOrArray = isDataArray(element);
@@ -152,7 +152,7 @@ export class Query  {
             // if not null            
             if (select) {
                 // Get real entity name (plural)
-                // const element.entity.name = models.getEntityName(main.ctx.config, element.entity.name);                
+                // const element.entity.name = models.getEntityName(main.ctx.service, element.entity.name);                
                 if (element.entity) {
                     // Create relations list
                     const relations: string[] = Object.keys(element.entity.relations);
@@ -162,29 +162,29 @@ export class Query  {
                         const index = relations.indexOf(name);
                         // if is relation
                         if (element.entity && index >= 0) {
-                            item.entity = models.getEntity(main.ctx.config, name);    ;
+                            item.entity = models.getEntity(main.ctx.service, name);    ;
                             item.query.where.add(`${item.query.where.notNull() === true ?  " AND " : ''}${expand(main.ctx, element.entity.name, name)}`); 
                             // create sql query for this relatiion (IN JSON result)   
                             const query = this.pgQueryToString(this.create(item, false));
                             if (query) relations[index] = `(${asJson({ 
                                 query: query, 
-                                singular : models.isSingular(main.ctx.config, name),
-                                strip: main.ctx.config.options.includes(EOptions.stripNull),
+                                singular : models.isSingular(main.ctx.service, name),
+                                strip: main.ctx.service.options.includes(EOptions.stripNull),
                                 count: false })}) AS ${doubleQuotesString(name)}`;
                             else throw new Error(errors.invalidQuery);
                         }
                     });
                     // create all relations Query
                     if (toWhere === false) relations
-                        .filter(e => e.includes('SELECT') || Object.keys(main.ctx.model).includes(models.getEntityName(main.ctx.config, e) || e))
+                        .filter(e => e.includes('SELECT') || Object.keys(main.ctx.model).includes(models.getEntityName(main.ctx.service, e) || e))
                         .forEach((rel: string) => {
                             if (rel[0] == "(") select.push(rel);
                             else if (element.entity && element.showRelations == true && main.onlyRef == false ) {
-                                const tempTable = models.getEntityName(main.ctx.config, rel);
+                                const tempTable = models.getEntityName(main.ctx.service, rel);
                                 let stream: string | undefined = undefined;
-                                const relation = relationInfos(main.ctx.config, element.entity.name, rel);
+                                const relation = relationInfos(main.ctx, element.entity.name, rel);
                                 if (tempTable && !relation.rightKey.startsWith("_"))
-                                    if ( main.ctx.config.options.includes(EOptions.stripNull) && element.entity.name === main.ctx.model[allEntities.Observations].name && tempTable.endsWith(main.ctx.model[allEntities.Datastreams].name)) stream = `CASE WHEN ${main.ctx.model[tempTable].table}_id NOTNULL THEN`;
+                                    if ( main.ctx.service.options.includes(EOptions.stripNull) && element.entity.name === main.ctx.model[allEntities.Observations].name && tempTable.endsWith(main.ctx.model[allEntities.Datastreams].name)) stream = `CASE WHEN ${main.ctx.model[tempTable].table}_id NOTNULL THEN`;
                                         select.push(`${stream ? stream : ""} CONCAT('${main.ctx.decodedUrl.root}/${element.entity.name}(', ${doubleQuotesString(element.entity.table)}."id", ')/${rel}') ${stream ? "END ": ""}AS "${rel}${EConstant.navLink}"`);                            
                                         main.addToIntervalColumns(`'${main.ctx.decodedUrl.root}/${element.entity.name}(0)/${rel}' AS "${rel}${EConstant.navLink}"`);
                             }

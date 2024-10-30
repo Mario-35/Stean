@@ -7,7 +7,7 @@
  */
 
 import { createEntity } from ".";
-import { EConstant, ERelations, ETable } from "../../enums";
+import { EConstant, EDataType, ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _text } from "./constants";
 import { doubleQuotesString } from "../../helpers";
@@ -23,16 +23,19 @@ import { doubleQuotesString } from "../../helpers";
            return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotesString(EConstant.id)}`: ''}` ;
         },
         type: "number",
+        dataType: EDataType.bigint
       },
       name: {
         create: _text('no name'),
         alias() {},
         type: "text",
+        dataType: EDataType.text
       },
       description: {
         create: _text('no description'),
         alias() {},
         type: "text",
+        dataType: EDataType.text
       },
       encodingType: {
         create: _text('application/pdf'),
@@ -42,11 +45,13 @@ import { doubleQuotesString } from "../../helpers";
           SensorML: "http://www.opengis.net/doc/IS/SensorML/2.0",
         },
         type: "list",
+        dataType: EDataType._text
       },
       metadata: {
         create: _text('none.pdf'),
         alias() {},
         type: "text",
+        dataType: EDataType.text
       },
     },
     constraints: {

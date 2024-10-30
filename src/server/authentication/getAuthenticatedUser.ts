@@ -13,10 +13,10 @@ import { decrypt } from "../helpers";
 import { Iuser, koaContext } from "../types";
 import { blankUser } from "../views/helpers/";
 export const getAuthenticatedUser = async ( ctx: koaContext ): Promise<Iuser | undefined> => {
-  if (!ctx.config.extensions.includes(EExtensions.users)) return blankUser(ctx);
+  if (!ctx.service.extensions.includes(EExtensions.users)) return blankUser(ctx);
   const token = decodeToken(ctx);  
   if (token && token.id > 0) {
-    const user = await userAccess.getSingle(ctx.config.name, token.id); 
+    const user = await userAccess.getSingle(ctx.service.name, token.id); 
     if (user && token.password.match(decrypt(user["password"])) !== null) return Object.freeze(user);    
   }
   return undefined;

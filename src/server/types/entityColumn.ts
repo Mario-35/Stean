@@ -7,8 +7,8 @@
  */
 
 import { IKeyString, IKeyBoolean, Iservice, typeExtensions } from ".";
-export interface IentityColumn {
-    [key: string]: {
+import { EDataType } from "../enums";
+export interface IentityColumn {    
         readonly create:    string;
         extensions?:        typeof typeExtensions;
         alias(config:       Iservice, test?: IKeyBoolean): string | undefined | void;
@@ -16,9 +16,9 @@ export interface IentityColumn {
         readonly test?:     string;
         readonly dataList?: IKeyString;
         readonly type:      string;
+        readonly dataType:  EDataType;
         readonly verify?: {
             list: string[];
             default: string;
         }
     };
-}

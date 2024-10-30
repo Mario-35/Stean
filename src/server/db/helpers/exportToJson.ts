@@ -11,7 +11,7 @@ import { doubleQuotesString, asyncForEach, getUrlKey, hidePassword, removeEmpty 
 import { koaContext } from "../../types";
 export const exportToJson = async (ctx: koaContext) => {
   // get config with hidden password
-  const result: Record<string, any> = { "create": hidePassword(config.getService(ctx.config.name))};
+  const result: Record<string, any> = { "create": hidePassword(config.getService(ctx.service.name))};
   // get entites list
   const entities = Object.keys(ctx.model).filter((e: string) => ctx.model[e].createOrder > 0);
   // add ThingsLocations
@@ -34,7 +34,7 @@ export const exportToJson = async (ctx: koaContext) => {
         const columnListWithQuotes = columnList.map(e => doubleQuotesString(e)).join();        
         if (columnListWithQuotes.length <= 1) rels.shift();
         // Execute query        
-        const tempResult = await config.connection(ctx.config.name).unsafe(`select ${columnListWithQuotes}${rels.length > 1 ? rels.join() : ""}\n FROM "${ctx.model[entity].table}" LIMIT ${getUrlKey(ctx.request.url, "limit") || ctx.config.nb_page}`);  
+        const tempResult = await config.connection(ctx.service.name).unsafe(`select ${columnListWithQuotes}${rels.length > 1 ? rels.join() : ""}\n FROM "${ctx.model[entity].table}" LIMIT ${getUrlKey(ctx.request.url, "limit") || ctx.service.nb_page}`);  
         // remove null and store datas result 
         result[entity] = removeEmpty(tempResult);        
       }  

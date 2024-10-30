@@ -14,6 +14,7 @@ export { EColor } from "./colors";
 export { EConstant } from "./constant";
 export { EColumnType } from "./colType";
 export { EDatesType } from "./datesType";
+export { EDataType } from "./dataType";
 export { EFileName } from "./fileName";
 export { EFrom } from "./from";
 export { allEntities, allEntitiesType, filterEntities } from "./entities";

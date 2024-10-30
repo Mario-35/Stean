@@ -10,7 +10,7 @@ import { Common } from "./common";
 import { IreturnResult, koaContext } from "../../types";
 import { config } from "../../configuration";
 import { hideKeysInJson, hidePassword } from "../../helpers";
-import { addToService, createService } from "../helpers";
+import { createService } from "../helpers";
 import { userAuthenticated } from "../../authentication";
 import { log } from "../../log";
 import { EExtensions, EHttpCode } from "../../enums";
@@ -29,7 +29,7 @@ export class Services extends Common {
     // Return result If not authorised    
     if (!can) 
         return this.formatReturnResult({
-          body: hidePassword(config.getService(this.ctx.config.name))
+          body: hidePassword(config.getService(this.ctx.service.name))
         });    
     // Return result
     return this.formatReturnResult({
@@ -45,20 +45,16 @@ export class Services extends Common {
     // Return result
     return this.formatReturnResult({
       body: hideKeysInJson(
-        config.getService( typeof this.ctx.odata.id === "string" ? this.ctx.odata.id  : this.ctx.config.name ), ["entities"] ),
+        config.getService( typeof this.ctx.odata.id === "string" ? this.ctx.odata.id  : this.ctx.service.name ), ["entities"] ),
     });
   }
   
   async post(dataInput: Record<string, any> | undefined): Promise<IreturnResult | undefined> {
     console.log(log.whereIam());
-    if (!this.ctx.config.extensions.includes(EExtensions.users)) this.ctx.throw(EHttpCode.Unauthorized);
+    if (!this.ctx.service.extensions.includes(EExtensions.users)) this.ctx.throw(EHttpCode.Unauthorized);
     if (dataInput && dataInput["create"] && dataInput["create"]["name"]) {
       return this.formatReturnResult({
-        body: await createService(dataInput, this.ctx),
-      });
-    } else if (dataInput && dataInput["add"] && dataInput["add"]["name"]) {
-      return this.formatReturnResult({
-        body: await addToService(this.ctx, dataInput),
+        body: await createService(this.ctx, dataInput),
       });
     }
     if (!userAuthenticated(this.ctx)) this.ctx.throw(EHttpCode.Unauthorized);    

@@ -71,7 +71,7 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
             query: input.toString(),
             singular: false,
             count: true,
-            strip: input.ctx.config.options.includes(EOptions.stripNull),
+            strip: input.ctx.service.options.includes(EOptions.stripNull),
             fullCount: input.count === true ? input.toPgQuery()?.count : undefined,
             fields: generateFields(input),
           });

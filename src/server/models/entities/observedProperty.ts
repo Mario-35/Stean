@@ -7,7 +7,7 @@
  */
 
 import { createEntity } from ".";
-import { EConstant, ERelations, ETable } from "../../enums";
+import { EConstant, EDataType, ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _text } from "./constants";
 import { doubleQuotesString } from "../../helpers";
@@ -23,21 +23,25 @@ export const ObservedProperty:Ientity  = createEntity("ObservedProperties", {
                 return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotesString(EConstant.id)}`: ''}` ;
             },
             type: "number",
+            dataType: EDataType.bigint
         },
         name: {
             create: _text('no name'),
             alias() {},
             type: "text",
+            dataType: EDataType.text
         },
         definition: {
             create: _text('no definition'),
             alias() {},
             type: "text",
+            dataType: EDataType.text
         },
         description: {
             create: _text('no description'),
             alias() {},
             type: "text",
+            dataType: EDataType.text
         },
     },
     constraints: {
