@@ -15,8 +15,6 @@ import { Admin, First, Service } from "../../views";
 import { EHttpCode } from "../../enums";
 
 function formatConfig(input: Record<string, any>, admin?: boolean): Record<string, any> {
-  console.log("-----------------------------------formatConfig----------------------------------------------");
-  console.log(input);
   const name = admin ? "admin" : input.name.toLowerCase();
   return {
       "name": name,
@@ -47,11 +45,7 @@ export async function firstInstall(ctx: koaContext): Promise<IdecodedUrl | undef
   
   // If Configuration file Not exist first Install
   const why: IKeyString = {};
-  console.log(ctx.request.body);
-  console.log("-----------------------------------firstInstall----------------------------------------------");
   const src = JSON.parse(JSON.stringify(ctx.request.body, null, 2));
-  console.log(src);
-
   function verifyItems(src: any, search: string[]): boolean {
     let error = false;
     function verifyItem(search: string) {
@@ -95,11 +89,7 @@ export async function firstInstall(ctx: koaContext): Promise<IdecodedUrl | undef
         }
 
       case "_first":
-        console.log("avant ____________________________");
-        console.log(src);
         if (verifyItems(src, ["host", "adminname", "port", "adminpassword", "repeat"]) === false) {
-          console.log("apres ____________________________");
-          console.log(src);
           if (src["adminpassword"] === src["repeat"]) {
             const testConnection = await postgres( `postgres://${src["adminname"]}:${src["adminpassword"]}@${src["host"]}:${src["port"]}/postgres`,
               {})`select 1+1 AS result`.then(async () => true)

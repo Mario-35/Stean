@@ -98,8 +98,6 @@ function simpleClick(link) {
 function openClick(link) {
 	if (link[link.length-1] === '"') link = link.slice(0, -1);
 	if (link[0] === '"') link = link.slice(1);
-	console.log("===========================================================");
-	console.log(link.trim());
 	window.open(link.trim(), '_blank').focus();
 }
 

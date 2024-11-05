@@ -159,7 +159,6 @@ function init() {
 	optHost.value = _PARAMS.decodedUrl.linkbase;
 	if (_PARAMS.datas) datas.json_value = _PARAMS.datas;
 	queryOptions.value = _PARAMS.options;
-	console.log(window.location.href);
 	if (window.location.href.includes('Query?')) decodeUrl(window.location.href);
 	jsonViewer = new JSONViewer();
 }

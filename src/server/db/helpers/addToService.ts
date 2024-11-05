@@ -16,7 +16,6 @@ import { apiAccess } from "../dataAccess";
 import { executeSqlValues } from "./executeSqlValues";
 export const addToService = async (ctx: koaContext, dataInput: Record<string, any>): Promise<Record<string, any>> => {
   console.log(log.whereIam());
-  console.log(dataInput);
   const results = {};    
   const temp = blankRootPgVisitor(ctx, ctx.model.Loras);
   if (temp) {

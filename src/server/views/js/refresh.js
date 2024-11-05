@@ -30,7 +30,6 @@ function refresh() {
 }
 
 function refresh_entity() {
-	console.log("refresh_entity");
 	const relations = getRelationsList(entityOption.value);
 	if (!relations.includes(subentityOption.value)) {
 		subentityOption.options.length = 0;

@@ -42,8 +42,7 @@ export async function queryInsertFromCsv( ctx: koaContext, paramsFile: IcsvFile 
            FROM "${ paramsFile.tempTable }" ON CONFLICT DO NOTHING returning 1`);
         }
       );
-
-      console.log(paramsFile);
+      
       const essai:string[] = [];
       Object.keys(paramsFile.columns).forEach((myColumn) => {
         const csvColumn: IcsvColumn = paramsFile.columns[myColumn as keyof object];
@@ -53,7 +52,6 @@ export async function queryInsertFromCsv( ctx: koaContext, paramsFile: IcsvFile 
               ELSE CAST(REPLACE(value${csvColumn.column},',','.') AS float) 
             END`);
       });
-      console.log(essai);
       
       // Object.keys(paramsFile.columns).forEach(
       //   (myColumn: string, index: number) => {

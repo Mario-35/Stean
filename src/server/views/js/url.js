@@ -193,9 +193,7 @@
     directLink = `${directLink}${addMark}${queryOptions.join("&$")}`;
     queryLink = `${queryLink}&${encodeURI(queryOptions.join("&"))}`;
     directLink = cleanUrl(directLink);
-    queryLink = cleanUrl(queryLink).split("&").join("&$");
-    console.log(queryLink);
-    
+    queryLink = cleanUrl(queryLink).split("&").join("&$");    
     if (isDebug) {
       console.log(`direct : ${directLink}`);
       console.log(`query : ${queryLink}`);

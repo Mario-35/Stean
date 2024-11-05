@@ -96,8 +96,6 @@ export class PgVisitor extends Visitor {
           : undefined;
           
     if (input.startsWith( "result/")) {
-      console.log(input);
-        
         this.columnSpecials["result"] = input.split("result/")[1].split("/").map(e => `"result"->'value'->'${e}' AS "${e}"`);
         return "result";
     }
@@ -314,10 +312,7 @@ export class PgVisitor extends Visitor {
   }
   protected VisitSelectItem(node: Token, context: IodataContext) {
     const tempColumn = this.getColumn(node.raw, "", context); 
-    if (isFile(this.ctx)) {
-      console.log('________________________________________________________');
-      console.log(this.ctx.columnSpecials);
-      
+    if (isFile(this.ctx)) {      
       context.identifier = `(result->'valueskeys')->>'${node.raw}' AS "${node.raw}"`;  
       // this.ctx.columnSpecials["result"] =`(result->'valueskeys')->>'${node.raw}' AS "${node.raw}"`;
     } else context.identifier = tempColumn ? tempColumn : node.raw;

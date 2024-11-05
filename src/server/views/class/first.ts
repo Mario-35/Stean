@@ -24,8 +24,6 @@ export class First extends CoreHtmlView {
         this.first(datas);
     }
     private first(datas: Idatas) {
-      console.log(datas);
-      
       const alert = (name: string): string => (datas.why && datas.why[name] ? `<div class="alert">${datas.why[name]}</div>` : "");
         this._HTMLResult = [`
             <!DOCTYPE html>
