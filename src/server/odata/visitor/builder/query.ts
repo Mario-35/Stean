@@ -12,7 +12,7 @@ import { asJson } from "../../../db/queries";
 import { Iservice, Ientity, IKeyBoolean, IpgQuery } from "../../../types";
 import { PgVisitor, RootPgVisitor } from "..";
 import { models } from "../../../models";
-import { allEntities, EConstant, EOptions } from "../../../enums";
+import { allEntities, EConstant, EDataType, EOptions } from "../../../enums";
 import { GroupBy, Key, OrderBy, Select, Where, Join } from ".";
 import { errors } from "../../../messages";
 import { log } from "../../../log";
@@ -60,13 +60,11 @@ export class Query  {
         if (entity.columns[column]) {
             // is column have alias
             const alias = entity.columns[column].alias(service, options);
-            // const alias = entity.columns[column].alias(service, options ? options : undefined);
             if (this.isCalcColumn(alias || column) === true) return alias || column;                
             if (options) {                    
-            if (alias && options["alias"] === true) return column === "id" ? `${doubleQuotesString(entity.table)}.${alias}` : alias;
+                if (alias && options["alias"] === true) return column === "id" ? `${doubleQuotesString(entity.table)}.${alias}` : alias;
                 let result: string = "";
                 if (options["table"] === true) result += `${doubleQuotesString(entity.table)}.`;
-                // if (options["table"] === true && (testIn(alias || column) === false)) result += `${doubleQuotesString(entity.table)}.`;
                 result += alias || options["quoted"] === true ? doubleQuotesString(column) : column;
                 if (options["as"] === true || (alias && alias.includes("->")) ) result += ` AS ${doubleQuotesString(column)}`;
                 return result;
@@ -76,6 +74,7 @@ export class Query  {
         if  (column.startsWith( "(SELECT")) return  column; 
         if (this.isFile === true) return `(result->'valueskeys')->>'${column}' AS "${column}"`;
     };
+
     private columnList(tableName: string, main: PgVisitor, element: PgVisitor): string[] | undefined  {
         this.isFile = isFile(element.ctx);
         if (this.isFile === true && element.query.select.toString() === "*" ) return element.columnSpecials["result"];
@@ -109,7 +108,7 @@ export class Query  {
         const columns:string[] = (element.query.select.toString() === "*" || element.query.select.toString() === "")
             ? Object.keys(tempEntity.columns)
                 .filter((word) => !word.includes("_"))
-                .filter(e => !(e === "result" && element.splitResult))
+                .filter(e => !(tempEntity.columns[e].dataType === EDataType.result && element.splitResult))
                 .filter(e => !tempEntity.columns[e].extensions || tempEntity.columns[e].extensions && containsAll(main.ctx.service.extensions, tempEntity.columns[e].extensions) === true || "")
             : element.query.select.toString().split(EConstant.columnSeparator).filter((word: string) => word.trim() != "").map(e => removeFirstEndDoubleQuotes(e));
             // loop on columns            
@@ -222,6 +221,7 @@ export class Query  {
                 : ''}` 
             : undefined;
     }
+
     toWhere(main: RootPgVisitor | PgVisitor, _element?: PgVisitor): string {
         console.log(log.whereIam());
         this._pgQuery = this.create(main, true, _element);
@@ -234,6 +234,7 @@ export class Query  {
         }
         throw new Error(errors.invalidQuery);
     }
+
     toString(main: RootPgVisitor | PgVisitor, _element?: PgVisitor): string {
         console.log(log.whereIam());
         if(!this._pgQuery) this._pgQuery = this.create(main, false, _element);
@@ -247,6 +248,7 @@ export class Query  {
         if(!this._pgQuery) this._pgQuery = this.create(main, false, _element);
         return this._pgQuery;
     }
+    
     addFrom(input: string) {
         this.from = input;
     }

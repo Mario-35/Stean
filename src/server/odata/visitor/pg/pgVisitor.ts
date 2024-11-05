@@ -628,10 +628,10 @@ export class PgVisitor extends Visitor {
       if (this.entity && test.includes("/")) {
         const tests = test.split("/");
         const relation =  relationInfos(this.ctx, this.entity.name, tests[0]);
-        if (relation) {
+        if (relation && relation.entity) {
           const relationEntity = models.getEntity(this.ctx.service, tests[0]);
           if (relationEntity) this.subQuery.from.push(relationEntity.table);
-          this.query.where.add(`${formatPgTableColumn(relation.table, relation.leftKey)} = "src"."id"`);
+          this.query.where.add(`${formatPgTableColumn(relation.entity.table, relation.leftKey)} = "src"."id"`);
           return formatPgTableColumn(tests[0], tests[1]);
         }
       }

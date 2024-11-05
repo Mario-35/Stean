@@ -29,7 +29,7 @@ export function createInsertValues(ctx: koaContext | undefined, input: Record<st
             if (!entity) return "";
             Object.keys(input).forEach((elem: string ) => {
                 if (input[elem] && entity.columns[elem]) {
-                  const temp = formatColumnValue(elem, input[elem], entity.columns[elem].type);
+                  const temp = formatColumnValue(elem, input[elem], entity.columns[elem]);
                   if (temp) {
                     keys.push(doubleQuotesString(elem));
                     values.push(temp);
@@ -37,7 +37,7 @@ export function createInsertValues(ctx: koaContext | undefined, input: Record<st
                 } else if (input[elem] && entity.relations[elem]) {
                   const relation = relationInfos(ctx, entity.name, elem);
                   if (entity.columns[relation.column]) {
-                    const temp = formatColumnValue(relation.column, input[elem], entity.columns[relation.column].type);
+                    const temp = formatColumnValue(relation.column, input[elem], entity.columns[relation.column]);
                     if (temp) {
                       keys.push(doubleQuotesString(relation.column));
                       values.push(temp);

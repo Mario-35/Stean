@@ -37,7 +37,7 @@ export const relationInfos = (ctx: koaContext, entityName: string, relationName:
             let rightKey = _Key(rightEntity, leftEntity);
             
             const fnError = (): IrelationInfos => {
-                return {type: "ERROR", rightKey: "", leftKey: "", entity: undefined, table : "cardinality ERROR", column: "cardinality ERROR", expand :  '', link :  '' };
+                return {type: "ERROR", rightKey: "", leftKey: "", entity: undefined, column: "cardinality ERROR", expand :  '', link :  '' };
             }
             const fnHasMany = () => {
                 const complexEntity = models.getEntity(ctx.service, `${leftEntity.name}${rightEntity.name}`) || models.getEntity(ctx.service, `${rightEntity.name}${leftEntity.name}`) || models.getEntity(ctx.service, `${leftEntity.singular}${rightEntity.singular}`) || models.getEntity(ctx.service, `${rightEntity.singular}${leftEntity.singular}`);
@@ -49,7 +49,6 @@ export const relationInfos = (ctx: koaContext, entityName: string, relationName:
                         leftKey: leftKey,
                         rightKey: rightKey,
                         entity: complexEntity,
-                        table: complexEntity.table,
                         column: idColumnName(leftEntity, rightEntity) || "id",
                         link: `${formatPgTableColumn(rightEntity.table, "id")} IN (SELECT ${formatPgTableColumn(complexEntity.table, rightKey)} FROM ${formatPgTableColumn(complexEntity.table)} WHERE ${formatPgTableColumn(complexEntity.table, leftKey)} =$ID)`,
                         expand: '', 
@@ -71,7 +70,6 @@ export const relationInfos = (ctx: koaContext, entityName: string, relationName:
                                     leftKey: leftKey,
                                     rightKey: rightKey,
                                     entity: leftEntity,
-                                    table: leftEntity.table,
                                     column: idColumnName(leftEntity, rightEntity) || "id",
                                     link: `${formatPgTableColumn(rightEntity.table, rightKey)} IN (SELECT ${formatPgTableColumn(rightEntity.table, rightKey)} FROM ${formatPgTableColumn(rightEntity.table)} WHERE ${formatPgTableColumn(rightEntity.table, rightKey)} =$ID)`,
                                     expand: ''
@@ -93,7 +91,6 @@ export const relationInfos = (ctx: koaContext, entityName: string, relationName:
                                     leftKey: leftKey,
                                     rightKey: rightKey,
                                     entity: leftEntity,
-                                    table: leftEntity.table,
                                     column: idColumnName(leftEntity, rightEntity) || "id",
                                     link: `${formatPgTableColumn(rightEntity.table, rightKey)} = (SELECT ${formatPgTableColumn(leftEntity.table, leftKey)} FROM ${formatPgTableColumn(leftEntity.table)} WHERE ${formatPgTableColumn(leftEntity.table, rightKey)} =$ID)`,
                                     expand: `${formatPgTableColumn(rightEntity.table, rightKey)} = ${formatPgTableColumn(leftEntity.table, leftKey)}`,
@@ -111,7 +108,6 @@ export const relationInfos = (ctx: koaContext, entityName: string, relationName:
                                             leftKey: leftKey,
                                             rightKey: rightKey,
                                             entity: leftEntity,
-                                            table: leftEntity.table,
                                             column: idColumnName(leftEntity, rightEntity) || "id",
                                             expand: `${formatPgTableColumn(rightEntity.table, "id")} IN (SELECT ${formatPgTableColumn(rightEntity.table, "id")} FROM ${formatPgTableColumn(rightEntity.table)} WHERE ${formatPgTableColumn(rightEntity.table, "id")} IN (SELECT ${formatPgTableColumn(complexEntity.table, rightKey)} FROM ${complexEntity.table} WHERE ${formatPgTableColumn(complexEntity.table, leftKey)} = ${formatPgTableColumn(leftEntity.table, leftKey)}))`,
                                             link: `${formatPgTableColumn(rightEntity.table, "id")} IN (SELECT ${formatPgTableColumn(rightEntity.table, "id")} FROM ${formatPgTableColumn(rightEntity.table)} WHERE ${formatPgTableColumn(rightEntity.table, "id")} IN (SELECT ${formatPgTableColumn(complexEntity.table, rightKey)} FROM ${complexEntity.table} WHERE ${formatPgTableColumn(complexEntity.table, leftKey)} IN (SELECT ${formatPgTableColumn(leftEntity.table, leftKey)} FROM ${leftEntity.table} WHERE ${formatPgTableColumn(leftEntity.table, "id")} =$ID)))`,
@@ -125,7 +121,6 @@ export const relationInfos = (ctx: koaContext, entityName: string, relationName:
                                     leftKey: leftKey,
                                     rightKey: rightKey,
                                     entity: leftEntity,
-                                    table: leftEntity.table,
                                     column: idColumnName(leftEntity, rightEntity) || "id",
                                     link: `${formatPgTableColumn(rightEntity.table, rightKey)} = (SELECT ${formatPgTableColumn(leftEntity.table, leftKey)} FROM ${formatPgTableColumn(leftEntity.table)} WHERE ${formatPgTableColumn(leftEntity.table, rightKey)} =$ID)`,
                                     expand: `${formatPgTableColumn(rightEntity.table, rightKey)} = ${formatPgTableColumn(leftEntity.table, leftKey)}`
@@ -147,7 +142,7 @@ export const relationInfos = (ctx: koaContext, entityName: string, relationName:
                                     const tempEntity = models.getEntity(ctx.service, tmp[0]);
                                     if (tempEntity && !loop) {
                                         const tempCardinality = relationInfos(ctx, leftEntity.name, tempEntity.name, true);
-                                        if(complexEntity2) {
+                                        if(complexEntity2 && tempCardinality.entity) {
                                             leftKey = _Key(complexEntity2, rightEntity);
                                             rightKey = _Key(complexEntity2, leftEntity);
                                             r = {
@@ -157,12 +152,11 @@ export const relationInfos = (ctx: koaContext, entityName: string, relationName:
                                                 external: {
                                                     leftKey: tempCardinality.leftKey,
                                                     rightKey: tempCardinality.rightKey,
-                                                    table: tempCardinality.table
+                                                    table: tempCardinality.entity.table
                                                 },
                                                 entity: complexEntity2,
-                                                table: complexEntity2.table,
                                                 column: idColumnName(leftEntity, rightEntity) || "id",
-                                                link: `${formatPgTableColumn(rightEntity.table, "id")} IN (SELECT ${formatPgTableColumn(rightEntity.table, "id")} FROM ${formatPgTableColumn(rightEntity.table)} WHERE ${formatPgTableColumn(rightEntity.table, tempCardinality.rightKey)} IN (SELECT ${formatPgTableColumn(tempCardinality.table, tempCardinality.rightKey)} FROM ${formatPgTableColumn(tempCardinality.table)} WHERE ${formatPgTableColumn(tempCardinality.table, tempCardinality.leftKey)} =$ID))`,
+                                                link: `${formatPgTableColumn(rightEntity.table, "id")} IN (SELECT ${formatPgTableColumn(rightEntity.table, "id")} FROM ${formatPgTableColumn(rightEntity.table)} WHERE ${formatPgTableColumn(rightEntity.table, tempCardinality.rightKey)} IN (SELECT ${formatPgTableColumn(tempCardinality.entity.table, tempCardinality.rightKey)} FROM ${formatPgTableColumn(tempCardinality.entity.table)} WHERE ${formatPgTableColumn(tempCardinality.entity.table, tempCardinality.leftKey)} =$ID))`,
                                                 expand: '', 
                                             }
                                             r.expand = r.link.replace("$ID", formatPgTableColumn(leftEntity.table, "id"));
@@ -180,7 +174,6 @@ export const relationInfos = (ctx: koaContext, entityName: string, relationName:
                                         leftKey: leftKey,
                                         rightKey: rightKey,
                                         entity: complexEntity2,
-                                        table: complexEntity2.table,
                                         column: idColumnName(leftEntity, rightEntity) || "id",
                                         link: `${formatPgTableColumn(rightEntity.table, rightKey)} IN (SELECT ${formatPgTableColumn(complexEntity2.table, idColumnName(complexEntity2, rightEntity) || "id")} FROM ${formatPgTableColumn(complexEntity2.table)} WHERE ${formatPgTableColumn(complexEntity2.table, idColumnName(complexEntity2, leftEntity) || "id")} =$ID)`,
                                         expand: '', 
@@ -206,7 +199,6 @@ export const relationInfos = (ctx: koaContext, entityName: string, relationName:
                                     leftKey: leftKey,
                                     rightKey: rightKey,
                                     entity: leftEntity,
-                                    table: leftEntity.table,
                                     column: idColumnName(leftEntity, rightEntity) || "id",
                                     link: `${formatPgTableColumn(rightEntity.table, leftKey)} IN (SELECT ${formatPgTableColumn(rightEntity.table, leftKey)} FROM ${formatPgTableColumn(rightEntity.table)} WHERE ${formatPgTableColumn(rightEntity.table, rightKey)} =$ID)`,
                                     expand: '',
@@ -220,7 +212,6 @@ export const relationInfos = (ctx: koaContext, entityName: string, relationName:
                                     rightKey: rightKey,
                                     leftKey: leftKey,
                                     entity: rightEntity,
-                                    table: rightEntity.table,
                                     column: idColumnName(leftEntity, rightEntity) || "id",
                                     link: `${formatPgTableColumn(rightEntity.table, "id")} IN (SELECT ${formatPgTableColumn(rightEntity.table, "id")} FROM ${formatPgTableColumn(rightEntity.table)} WHERE ${formatPgTableColumn(rightEntity.table, rightKey)} =$ID)`,
                                     expand: '',
@@ -246,7 +237,6 @@ export const relationInfos = (ctx: koaContext, entityName: string, relationName:
                                     leftKey: leftKey,
                                     rightKey: rightKey,
                                     entity: leftEntity,
-                                    table: leftEntity.table,
                                     column: idColumnName(leftEntity, rightEntity) || "id",
                                     link: `${formatPgTableColumn(rightEntity.table, rightKey)} = (SELECT ${formatPgTableColumn(leftEntity.table, leftKey)} FROM ${formatPgTableColumn(leftEntity.table)} WHERE ${formatPgTableColumn(leftEntity.table, leftKey)} =$ID)`,
                                     expand: `${formatPgTableColumn(rightEntity.table, rightKey)} = ${formatPgTableColumn(leftEntity.table, leftKey)}`,
@@ -261,6 +251,6 @@ export const relationInfos = (ctx: koaContext, entityName: string, relationName:
         errorMessage(`relationInfos [${leftEntity.name} ${leftRelation?.type}] : [${rightEntity.name} ${rightRelation?.type}]`);
     }
     
-    return {type: "ERROR", rightKey: "", leftKey: "", entity: undefined, table : "cardinality ERROR", column: "cardinality ERROR", expand :  '', link :  '' };
+    return {type: "ERROR", rightKey: "", leftKey: "", entity: undefined, column: "cardinality ERROR", expand :  '', link :  '' };
 
 }

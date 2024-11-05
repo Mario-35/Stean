@@ -6,6 +6,7 @@
  *
  */
 
+import { log } from "../../log";
 import { info } from "../../messages";
 import { IKeyString, koaContext } from "../../types";
 import { CoreHtmlView } from "./core";
@@ -18,10 +19,13 @@ interface Idatas {
 
 export class First extends CoreHtmlView {
     constructor(ctx: koaContext, datas: Idatas) {
+        console.log(log.whereIam("View"));
         super(ctx);        
         this.first(datas);
     }
     private first(datas: Idatas) {
+      console.log(datas);
+      
       const alert = (name: string): string => (datas.why && datas.why[name] ? `<div class="alert">${datas.why[name]}</div>` : "");
         this._HTMLResult = [`
             <!DOCTYPE html>
@@ -36,12 +40,13 @@ export class First extends CoreHtmlView {
                     <input id="tab-2" type="radio" name="tab" class="sign-up">
                     <label for="tab-2" class="tab">Help</label>
                     <div class="login-form">
-                      <form action="/install" method="post">
+                      <form action="/service" method="post">
                         <div class="sign-in-htm">
                           ${this.addHidden("_src", "_first")}
                           ${this.addTextInput({name: "host", label: info.host , value: datas.body && datas.body.host || "localhost", alert: alert("host"), toolType: info.least5Tool})}
-                          ${this.addTextInput({name: "username", label: info.user, value: datas.body && datas.body.username || "postgres", alert: alert("username"), toolType: info.least5Tool})}
-                          ${this.addTextInput({name: "password", label: info.pass, password: true, value: "", alert: alert("password"), toolType: info.passTool})}
+                          ${this.addTextInput({name: "port", label: info.pg + " port", value: datas.body && datas.body.port || "5432", toolType: info.portTool, alert: alert("port")})}
+                          ${this.addTextInput({name: "adminname", label: info.user, value: datas.body && datas.body.adminname || "postgres", alert: alert("username"), toolType: info.least5Tool})}
+                          ${this.addTextInput({name: "adminpassword", label: info.pass, password: true, value: "", alert: alert("password"), toolType: info.passTool})}
                           ${this.addTextInput({name: "repeat", label: info.rep, password: true, value: "", alert: alert("repeat"), toolType: info.repTool})}
                           ${this.addSubmitButton(info.dbPgConn)}
                           ${ datas.why && datas.why["_error"] ? this.AddErrorMessage(datas.why["_error"]) : ""}

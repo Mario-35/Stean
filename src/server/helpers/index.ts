@@ -6,7 +6,6 @@
  *
 */
 import { koaContext } from "../types";
-const removeFirstAndEnd = (input: string, char: string) => input[0] === char && input[input.length - 1] === char[0] ? input.slice(0, -1).slice(1).trim() : input;
 export const getUserId = (ctx: koaContext): number => ctx.state.user && ctx.state.user.id ? ctx.state.user.id : -1;
 export const unikeList = (input: string[]) => [...new Set(input)];
 export { isTest, isProduction, isDataArray, isCsv, isGraph, isObservation, isGeoJson, isAdmin,  isAllowedTo, isString , isBoolean , isNumber , isIntegerNumber , isObject, isArray } from "./tests";
@@ -28,6 +27,7 @@ export { removeEmpty } from "./removeEmpty";
 export { upload } from "./upload";
 export { logToHtml } from "./logToHtml";
 export { Csv } from "./csv";
+export const removeFirstAndEnd = (input: string, char: string) => input[0] === char && input[input.length - 1] === char[0] ? input.slice(0, -1).slice(1).trim() : input;
 export const removeAllQuotes = (input: string): string => input.replace(/['"]+/g, "");
 export const escapeSimpleQuotes = (input: string) => input.replace(/[']+/g, "''");
 export const escapeDoubleQuotes = (input: string) => input.replace(/["]+/g, '\\"');

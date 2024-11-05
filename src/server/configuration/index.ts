@@ -360,15 +360,6 @@ class Configuration {
       throw new Error(`No configuration found for ${input} name`);
     }
   }
-
-  public getConfigForExcelExport = (name: string): object=> {
-    const result: Record<string, any> = Object.assign({}, Configuration.services[name].pg);
-    result["password"] = "*****";
-    ["name", "apiVersion", "port", "date_format", "webSite", "nb_page", "forceHttps", "highPrecision", "canDrop", "logFile", "alias", "extensions"].forEach(e => {
-      result[e]= Configuration.services[name][e as keyobj];
-    }); 
-    return result;
-  };
   
   public getConfigNameFromName = (name: string): string | undefined => {
     if (name) {

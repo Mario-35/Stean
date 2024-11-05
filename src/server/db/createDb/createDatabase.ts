@@ -71,7 +71,7 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
   const DB = models.DBFull(configName);  
   // loop to create each table
   await asyncForEach(
-    Object.keys(DB),
+    Object.keys(DB).filter(e => e.trim() !== ""),
     async (keyName: string) => {
       const res = await createTable(configName, DB[keyName], undefined);
       Object.keys(res).forEach((e: string) => log.create(e, res[e]));      
@@ -90,7 +90,7 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
   if (!config.getService(configName).extensions.includes( EExtensions.file ) ) {   
     await asyncForEach( triggers(configName), async (query: string) => {
       const name = query.split(" */")[0].split("/*")[1].trim();
-      await config.connection(configName).unsafe(query)
+      await dbConnection.unsafe(query)
         .then(() => {
           log.create(name, EChar.ok);
         }).catch((error: Error) => {

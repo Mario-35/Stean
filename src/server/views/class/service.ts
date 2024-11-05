@@ -7,6 +7,7 @@
  */
 
 import { EExtensions, enumKeys, EOptions } from "../../enums";
+import { log } from "../../log";
 import { info } from "../../messages";
 import { models } from "../../models";
 import { IKeyString, koaContext } from "../../types";
@@ -19,6 +20,7 @@ interface Idatas {
 }
 export class Service extends CoreHtmlView {
     constructor(ctx: koaContext, datas: Idatas) {
+      console.log(log.whereIam("View"));
       super(ctx);
       this.service(datas);
     }
@@ -55,18 +57,17 @@ export class Service extends CoreHtmlView {
                       <form action="/service" method="post">
                         <div class="sign-in-htm">
                           ${this.addHidden("_src", datas.body._src === "_first" ? "_createService" : "_addService") }
-                          ${this.addHidden("_host", datas.why && datas.why["_host"] ? datas.why["_host"] : "")}
-                          ${this.addHidden("_username", datas.why && datas.why["_username"] ? datas.why["_username"] : "")}
-                          ${this.addHidden("_password", datas.why && datas.why["_password"] ? datas.why["_password"] : "")}
-                          ${this.addTextInput({name: "name", label: "Service name", value: datas.body && datas.body.name || "", alert: alert("name"), toolType: `Name ${info.least5Tool}`})}
-                          ${this.addTextInput({name: "port", label: info.pg + " port", value: datas.body && datas.body.port || "5432", alert: alert("port"), toolType: info.portTool})}
-                          ${this.addTextInput({name: "database", label: `${info.pg} ${info.db} name`, value: "", alert: alert("database"), toolType: `name of ${info.pg} ${info.db}`})} </td>
-                          ${this.addSelect({name: "version", list: models.listVersion().map(e => e.replace("_", ".")) , message: "Select version", value: "", alert: alert("repeat"), toolType: info.repTool})}
-                          ${this.addMultiSelect({name: "extensions", list: enumKeys(EExtensions).filter(e => !["file","base"].includes(e) ) , message: "Select extensions"})}                            
-                          ${this.addMultiSelect({name: "options", list: enumKeys(EOptions) , message: "Select Options"})}
+                          ${this.addHidden("host", datas)}
+                          ${this.addHidden("port", datas)}
+                          ${this.addHidden("adminname", datas)}
+                          ${this.addHidden("adminpassword", datas)}
+                          ${this.addTextInput({name: "name", label: "Service name", value: datas.body && datas.body.name || "", alert: alert("name"), toolType: `Name ${info.least5Tool}`, onlyAlpha: true})}
+                          ${this.addTextInput({name: "database", label: `${info.pg} ${info.db} name`, value: datas.body && datas.body.database || "", alert: alert("database"), toolType: `name of ${info.pg} ${info.db}`, onlyAlpha: true})} </td>
+                          ${this.addSelect({name: "version", list: models.listVersion().map(e => e.replace("_", ".")) , message: "Select version", value: datas.body && datas.body.version || "", alert: alert("repeat"), toolType: info.repTool})}
+                          ${this.addMultiSelect({name: "extensions", list: enumKeys(EExtensions).filter(e => !["file","base"].includes(e) ) , message: "Select Extensions", values: datas.body && datas.body.extensions || [""]})}                            
+                          ${this.addMultiSelect({name: "options",    list: enumKeys(EOptions) , message: "Select Options", values: datas.body && datas.body.options || [""] })}
                         </div> 
                         <div class="sign-up-htm">
-                          ${this.addTextInput({name: "host", label: "host", value: datas.why && datas.why["_host"] ? datas.why["_host"] : "localhost", alert: alert("host"), toolType: `Host ${info.least5Tool}`})}
                           ${this.addTextInput({name: "username", label: info.firstUser, value: "", alert: alert("username"), toolType: `Name ${info.least5Tool}`, disabled: true})}
                           ${this.addTextInput({name: "password", label: `New user ${info.pass}`, password: true, value: datas.body && datas.body.password || "", alert: alert("password"), toolType: info.passTool})}
                           ${this.addTextInput({name: "repeat", label: `${info.rep} ${info.pass}`, password: true, value: "", alert: alert("repeat"), toolType: info.repTool})}
@@ -78,22 +79,30 @@ export class Service extends CoreHtmlView {
                 </div>
               </body>  
               <script>
+                function clsAlphaNoOnly (e) {
+                  var regex = new RegExp("^[a-zA-Z0-9]+$");
+                  var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+                  if (regex.test(str)) {
+                      return true;
+                  }
+                  e.preventDefault();
+                  return false;
+                }
                 function update() { 
-                  regusername.value = regdatabase.value;
-                  if (regversion.value === 'v0.9') {
-                    extensionslora.checked = false;
-                    extensionstasking.checked = false;
-                    extensionsmultiDatastream.checked = false;
-                    extensionshighPrecision.checked = false;
-                    extensionsresultNumeric.checked = false;
+                  username.value = database.value;
+                  if (version.value === 'v0.9') {
+                    
                   }
                 }
-                regusername.addEventListener("change", () => {
+                username.addEventListener("change", () => {
                   update();
                 });
-                regversion.addEventListener("change", () => {
+                version.addEventListener("change", () => {
                   update();
                 });
+                ${this.addMultiJs()}
+                MultiselectDropdown("extensions", "${datas.body.extensions}");
+                MultiselectDropdown("options", "${datas.body.options}");
               </script>                 
             </html>`];
     };

@@ -7,9 +7,17 @@
  */
 
 import { ESCAPE_SIMPLE_QUOTE } from "../../constants";
+import { EDataType } from "../../enums";
 import { doubleQuotesString, simpleQuotesString } from "../../helpers";
 import { log } from "../../log";
-export function createUpdateValues(input: Record<string, any> ): string  {
+import { Ientity } from "../../types";
+export function createUpdateValues(entity: Ientity, input: Record<string, any>): string  {
   console.log(log.whereIam());
-  return  Object.keys(input).map((elem: string) => `${doubleQuotesString(elem)} = ${simpleQuotesString(ESCAPE_SIMPLE_QUOTE(input[elem]))}`).join();
+  // if(entity)
+   return  Object.keys(input).map((elem: string) => `${doubleQuotesString(elem)} = ${
+    input[elem][0] === "{" 
+    ? `${entity.columns[elem].dataType === EDataType.result ? '' : `COALESCE(${doubleQuotesString(elem)}, '{}'::jsonb) ||`} ${simpleQuotesString(ESCAPE_SIMPLE_QUOTE(input[elem]))}::jsonb`
+    : simpleQuotesString(ESCAPE_SIMPLE_QUOTE(input[elem]))
+  }`).join();
+  // else  return  Object.keys(input).map((elem: string) => `${doubleQuotesString(elem)} = ${simpleQuotesString(ESCAPE_SIMPLE_QUOTE(input[elem]))}`).join();
 };

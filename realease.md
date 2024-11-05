@@ -13,5 +13,6 @@
     perform csv 
 ## version 0.9.3
     remove result contraint
-    change version in code
-    
+    change versicnon in code
+## version 0.9.3
+    rewrite services add to respond issue 2 (can't reproduce bug)

@@ -6,10 +6,12 @@
  *
  */
 
+import { log } from "../../log";
 import { koaContext } from "../../types";
 import { CoreHtmlView } from "./core";
 export class HtmlError extends CoreHtmlView {
     constructor(ctx: koaContext, datas: string) {
+        console.log(log.whereIam("View"));
         super(ctx);
         this.error(datas);
     }

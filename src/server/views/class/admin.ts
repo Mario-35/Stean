@@ -6,6 +6,7 @@
  *
  */
 
+import { log } from "../../log";
 import { info } from "../../messages";
 import { IKeyString, koaContext } from "../../types";
 import { CoreHtmlView } from "./core";
@@ -18,8 +19,9 @@ interface Idatas {
 }
 export class Admin extends CoreHtmlView {
     constructor(ctx: koaContext, datas: Idatas) {
-        super(ctx);        
-        this.admin(ctx, datas);
+      console.log(log.whereIam("View"));
+      super(ctx);        
+      this.admin(ctx, datas);
     }
     private admin(ctx: koaContext, datas: Idatas) {
       if (datas.body._src === "_admin") {
@@ -37,9 +39,10 @@ export class Admin extends CoreHtmlView {
                     <div class="login-form">
                       <form action="/service" method="post">
                           ${this.addHidden("_src", "_admin")}
-                          ${this.addHidden("host", "localhost")}
-                          ${this.addTextInput({name: "username", label: info.user, value: datas.body && datas.body.username || "postgres", alert: alert("username")})}
-                          ${this.addTextInput({name: "password", label: info.pass, password: true, value: "", alert: alert("password")})}
+                          ${this.addTextInput({name: "host",          label: info.host,         value: datas.body && datas.body["host"] || "localhost", alert: alert("host")})}
+                          ${this.addTextInput({name: "port",          label: info.pg + " port", value: datas.body && datas.body.port || "5432", toolType: info.portTool, alert: alert("port")})}
+                          ${this.addTextInput({name: "adminname",     label: info.user,         value: datas.body && datas.body.adminname || "postgres",                 alert: alert("adminname")})}
+                          ${this.addTextInput({name: "adminpassword", label: info.pass,         value: "", password: true,                                               alert: alert("adminpassword")})}
                           ${this.hr()}
                           ${this.addSubmitButton(info.conn)}
                           ${ datas.why && datas.why["_error"] ? this.AddErrorMessage(datas.why["_error"]) : ""}

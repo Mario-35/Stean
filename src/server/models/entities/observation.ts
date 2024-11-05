@@ -10,7 +10,7 @@ import { createEntity } from ".";
 import { EConstant, EDataType, ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { doubleQuotesString } from "../../helpers";
-import { _idBig } from "./constants";
+import { _idBig, _result } from "./constants";
 export const Observation:Ientity  = createEntity("Observations", {
     createOrder: 12,
     type: ETable.table,
@@ -33,17 +33,7 @@ export const Observation:Ientity  = createEntity("Observations", {
       },
       result: {
         create: "JSONB NULL",
-        alias(service: Iservice , test: IKeyBoolean | undefined) {
-          if (!test) return "result";  
-          if (test["valueskeys"] && test["valueskeys"] === true) 
-            return `COALESCE("result"-> 'valueskeys', "result"-> 'value')${test && test["as"] === true ? ` AS "result"`: ''}`;
-          if (test["numeric"] && test["numeric"] === true)
-            return`CASE 
-            WHEN jsonb_typeof("result"-> 'value') = 'number' THEN ("result"->>'value')::numeric 
-            WHEN jsonb_typeof("result"-> 'value') = 'array' THEN ("result"->>'value')[0]::numeric 
-            END${test && test["as"] === true ? ` AS "result"`: ''}`;
-          return `COALESCE("result"->'quality', "result"->'value')${test && test["as"] === true ? ` AS "result"`: ''}`;
-        },
+        alias: _result,
         type: "result",
         dataType: EDataType.result
       },

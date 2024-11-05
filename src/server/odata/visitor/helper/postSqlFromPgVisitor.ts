@@ -93,9 +93,9 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
                 returnValue.push(`, ${element} AS (`);
                 if (src.id) {
                     if (queryMaker[element].type == EOperation.Association) 
-                        returnValue.push(`INSERT INTO "${queryMaker[element].entity.table}" ${createInsertValues(src.ctx, formatInsertEntityData(queryMaker[element].entity.table, queryMaker[element].datas, src))} on conflict ("${Object.keys(queryMaker[element].datas).join('","')}") do update set ${createUpdateValues(queryMaker[element].datas)} WHERE "${queryMaker[element].entity.table}"."${queryMaker[element].keyId}" = ${BigInt(src.id).toString()}`);
+                        returnValue.push(`INSERT INTO "${queryMaker[element].entity.table}" ${createInsertValues(src.ctx, formatInsertEntityData(queryMaker[element].entity.table, queryMaker[element].datas, src))} on conflict ("${Object.keys(queryMaker[element].datas).join('","')}") do update set ${createUpdateValues(queryMaker[element].entity, queryMaker[element].datas)} WHERE "${queryMaker[element].entity.table}"."${queryMaker[element].keyId}" = ${BigInt(src.id).toString()}`);
                     else
-                        returnValue.push(`UPDATE "${queryMaker[element].entity.table}" SET ${createUpdateValues(queryMaker[element].datas)} WHERE "${queryMaker[element].entity.table}"."${queryMaker[element].keyId}" = (select verifyId('${queryMaker[element].entity.table}', ${src.id}) as id)`);
+                        returnValue.push(`UPDATE "${queryMaker[element].entity.table}" SET ${createUpdateValues(queryMaker[element].entity, queryMaker[element].datas)} WHERE "${queryMaker[element].entity.table}"."${queryMaker[element].keyId}" = (select verifyId('${queryMaker[element].entity.table}', ${src.id}) as id)`);
                 } else returnValue.push(`INSERT INTO "${queryMaker[element].entity.table}" ${createInsertValues(src.ctx, formatInsertEntityData(queryMaker[element].entity.table, queryMaker[element].datas, src))}`);                            
                 returnValue.push(`RETURNING ${postEntity.table == queryMaker[element].entity.table ? allFields : queryMaker[element].keyId})`);
             }
@@ -147,7 +147,6 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
             type: EOperation,
             name: string,
             entity: Ientity,
-            tableName: string,
             datas: string | Record<string, any>,
             keyId: string,
             key: string | undefined
@@ -167,7 +166,6 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
                         queryMaker[createName(name)] = {
                             type: queryMaker[name].type,
                             entity: queryMaker[name].entity,
-                            asup: queryMaker[name].asup,
                             datas: datas,
                             keyId: queryMaker[name].keyId
                         };
@@ -177,7 +175,6 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
                     queryMaker[name] = {
                         type: type,
                         entity: entity,
-                        asup: tableName,
                         datas: { [key]: datas },
                         keyId: keyId
                     };
@@ -185,7 +182,6 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
                     queryMaker[name] = {
                         type: type,
                         entity: entity,
-                        asup: tableName,
                         datas: datas,
                         keyId: keyId
                     };
@@ -205,7 +201,7 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
                 const relCardinality = relationInfos(src.ctx, subEntity.name, relationName);
                 const parentCardinality = relationInfos(src.ctx, subParentEntity.name, subEntity.name);
                 console.log(log.debug_infos(`Found a parent relation in ${subEntity.name}`, subParentEntity.name));                
-                if (relCardinality.table == parentCardinality.table && relCardinality.table == subEntity.table) {
+                if (relCardinality.entity && parentCardinality.entity && relCardinality.entity.table == parentCardinality.entity.table && relCardinality.entity.table == subEntity.table) {
                     console.log(log.debug_infos("Found a relation to do in sub query", subParentEntity.name));
                     const tableName = names[subEntity.table];
                     const parentTableName = names[subParentEntity.table];
@@ -213,13 +209,12 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
                         EOperation.Relation,
                         tableName,
                         subEntity,
-                        subEntity.table,
                         `@(select ${parentTableName}.id from ${parentTableName})@`,
                         parentCardinality.leftKey,
                         parentCardinality.rightKey
                         );
-                    } else if (relCardinality.table == parentCardinality.table) {
-                        if (relCardinality.table == subParentEntity.table) {
+                    } else if (relCardinality.entity && parentCardinality.entity && relCardinality.entity.table == parentCardinality.entity.table) {
+                        if (relCardinality.entity.table == subParentEntity.table) {
                             const tableName = names[subEntity.table];
                             const parentTableName = names[subParentEntity.table];
                             console.log(log.debug_infos(`Add parent relation ${tableName} in`, parentTableName));                            
@@ -227,20 +222,18 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
                                 EOperation.Relation,
                                 parentTableName,
                                 subParentEntity,
-                                subParentEntity.table,
                                 `@(select ${tableName}.id from ${tableName})@`,
                                 parentCardinality.leftKey,
                                 relCardinality.rightKey
                                 );
-                            } else if (relCardinality.entity && relCardinality.table != subParentEntity.table && relCardinality.table != subEntity.table) {
+                            } else if (relCardinality.entity && relCardinality.entity.table != subParentEntity.table && relCardinality.entity.table != subEntity.table) {
                                 const tableName = names[subEntity.table];
                                 const parentTableName = names[subParentEntity.table];
                                 console.log(log.debug_infos(`Add Table association ${tableName} in`, parentTableName));
                                 addToQueryMaker(
                                     EOperation.Association,
-                                    relCardinality.table,
+                                    relCardinality.entity.table,
                                     relCardinality.entity,
-                                    relCardinality.table,
                                     {
                                         [`${subEntity.table}_id`]: `@(select ${tableName}.id from ${tableName})@`,
                                         [`${subParentEntity.table}_id`]: `@(select ${parentTableName}.id from ${parentTableName})@`
@@ -257,7 +250,6 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
                         EOperation.Table,
                         parentTableName,
                         subParentEntity,
-                        subParentEntity.table,
                         {
                             [relCardinality.rightKey]: `@(select ${tableName}.id from ${tableName})@`
                         },
@@ -280,7 +272,7 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
                 names[newEntity.table] = name;
                 const test = start(value, newEntity, entity);
                 if (test) {
-                    addToQueryMaker(EOperation.Table, name, newEntity, newEntity.table, test, "id", undefined);
+                    addToQueryMaker(EOperation.Table, name, newEntity, test, "id", undefined);
                     level--;
                 }
                 if (entity) addAssociation(newEntity, entity);
@@ -333,7 +325,7 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
         sqlResult = queryMakerToString(
             src.id
             ? root && Object.entries(root).length > 0
-            ? `WITH ${postEntity.table} AS (\n\tUPDATE ${doubleQuotesString(postEntity.table)}\n\tSET ${createUpdateValues(root)} WHERE "id" = (\n\tselect verifyId('${postEntity.table}', ${src.id}) as id\n) RETURNING ${allFields})`
+            ? `WITH ${postEntity.table} AS (\n\tUPDATE ${doubleQuotesString(postEntity.table)}\n\tSET ${createUpdateValues(postEntity, root)} WHERE "id" = (\n\tselect verifyId('${postEntity.table}', ${src.id}) as id\n) RETURNING ${allFields})`
                 : `WITH ${postEntity.table} AS (\n\tSELECT * FROM ${doubleQuotesString(postEntity.table)}\n\tWHERE "id" = ${src.id.toString()})`
                 : `WITH ${postEntity.table} AS (\n\tINSERT INTO ${doubleQuotesString(postEntity.table)} ${createInsertValues(src.ctx, formatInsertEntityData(postEntity.name, root, src))} RETURNING ${allFields})`
                 );

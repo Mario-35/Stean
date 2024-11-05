@@ -8,10 +8,12 @@
 
 import { config } from "../../configuration";
 import { EChar, EExtensions } from "../../enums";
+import { log } from "../../log";
 import { Iuser, koaContext } from "../../types";
 import { CoreHtmlView } from "./core";
 export class Status extends CoreHtmlView {
     constructor(ctx: koaContext, datas: Iuser) {
+        console.log(log.whereIam("View"));
         super(ctx);
         this.status(ctx, datas);
     }

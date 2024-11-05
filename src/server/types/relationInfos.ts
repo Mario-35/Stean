@@ -10,7 +10,6 @@ import { Ientity } from "./";
 export interface IrelationInfos {
     type:  string; 
     entity: Ientity | undefined;
-    table: string;
     column: string;
     leftKey: string;
     rightKey: string;

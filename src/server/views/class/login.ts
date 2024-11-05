@@ -6,6 +6,7 @@
  *
  */
 
+import { log } from "../../log";
 import { info } from "../../messages";
 import { IKeyString, koaContext } from "../../types";
 import { CoreHtmlView } from "./core";
@@ -17,6 +18,7 @@ interface Idatas {
 
 export class Login extends CoreHtmlView {
     constructor(ctx: koaContext, datas: Idatas) {
+        console.log(log.whereIam("View"));
         super(ctx);
         this.login(datas);
     }
