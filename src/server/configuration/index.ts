@@ -22,6 +22,7 @@ import { userAccess } from "../db/dataAccess";
 import path from "path";
 import { formatconfigFile, testDbExists, validJSONConfig } from "./helpers";
 import { MqttServer } from "../mqtt";
+import { createIndexes } from "../db/helpers";
 // class to logCreate configs environements
 class Configuration {
   // store all services
@@ -415,7 +416,7 @@ class Configuration {
             superAdmin: false,
             admin: false
           });
-          
+          if(![EConstant.admin as String, EConstant.test as String].includes(key)) createIndexes(key);
           // if(!Configuration.services[key].extensions.includes(EExtensions.file) && ![EConstant.admin as String, EConstant.test as String].includes(key)) createIndexes(key);
           this.messageListen(key, res ? EChar.web : EChar.notOk, true);
           this.addListening(this.defaultHttp(), key);

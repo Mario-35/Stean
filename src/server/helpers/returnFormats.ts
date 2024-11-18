@@ -14,10 +14,14 @@ import util from "util";
 import { EConstant, EOptions, EReturnFormats } from "../enums";
 import { isGraph } from ".";
 import { PgVisitor } from "../odata/visitor";
+import { errors } from "../messages";
+
 // Default "blank" function
 const defaultFunction = (input: string | object) => input;
+
 // Default "blank" format function
 const defaultForwat = (input: PgVisitor): string => input.toString();
+
 const generateFields = (input: PgVisitor)=> {
   if (isGraph(input)) {
     const entity = input.parentEntity || input.entity;
@@ -93,8 +97,9 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
       const formatedDatas: string[] = [];
       const height = String(100 / Object.entries(input).length).split(".")[0];
       if (typeof input === "object") {
-       
+        if (input[0  as keyof object]["infos"] === null) return errors.noDatas;
         Object.entries(input).forEach((element: Record<string, any>, index: number) => {
+          // if (input["infos" as keyof object] == null && input["datas" as keyof object] == null) return "";
           graphNames.push( `<button type="button" id="btngraph${index}" onclick="graph${index}.remove(); btngraph${index}.remove();">X</button>
            <div id="graph${index}" style="width:95%; height:${height}%;"></div>` );
           const infos = element[1]["description"]

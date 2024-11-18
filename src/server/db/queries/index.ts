@@ -9,7 +9,6 @@ export { createIdList } from "./createIdList";
 export { asDataArray } from "./asDataArray";
 export { asCsv } from "./asCsv";
 export { asJson } from "./asJson";
-export { observationResultCsv } from "./observationResultCsv";
 export { asGeoJSON } from "./asGeoJSON";
 export { graphDatastream } from "./graphDatastream";
 export { graphMultiDatastream } from "./graphMultiDatastream";

@@ -27,7 +27,7 @@ export const createEntity = (name: string, datas: IentityCore | number) : Ientit
         singular: t,
         table: t.toLowerCase(),
         ... datas
-      } :  {
+      } : {
           type: ETable.blank,
           name: name,
           singular: t,

@@ -21,6 +21,8 @@ export const isObservation = (input: RootPgVisitor |PgVisitor):boolean => (input
 export const isAdmin = (ctx: koaContext): boolean => ctx.service && ctx.service.name === EConstant.admin;
 export const isAllowedTo = (ctx: koaContext, what: EUserRights): boolean => ctx.service.extensions.includes(EExtensions.users) ? true : ctx.user && ctx.user.PDCUAS[what];
 export const isFile = (ctx: koaContext): boolean => ctx.service.extensions.includes(EExtensions.file);
+
+
 export function isString(obj: any) {
     return (typeof obj) === 'string';
  }

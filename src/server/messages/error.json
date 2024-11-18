@@ -44,6 +44,7 @@
     "stream" : "stream error",
     "fileStream" : "fileStream error",
     "noValue" : "no value found",
+    "noDatas" : "no datas found",
 	"observationType": "Wrong value for observationType",
 	"createUser": "Error in creating user",
 	"decoderError": "decoder error",

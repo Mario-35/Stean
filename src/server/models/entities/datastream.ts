@@ -11,6 +11,7 @@ import { EConstant, EDataType, EDatesType, EObservationType, ERelations, ETable 
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _idRel, _text, _tz } from "./constants";
 import { doubleQuotesString } from "../../helpers";
+import { info } from "../../messages";
 export const Datastream:Ientity  = createEntity("Datastreams", {
     createOrder: 7,
     type: ETable.table,
@@ -26,13 +27,13 @@ export const Datastream:Ientity  = createEntity("Datastreams", {
         dataType: EDataType.bigint
       },
       name: {
-        create: _text('no name'),
+        create: _text(info.noName),
         alias() {},
         type: "text",
         dataType: EDataType.text
       },
       description: {
-        create: _text('no description'),
+        create: _text(info.noDescription),
         alias() {},
         type: "text",
         dataType: EDataType.text
@@ -164,4 +165,21 @@ export const Datastream:Ientity  = createEntity("Datastreams", {
       datastream_sensor_id: 'ON public."datastream" USING btree ("sensor_id")',
       datastream_thing_id: 'ON public."datastream" USING btree ("thing_id")',
     },
+    clean: [`WITH datastreams AS (
+      SELECT DISTINCT "datastream_id" AS id FROM observation
+      ),
+      datas AS (SELECT 
+        "datastream_id" AS id,
+        MIN("phenomenonTime") AS pmin ,
+        MAX("phenomenonTime") AS pmax,
+        MIN("resultTime") AS rmin,
+        MAX("resultTime") AS rmax
+        FROM observation, datastreams where "datastream_id" = datastreams.id group by "datastream_id"
+      )
+      UPDATE "datastream" SET 
+        "_phenomenonTimeStart" =  datas.pmin ,
+        "_phenomenonTimeEnd" = datas.pmax,
+        "_resultTimeStart" = datas.rmin,
+        "_resultTimeEnd" = datas.rmax
+      FROM datas WHERE "datastream".id = datas.id`]
   });

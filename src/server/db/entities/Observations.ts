@@ -40,13 +40,12 @@ export class Observations extends Common {
     // }
     // IF MultiDatastream
     if ( (dataInput["MultiDatastream"] && dataInput["MultiDatastream"] != null) || (this.ctx.odata.parentEntity && this.ctx.odata.parentEntity.name.startsWith("MultiDatastream")) ) {
-      // get search ID
+      // get MultiDatastream search ID
       const searchID: bigint | undefined = dataInput["MultiDatastream"] && dataInput["MultiDatastream"] != null
           ? BigInt(dataInput["MultiDatastream"][EConstant.id])
           : getBigIntFromString(this.ctx.odata.parentId);
       if (!searchID) this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: msg(errors.noFound, "MultiDatastreams"), });
       // Search uint keys
-      console.log(searchID);
       const tempSql = await executeSqlValues(this.ctx.service, multiDatastreamsUnitsKeys(searchID) );
       if (tempSql[0 as keyof object] === null) this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: msg(errors.noFound, "MultiDatastreams"), });
       const multiDatastream: Record<string, any> = tempSql[0 as keyobj];
@@ -64,12 +63,13 @@ export class Observations extends Common {
         }
         dataInput["result"] = { value: Object.values(dataInput["result"]), valueskeys: dataInput["result"], };
       }
-    } 
+    } // IF Datastream
     else if ((dataInput["Datastream"] && dataInput["Datastream"] != null) || (this.ctx.odata.parentEntity && this.ctx.odata.parentEntity.name.startsWith("Datastream")) ) { 
       if (dataInput["result"] && typeof dataInput["result"] != "object")
           dataInput["result"] = this.ctx.service.extensions.includes( EExtensions.resultNumeric )
                                 ? dataInput["result"]
                                 : { value: dataInput["result"] };
+    // if no stream go out with error
     } else if (this.ctx.request.method === "POST") {
       this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: errors.noStream });
     }
@@ -94,6 +94,12 @@ export class Observations extends Common {
     console.log(log.whereIam());
     if (dataInput) dataInput = await this.prepareInputResult(dataInput);
     if (dataInput) dataInput["validTime"] = await getDBDateNow(this.ctx.service);
+    if (dataInput && dataInput["resultQuality"] && dataInput["resultQuality"]["nameOfMeasure"]) {
+      dataInput["result"] = { quality: dataInput["result"] };
+    }
     return await super.update(idInput, dataInput);
   }
+
+
+
 }

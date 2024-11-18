@@ -43,6 +43,8 @@
     "updateUser" : "update user => ",
 	"user": "username",
 	"ver": "version",
-	"write": "Write"
+	"write": "Write",
+	"noName": "No name",
+	"noDescription": "No description"
 
 }

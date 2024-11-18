@@ -17,6 +17,7 @@ export interface IentityCore {
      relations:     { [key: string]: IentityRelation };
      constraints?:  IKeyString;
      indexes?:      IKeyString;
+     clean?:        string[];
      after?:        string;
 }
 export interface Ientity extends IentityCore {

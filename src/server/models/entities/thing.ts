@@ -11,6 +11,7 @@ import { EConstant, EDataType, ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _text } from "./constants";
 import { doubleQuotesString } from "../../helpers";
+import { info } from "../../messages";
 export const Thing: Ientity = createEntity("Things", {
     createOrder: 1,
     type: ETable.table,
@@ -26,13 +27,13 @@ export const Thing: Ientity = createEntity("Things", {
         dataType: EDataType.bigint
       },
       name: {
-        create: _text('no name'),
+        create: _text(info.noName),
         alias() {},
         type: "text",
         dataType: EDataType.text
       },
       description: {
-        create: _text('no description'), 
+        create: _text(info.noDescription), 
         alias() {},
         type: "text",
         dataType: EDataType.text

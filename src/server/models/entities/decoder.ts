@@ -11,6 +11,7 @@ import { EConstant, EDataType, ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _text } from "./constants";
 import { doubleQuotesString } from "../../helpers";
+import { info } from "../../messages";
 export const Decoder:Ientity  = createEntity("Decoders", {
     createOrder: 10,
     type: ETable.table,
@@ -26,7 +27,7 @@ export const Decoder:Ientity  = createEntity("Decoders", {
         dataType: EDataType.bigint
       },
       name: {
-        create: _text('no name'),
+        create: _text(info.noName),
         alias() {},
         type: "text",
         dataType: EDataType.text

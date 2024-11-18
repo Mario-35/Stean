@@ -15,12 +15,13 @@ import { log } from "../../log";
 import { config } from "../../configuration";
 import { EConstant } from "../../enums";
 import { asCsv } from "../queries";
-// import { isFile } from "../../helpers/tests";
+
 // Common class
 export class Common {
   readonly ctx: koaContext;
   public nextLinkBase: string;
   public linkBase: string;
+  
   constructor(ctx: koaContext) {
     console.log(log.whereIam());
     this.ctx = ctx;
@@ -45,6 +46,7 @@ export class Common {
     });
     return undefined;
   }
+
   // Only for override
   formatDataInput(input: Record<string, any> | undefined ): Record<string, any> | undefined {    
     return input;
@@ -63,6 +65,7 @@ export class Common {
       ...args,
     };
   }
+
   // Create the nextLink
   public nextLink = (resLength: number): string | undefined => {
     if (this.ctx.odata.limit < 1) return;
@@ -73,6 +76,7 @@ export class Common {
     if (resLength >= max) 
      return `${encodeURI(this.nextLinkBase)}${this.nextLinkBase.includes("?") ? "&" : "?" }$top=${this.ctx.odata.limit}&$skip=${this.ctx.odata.skip + this.ctx.odata.limit }`;
   };
+
   // Create the prevLink
   public prevLink = (resLength: number): string | undefined => {
     if (this.ctx.odata.limit < 1) return;
@@ -80,6 +84,7 @@ export class Common {
     if ( ((this.ctx.service.nb_page && resLength >= this.ctx.service.nb_page) || this.ctx.odata.limit) && prev >= 0 )
       return `${encodeURI(this.nextLinkBase)}${ this.nextLinkBase.includes("?") ? "&" : "?" }$top=${this.ctx.odata.limit}&$skip=${prev}`;
   };
+
   // Return all items
   async getAll(): Promise<IreturnResult | undefined> {
     console.log(log.whereIam());
@@ -92,14 +97,13 @@ export class Common {
        case returnFormats.sql:
          return this.formatReturnResult({ body: sql }); 
        case returnFormats.csv:
-         sql = asCsv(sql);          
-              config.writeLog(log.query(sql));
-              this.ctx.attachment(`${this.ctx.odata.entity?.name || "export"}.csv`);
-            return this.formatReturnResult({ body:  await config
+          sql = asCsv(sql);          
+          config.writeLog(log.query(sql));
+          this.ctx.attachment(`${this.ctx.odata.entity?.name || "export"}.csv`);
+          return this.formatReturnResult({ body:  await config
               .connection(this.ctx.service.name)
               .unsafe(sql)
-              .readable()
-            });
+              .readable()});
        default:        
          return await executeSqlValues(this.ctx.service, sql).then(async (res: Record<string, any>) => {         
            return (res[0] > 0) 
@@ -109,7 +113,7 @@ export class Common {
               prevLink: this.prevLink(res[0]), 
               body: res[1], }) 
             : this.formatReturnResult({ body: res[0] == 0 ? [] : res[0]});
-         }).catch((err: Error) => this.ctx.throw(400, { code: 400, detail: err.message }) );
+         }).catch((err: Error) => this.ctx.throw(400, { code: 400, detail: err.message }));
      }
     }
   }

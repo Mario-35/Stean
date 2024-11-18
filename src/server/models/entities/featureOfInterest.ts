@@ -11,6 +11,7 @@ import { EConstant, EDataType, ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _text } from "./constants";
 import { doubleQuotesString } from "../../helpers";
+import { info } from "../../messages";
 export const FeatureOfInterest:Ientity  = createEntity("FeaturesOfInterest", {
             createOrder: 4,
             type: ETable.table,
@@ -23,19 +24,19 @@ export const FeatureOfInterest:Ientity  = createEntity("FeaturesOfInterest", {
                   return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotesString(EConstant.id)}`: ''}` ;
                 },
                 type: "number",
-        dataType: EDataType.bigint
+                dataType: EDataType.bigint
               },
               name: {
-                create: _text('no name'),
+                create: _text(info.noName),
                 alias() {},
                 type: "text",
-        dataType: EDataType.text
+                dataType: EDataType.text
               },
               description: {
-                create: _text('no description'), 
+                create: _text(info.noDescription), 
                 alias() {},
                 type: "text",
-        dataType: EDataType.text
+                dataType: EDataType.text
               },
               encodingType: {
                 create: _text(), 
@@ -47,8 +48,8 @@ export const FeatureOfInterest:Ientity  = createEntity("FeaturesOfInterest", {
                 create: "jsonb NOT NULL",
                 alias() {},
                 type: "json",
-                dataType: EDataType.jsonb,
                 test: "encodingType",
+                dataType: EDataType.jsonb,
               }
             },
             relations: {
@@ -66,6 +67,5 @@ export const FeatureOfInterest:Ientity  = createEntity("FeaturesOfInterest", {
               featureofinterest_pkey: 'PRIMARY KEY ("id")',
               featureofinterest_unik_name: 'UNIQUE ("name")',
             },
-            after:
-              "INSERT INTO featureofinterest (name, description, \"encodingType\", feature) VALUES ('Default Feature of Interest', 'Default Feature of Interest', 'application/vnd.geo+json', '{}');",
+            after: "INSERT INTO featureofinterest (name, description, \"encodingType\", feature) VALUES ('Default Feature of Interest', 'Default Feature of Interest', 'application/vnd.geo+json', '{}');",
           });

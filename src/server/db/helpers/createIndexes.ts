@@ -7,10 +7,12 @@
  */
 
 import { config } from "../../configuration";
-import { EChar, EExtensions } from "../../enums";
+import { EChar } from "../../enums";
 import { asyncForEach } from "../../helpers";
 import { log } from "../../log";
+import { models } from "../../models";
 
+// this create index are executed without wait 
 export const createIndexes = (name: string): void => {
     const exe = async (name: string, queries: string[]): Promise<boolean> => {
         await asyncForEach( queries, async (query: string) => {
@@ -26,45 +28,11 @@ export const createIndexes = (name: string): void => {
         log.create(`Indexes : [${name}]`, EChar.ok);
         return true;
     }
-    const sqls = [`WITH datastreams AS (
-        select distinct "datastream_id" AS id from observation
-        ),
-        datas AS (
-            SELECT 
-                "datastream_id" AS id,
-                min("phenomenonTime") AS pmin ,
-                max("phenomenonTime") AS pmax,
-                min("resultTime") AS rmin,
-                max("resultTime") AS rmax
-            FROM observation, datastreams where  "datastream_id" = datastreams.id group by "datastream_id"
-        )
-        UPDATE "datastream" SET 
-            "_phenomenonTimeStart" =  datas.pmin ,
-            "_phenomenonTimeEnd" = datas.pmax,
-            "_resultTimeStart" = datas.rmin,
-            "_resultTimeEnd" = datas.rmax
-        FROM datas where "datastream".id = datas.id`
-    ] 
-    if (config.getService(name).extensions.includes(EExtensions.multiDatastream)) {
-        sqls.push(`WITH multidatastreams AS (
-                select distinct "multidatastream_id" AS id from observation
-            ),
-            datas AS (
-                SELECT 
-                    "multidatastream_id" AS id,
-                    min("phenomenonTime") AS pmin ,
-                    max("phenomenonTime") AS pmax,
-                    min("resultTime") AS rmin,
-                    max("resultTime") AS rmax
-                FROM observation, multidatastreams where "multidatastream_id" = multidatastreams.id group by "multidatastream_id"
-            )
-            UPDATE "multidatastream" SET 
-                "_phenomenonTimeStart" =  datas.pmin ,
-                "_phenomenonTimeEnd" = datas.pmax,
-                "_resultTimeStart" = datas.rmin,
-                "_resultTimeEnd" = datas.rmax
-            FROM datas where "multidatastream".id = datas.id`);
-    }
-    
+
+    const sqls: string[] = [];
+    Object.keys(models.DBFull(name)).forEach((entity: string) => {
+        const tmp = models.DBFull(name)[entity].clean;
+        if (tmp) tmp.forEach(e => sqls.push(e));
+    });
     exe(name, sqls);
-  }
+}

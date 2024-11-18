@@ -11,6 +11,7 @@ import { EConstant, EDataType, ERelations, ETable } from "../../enums";
 import { Iservice, Ientity, IKeyBoolean } from "../../types";
 import { _idBig, _idRel, _text } from "./constants";
 import { doubleQuotesString } from "../../helpers";
+import { info } from "../../messages";
 export const Lora:Ientity  = createEntity("Loras", {
   createOrder: 11,
   type: ETable.table,
@@ -26,7 +27,7 @@ export const Lora:Ientity  = createEntity("Loras", {
         dataType: EDataType.bigint
     },
     name: {
-      create: _text('no name'),
+      create: _text(info.noName),
       alias() {
         return undefined;
       },
@@ -34,7 +35,7 @@ export const Lora:Ientity  = createEntity("Loras", {
         dataType: EDataType.text
     },
     description: {
-      create: _text('no description'),
+      create: _text(info.noDescription),
       alias() {
         return undefined;
       },
