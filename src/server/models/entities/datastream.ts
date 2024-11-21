@@ -9,7 +9,7 @@
 import { EObservationType, ERelations, ETable } from "../../enums";
 import { info } from "../../messages";
 import { Entity } from "../entity";
-import { Bigint, Geometry, Jsonb, Relation, Text, Timestamp } from "../types";
+import { Bigint, Geometry, Jsonb, Relation, Text, Tmperiod } from "../types";
 
 export const Datastream = new Entity("Datastreams", {
     createOrder: 7,
@@ -23,12 +23,8 @@ export const Datastream = new Entity("Datastreams", {
       observationType: new Text().notNull().default('http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement').verify(Object.keys(EObservationType)).type(),
       unitOfMeasurement: new Jsonb().notNull().type(),
       observedArea: new Geometry().type(),
-      phenomenonTime: new Timestamp().alias("phenomenonTime").type(),
-      resultTime: new Timestamp().alias("resultTime").type(),
-      _phenomenonTimeStart: new Timestamp().tz().type(),
-      _phenomenonTimeEnd: new Timestamp().tz().type(),
-      _resultTimeStart: new Timestamp().tz().type(),
-      _resultTimeEnd: new Timestamp().tz().type(),
+      phenomenonTime: new Tmperiod().source("Observations").type(),
+      resultTime: new Tmperiod().source("Observations").type(),
       thing_id:  new Relation().relation("Things").type(),
       observedproperty_id: new Relation().relation("ObservedProperties").type(),
       sensor_id: new Relation().relation("Sensors").type(),
@@ -53,22 +49,5 @@ export const Datastream = new Entity("Datastreams", {
       FeatureOfInterest: {
         type: ERelations.defaultUnique
       },
-    },
-    clean: [`WITH datastreams AS (
-      SELECT DISTINCT "datastream_id" AS id FROM observation
-      ),
-      datas AS (SELECT 
-        "datastream_id" AS id,
-        MIN("phenomenonTime") AS pmin ,
-        MAX("phenomenonTime") AS pmax,
-        MIN("resultTime") AS rmin,
-        MAX("resultTime") AS rmax
-        FROM observation, datastreams where "datastream_id" = datastreams.id group by "datastream_id"
-      )
-      UPDATE "datastream" SET 
-        "_phenomenonTimeStart" =  datas.pmin ,
-        "_phenomenonTimeEnd" = datas.pmax,
-        "_resultTimeStart" = datas.rmin,
-        "_resultTimeEnd" = datas.rmax
-      FROM datas WHERE "datastream".id = datas.id`]
+    }
   });

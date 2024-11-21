@@ -52,5 +52,6 @@ export enum EDataType {
     xml, // XML data
     geometry, // geojson
     link, // link
-    result // result
+    result, // result
+    period // result
 }

@@ -16,7 +16,6 @@ export interface IentityCore {
      orderBy:       string;
      columns:       { [key: string]: IentityColumn };
      relations:     { [key: string]: IentityRelation };
-     clean?:        string[];
      after?:        string;
 }
 
@@ -26,4 +25,5 @@ export interface Ientity extends IentityCore {
      table:         string;
      constraints:   { [key: string]: string };
      indexes:       { [key: string]: string };
+     update?:        string[];
 }

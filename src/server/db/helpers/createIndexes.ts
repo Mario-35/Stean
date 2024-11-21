@@ -31,7 +31,7 @@ export const createIndexes = (name: string): void => {
 
     const sqls: string[] = [];
     Object.keys(models.DBFull(name)).forEach((entity: string) => {
-        const tmp = models.DBFull(name)[entity].clean;
+        const tmp = models.DBFull(name)[entity].update;
         if (tmp) tmp.forEach(e => sqls.push(e));
     });
     exe(name, sqls);

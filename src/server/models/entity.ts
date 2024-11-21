@@ -1,8 +1,9 @@
-import { ERelations, ETable, allEntities } from "../enums";
+import { EDataType, ERelations, ETable, allEntities } from "../enums";
 import { doubleQuotesString } from "../helpers";
 import { msg, errors } from "../messages";
 import { IentityColumn, IentityCore, IentityRelation, IKeyString } from "../types";
 import { singular } from "./helpers";
+import { Timestamp } from "./types";
 
 class Pass {
     static pass:  {
@@ -25,7 +26,7 @@ export class Entity extends Pass {
     relations:     { [key: string]: IentityRelation };
     constraints:   IKeyString;
     indexes:       IKeyString;
-    clean?:        string[];
+    update?:        string[];
     after?:        string;    
     constructor (name: string, datas: IentityCore) {
       super();
@@ -39,30 +40,57 @@ export class Entity extends Pass {
             this.relations = datas.relations,
             this.constraints = {},
             this.indexes = {},
-            this.clean = datas.clean,
             this.after = datas.after,
             this.name = name;
             this.singular = singular(entity);
             this.table = this.singular.toLowerCase();
           } else throw new Error(msg( errors.noValidEntity, name));
+          this.prepareColums();
           this.createConstraints();
       };
 
-      is(elem: string) {
+      private prepareColums() {
+        Object.keys(this.columns).forEach(e => {
+          if (this.columns[e].dataType === EDataType.period) {
+            const table = this.columns[e].create;
+            this.columns[e] = new Timestamp().alias(e).type();
+            this.columns[`_${e}Start`] = new Timestamp().tz().type();
+            this.columns[`_${e}End`] = new Timestamp().tz().type();
+            this.addToUpdate(`WITH datastreams AS ( SELECT DISTINCT "${this.table}_id" AS id FROM ${table} ),
+      datas AS (SELECT 
+        "${this.table}_id" AS id,
+        MIN("${e}") AS pmin ,
+        MAX("${e}") AS pmax
+        FROM ${table}, datastreams WHERE "${this.table}_id" = datastreams.id GROUP BY "${this.table}_id")
+      UPDATE "${this.table}" SET 
+        "_${e}Start" =  datas.pmin ,
+        "_${e}End" = datas.pmax
+      FROM datas WHERE "${this.table}".id = datas.id`);
+          }
+        })
+      }
+
+      private is(elem: string) {
         return Object.keys(this.columns).includes(`${elem.toLowerCase()}_id`);
       }
 
-      addToPass(key: string, value?: string) {
+      private addToUpdate(value: string) {
+        if (this.update) 
+          this.update.push(value);
+        else this.update = [value];
+      }
+
+      private addToPass(key: string, value?: string) {
         value = value || `FOREIGN KEY ("${this.table}_id") REFERENCES "${this.table}"("id") ON UPDATE CASCADE ON DELETE CASCADE`;
         if (!Entity.pass[key]) Entity.pass[key] = {constraints: {}, indexes: {} };
         Entity.pass[key].constraints[`${singular(key).toLowerCase()}_${this.table}_id_fkey`] = value;
       }
 
-      addToConstraints( key: string, value: string) {
+      private addToConstraints( key: string, value: string) {
           this.constraints[key] = value;
       }
 
-      addToIndexes( key: string, value: string) {
+      private addToIndexes( key: string, value: string) {
           this.indexes[key] = value;
       }
       

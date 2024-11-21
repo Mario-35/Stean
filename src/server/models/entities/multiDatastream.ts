@@ -10,7 +10,7 @@ import { Entity } from "../entity";
 import { EObservationType, ERelations, ETable } from "../../enums";
 import { Ientity } from "../../types";
 import { info } from "../../messages";
-import { Bigint, Geometry, Jsonb, Relation, Text, Texts, Timestamp } from "../types";
+import { Bigint, Geometry, Jsonb, Relation, Text, Texts, Timestamp, Tmperiod } from "../types";
 export const MultiDatastream:Ientity  = new Entity("MultiDatastreams", {
     createOrder: 8,
     type: ETable.table,
@@ -24,8 +24,8 @@ export const MultiDatastream:Ientity  = new Entity("MultiDatastreams", {
       observationType: new Text().notNull().default('http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement').verify(Object.keys(EObservationType)).type(),
       multiObservationDataTypes: new Texts().type(),
       observedArea: new Geometry().type(),
-      phenomenonTime: new Timestamp().alias("phenomenonTime").type(),
-      resultTime: new Timestamp().alias("resultTime").type(),
+      phenomenonTime: new Tmperiod().source("Observations").type(),
+      resultTime: new Tmperiod().source("Observations").type(),
       _phenomenonTimeStart: new Timestamp().tz().type(),
       _phenomenonTimeEnd: new Timestamp().tz().type(),
       _resultTimeStart: new Timestamp().tz().type(),
@@ -54,22 +54,5 @@ export const MultiDatastream:Ientity  = new Entity("MultiDatastreams", {
       FeatureOfInterest: {
         type: ERelations.defaultUnique
       },
-    },
-    clean: [`WITH multidatastreams AS (
-                SELECT DISTINCT "multidatastream_id" AS id FROM observation
-            ),
-            datas AS (SELECT 
-                    "multidatastream_id" AS id,
-                    MIN("phenomenonTime") AS pmin,
-                    MAX("phenomenonTime") AS pmax,
-                    MIN("resultTime") AS rmin,
-                    MAX("resultTime") AS rmax
-                FROM observation, multidatastreams WHERE "multidatastream_id" = multidatastreams.id GROUP BY "multidatastream_id"
-            )
-            UPDATE "multidatastream" SET 
-                "_phenomenonTimeStart" =  datas.pmin,
-                "_phenomenonTimeEnd" = datas.pmax,
-                "_resultTimeStart" = datas.rmin,
-                "_resultTimeEnd" = datas.rmax
-            FROM datas WHERE "multidatastream".id = datas.id`]
+    }
 });

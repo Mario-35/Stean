@@ -15,4 +15,5 @@ export { Result } from "./result";
 export { Text } from "./text";
 export { Texts } from "./texts";
 export { Timestamp } from "./timestamp";
+export { Tmperiod } from "./tmperiod";
 
