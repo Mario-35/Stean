@@ -7,7 +7,7 @@
  */
 
 
-import { doubleQuotesString, cleanStringComma, containsAll, isDataArray, isGraph, isGeoJson, removeAllQuotes, removeFirstEndDoubleQuotes, formatPgString } from "../../../helpers";
+import { doubleQuotesString, cleanStringComma, isDataArray, isGraph, isGeoJson, removeAllQuotes, removeFirstEndDoubleQuotes, formatPgString } from "../../../helpers";
 import { asJson } from "../../../db/queries";
 import { Iservice, Ientity, IKeyBoolean, IpgQuery } from "../../../types";
 import { PgVisitor, RootPgVisitor } from "..";
@@ -109,7 +109,7 @@ export class Query  {
             ? Object.keys(tempEntity.columns)
                 .filter((word) => !word.includes("_"))
                 .filter(e => !(tempEntity.columns[e].dataType === EDataType.result && element.splitResult))
-                .filter(e => !tempEntity.columns[e].extensions || tempEntity.columns[e].extensions && containsAll(main.ctx.service.extensions, tempEntity.columns[e].extensions) === true || "")
+                // .filter(e => !tempEntity.columns[e].extensions || tempEntity.columns[e].extensions && containsAll(main.ctx.service.extensions, tempEntity.columns[e].extensions) === true || "")
             : element.query.select.toString().split(EConstant.columnSeparator).filter((word: string) => word.trim() != "").map(e => removeFirstEndDoubleQuotes(e));
             // loop on columns            
         columns.map((column: string) => {

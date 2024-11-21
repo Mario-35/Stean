@@ -6,8 +6,9 @@
  *
  */
 
-import { IentityColumn, IentityRelation, IKeyString } from ".";
+import { IentityColumn, IentityRelation } from ".";
 import { ETable } from "../enums";
+
 export interface IentityCore {
      createOrder:   number;
      type:          ETable;
@@ -15,13 +16,14 @@ export interface IentityCore {
      orderBy:       string;
      columns:       { [key: string]: IentityColumn };
      relations:     { [key: string]: IentityRelation };
-     constraints?:  IKeyString;
-     indexes?:      IKeyString;
      clean?:        string[];
      after?:        string;
 }
+
 export interface Ientity extends IentityCore {
-     name:     string; // Entity Name
-     singular: string;
-     table:    string;
+     name:          string; // Entity Name
+     singular:      string;
+     table:         string;
+     constraints:   { [key: string]: string };
+     indexes:       { [key: string]: string };
 }

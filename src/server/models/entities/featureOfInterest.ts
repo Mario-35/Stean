@@ -6,51 +6,23 @@
  *
  */
 
-import { createEntity } from ".";
-import { EConstant, EDataType, ERelations, ETable } from "../../enums";
-import { Iservice, Ientity, IKeyBoolean } from "../../types";
-import { _idBig, _text } from "./constants";
-import { doubleQuotesString } from "../../helpers";
+import { Entity } from "../entity";
+import { ERelations, ETable } from "../../enums";
+import { Ientity } from "../../types";
 import { info } from "../../messages";
-export const FeatureOfInterest:Ientity  = createEntity("FeaturesOfInterest", {
+import { Bigint, Jsonb, Text } from "../types";
+
+export const FeatureOfInterest:Ientity  = new Entity("FeaturesOfInterest", {
             createOrder: 4,
             type: ETable.table,
             order: 4,
             orderBy: `"id"`,
             columns: {
-              id: {
-                create: _idBig,
-                alias(service: Iservice , test: IKeyBoolean) {
-                  return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotesString(EConstant.id)}`: ''}` ;
-                },
-                type: "number",
-                dataType: EDataType.bigint
-              },
-              name: {
-                create: _text(info.noName),
-                alias() {},
-                type: "text",
-                dataType: EDataType.text
-              },
-              description: {
-                create: _text(info.noDescription), 
-                alias() {},
-                type: "text",
-                dataType: EDataType.text
-              },
-              encodingType: {
-                create: _text(), 
-                alias() {},
-                type: "text",
-                dataType: EDataType.text
-              },
-              feature: {
-                create: "jsonb NOT NULL",
-                alias() {},
-                type: "json",
-                test: "encodingType",
-                dataType: EDataType.jsonb,
-              }
+              id: new Bigint().generated("id").type(),
+              name: new Text().notNull().default(info.noName).unique().type(),
+              description: new Text().notNull().default(info.noDescription).type(),
+              encodingType: new Text().type(),
+              feature: new Jsonb().notNull().type(),
             },
             relations: {
               Observations: {
@@ -62,10 +34,6 @@ export const FeatureOfInterest:Ientity  = createEntity("FeaturesOfInterest", {
               MultiDatastreams: {
                 type: ERelations.hasMany
               },
-            },
-            constraints: {
-              featureofinterest_pkey: 'PRIMARY KEY ("id")',
-              featureofinterest_unik_name: 'UNIQUE ("name")',
             },
             after: "INSERT INTO featureofinterest (name, description, \"encodingType\", feature) VALUES ('Default Feature of Interest', 'Default Feature of Interest', 'application/vnd.geo+json', '{}');",
           });

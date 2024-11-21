@@ -9,7 +9,7 @@
 
 import fs from "fs";
 import path from "path";
-import { Ientity } from "../../server/types";
+import { getColumnType, Ientity } from "../../server/types";
 import util from "util";
 import apidocJson from "../apidoc.json";
 import { models } from "../../server/models";
@@ -526,9 +526,9 @@ export const listOfColumns = (inputEntity: Ientity) => {
     const infosEntity: Record<string, any> = infos[inputEntity.name];
     Object.keys(infosEntity.columns).forEach((elem: string) => {
         const optional = (inputEntity.columns[elem] && inputEntity.columns[elem].create.includes("NOT NULL")) ? elem : `[${elem}]`;
-        success.push(`{${inputEntity.columns[elem] && inputEntity.columns[elem].type ? inputEntity.columns[elem].type : "none"}} ${elem} ${infosEntity["columns"][elem] || elem}`);
+        success.push(`{${getColumnType(inputEntity.columns[elem])}} ${elem} ${infosEntity["columns"][elem] || elem}`);
         if (inputEntity.columns[elem] && !inputEntity.columns[elem].create.includes("GENERATED"))
-            params.push(`{${inputEntity.columns[elem].type}} ${optional} ${infosEntity["type"] && infosEntity["type"][elem] ? infosEntity["type"][elem] : ""}`);
+            params.push(`{${getColumnType(inputEntity.columns[elem])}} ${optional} ${infosEntity["type"] && infosEntity["type"][elem] ? infosEntity["type"][elem] : ""}`);
     });
     Object.keys(inputEntity.relations).forEach((elem: string) => {
         const optional = (inputEntity.columns[elem] && inputEntity.columns[elem].create.includes("NOT NULL")) ? elem : `[${elem}]`;

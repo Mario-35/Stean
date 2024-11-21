@@ -6,46 +6,20 @@
  *
  */
 
-import { createEntity } from ".";
-import {  EConstant, EDataType, ERelations, ETable } from "../../enums";
-import { Iservice, Ientity, IKeyBoolean } from "../../types";
-import { _idBig, _idRel, _tz } from "./constants";
-import { doubleQuotesString } from "../../helpers";
-export const HistoricalLocation:Ientity  = createEntity("HistoricalLocations", {
+import { Entity } from "../entity";
+import { ERelations, ETable } from "../../enums";
+import { Ientity } from "../../types";
+import { Bigint, Timestamp } from "../types";
+
+export const HistoricalLocation:Ientity  = new Entity("HistoricalLocations", {
   createOrder: -1,
   order: 5,
   type: ETable.table,
   orderBy: `"id"`,
   columns: {
-    id: {
-      create: _idBig,
-      alias(service: Iservice , test: IKeyBoolean) {
-          return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotesString(EConstant.id)}`: ''}` ;
-      },
-      type: "bigint",
-      dataType: EDataType.bigint
-    },
-    time: {
-      create: _tz,
-      alias() {},
-      type: "date",
-      dataType: EDataType.timestamptz
-    },
-    thing_id: {
-      create: _idRel,
-      alias() {},
-      type: "bigint",
-      dataType: EDataType.bigint
-    },
-  },
-  constraints: {
-    historicallocation_pkey: 'PRIMARY KEY ("id")',
-    historicallocation_thing_id_fkey:
-      'FOREIGN KEY ("thing_id") REFERENCES "thing"("id") ON UPDATE CASCADE ON DELETE CASCADE',
-  },
-  indexes: {
-    historicallocation_thing_id:
-      'ON public."historicallocation" USING btree ("thing_id")',
+    id: new Bigint().generated("id").type(),
+    time: new Timestamp().tz().type(),
+    thing_id: new Bigint().notNull().type(),
   },
   relations: {
     Thing: {

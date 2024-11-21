@@ -6,38 +6,19 @@
  *
  */
 
-import { createEntity } from ".";
-import { EDataType, ETable } from "../../enums";
+import { Entity } from "../entity";
+import { ETable } from "../../enums";
 import { Ientity } from "../../types";
-import { _idRel } from "./constants";
+import { Bigint } from "../types";
 
-  export const ThingLocation:Ientity  = createEntity("ThingsLocations", {
+  export const ThingLocation:Ientity  = new Entity("ThingsLocations", {
     createOrder: 3,
     type: ETable.link,
     order: -1,
     orderBy: `"thing_id"`,
     columns: {
-      thing_id: {
-        create: _idRel,
-        alias() {},
-        type: "bigint",
-        dataType: EDataType.bigint
-      },
-      location_id: {
-        create: _idRel,
-        alias() {},
-        type: "bigint",
-        dataType: EDataType.bigint
-      },
+      thing_id: new Bigint().notNull().type(),
+      location_id: new Bigint().notNull().type(),
     },
-    relations: {},
-    constraints: {
-      thinglocation_pkey: 'PRIMARY KEY ("thing_id", "location_id")',
-      thinglocation_location_id_fkey: 'FOREIGN KEY ("location_id") REFERENCES "location"("id") ON UPDATE CASCADE ON DELETE CASCADE',
-      thinglocation_thing_id_fkey: 'FOREIGN KEY ("thing_id") REFERENCES "thing"("id") ON UPDATE CASCADE ON DELETE CASCADE',
-    },
-    indexes: {
-      thinglocation_location_id: 'ON public."thinglocation" USING btree ("location_id")',
-      thinglocation_thing_id: 'ON public."thinglocation" USING btree ("thing_id")',
-    },
+    relations: {}
   });

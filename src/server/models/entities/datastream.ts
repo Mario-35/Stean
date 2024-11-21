@@ -6,126 +6,33 @@
  *
  */
 
-import { createEntity } from ".";
-import { EConstant, EDataType, EDatesType, EObservationType, ERelations, ETable } from "../../enums";
-import { Iservice, Ientity, IKeyBoolean } from "../../types";
-import { _idBig, _idRel, _text, _tz } from "./constants";
-import { doubleQuotesString } from "../../helpers";
+import { EObservationType, ERelations, ETable } from "../../enums";
 import { info } from "../../messages";
-export const Datastream:Ientity  = createEntity("Datastreams", {
+import { Entity } from "../entity";
+import { Bigint, Geometry, Jsonb, Relation, Text, Timestamp } from "../types";
+
+export const Datastream = new Entity("Datastreams", {
     createOrder: 7,
     type: ETable.table,
     order: 1,
     orderBy: `"id"`,
     columns: {
-      id: {
-        create: _idBig,
-        alias(service: Iservice , test: IKeyBoolean) {
-           return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotesString(EConstant.id)}`: ''}` ;
-        },
-        type: "number",
-        dataType: EDataType.bigint
-      },
-      name: {
-        create: _text(info.noName),
-        alias() {},
-        type: "text",
-        dataType: EDataType.text
-      },
-      description: {
-        create: _text(info.noDescription),
-        alias() {},
-        type: "text",
-        dataType: EDataType.text
-      },
-      observationType: {
-        create:
-        _text('http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement'),
-        alias() {},
-        type: "list",
-        dataType: EDataType._text,
-        verify: {
-          list: Object.keys(EObservationType),
-          default:
-            "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement",
-        },
-      },
-      unitOfMeasurement: {
-        create: "jsonb NOT NULL",
-        alias() {},
-        type: "json",
-        dataType: EDataType.jsonb
-      },
-      observedArea: {
-        create: "geometry NULL",
-        alias() {},
-        type: "json",
-        dataType: EDataType.jsonb
-      },
-      phenomenonTime: {
-        create: "",
-        alias(service: Iservice , test: IKeyBoolean | undefined) {          
-          return `CONCAT(to_char("_phenomenonTimeStart",'${EDatesType.date}'),'/',to_char("_phenomenonTimeEnd",'${EDatesType.date}')) AS "phenomenonTime"`;
-        },
-        type: "text",
-        dataType: EDataType.text
-      },
-      resultTime: {
-        create: "",
-        alias(service: Iservice , test: IKeyBoolean | undefined) {
-          return `CONCAT(to_char("_resultTimeStart",'${EDatesType.date}'),'/',to_char("_resultTimeEnd",'${EDatesType.date}')) AS "resultTime"`;
-        },
-        type: "text",
-        dataType: EDataType.text
-      },
-      _phenomenonTimeStart: {
-        create: _tz,
-        alias() {},
-        type: "date",
-        dataType: EDataType.timestamptz
-      },
-      _phenomenonTimeEnd: {
-        create: _tz,
-        alias() {},
-        type: "date",
-        dataType: EDataType.timestamptz
-      },
-      _resultTimeStart: {
-        create: _tz,
-        alias() {},
-        type: "date",
-        dataType: EDataType.timestamptz
-      },
-      _resultTimeEnd: {
-        create: _tz,
-        alias() {},
-        type: "date",
-        dataType: EDataType.timestamptz
-      },
-      thing_id: {
-        create: _idRel,
-        alias() {},
-        dataType: EDataType.link,
-        type: "relation:Things",
-      },
-      observedproperty_id: {
-        create: _idRel,
-        alias() {},
-        dataType: EDataType.link,
-        type: "relation:ObservedProperties",
-      },
-      sensor_id: {
-        create: _idRel,
-        alias() {},
-        dataType: EDataType.link,
-        type: "relation:Sensor",
-      },
-      _default_featureofinterest: {
-        create: "BIGINT NOT NULL DEFAULT 1",
-        alias() {},
-        dataType: EDataType.link,
-        type: "relation:FeaturesOfInterest",
-      },
+      id: new Bigint().generated("id").type(),
+      name: new Text().notNull().default(info.noName).unique().type(),
+      description: new Text().notNull().default(info.noDescription).type(),
+      observationType: new Text().notNull().default('http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement').verify(Object.keys(EObservationType)).type(),
+      unitOfMeasurement: new Jsonb().notNull().type(),
+      observedArea: new Geometry().type(),
+      phenomenonTime: new Timestamp().alias("phenomenonTime").type(),
+      resultTime: new Timestamp().alias("resultTime").type(),
+      _phenomenonTimeStart: new Timestamp().tz().type(),
+      _phenomenonTimeEnd: new Timestamp().tz().type(),
+      _resultTimeStart: new Timestamp().tz().type(),
+      _resultTimeEnd: new Timestamp().tz().type(),
+      thing_id:  new Relation().relation("Things").type(),
+      observedproperty_id: new Relation().relation("ObservedProperties").type(),
+      sensor_id: new Relation().relation("Sensors").type(),
+      _default_featureofinterest:  new Relation().relation("FeaturesOfInterest").default(1).type()
     },
     relations: {
       Thing: {
@@ -146,24 +53,6 @@ export const Datastream:Ientity  = createEntity("Datastreams", {
       FeatureOfInterest: {
         type: ERelations.defaultUnique
       },
-    },
-    constraints: {
-      datastream_pkey: 'PRIMARY KEY ("id")',
-      datastream_unik_name: 'UNIQUE ("name")',
-      datastream_observedproperty_id_fkey:
-        'FOREIGN KEY ("observedproperty_id") REFERENCES "observedproperty"("id") ON UPDATE CASCADE ON DELETE CASCADE',
-      datastream_sensor_id_fkey:
-        'FOREIGN KEY ("sensor_id") REFERENCES "sensor"("id") ON UPDATE CASCADE ON DELETE CASCADE',
-      datastream_thing_id_fkey:
-        'FOREIGN KEY ("thing_id") REFERENCES "thing"("id") ON UPDATE CASCADE ON DELETE CASCADE',
-      datastream_featureofinterest_id_fkey:
-        'FOREIGN KEY ("_default_featureofinterest") REFERENCES "featureofinterest"("id") ON UPDATE CASCADE ON DELETE CASCADE',
-    },
-    indexes: {
-      datastream_observedproperty_id:
-        'ON public."datastream" USING btree ("observedproperty_id")',
-      datastream_sensor_id: 'ON public."datastream" USING btree ("sensor_id")',
-      datastream_thing_id: 'ON public."datastream" USING btree ("thing_id")',
     },
     clean: [`WITH datastreams AS (
       SELECT DISTINCT "datastream_id" AS id FROM observation

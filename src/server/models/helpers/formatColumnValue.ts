@@ -27,7 +27,7 @@ export function formatColumnValue(columnName: string, value: any, column: Ientit
           ? value[EConstant.id]
       : removeFirstAndEnd(value, '@');
   }
-  console.log(log.debug_head(`${columnName} [${column.type}] ==> ${value}`));    
+  console.log(log.debug_head(`${columnName} [${column.dataType}] ==> ${value}`));    
     if (value) switch (value) {
       case void 0:
         return '';
@@ -63,8 +63,8 @@ export function formatColumnValue(columnName: string, value: any, column: Ientit
               return value.includes("'") 
                 ? simpleQuotesString(ESCAPE_SIMPLE_QUOTE(value))
                 : simpleQuotesString(value);
-            } catch (error) {            
-                return simpleQuotesString(value);
+            } catch (error) {
+                return simpleQuotesString(typeof value === "object" ? JSON.stringify(value) :value);
             }
           default:
             process.stdout.write(`====[ERROR]=========${column.dataType}] ===============` + "\n");

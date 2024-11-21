@@ -6,46 +6,20 @@
  *
  */
 
-import { createEntity } from ".";
-import { EConstant, EDataType, ERelations, ETable } from "../../enums";
-import { Iservice, Ientity, IKeyBoolean } from "../../types";
-import { doubleQuotesString } from "../../helpers";
-import { _idBig } from "./constants";
-export const Line:Ientity  = createEntity("Lines", {
+import { Entity } from "../entity";
+import { ERelations, ETable } from "../../enums";
+import { Ientity } from "../../types";
+import { Bigint, Relation, Result } from "../types";
+export const Line:Ientity  = new Entity("Lines", {
     createOrder: 2,
     type: ETable.table,
     order: 2,
     orderBy: `"id"`,
     columns: {
-      id: {
-        create: _idBig,
-        alias(service: Iservice , test: IKeyBoolean) {
-           return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotesString(EConstant.id)}`: ''}` ;
-        },
-        type: "number",
-        dataType: EDataType.bigint
-      },
-      result: {
-        create: "JSONB NULL",
-        alias(service: Iservice , test: IKeyBoolean | undefined) {
-          return `"result"->'line'${test && test["as"] === true ? ` AS "result"`: ''}`;
-        },
-        type: "result",
-        dataType: EDataType.result
-      },
-      file_id: {
-        create: "BIGINT NULL",
-        alias() {},
-        dataType: EDataType.link,
-        type: "relation:Files",
-      }
-    },
-    constraints: {
-      line_pkey: 'PRIMARY KEY ("id")',
-    },
-    indexes: {
-      line_file_id:
-        'ON public."line" USING btree ("file_id")'
+      id: new Bigint().generated("id").type(),
+      result: new Result().lines().type(),
+      file_id: new Relation().relation("Files").type(),
+
     },
     relations: {
       File: {

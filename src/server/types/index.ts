@@ -7,8 +7,9 @@
  */
 
 import Koa from "koa";
-import { allEntitiesType, EExtensions, EOptions } from "../enums";
+import { allEntitiesType, EDataType, EExtensions, EOptions } from "../enums";
 import { Ientity } from "./entity";
+import { IentityColumn } from "./entityColumn";
 export { IrelationInfos } from "./relationInfos";
 export { Icomon } from "./comon";
 export { Iservice } from "./service";
@@ -41,3 +42,28 @@ export type koaContext = Koa.ParameterizedContext<Koa.DefaultState,  Koa.Default
 export const typeOptions = Object.keys(EOptions) as Array<keyof typeof EOptions>;
 export const typeExtensions= Object.keys(EExtensions) as Array<keyof typeof EExtensions>;
 export type keyobj = keyof object;
+
+export const getColumnType = (input: IentityColumn): string => {
+   switch (input.dataType) {
+    case EDataType.bigint:
+        return  "number";
+    case EDataType.text:
+        return  "text";   
+    case EDataType._text:
+        return  "text[]";
+        // return  "list";
+    case EDataType.timestamptz:
+        return "date";
+    case EDataType.json:
+    case EDataType.jsonb:
+        return  "json";
+    case EDataType.link:
+        return `relation:${input.entityRelation}`;
+    case EDataType.result:
+        return `result`;
+    case EDataType.boolean:
+        return `boolean`;
+    default:
+        return  "ERR_OR";
+   } 
+}

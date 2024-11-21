@@ -74,10 +74,12 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
   await asyncForEach(
     Object.keys(DB).filter(e => e.trim() !== ""),
     async (keyName: string) => {
-      const res = await createTable(configName, DB[keyName], undefined);
+      const res = await createTable(configName, DB[keyName], undefined);      
       Object.keys(res).forEach((e: string) => log.create(e, res[e]));      
     }
   );
+
+
 
   returnValue[`Create Role`] = await createRole(config.getService(configName))
   .then(() => EChar.ok)

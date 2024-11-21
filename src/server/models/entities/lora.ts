@@ -6,96 +6,25 @@
  *
  */
 
-import { createEntity } from ".";
-import { EConstant, EDataType, ERelations, ETable } from "../../enums";
-import { Iservice, Ientity, IKeyBoolean } from "../../types";
-import { _idBig, _idRel, _text } from "./constants";
-import { doubleQuotesString } from "../../helpers";
+import { Entity } from "../entity";
+import {  ERelations, ETable } from "../../enums";
+import { Ientity } from "../../types";
 import { info } from "../../messages";
-export const Lora:Ientity  = createEntity("Loras", {
+import { Bigint, Jsonb, Relation, Text } from "../types";
+export const Lora:Ientity  = new Entity("Loras", {
   createOrder: 11,
   type: ETable.table,
   order: 11,
   orderBy: `"id"`,
   columns: {
-    id: {
-      create: _idBig,
-      alias(service: Iservice , test: IKeyBoolean) {
-          return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotesString(EConstant.id)}`: ''}` ;
-      },
-      type: "number",
-        dataType: EDataType.bigint
-    },
-    name: {
-      create: _text(info.noName),
-      alias() {
-        return undefined;
-      },
-      type: "text",
-        dataType: EDataType.text
-    },
-    description: {
-      create: _text(info.noDescription),
-      alias() {
-        return undefined;
-      },
-      type: "text",
-        dataType: EDataType.text
-    },
-    properties: {
-      create: "JSONB NULL",
-      alias() {
-        return undefined;
-      },
-      type: "json",
-        dataType: EDataType.jsonb
-    },
-    deveui: {
-      create: _text(), 
-      alias() {
-        return undefined;
-      },
-      type: "text",
-        dataType: EDataType.text
-    },
-    decoder_id: {
-      create: _idRel,
-      alias() {
-        return undefined;
-      },
-      dataType: EDataType.link,
-        type: "relation:Decoders",
-    },
-    datastream_id: {
-      create: "BIGINT NULL",
-      alias() {
-        return undefined;
-      },
-      dataType: EDataType.link,
-        type: "relation:Datastreams",
-    },
-    multidatastream_id: {
-      create: "BIGINT NULL",
-      alias() {
-        return undefined;
-      },
-      dataType: EDataType.link,
-        type: "relation:MultiDatastreams",
-    },
-  },
-  constraints: {
-    lora_pkey: 'PRIMARY KEY ("id")',
-    lora_unik_deveui: 'UNIQUE ("deveui")',
-    lora_datastream_unik_id: 'UNIQUE ("datastream_id")',
-    lora_multidatastream_unik_id: 'UNIQUE ("multidatastream_id")',
-    lora_datastream_fkey: 'FOREIGN KEY ("datastream_id") REFERENCES "datastream"("id") ON UPDATE CASCADE ON DELETE CASCADE',
-    lora_multidatastream_fkey: 'FOREIGN KEY ("multidatastream_id") REFERENCES "multidatastream"("id") ON UPDATE CASCADE ON DELETE CASCADE',
-    lora_decoder_fkey: 'FOREIGN KEY ("decoder_id") REFERENCES "decoder"("id") ON UPDATE CASCADE ON DELETE CASCADE',
-  },
-  indexes: {
-    lora_datastream_id: 'ON public."lora" USING btree ("datastream_id")',
-    lora_multidatastream_id: 'ON public."lora" USING btree ("multidatastream_id")',
-    decoder_id: 'ON public."lora" USING btree ("decoder_id")',
+    id: new Bigint().generated("id").type(),
+    name: new Text().notNull().default(info.noName).unique().type(),
+    description: new Text().notNull().default(info.noDescription).type(),
+    properties: new Jsonb().type(),
+    deveui: new Text().unique().type(),
+    decoder_id:  new Relation().notNull().relation("Decoders").type(),
+    datastream_id:  new Relation().relation("Datastreams").unique().type(),
+    multidatastream_id:  new Relation().relation("MultiDatastreams").unique().type()
   },
   relations: {
     Datastream: {

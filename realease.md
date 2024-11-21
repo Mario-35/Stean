@@ -16,3 +16,7 @@
     change versicnon in code
 ## version 0.9.3
     rewrite services add to respond issue 2 (can't reproduce bug)
+## version 0.9.4
+    new column mechanij
+## version 0.9.5
+    rewrite mechanic of model creator to be univwersal not only STA

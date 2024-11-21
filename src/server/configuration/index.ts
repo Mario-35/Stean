@@ -40,6 +40,9 @@ class Configuration {
     if (isTest()) {
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       console.log = (data: any) => {};
+      // console.log = (data: any) => {
+      //   if (data) this.writeLog(data);
+      // }
       this.readConfigFile();
     } 
     else console.log = (data: any) => {

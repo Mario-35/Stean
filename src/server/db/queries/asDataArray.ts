@@ -3,7 +3,7 @@
  *
  * @copyright 2020-present Inrae
  * @review 27-01-2024
- * @author formatPgString.adam@inrae.fr
+ * @author mario.adam@inrae.fr
  *
  */
 

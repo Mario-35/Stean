@@ -13,7 +13,7 @@ import { Ientity, IKeyString } from "../../types";
 import { EChar } from "../../enums";
 export const createTable = async ( configName: string, tableEntity: Ientity, doAfter: string | undefined ): Promise<IKeyString> => {
   if (!tableEntity) return {};
-  console.log(log.debug_head(`CreateTable [${tableEntity.table}] for ${configName}`));
+  console.log(log.debug_head(`CreateTable [${tableEntity.table || `pseudo ${tableEntity.name}`}] for ${configName}`));
   const space = 5;
   const tab = () => " ".repeat(space);
   const tabIeInsert: string[] = [];
@@ -30,12 +30,11 @@ export const createTable = async ( configName: string, tableEntity: Ientity, doA
       tabIeInsert.push(`${doubleQuotesString(column)} ${tableEntity.columns[column].create}`);
   });
   insertion = tabIeInsert.join(", ");
-  if (tableEntity.constraints) {
-    Object.keys(tableEntity.constraints).forEach((constraint) => {
-      if (tableEntity.constraints)
-        tableConstraints.push( `ALTER TABLE ONLY ${doubleQuotesString(tableEntity.table)} ADD CONSTRAINT ${doubleQuotesString(constraint)} ${tableEntity.constraints[constraint]};` );
-    });
-  }
+
+  Object.keys(tableEntity.constraints).forEach((constraint) => {
+    tableConstraints.push( `ALTER TABLE ONLY ${doubleQuotesString(tableEntity.table)} ADD CONSTRAINT ${doubleQuotesString(constraint)} ${tableEntity.constraints[constraint]}` );
+  });
+
   if (tableEntity.table.trim() != "")
     returnValue[String(`Create table ${doubleQuotesString(tableEntity.table)}`)] =
     await config.connection(configName).unsafe(`CREATE TABLE ${doubleQuotesString(tableEntity.table)} (${insertion});`)
@@ -54,9 +53,10 @@ export const createTable = async ( configName: string, tableEntity: Ientity, doA
         .then(() => EChar.ok)
         .catch((error: Error) => error.message);
   // CREATE CONSTRAINTS
-  if (tableEntity.constraints && tableConstraints.length > 0)
+
+  if (tableConstraints.length > 0)
     returnValue[`${tab()}Create constraints for ${tableEntity.table}`] =
-      await config.connection(configName).unsafe(tableConstraints.join(" "))
+      await config.connection(configName).unsafe(tableConstraints.join(";"))
         .then(() => EChar.ok)
         .catch((error: Error) => error.message);
   // CREATE SOMETHING AFTER
@@ -76,5 +76,6 @@ export const createTable = async ( configName: string, tableEntity: Ientity, doA
       .then(() => EChar.ok)
       .catch((error: Error) => error.message);
   }
+
   return returnValue;
 };

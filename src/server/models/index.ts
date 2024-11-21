@@ -3,12 +3,13 @@ import { log } from "../log";
 import { _STREAM } from "../db/constants";
 import { executeSqlValues } from "../db/helpers";
 import { asJson } from "../db/queries";
-import { EColumnType, EConstant, EDataType, EExtensions, filterEntities } from "../enums";
+import { EColumnType, EConstant, EExtensions, filterEntities } from "../enums";
 import { doubleQuotesString, deepClone, isTest, formatPgTableColumn, isString } from "../helpers";
 import { errors, msg } from "../messages";
-import { Iservice, Ientities, Ientity, IstreamInfos, koaContext, IentityRelation } from "../types";
+import { Iservice, Ientities, Ientity, IstreamInfos, koaContext, IentityRelation, getColumnType } from "../types";
 import fs from "fs";
 import { FeatureOfInterest, Thing, Location, Service, CreateObservation, CreateFile, Datastream, Decoder, HistoricalLocation, Log, Lora, MultiDatastream, MultiDatastreamObservedProperty, Observation, Sensor, User, LocationHistoricalLocation, ObservedProperty, ThingLocation, File, Line } from "./entities";
+import { Geometry, Jsonb } from "./types";
 
 const testVersion = (input: string) => Object.keys(Models.models).includes(`${input}`);
 class Models {
@@ -19,6 +20,7 @@ class Models {
           Things: Thing,        
           FeaturesOfInterest: FeatureOfInterest,        
           Locations: Location,        
+          ThingsLocations: ThingLocation,
           HistoricalLocations: HistoricalLocation,        
           LocationsHistoricalLocations: LocationHistoricalLocation,        
           ObservedProperties: ObservedProperty,        
@@ -27,7 +29,6 @@ class Models {
           MultiDatastreams: MultiDatastream,        
           MultiDatastreamObservedProperties: MultiDatastreamObservedProperty,        
           Observations: Observation,      
-          ThingsLocations: ThingLocation,        
           Decoders: Decoder,        
           Loras: Lora,        
           Logs: Log,        
@@ -73,7 +74,7 @@ class Models {
       fileContent = fileContent.replace(`&lt;strong&gt;${entities.MultiDatastreams.singular}&lt;/strong&gt;`, "");
     }
     Object.keys(entities).forEach((strEntity: string) => {
-      fileContent = fileContent.replace(`COLUMNS.${entities[strEntity].name}`, this.getColumnListNameWithoutId(entities[strEntity]).map((colName: string) => `&lt;p style=&quot;margin: 0px; margin-left: 8px;&quot;&gt;${colName}: ${entities[strEntity].columns[colName].type.toUpperCase()}&lt;/p&gt;`).join(""));
+      fileContent = fileContent.replace(`COLUMNS.${entities[strEntity].name}`, this.getColumnListNameWithoutId(entities[strEntity]).map((colName: string) => `&lt;p style=&quot;margin: 0px; margin-left: 8px;&quot;&gt;${colName}: ${getColumnType(entities[strEntity].columns[colName]).toUpperCase()}&lt;/p&gt;`).join(""));
     });
     return fileContent;
   }
@@ -143,28 +144,11 @@ class Models {
   }
 
   private version1_1(input: Ientities): Ientities {
-    const makeJson = (name:string) => {
-      return {
-        create : "jsonb NULL",
-        alias() {
-          return `"${name}"`;
-        },
-        type: "json",
-        dataType: EDataType.jsonb
-      };
-    };
     // add properties to entities
     ["Things", "Locations", "FeaturesOfInterest", "ObservedProperties", "Sensors", "Datastreams", "MultiDatastreams"]
-      .forEach((e: string) => { input[e].columns["properties"] = makeJson("properties"); });
+      .forEach((e: string) => { input[e].columns["properties"] =  new Jsonb().type() });
     // add geom to Location
-    input.Locations.columns["geom"] = {
-      create: "geometry NULL",
-      alias() {
-        return `"geom"`;
-      },
-      type: "json",
-        dataType: EDataType.jsonb
-    };
+    input.Locations.columns["geom"] =  new Geometry().type();
     return input;
   }
   
@@ -304,7 +288,7 @@ class Models {
   public isColumnType(service: Iservice , entity: Ientity | string, column: string , test: string): boolean {
     if (config && entity) {
       const tempEntity = this.getEntity(service, entity);
-      return tempEntity && tempEntity.columns[column] ? (tempEntity.columns[column].type.toLowerCase() === test.toLowerCase()) : false;
+      return tempEntity && tempEntity.columns[column] ? (getColumnType(tempEntity.columns[column]) === test.toLowerCase()) : false;
     }
     return false;
   }
@@ -393,4 +377,5 @@ class Models {
     }
   }
 }
+
 export const models = new Models();

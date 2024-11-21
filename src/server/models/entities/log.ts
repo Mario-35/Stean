@@ -6,79 +6,26 @@
  *
  */
 
-import { createEntity } from ".";
-import { Iservice, Ientity, IKeyBoolean } from "../../types";
-import { _idBig, _text } from "./constants";
-import { doubleQuotesString } from "../../helpers";
-import { EConstant, EDataType, ETable } from "../../enums";
-export const Log:Ientity = createEntity("Logs", {
+import { Entity } from "../entity";
+import { Ientity } from "../../types";
+import { ETable } from "../../enums";import { Bigint, Jsonb, Text, Timestamp } from "../types";
+
+export const Log:Ientity = new Entity("Logs", {
     createOrder: -1,
     type: ETable.table,
     order: -1,
     orderBy: `"date DESC"`,
     columns: {
-      id: {
-        create: _idBig,
-        alias(service: Iservice , test: IKeyBoolean) {
-           return `"id"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotesString(EConstant.id)}`: ''}` ;
-        },
-        type: "number",
-        dataType: EDataType.bigint,
-      },
-      date: {
-        create: "timestamptz DEFAULT CURRENT_TIMESTAMP",
-        alias() {},
-        type: "date",
-        dataType: EDataType.timestamptz
-      },
-      user_id: {
-        create: "BIGINT NULL",
-        alias() {},
-        type: "number",
-        dataType: EDataType.bigint
-      },
-      method: {
-        create: "TEXT NULL",
-        alias() {},
-        type: "text",
-        dataType: EDataType.text
-      },
-      code: {
-        create: "INT NULL",
-        alias() {},
-        type: "number",
-        dataType: EDataType.bigint
-      },
-      url: {
-        create: _text(), 
-        alias() {},
-        type: "text",
-        dataType: EDataType.text
-      },
-      datas: {
-        create: "JSONB NULL",
-        alias() {},
-        type: "json",
-        dataType: EDataType.jsonb
-      },
-      database: {
-        create: "TEXT NULL",
-        alias() {},
-        type: "text",
-        dataType: EDataType.text
-      },
-      returnid: {
-        create: "TEXT NULL",
-        alias() {},
-        type: "text",
-        dataType: EDataType.text
-      },
-      error: {
-        create: "JSONB NULL",
-        alias() {},
-        type: "json",
-        dataType: EDataType.jsonb
-      },
+      id: new Bigint().generated("id").type(),
+      date: new Timestamp().tz().notNull().defaultCurrent().type(),
+      user_id: new Bigint().type(),
+      method: new Text().type(),
+      code: new Bigint().type(),
+      url: new Text().type(),
+      datas: new Jsonb().type(),
+      database: new Text().type(),
+      returnid: new Text().type(),
+      error: new Jsonb().type(),
     },
     relations: {},
   });

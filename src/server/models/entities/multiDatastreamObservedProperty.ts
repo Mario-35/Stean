@@ -6,44 +6,19 @@
  *
  */
 
-import { createEntity } from ".";
-import { EDataType, ETable } from "../../enums";
+import { Entity } from "../entity";
+import { ETable } from "../../enums";
 import { Ientity } from "../../types";
-import { _idRel } from "./constants";
-    export const MultiDatastreamObservedProperty:Ientity  = createEntity("MultiDatastreamObservedProperties", {
+import { Bigint } from "../types";
+
+export const MultiDatastreamObservedProperty:Ientity  = new Entity("MultiDatastreamObservedProperties", {
     createOrder: 9,
     type: ETable.link,
     order: -1,
     orderBy: "",
     columns: {
-      multidatastream_id: {
-        create: _idRel,
-        alias() {},
-        type: "bigint",
-        dataType: EDataType.bigint
-      },
-      observedproperty_id: {
-        create: _idRel,
-        alias() {
-          return undefined;
-        },
-        type: "bigint",
-        dataType: EDataType.bigint
-      },
+      multidatastream_id: new Bigint().notNull().type(),
+      observedproperty_id: new Bigint().notNull().type(),
     },
-    relations: {},
-    constraints: {
-      multidatastreamobservedproperty_pkey:
-        'PRIMARY KEY ("multidatastream_id", "observedproperty_id")',
-      multidatastreamobservedproperty_multidatastream_id_fkey:
-        'FOREIGN KEY ("multidatastream_id") REFERENCES "multidatastream"("id") ON UPDATE CASCADE ON DELETE CASCADE',
-      multidatastreamobservedproperty_observedproperty_id_fkey:
-        'FOREIGN KEY ("observedproperty_id") REFERENCES "observedproperty"("id") ON UPDATE CASCADE ON DELETE CASCADE',
-    },
-    indexes: {
-      multidatastreamobservedproperty_multidatastream_id:
-        'ON public."multidatastreamobservedproperty" USING btree ("multidatastream_id")',
-      multidatastreamobservedproperty_observedproperty_id:
-        'ON public."multidatastreamobservedproperty" USING btree ("observedproperty_id")',
-    },
+    relations: {}
   });

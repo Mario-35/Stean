@@ -6,18 +6,15 @@
  *
  */
 
-import { IKeyString, IKeyBoolean, Iservice, typeExtensions } from ".";
+import { IKeyBoolean, Iservice } from ".";
 import { EDataType } from "../enums";
 export interface IentityColumn {    
-        readonly create:    string;
-        extensions?:        typeof typeExtensions;
-        alias(config:       Iservice, test?: IKeyBoolean): string | undefined | void;
-        readonly unique?:   boolean;
-        readonly test?:     string;
-        readonly dataList?: IKeyString;
-        readonly type:      string;
-        readonly dataType:  EDataType;
-        readonly verify?: {
+        dataType:  EDataType;
+        create:    string;
+        entityRelation?: string;
+        alias(config:Iservice, test?: IKeyBoolean): string | undefined | void;
+        // readonly dataList?: IKeyString;
+        verify?: {
             list: string[];
             default: string;
         }

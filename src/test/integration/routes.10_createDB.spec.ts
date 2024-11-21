@@ -21,7 +21,8 @@ describe("Create Test Database.", function () {
                     console.error(err);
                 }
                 should.not.exist(err);
-                res.status.should.equal(201);
+                res.status.should.equal(201);    
+                // process.exit(111);            
                 done();
             });
     });
