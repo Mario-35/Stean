@@ -39,7 +39,7 @@ export class CreateObservations extends Common {
             ? `'{"value": [${elem}]}'`
             : typeof elem === "string"
             ? elem.endsWith("Z")
-              ? `TO_TIMESTAMP('${dateToDateWithTimeZone(elem)}', '${ EDatesType.dateWithOutTimeZone }')::TIMESTAMP`
+              ? `TO_TIMESTAMP('${dateToDateWithTimeZone(elem)}', '${ EDatesType.dateImport }')::TIMESTAMP`
               : `${separateur}${elem}${separateur}`
             : `${separateur}{${elem}}${separateur}`
           : index === this.indexResult && type === "VALUES"

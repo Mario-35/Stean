@@ -3,7 +3,7 @@ import { doubleQuotesString } from "../helpers";
 import { msg, errors } from "../messages";
 import { IentityColumn, IentityCore, IentityRelation, IKeyString } from "../types";
 import { singular } from "./helpers";
-import { Timestamp } from "./types";
+import { Time, Timestamp } from "./types";
 
 class Pass {
     static pass:  {
@@ -52,22 +52,43 @@ export class Entity extends Pass {
       private prepareColums() {
         Object.keys(this.columns).forEach(e => {
           if (this.columns[e].dataType === EDataType.period) {
-            const table = this.columns[e].create;
-            this.columns[e] = new Timestamp().alias(e).type();
-            this.columns[`_${e}Start`] = new Timestamp().tz().type();
-            this.columns[`_${e}End`] = new Timestamp().tz().type();
-            this.addToUpdate(`WITH datastreams AS ( SELECT DISTINCT "${this.table}_id" AS id FROM ${table} ),
+            const table = this.columns[e].entityRelation;
+            switch (this.columns[e].create.split(" ")[0]) {
+              case "TIME":
+                this.columns[e] = new Time().alias(e).type();
+                this.columns[`_${e}Start`] = new Time().type();
+                this.columns[`_${e}End`] = new Time().type();                
+              break;
+              case "TIMETZ":
+                this.columns[e] = new Time("tz").alias(e).type();
+                this.columns[`_${e}Start`] = new Time("tz").type();
+                this.columns[`_${e}End`] = new Time("tz").type();                
+                break;
+              case "TIMESTAMP":
+                this.columns[e] = new Timestamp().alias(e).type();
+                this.columns[`_${e}Start`] = new Timestamp().type();
+                this.columns[`_${e}End`] = new Timestamp().type();                
+                break;
+              case "TIMESTAMPTZ":
+                this.columns[e] = new Timestamp("tz").alias(e).type();
+                this.columns[`_${e}Start`] = new Timestamp("tz").type();
+                this.columns[`_${e}End`] = new Timestamp("tz").type();                
+                break;
+            }
+            this.addToUpdate(`WITH stream AS (SELECT DISTINCT "${this.table}_id" AS id FROM ${table}),
       datas AS (SELECT 
         "${this.table}_id" AS id,
         MIN("${e}") AS pmin ,
         MAX("${e}") AS pmax
-        FROM ${table}, datastreams WHERE "${this.table}_id" = datastreams.id GROUP BY "${this.table}_id")
+        FROM ${table}, stream WHERE "${this.table}_id" = stream.id GROUP BY "${this.table}_id")
       UPDATE "${this.table}" SET 
         "_${e}Start" =  datas.pmin ,
         "_${e}End" = datas.pmax
       FROM datas WHERE "${this.table}".id = datas.id`);
+      this.columns[e].create = "";
           }
-        })
+        });
+        
       }
 
       private is(elem: string) {

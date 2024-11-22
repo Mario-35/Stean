@@ -178,8 +178,8 @@ export class Loras extends Common {
           ? `SELECT COALESCE((SELECT "id" FROM "featureofinterest" WHERE "id" = ${getFeatureOfInterest}), ${getFeatureOfInterest})`
           : `(SELECT multidatastream1._default_featureofinterest FROM multidatastream1)`,
         multidatastream_id: "(SELECT multidatastream1.id FROM multidatastream1)",
-      phenomenonTime: `to_timestamp('${this.stean["timestamp"]}','${EDatesType.dateWithOutTimeZone}')::timestamp`,
-      resultTime: `to_timestamp('${this.stean["timestamp"]}','${EDatesType.dateWithOutTimeZone}')::timestamp`,
+      phenomenonTime: `to_timestamp('${this.stean["timestamp"]}','${EDatesType.dateImport}')::timestamp`,
+      resultTime: `to_timestamp('${this.stean["timestamp"]}','${EDatesType.dateImport}')::timestamp`,
         result: resultCreate,
       };
       const searchDuplicate = Object.keys(insertObject)
@@ -267,8 +267,8 @@ export class Loras extends Common {
       const insertObject: Record<string, any>  = {
         featureofinterest_id: "(SELECT datastream1._default_featureofinterest from datastream1)",
         datastream_id: "(SELECT datastream1.id from datastream1)",
-      phenomenonTime: `to_timestamp('${this.stean["timestamp"]}','${EDatesType.dateWithOutTimeZone}')::timestamp`,
-      resultTime: `to_timestamp('${this.stean["timestamp"]}}','${EDatesType.dateWithOutTimeZone}')::timestamp`,
+      phenomenonTime: `to_timestamp('${this.stean["timestamp"]}','${EDatesType.dateImport}')::timestamp`,
+      resultTime: `to_timestamp('${this.stean["timestamp"]}}','${EDatesType.dateImport}')::timestamp`,
         result: resultCreate,
       };
       const searchDuplicate = Object.keys(insertObject)

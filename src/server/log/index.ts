@@ -32,7 +32,7 @@ class Log {
     return `${color(EColor.Yellow)}${cle} ${color( EColor.White )}:${color(EColor.Cyan)} ${this.showAll( infos)}${color(EColor.Reset)}`;
   }
   public query(sql: unknown) {
-    if (_DEBUG) return `${color(EColor.Code)}${"=".repeat(5)}[ Query Start ]${"=".repeat(5)}\n${color(EColor.Sql)} ${this.showAll(sql)}\n${color(EColor.Sql)}${color(EColor.Code)}\n${color( EColor.Reset )}`;
+    if (_DEBUG) return `${color(EColor.Code)}${"=".repeat(5)}[ Query Start ]${"=".repeat(5)}\n${color(EColor.Sql)} ${this.showAll(sql)}\n${color(EColor.Sql)}${color(EColor.Code)}${color( EColor.Reset )}`;
   }
   public queryError<T>(query: unknown, error: T) {  
     return `${color(EColor.Green)} ${"=".repeat(15)} ${color( EColor.Cyan )} ERROR ${color(EColor.Green)} ${"=".repeat(15)}${color( EColor.Reset )}

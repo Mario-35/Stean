@@ -17,7 +17,7 @@ export const Log:Ientity = new Entity("Logs", {
     orderBy: `"date DESC"`,
     columns: {
       id: new Bigint().generated("id").type(),
-      date: new Timestamp().tz().notNull().defaultCurrent().type(),
+      date: new Timestamp("tz").notNull().defaultCurrent().type(),
       user_id: new Bigint().type(),
       method: new Text().type(),
       code: new Bigint().type(),

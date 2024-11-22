@@ -18,7 +18,7 @@ export const HistoricalLocation:Ientity  = new Entity("HistoricalLocations", {
   orderBy: `"id"`,
   columns: {
     id: new Bigint().generated("id").type(),
-    time: new Timestamp().tz().type(),
+    time: new Timestamp("tz").type(),
     thing_id: new Bigint().notNull().type(),
   },
   relations: {

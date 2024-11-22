@@ -22,7 +22,6 @@ describe("Create Test Database.", function () {
                 }
                 should.not.exist(err);
                 res.status.should.equal(201);    
-                // process.exit(111);            
                 done();
             });
     });

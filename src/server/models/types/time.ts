@@ -2,18 +2,20 @@ import { EDataType, EDatesType } from "../../enums";
 import { IKeyBoolean, Iservice } from "../../types";
 import { Core } from "./core";
 
-export class Timestamp extends Core {
+export class Time extends Core {
+
     constructor(tz?: "tz" | "TZ") {
-        super(tz ? EDataType.timestamptz : EDataType.timestamp, tz ? "TIMESTAMPTZ" : "TIMESTAMP");
+        super(tz ? EDataType.timetz : EDataType.time, tz ? "TIMETZ" : "TIME");
     }
 
     defaultCurrent()  {
-        this._create = this._create.replace('@DEFAULT@', ' DEFAULT CURRENT_TIMESTAMP');
+        this._create = this._create.replace('@DEFAULT@', ' DEFAULT CURRENT_TIME');
         return this;
     }
 
+    
     alias(alias: string) {
-        const tmpType  = this._dataType === EDataType.timestamptz ? EDatesType.dateTz : EDatesType.date;
+        const tmpType  = this._dataType === EDataType.timetz ? EDatesType.timeTz : EDatesType.time;
         this._override = {
             create: "",
             alias(service: Iservice , test: IKeyBoolean | undefined) {

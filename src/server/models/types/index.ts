@@ -14,6 +14,7 @@ export { Relation } from "./relation";
 export { Result } from "./result";
 export { Text } from "./text";
 export { Texts } from "./texts";
+export { Time } from "./time";
 export { Timestamp } from "./timestamp";
 export { Tmperiod } from "./tmperiod";
 

@@ -10,7 +10,7 @@ import { Entity } from "../entity";
 import { EObservationType, ERelations, ETable } from "../../enums";
 import { Ientity } from "../../types";
 import { info } from "../../messages";
-import { Bigint, Geometry, Jsonb, Relation, Text, Texts, Timestamp, Tmperiod } from "../types";
+import { Bigint, Geometry, Jsonb, Relation, Text, Texts, Tmperiod } from "../types";
 export const MultiDatastream:Ientity  = new Entity("MultiDatastreams", {
     createOrder: 8,
     type: ETable.table,
@@ -24,12 +24,8 @@ export const MultiDatastream:Ientity  = new Entity("MultiDatastreams", {
       observationType: new Text().notNull().default('http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement').verify(Object.keys(EObservationType)).type(),
       multiObservationDataTypes: new Texts().type(),
       observedArea: new Geometry().type(),
-      phenomenonTime: new Tmperiod().source("Observations").type(),
-      resultTime: new Tmperiod().source("Observations").type(),
-      _phenomenonTimeStart: new Timestamp().tz().type(),
-      _phenomenonTimeEnd: new Timestamp().tz().type(),
-      _resultTimeStart: new Timestamp().tz().type(),
-      _resultTimeEnd: new Timestamp().tz().type(),
+      phenomenonTime: new Tmperiod("timestamp").source("Observations").type(),
+      resultTime: new Tmperiod("timestamp").source("Observations").type(),
       thing_id:  new Relation().relation("Things").type(),
       sensor_id: new Relation().relation("Sensors").type(),
       _default_featureofinterest:  new Relation().relation("FeaturesOfInterest").default(1).type()

@@ -71,14 +71,6 @@ export class Core {
         };
         return this;
     }
-
-    // export const colResultLine: IentityColumn  = {
-    //     create: "JSONB NULL",
-    //     alias(service: Iservice , test: IKeyBoolean | undefined) {
-    //         return `"result"->'line'${test && test["as"] === true ? ` AS "result"`: ''}`;
-    //     },
-    //     dataType: EDataType.result
-    // };
     
 }
 

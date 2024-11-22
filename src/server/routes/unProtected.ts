@@ -127,8 +127,6 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
       ctx.type = returnFormats.json.type;
       ctx.body = await models.getInfos(ctx);
       return;
-    case "INDEXES":
-      process.exit(110);
     case "DROP":
       console.log(log.debug_head("drop database"));
       if (ctx.service.options.includes(EOptions.canDrop)) {        

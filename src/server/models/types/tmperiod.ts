@@ -3,12 +3,12 @@ import { singular } from "../helpers";
 import { Core } from "./core";
 
 export class Tmperiod extends Core {
-    constructor() {
-        super(EDataType.period, "TIMESTAMP");
+    constructor(tz: "time" | "timetz" | "timestamp" | "timestamptz") {
+        super(EDataType.period, tz.toUpperCase());
     }
-    
+
     source(source: string) {
-        this._create = singular(source).toLowerCase();
+        this._entityRelation = singular(source).toLowerCase();
         return this;
     }
 }

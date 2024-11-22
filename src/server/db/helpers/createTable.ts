@@ -35,9 +35,11 @@ export const createTable = async ( configName: string, tableEntity: Ientity, doA
     tableConstraints.push( `ALTER TABLE ONLY ${doubleQuotesString(tableEntity.table)} ADD CONSTRAINT ${doubleQuotesString(constraint)} ${tableEntity.constraints[constraint]}` );
   });
 
+  let sql = `CREATE TABLE ${doubleQuotesString(tableEntity.table)} (${insertion});`;
+  console.log(log.query(sql));
   if (tableEntity.table.trim() != "")
     returnValue[String(`Create table ${doubleQuotesString(tableEntity.table)}`)] =
-    await config.connection(configName).unsafe(`CREATE TABLE ${doubleQuotesString(tableEntity.table)} (${insertion});`)
+    await config.connection(configName).unsafe(sql)
         .then(() => EChar.ok)
         .catch((error: Error) => error.message);
   const indexes = tableEntity.indexes;
@@ -47,20 +49,29 @@ export const createTable = async ( configName: string, tableEntity: Ientity, doA
     Object.keys(indexes).forEach((index) => {
       tabTemp.push(`CREATE INDEX "${index}" ${indexes[index]}`);
     });
-  if (tabTemp.length > 0)
+  if (tabTemp.length > 0) {
+    sql = tableConstraints.join(";");
+    console.log(log.query(sql));
     returnValue[`${tab()}Create indexes for ${tableEntity.name}`] =
-    await config.connection(configName).unsafe(tabTemp.join(";"))
+    await config.connection(configName).unsafe(sql)
         .then(() => EChar.ok)
         .catch((error: Error) => error.message);
+
+  }
   // CREATE CONSTRAINTS
 
-  if (tableConstraints.length > 0)
+  if (tableConstraints.length > 0) {
+    sql = tabTemp.join(";");
+    console.log(log.query(sql));
     returnValue[`${tab()}Create constraints for ${tableEntity.table}`] =
-      await config.connection(configName).unsafe(tableConstraints.join(";"))
+      await config.connection(configName).unsafe(sql)
         .then(() => EChar.ok)
         .catch((error: Error) => error.message);
+  }
+
   // CREATE SOMETHING AFTER
   if (tableEntity.after) {
+    log.query(tableEntity.after);
     if (tableEntity.after.toUpperCase().startsWith("INSERT"))
       returnValue[`${tab()}Something to do after for ${tableEntity.table}`] =
       await config.connection(configName).unsafe(tableEntity.after)
@@ -72,6 +83,7 @@ export const createTable = async ( configName: string, tableEntity: Ientity, doA
   }
   // CREATE SOMETHING AFTER (migration)
   if (doAfter) {
+    log.query(doAfter);
     returnValue[`${tab()} doAfter ${tableEntity.table}`] = await config.connection(configName).unsafe(doAfter)
       .then(() => EChar.ok)
       .catch((error: Error) => error.message);
