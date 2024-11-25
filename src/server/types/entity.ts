@@ -13,7 +13,6 @@ export interface IentityCore {
      createOrder:   number;
      type:          ETable;
      order:         number;
-     orderBy:       string;
      columns:       { [key: string]: IentityColumn };
      relations:     { [key: string]: IentityRelation };
      after?:        string;
@@ -26,4 +25,5 @@ export interface Ientity extends IentityCore {
      constraints:   { [key: string]: string };
      indexes:       { [key: string]: string };
      update?:        string[];
+     orderBy:       string;
 }

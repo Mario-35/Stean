@@ -14,10 +14,9 @@ export const Observation:Ientity  = new Entity("Observations", {
     createOrder: 12,
     type: ETable.table,
     order: 7,
-    orderBy: `"phenomenonTime"`,
     columns: {
       id: new Bigint().generated("id").type(),
-      phenomenonTime: new Timestamp("tz").notNull().type(),
+      phenomenonTime: new Timestamp("tz").notNull().defaultOrder("asc").type(),
       result: new Result().type(),
       resultTime: new Timestamp("tz").notNull().type(),
       resultQuality: new Jsonb().type(),

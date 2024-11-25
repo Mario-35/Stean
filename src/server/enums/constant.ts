@@ -21,6 +21,7 @@ const getKey = () => {
 export const EConstant = Object.freeze({
     rights : "SUPERUSER CREATEDB NOCREATEROLE INHERIT LOGIN NOREPLICATION NOBYPASSRLS CONNECTION LIMIT -1",
     id : '@iot.id',
+    name : "@iot.name",
     navLink : '@iot.navigationLink',
     selfLink : '@iot.selfLink',
     encoding : "encodingType",

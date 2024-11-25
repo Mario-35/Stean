@@ -15,7 +15,6 @@ export const Datastream = new Entity("Datastreams", {
     createOrder: 7,
     type: ETable.table,
     order: 1,
-    orderBy: `"id"`,
     columns: {
       id: new Bigint().generated("id").type(),
       name: new Text().notNull().default(info.noName).unique().type(),

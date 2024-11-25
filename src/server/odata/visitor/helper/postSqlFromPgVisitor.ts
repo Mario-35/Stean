@@ -8,7 +8,7 @@
 
 import { doubleQuotesString, getBigIntFromString } from "../../../helpers";
 import { Ientity, IKeyString, IqueryMaker } from "../../../types";
-import { EConstant, EOperation, EOptions } from "../../../enums";
+import { EConstant, EOperation, EOptions, ETable } from "../../../enums";
 import { asJson } from "../../../db/queries";
 import { models } from "../../../models";
 import { log } from "../../../log";
@@ -17,6 +17,7 @@ import { apiAccess } from "../../../db/dataAccess";
 import * as entities from "../../../db/entities";
 import { PgVisitor } from "..";
 export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor): string | undefined {
+
     const formatInsertEntityData = (entity: string, datas: object, main: PgVisitor): Record<string, any> => {
         const goodEntity = models.getEntityName(main.ctx.service, entity);
         if (goodEntity && goodEntity in entities) {
@@ -55,6 +56,11 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
      * @param query query for the query not in as
      * @returns
      */
+    const onConflict = (element: string): string => {
+        let conflictNames = Object.keys(queryMaker[element].datas).filter((e => queryMaker[element].entity.columns[e].create.includes("UNIQUE")));
+        if (conflictNames.length <= 0 && src.id) conflictNames = Object.keys(queryMaker[element].datas);
+        return conflictNames.length <= 0 ? '' : ` ON CONFLICT ("${conflictNames.join('","')}") do update set ${createUpdateValues(queryMaker[element].entity, queryMaker[element].datas)}`
+    }
     const queryMakerToString = (query: string): string => {
         const returnValue: string[] = [query];
         const links: { [key: string]: string[] } = {};
@@ -86,17 +92,20 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
             if (queryMaker[element].datas.hasOwnProperty(EConstant.id)) {
                 const searchId = queryMaker[element].datas[EConstant.id as keyof object];
                 returnValue.push( `, ${element} AS (select verifyId('${queryMaker[element].entity.table}', ${searchId}) as id)` );
-            } else if (queryMaker[element].datas.hasOwnProperty("@iot.name")) {
-                const searchByName = queryMaker[element].datas["@iot.name" as keyof object];
+            } else if (queryMaker[element].datas.hasOwnProperty(EConstant.name)) {
+                const searchByName = queryMaker[element].datas[EConstant.name as keyof object];
                 returnValue.push( `, ${element} AS (select "id" from "${queryMaker[element].entity.table}" where "name" = '${searchByName}')` );
             } else {
                 returnValue.push(`, ${element} AS (`);
                 if (src.id) {
-                    if (queryMaker[element].type == EOperation.Association) 
-                        returnValue.push(`INSERT INTO "${queryMaker[element].entity.table}" ${createInsertValues(src.ctx, formatInsertEntityData(queryMaker[element].entity.table, queryMaker[element].datas, src))} on conflict ("${Object.keys(queryMaker[element].datas).join('","')}") do update set ${createUpdateValues(queryMaker[element].entity, queryMaker[element].datas)} WHERE "${queryMaker[element].entity.table}"."${queryMaker[element].keyId}" = ${BigInt(src.id).toString()}`);
+                    if (queryMaker[element].type == EOperation.Association) {
+                        returnValue.push(`INSERT INTO "${queryMaker[element].entity.table}" ${createInsertValues(src.ctx, formatInsertEntityData(queryMaker[element].entity.table, queryMaker[element].datas, src))}${onConflict(element)} WHERE "${queryMaker[element].entity.table}"."${queryMaker[element].keyId}" = ${BigInt(src.id).toString()}`);
+                    }
                     else
                         returnValue.push(`UPDATE "${queryMaker[element].entity.table}" SET ${createUpdateValues(queryMaker[element].entity, queryMaker[element].datas)} WHERE "${queryMaker[element].entity.table}"."${queryMaker[element].keyId}" = (select verifyId('${queryMaker[element].entity.table}', ${src.id}) as id)`);
-                } else returnValue.push(`INSERT INTO "${queryMaker[element].entity.table}" ${createInsertValues(src.ctx, formatInsertEntityData(queryMaker[element].entity.table, queryMaker[element].datas, src))}`);                            
+                } else  returnValue.push(`INSERT INTO "${queryMaker[element].entity.table}" ${createInsertValues(src.ctx, formatInsertEntityData(queryMaker[element].entity.table, queryMaker[element].datas, src))}${queryMaker[element].entity.type === ETable.link ? onConflict(element) : ''}`);                            
+
+                
                 returnValue.push(`RETURNING ${postEntity.table == queryMaker[element].entity.table ? allFields : queryMaker[element].keyId})`);
             }
         });
@@ -238,7 +247,9 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
                                         [`${subEntity.table}_id`]: `@(select ${tableName}.id from ${tableName})@`,
                                         [`${subParentEntity.table}_id`]: `@(select ${parentTableName}.id from ${parentTableName})@`
                                     },
-                                    relCardinality.leftKey,
+                                    relCardinality.entity.columns[relCardinality.rightKey].create.includes("UNIQUE")
+                                        ? relCardinality.rightKey
+                                        : relCardinality.leftKey,
                                     undefined
                                     );
                                 }

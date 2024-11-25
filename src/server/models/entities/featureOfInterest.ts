@@ -16,7 +16,6 @@ export const FeatureOfInterest:Ientity  = new Entity("FeaturesOfInterest", {
             createOrder: 4,
             type: ETable.table,
             order: 4,
-            orderBy: `"id"`,
             columns: {
               id: new Bigint().generated("id").type(),
               name: new Text().notNull().default(info.noName).unique().type(),

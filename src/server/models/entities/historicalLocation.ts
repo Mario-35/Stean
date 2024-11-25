@@ -15,7 +15,6 @@ export const HistoricalLocation:Ientity  = new Entity("HistoricalLocations", {
   createOrder: -1,
   order: 5,
   type: ETable.table,
-  orderBy: `"id"`,
   columns: {
     id: new Bigint().generated("id").type(),
     time: new Timestamp("tz").type(),
@@ -27,7 +26,7 @@ export const HistoricalLocation:Ientity  = new Entity("HistoricalLocations", {
     },
     Locations: {
       type: ERelations.belongsTo,
-      entityRelation: "ThingsLocations"
+      entityRelation: "LocationsHistoricalLocations"
     },
   },
 });

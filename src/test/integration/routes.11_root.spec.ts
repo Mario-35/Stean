@@ -85,6 +85,8 @@ describe("endpoint : index", () => {
                 res.body.value[10].url.should.contain("/Decoders");
                 docs.push(prepareToApiDoc({ ...infos, result: res }, "SensorThings"));
                 generateApiDoc(docs, "apiSensorThings.js");
+					// if (res.body) process.exit(111);
+
                 done();
             });
         });

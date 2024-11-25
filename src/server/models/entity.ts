@@ -35,8 +35,8 @@ export class Entity extends Pass {
             this.createOrder = datas.createOrder,
             this.type = datas.type,
             this.order = datas.order,
-            this.orderBy = datas.orderBy,
             this.columns = datas.columns,
+            this.orderBy =Object.keys(datas.columns)[0];
             this.relations = datas.relations,
             this.constraints = {},
             this.indexes = {},
@@ -47,6 +47,8 @@ export class Entity extends Pass {
           } else throw new Error(msg( errors.noValidEntity, name));
           this.prepareColums();
           this.createConstraints();
+          // if (name.includes("atastreams")) console.log(this);
+          
       };
 
       private prepareColums() {
@@ -117,6 +119,7 @@ export class Entity extends Pass {
       
       private createConstraints() {
         Object.keys(this.columns).forEach((elem: string) => {
+          if (this.columns[elem].orderBy) this.orderBy = `${doubleQuotesString(elem)} ${this.columns[elem].orderBy.toUpperCase()}` ;
           if (this.columns[elem].create.startsWith('BIGINT GENERATED ALWAYS AS IDENTITY')) {
             this.addToConstraints(`${this.table}_pkey`,`PRIMARY KEY ("${elem}")`);
             this.addToIndexes(`${this.table}_${elem}`, `ON public."${this.table}" USING btree ("${elem}")`);

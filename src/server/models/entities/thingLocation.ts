@@ -15,7 +15,6 @@ import { Bigint } from "../types";
     createOrder: 3,
     type: ETable.link,
     order: -1,
-    orderBy: `"thing_id"`,
     columns: {
       thing_id: new Bigint().notNull().type(),
       location_id: new Bigint().notNull().type(),

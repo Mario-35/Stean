@@ -9,6 +9,7 @@
 import { formatColumnValue, relationInfos } from ".";
 import { models } from "..";
 import { ESCAPE_SIMPLE_QUOTE } from "../../constants";
+import { EConstant } from "../../enums";
 import { doubleQuotesString, simpleQuotesString, removeFirstEndDoubleQuotes } from "../../helpers";
 import { log } from "../../log";
 import { koaContext } from "../../types";
@@ -53,7 +54,7 @@ export function createInsertValues(ctx: koaContext | undefined, input: Record<st
                     {                      
                       input[elem] = removeFirstEndDoubleQuotes(input[elem].replace(/\\"+/g, ""));
                     } else if (input[elem].startsWith && input[elem].startsWith('{"@iot.name"')) {
-                      input[elem] = `(SELECT "id" FROM "${elem.split("_")[0]}" WHERE "name" = '${JSON.parse(removeFirstEndDoubleQuotes(input[elem]))["@iot.name"]}')`;
+                      input[elem] = `(SELECT "id" FROM "${elem.split("_")[0]}" WHERE "name" = '${JSON.parse(removeFirstEndDoubleQuotes(input[elem]))[EConstant.name]}')`;
                     }
                   keys.push(doubleQuotesString(elem));
                   values.push(typeof input[elem] === "string" 

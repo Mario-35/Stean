@@ -6,7 +6,7 @@
  *
  */
 
-import { setReady, _DEBUG } from "../constants";
+import { setReady, _DEBUG, _TRACE } from "../constants";
 import { asyncForEach, decrypt, encrypt, isProduction, isTest, logToHtml, } from "../helpers";
 import { Iservice, IdbConnection, IserviceInfos, koaContext, keyobj } from "../types";
 import { errors, info, infos, msg } from "../messages";
@@ -217,7 +217,7 @@ class Configuration {
     const input = Configuration.services[EConstant.admin].pg;    
     return postgres(`postgres://${input.user}:${input.password}@${input.host}:${input.port || 5432}/${EConstant.defaultDb}`,
       {
-        debug: _DEBUG,          
+        debug: _TRACE,          
         connection: { 
           application_name : `${EConstant.appName} ${EConstant.appVersion}`
         }

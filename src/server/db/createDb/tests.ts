@@ -401,8 +401,8 @@ export const testDatas:Record<string, any> = {
 			"description": "Watershed F4 piezometer of Kerrien"
 		},
 		{
-			"name": "BeautifulEyes Sensor",
-			"description": "Sensor from the BeautifulEyes site"
+			"name": "BeautifulEyes Thing",
+			"description": "Thing from the BeautifulEyes site"
 		}
 	],
 	"FeaturesOfInterest": [
@@ -980,6 +980,13 @@ export const testDatas:Record<string, any> = {
 		}
 	],
 	"Locations": [
+		// Only for not hawe same id as Thing
+		{
+			"name": "On the Moon",
+			"description": "Climatic chamber location",
+			"encodingType": "application/geo+json",
+			"location": geo.Quimper.geometry
+		},
 		{
 			"name": `${n["classic"]} Location`,
 			"description": `Description of ${n["classic"]} Location`,
@@ -1015,12 +1022,6 @@ export const testDatas:Record<string, any> = {
 			"description": "Institut Agro Rennes-Angers",
 			"encodingType": "application/geo+json",
 			"location": geo.Rennes.geometry
-		},
-		{
-			"name": "On the Moon",
-			"description": "Climatic chamber location",
-			"encodingType": "application/geo+json",
-			"location": geo.Quimper.geometry
 		},
 		{
 			"name": "Outlet E30",
@@ -1609,7 +1610,7 @@ export const testDatas:Record<string, any> = {
 				"definition": ""
 			},
 			"thing_id": {
-				"@iot.name": "BeautifulEyes Sensor"
+				"@iot.name": "BeautifulEyes Thing"
 			},
 			"observedproperty_id": {
 				"@iot.name": "Pressure sensor"
@@ -1755,7 +1756,7 @@ export const testDatas:Record<string, any> = {
 				"\"Measurement\""
 			],
 			"thing_id": {
-				"@iot.name": "BeautifulEyes Sensor"
+				"@iot.name": "BeautifulEyes Thing"
 			},
 			"sensor_id": {
 				"@iot.name": "LoRa-G-868-E/4G"
@@ -1781,7 +1782,7 @@ export const testDatas:Record<string, any> = {
 				"\"Measurement\""
 			],
 			"thing_id": {
-				"@iot.name": "BeautifulEyes Sensor"
+				"@iot.name": "BeautifulEyes Thing"
 			},
 			"sensor_id": {
 				"@iot.name": "LoRa-G-868-E/4G"
@@ -1807,7 +1808,7 @@ export const testDatas:Record<string, any> = {
 				"\"Measurement\""
 			],
 			"thing_id": {
-				"@iot.name": "BeautifulEyes Sensor"
+				"@iot.name": "BeautifulEyes Thing"
 			},
 			"sensor_id": {
 				"@iot.name": "LoRa-G-868-E/4G"
@@ -1833,7 +1834,7 @@ export const testDatas:Record<string, any> = {
 				"\"Measurement\""
 			],
 			"thing_id": {
-				"@iot.name": "BeautifulEyes Sensor"
+				"@iot.name": "BeautifulEyes Thing"
 			},
 			"sensor_id": {
 				"@iot.name": "Capteur THR Quince"
@@ -2027,9 +2028,17 @@ export const testDatas:Record<string, any> = {
 				"@iot.name": `${n["hack"]} Location`
 			}
 		},
+		// {
+		// 	"thing_id": {
+		// 		"@iot.name": `BeautifulEyes Thing`
+		// 	},
+		// 	"location_id": {
+		// 		"@iot.name": "Institut Agro"
+		// 	}
+		// },
 		{
 			"thing_id": {
-				"@iot.name": `${n["apostrophe"]} Thing`
+				"@iot.name": "Climatic chamber"
 			},
 			"location_id": {
 				"@iot.name": "Institut Agro"
@@ -2037,14 +2046,6 @@ export const testDatas:Record<string, any> = {
 		},
 		{
 			"thing_id": {
-				"@iot.name": "Climatic chamber"
-			},
-			"location_id": {
-				"@iot.name": "On the Moon"
-			}
-		},
-		{
-			"thing_id": {
 				"@iot.name": "Outlet E30"
 			},
 			"location_id": {
@@ -2077,7 +2078,7 @@ export const testDatas:Record<string, any> = {
 		},
 		{
 			"thing_id": {
-				"@iot.name": "BeautifulEyes Sensor"
+				"@iot.name": "BeautifulEyes Thing"
 			},
 			"location_id": {
 				"@iot.name": "Site of BeautifulEyes"

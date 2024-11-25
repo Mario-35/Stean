@@ -507,8 +507,8 @@ describe("endpoint : Thing [8.2.1]", () => {
 					res.type.should.equal("application/json");
 					const id = res.body.Locations[0]["@iot.id"];
 					res.body.Locations[0]["@iot.selfLink"].should.contain(`Locations(${id})`);
-					res.body.HistoricalLocations[0]["@iot.id"].should.eql(id);
-					res.body.HistoricalLocations[0]["@iot.selfLink"].should.contain(`HistoricalLocations(${id})`);
+					res.body.HistoricalLocations[0]["@iot.id"].should.eql(6);
+					res.body.HistoricalLocations[0]["@iot.selfLink"].should.contain(`HistoricalLocations(6)`);
 					addToApiDoc({
 						...infos,
 						result: limitResult(res)
@@ -812,6 +812,7 @@ describe("endpoint : Thing [8.2.1]", () => {
 				});
 		});
 	});
+
 	describe(`{post} ${entity.name} ${nbColorTitle}[10.2]`, () => {
 		afterEach(() => { writeLog(true); });
 		it(`Return added ${entity.name} ${nbColor}[10.2.1]`, (done) => {
@@ -1220,6 +1221,7 @@ describe("endpoint : Thing [8.2.1]", () => {
 				});
 		});
 	});
+
 	describe(`{patch} ${entity.name} ${nbColorTitle}[10.3]`, () => {
 		afterEach(() => { writeLog(true); });
 		it(`Return updated ${entity.name} ${nbColor}[10.3.1]`, (done) => {
@@ -1264,6 +1266,7 @@ describe("endpoint : Thing [8.2.1]", () => {
 						});
 				});
 		});
+
 		it(`Return Error if the ${entity.name} not exist`, (done) => {
 			const datas = {
 				"name": "New SensorWebThing Patch",
@@ -1293,6 +1296,7 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
+		
 		it(`Return updated ${entity.name} with new location`, (done) => {
 			const datas = {
 				"name": "New SensorWebThing back",
@@ -1407,6 +1411,7 @@ describe("endpoint : Thing [8.2.1]", () => {
 				});
 		});
 	});
+
 	describe(`{delete} ${entity.name} ${nbColorTitle}[10.4]`, () => {
 		afterEach(() => { writeLog(true); });
 		it(`Delete ${entity.name} return no content with code 204 ${nbColor}[10.4.1]`, (done) => {

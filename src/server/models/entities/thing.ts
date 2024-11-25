@@ -15,7 +15,6 @@ export const Thing: Ientity = new Entity("Things", {
     createOrder: 1,
     type: ETable.table,
     order: 10,
-    orderBy: `"id"`,
     columns: {
       id: new Bigint().generated("id").type(),
       name: new Text().notNull().default(info.noName).unique().type(),

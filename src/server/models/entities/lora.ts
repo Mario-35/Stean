@@ -15,7 +15,6 @@ export const Lora:Ientity  = new Entity("Loras", {
   createOrder: 11,
   type: ETable.table,
   order: 11,
-  orderBy: `"id"`,
   columns: {
     id: new Bigint().generated("id").type(),
     name: new Text().notNull().default(info.noName).unique().type(),

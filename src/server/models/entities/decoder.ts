@@ -16,7 +16,6 @@ export const Decoder:Ientity  = new Entity("Decoders", {
     createOrder: 10,
     type: ETable.table,
     order: 12,
-    orderBy: `"id"`,
     columns: {
       id: new Bigint().generated("id").type(),
       name: new Text().notNull().default(info.noName).unique().type(),

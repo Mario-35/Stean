@@ -16,7 +16,6 @@ import { Bigint, Text } from "../types";
     createOrder: 6,
     type: ETable.table,
     order: 9,
-    orderBy: `"id"`,
     columns: {
       id: new Bigint().generated("id").type(),
       name: new Text().notNull().default(info.noName).unique().type(),

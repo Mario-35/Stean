@@ -15,7 +15,6 @@ export const MultiDatastream:Ientity  = new Entity("MultiDatastreams", {
     createOrder: 8,
     type: ETable.table,
     order: 2,
-    orderBy: `"id"`,
     columns: {
       id: new Bigint().generated("id").type(),
       name: new Text().notNull().default(info.noName).unique().type(),

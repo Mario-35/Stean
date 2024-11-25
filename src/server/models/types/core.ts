@@ -4,6 +4,7 @@ import { IentityColumn, IKeyBoolean, Iservice } from "../../types";
 export class Core {
     _override: IentityColumn | undefined;
     _dataType: EDataType;
+    _orderBy: string | undefined;
     _cast: string;
     _create: string;
     _entityRelation: string | undefined = undefined;
@@ -21,6 +22,11 @@ export class Core {
         this._entityRelation = entityRelation;
     }
 
+    defaultOrder(input: "asc" | "desc")  {
+        this._orderBy = input;
+        return this;
+    }
+
     type(): IentityColumn  {
         if(this._override) return this._override;
         const res: IentityColumn = {    
@@ -28,6 +34,7 @@ export class Core {
             create: this._create.replace('@CAST@',this._cast).replace('@DEFAULT@','').replace('@NULL@','').replace('@UNIQUE@',''),
             alias() {},
         }
+        if (this._orderBy) res.orderBy = this._orderBy;
         if (this._entityRelation) res.entityRelation = this._entityRelation;
         if (this._verify.default && this._verify.list) res.verify =  {
             list: this._verify.list,

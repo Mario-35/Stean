@@ -26,6 +26,6 @@ describe("Create ApiDoc", function () {
         } catch (error) {
             console.error(error);
         }
-        done();
+        process.exit(111);
     });
 });

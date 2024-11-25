@@ -8,7 +8,7 @@
 
 import { idColumnName } from ".";
 import { models } from "..";
-import { ERelations } from "../../enums";
+import { ERelations, ETable } from "../../enums";
 import { formatPgTableColumn } from "../../helpers";
 import { log } from "../../log";
 import { errorMessage } from "../../messages";
@@ -71,14 +71,13 @@ export const relationInfos = (ctx: koaContext, entityName: string, relationName:
                                     rightKey: rightKey,
                                     entity: leftEntity,
                                     column: idColumnName(leftEntity, rightEntity) || "id",
-                                    link: `${formatPgTableColumn(rightEntity.table, rightKey)} IN (SELECT ${formatPgTableColumn(rightEntity.table, rightKey)} FROM ${formatPgTableColumn(rightEntity.table)} WHERE ${formatPgTableColumn(rightEntity.table, rightKey)} =$ID)`,
-                                    expand: ''
+                                    link: `${formatPgTableColumn(rightEntity.table, rightKey)} IN (SELECT ${formatPgTableColumn(rightEntity.table, rightKey)} FROM ${formatPgTableColumn(rightEntity.table)} WHERE ${formatPgTableColumn(rightEntity.table, rightKey)} =(SELECT ${formatPgTableColumn(leftEntity.table, leftKey)} FROM ${formatPgTableColumn(leftEntity.table)} WHERE id = $ID))`,
+                                    expand: `${formatPgTableColumn(rightEntity.table, rightKey)} IN (SELECT ${formatPgTableColumn(rightEntity.table, rightKey)} FROM ${formatPgTableColumn(rightEntity.table)} WHERE ${formatPgTableColumn(rightEntity.table, rightKey)} =${formatPgTableColumn(leftEntity.table, leftKey)})`,
                                 }       
-                                r.expand = r.link.replace("$ID", formatPgTableColumn(leftEntity.table, leftKey));
                                 return r;
                             }
                         }
-                        errorMessage("defaultUnique");
+                        errorMessage("defaultUnique"); 
                         break;
                 // === : 2
                 case ERelations.belongsTo:
@@ -142,7 +141,7 @@ export const relationInfos = (ctx: koaContext, entityName: string, relationName:
                                     const tempEntity = models.getEntity(ctx.service, tmp[0]);
                                     if (tempEntity && !loop) {
                                         const tempCardinality = relationInfos(ctx, leftEntity.name, tempEntity.name, true);
-                                        if(complexEntity2 && tempCardinality.entity) {
+                                        if(complexEntity2 && tempCardinality.entity && complexEntity2.type !== ETable.link) {
                                             leftKey = _Key(complexEntity2, rightEntity);
                                             rightKey = _Key(complexEntity2, leftEntity);
                                             r = {

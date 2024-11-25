@@ -14,7 +14,6 @@ export const Line:Ientity  = new Entity("Lines", {
     createOrder: 2,
     type: ETable.table,
     order: 2,
-    orderBy: `"id"`,
     columns: {
       id: new Bigint().generated("id").type(),
       result: new Result().lines().type(),

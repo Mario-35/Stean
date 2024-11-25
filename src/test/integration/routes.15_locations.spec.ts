@@ -256,7 +256,7 @@ describe("endpoint : Locations [8.2.2]", () => {
 					should.not.exist(err);
 					res.status.should.equal(200);
 					res.type.should.equal("application/json");
-					res.body.value.length.should.eql(2);
+					res.body.value.length.should.eql(1);
 					const id = Number(res.body.value[0]["@iot.id"]);
 					res.body.value[0]["@iot.selfLink"].should.contain(`/${name}(${id})`);
 					res.body.value[0]["Thing@iot.navigationLink"].should.contain(`/${name}(${id})/Thing`);

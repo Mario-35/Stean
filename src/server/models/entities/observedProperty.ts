@@ -15,7 +15,6 @@ export const ObservedProperty:Ientity  = new Entity("ObservedProperties", {
     createOrder: 5,
     type: ETable.table,
     order: 8,
-    orderBy: `"id"`,
     columns: {
         id: new Bigint().generated("id").type(),
         name: new Text().notNull().default(info.noName).unique().type(),

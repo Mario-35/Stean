@@ -15,7 +15,6 @@ export const File:Ientity  = new Entity("Files", {
   createOrder: 1,
     type: ETable.table,
     order: 1,
-    orderBy: `"id"`,
     columns: {
       id: new Bigint().generated("id").type(),
       name: new Text().notNull().default(info.noName).unique().type(),

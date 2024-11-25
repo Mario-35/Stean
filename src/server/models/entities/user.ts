@@ -15,10 +15,9 @@ import { Bigint, Bool, Text } from "../types";
     createOrder: -1,
     type: ETable.table,
     order: 21,
-    orderBy: `"name"`,
     columns: {
       id: new Bigint().generated("id").type(),
-      username: new Text().notNull().unique().type(),
+      username: new Text().notNull().unique().defaultOrder("asc").type(),
       email: new Text().type(),
       password: new Text().type(),
       database: new Text().type(),

@@ -15,7 +15,6 @@ export const MultiDatastreamObservedProperty:Ientity  = new Entity("MultiDatastr
     createOrder: 9,
     type: ETable.link,
     order: -1,
-    orderBy: "",
     columns: {
       multidatastream_id: new Bigint().notNull().type(),
       observedproperty_id: new Bigint().notNull().type(),
