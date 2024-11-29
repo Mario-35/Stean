@@ -30,7 +30,7 @@ export const graphDatastream = (table: string, id: string | bigint, input: PgVis
                   (
                     SELECT 
                       round_minutes("resultTime", 15) as date, 
-                      ${ids.filter((e: string) => +e !== (n+1)).map((e, n) => `null as res${n+1}`).join(",")} , 
+                      ${ids.filter((e: string) => +e !== (n+1)).map((e, n) => `null as res${n+1}`).join(",")}, 
                       result -> 'value' as res 
                     FROM 
                       "observation" 

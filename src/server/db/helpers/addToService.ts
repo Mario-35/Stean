@@ -6,7 +6,7 @@
  *
  */
 
-import { doubleQuotesString, asyncForEach } from "../../helpers";
+import { doubleQuotes, asyncForEach } from "../../helpers";
 import { log } from "../../log";
 import { models } from "../../models";
 import { createInsertValues } from "../../models/helpers";
@@ -38,7 +38,7 @@ export const addToService = async (ctx: koaContext, dataInput: Record<string, an
           user_id: String(ctx.user.id),
           error: error
         } ;
-        await executeSqlValues(ctx.service, `INSERT INTO ${doubleQuotesString(models.DBFull(ctx.service).Logs.table)} ${createInsertValues(ctx, datas, models.DBFull(ctx.service).Logs.name)} returning id`);
+        await executeSqlValues(ctx.service, `INSERT INTO ${doubleQuotes(models.DBFull(ctx.service).Logs.table)} ${createInsertValues(ctx, datas, models.DBFull(ctx.service).Logs.name)} returning id`);
       }
     });
   }

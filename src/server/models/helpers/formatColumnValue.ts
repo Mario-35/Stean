@@ -8,7 +8,7 @@
 
 import { ESCAPE_SIMPLE_QUOTE } from "../../constants";
 import { EConstant, EDataType } from "../../enums";
-import { doubleQuotesString, simpleQuotesString, removeFirstEndSimpleQuotes, removeFirstAndEnd, isString } from "../../helpers";
+import { doubleQuotes, simpleQuotes, removeFirstEndSimpleQuotes, removeFirstAndEnd, isString } from "../../helpers";
 import { log } from "../../log";
 import { IentityColumn } from "../../types";
 /**
@@ -44,27 +44,27 @@ export function formatColumnValue(columnName: string, value: any, column: Ientit
             return `'${value ? 1 : 0}'`;
           case EDataType.json:
           case EDataType.jsonb:
-              return simpleQuotesString(ESCAPE_SIMPLE_QUOTE(JSON.stringify(value)));
+              return simpleQuotes(ESCAPE_SIMPLE_QUOTE(JSON.stringify(value)));
           case EDataType._text:
             return isString(value) 
-              ? simpleQuotesString(value) 
-              : simpleQuotesString(`{${value.map((e: string) => doubleQuotesString(removeFirstEndSimpleQuotes(e))).join(",")}}`);
+              ? simpleQuotes(value) 
+              : simpleQuotes(`{${value.map((e: string) => doubleQuotes(removeFirstEndSimpleQuotes(e))).join(",")}}`);
           case EDataType.result:
-            return simpleQuotesString(ESCAPE_SIMPLE_QUOTE(JSON.stringify(value)));
+            return simpleQuotes(ESCAPE_SIMPLE_QUOTE(JSON.stringify(value)));
           case EDataType.date:
           case EDataType.time:
           case EDataType.timestamp:
           case EDataType.timestamptz:
-            return simpleQuotesString(value);
+            return simpleQuotes(value);
           case EDataType.link:
             return idLink(value);
           case EDataType.text:
             try {
               return value.includes("'") 
-                ? simpleQuotesString(ESCAPE_SIMPLE_QUOTE(value))
-                : simpleQuotesString(value);
+                ? simpleQuotes(ESCAPE_SIMPLE_QUOTE(value))
+                : simpleQuotes(value);
             } catch (error) {
-                return simpleQuotesString(typeof value === "object" ? JSON.stringify(value) :value);
+                return simpleQuotes(typeof value === "object" ? JSON.stringify(value) :value);
             }
           default:
             process.stdout.write(`====[ERROR]=========${column.dataType}] ===============` + "\n");
@@ -72,9 +72,9 @@ export function formatColumnValue(columnName: string, value: any, column: Ientit
         }
         if (String(value).startsWith("(SELECT")) return `${value}`;
         try {
-            return value.includes("'") ? simpleQuotesString(ESCAPE_SIMPLE_QUOTE(value)): simpleQuotesString(value);
+            return value.includes("'") ? simpleQuotes(ESCAPE_SIMPLE_QUOTE(value)): simpleQuotes(value);
         } catch (error) {            
-            return simpleQuotesString(value);
+            return simpleQuotes(value);
         }
     }
 }

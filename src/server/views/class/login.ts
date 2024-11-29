@@ -56,7 +56,7 @@ export class Login extends CoreHtmlView {
             
                       <form action="${url}/register" method="post">
                         <div class="sign-up-htm">
-                          ${this.addTextInput({name: "username", label: info.user , value: datas.body && datas.body.username ? datas.body.username : "", alert: alert("username"), toolType: `Name ${info.least5Tool}`})}
+                          ${this.addTextInput({name: "username", label: info.user, value: datas.body && datas.body.username ? datas.body.username : "", alert: alert("username"), toolType: `Name ${info.least5Tool}`})}
                           ${this.addTextInput({name: "pass", label: info.pass, password: true, value: datas.body && datas.body.password ? datas.body.password : "", alert: alert("password"), toolType: info.passTool})}
                           ${this.addTextInput({name: "repeat", label: info.rep, password: true, value: "", alert: alert("repeat"), toolType: info.repTool})}
                           ${this.addTextInput({name: "mail", label: "Email address", value: datas.body && datas.body.email ? datas.body.email : "", alert: alert("email"), toolType: info.mailTool})}

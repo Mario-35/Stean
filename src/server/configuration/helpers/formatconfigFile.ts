@@ -5,21 +5,27 @@
  * @author mario.adam@inrae.fr
  *
  */
-
 import util from "util";
 import { EConstant } from "../../enums";
 import { unikeList, unique } from "../../helpers";
 import { errors } from "../../messages";
 import { Iservice, typeExtensions, typeOptions } from "../../types";
+
 export function formatconfigFile(name: string, input: Record<string, any>): Iservice {
     const options: typeof typeOptions = input["options"]
-    ? unique([... String(input["options"]).split(",")]) as typeof typeOptions 
-    : [];
+      ? unique([... String(input["options"]).split(",")]) as typeof typeOptions 
+      : [];
+
     const extensions: typeof typeExtensions = input["extensions"]
       ? unique([... String(input["extensions"]).split(",")]) as typeof typeExtensions 
       : ["base"];
+
     if (input["extensions"]["users"]) extensions.includes("users");
-    const version = name === EConstant.admin ? "v1.1" : String(input["apiVersion"]).trim();
+
+    const version = name === EConstant.admin 
+      ? "v1.1" 
+      : String(input["apiVersion"]).trim();
+
     const returnValue: Iservice = {
       name: name,
       ports: name === EConstant.admin
@@ -45,7 +51,8 @@ export function formatconfigFile(name: string, input: Record<string, any>): Iser
       extensions: extensions,
       options: options,
       _connection: undefined,
-    };    
+    };
+    
     if (Object.values(returnValue).includes("ERROR"))
       throw new TypeError(
         `${errors.inConfigFile} [${util.inspect(returnValue, {

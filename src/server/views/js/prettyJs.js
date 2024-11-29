@@ -529,7 +529,7 @@ function js_beautify(js_source_text, options) {
 			resulting_string += sep;
 
 			if (sep === '/') {
-				// regexps may have modifiers /regexp/MOD , so fetch those, too
+				// regexps may have modifiers /regexp/MOD, so fetch those, too
 				while (parser_pos < input_length && in_array(input.charAt(parser_pos), wordchar)) {
 					resulting_string += input.charAt(parser_pos);
 					parser_pos += 1;
@@ -626,7 +626,7 @@ function js_beautify(js_source_text, options) {
 	whitespace = "\n\r\t ".split('');
 	wordchar = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_$'.split('');
 	digits = '0123456789'.split('');
-	punct = '+ - * / % & ++ -- = += -= *= /= %= == === != !== > < >= <= >> << >>> >>>= >>= <<= && &= | || ! !! , : ? ^ ^= |= ::'.split(' ');
+	punct = '+ - * / % & ++ -- = += -= *= /= %= == === != !== > < >= <= >> << >>> >>>= >>= <<= && &= | || ! !!, : ? ^ ^= |= ::'.split(' ');
 
 	// words which should always start on new line.
 	line_starters = 'continue,try,throw,return,var,if,switch,case,default,for,while,break,function'.split(',');

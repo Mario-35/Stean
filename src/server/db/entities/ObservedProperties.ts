@@ -9,6 +9,7 @@
 import { log } from "../../log";
 import { koaContext } from "../../types";
 import { Common } from "./common";
+
 export class ObservedProperties extends Common {
   constructor(ctx: koaContext) {
     console.log(log.whereIam());

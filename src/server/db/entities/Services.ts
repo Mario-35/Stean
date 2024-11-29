@@ -14,11 +14,14 @@ import { createService } from "../helpers";
 import { userAuthenticated } from "../../authentication";
 import { log } from "../../log";
 import { EExtensions, EHttpCode } from "../../enums";
+
 export class Services extends Common {
   constructor(ctx: koaContext) {
     console.log(log.whereIam());
     super(ctx);
   }
+
+  // Override Get All serwices
   async getAll(): Promise<IreturnResult | undefined> {
     console.log(log.whereIam());
     let can = userAuthenticated(this.ctx);
@@ -38,6 +41,8 @@ export class Services extends Common {
       })))
     });
   }
+
+  // Override Get One serwice
   async getSingle(): Promise<IreturnResult | undefined> {
     console.log(log.whereIam());
     // Return result If not authorised
@@ -49,6 +54,7 @@ export class Services extends Common {
     });
   }
   
+  // Override Post service
   async post(dataInput: Record<string, any> | undefined): Promise<IreturnResult | undefined> {
     console.log(log.whereIam());
     if (!this.ctx.service.extensions.includes(EExtensions.users)) this.ctx.throw(EHttpCode.Unauthorized);
@@ -66,11 +72,15 @@ export class Services extends Common {
         });
     }
   }
-  // Update an item
+
+  // Override Update service
   async update( idInput: bigint | string, dataInput: Record<string, any>  | undefined ): Promise<IreturnResult | undefined | void> {
     console.log(log.whereIam());      
+    // This function not exists
+    return;
   }
-  // Delete an item
+
+  // Override Delete service
   async delete(idInput: bigint | string): Promise<IreturnResult | undefined> {
     console.log(log.whereIam(idInput));
     // This function not exists

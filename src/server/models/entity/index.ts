@@ -1,11 +1,11 @@
-import { EDataType, ERelations, ETable, allEntities } from "../enums";
-import { doubleQuotesString } from "../helpers";
-import { msg, errors } from "../messages";
-import { IentityColumn, IentityCore, IentityRelation, IKeyString } from "../types";
-import { singular } from "./helpers";
-import { Time, Timestamp } from "./types";
+import { EDataType, ERelations, ETable, allEntities } from "../../enums";
+import { doubleQuotes } from "../../helpers";
+import { msg, errors } from "../../messages";
+import { IentityColumn, IentityCore, IentityRelation, IKeyString } from "../../types";
+import { singular } from "../helpers";
+import { Time, Timestamp } from "../types";
 
-class Pass {
+class EntityPass {
     static pass:  {
         [key: string]: {
             constraints:  IKeyString; 
@@ -14,7 +14,7 @@ class Pass {
     } = {};
 }
 
-export class Entity extends Pass {
+export class Entity extends EntityPass {
     name:          string; // Entity Name
     singular:      string;
     table:         string;
@@ -46,9 +46,7 @@ export class Entity extends Pass {
             this.table = this.singular.toLowerCase();
           } else throw new Error(msg( errors.noValidEntity, name));
           this.prepareColums();
-          this.createConstraints();
-          // if (name.includes("atastreams")) console.log(this);
-          
+          this.createConstraints();          
       };
 
       private prepareColums() {
@@ -90,7 +88,6 @@ export class Entity extends Pass {
       this.columns[e].create = "";
           }
         });
-        
       }
 
       private is(elem: string) {
@@ -119,7 +116,7 @@ export class Entity extends Pass {
       
       private createConstraints() {
         Object.keys(this.columns).forEach((elem: string) => {
-          if (this.columns[elem].orderBy) this.orderBy = `${doubleQuotesString(elem)} ${this.columns[elem].orderBy.toUpperCase()}` ;
+          if (this.columns[elem].orderBy) this.orderBy = `${doubleQuotes(elem)} ${this.columns[elem].orderBy.toUpperCase()}` ;
           if (this.columns[elem].create.startsWith('BIGINT GENERATED ALWAYS AS IDENTITY')) {
             this.addToConstraints(`${this.table}_pkey`,`PRIMARY KEY ("${elem}")`);
             this.addToIndexes(`${this.table}_${elem}`, `ON public."${this.table}" USING btree ("${elem}")`);
@@ -130,7 +127,7 @@ export class Entity extends Pass {
         });
         
         Object.keys(this.relations).forEach((elem: string) => {
-          if (this.relations[elem].unique) this.addToConstraints(`${this.table}_unik_${elem.toLowerCase()}`, `UNIQUE (${this.relations[elem].unique.map(e => doubleQuotesString(e))})`);
+          if (this.relations[elem].unique) this.addToConstraints(`${this.table}_unik_${elem.toLowerCase()}`, `UNIQUE (${this.relations[elem].unique.map(e => doubleQuotes(e))})`);
           switch (this.relations[elem].type) {
             case ERelations.belongsTo:
               const value = `FOREIGN KEY ("${elem.toLowerCase()}_id") REFERENCES "${elem.toLowerCase()}"("id") ON UPDATE CASCADE ON DELETE CASCADE`;
@@ -156,19 +153,17 @@ export class Entity extends Pass {
         });
 
         if (this.type === ETable.link && Object.keys(this.columns).length === 2) {
-          this.addToConstraints(`${this.table}_pkey`,`PRIMARY KEY (${Object.keys(this.columns).map(e => doubleQuotesString(e))})`);
+          this.addToConstraints(`${this.table}_pkey`,`PRIMARY KEY (${Object.keys(this.columns).map(e => doubleQuotes(e))})`);
           Object.keys(this.columns).forEach(elem => {
             this.addToIndexes(`${this.table}_${elem}`, `ON public."${this.table}" USING btree ("${elem}")`);
-          })
-          
+          });
         }
 
         if (Entity.pass[this.name]) {
           Object.keys(Entity.pass[this.name].constraints).forEach((elem: string) => {
             this.constraints[elem] = Entity.pass[this.name].constraints[elem];
-            // delete Entity.pass[this.name].constraints[elem];
           });
         }
-
       }
+
 }

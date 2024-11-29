@@ -8,6 +8,7 @@
 
 import { EConstant } from "../../enums";
 import { keyobj } from "../../types";
+
 // verify is valid config
 export function validJSONConfig(input: Record<string, any> ): boolean {    
     if (!input.hasOwnProperty(EConstant.admin)) return false;

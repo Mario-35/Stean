@@ -6,7 +6,6 @@
  *
  */
 
-
 export const singular = (input: string) : string => {
   if (input.endsWith("ies")) input = input.slice(0, -3) + "y";
   if (input.endsWith("s")) input = input.slice(0, -1);

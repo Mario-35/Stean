@@ -29,7 +29,6 @@ export const Location:Ientity  = new Entity("Locations", {
       },
       HistoricalLocations: {
         type: ERelations.belongsToMany,
-        entityRelation: "LocationsHistoricalLocations"
       },
     },
   });

@@ -14,7 +14,7 @@ export class Result extends Core {
         if(this._override) return this._override;
         return  {
             create: "JSONB NULL",
-            alias: function functionResult(service: Iservice , test: IKeyBoolean | undefined) {
+            alias: function functionResult(service: Iservice, test: IKeyBoolean | undefined) {
                 if (!test) return "result";  
                 if (test["valueskeys"] && test["valueskeys"] === true) 
                 return `COALESCE("result"-> 'valueskeys', "result"-> 'value')${test && test["as"] === true ? ` AS "result"`: ''}`;
@@ -32,7 +32,7 @@ export class Result extends Core {
     lines()  {
         this._override = {
             create: "JSONB NULL",
-            alias(service: Iservice , test: IKeyBoolean | undefined) {
+            alias(service: Iservice, test: IKeyBoolean | undefined) {
                 return `"result"->'line'${test && test["as"] === true ? ` AS "result"`: ''}`;
             },
             dataType: EDataType.result

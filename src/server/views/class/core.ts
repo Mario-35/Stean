@@ -91,7 +91,7 @@ export class CoreHtmlView {
         res.push(`<option value="${e}">${e}</option>`)});
       return res.join("");
     }
-    addSelect(input: { name: string, message: string, list: string[] , value: any, alert?: string, toolType?: string, password?: boolean }) {
+    addSelect(input: { name: string, message: string, list: string[], value: any, alert?: string, toolType?: string, password?: boolean }) {
       // const idName = this.makeIdName(input.name);
       return `<div class="group">
                 <label  for="${input.name}" class="label">

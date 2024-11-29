@@ -442,7 +442,7 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
     //     const infos = addTest({
     //         api: "{get} Location overlaps location",
     //         apiName: "BuiltInGeospatialOverlapsLocation",
-    //         apiDescription: "geo.overlaps( geometry A , geometry B ) Returns TRUE if geometry A and B 'spatially overlap'. Two geometries overlap if they have the same dimension, each has at least one point not shared by the other (or equivalently neither covers the other), and the intersection of their interiors has the same dimension. The overlaps relationship is symmetrical.",
+    //         apiDescription: "geo.overlaps( geometry A, geometry B ) Returns TRUE if geometry A and B 'spatially overlap'. Two geometries overlap if they have the same dimension, each has at least one point not shared by the other (or equivalently neither covers the other), and the intersection of their interiors has the same dimension. The overlaps relationship is symmetrical.",
     //         apiReference: "https://postgis.net/docs/ST_Overlaps.html",
     //         apiExample: {   http: `/${testVersion}/Locations?$filter=geo.overlaps(location,'MULTIPOINT(${point.join()})')`,
     //                         curl: defaultGet("curl", "KEYHTTP"),

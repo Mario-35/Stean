@@ -8,7 +8,7 @@
 
 import { config } from "../../configuration";
 import { log } from "../../log";
-import { doubleQuotesString } from "../../helpers";
+import { doubleQuotes } from "../../helpers";
 import { Ientity, IKeyString } from "../../types";
 import { EChar } from "../../enums";
 export const createTable = async ( configName: string, tableEntity: Ientity, doAfter: string | undefined ): Promise<IKeyString> => {
@@ -27,18 +27,18 @@ export const createTable = async ( configName: string, tableEntity: Ientity, doA
   
   Object.keys(tableEntity.columns).forEach((column) => {
     if (tableEntity.columns[column].create.trim() != "")
-      tabIeInsert.push(`${doubleQuotesString(column)} ${tableEntity.columns[column].create}`);
+      tabIeInsert.push(`${doubleQuotes(column)} ${tableEntity.columns[column].create}`);
   });
   insertion = tabIeInsert.join(", ");
 
   Object.keys(tableEntity.constraints).forEach((constraint) => {
-    tableConstraints.push( `ALTER TABLE ONLY ${doubleQuotesString(tableEntity.table)} ADD CONSTRAINT ${doubleQuotesString(constraint)} ${tableEntity.constraints[constraint]}` );
+    tableConstraints.push( `ALTER TABLE ONLY ${doubleQuotes(tableEntity.table)} ADD CONSTRAINT ${doubleQuotes(constraint)} ${tableEntity.constraints[constraint]}` );
   });
 
-  let sql = `CREATE TABLE ${doubleQuotesString(tableEntity.table)} (${insertion});`;
+  let sql = `CREATE TABLE ${doubleQuotes(tableEntity.table)} (${insertion});`;
   console.log(log.query(sql));
   if (tableEntity.table.trim() != "")
-    returnValue[String(`Create table ${doubleQuotesString(tableEntity.table)}`)] =
+    returnValue[String(`Create table ${doubleQuotes(tableEntity.table)}`)] =
     await config.connection(configName).unsafe(sql)
         .then(() => EChar.ok)
         .catch((error: Error) => error.message);

@@ -1877,7 +1877,7 @@
     {
       "-Name": "Functions in commonExpr - collection parameter in JSON with whitespace",
       "-Rule": "commonExpr",
-      "input": "Products/Model.ProductsByColor(colors=[ \"red\", \"green\" , \"blue\" ])"
+      "input": "Products/Model.ProductsByColor(colors=[ \"red\", \"green\", \"blue\" ])"
     },
     {
       "-Name": "Functions in commonExpr - collection parameter in JSON with whitespace",

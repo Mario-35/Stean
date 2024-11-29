@@ -41,7 +41,7 @@ export class First extends CoreHtmlView {
                       <form action="/service" method="post">
                         <div class="sign-in-htm">
                           ${this.addHidden("_src", "_first")}
-                          ${this.addTextInput({name: "host", label: info.host , value: datas.body && datas.body.host || "localhost", alert: alert("host"), toolType: info.least5Tool})}
+                          ${this.addTextInput({name: "host", label: info.host, value: datas.body && datas.body.host || "localhost", alert: alert("host"), toolType: info.least5Tool})}
                           ${this.addTextInput({name: "port", label: info.pg + " port", value: datas.body && datas.body.port || "5432", toolType: info.portTool, alert: alert("port")})}
                           ${this.addTextInput({name: "adminname", label: info.user, value: datas.body && datas.body.adminname || "postgres", alert: alert("username"), toolType: info.least5Tool})}
                           ${this.addTextInput({name: "adminpassword", label: info.pass, password: true, value: "", alert: alert("password"), toolType: info.passTool})}

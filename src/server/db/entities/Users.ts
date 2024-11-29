@@ -16,11 +16,13 @@ import { EConstant, EHttpCode, EUserRights } from "../../enums";
 import { executeSqlValues } from "../helpers";
 import { models } from "../../models";
 import { log } from "../../log";
+
 export class Users extends Common {
   constructor(ctx: koaContext) {
     console.log(log.whereIam());
     super(ctx);
   }
+
   // Override get all to return all users only if rights are good
   async getAll(): Promise<IreturnResult | undefined> {
     console.log(log.whereIam());
@@ -31,6 +33,7 @@ export class Users extends Common {
       });
     } else this.ctx.throw(EHttpCode.Unauthorized, { code: EHttpCode.Unauthorized, detail: errors[EHttpCode.Unauthorized as keyobj] });
   }
+
   // Override to creste a new config and load it 
   async post(dataInput: object | undefined): Promise<IreturnResult | undefined> {
     console.log(log.whereIam());

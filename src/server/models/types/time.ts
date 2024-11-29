@@ -18,7 +18,7 @@ export class Time extends Core {
         const tmpType  = this._dataType === EDataType.timetz ? EDatesType.timeTz : EDatesType.time;
         this._override = {
             create: "",
-            alias(service: Iservice , test: IKeyBoolean | undefined) {
+            alias(service: Iservice, test: IKeyBoolean | undefined) {
                 return `CONCAT(to_char("_${alias}Start",'${tmpType}'),'/',to_char("_${alias}End",'${tmpType}')) AS "${alias}"`;    
             },
             dataType: EDataType.text

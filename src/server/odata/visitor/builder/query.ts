@@ -7,16 +7,16 @@
  */
 
 
-import { doubleQuotesString, cleanStringComma, isDataArray, isGraph, isGeoJson, removeAllQuotes, removeFirstEndDoubleQuotes, formatPgString } from "../../../helpers";
+import { doubleQuotes, cleanStringComma, isDataArray, isGraph, isGeoJson, removeAllQuotes, removeFirstEndDoubleQuotes, formatPgString } from "../../../helpers";
 import { asJson } from "../../../db/queries";
 import { Iservice, Ientity, IKeyBoolean, IpgQuery } from "../../../types";
 import { PgVisitor, RootPgVisitor } from "..";
 import { models } from "../../../models";
-import { allEntities, EConstant, EDataType, EOptions } from "../../../enums";
+import { EConstant, EDataType, EOptions } from "../../../enums";
 import { GroupBy, Key, OrderBy, Select, Where, Join } from ".";
 import { errors } from "../../../messages";
 import { log } from "../../../log";
-import { expand, relationInfos } from "../../../models/helpers";
+import { expand } from "../../../models/helpers";
 import { _isObservation, isFile } from "../../../helpers/tests";
 export class Query  {
     from: string;
@@ -54,7 +54,7 @@ export class Query  {
      * @param options options
      * @returns formated column or 
      */
-    private formatedColumn(service: Iservice , entity : Ientity, column: string, options?: IKeyBoolean): string | undefined {   
+    private formatedColumn(service: Iservice, entity : Ientity, column: string, options?: IKeyBoolean): string | undefined {   
         console.log(log.whereIam(column));
         // verify column exist
         if (entity.columns[column]) {
@@ -62,11 +62,11 @@ export class Query  {
             const alias = entity.columns[column].alias(service, options);
             if (this.isCalcColumn(alias || column) === true) return alias || column;                
             if (options) {                    
-                if (alias && options["alias"] === true) return column === "id" ? `${doubleQuotesString(entity.table)}.${alias}` : alias;
+                if (alias && options["alias"] === true) return column === "id" ? `${doubleQuotes(entity.table)}.${alias}` : alias;
                 let result: string = "";
-                if (options["table"] === true) result += `${doubleQuotesString(entity.table)}.`;
-                result += alias || options["quoted"] === true ? doubleQuotesString(column) : column;
-                if (options["as"] === true || (alias && alias.includes("->")) ) result += ` AS ${doubleQuotesString(column)}`;
+                if (options["table"] === true) result += `${doubleQuotes(entity.table)}.`;
+                result += alias || options["quoted"] === true ? doubleQuotes(column) : column;
+                if (options["as"] === true || (alias && alias.includes("->")) ) result += ` AS ${doubleQuotes(column)}`;
                 return result;
             } else return column;
         } else if (this.isCalcColumn(column) === true) return column;
@@ -100,7 +100,7 @@ export class Query  {
         // If array result add id 
         const returnValue: string[] = isDataArray(main) && !element.query.select.toString().includes(`"id"${EConstant.columnSeparator}`) ? ["id"] : []; 
         // create selfLink                                   
-        const selfLink = `CONCAT('${main.ctx.decodedUrl.root}/${tempEntity.name}(', "${tempEntity.table}"."id", ')') AS ${doubleQuotesString(EConstant.selfLink)}`; 
+        const selfLink = `CONCAT('${main.ctx.decodedUrl.root}/${tempEntity.name}(', "${tempEntity.table}"."id", ')') AS ${doubleQuotes(EConstant.selfLink)}`; 
         // if $ref return only selfLink
         if (element.onlyRef == true) return [selfLink];
         if (element.showRelations == true ) returnValue.push(selfLink);
@@ -128,7 +128,7 @@ export class Query  {
              if (testIsCsvOrArray && ["payload", "deveui", "phenomenonTime"].includes(removeAllQuotes(e))) this.keyNames.add(e);
         });
         // add interval if requested
-        if (main.interval) main.addToIntervalColumns(`CONCAT('${main.ctx.decodedUrl.root}/${tempEntity.name}(', COALESCE("${EConstant.id}", '0')::text, ')') AS ${doubleQuotesString(EConstant.selfLink)}`);
+        if (main.interval) main.addToIntervalColumns(`CONCAT('${main.ctx.decodedUrl.root}/${tempEntity.name}(', COALESCE("${EConstant.id}", '0')::text, ')') AS ${doubleQuotes(EConstant.selfLink)}`);
         // If observation entity
         if (_isObservation(tempEntity) === true && element.onlyRef === false ) {
             if (main.interval && !isGraph(main)) returnValue.push(`timestamp_ceil("resultTime", interval '${main.interval}') AS srcdate`);
@@ -149,9 +149,7 @@ export class Query  {
             // get columns
             const select = toWhere === true ? ["id"] : this.columnList(element.entity.name, main, element);            
             // if not null            
-            if (select) {
-                // Get real entity name (plural)
-                // const element.entity.name = models.getEntityName(main.ctx.service, element.entity.name);                
+            if (select) {          
                 if (element.entity) {
                     // Create relations list
                     const relations: string[] = Object.keys(element.entity.relations);
@@ -169,7 +167,7 @@ export class Query  {
                                 query: query, 
                                 singular : models.isSingular(main.ctx.service, name),
                                 strip: main.ctx.service.options.includes(EOptions.stripNull),
-                                count: false })}) AS ${doubleQuotesString(name)}`;
+                                count: false })}) AS ${doubleQuotes(name)}`;
                             else throw new Error(errors.invalidQuery);
                         }
                     });
@@ -179,18 +177,12 @@ export class Query  {
                         .forEach((rel: string) => {
                             if (rel[0] == "(") select.push(rel);
                             else if (element.entity && element.showRelations == true && main.onlyRef == false ) {
-                                const tempTable = models.getEntityName(main.ctx.service, rel);
                                 let stream: string | undefined = undefined;
-                                const relation = relationInfos(main.ctx, element.entity.name, rel);
-                                if (tempTable && !relation.rightKey.startsWith("_"))
-                                    if ( main.ctx.service.options.includes(EOptions.stripNull) && element.entity.name === main.ctx.model[allEntities.Observations].name && tempTable.endsWith(main.ctx.model[allEntities.Datastreams].name)) stream = `CASE WHEN ${main.ctx.model[tempTable].table}_id NOTNULL THEN`;
-                                        select.push(`${stream ? stream : ""} CONCAT('${main.ctx.decodedUrl.root}/${element.entity.name}(', ${doubleQuotesString(element.entity.table)}."id", ')/${rel}') ${stream ? "END ": ""}AS "${rel}${EConstant.navLink}"`);                            
-                                        main.addToIntervalColumns(`'${main.ctx.decodedUrl.root}/${element.entity.name}(0)/${rel}' AS "${rel}${EConstant.navLink}"`);
-                            }
+                                select.push(`${stream ? stream : ""} CONCAT('${main.ctx.decodedUrl.root}/${element.entity.name}(', ${doubleQuotes(element.entity.table)}."id", ')/${rel}') ${stream ? "END ": ""}AS "${rel}${EConstant.navLink}"`);}
                         });
                     const res = { 
                         select: select.join(",\n\t\t"), 
-                        from: [doubleQuotesString(element.entity.table)],
+                        from: [doubleQuotes(element.entity.table)],
                         where: element.query.where.toString(), 
                         groupBy: element.query.groupBy.notNull() === true ?  element.query.groupBy.toString() : undefined,
                         orderBy: element.query.orderBy.notNull() === true ?  element.query.orderBy.toString() : element.entity.orderBy,

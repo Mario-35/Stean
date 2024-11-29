@@ -9,6 +9,7 @@
 import postgres from "postgres";
 import { _DEBUG, _TRACE } from "../../constants";
 import { EConstant } from "../../enums";
+
 // test if database exist with admin connection
 export async function testDbConnection(host: string, username: string, password: string, port?: number, database?: string): Promise<boolean> {
     return await postgres( `postgres://${username}:${password}@${host}:${port || 5432}/${database || "postgres"}`,

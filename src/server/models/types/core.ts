@@ -71,7 +71,7 @@ export class Core {
         dataType: EDataType) {
         this._override = {
             create: "JSONB NULL",
-            alias(service: Iservice , test: IKeyBoolean | undefined) {
+            alias(service: Iservice, test: IKeyBoolean | undefined) {
                 return `"result"->'line'${test && test["as"] === true ? ` AS "result"`: ''}`;
             },
             dataType: dataType

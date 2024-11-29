@@ -3873,7 +3873,7 @@
     this.dygraph_ = dygraph;
   
     /**
-     * Array of axis index to { series : [ series names ] , options : { axis-specific options. } }
+     * Array of axis index to { series : [ series names ], options : { axis-specific options. } }
      * @type {Array.<{series : Array.<string>, options : Object}>} @private
      */
     this.yAxes_ = [];

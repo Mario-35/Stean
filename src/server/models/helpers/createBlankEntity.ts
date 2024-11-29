@@ -14,11 +14,10 @@ import { Ientity } from "../../types";
 export const createBlankEntity = (name: string) : Ientity => {
     const entity= allEntities[name];
       if (entity) {
-        const t = singular(entity);
         return {
             type: ETable.blank,
             name: name,
-            singular: t,
+            singular: singular(entity),
             table: "",
             createOrder: 99,
             order: 0,

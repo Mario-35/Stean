@@ -13,7 +13,7 @@
 	"dbExist": "Test database exist",
 	"dbOnline": "Database $1 Online",
 	"dbPgConn": "Test PostgresSql connection",
-	"firstUser": "New user name (automatically create)",
+	"firstUser": "New user automatically create with fixed database name",
 	"foundConfig": "Found configuration table",
 	"host": "host name",
 	"least5Tool":"Must be at least 5 chars",

@@ -63,12 +63,12 @@ export class Service extends CoreHtmlView {
                           ${this.addHidden("adminpassword", datas)}
                           ${this.addTextInput({name: "name", label: "Service name", value: datas.body && datas.body.name || "", alert: alert("name"), toolType: `Name ${info.least5Tool}`, onlyAlpha: true})}
                           ${this.addTextInput({name: "database", label: `${info.pg} ${info.db} name`, value: datas.body && datas.body.database || "", alert: alert("database"), toolType: `name of ${info.pg} ${info.db}`, onlyAlpha: true})} </td>
-                          ${this.addSelect({name: "version", list: models.listVersion().map(e => e.replace("_", ".")) , message: "Select version", value: datas.body && datas.body.version || "", alert: alert("repeat"), toolType: info.repTool})}
-                          ${this.addMultiSelect({name: "extensions", list: enumKeys(EExtensions).filter(e => !["file","base"].includes(e) ) , message: "Select Extensions", values: datas.body && datas.body.extensions || [""]})}                            
-                          ${this.addMultiSelect({name: "options",    list: enumKeys(EOptions) , message: "Select Options", values: datas.body && datas.body.options || [""] })}
+                          ${this.addSelect({name: "version", list: models.listVersion().reverse().map(e => e.replace("_", ".")), message: "Select version", value: datas.body && datas.body.version || "", alert: alert("repeat"), toolType: info.repTool})}
+                          ${this.addMultiSelect({name: "extensions", list: enumKeys(EExtensions).filter(e => !["file","base"].includes(e) ), message: "Select Extensions", values: datas.body && datas.body.extensions || [""]})}                            
+                          ${this.addMultiSelect({name: "options",    list: enumKeys(EOptions), message: "Select Options", values: datas.body && datas.body.options || [""] })}
                         </div> 
                         <div class="sign-up-htm">
-                          ${this.addTextInput({name: "username", label: info.firstUser, value: "", alert: alert("username"), toolType: `Name ${info.least5Tool}`, disabled: true})}
+                          ${this.addTextInput({name: "username", label: info.firstUser, value: "", alert: alert("username"), disabled: true})}
                           ${this.addTextInput({name: "password", label: `New user ${info.pass}`, password: true, value: datas.body && datas.body.password || "", alert: alert("password"), toolType: info.passTool})}
                           ${this.addTextInput({name: "repeat", label: `${info.rep} ${info.pass}`, password: true, value: "", alert: alert("repeat"), toolType: info.repTool})}
                           ${this.addSubmitButton(info.createServ)}

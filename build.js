@@ -338,9 +338,9 @@ fs.writeFile(_DEST + "package.json", JSON.stringify(packageJson, null, 2), { enc
 
   const fileRelease = `stean_${packageJson.version}.zip`
     
-  if (!mode.includes("docker")) zipDirectory(_DEST , `./builds/${fileRelease}`).then(function (e) {
+  if (!mode.includes("docker")) zipDirectory(_DEST, `./builds/${fileRelease}`).then(function (e) {
     console.log(`\x1b[34m ${_DEST} \x1b[36m zip to ==> \x1b[37m ${fileRelease} \x1b[0m`);
-    zipDirectory(_DEST , `./builds/stean_latest.zip`).then(function (e) {
+    zipDirectory(_DEST, `./builds/stean_latest.zip`).then(function (e) {
       console.log(`\x1b[34m ${_DEST} \x1b[36m zip to ==> \x1b[37m stean_latest.zip \x1b[0m`);
     }); 
   }); 

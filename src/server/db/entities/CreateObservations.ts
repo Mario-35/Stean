@@ -9,7 +9,7 @@
 import { Common } from "./common";
 import { IcsvColumn, IcsvFile, IreturnResult, IstreamInfos, koaContext } from "../../types";
 import { queryInsertFromCsv, dateToDateWithTimeZone, executeSql, executeSqlValues } from "../helpers";
-import { doubleQuotesString, asyncForEach } from "../../helpers";
+import { doubleQuotes, asyncForEach } from "../../helpers";
 import { errors, msg } from "../../messages/";
 import { EChar, EDatesType, EExtensions, EHttpCode } from "../../enums";
 import util from "util";
@@ -125,7 +125,7 @@ export class CreateObservations extends Common {
         await asyncForEach(dataInput["dataArray"], async (elem: string[]) => {
       const keys = [`"${dataStreamId.type?.toLowerCase()}_id"`].concat( this.createListColumnsValues( "COLUMNS", dataInput["components"] ) );
           const values = this.createListColumnsValues("VALUES", [ String(dataStreamId.id), ...elem, ]);
-          await executeSqlValues(this.ctx.service, `INSERT INTO ${doubleQuotesString(this.ctx.model.Observations.table)} (${keys}) VALUES (${values}) RETURNING id`)
+          await executeSqlValues(this.ctx.service, `INSERT INTO ${doubleQuotes(this.ctx.model.Observations.table)} (${keys}) VALUES (${values}) RETURNING id`)
             .then((res: Record<string, any> ) => {
               returnValue.push( this.linkBase.replace("Create", "") + "(" + res[0]+ ")" );
               total += 1;
@@ -134,7 +134,7 @@ export class CreateObservations extends Common {
               if (error.code === "23505") {
                 returnValue.push(`Duplicate (${elem})`);
                 if ( dataInput["duplicate"] && dataInput["duplicate"].toUpperCase() === "DELETE" ) {
-                  await executeSqlValues(this.ctx.service, `DELETE FROM ${doubleQuotesString(this.ctx.model.Observations.table)} WHERE 1=1 ` + keys .map((e, i) => `AND ${e} = ${values[i]}`) .join(" ") + ` RETURNING id` ) .then((res: Record<string, any> ) => {
+                  await executeSqlValues(this.ctx.service, `DELETE FROM ${doubleQuotes(this.ctx.model.Observations.table)} WHERE 1=1 ` + keys .map((e, i) => `AND ${e} = ${values[i]}`) .join(" ") + ` RETURNING id` ) .then((res: Record<string, any> ) => {
                       returnValue.push(`delete id ==> ${res[0]}`);
                       total += 1;
                     }).catch((error) => {

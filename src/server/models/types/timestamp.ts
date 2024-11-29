@@ -16,7 +16,7 @@ export class Timestamp extends Core {
         const tmpType  = this._dataType === EDataType.timestamptz ? EDatesType.dateTz : EDatesType.date;
         this._override = {
             create: "",
-            alias(service: Iservice , test: IKeyBoolean | undefined) {
+            alias(service: Iservice, test: IKeyBoolean | undefined) {
                 return `CONCAT(to_char("_${alias}Start",'${tmpType}'),'/',to_char("_${alias}End",'${tmpType}')) AS "${alias}"`;    
             },
             dataType: EDataType.text

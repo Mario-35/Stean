@@ -52,4 +52,4 @@ export const filterEntities = (exts: string[], name?: string) => {
     return res;
 }
 export type allEntitiesType = EnumBaseEntities | EnumMultiDatastreamEntities | EnumUsersEntities |  EnumLoraEntities | EnumLogEntities | EnumFileEntities;
-export const allEntities: Record<string, any> = { ...EnumBaseEntities, ... EnumMultiDatastreamEntities , ... EnumUsersEntities , ... EnumLoraEntities , ... EnumLogEntities, ... EnumFileEntities};
+export const allEntities: Record<string, any> = { ...EnumBaseEntities, ... EnumMultiDatastreamEntities, ... EnumUsersEntities, ... EnumLoraEntities, ... EnumLogEntities, ... EnumFileEntities};

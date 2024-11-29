@@ -17,6 +17,7 @@ interface Idatas {
   body?: any; 
   why?: IKeyString
 }
+
 export class Admin extends CoreHtmlView {
     constructor(ctx: koaContext, datas: Idatas) {
       console.log(log.whereIam("View"));
@@ -25,7 +26,7 @@ export class Admin extends CoreHtmlView {
     }
     private admin(ctx: koaContext, datas: Idatas) {
       if (datas.body._src === "_admin") {
-        return new Service(ctx, { login: false , url: ctx.request.url, body: datas.body, why: {}})
+        return new Service(ctx, { login: false, url: ctx.request.url, body: datas.body, why: {}})
       }
       const alert = (name: string): string => (datas.why && datas.why[name] ? `<div class="alert">${datas.why[name]}</div>` : "");
         this._HTMLResult = [`

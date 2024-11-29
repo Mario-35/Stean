@@ -4,60 +4,27 @@ import { _STREAM } from "../db/constants";
 import { executeSqlValues } from "../db/helpers";
 import { asJson } from "../db/queries";
 import { EColumnType, EConstant, EExtensions, filterEntities } from "../enums";
-import { doubleQuotesString, deepClone, isTest, formatPgTableColumn, isString } from "../helpers";
-import { errors, msg } from "../messages";
+import { doubleQuotes, deepClone, isTest, formatPgTableColumn, isString } from "../helpers";
+import { errors } from "../messages";
 import { Iservice, Ientities, Ientity, IstreamInfos, koaContext, IentityRelation, getColumnType } from "../types";
 import fs from "fs";
 import { FeatureOfInterest, Thing, Location, Service, CreateObservation, CreateFile, Datastream, Decoder, HistoricalLocation, Log, Lora, MultiDatastream, MultiDatastreamObservedProperty, Observation, Sensor, User, LocationHistoricalLocation, ObservedProperty, ThingLocation, File, Line } from "./entities";
 import { Geometry, Jsonb } from "./types";
 
-const testVersion = (input: string) => Object.keys(Models.models).includes(`${input}`);
 class Models {
-  static models : { [key: string]: Ientities; } = {};
-  // Create Object FOR v1.0
+  static models : { 
+    [key: string]: Ientities;
+  } = {};
+
   constructor() { 
-      Models.models["v1.0"] = {
-          Things: Thing,        
-          FeaturesOfInterest: FeatureOfInterest,        
-          Locations: Location,        
-          ThingsLocations: ThingLocation,
-          HistoricalLocations: HistoricalLocation,        
-          LocationsHistoricalLocations: LocationHistoricalLocation,        
-          ObservedProperties: ObservedProperty,        
-          Sensors: Sensor,        
-          Datastreams: Datastream,        
-          MultiDatastreams: MultiDatastream,        
-          MultiDatastreamObservedProperties: MultiDatastreamObservedProperty,        
-          Observations: Observation,      
-          Decoders: Decoder,        
-          Loras: Lora,        
-          Logs: Log,        
-          Users: User,        
-          Services: Service,        
-          CreateObservations: CreateObservation,
-      };                
+    this.createVersion("v1.0");
   }
-  escape(input: string, ignore?: string) {
-    let pattern = "";
-    const map = {
-        '>': '&gt;'
-      , '<': '&lt;'
-      , "'": '&apos;'
-      , '"': '&quot;'
-      , '&': '&amp;'
-    };
-  
-    if (input === null || input === undefined) return;
-  
-    ignore = (ignore || '').replace(/[^&"<>\']/g, '');
-    pattern = '([&"<>\'])'.replace(new RegExp('[' + ignore + ']', 'g'), '');
-  
-    return input.replace(new RegExp(pattern, 'g'), function(str, item) {
-      return map[item as keyof object];
-    });
-  }
-  // create drawIO Model
-  getDraw(ctx: koaContext) {
+
+  private testVersion(verStr: string) {
+    return Models.models.hasOwnProperty(verStr);
+  };
+
+  public getDrawIo(ctx: koaContext) {
     const deleteId = (id: string) => {
       const start = `<mxCell id="${id}"`;
       const end = "</mxCell>";
@@ -74,12 +41,12 @@ class Models {
       fileContent = fileContent.replace(`&lt;strong&gt;${entities.MultiDatastreams.singular}&lt;/strong&gt;`, "");
     }
     Object.keys(entities).forEach((strEntity: string) => {
-      fileContent = fileContent.replace(`COLUMNS.${entities[strEntity].name}`, this.getColumnListNameWithoutId(entities[strEntity]).map((colName: string) => `&lt;p style=&quot;margin: 0px; margin-left: 8px;&quot;&gt;${colName}: ${getColumnType(entities[strEntity].columns[colName]).toUpperCase()}&lt;/p&gt;`).join(""));
+      fileContent = fileContent.replace(`COLUMNS.${entities[strEntity].name}`, Object.keys(entities[strEntity].columns).filter((word) => !word.includes("_") && !word.includes("id")).map((colName: string) => `&lt;p style=&quot;margin: 0px; margin-left: 8px;&quot;&gt;${colName}: ${getColumnType(entities[strEntity].columns[colName]).toUpperCase()}&lt;/p&gt;`).join(""));
     });
     return fileContent;
   }
   
-  async getInfos(ctx: koaContext) {
+  public async getInfos(ctx: koaContext) {
     const temp = config.getInfos(ctx, ctx.service.name)
     const result: Record<string, any> = {
       ... temp,
@@ -107,8 +74,9 @@ class Models {
     });
     return result;
   }
-    // Get multiDatastream or Datastrems infos
-  public async getStreamInfos(service: Iservice , input: Record<string, any> ): Promise<IstreamInfos | undefined> {
+  
+  // Get multiDatastream or Datastreams infos
+  public async getStreamInfos(service: Iservice, input: Record<string, any> ): Promise<IstreamInfos | undefined> {
     console.log(log.whereIam());
     const stream: _STREAM = input["Datastream"] ? "Datastream" : input["MultiDatastream"] ? "MultiDatastream" : undefined;
     if (!stream) return undefined;
@@ -118,7 +86,7 @@ class Models {
     const searchKey = input[models.DBFull(service)[streamEntity].name] || input[models.DBFull(service)[streamEntity].singular];
     const streamId: string | undefined = isNaN(searchKey) ? searchKey[EConstant.id] : searchKey;
     if (streamId) {
-      const query = `SELECT "id", "observationType", "_default_featureofinterest" FROM ${doubleQuotesString(models.DBFull(service)[streamEntity].table)} WHERE "id" = ${BigInt(streamId)} LIMIT 1`;
+      const query = `SELECT "id", "observationType", "_default_featureofinterest" FROM ${doubleQuotes(models.DBFull(service)[streamEntity].table)} WHERE "id" = ${BigInt(streamId)} LIMIT 1`;
       return executeSqlValues(service, asJson({ query: query, singular: true, strip: false, count: false }))
         .then((res: object) => {        
           return res ? {
@@ -143,48 +111,61 @@ class Models {
     };
   }
 
+  private version1_0(): Ientities {
+    return {
+      Things: Thing,        
+      FeaturesOfInterest: FeatureOfInterest,        
+      Locations: Location,        
+      ThingsLocations: ThingLocation,
+      HistoricalLocations: HistoricalLocation,        
+      LocationsHistoricalLocations: LocationHistoricalLocation,        
+      ObservedProperties: ObservedProperty,        
+      Sensors: Sensor,        
+      Datastreams: Datastream,        
+      MultiDatastreams: MultiDatastream,        
+      MultiDatastreamObservedProperties: MultiDatastreamObservedProperty,        
+      Observations: Observation,      
+      Decoders: Decoder,        
+      Loras: Lora,        
+      Logs: Log,        
+      Users: User,        
+      Services: Service,        
+      CreateObservations: CreateObservation,
+    }
+  }
+  
   private version1_1(input: Ientities): Ientities {
     // add properties to entities
     ["Things", "Locations", "FeaturesOfInterest", "ObservedProperties", "Sensors", "Datastreams", "MultiDatastreams"]
-      .forEach((e: string) => { input[e].columns["properties"] =  new Jsonb().type() });
+      .forEach((entityName: string) => { input[entityName].columns["properties"] =  new Jsonb().type() });
     // add geom to Location
     input.Locations.columns["geom"] =  new Geometry().type();
     return input;
   }
-  
-  public isVersionExist(nb: string): boolean {
-    if (testVersion(nb) === true) return true;
-    if (this.createVersion(nb) === true ) return true;
-    throw new Error(msg(errors.wrongVersion, String(nb)));      
-  }
 
-  public createVersion(nb: string): boolean {
-    console.log(log.whereIam(nb));
-    switch (nb) {
+  private createVersion(verStr: string): boolean {
+    console.log(log.whereIam(verStr));
+    switch (verStr) {
       case "v0.9":        
         Models.models["v0.9"] = this.version0_9();         
       case "v1.1":          
         Models.models["v1.1"] = this.version1_1(deepClone(Models.models["v1.0"]));
+      default:         
+        Models.models["v1.0"] = this.version1_0();
     }
-    return testVersion(nb);
+    return this.testVersion(verStr);
   }
   
   public listVersion() {
     return ["v0.9","v1.0","v1.1"]
   }
 
-  private filtering(service: Iservice ) {
-    const exts = filterEntities(service.extensions);      
-    return Object.fromEntries(Object.entries(Models.models[service.apiVersion]).filter(([, v]) => Object.keys(exts).includes(v.name))) as Ientities;
-  }
-
-  public version(service: Iservice ): string {
-    if (service && service.apiVersion && testVersion(service.apiVersion)) return service.apiVersion;
-    throw new Error(msg(errors.wrongVersion, String(service.apiVersion)));
+  private filtering(service: Iservice) {    
+    return Object.fromEntries(Object.entries(Models.models[service.apiVersion]).filter(([, v]) => Object.keys(filterEntities(service.extensions)).includes(v.name))) as Ientities;
   }
   
-  public filteredModel(service: Iservice  ): Ientities {
-    if (testVersion(service.apiVersion) === false) this.createVersion(service.apiVersion);
+  public filteredModel(service: Iservice): Ientities {
+    if (this.testVersion(service.apiVersion) === false) this.createVersion(service.apiVersion);
     return service.name === EConstant.admin ? this.DBAdmin(service) : this.filtering(service);
   }
   
@@ -192,7 +173,7 @@ class Models {
     if (typeof service === "string") {
       const nameConfig = config.getConfigNameFromName(service);
       if (!nameConfig) throw new Error(errors.configName);
-      if (testVersion(config.getService(nameConfig).apiVersion) === false) this.createVersion(config.getService(nameConfig).apiVersion);
+      if (this.testVersion(config.getService(nameConfig).apiVersion) === false) this.createVersion(config.getService(nameConfig).apiVersion);
       service = config.getService(nameConfig);
     }  
     return Models.models[service.apiVersion];
@@ -203,7 +184,7 @@ class Models {
     return Object.fromEntries(Object.entries(entities)) as Ientities;
   } 
 
-  public isSingular(service: Iservice , input: string): boolean { 
+  public isSingular(service: Iservice, input: string): boolean { 
     if (config && input) {
       const entityName = this.getEntityName(service, input); 
       return entityName ? Models.models[service.apiVersion][entityName].singular == input : false; 
@@ -211,37 +192,33 @@ class Models {
     return false;
   }
 
-  public getEntityName(service: Iservice , search: string): string | undefined {
+  public getEntityName(service: Iservice, search: string): string | undefined {
     if (config && search) {        
       const tempModel = Models.models[service.apiVersion];
-      const testString: string | undefined = search
-            .trim()
-            .match(/[a-zA-Z_]/g)
-            ?.join("");
+      const testString: string | undefined = search.trim().match(/[a-zA-Z_]/g)?.join("");
       return tempModel && testString
           ? tempModel.hasOwnProperty(testString)
           ? testString
-          : Object.keys(tempModel).filter(
-              (elem: string) =>
-              tempModel[elem].table == testString.toLowerCase() ||
-              tempModel[elem].singular == testString
-              )[0]
+          : Object.keys(tempModel).filter((elem: string) => tempModel[elem].table == testString.toLowerCase() || tempModel[elem].singular == testString )[0]
           : undefined;
     }
   }
 
-  public getEntityStrict = (service: Iservice , entity: Ientity | string): Ientity | undefined => {
+  public getEntityStrict = (service: Iservice, entity: Ientity | string): Ientity | undefined => {
     return (typeof entity === "string") ? Models.models[service.apiVersion][entity] : Models.models[service.apiVersion][entity.name];
   }
 
-  public getEntity = (service: Iservice , entity: Ientity | string): Ientity | undefined => {
+  public getEntity = (service: Iservice, entity: Ientity | string): Ientity | undefined => {
     if (config && entity) {
       if (isString(entity)) {
         const entityName = this.getEntityName(service, entity.trim());
         if (!entityName) return;
         entity = entityName;
-      } 
-      return isString(entity) ? Models.models[service.apiVersion][entity] : Models.models[service.apiVersion][entity.name];
+      }
+      
+      return isString(entity) 
+        ? Models.models[service.apiVersion][entity] 
+        : Models.models[service.apiVersion][entity.name];
     }
   };
 
@@ -256,20 +233,20 @@ class Models {
     return res;
   }
   
-  public getRelation = (service: Iservice , entity: Ientity, relation: Ientity | string): IentityRelation | undefined => {
+  public getRelation = (service: Iservice, entity: Ientity, relation: Ientity | string): IentityRelation | undefined => {
     const entityRelation = this.getEntity(service, relation);
     return entityRelation ? entity.relations[entityRelation.name] ||  entity.relations[entityRelation.singular] : undefined;
   };
   
-  public getRelationColumnTable = (service: Iservice , entity: Ientity | string, test: string): EColumnType | undefined => {
+  public getRelationColumnTable = (service: Iservice, entity: Ientity | string, test: string): EColumnType | undefined => {
     if (config && entity) {
       const tempEntity = this.getEntity(service, entity);
       if (tempEntity)
           return tempEntity.relations.hasOwnProperty(test)
-          ? EColumnType.Relation
-          : tempEntity.columns.hasOwnProperty(test)
-              ? EColumnType.Column
-              : undefined;
+            ? EColumnType.Relation
+            : tempEntity.columns.hasOwnProperty(test)
+                ? EColumnType.Column
+                : undefined;
     }      
   };
 
@@ -277,15 +254,12 @@ class Models {
       const tempEntity = this.getEntity(service, entity);
       exclus = exclus || [""];
       return tempEntity 
-        ? Object.keys(tempEntity.columns).filter((word) => !word.includes("_") && !exclus.includes(word)).map((e: string) => complete ? formatPgTableColumn(tempEntity.table, e) : doubleQuotesString(e))
-        : [];
+        ? Object.keys(tempEntity.columns).filter((word) => !word.includes("_") && !exclus.includes(word)).map((e: string) => complete 
+          ? formatPgTableColumn(tempEntity.table, e) : doubleQuotes(e))
+          : [];
   }
-
-  getColumnListNameWithoutId(input: Ientity) {
-    return Object.keys(input.columns).filter((word) => !word.includes("_") && !word.includes("id")); 
-  }
-
-  public isColumnType(service: Iservice , entity: Ientity | string, column: string , test: string): boolean {
+  
+  public isColumnType(service: Iservice, entity: Ientity | string, column: string, test: string): boolean {
     if (config && entity) {
       const tempEntity = this.getEntity(service, entity);
       return tempEntity && tempEntity.columns[column] ? (getColumnType(tempEntity.columns[column]) === test.toLowerCase()) : false;
@@ -364,11 +338,6 @@ class Models {
         default:
           break;
       }
-  }
-
-  public extractEntityNames(input: string, search: string | string[]): string[] {    
-    if (typeof search === "string") search = [search];
-    return search.map(e => (input.replace(e, ""))).filter(e => e != input);
   }
 
   public init() {    

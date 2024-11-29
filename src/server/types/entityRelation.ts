@@ -7,6 +7,7 @@
  */
 
 import { ERelations } from "../enums";
+
 export interface IentityRelation {
     type:            ERelations; // relation Type
     entityRelation?: string; // relationTable

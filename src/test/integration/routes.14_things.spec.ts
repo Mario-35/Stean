@@ -486,7 +486,7 @@ describe("endpoint : Thing [8.2.1]", () => {
 					done();
 				});
 		});
-		it(`Return ${entity.name} Expand Locations , HistoricalLocations ${nbColor}[9.3.2.1]`, (done) => {
+		it(`Return ${entity.name} Expand Locations, HistoricalLocations ${nbColor}[9.3.2.1]`, (done) => {
 			const infos = addTest({
 				api: `{get} ${entity.name}(:id) Get Expand coma separation`,
 				apiName: `Get${entity.name}ExpandComaHistorical`,

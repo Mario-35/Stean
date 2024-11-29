@@ -10,7 +10,7 @@ import { config } from "../../configuration";
 import { log } from "../../log";
 import { isTest } from "../../helpers";
 import { Iservice, keyobj } from "../../types";
-const executeSqlOne = async (service: Iservice , query: string): Promise<object> => {
+const executeSqlOne = async (service: Iservice, query: string): Promise<object> => {
     config.writeLog(log.query(query))
     return new Promise(async function (resolve, reject) {
         await config.connection(service.name).unsafe(query).then((res: object) => {                            
@@ -21,7 +21,7 @@ const executeSqlOne = async (service: Iservice , query: string): Promise<object>
         });
     });
 };
-const executeSqlMulti = async (service: Iservice , query: string[]): Promise<object> => {
+const executeSqlMulti = async (service: Iservice, query: string[]): Promise<object> => {
     config.writeLog(log.query(query));
     return new Promise(async function (resolve, reject) {
         await config.connection(service.name).begin(sql => query.map((e: string) => sql.unsafe(e)))
@@ -33,6 +33,6 @@ const executeSqlMulti = async (service: Iservice , query: string[]): Promise<obj
         });
     });
 };
-export const executeSql = async (service: Iservice , query: string | string[]): Promise<object> => typeof query === "string" 
+export const executeSql = async (service: Iservice, query: string | string[]): Promise<object> => typeof query === "string" 
     ? executeSqlOne(service, query) 
     : executeSqlMulti(service, query);

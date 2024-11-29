@@ -41,7 +41,7 @@ export class Loras extends Common {
     return tempList[0].concat( '"', input.join(`"${tempList[1]}${tempList[0]}"`), '"', tempList[1] );
   }
   // Override post
-  async post( dataInput: Record<string, any> , silent?: boolean ): Promise<IreturnResult | undefined | void> {
+  async post( dataInput: Record<string, any>, silent?: boolean ): Promise<IreturnResult | undefined | void> {
     console.log(log.whereIam());
       const addToStean = (key: string) => (this.stean[key] = dataInput[key]);
     if (dataInput) this.stean = await this.prepareInputResult(dataInput);
@@ -188,24 +188,24 @@ export class Loras extends Common {
         .concat(`"result" = ${resultCreate}`)
         .join("");
       const sql = `WITH "${EConstant.voidtable}" AS (SELECT srid FROM "${EConstant.voidtable}" LIMIT 1)
-                , multidatastream1 AS (SELECT id, thing_id, _default_featureofinterest, ${searchMulti} LIMIT 1)
-                , myValues ( "${Object.keys(insertObject).join(
+               , multidatastream1 AS (SELECT id, thing_id, _default_featureofinterest, ${searchMulti} LIMIT 1)
+               , myValues ( "${Object.keys(insertObject).join(
                   EConstant.doubleQuotedComa
                 )}") AS (values (${Object.values(insertObject).join()}))
-                , searchDuplicate AS (SELECT * FROM "${
+               , searchDuplicate AS (SELECT * FROM "${
                   this.ctx.model.Observations.table
                 }" WHERE ${searchDuplicate})
-                , observation1 AS (INSERT INTO  "${
+               , observation1 AS (INSERT INTO  "${
                   this.ctx.model.Observations.table
                 }" ("${Object.keys(insertObject).join(
                   EConstant.doubleQuotedComa
       )}") SELECT * FROM myValues WHERE NOT EXISTS (SELECT * FROM searchDuplicate)
                                   AND (SELECT id FROM multidatastream1) IS NOT NULL
                                   RETURNING *)
-                , result1 AS (SELECT (SELECT observation1.id FROM observation1)
-                , (SELECT multidatastream1."keys" FROM multidatastream1)
-                , (SELECT searchDuplicate.id AS duplicate FROM  searchDuplicate)
-                , ${this.createListQuery(
+               , result1 AS (SELECT (SELECT observation1.id FROM observation1)
+               , (SELECT multidatastream1."keys" FROM multidatastream1)
+               , (SELECT searchDuplicate.id AS duplicate FROM  searchDuplicate)
+               , ${this.createListQuery(
                   Object.keys(insertObject),
                   "(SELECT observation1.COLUMN FROM observation1), "
                 )} (SELECT multidatastream1.id FROM multidatastream1) AS multidatastream, (SELECT multidatastream1.thing_id FROM multidatastream1) AS thing)
@@ -278,16 +278,16 @@ export class Loras extends Common {
         .join("");
       console.log(log.debug_infos("searchDuplicate", searchDuplicate));
       const sql = `WITH "${EConstant.voidtable}" AS (SELECT srid FROM "${EConstant.voidtable}" LIMIT 1)
-               , datastream1 AS (SELECT id, _default_featureofinterest, thing_id FROM "${
+              , datastream1 AS (SELECT id, _default_featureofinterest, thing_id FROM "${
                  this.ctx.model.Datastreams.table
                }" WHERE id =${stream["id"]})
-               , myValues ( "${Object.keys(insertObject).join(
+              , myValues ( "${Object.keys(insertObject).join(
                 EConstant.doubleQuotedComa
                )}") AS (values (${Object.values(insertObject).join()}))
-               , searchDuplicate AS (SELECT * FROM "${
+              , searchDuplicate AS (SELECT * FROM "${
                  this.ctx.model.Observations.table
                }" WHERE ${searchDuplicate})
-               , observation1 AS (INSERT INTO  "${
+              , observation1 AS (INSERT INTO  "${
                  this.ctx.model.Observations.table
                }" ("${Object.keys(insertObject).join(
                 EConstant.doubleQuotedComa
@@ -295,7 +295,7 @@ export class Loras extends Common {
                                 WHERE NOT EXISTS (SELECT * FROM searchDuplicate)
                                AND (SELECT id from datastream1) IS NOT NULL
                                RETURNING *)
-               , result1 AS (SELECT 
+              , result1 AS (SELECT 
                     (SELECT observation1.id FROM observation1),
                     (SELECT searchDuplicate.id AS duplicate FROM searchDuplicate),
                     ${this.createListQuery(
