@@ -10,7 +10,7 @@ import { formatColumnValue, relationInfos } from ".";
 import { models } from "..";
 import { ESCAPE_SIMPLE_QUOTE } from "../../constants";
 import { EConstant } from "../../enums";
-import { doubleQuotes, simpleQuotes, removeFirstEndDoubleQuotes } from "../../helpers";
+import { doubleQuotesString, simpleQuotesString, removeFirstEndDoubleQuotes } from "../../helpers";
 import { log } from "../../log";
 import { koaContext } from "../../types";
 /**
@@ -32,7 +32,7 @@ export function createInsertValues(ctx: koaContext | undefined, input: Record<st
                 if (input[elem] && entity.columns[elem]) {
                   const temp = formatColumnValue(elem, input[elem], entity.columns[elem]);
                   if (temp) {
-                    keys.push(doubleQuotes(elem));
+                    keys.push(doubleQuotesString(elem));
                     values.push(temp);
                   }
                 } else if (input[elem] && entity.relations[elem]) {
@@ -40,7 +40,7 @@ export function createInsertValues(ctx: koaContext | undefined, input: Record<st
                   if (entity.columns[relation.column]) {
                     const temp = formatColumnValue(relation.column, input[elem], entity.columns[relation.column]);
                     if (temp) {
-                      keys.push(doubleQuotes(relation.column));
+                      keys.push(doubleQuotesString(relation.column));
                       values.push(temp);
                     }  
                   }                  
@@ -56,11 +56,11 @@ export function createInsertValues(ctx: koaContext | undefined, input: Record<st
                     } else if (input[elem].startsWith && input[elem].startsWith('{"@iot.name"')) {
                       input[elem] = `(SELECT "id" FROM "${elem.split("_")[0]}" WHERE "name" = '${JSON.parse(removeFirstEndDoubleQuotes(input[elem]))[EConstant.name]}')`;
                     }
-                  keys.push(doubleQuotes(elem));
+                  keys.push(doubleQuotesString(elem));
                   values.push(typeof input[elem] === "string" 
                     ? input[elem].startsWith("(SELECT")
                     ? input[elem]
-                    : simpleQuotes(ESCAPE_SIMPLE_QUOTE(input[elem].trim())) 
+                    : simpleQuotesString(ESCAPE_SIMPLE_QUOTE(input[elem].trim())) 
                     : elem === "result" ? `'{"value": ${input[elem]}}'::jsonb`: ESCAPE_SIMPLE_QUOTE(input[elem].trim()));
               }
           });

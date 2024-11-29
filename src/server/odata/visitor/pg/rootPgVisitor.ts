@@ -13,10 +13,10 @@ import { postSqlFromPgVisitor } from "../helper";
 import { EColumnType, EConstant, EExtensions, EHttpCode } from "../../../enums";
 import { log } from "../../../log";
 import { PgVisitor } from "../.";
-import { doubleQuotes } from "../../../helpers";
 import { models } from "../../../models";
 import { errors } from "../../../messages";
 import { link } from "../../../models/helpers";
+import { doubleQuotesString } from "../../../helpers";
 export class RootPgVisitor extends PgVisitor {
   static root = true;
   constructor(ctx: koaContext, options = <SqlOptions>{}, node?: Token) {
@@ -106,7 +106,7 @@ export class RootPgVisitor extends PgVisitor {
           this.VisitRessources(node.value.navigation, context);
         }
       } else if (this.entity.columns[node.value.path.raw]) {
-        this.query.select.add(`${doubleQuotes(node.value.path.raw )}${EConstant.columnSeparator}`);
+        this.query.select.add(`${doubleQuotesString(node.value.path.raw )}${EConstant.columnSeparator}`);
         this.showRelations = false;
       } else this.entity = node.value.path.raw;
       this.entity = models.getEntity(this.ctx.service, node.value.path.raw);      
@@ -128,7 +128,7 @@ export class RootPgVisitor extends PgVisitor {
         }
       } else if (this.entity && this.entity.columns[node.value.name]) {
       console.log("two");
-      this.query.select.add(`${doubleQuotes(node.value.name)}${EConstant.columnSeparator}`);
+      this.query.select.add(`${doubleQuotesString(node.value.name)}${EConstant.columnSeparator}`);
       this.showRelations = false;
     } else this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: errors.notValid });
 	}

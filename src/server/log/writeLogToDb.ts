@@ -6,7 +6,7 @@
  *
  */
 
-import { doubleQuotes, hidePassword } from "../helpers";
+import { doubleQuotesString, hidePassword } from "../helpers";
 import { models } from "../models";
 import { log } from ".";
 import { createInsertValues } from "../models/helpers";
@@ -25,7 +25,7 @@ export const writeLogToDb = async ( ctx: koaContext, ...error: any[] ): Promise<
     } catch (error) {
       ctx.log.returnid = undefined;
     }
-    await config.connection(ctx.service.name).unsafe(`INSERT INTO ${doubleQuotes(models.DBFull(ctx.service).Logs.table)} ${createInsertValues(ctx, ctx.log, models.DBFull(ctx.service).Logs.name)} returning id`).then((res: object) => {                            
+    await config.connection(ctx.service.name).unsafe(`INSERT INTO ${doubleQuotesString(models.DBFull(ctx.service).Logs.table)} ${createInsertValues(ctx, ctx.log, models.DBFull(ctx.service).Logs.name)} returning id`).then((res: object) => {                            
       }).catch((err: Error) => {
         process.stdout.write( err + "\n");
       });    

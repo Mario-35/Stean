@@ -1,5 +1,5 @@
 import { EDataType } from "../../enums";
-import { doubleQuotes } from "../../helpers";
+import { doubleQuotesString } from "../../helpers";
 import { IKeyBoolean, Iservice } from "../../types";
 import { Core } from "./core";
 
@@ -12,7 +12,7 @@ export class Bigint extends Core {
         this._override = {
             create: "BIGINT GENERATED ALWAYS AS IDENTITY",
             alias(service: Iservice, test: IKeyBoolean) {
-                return `"${name}"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotes(`@iot.${name}`)}`: ''}` ;
+                return `"${name}"${test["alias"] && test["alias"] === true  === true ? ` AS ${doubleQuotesString(`@iot.${name}`)}`: ''}` ;
             },
             dataType: EDataType.bigint
         }

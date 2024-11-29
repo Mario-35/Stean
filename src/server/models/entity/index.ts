@@ -1,5 +1,5 @@
 import { EDataType, ERelations, ETable, allEntities } from "../../enums";
-import { doubleQuotes } from "../../helpers";
+import { doubleQuotesString } from "../../helpers";
 import { msg, errors } from "../../messages";
 import { IentityColumn, IentityCore, IentityRelation, IKeyString } from "../../types";
 import { singular } from "../helpers";
@@ -116,7 +116,7 @@ export class Entity extends EntityPass {
       
       private createConstraints() {
         Object.keys(this.columns).forEach((elem: string) => {
-          if (this.columns[elem].orderBy) this.orderBy = `${doubleQuotes(elem)} ${this.columns[elem].orderBy.toUpperCase()}` ;
+          if (this.columns[elem].orderBy) this.orderBy = `${doubleQuotesString(elem)} ${this.columns[elem].orderBy.toUpperCase()}` ;
           if (this.columns[elem].create.startsWith('BIGINT GENERATED ALWAYS AS IDENTITY')) {
             this.addToConstraints(`${this.table}_pkey`,`PRIMARY KEY ("${elem}")`);
             this.addToIndexes(`${this.table}_${elem}`, `ON public."${this.table}" USING btree ("${elem}")`);
@@ -127,7 +127,7 @@ export class Entity extends EntityPass {
         });
         
         Object.keys(this.relations).forEach((elem: string) => {
-          if (this.relations[elem].unique) this.addToConstraints(`${this.table}_unik_${elem.toLowerCase()}`, `UNIQUE (${this.relations[elem].unique.map(e => doubleQuotes(e))})`);
+          if (this.relations[elem].unique) this.addToConstraints(`${this.table}_unik_${elem.toLowerCase()}`, `UNIQUE (${this.relations[elem].unique.map(e => doubleQuotesString(e))})`);
           switch (this.relations[elem].type) {
             case ERelations.belongsTo:
               const value = `FOREIGN KEY ("${elem.toLowerCase()}_id") REFERENCES "${elem.toLowerCase()}"("id") ON UPDATE CASCADE ON DELETE CASCADE`;
@@ -153,7 +153,7 @@ export class Entity extends EntityPass {
         });
 
         if (this.type === ETable.link && Object.keys(this.columns).length === 2) {
-          this.addToConstraints(`${this.table}_pkey`,`PRIMARY KEY (${Object.keys(this.columns).map(e => doubleQuotes(e))})`);
+          this.addToConstraints(`${this.table}_pkey`,`PRIMARY KEY (${Object.keys(this.columns).map(e => doubleQuotesString(e))})`);
           Object.keys(this.columns).forEach(elem => {
             this.addToIndexes(`${this.table}_${elem}`, `ON public."${this.table}" USING btree ("${elem}")`);
           });

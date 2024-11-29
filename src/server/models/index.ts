@@ -4,7 +4,7 @@ import { _STREAM } from "../db/constants";
 import { executeSqlValues } from "../db/helpers";
 import { asJson } from "../db/queries";
 import { EColumnType, EConstant, EExtensions, filterEntities } from "../enums";
-import { doubleQuotes, deepClone, isTest, formatPgTableColumn, isString } from "../helpers";
+import { doubleQuotesString, deepClone, isTest, formatPgTableColumn, isString } from "../helpers";
 import { errors } from "../messages";
 import { Iservice, Ientities, Ientity, IstreamInfos, koaContext, IentityRelation, getColumnType } from "../types";
 import fs from "fs";
@@ -86,7 +86,7 @@ class Models {
     const searchKey = input[models.DBFull(service)[streamEntity].name] || input[models.DBFull(service)[streamEntity].singular];
     const streamId: string | undefined = isNaN(searchKey) ? searchKey[EConstant.id] : searchKey;
     if (streamId) {
-      const query = `SELECT "id", "observationType", "_default_featureofinterest" FROM ${doubleQuotes(models.DBFull(service)[streamEntity].table)} WHERE "id" = ${BigInt(streamId)} LIMIT 1`;
+      const query = `SELECT "id", "observationType", "_default_featureofinterest" FROM ${doubleQuotesString(models.DBFull(service)[streamEntity].table)} WHERE "id" = ${BigInt(streamId)} LIMIT 1`;
       return executeSqlValues(service, asJson({ query: query, singular: true, strip: false, count: false }))
         .then((res: object) => {        
           return res ? {
@@ -255,7 +255,7 @@ class Models {
       exclus = exclus || [""];
       return tempEntity 
         ? Object.keys(tempEntity.columns).filter((word) => !word.includes("_") && !exclus.includes(word)).map((e: string) => complete 
-          ? formatPgTableColumn(tempEntity.table, e) : doubleQuotes(e))
+          ? formatPgTableColumn(tempEntity.table, e) : doubleQuotesString(e))
           : [];
   }
   

@@ -8,7 +8,7 @@
 
 import { createTable, createUser } from "../helpers";
 import { config } from "../../configuration";
-import { doubleQuotes, simpleQuotes, asyncForEach } from "../../helpers";
+import { doubleQuotesString, simpleQuotesString, asyncForEach } from "../../helpers";
 import { IKeyString } from "../../types";
 import { EChar, EConstant, EExtensions } from "../../enums";
 import { triggers } from "./triggers";
@@ -33,14 +33,14 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
     .then(async () => {
       returnValue[`Create Database`] = `${servicePg.database} ${EChar.ok}`;
       // create USER if not exist
-      await adminConnection.unsafe(`SELECT COUNT(*) FROM pg_user WHERE usename = ${simpleQuotes(servicePg.user)};`)
+      await adminConnection.unsafe(`SELECT COUNT(*) FROM pg_user WHERE usename = ${simpleQuotesString(servicePg.user)};`)
         .then(async (res: Record<string, any>) => {
           if (res[0].count == 0) {            
-            returnValue[`CREATE ROLE ${servicePg.user}`] = await adminConnection.unsafe(`CREATE ROLE ${servicePg.user} WITH PASSWORD ${simpleQuotes(servicePg.password)} ${EConstant.rights}`)
+            returnValue[`CREATE ROLE ${servicePg.user}`] = await adminConnection.unsafe(`CREATE ROLE ${servicePg.user} WITH PASSWORD ${simpleQuotesString(servicePg.password)} ${EConstant.rights}`)
               .then(() => EChar.ok)
               .catch((err: Error) => err.message);
           } else {
-            await adminConnection.unsafe(`ALTER ROLE ${servicePg.user} WITH PASSWORD ${simpleQuotes(servicePg.password)}  ${EConstant.rights}`)
+            await adminConnection.unsafe(`ALTER ROLE ${servicePg.user} WITH PASSWORD ${simpleQuotesString(servicePg.password)}  ${EConstant.rights}`)
               .then(() => {
                 returnValue[`Create/Alter ROLE`] = `${servicePg.user} ${EChar.ok}`;
               })
@@ -106,19 +106,19 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
 
   // If only numeric extension
   if ( config.getService(configName).extensions.includes( EExtensions.highPrecision ) ) {
-    await dbConnection.unsafe(`ALTER TABLE ${doubleQuotes(DB.Observations.table)} ALTER COLUMN 'result' TYPE float4 USING null;`)
+    await dbConnection.unsafe(`ALTER TABLE ${doubleQuotesString(DB.Observations.table)} ALTER COLUMN 'result' TYPE float4 USING null;`)
       .catch((error: Error) => {
         console.log(error);
         return error;
       });
-    await dbConnection.unsafe(`ALTER TABLE ${doubleQuotes(DB.HistoricalLocations.table)} ALTER COLUMN '_result' TYPE float4 USING null;`)
+    await dbConnection.unsafe(`ALTER TABLE ${doubleQuotesString(DB.HistoricalLocations.table)} ALTER COLUMN '_result' TYPE float4 USING null;`)
       .catch((error) => {
         console.log(error);
         return error;
       });
   }
 
-  await dbConnection.unsafe(`SELECT COUNT(*) FROM pg_user WHERE usename = ${simpleQuotes(servicePg.user)};`)
+  await dbConnection.unsafe(`SELECT COUNT(*) FROM pg_user WHERE usename = ${simpleQuotesString(servicePg.user)};`)
     .then(() => { returnValue["ALL finished ..."] = EChar.ok; })
     .catch((err: Error) => err.message);
     

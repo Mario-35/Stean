@@ -7,7 +7,7 @@
  */
 
 
-import { doubleQuotes, cleanStringComma, isDataArray, isGraph, isGeoJson, removeAllQuotes, removeFirstEndDoubleQuotes, formatPgString } from "../../../helpers";
+import { doubleQuotesString, cleanStringComma, isDataArray, isGraph, isGeoJson, removeAllQuotes, removeFirstEndDoubleQuotes, formatPgString } from "../../../helpers";
 import { asJson } from "../../../db/queries";
 import { Iservice, Ientity, IKeyBoolean, IpgQuery } from "../../../types";
 import { PgVisitor, RootPgVisitor } from "..";
@@ -62,11 +62,11 @@ export class Query  {
             const alias = entity.columns[column].alias(service, options);
             if (this.isCalcColumn(alias || column) === true) return alias || column;                
             if (options) {                    
-                if (alias && options["alias"] === true) return column === "id" ? `${doubleQuotes(entity.table)}.${alias}` : alias;
+                if (alias && options["alias"] === true) return column === "id" ? `${doubleQuotesString(entity.table)}.${alias}` : alias;
                 let result: string = "";
-                if (options["table"] === true) result += `${doubleQuotes(entity.table)}.`;
-                result += alias || options["quoted"] === true ? doubleQuotes(column) : column;
-                if (options["as"] === true || (alias && alias.includes("->")) ) result += ` AS ${doubleQuotes(column)}`;
+                if (options["table"] === true) result += `${doubleQuotesString(entity.table)}.`;
+                result += alias || options["quoted"] === true ? doubleQuotesString(column) : column;
+                if (options["as"] === true || (alias && alias.includes("->")) ) result += ` AS ${doubleQuotesString(column)}`;
                 return result;
             } else return column;
         } else if (this.isCalcColumn(column) === true) return column;
@@ -100,7 +100,7 @@ export class Query  {
         // If array result add id 
         const returnValue: string[] = isDataArray(main) && !element.query.select.toString().includes(`"id"${EConstant.columnSeparator}`) ? ["id"] : []; 
         // create selfLink                                   
-        const selfLink = `CONCAT('${main.ctx.decodedUrl.root}/${tempEntity.name}(', "${tempEntity.table}"."id", ')') AS ${doubleQuotes(EConstant.selfLink)}`; 
+        const selfLink = `CONCAT('${main.ctx.decodedUrl.root}/${tempEntity.name}(', "${tempEntity.table}"."id", ')') AS ${doubleQuotesString(EConstant.selfLink)}`; 
         // if $ref return only selfLink
         if (element.onlyRef == true) return [selfLink];
         if (element.showRelations == true ) returnValue.push(selfLink);
@@ -128,7 +128,7 @@ export class Query  {
              if (testIsCsvOrArray && ["payload", "deveui", "phenomenonTime"].includes(removeAllQuotes(e))) this.keyNames.add(e);
         });
         // add interval if requested
-        if (main.interval) main.addToIntervalColumns(`CONCAT('${main.ctx.decodedUrl.root}/${tempEntity.name}(', COALESCE("${EConstant.id}", '0')::text, ')') AS ${doubleQuotes(EConstant.selfLink)}`);
+        if (main.interval) main.addToIntervalColumns(`CONCAT('${main.ctx.decodedUrl.root}/${tempEntity.name}(', COALESCE("${EConstant.id}", '0')::text, ')') AS ${doubleQuotesString(EConstant.selfLink)}`);
         // If observation entity
         if (_isObservation(tempEntity) === true && element.onlyRef === false ) {
             if (main.interval && !isGraph(main)) returnValue.push(`timestamp_ceil("resultTime", interval '${main.interval}') AS srcdate`);
@@ -167,7 +167,7 @@ export class Query  {
                                 query: query, 
                                 singular : models.isSingular(main.ctx.service, name),
                                 strip: main.ctx.service.options.includes(EOptions.stripNull),
-                                count: false })}) AS ${doubleQuotes(name)}`;
+                                count: false })}) AS ${doubleQuotesString(name)}`;
                             else throw new Error(errors.invalidQuery);
                         }
                     });
@@ -178,11 +178,11 @@ export class Query  {
                             if (rel[0] == "(") select.push(rel);
                             else if (element.entity && element.showRelations == true && main.onlyRef == false ) {
                                 let stream: string | undefined = undefined;
-                                select.push(`${stream ? stream : ""} CONCAT('${main.ctx.decodedUrl.root}/${element.entity.name}(', ${doubleQuotes(element.entity.table)}."id", ')/${rel}') ${stream ? "END ": ""}AS "${rel}${EConstant.navLink}"`);}
+                                select.push(`${stream ? stream : ""} CONCAT('${main.ctx.decodedUrl.root}/${element.entity.name}(', ${doubleQuotesString(element.entity.table)}."id", ')/${rel}') ${stream ? "END ": ""}AS "${rel}${EConstant.navLink}"`);}
                         });
                     const res = { 
                         select: select.join(",\n\t\t"), 
-                        from: [doubleQuotes(element.entity.table)],
+                        from: [doubleQuotesString(element.entity.table)],
                         where: element.query.where.toString(), 
                         groupBy: element.query.groupBy.notNull() === true ?  element.query.groupBy.toString() : undefined,
                         orderBy: element.query.orderBy.notNull() === true ?  element.query.orderBy.toString() : element.entity.orderBy,
