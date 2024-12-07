@@ -1,16 +1,17 @@
 import { EDataType, ERelations, ETable, allEntities } from "../../enums";
-import { doubleQuotesString } from "../../helpers";
 import { msg, errors } from "../../messages";
 import { IentityColumn, IentityCore, IentityRelation, IKeyString } from "../../types";
 import { singular } from "../helpers";
 import { Time, Timestamp } from "../types";
 
 class EntityPass {
+    // static period: IKeyString = {};
+    static trigger: { [key: string]: IKeyString }  = {};
     static pass:  {
         [key: string]: {
             constraints:  IKeyString; 
             indexes:      IKeyString;
-        }
+          }
     } = {};
 }
 
@@ -26,8 +27,10 @@ export class Entity extends EntityPass {
     relations:     { [key: string]: IentityRelation };
     constraints:   IKeyString;
     indexes:       IKeyString;
-    update?:        string[];
-    after?:        string;    
+    update?:       string[];
+    after?:        string;
+    trigger:       string[];
+    
     constructor (name: string, datas: IentityCore) {
       super();
         const entity= allEntities[name];
@@ -42,81 +45,146 @@ export class Entity extends EntityPass {
             this.indexes = {},
             this.after = datas.after,
             this.name = name;
+            if (datas.trigger) this.trigger = datas.trigger;
             this.singular = singular(entity);
             this.table = this.singular.toLowerCase();
           } else throw new Error(msg( errors.noValidEntity, name));
           this.prepareColums();
-          this.createConstraints();          
+          this.createConstraints();
+          this.createTriggers();
+          // if (this.name.includes("Datastreams")) {
+          //   console.log(this);
+          // }
       };
 
-      private prepareColums() {
-        Object.keys(this.columns).forEach(e => {
-          if (this.columns[e].dataType === EDataType.period) {
-            const table = this.columns[e].entityRelation;
-            switch (this.columns[e].create.split(" ")[0]) {
-              case "TIME":
-                this.columns[e] = new Time().alias(e).type();
-                this.columns[`_${e}Start`] = new Time().type();
-                this.columns[`_${e}End`] = new Time().type();                
-              break;
-              case "TIMETZ":
-                this.columns[e] = new Time("tz").alias(e).type();
-                this.columns[`_${e}Start`] = new Time("tz").type();
-                this.columns[`_${e}End`] = new Time("tz").type();                
-                break;
-              case "TIMESTAMP":
-                this.columns[e] = new Timestamp().alias(e).type();
-                this.columns[`_${e}Start`] = new Timestamp().type();
-                this.columns[`_${e}End`] = new Timestamp().type();                
-                break;
-              case "TIMESTAMPTZ":
-                this.columns[e] = new Timestamp("tz").alias(e).type();
-                this.columns[`_${e}Start`] = new Timestamp("tz").type();
-                this.columns[`_${e}End`] = new Timestamp("tz").type();                
-                break;
-            }
-            this.addToUpdate(`WITH stream AS (SELECT DISTINCT "${this.table}_id" AS id FROM ${table}),
-      datas AS (SELECT 
-        "${this.table}_id" AS id,
-        MIN("${e}") AS pmin ,
-        MAX("${e}") AS pmax
-        FROM ${table}, stream WHERE "${this.table}_id" = stream.id GROUP BY "${this.table}_id")
-      UPDATE "${this.table}" SET 
-        "_${e}Start" =  datas.pmin ,
-        "_${e}End" = datas.pmax
-      FROM datas WHERE "${this.table}".id = datas.id`);
-      this.columns[e].create = "";
-          }
-        });
-      }
 
-      private is(elem: string) {
-        return Object.keys(this.columns).includes(`${elem.toLowerCase()}_id`);
-      }
+  addTrigger(action: string, table: string, relTable: string) {
+    return `do $$ BEGIN
+    CREATE TRIGGER ${table}s_actualization_${action}
+        after ${action}
+        on "${relTable}"
+        for each row
+        execute procedure ${table}s_update_${action}();
+  exception
+    when others then null;
+  end $$;`;
+  }
 
-      private addToUpdate(value: string) {
-        if (this.update) 
-          this.update.push(value);
-        else this.update = [value];
-      }
+  querySet(column: string, imp: "Start" | "End") {
+    return `THEN queryset := queryset || delimitr || '"_${column}${imp}" = $1."${column}"'; delimitr := ','; END IF;`;
+  }
 
-      private addToPass(key: string, value?: string) {
-        value = value || `FOREIGN KEY ("${this.table}_id") REFERENCES "${this.table}"("id") ON UPDATE CASCADE ON DELETE CASCADE`;
-        if (!Entity.pass[key]) Entity.pass[key] = {constraints: {}, indexes: {} };
-        Entity.pass[key].constraints[`${singular(key).toLowerCase()}_${this.table}_id_fkey`] = value;
-      }
+  insertStr(table: string, column: string, relTable: string, coalesce?: string) {
+    const datas = `IF ( NEW."${column}" < "DS_ROW"."_${column}Start" OR "DS_ROW"."_${column}Start" IS NULL ) ${this.querySet(column, "Start")}\n IF (${coalesce ? ` COALESCE( NEW."${column}", NEW."${coalesce}") ` : `NEW."${column}"`} > "DS_ROW"."_${column}End" OR "DS_ROW"."_${column}End" IS NULL ) ${this.querySet(column, "End")}`;
+    Entity.trigger[table].insert = Entity.trigger[table].hasOwnProperty("insert") 
+    ? Entity.trigger[table].insert.replace("@DATAS@", `\n${datas}@DATAS@`)
+    : `CREATE OR REPLACE FUNCTION ${table}s_update_insert() RETURNS TRIGGER LANGUAGE PLPGSQL AS $$ DECLARE "DS_ROW" RECORD; queryset TEXT := ''; delimitr char(1) := ' '; BEGIN IF (NEW."${table}_id" is not null) THEN SELECT "id", "_${column}Start", "_${column}End", "_resultTimeStart", "_resultTimeEnd" INTO "DS_ROW" FROM "${table}" WHERE "${table}"."id" = NEW."${table}_id"; ${datas} @DATAS@ IF (delimitr = ',') THEN EXECUTE 'update "${table}" SET ' || queryset || ' where "${table}"."id"=$1."${table}_id"' using NEW; END IF; RETURN new; END IF; RETURN new; END; $$`;
+    Entity.trigger[table].doInsert = this.addTrigger("insert", table, relTable);
+  }
 
-      private addToConstraints( key: string, value: string) {
-          this.constraints[key] = value;
-      }
-
-      private addToIndexes( key: string, value: string) {
-          this.indexes[key] = value;
-      }
+  updateStr(table: string, column: string, relTable: string, coalesce?: string) {
+    const datas = `IF (NEW."${column}" != OLD."${column}") THEN for "DS_ROW" IN SELECT * FROM "${table}" WHERE "id"=NEW."${table}_id" LOOP IF (${coalesce ? ` COALESCE( NEW."${column}", NEW."${coalesce}") ` : `NEW."${column}"`} < "DS_ROW"."_${column}Start") ${this.querySet(column, "End")} END LOOP; END IF;`;
+    Entity.trigger[table].update = Entity.trigger[table].hasOwnProperty("update") 
+    ? Entity.trigger[table].update.replace("@DATAS@", `\n${datas}@DATAS@`)
+    : `CREATE OR REPLACE FUNCTION ${table}s_update_update() RETURNS TRIGGER LANGUAGE PLPGSQL AS $$ DECLARE "DS_ROW" "${table}"%rowtype; queryset TEXT := ''; delimitr char(1) := ' '; BEGIN IF (NEW."${table}_id" is not null) THEN ${datas} @DATAS@ IF (delimitr = ',') THEN EXECUTE 'update "${table}" SET ' || queryset ||  ' where "${table}"."id"=$1."${table}_id"' using NEW; END IF; END IF; RETURN NEW; END; $$`;
+    Entity.trigger[table].doUpdate = this.addTrigger("update", table, relTable);
+  }
       
-      private createConstraints() {
+  deleteStr(table: string, column: string, relTable: string,) {
+    const datas = `IF (OLD."${column}" = "DS_ROW"."_${column}Start" OR OLD."${column}" = "DS_ROW"."_${column}End") THEN queryset := queryset || delimitr || '"_${column}Start" = (select min("${column}") from "${relTable}" where "${relTable}"."${table}_id" = $1."${table}_id")'; delimitr := ','; queryset := queryset || delimitr || '"_${column}End" = (select max(coalesce("${column}", "resultTime")) from "${relTable}" where "${relTable}"."${table}_id" = $1."${table}_id")'; END IF;`;
+    Entity.trigger[table].delete = Entity.trigger[table].hasOwnProperty("delete") 
+    ? Entity.trigger[table].delete.replace("@DATAS@", `\n${datas}@DATAS@`)
+    : `CREATE OR REPLACE FUNCTION ${table}s_update_delete() RETURNS TRIGGER LANGUAGE PLPGSQL AS $$ DECLARE "DS_ROW" "${table}"%rowtype; queryset TEXT := ''; delimitr char(1) := ' '; BEGIN IF (OLD."${table}_id" is not null) THEN SELECT * INTO "DS_ROW" FROM "${table}" WHERE "${table}"."id"=OLD."${table}_id"; ${datas} @DATAS@ IF (delimitr = ',') THEN EXECUTE 'update "${table}" SET ' || queryset ||  ' where "${table}"."id"=$1."${table}_id"' using OLD; END IF; END IF; RETURN NULL; END; $$`;
+    Entity.trigger[table].doDelete = this.addTrigger("delete", table, relTable);
+  }
+
+  private prepareColums() {
+    Object.keys(this.columns).forEach(e => {
+      if (this.columns[e].dataType === EDataType.period) {
+        const entityRelation =  this.columns[e].entityRelation;
+        const coalesce =  this.columns[e].coalesce;
+        switch (this.columns[e].create.split(" ")[0]) {
+          case "TIME":
+            this.columns[e] = new Time().alias(e).type();
+            this.columns[`_${e}Start`] = new Time().type();
+            this.columns[`_${e}End`] = new Time().type();
+          break;
+          case "TIMETZ":
+            this.columns[e] = new Time("tz").alias(e).type();
+            this.columns[`_${e}Start`] = new Time("tz").type();
+            this.columns[`_${e}End`] = new Time("tz").type();
+            break;
+          case "TIMESTAMP":
+            this.columns[e] = new Timestamp().alias(e).type();
+            this.columns[`_${e}Start`] = new Timestamp().type();
+            this.columns[`_${e}End`] = new Timestamp().type();                
+            break;
+          case "TIMESTAMPTZ":
+            this.columns[e] = new Timestamp("tz").alias(e).type();
+            this.columns[`_${e}Start`] = new Timestamp("tz").type();
+            this.columns[`_${e}End`] = new Timestamp("tz").type();                
+            break;
+        }
+        
+        if(entityRelation) {
+        this.addToUpdate(`WITH stream AS (SELECT DISTINCT "${this.table}_id" AS id FROM "${entityRelation}"),
+          datas AS (SELECT 
+            "${this.table}_id" AS id,
+            MIN("${e}") AS pmin ,
+            MAX("${e}") AS pmax
+            FROM "${entityRelation}", stream WHERE "${this.table}_id" = stream.id GROUP BY "${this.table}_id")
+          UPDATE "${this.table}" SET 
+            "_${e}Start" =  datas.pmin ,
+            "_${e}End" = datas.pmax
+          FROM datas WHERE "${this.table}".id = datas.id`);
+        
+            if (!Entity.trigger[this.table]) Entity.trigger[this.table] = {};
+          
+            this.insertStr(this.table, e, entityRelation, coalesce);
+            this.updateStr(this.table, e, entityRelation, coalesce);
+            this.deleteStr(this.table, e, entityRelation);
+          }
+        this.columns[e].create = "";
+      }
+    });
+  }
+
+  private createTriggers() {
+    if (Entity.trigger[this.table] ) {
+      this.trigger = [];
+      Object.keys(Entity.trigger[this.table]).forEach((elem: string) => {            
+          this.trigger.push(Entity.trigger[this.table][elem].replace("@DATAS@", ""));
+      });
+    }
+  }
+
+  private is(elem: string) {
+    return Object.keys(this.columns).includes(`${elem.toLowerCase()}_id`);
+  }
+
+  private addToUpdate(value: string) {
+    if (this.update) 
+      this.update.push(value);
+    else this.update = [value];
+  }
+
+  private addToPass(key: string, value?: string) {
+    value = value || `FOREIGN KEY ("${this.table}_id") REFERENCES "${this.table}"("id") ON UPDATE CASCADE ON DELETE CASCADE`;
+    if (!Entity.pass[key]) Entity.pass[key] = {constraints: {}, indexes: {} };
+    Entity.pass[key].constraints[`${singular(key).toLowerCase()}_${this.table}_id_fkey`] = value;
+  }
+
+  private addToConstraints( key: string, value: string) {
+      this.constraints[key] = value;
+  }
+
+  private addToIndexes( key: string, value: string) {
+      this.indexes[key] = value;
+  }
+  
+  private createConstraints() {
         Object.keys(this.columns).forEach((elem: string) => {
-          if (this.columns[elem].orderBy) this.orderBy = `${doubleQuotesString(elem)} ${this.columns[elem].orderBy.toUpperCase()}` ;
+          if (this.columns[elem].orderBy) this.orderBy = `"${elem}" ${this.columns[elem].orderBy.toUpperCase()}` ;
           if (this.columns[elem].create.startsWith('BIGINT GENERATED ALWAYS AS IDENTITY')) {
             this.addToConstraints(`${this.table}_pkey`,`PRIMARY KEY ("${elem}")`);
             this.addToIndexes(`${this.table}_${elem}`, `ON public."${this.table}" USING btree ("${elem}")`);
@@ -127,7 +195,7 @@ export class Entity extends EntityPass {
         });
         
         Object.keys(this.relations).forEach((elem: string) => {
-          if (this.relations[elem].unique) this.addToConstraints(`${this.table}_unik_${elem.toLowerCase()}`, `UNIQUE (${this.relations[elem].unique.map(e => doubleQuotesString(e))})`);
+          if (this.relations[elem].unique) this.addToConstraints(`${this.table}_unik_${elem.toLowerCase()}`, `UNIQUE (${this.relations[elem].unique.map(e => `"${e}"`)})`);
           switch (this.relations[elem].type) {
             case ERelations.belongsTo:
               const value = `FOREIGN KEY ("${elem.toLowerCase()}_id") REFERENCES "${elem.toLowerCase()}"("id") ON UPDATE CASCADE ON DELETE CASCADE`;
@@ -143,7 +211,7 @@ export class Entity extends EntityPass {
               break;
             case ERelations.belongsToMany:
               if (this.relations[elem].entityRelation) 
-                this.addToPass(this.relations[elem].entityRelation)
+                this.addToPass(this.relations[elem].entityRelation);              
               break;
             case ERelations.hasMany:
               if (this.relations[elem].entityRelation) 
@@ -153,7 +221,7 @@ export class Entity extends EntityPass {
         });
 
         if (this.type === ETable.link && Object.keys(this.columns).length === 2) {
-          this.addToConstraints(`${this.table}_pkey`,`PRIMARY KEY (${Object.keys(this.columns).map(e => doubleQuotesString(e))})`);
+          this.addToConstraints(`${this.table}_pkey`,`PRIMARY KEY (${Object.keys(this.columns).map(e => `"${e}"`)})`);
           Object.keys(this.columns).forEach(elem => {
             this.addToIndexes(`${this.table}_${elem}`, `ON public."${this.table}" USING btree ("${elem}")`);
           });
@@ -164,6 +232,7 @@ export class Entity extends EntityPass {
             this.constraints[elem] = Entity.pass[this.name].constraints[elem];
           });
         }
-      }
+
+  }
 
 }

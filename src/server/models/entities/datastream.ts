@@ -11,7 +11,7 @@ import { info } from "../../messages";
 import { Entity } from "../entity";
 import { Bigint, Geometry, Jsonb, Relation, Text, Tmperiod } from "../types";
 
-export const Datastream = new Entity("Datastreams", {
+export const DATASTREAM = new Entity("Datastreams", {
     createOrder: 7,
     type: ETable.table,
     order: 1,
@@ -22,7 +22,7 @@ export const Datastream = new Entity("Datastreams", {
       observationType: new Text().notNull().default('http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement').verify(Object.keys(EObservationType)).type(),
       unitOfMeasurement: new Jsonb().notNull().type(),
       observedArea: new Geometry().type(),
-      phenomenonTime: new Tmperiod("timestamp").source("Observations").type(),
+      phenomenonTime: new Tmperiod("timestamp").source("Observations").coalesce("resultTime").type(),
       resultTime: new Tmperiod("timestamp").source("Observations").type(),
       thing_id:  new Relation().relation("Things").type(),
       observedproperty_id: new Relation().relation("ObservedProperties").type(),

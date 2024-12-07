@@ -15,6 +15,7 @@ import { EConstant, EOptions, EReturnFormats } from "../enums";
 import { isGraph } from ".";
 import { PgVisitor } from "../odata/visitor";
 import { errors } from "../messages";
+import { DATASTREAM } from "../models/entities";
 
 // Default "blank" function
 const defaultFunction = (input: string | object) => input;
@@ -43,7 +44,7 @@ const generateGrahSql = (input: PgVisitor) => {
   const entity = input.parentEntity || input.entity;
   if (entity) {
     const id = input.parentId ? input.parentId : input.id;
-    const query = entity.table === input.ctx.model.Datastreams.table
+    const query = entity.table === DATASTREAM.table
         ? graphDatastream(entity.table, id, input)
         : graphMultiDatastream( entity.table, id, input );
         

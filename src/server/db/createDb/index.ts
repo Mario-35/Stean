@@ -6,4 +6,5 @@
  *
  */
 export { createDatabase } from "./createDatabase";
+export { pgFunctions } from "./pgFunctions";
 export { testDatas } from "./tests";

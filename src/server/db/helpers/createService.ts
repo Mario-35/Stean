@@ -55,7 +55,7 @@ export const createService = async (ctx: koaContext, dataInput: Record<string, a
       await createDB();
     }
   });
-  const tmp = models.filteredModel(service);
+  const tmp = models.filtered(service);
     
   await asyncForEach( Object.keys(tmp) .filter((elem: string) => tmp[elem].createOrder > 0) .sort((a, b) => (tmp[a].createOrder > tmp[b].createOrder ? 1 : -1)), async (entityName: string) => {
     if (dataInput[entityName]) {

@@ -10,6 +10,7 @@ import { koaContext } from "../../types";
 import { Common } from "./common";
 import { errors, msg } from "../../messages/";
 import { log } from "../../log";
+import { MULTIDATASTREAM } from "../../models/entities";
 
 export class MultiDatastreams extends Common {
   constructor(ctx: koaContext) {
@@ -47,10 +48,10 @@ export class MultiDatastreams extends Common {
         .replace("[", "{")
         .replace("]", "}");
     if (input["observationType"]) {
-      if ( !this.ctx.model.MultiDatastreams.columns[ "observationType" ].verify?.list.includes(input["observationType"]) )
+      if ( !MULTIDATASTREAM.columns[ "observationType" ].verify?.list.includes(input["observationType"]) )
         this.ctx.throw(400, { code: 400, detail: errors["observationType"] });
     } else
-      input["observationType"] = this.ctx.model.MultiDatastreams.columns["observationType"].verify?.default;
+      input["observationType"] = MULTIDATASTREAM.columns["observationType"].verify?.default;
     return input;
   }
 }

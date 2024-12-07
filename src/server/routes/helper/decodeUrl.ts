@@ -59,7 +59,7 @@ export const decodeUrl = (ctx: koaContext, input?: string): IdecodedUrl | undefi
       version: paths[0] === EConstant.admin ? "v1.0" : paths[1],
       path: idStr ? path.replace(String(id), '0') : path,
       id: (isNaN(+id)) ? BigInt(0) : BigInt(id),
-      idStr: idStr,
+      idStr: idStr, // Lora deveUI
       configName: configName,
       linkbase: LinkBase.linkBase,
       root: LinkBase.root,

@@ -267,7 +267,7 @@ copyFolderRecursiveSync("./src/server/apidoc", _DEST);
 copyFolderRecursiveSync("./src/server/views", _DEST);
 copyFolderRecursiveSync("./src/server/views/js", _DEST + "views/");
 copyFolderRecursiveSync( "./src/server/views/css", _DEST + "views/" );
-copyFolderRecursiveSync( "./src/server/db/createDb/triggers", _DEST + "db/createDb/" );
+copyFolderRecursiveSync( "./src/server/db/createDb/pgFunctions", _DEST + "db/createDb/" );
 copyFileSync( "./src/server/favicon.ico", _DEST );
 copyFileSync("./src/server/models/model.drawio", _DEST + "models/");
 

@@ -8,25 +8,27 @@
 
 import { Ientity } from "../../types";
 import { createBlankEntity } from "../helpers";
+
+// Entities are in uppercase to have a difference with classes entities
  
-export const Service: Ientity = createBlankEntity("Services");
-export const CreateObservation:Ientity = createBlankEntity("CreateObservations");
-export const CreateFile: Ientity = createBlankEntity("CreateFile");
-export { Datastream } from "./datastream";
-export { Decoder } from "./decoder";
-export { FeatureOfInterest } from "./featureOfInterest";
-export { HistoricalLocation } from "./historicalLocation";
-export { Location } from "./location";
-export { LocationHistoricalLocation } from "./locationHistoricalLocation";
-export { Log } from "./log";
-export { Lora } from "./lora";
-export { MultiDatastream } from "./multiDatastream";
-export { MultiDatastreamObservedProperty } from "./multiDatastreamObservedProperty";
-export { Observation } from "./observation";
-export { ObservedProperty } from "./observedProperty";
-export { Sensor } from "./sensor";
-export { Thing } from "./thing";
-export { ThingLocation } from "./thingLocation";
-export { User } from "./user";
-export { File } from "./file";
-export { Line } from "./line";
+export const SERVICE: Ientity = createBlankEntity("Services");
+export const CREATEOBSERVATION:Ientity = createBlankEntity("CreateObservations");
+export const CREATEFILE: Ientity = createBlankEntity("CreateFile");
+export { DATASTREAM } from "./datastream";
+export { DECODER } from "./decoder";
+export { FEATUREOFINTEREST } from "./featureOfInterest";
+export { HISTORICALLOCATION } from "./historicalLocation";
+export { LOCATION } from "./location";
+export { LOCATIONHISTORICALLOCATION } from "./locationHistoricalLocation";
+export { LOG } from "./log";
+export { LORA } from "./lora";
+export { MULTIDATASTREAM } from "./multiDatastream";
+export { MULTIDATASTREAMOBSERVEDPROPERTY } from "./multiDatastreamObservedProperty";
+export { OBSERVATION } from "./observation";
+export { OBSERVEDPROPERTY } from "./observedProperty";
+export { SENSOR } from "./sensor";
+export { THING } from "./thing";
+export { THINGLOCATION } from "./thingLocation";
+export { USER } from "./user";
+export { FILE } from "./file";
+export { LINE } from "./line";

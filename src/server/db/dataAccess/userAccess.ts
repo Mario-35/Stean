@@ -11,6 +11,7 @@ import { encrypt } from "../../helpers";
 import { config } from "../../configuration";
 import { models } from "../../models";
 import { EConstant } from "../../enums";
+import { USER } from "../../models/entities";
 
 // Get all the columns of user table
 const userColumns = () => Object.keys(models.DBAdmin(config.getService(EConstant.admin)).Users.columns);
@@ -33,7 +34,7 @@ export const userAccess = {
        VALUES ('${data.username}', '${data.email}', '${encrypt(data.password)}', '${data.database || "all"}', ${data.canPost || false}, ${data.canDelete || false}, ${data.canCreateUser || false}, ${data.canCreateDb || false}, ${data.superAdmin || false}, ${data.admin || false}) 
       RETURNING *`).catch(async (err) => {
         if (err.code === "23505") {          
-           const id = await conn.unsafe(`SELECT id FROM "user" WHERE "username" = '${data.username}'`);
+           const id = await conn.unsafe(`SELECT id FROM "${USER.table}" WHERE "username" = '${data.username}'`);
             if (id[0]) {
               data.id = id[0].id;
               return await conn.unsafe(`UPDATE "user" SET "username" = '${data.username}', "email" = '${data.email}', "database" = '${data.database}', "canPost" = ${data.canPost || false}, "canDelete" = ${data.canDelete || false}, "canCreateUser" = ${data.canCreateUser || false}, "canCreateDb" = ${data.canCreateDb || false}, "superAdmin" = ${data.superAdmin || false}, "admin" = ${data.admin || false} WHERE "id" = ${data.id} RETURNING *`);

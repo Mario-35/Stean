@@ -10,10 +10,11 @@ import { decodingPayload } from ".";
 import { executeSql } from "../db/helpers";
 import { log } from "../log";
 import { errors } from "../messages";
+import { DECODER, LORA } from "../models/entities";
 import { ILoraDecodingResult, koaContext } from "../types";
 export const decodeloraDeveuiPayload = async ( ctx: koaContext, loraDeveui: string, payload: string ): Promise<ILoraDecodingResult| undefined> => {
   console.log(log.debug_infos(`decodeLoraPayload deveui : [${loraDeveui}]`, payload));  
-  return await executeSql(ctx.service, `SELECT "name", "code", "nomenclature", "synonym" FROM "${ctx.model.Decoders.table}" WHERE id = (SELECT "decoder_id" FROM "${ctx.model.Loras.table}" WHERE "deveui" = '${loraDeveui}') LIMIT 1`)
+  return await executeSql(ctx.service, `SELECT "name", "code", "nomenclature", "synonym" FROM "${DECODER.table}" WHERE id = (SELECT "decoder_id" FROM "${LORA.table}" WHERE "deveui" = '${loraDeveui}') LIMIT 1`)
     .then((res: Record<string, any>) => {
       try {
         return decodingPayload( { ...res[0] }, payload );        

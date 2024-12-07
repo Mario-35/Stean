@@ -15,9 +15,8 @@ import { color, EChar, EColor, EConstant, EExtensions, EFileName, EOptions, EUpd
 import fs from "fs";
 import update from "./update.json";
 import postgres from "postgres";
-import { triggers } from "../db/createDb/triggers";
 import { log } from "../log";
-import { createDatabase, testDatas } from "../db/createDb";
+import { createDatabase, pgFunctions, testDatas } from "../db/createDb";
 import { userAccess } from "../db/dataAccess";
 import path from "path";
 import { formatconfigFile, testDbExists, validJSONConfig } from "./helpers";
@@ -40,6 +39,9 @@ class Configuration {
     // override console log important in production build will remove all console.log
     if (isTest()) {
       console.log = (data: any) => {};
+      // console.log = (data: any) => {
+      //   if (data) this.writeLog(data);
+      // };
       this.readConfigFile();
     } 
     else console.log = (data: any) => {
@@ -288,7 +290,7 @@ class Configuration {
   }
   
   async relogCreateTrigger(configName: string): Promise<boolean> {
-    await asyncForEach( triggers(configName), async (query: string) => {
+    await asyncForEach( pgFunctions(configName), async (query: string) => {
       const name = query.split(" */")[0].split("/*")[1].trim();
       await config.connection(configName).unsafe(query).then(() => {
         log.create(`[${configName}] ${name}`, EChar.ok);
@@ -454,7 +456,7 @@ class Configuration {
             admin: false
           });
           if(![EConstant.admin as String, EConstant.test as String].includes(key)) createIndexes(key);
-          // if(!Configuration.services[key].extensions.includes(EExtensions.file) && ![EConstant.admin as String, EConstant.test as String].includes(key)) createIndexes(key);
+          if(!Configuration.services[key].extensions.includes(EExtensions.file) && ![EConstant.admin as String, EConstant.test as String].includes(key)) createIndexes(key);
           this.messageListen(key, res ? EChar.web : EChar.notOk, true);
           this.addListening(this.defaultHttp(), key);
         }

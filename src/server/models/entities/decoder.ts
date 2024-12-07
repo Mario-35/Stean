@@ -12,7 +12,7 @@ import { Ientity } from "../../types";
 import { info } from "../../messages";
 import { Bigint, Text } from "../types";
 
-export const Decoder:Ientity  = new Entity("Decoders", {
+export const DECODER:Ientity  = new Entity("Decoders", {
     createOrder: 10,
     type: ETable.table,
     order: 12,

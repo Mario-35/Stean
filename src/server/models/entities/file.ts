@@ -11,7 +11,7 @@ import { ERelations, ETable } from "../../enums";
 import { Ientity } from "../../types";
 import { info } from "../../messages";
 import { Bigint, Jsonb, Text } from "../types";
-export const File:Ientity  = new Entity("Files", {
+export const FILE:Ientity  = new Entity("Files", {
   createOrder: 1,
     type: ETable.table,
     order: 1,

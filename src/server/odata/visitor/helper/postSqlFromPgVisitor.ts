@@ -16,6 +16,7 @@ import { createInsertValues, createUpdateValues, relationInfos } from "../../../
 import { apiAccess } from "../../../db/dataAccess";
 import * as entities from "../../../db/entities";
 import { PgVisitor } from "..";
+import { DATASTREAM } from "../../../models/entities";
 export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor): string | undefined {
 
     const formatInsertEntityData = (entity: string, datas: object, main: PgVisitor): Record<string, any> => {
@@ -35,7 +36,7 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
     let sqlResult = "";
     const queryMaker: IqueryMaker= {};
     const tempEntity = src.entity;
-    const postEntity = tempEntity && tempEntity.name == "CreateFile" ? src.ctx.model["Datastreams"] : tempEntity;
+    const postEntity = tempEntity && tempEntity.name == "CreateFile" ? DATASTREAM : tempEntity;
     if (!postEntity) return;
     const postParentEntity: Ientity | undefined = src.parentEntity ? src.parentEntity : undefined;
     const names: IKeyString = {

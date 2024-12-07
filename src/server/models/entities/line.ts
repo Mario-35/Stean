@@ -10,7 +10,7 @@ import { Entity } from "../entity";
 import { ERelations, ETable } from "../../enums";
 import { Ientity } from "../../types";
 import { Bigint, Relation, Result } from "../types";
-export const Line:Ientity  = new Entity("Lines", {
+export const LINE:Ientity  = new Entity("Lines", {
     createOrder: 2,
     type: ETable.table,
     order: 2,

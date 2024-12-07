@@ -10,7 +10,7 @@ import { Entity } from "../entity";
 import { Ientity } from "../../types";
 import { ETable } from "../../enums";import { Bigint, Jsonb, Text, Timestamp } from "../types";
 
-export const Log:Ientity = new Entity("Logs", {
+export const LOG:Ientity = new Entity("Logs", {
     createOrder: -1,
     type: ETable.table,
     order: -1,

@@ -16,6 +16,8 @@ import { multiDatastreamFromDeveui, streamFromDeveui } from "../queries";
 import { decodeloraDeveuiPayload } from "../../lora";
 import { executeSql, executeSqlValues } from "../helpers";
 import { log } from "../../log";
+import { DATASTREAM, FEATUREOFINTEREST, OBSERVATION } from "../../models/entities";
+
 export class Loras extends Common {
   synonym: Record<string, any>  = {};
   stean: Record<string, any>  = {};
@@ -35,11 +37,13 @@ export class Loras extends Common {
       result["timestamp"] = new Date( dataInput["timestamp"] * 1000 ).toISOString();
     return result;
   }
+
   createListQuery(input: string[], columnListString: string): string {
     console.log(log.whereIam());
     const tempList = columnListString.split("COLUMN");
     return tempList[0].concat( '"', input.join(`"${tempList[1]}${tempList[0]}"`), '"', tempList[1] );
   }
+
   // Override post
   async post( dataInput: Record<string, any>, silent?: boolean ): Promise<IreturnResult | undefined | void> {
     console.log(log.whereIam());
@@ -175,7 +179,7 @@ export class Loras extends Common {
       })}'::jsonb`;
       const insertObject: Record<string, any> = {
         featureofinterest_id: getFeatureOfInterest
-          ? `SELECT COALESCE((SELECT "id" FROM "featureofinterest" WHERE "id" = ${getFeatureOfInterest}), ${getFeatureOfInterest})`
+          ? `SELECT COALESCE((SELECT "id" FROM "${FEATUREOFINTEREST.table}" WHERE "id" = ${getFeatureOfInterest}), ${getFeatureOfInterest})`
           : `(SELECT multidatastream1._default_featureofinterest FROM multidatastream1)`,
         multidatastream_id: "(SELECT multidatastream1.id FROM multidatastream1)",
       phenomenonTime: `to_timestamp('${this.stean["timestamp"]}','${EDatesType.dateImport}')::timestamp`,
@@ -193,10 +197,10 @@ export class Loras extends Common {
                   EConstant.doubleQuotedComa
                 )}") AS (values (${Object.values(insertObject).join()}))
                , searchDuplicate AS (SELECT * FROM "${
-                  this.ctx.model.Observations.table
+                  OBSERVATION.table
                 }" WHERE ${searchDuplicate})
                , observation1 AS (INSERT INTO  "${
-                  this.ctx.model.Observations.table
+                  OBSERVATION.table
                 }" ("${Object.keys(insertObject).join(
                   EConstant.doubleQuotedComa
       )}") SELECT * FROM myValues WHERE NOT EXISTS (SELECT * FROM searchDuplicate)
@@ -221,7 +225,7 @@ export class Loras extends Common {
           };
           result[EConstant.id] = tempResult.id;
           result[EConstant.selfLink] = `${this.ctx.decodedUrl.root}/Observations(${tempResult.id})`;
-          Object.keys(this.ctx.model["Observations"].relations).forEach((word) => {
+          Object.keys(OBSERVATION.relations).forEach((word) => {
       result[ `${word}${EConstant.navLink}` ] = `${this.ctx.decodedUrl.root}/Observations(${tempResult.id})/${word}`;
           });
           return this.formatReturnResult({ body: result, query: sql, });
@@ -244,8 +248,8 @@ export class Loras extends Common {
       );
       const searchFOI: Record<string, any>  = await executeSql(this.ctx.service, 
         getFeatureOfInterest
-          ? `SELECT coalesce((SELECT "id" FROM "${this.ctx.model.FeaturesOfInterest.table}" WHERE "id" = ${getFeatureOfInterest}), ${getFeatureOfInterest}) AS id `
-          : stream["_default_featureofinterest"] ? `SELECT id FROM "${this.ctx.model.FeaturesOfInterest.table}" WHERE id = ${stream["_default_featureofinterest"]}` : ""
+          ? `SELECT coalesce((SELECT "id" FROM "${FEATUREOFINTEREST.table}" WHERE "id" = ${getFeatureOfInterest}), ${getFeatureOfInterest}) AS id `
+          : stream["_default_featureofinterest"] ? `SELECT id FROM "${FEATUREOFINTEREST.table}" WHERE id = ${stream["_default_featureofinterest"]}` : ""
       );
       
       if (searchFOI[0].length < 1) {
@@ -279,16 +283,16 @@ export class Loras extends Common {
       console.log(log.debug_infos("searchDuplicate", searchDuplicate));
       const sql = `WITH "${EConstant.voidtable}" AS (SELECT srid FROM "${EConstant.voidtable}" LIMIT 1)
               , datastream1 AS (SELECT id, _default_featureofinterest, thing_id FROM "${
-                 this.ctx.model.Datastreams.table
+                 DATASTREAM.table
                }" WHERE id =${stream["id"]})
               , myValues ( "${Object.keys(insertObject).join(
                 EConstant.doubleQuotedComa
                )}") AS (values (${Object.values(insertObject).join()}))
               , searchDuplicate AS (SELECT * FROM "${
-                 this.ctx.model.Observations.table
+                 OBSERVATION.table
                }" WHERE ${searchDuplicate})
               , observation1 AS (INSERT INTO  "${
-                 this.ctx.model.Observations.table
+                 OBSERVATION.table
                }" ("${Object.keys(insertObject).join(
                 EConstant.doubleQuotedComa
       )}") SELECT * FROM myValues
@@ -313,7 +317,7 @@ export class Loras extends Common {
           };
           result[EConstant.id] = tempResult.id;
           result[EConstant.selfLink] = `${this.ctx.decodedUrl.root}/Observations(${tempResult.id})`;
-          Object.keys(this.ctx.model["Observations"].relations).forEach((word) => {
+          Object.keys(OBSERVATION.relations).forEach((word) => {
       result[ `${word}${EConstant.navLink}` ] = `${this.ctx.decodedUrl.root}/Observations(${tempResult.id})/${word}`;
           });
           return this.formatReturnResult({

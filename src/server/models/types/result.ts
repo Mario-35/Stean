@@ -6,9 +6,6 @@ export class Result extends Core {
     constructor() {
         super(EDataType.result, "BIGINT");
     }
-
-    
-    
     
     type(): IentityColumn  {
         if(this._override) return this._override;

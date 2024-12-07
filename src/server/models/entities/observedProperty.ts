@@ -11,7 +11,7 @@ import { ERelations, ETable } from "../../enums";
 import { Ientity } from "../../types";
 import { info } from "../../messages";
 import { Bigint, Text } from "../types";
-export const ObservedProperty:Ientity  = new Entity("ObservedProperties", {
+export const OBSERVEDPROPERTY:Ientity  = new Entity("ObservedProperties", {
     createOrder: 5,
     type: ETable.table,
     order: 8,

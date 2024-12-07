@@ -8,17 +8,13 @@ import { doubleQuotesString, deepClone, isTest, formatPgTableColumn, isString } 
 import { errors } from "../messages";
 import { Iservice, Ientities, Ientity, IstreamInfos, koaContext, IentityRelation, getColumnType } from "../types";
 import fs from "fs";
-import { FeatureOfInterest, Thing, Location, Service, CreateObservation, CreateFile, Datastream, Decoder, HistoricalLocation, Log, Lora, MultiDatastream, MultiDatastreamObservedProperty, Observation, Sensor, User, LocationHistoricalLocation, ObservedProperty, ThingLocation, File, Line } from "./entities";
+import { FEATUREOFINTEREST, THING, LOCATION, SERVICE, CREATEOBSERVATION, CREATEFILE, DATASTREAM, DECODER, HISTORICALLOCATION, LOG, LORA, MULTIDATASTREAM, MULTIDATASTREAMOBSERVEDPROPERTY, OBSERVATION, SENSOR, USER, LOCATIONHISTORICALLOCATION, OBSERVEDPROPERTY, THINGLOCATION, FILE, LINE } from "./entities";
 import { Geometry, Jsonb } from "./types";
 
 class Models {
   static models : { 
     [key: string]: Ientities;
   } = {};
-
-  constructor() { 
-    this.createVersion("v1.0");
-  }
 
   private testVersion(verStr: string) {
     return Models.models.hasOwnProperty(verStr);
@@ -105,32 +101,32 @@ class Models {
 
   private version0_9(): Ientities {
     return  {
-      Files: File,
-      Lines: Line,
-      CreateFile: CreateFile,
+      Files: FILE,
+      Lines: LINE,
+      CreateFile: CREATEFILE,
     };
   }
 
   private version1_0(): Ientities {
     return {
-      Things: Thing,        
-      FeaturesOfInterest: FeatureOfInterest,        
-      Locations: Location,        
-      ThingsLocations: ThingLocation,
-      HistoricalLocations: HistoricalLocation,        
-      LocationsHistoricalLocations: LocationHistoricalLocation,        
-      ObservedProperties: ObservedProperty,        
-      Sensors: Sensor,        
-      Datastreams: Datastream,        
-      MultiDatastreams: MultiDatastream,        
-      MultiDatastreamObservedProperties: MultiDatastreamObservedProperty,        
-      Observations: Observation,      
-      Decoders: Decoder,        
-      Loras: Lora,        
-      Logs: Log,        
-      Users: User,        
-      Services: Service,        
-      CreateObservations: CreateObservation,
+      Things: THING,
+      FeaturesOfInterest: FEATUREOFINTEREST,
+      Locations: LOCATION,
+      ThingsLocations: THINGLOCATION,
+      HistoricalLocations: HISTORICALLOCATION,
+      LocationsHistoricalLocations: LOCATIONHISTORICALLOCATION,
+      ObservedProperties: OBSERVEDPROPERTY,
+      Sensors: SENSOR,
+      Datastreams: DATASTREAM,
+      MultiDatastreams: MULTIDATASTREAM,
+      MultiDatastreamObservedProperties: MULTIDATASTREAMOBSERVEDPROPERTY,
+      Observations: OBSERVATION,      
+      Decoders: DECODER,
+      Loras: LORA,
+      Logs: LOG,
+      Users: USER,
+      Services: SERVICE,
+      CreateObservations: CREATEOBSERVATION,
     }
   }
   
@@ -149,7 +145,8 @@ class Models {
       case "v0.9":        
         Models.models["v0.9"] = this.version0_9();         
       case "v1.1":          
-        Models.models["v1.1"] = this.version1_1(deepClone(Models.models["v1.0"]));
+      this.createVersion("v1.0");
+      Models.models["v1.1"] = this.version1_1(deepClone(Models.models["v1.0"]));
       default:         
         Models.models["v1.0"] = this.version1_0();
     }
@@ -164,7 +161,7 @@ class Models {
     return Object.fromEntries(Object.entries(Models.models[service.apiVersion]).filter(([, v]) => Object.keys(filterEntities(service.extensions)).includes(v.name))) as Ientities;
   }
   
-  public filteredModel(service: Iservice): Ientities {
+  public filtered(service: Iservice): Ientities {
     if (this.testVersion(service.apiVersion) === false) this.createVersion(service.apiVersion);
     return service.name === EConstant.admin ? this.DBAdmin(service) : this.filtering(service);
   }
@@ -340,10 +337,8 @@ class Models {
       }
   }
 
-  public init() {    
-    if (isTest()) {      
-      this.createVersion("v1.1");
-    }
+  public init() {
+    if (isTest()) this.createVersion("v1.1");
   }
 }
 

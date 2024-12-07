@@ -8,6 +8,7 @@
 
 import { config } from "../../configuration";
 import { doubleQuotesString, asyncForEach, getUrlKey, hidePassword, removeEmpty } from "../../helpers";
+import { THINGLOCATION } from "../../models/entities";
 import { koaContext } from "../../types";
 export const exportToJson = async (ctx: koaContext) => {
   // get config with hidden password
@@ -15,7 +16,7 @@ export const exportToJson = async (ctx: koaContext) => {
   // get entites list
   const entities = Object.keys(ctx.model).filter((e: string) => ctx.model[e].createOrder > 0);
   // add ThingsLocations
-  entities.push(ctx.model.ThingsLocations.name);
+  entities.push(THINGLOCATION.name);
   // async loop
   await asyncForEach(
     // Entities list

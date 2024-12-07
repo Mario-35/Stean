@@ -10,7 +10,7 @@ import { Entity } from "../entity";
 import { ERelations, ETable } from "../../enums";
 import { Ientity } from "../../types";
 import { Bigint, Jsonb, Relation, Result, Timestamp } from "../types";
-export const Observation:Ientity  = new Entity("Observations", {
+export const OBSERVATION:Ientity  = new Entity("Observations", {
     createOrder: 12,
     type: ETable.table,
     order: 7,

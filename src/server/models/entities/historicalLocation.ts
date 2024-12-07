@@ -11,7 +11,7 @@ import { ERelations, ETable } from "../../enums";
 import { Ientity } from "../../types";
 import { Bigint, Timestamp } from "../types";
 
-export const HistoricalLocation:Ientity  = new Entity("HistoricalLocations", {
+export const HISTORICALLOCATION:Ientity  = new Entity("HistoricalLocations", {
   createOrder: -1,
   order: 5,
   type: ETable.table,

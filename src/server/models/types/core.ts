@@ -2,19 +2,21 @@ import { EDataType } from "../../enums";
 import { IentityColumn, IKeyBoolean, Iservice } from "../../types";
 
 export class Core {
-    _override: IentityColumn | undefined;
-    _dataType: EDataType;
-    _orderBy: string | undefined;
-    _cast: string;
-    _create: string;
-    _entityRelation: string | undefined = undefined;
+    _override:          IentityColumn | undefined;
+    _dataType:          EDataType;
+    _orderBy:           string | undefined;
+    _cast:              string;
+    _create:            string;
+    _coalesce:            string;
+    _entityRelation:    string | undefined = undefined;
     _verify: {
-        list: string[] | undefined;
-        default: string | undefined;
+        list:           string[] | undefined;
+        default:        string | undefined;
     } = {
         list: undefined,
         default: undefined
     };
+
     constructor(dataType: EDataType, cast: string, entityRelation?: string) {
         this._dataType = dataType;
         this._cast = cast;
@@ -22,6 +24,10 @@ export class Core {
         this._entityRelation = entityRelation;
     }
 
+    coalesce(input: string)  {
+        this._coalesce = input;
+        return this;
+    }
     defaultOrder(input: "asc" | "desc")  {
         this._orderBy = input;
         return this;
@@ -36,6 +42,7 @@ export class Core {
         }
         if (this._orderBy) res.orderBy = this._orderBy;
         if (this._entityRelation) res.entityRelation = this._entityRelation;
+        if (this._coalesce) res.coalesce = this._coalesce;
         if (this._verify.default && this._verify.list) res.verify =  {
             list: this._verify.list,
             default: this._verify.default

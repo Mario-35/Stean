@@ -22,6 +22,7 @@ import { checkPassword, emailIsValid } from "./helper";
 import { Login, Query } from "../views";
 import { createQueryParams } from "../views/helpers";
 import { log } from "../log";
+import { USER } from "../models/entities";
 export const protectedRoutes = new Router<DefaultState, Context>();
 protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {  
   switch (ctx.decodedUrl.path.toUpperCase()) {
@@ -50,7 +51,7 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
       if (ctx.body["username"].trim() === "") {
         why["username"] = msg(errors.empty, "username");
       } else {
-        const user = await executeSqlValues(config.getService(EConstant.admin), `SELECT "username" FROM "user" WHERE username = '${ctx.body["username"]}' LIMIT 1`);
+        const user = await executeSqlValues(config.getService(EConstant.admin), `SELECT "username" FROM "${USER.table}" WHERE username = '${ctx.body["username"]}' LIMIT 1`);
         if (user) why["username"] = errors.alreadyPresent;
       }
       // Email

@@ -11,7 +11,7 @@ import { ETable } from "../../enums";
 import { Ientity } from "../../types";
 import { Bigint } from "../types";
 
-export const MultiDatastreamObservedProperty:Ientity  = new Entity("MultiDatastreamObservedProperties", {
+export const MULTIDATASTREAMOBSERVEDPROPERTY:Ientity  = new Entity("MultiDatastreamObservedProperties", {
     createOrder: 9,
     type: ETable.link,
     order: -1,

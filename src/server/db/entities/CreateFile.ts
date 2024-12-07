@@ -17,6 +17,7 @@ import { addAbortSignal } from 'stream';
 import { config } from "../../configuration";
 import { log } from "../../log";
 import { EConstant } from "../../enums";
+import { FILE, LINE } from "../../models/entities";
 
 export class CreateFile extends Common {
   constructor(ctx: koaContext) {
@@ -36,16 +37,16 @@ export class CreateFile extends Common {
     const nameOfFile = paramsFile.filename.split("/").reverse()[0];
     const createDataStream = async () => {
       const copyCtx = Object.assign({}, ctx.odata);
-      ctx.odata.entity = this.ctx.model.Files;
+      ctx.odata.entity = FILE;
       // IMPORTANT TO ADD instead update
       ctx.odata.returnFormat = returnFormats.json;
       ctx.log = undefined;
       // @ts-ignore
-      const objectFile = new entities[this.ctx.model.Files.name]( ctx );
+      const objectFile = new entities[FILE.name]( ctx );
       try {
         return await objectFile.post({
           "name": nameOfFile,
-          "description": `${this.ctx.model.Files.name} import file ${nameOfFile}`,
+          "description": `${FILE.name} import file ${nameOfFile}`,
         });
       } catch (err) {
         console.log(err);        
@@ -56,7 +57,7 @@ export class CreateFile extends Common {
           returnValueError.body = returnValueError.body
             ? returnValueError.body[0]
             : {};
-          if (returnValueError.body) await executeSqlValues(ctx.service, `DELETE FROM "${this.ctx.model.Lines.table}" WHERE "file_id" = ${returnValueError.body[EConstant.id]}`);
+          if (returnValueError.body) await executeSqlValues(ctx.service, `DELETE FROM "${LINE.table}" WHERE "file_id" = ${returnValueError.body[EConstant.id]}`);
           return returnValueError;
         }
       } finally {
@@ -76,7 +77,7 @@ export class CreateFile extends Common {
       readable
         .pipe(addAbortSignal(controller.signal, await writable))
         .on('close', async () => {
-          const sql = `INSERT INTO "${ this.ctx.model.Lines.table }" 
+          const sql = `INSERT INTO "${ LINE.table }" 
                     (
                     "file_id", 
                     "result") 

@@ -20,3 +20,5 @@
     new column mechanij
 ## version 0.9.5
     rewrite mechanic of model creator to be univwersal not only STA
+## version 0.9.7
+    cruate auto trigger cruate for period

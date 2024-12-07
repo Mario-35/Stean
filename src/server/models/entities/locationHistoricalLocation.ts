@@ -11,7 +11,7 @@ import { ETable } from "../../enums";
 import { Ientity } from "../../types";
 import { Bigint } from "../types";
 
-export const LocationHistoricalLocation:Ientity  = new Entity("LocationsHistoricalLocations", {
+export const LOCATIONHISTORICALLOCATION:Ientity  = new Entity("LocationsHistoricalLocations", {
   createOrder: -1,
   type: ETable.link,
   order: -1,

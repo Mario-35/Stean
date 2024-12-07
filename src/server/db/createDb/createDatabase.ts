@@ -11,11 +11,11 @@ import { config } from "../../configuration";
 import { doubleQuotesString, simpleQuotesString, asyncForEach } from "../../helpers";
 import { IKeyString } from "../../types";
 import { EChar, EConstant, EExtensions } from "../../enums";
-import { triggers } from "./triggers";
 import { models } from "../../models";
 import { log } from "../../log";
 import { createRole } from "../helpers/createRole";
 import { createExtension } from "../queries";
+import { pgFunctions } from ".";
 
 export const createDatabase = async (configName: string): Promise<IKeyString> => {
   console.log(log.debug_head("createDatabase", configName));
@@ -75,11 +75,9 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
     Object.keys(DB).filter(e => e.trim() !== ""),
     async (keyName: string) => {
       const res = await createTable(configName, DB[keyName], undefined);      
-      Object.keys(res).forEach((e: string) => log.create(e, res[e]));      
+      Object.keys(res).forEach((e: string) => log.create(e, res[e]));
     }
   );
-
-
 
   returnValue[`Create Role`] = await createRole(config.getService(configName))
   .then(() => EChar.ok)
@@ -91,7 +89,7 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
     
   // loop to create each triggers
   if (!config.getService(configName).extensions.includes( EExtensions.file ) ) {   
-    await asyncForEach( triggers(configName), async (query: string) => {
+    await asyncForEach( pgFunctions(configName), async (query: string) => {
       const name = query.split(" */")[0].split("/*")[1].trim();
       await dbConnection.unsafe(query)
         .then(() => {
@@ -103,6 +101,28 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
       }
     );
   }
+
+  await asyncForEach(
+    Object.keys(DB).filter(e => e.trim() !== ""),
+    async (keyName: string) => {
+      if (DB[keyName].trigger) {
+        await asyncForEach(
+          DB[keyName].trigger,
+          async (query: string) => {
+            await dbConnection.unsafe(query)
+            .then(e => {
+              // to preserve size
+              DB[keyName].trigger = [];              
+            })
+              .catch((error: Error) => {
+                console.log(error);
+                return error;
+              });     
+          }
+        );
+      }
+    }
+  );
 
   // If only numeric extension
   if ( config.getService(configName).extensions.includes( EExtensions.highPrecision ) ) {

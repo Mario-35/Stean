@@ -37,6 +37,8 @@ declare module "koa" {
     body: any;
   }
 }
+// Initialisation of models
+models.init();
 // new koa server https://koajs.com/
 export const app = new Koa();
 app.use(favicon(__dirname + '/favicon.ico'));
@@ -69,8 +71,7 @@ app.use((ctx: koaContext, next) => {
 });
 // authenticated routes
 app.use(protectedRoutes.routes());
-// Initialisation of models
-models.init();
+
 // Start server initialisaion
 export const server = isTest()
   // Tdd init

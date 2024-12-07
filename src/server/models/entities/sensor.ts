@@ -12,7 +12,7 @@ import { Ientity } from "../../types";
 import { info } from "../../messages";
 import { Bigint, Text } from "../types";
 
-  export const Sensor:Ientity  = new Entity("Sensors", {
+  export const SENSOR:Ientity  = new Entity("Sensors", {
     createOrder: 6,
     type: ETable.table,
     order: 9,

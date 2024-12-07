@@ -83,7 +83,7 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     ctx.log = undefined;
   }
   // get model
-  ctx.model = models.filteredModel(ctx.service);
+  ctx.model = models.filtered(ctx.service);
   try {
     // Init config context
     if (!ctx.service) return;    

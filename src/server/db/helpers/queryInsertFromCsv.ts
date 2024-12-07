@@ -10,6 +10,7 @@ import { IcsvColumn, IcsvFile, koaContext } from "../../types";
 import { columnsNameFromHydrasCsv, streamCsvFile } from ".";
 import { log } from "../../log";
 import { EChar } from "../../enums";
+import { OBSERVATION } from "../../models/entities";
 export async function queryInsertFromCsv( ctx: koaContext, paramsFile: IcsvFile ): Promise<{count: number, query: string[]} | undefined> {
   console.log(log.whereIam());
   const sqlRequest = await columnsNameFromHydrasCsv(paramsFile);
@@ -25,7 +26,7 @@ export async function queryInsertFromCsv( ctx: koaContext, paramsFile: IcsvFile 
       Object.keys(paramsFile.columns).forEach(
         (myColumn: string, index: number) => {
           const csvColumn: IcsvColumn = paramsFile.columns[myColumn as keyof object];
-          scriptSql.push(`INSERT INTO "${ ctx.model.Observations.table }" 
+          scriptSql.push(`INSERT INTO "${ OBSERVATION.table }" 
           ("${csvColumn.stream.type?.toLowerCase()}_id", "featureofinterest_id", "phenomenonTime", "resultTime", "result", "resultQuality")
             SELECT 
             ${csvColumn.stream.id}, 
@@ -52,32 +53,6 @@ export async function queryInsertFromCsv( ctx: koaContext, paramsFile: IcsvFile 
               ELSE CAST(REPLACE(value${csvColumn.column},',','.') AS float) 
             END`);
       });
-      
-      // Object.keys(paramsFile.columns).forEach(
-      //   (myColumn: string, index: number) => {
-      //     const csvColumn: IcsvColumn = paramsFile.columns[myColumn as keyof object];
-      //     scriptSql.push(`INSERT INTO "${ ctx.model.Observations.table }" 
-      //     ("${csvColumn.stream.type?.toLowerCase()}_id", "featureofinterest_id", "phenomenonTime", "resultTime", "result", "resultQuality")
-      //       SELECT 
-      //       ${csvColumn.stream.id}, 
-      //       ${csvColumn.stream.FoId},  
-      //       ${sqlRequest.dateSql}, 
-      //       ${sqlRequest.dateSql},
-      //       json_build_object('value',
-      //       ARRAY [ 
-      //       CASE "${paramsFile.tempTable}".value${csvColumn.column}
-      //         WHEN '---' THEN NULL 
-      //         WHEN '#REF!' THEN NULL 
-      //         ELSE CAST(REPLACE(value${csvColumn.column},',','.') AS float) 
-      //       END
-      //       ]),
-      //       '{"import": "${fileImport}","date": "${dateImport}"}'  
-      //      FROM "${ paramsFile.tempTable }" ON CONFLICT DO NOTHING returning 1`);
-      //   }
-      // );
-
-
-
       return {
         count: stream,
         query: scriptSql

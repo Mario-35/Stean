@@ -16,6 +16,7 @@ export interface IentityCore {
      columns:       { [key: string]: IentityColumn };
      relations:     { [key: string]: IentityRelation };
      after?:        string;
+     trigger?:      string[];
 }
 
 export interface Ientity extends IentityCore {

@@ -12,7 +12,7 @@ import { Ientity } from "../../types";
 import { info } from "../../messages";
 import { Bigint, Jsonb, Text } from "../types";
 
-export const FeatureOfInterest:Ientity  = new Entity("FeaturesOfInterest", {
+export const FEATUREOFINTEREST:Ientity  = new Entity("FeaturesOfInterest", {
             createOrder: 4,
             type: ETable.table,
             order: 4,

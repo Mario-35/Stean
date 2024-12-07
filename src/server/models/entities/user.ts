@@ -11,7 +11,7 @@ import { Entity } from "../entity";
 import {  ETable } from "../../enums";
 import { Bigint, Bool, Text } from "../types";
 
-  export const User:Ientity  = new Entity("Users", {
+  export const USER:Ientity  = new Entity("Users", {
     createOrder: -1,
     type: ETable.table,
     order: 21,

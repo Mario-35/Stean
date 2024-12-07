@@ -8,6 +8,7 @@
 
 import { log } from "../../log";
 import { errors } from "../../messages";
+import { DATASTREAM } from "../../models/entities";
 import { koaContext } from "../../types";
 import { Common } from "./common";
 
@@ -22,10 +23,10 @@ export class Datastreams extends Common {
     if (input) {
       const colName = "observationType";
       if (input[colName]) {
-        if (!this.ctx.model.Datastreams.columns[ colName ].verify?.list.includes(input[colName]))
+        if (!DATASTREAM.columns[ colName ].verify?.list.includes(input[colName]))
           this.ctx.throw(400, { code: 400, detail: errors[colName] });
       } else
-        input[colName] = this.ctx.model.Datastreams.columns[colName].verify?.default;
+        input[colName] = DATASTREAM.columns[colName].verify?.default;
     }
     return input;
   }

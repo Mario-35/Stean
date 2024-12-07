@@ -11,7 +11,7 @@ import {  ERelations, ETable } from "../../enums";
 import { Ientity } from "../../types";
 import { info } from "../../messages";
 import { Bigint, Jsonb, Relation, Text } from "../types";
-export const Lora:Ientity  = new Entity("Loras", {
+export const LORA:Ientity  = new Entity("Loras", {
   createOrder: 11,
   type: ETable.table,
   order: 11,

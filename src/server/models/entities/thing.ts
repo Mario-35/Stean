@@ -11,7 +11,7 @@ import { ERelations, ETable } from "../../enums";
 import { Ientity } from "../../types";
 import { info } from "../../messages";
 import { Bigint, Text } from "../types";
-export const Thing: Ientity = new Entity("Things", {
+export const THING: Ientity = new Entity("Things", {
     createOrder: 1,
     type: ETable.table,
     order: 10,

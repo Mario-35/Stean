@@ -12,6 +12,7 @@ import { ESCAPE_SIMPLE_QUOTE } from "../../constants";
 import { EConstant } from "../../enums";
 import { doubleQuotesString, simpleQuotesString, formatPgString } from "../../helpers";
 import { PgVisitor } from "../../odata/visitor";
+
 export const asDataArray = (input: PgVisitor): string => {  
   // create names  
   const names:string[] = input.toPgQuery()?.keys.map((e: string) => formatPgString(e)) || [];

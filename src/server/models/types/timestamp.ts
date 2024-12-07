@@ -11,7 +11,7 @@ export class Timestamp extends Core {
         this._create = this._create.replace('@DEFAULT@', ' DEFAULT CURRENT_TIMESTAMP');
         return this;
     }
-
+    
     alias(alias: string) {
         const tmpType  = this._dataType === EDataType.timestamptz ? EDatesType.dateTz : EDatesType.date;
         this._override = {

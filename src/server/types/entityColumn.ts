@@ -10,9 +10,10 @@ import { IKeyBoolean, Iservice } from ".";
 import { EDataType } from "../enums";
 export interface IentityColumn {    
         dataType:           EDataType;
-        orderBy?:            string;
+        orderBy?:           string;
         create:             string;
         entityRelation?:    string;
+        coalesce?:          string;
         alias(config:Iservice, test?: IKeyBoolean): string | undefined | void;
         verify?: {
             list: string[];
