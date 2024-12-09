@@ -36,7 +36,7 @@ export class Services extends Common {
         });    
     // Return result
     return this.formatReturnResult({
-      body: hidePassword(config.getServices().map((elem: string) => ({ 
+      body: hidePassword(config.getServicesNames().map((elem: string) => ({ 
         [elem] : { ...config.getService(elem) }
       })))
     });

@@ -10,7 +10,6 @@ import { IcsvFile, IcsvImport, koaContext } from "../../types";
 import { createReadStream } from 'fs';
 import { addAbortSignal } from 'stream';
 import { config } from "../../configuration";
-import { executeSql, executeSqlValues } from ".";
 import { log } from "../../log";
 export async function streamCsvFile( ctx: koaContext, paramsFile: IcsvFile, sqlRequest: IcsvImport ): Promise<number> {
   console.log(log.whereIam());
@@ -18,13 +17,13 @@ export async function streamCsvFile( ctx: koaContext, paramsFile: IcsvFile, sqlR
   const controller = new AbortController();
   const readable = createReadStream(paramsFile.filename);
   sqlRequest.columns.forEach((value) => cols.push(`"${value}" varchar(255) NULL`));
-  await executeSql(ctx.service, `CREATE TABLE "${paramsFile.tempTable}" ( id serial4 NOT NULL, ${cols}, CONSTRAINT ${paramsFile.tempTable}_pkey PRIMARY KEY (id));`).catch((error: any) => {console.log(error)});
+  await config.executeSql(ctx.service, `CREATE TABLE "${paramsFile.tempTable}" ( id serial4 NOT NULL, ${cols}, CONSTRAINT ${paramsFile.tempTable}_pkey PRIMARY KEY (id));`).catch((error: any) => {console.log(error)});
   const writable = config.connection(ctx.service.name).unsafe(`COPY "${paramsFile.tempTable}" (${sqlRequest.columns.join( "," )}) FROM STDIN WITH(FORMAT csv, DELIMITER ';'${ paramsFile.header })`).writable();
   return new Promise(async function (resolve, reject) {
     readable
     .pipe(addAbortSignal(controller.signal, await writable))
     .on('finish', async (e: any) => {
-      await executeSqlValues(ctx.service, `SELECT count(id) FROM "${paramsFile.tempTable}"`)
+      await config.executeSqlValues(ctx.service, `SELECT count(id) FROM "${paramsFile.tempTable}"`)
       .then((e) => {
         resolve(+e[0 as keyof object]);
       }).catch((error) => {

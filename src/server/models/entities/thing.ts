@@ -12,27 +12,27 @@ import { Ientity } from "../../types";
 import { info } from "../../messages";
 import { Bigint, Text } from "../types";
 export const THING: Ientity = new Entity("Things", {
-    createOrder: 1,
-    type: ETable.table,
-    order: 10,
-    columns: {
-      id: new Bigint().generated("id").type(),
-      name: new Text().notNull().default(info.noName).unique().type(),
-      description: new Text().notNull().default(info.noDescription).type(),
+  createOrder: 1,
+  type: ETable.table,
+  order: 10,
+  columns: {
+    id: new Bigint().generated("id").type(),
+    name: new Text().notNull().default(info.noName).unique().type(),
+    description: new Text().notNull().default(info.noDescription).type(),
+  },
+  relations: {
+    Locations: {
+      type: ERelations.belongsToMany,
+      entityRelation: "ThingsLocations",
     },
-    relations: {
-      Locations: {
-        type: ERelations.belongsToMany,
-        entityRelation: "ThingsLocations",
-      },
-      HistoricalLocations: {
-        type: ERelations.hasMany
-      },
-      Datastreams: {
-        type: ERelations.hasMany
-      },
-      MultiDatastreams: {
-        type: ERelations.hasMany
-      },
+    HistoricalLocations: {
+      type: ERelations.hasMany
     },
-  });
+    Datastreams: {
+      type: ERelations.hasMany
+    },
+    MultiDatastreams: {
+      type: ERelations.hasMany
+    },
+  },
+});

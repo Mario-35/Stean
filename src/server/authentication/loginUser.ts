@@ -24,9 +24,8 @@ const getUser = async (configName: string, username: string,  password: string):
 };
 // ctx for koa connection and set undefined for mqtt
 export const loginUser = async ( ctx: koaContext | undefined, login?: {configName: string, username: string,  password: string} ): Promise<Iuser | undefined> => {
-  if (login) {    
-    return await getUser(login.configName, login.username, login.password);
-  } else if (ctx) {
+  if (login) return await getUser(login.configName, login.username, login.password);
+  if (ctx) {
     const body: Record<string, any> = ctx.request.body as Record<string, any>;    
     if (body["username"] && body["password"]) {   
       const user = await getUser(ctx.service.name, body["username"], body["password"]);

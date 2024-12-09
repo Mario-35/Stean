@@ -10,6 +10,12 @@ import { config } from "../../configuration";
 import { EChar, EConstant } from "../../enums";
 import { simpleQuotesString } from "../../helpers";
 import { Iservice } from "../../types";
+
+/**
+ * 
+ * @param service service
+ * @returns return ok or notOk
+ */
 export const createRole = async (service: Iservice ): Promise<string> => {
   const connection = config.connection(EConstant.admin);
   return new Promise(async function (resolve, reject) {

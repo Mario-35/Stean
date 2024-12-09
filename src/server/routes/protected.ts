@@ -16,7 +16,6 @@ import { createOdata } from "../odata";
 import { errors, info, msg } from "../messages";
 import { EConstant, EExtensions, EHttpCode, EUserRights } from "../enums";
 import { loginUser } from "../authentication";
-import { executeSqlValues } from "../db/helpers";
 import { config } from "../configuration";
 import { checkPassword, emailIsValid } from "./helper";
 import { Login, Query } from "../views";
@@ -51,7 +50,7 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
       if (ctx.body["username"].trim() === "") {
         why["username"] = msg(errors.empty, "username");
       } else {
-        const user = await executeSqlValues(config.getService(EConstant.admin), `SELECT "username" FROM "${USER.table}" WHERE username = '${ctx.body["username"]}' LIMIT 1`);
+        const user = await config.executeSqlValues(config.getService(EConstant.admin), `SELECT "username" FROM "${USER.table}" WHERE username = '${ctx.body["username"]}' LIMIT 1`);
         if (user) why["username"] = errors.alreadyPresent;
       }
       // Email
@@ -112,7 +111,7 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
           ctx.status = EHttpCode.created;
           ctx.body = returnValue.body;
         }
-      } else ctx.throw(400);
+      } else ctx.throw(EHttpCode.badRequest);
     } else if (ctx.request.type.startsWith("multipart/")) {      
       // If upload datas
       const getDatas = async (): Promise<object> => {
@@ -157,12 +156,12 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
             ctx.body = returnValue.body;
           }
         } else {
-          ctx.throw(400);
+          ctx.throw(EHttpCode.badRequest);
         }
       }
     } else {
       // payload is malformed
-      ctx.throw(400, { details: errors.payloadIsMalformed });
+      ctx.throw(EHttpCode.badRequest, { details: errors.payloadIsMalformed });
     }
   } else ctx.throw(EHttpCode.Unauthorized);
 });
@@ -201,7 +200,7 @@ protectedRoutes.delete("/(.*)", async (ctx) => {
     if (ctx.odata) {
       console.log(log.debug_head("DELETE"));
       const objectAccess = new apiAccess(ctx);
-      if (!ctx.odata.id) ctx.throw(400, { detail: errors.idRequired });
+      if (!ctx.odata.id) ctx.throw(EHttpCode.badRequest, { detail: errors.idRequired });
       const returnValue = await objectAccess.delete(ctx.odata.id);
       if (returnValue && returnValue.id && returnValue.id > 0) {
         returnFormats.json.type;

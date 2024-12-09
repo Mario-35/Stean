@@ -5,7 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-export { formatconfigFile } from "./formatconfigFile";
+export { formatServiceFile } from "./formatServiceFile";
 export { testDbExists } from "./testDbExists";
 export { testDbConnection } from "./testDbConnection";
-export { validJSONConfig } from "./validJSONConfig";
+export { validJSONService } from "./validJSONService";

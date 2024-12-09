@@ -8,7 +8,7 @@
 
 import { Common } from "./common";
 import { IcsvColumn, IcsvFile, IreturnResult, koaContext } from "../../types";
-import { getColumnsNamesFromCsvFile, executeSqlValues } from "../helpers";
+import { getColumnsNamesFromCsvFile } from "../helpers";
 import { errors } from "../../messages/";
 import * as entities from "../entities/index";
 import { returnFormats } from "../../helpers";
@@ -16,7 +16,7 @@ import { createReadStream } from 'fs';
 import { addAbortSignal } from 'stream';
 import { config } from "../../configuration";
 import { log } from "../../log";
-import { EConstant } from "../../enums";
+import { EConstant, EHttpCode } from "../../enums";
 import { FILE, LINE } from "../../models/entities";
 
 export class CreateFile extends Common {
@@ -29,8 +29,8 @@ export class CreateFile extends Common {
     console.log(log.debug_head("streamCsvFileInPostgreSqlFileInDatastream"));
     const headers = await getColumnsNamesFromCsvFile(paramsFile.filename);
     if (!headers) {
-      ctx.throw(400, {
-        code: 400,
+      ctx.throw(EHttpCode.badRequest, {
+        code: EHttpCode.badRequest,
         detail: errors.noHeaderCsv + paramsFile.filename,
       });
     }
@@ -57,7 +57,7 @@ export class CreateFile extends Common {
           returnValueError.body = returnValueError.body
             ? returnValueError.body[0]
             : {};
-          if (returnValueError.body) await executeSqlValues(ctx.service, `DELETE FROM "${LINE.table}" WHERE "file_id" = ${returnValueError.body[EConstant.id]}`);
+          if (returnValueError.body) await config.executeSqlValues(ctx.service, `DELETE FROM "${LINE.table}" WHERE "file_id" = ${returnValueError.body[EConstant.id]}`);
           return returnValueError;
         }
       } finally {
@@ -71,7 +71,7 @@ export class CreateFile extends Common {
     const cols:string[] = [];
     headers.forEach((value: string) => cols.push(`${value} TEXT NULL`));  
     const createTable = `CREATE TABLE public."${paramsFile.tempTable}" (${cols});`;
-    await executeSqlValues(ctx.service, createTable);
+    await config.executeSqlValues(ctx.service, createTable);
     const writable = config.connection(ctx.service.name).unsafe(`COPY ${paramsFile.tempTable}  (${headers.join( "," )}) FROM STDIN WITH(FORMAT csv, DELIMITER ';'${ paramsFile.header })`).writable();
     return await new Promise<string | undefined>(async (resolve, reject) => {      
       readable
@@ -96,12 +96,12 @@ export class CreateFile extends Common {
   };
   
   async getAll(): Promise<IreturnResult | undefined> {
-    this.ctx.throw(400, { code: 400 });
+    this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest });
   }
   
   async getSingle(): Promise<IreturnResult | undefined> {
     console.log(log.whereIam());
-    this.ctx.throw(400, { code: 400 });
+    this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest });
   }
     
   async post(dataInput: Record<string, string>): Promise<IreturnResult | undefined> {

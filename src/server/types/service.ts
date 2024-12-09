@@ -24,5 +24,6 @@ export interface Iservice {
     options:        typeof typeOptions; // Options see Enum EOptions
     extensions:     typeof typeExtensions; // extensions see Enum EExtensions
     alias:          string[]; // alias name of the service
+    csvDelimiter:   ";" | ","; // csv format delimiter
     _connection:    postgres.Sql<Record<string, unknown>> | undefined; // not in file only when running to store connection
 }

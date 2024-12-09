@@ -7,5 +7,5 @@
  *
  */
 
-export const asCsv = (sql: string): string => `COPY ( ${sql} ) TO STDOUT WITH (FORMAT CSV, NULL "NULL", HEADER, DELIMITER ';')`;
+export const asCsv = (sql: string, csvDelimiter: ";" | ","): string => `COPY (${sql}) TO STDOUT WITH (FORMAT CSV, NULL "NULL", HEADER, DELIMITER '${csvDelimiter}')`;
   

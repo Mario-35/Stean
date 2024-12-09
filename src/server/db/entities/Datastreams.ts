@@ -6,6 +6,7 @@
  *
  */
 
+import { EHttpCode } from "../../enums";
 import { log } from "../../log";
 import { errors } from "../../messages";
 import { DATASTREAM } from "../../models/entities";
@@ -24,7 +25,7 @@ export class Datastreams extends Common {
       const colName = "observationType";
       if (input[colName]) {
         if (!DATASTREAM.columns[ colName ].verify?.list.includes(input[colName]))
-          this.ctx.throw(400, { code: 400, detail: errors[colName] });
+          this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors[colName] });
       } else
         input[colName] = DATASTREAM.columns[colName].verify?.default;
     }

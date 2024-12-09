@@ -16,7 +16,7 @@ import { createOdata } from "../odata";
 import { info } from "../messages";
 import { config } from "../configuration";
 import { createDatabase, testDatas } from "../db/createDb";
-import { executeAdmin, executeSql, exportService } from "../db/helpers";
+import { exportService } from "../db/helpers";
 import { models } from "../models";
 import { getTest, sqlStopDbName } from "./helper";
 import { createService } from "../db/helpers";
@@ -112,7 +112,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
       let sql = getUrlKey(ctx.request.url, "query");
       if (sql) {
         sql = atob(sql);
-        const resultSql = await executeSql(sql.includes("log_request") ? config.getService(EConstant.admin) : ctx.service, sql);
+        const resultSql = await config.executeSql(sql.includes("log_request") ? config.getService(EConstant.admin) : ctx.service, sql);
         ctx.status = EHttpCode.created;
         ctx.body = [resultSql];
       }
@@ -130,8 +130,8 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
     case "DROP":
       console.log(log.debug_head("drop database"));
       if (ctx.service.options.includes(EOptions.canDrop)) {        
-        await executeAdmin(sqlStopDbName(simpleQuotesString(ctx.service.pg.database))).then(async () => {
-            await executeAdmin(`DROP DATABASE IF EXISTS ${ctx.service.pg.database}`);
+        await config.executeAdmin(sqlStopDbName(simpleQuotesString(ctx.service.pg.database))).then(async () => {
+            await config.executeAdmin(`DROP DATABASE IF EXISTS ${ctx.service.pg.database}`);
             try {
               ctx.status = EHttpCode.created;
               ctx.body = await createDatabase(ctx.service.pg.database);              

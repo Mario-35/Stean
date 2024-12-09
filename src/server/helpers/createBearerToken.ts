@@ -10,7 +10,7 @@ import cookieParser from "cookie-parser";;
 import { errors } from "../messages";
 import cookieModule from "cookie";
 import { keyobj, koaContext } from "../types";
-import { EConstant } from "../enums";
+import { EConstant, EHttpCode } from "../enums";
 export const createBearerToken = (ctx: koaContext) => {  
     const getCookie = (serializedCookies: string, key: string) => cookieModule.parse(serializedCookies)[key] ?? false;
     const queryKey = "access_token";
@@ -63,7 +63,7 @@ export const createBearerToken = (ctx: koaContext) => {
     // RFC6750 states the access_token MUST NOT be provided
     // in more than one place in a single request.
     if (count > 1) {
-      ctx.throw(400, "token_invalid", {
+      ctx.throw(EHttpCode.badRequest, "token_invalid", {
         message: errors.tokenInvalid,
       });
     }

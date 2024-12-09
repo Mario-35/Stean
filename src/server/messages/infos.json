@@ -1,4 +1,5 @@
 {
+	"try":"Try create Database",
 	"auth": "Authentication",
 	"csvFile": "csv file",
     "classConstructor" : "class $1 override $2",
@@ -8,6 +9,7 @@
     "constructor": "Constructor",
 	"create": "Create",
     "createAdminUser" : "create user => ",
+	"createFunc": "(re)create PostgresSql functions",
 	"createServ": "Create Service",
 	"db": "dataBase",
 	"dbExist": "Test database exist",
@@ -46,5 +48,4 @@
 	"write": "Write",
 	"noName": "No name",
 	"noDescription": "No description"
-
 }

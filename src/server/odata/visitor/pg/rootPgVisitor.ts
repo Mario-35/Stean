@@ -51,7 +51,7 @@ export class RootPgVisitor extends PgVisitor {
   
   protected VisitRessourcesEntitySetName(node: Token, _context: IodataContext) {
     this.entity = models.getEntityStrict(this.ctx.service, node.value.name);
-    if (!this.entity) this.ctx.throw(404, "Not Found");
+    if (!this.entity) this.ctx.throw(EHttpCode.notFound, "Not Found");
   }
  
   protected VisitRessourcesRefExpression(node: Token, _context: IodataContext) {

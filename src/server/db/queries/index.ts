@@ -17,7 +17,6 @@ export { multiDatastreamFromDeveui } from "./multiDatastreamFromDeveui";
 export { multiDatastreamKeys } from "./multiDatastreamKeys";
 export { multiDatastreamsUnitsKeys } from "./multiDatastreamsUnitsKeys";
 export { streamFromDeveui } from "./streamFromDeveui";
-export { testId } from "./testId";
 export { resultKeys } from "./resultKeys";
 export { multiDatastreamUoM } from "./multiDatastreamUoM";
 export { createExtension } from "./createExtension";

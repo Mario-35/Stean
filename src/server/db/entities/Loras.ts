@@ -11,12 +11,12 @@ import { getBigIntFromString, notNull, } from "../../helpers/index";
 import { ESCAPE_SIMPLE_QUOTE } from "../../constants";
 import { IreturnResult, keyobj, koaContext } from "../../types";
 import { errors, msg } from "../../messages/";
-import { EConstant, EDatesType } from "../../enums";
+import { EConstant, EDatesType, EHttpCode } from "../../enums";
 import { multiDatastreamFromDeveui, streamFromDeveui } from "../queries";
 import { decodeloraDeveuiPayload } from "../../lora";
-import { executeSql, executeSqlValues } from "../helpers";
 import { log } from "../../log";
 import { DATASTREAM, FEATUREOFINTEREST, OBSERVATION } from "../../models/entities";
+import { config } from "../../configuration";
 
 export class Loras extends Common {
   synonym: Record<string, any>  = {};
@@ -49,7 +49,7 @@ export class Loras extends Common {
     console.log(log.whereIam());
       const addToStean = (key: string) => (this.stean[key] = dataInput[key]);
     if (dataInput) this.stean = await this.prepareInputResult(dataInput);
-    if (this.stean["frame"] === "000000000000000000") this.ctx.throw(400, { code: 400, detail: errors.frameNotConform });
+    if (this.stean["frame"] === "000000000000000000") this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.frameNotConform });
     function gedataInputtDate(): string | undefined {
       if (dataInput["datetime"]) return String(dataInput["datetime"]);
       if (dataInput["phenomenonTime"]) return String(dataInput["phenomenonTime"]);
@@ -59,7 +59,7 @@ export class Loras extends Common {
       if (notNull(dataInput["MultiDatastream"])) {
       if (!notNull(this.stean["deveui"])) {
         if (silent) return this.formatReturnResult({ body: errors.deveuiMessage });
-        else this.ctx.throw(400, { code: 400, detail: errors.deveuiMessage });
+        else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.deveuiMessage });
       }
       addToStean("MultiDatastream");
       return await super.post(this.stean);
@@ -68,7 +68,7 @@ export class Loras extends Common {
       if (notNull(dataInput["Datastream"])) {
       if (!notNull(dataInput["deveui"])) {
         if (silent) return this.formatReturnResult({ body: errors.deveuiMessage });
-        else this.ctx.throw(400, { code: 400, detail: errors.deveuiMessage });
+        else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.deveuiMessage });
       }
       addToStean("Datastream");
       return await super.post(this.stean);
@@ -76,25 +76,25 @@ export class Loras extends Common {
     // search for deveui
       if (!notNull(this.stean["deveui"])) {
       if (silent) return this.formatReturnResult({ body: errors.deveuiMessage });
-      else this.ctx.throw(400, { code: 400, detail: errors.deveuiMessage });
+      else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.deveuiMessage });
     }
-      const stream = await executeSql(this.ctx.service, streamFromDeveui(this.stean["deveui"])).then((res: Record<string, any> ) => {
+      const stream = await config.executeSql(this.ctx.service, streamFromDeveui(this.stean["deveui"])).then((res: Record<string, any> ) => {
       if (res[0]["multidatastream"] != null) return res[0]["multidatastream"][0];
       if (res[0]["datastream"] != null) return res[0]["datastream"][0];
-      this.ctx.throw(400, { code: 400, detail: msg( errors.deveuiNotFound, this.stean["deveui"] )}); 
+      this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: msg( errors.deveuiNotFound, this.stean["deveui"] )}); 
     });
     
     console.log(log.debug_infos("stream", stream));
     // search for frame and decode payload if found
       if (notNull(this.stean["frame"])) {
       const temp = await decodeloraDeveuiPayload( this.ctx, this.stean["deveui"], this.stean["frame"] );
-      if (!temp) return this.ctx.throw(400, { code: 400, detail: "Error"});
+      if (!temp) return this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: "Error"});
       if (temp && temp.error) {
         if (silent) return this.formatReturnResult({ body: temp.error });
-        else this.ctx.throw(400, { code: 400, detail: temp.error });
+        else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: temp.error });
       }
       this.stean["decodedPayload"] = temp["result"];
-      if (this.stean["decodedPayload"].valid === false) this.ctx.throw(400, { code: 400, detail: errors.InvalidPayload });
+      if (this.stean["decodedPayload"].valid === false) this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.InvalidPayload });
     }
       const searchMulti = multiDatastreamFromDeveui(this.stean["deveui"]);
       this.stean["formatedDatas"] = {};
@@ -114,7 +114,7 @@ export class Loras extends Common {
   
       if (!notNull(this.stean["formatedDatas"])) {
         if (silent) return this.formatReturnResult({ body: errors.dataMessage });
-        else this.ctx.throw(400, { code: 400, detail: errors.dataMessage });
+        else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.dataMessage });
       }
     } else {
       
@@ -122,14 +122,14 @@ export class Loras extends Common {
       this.stean["formatedDatas"] = this.stean["decodedPayload"]["datas"];
     } else if (!this.stean["value"]) {
           if (silent) return this.formatReturnResult({ body: errors.dataMessage });
-          else this.ctx.throw(400, { code: 400, detail: errors.dataMessage });
+          else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.dataMessage });
         }
     }
       console.log(log.debug_infos("Formated datas", this.stean["formatedDatas"]));
       this.stean["date"] = gedataInputtDate();
       if (!this.stean["date"]) {
       if (silent) return this.formatReturnResult({ body: errors.noValidDate });
-      else this.ctx.throw(400, { code: 400, detail: errors.noValidDate });
+      else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.noValidDate });
     }    
     
     if (stream["multidatastream"]) {
@@ -155,7 +155,7 @@ export class Loras extends Common {
       if ( Object.values(listOfSortedValues).filter((word) => word != null) .length < 1 ) {
       const errorMessage = `${errors.dataNotCorresponding} [${stream["keys"]}] with [${Object.keys(this.stean["formatedDatas"])}]`;
         if (silent) return this.formatReturnResult({ body: errorMessage });
-        else this.ctx.throw(400, { code: 400, detail: errorMessage });
+        else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errorMessage });
       }
       const getFeatureOfInterest = getBigIntFromString( dataInput["FeatureOfInterest"] );
       const temp = listOfSortedValues;
@@ -169,7 +169,7 @@ export class Loras extends Common {
             stream["keys"].length
           );
           if (silent) return this.formatReturnResult({ body: errorMessage });
-          else this.ctx.throw(400, { code: 400, detail: errorMessage });
+          else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errorMessage });
         }
       }
       const resultCreate = `'${JSON.stringify({
@@ -214,7 +214,7 @@ export class Loras extends Common {
                   "(SELECT observation1.COLUMN FROM observation1), "
                 )} (SELECT multidatastream1.id FROM multidatastream1) AS multidatastream, (SELECT multidatastream1.thing_id FROM multidatastream1) AS thing)
                  SELECT coalesce(json_agg(t), '[]') AS result FROM result1 AS t`;
-      return await executeSqlValues(this.ctx.service, sql).then(async (res: object) => {
+      return await config.executeSqlValues(this.ctx.service, sql).then(async (res: object) => {
         // TODO MULTI 
       const tempResult: Record<string, any>  = res[0 as keyobj][0];
         if (tempResult.id != null) {          
@@ -232,8 +232,8 @@ export class Loras extends Common {
         } else {
           if (silent) return this.formatReturnResult({ body: errors.observationExist });
           else
-            this.ctx.throw(409, {
-              code: 409,
+            this.ctx.throw(EHttpCode.conflict, {
+              code: EHttpCode.conflict,
               detail: errors.observationExist,
               link: `${this.ctx.decodedUrl.root}/Observations(${[
                 tempResult.duplicate,
@@ -246,7 +246,7 @@ export class Loras extends Common {
       const getFeatureOfInterest = getBigIntFromString(
       dataInput["FeatureOfInterest"]
       );
-      const searchFOI: Record<string, any>  = await executeSql(this.ctx.service, 
+      const searchFOI: Record<string, any>  = await config.executeSql(this.ctx.service, 
         getFeatureOfInterest
           ? `SELECT coalesce((SELECT "id" FROM "${FEATUREOFINTEREST.table}" WHERE "id" = ${getFeatureOfInterest}), ${getFeatureOfInterest}) AS id `
           : stream["_default_featureofinterest"] ? `SELECT id FROM "${FEATUREOFINTEREST.table}" WHERE id = ${stream["_default_featureofinterest"]}` : ""
@@ -254,7 +254,7 @@ export class Loras extends Common {
       
       if (searchFOI[0].length < 1) {
         if (silent) return this.formatReturnResult({ body: errors.noFoi });
-        else this.ctx.throw(400, { code: 400, detail: errors.noFoi });
+        else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.noFoi });
       }
       const value = this.stean["value"] 
       ? this.stean["value"]
@@ -265,7 +265,7 @@ export class Loras extends Common {
       : undefined;
       if (!value) {
         if (silent) return this.formatReturnResult({ body: errors.noValue });
-        else this.ctx.throw(400, { code: 400, detail: errors.noValue });
+        else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.noValue });
       }
       const resultCreate = `'${JSON.stringify({ value: value })}'::jsonb`;
       const insertObject: Record<string, any>  = {
@@ -307,7 +307,7 @@ export class Loras extends Common {
                       "(SELECT observation1.COLUMN from observation1), "
                     )} (SELECT datastream1.id from datastream1) AS datastream, (SELECT datastream1.thing_id from datastream1) AS thing)
                 SELECT coalesce(json_agg(t), '[]') AS result FROM result1 AS t`;
-      return await executeSql(this.ctx.service, sql).then(async (res: object) => {
+      return await config.executeSql(this.ctx.service, sql).then(async (res: object) => {
       const tempResult: Record<string, any>  = res[0 as keyobj]["result"][0];
         if (tempResult.id != null) {
           const result: Record<string, any>  = {
@@ -327,8 +327,8 @@ export class Loras extends Common {
         } else {
           if (silent) return this.formatReturnResult({ body: errors.observationExist });
           else
-            this.ctx.throw(409, {
-              code: 409,
+            this.ctx.throw(EHttpCode.conflict, {
+              code: EHttpCode.conflict,
               detail: errors.observationExist,
               link: `${this.ctx.decodedUrl.root}/Observations(${[
                 tempResult.duplicate,

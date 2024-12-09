@@ -6,7 +6,7 @@
  *
  */
 
-import {   executeSqlValues } from "../../db/helpers";
+import { config } from "../../configuration";
 import { EConstant } from "../../enums";
 import { koaContext } from "../../types";
 const geo = {
@@ -238,8 +238,8 @@ const geo = {
 export const getTest = async (ctx: koaContext): Promise<string[] | { [key: string]: any }> => {
     let result: Record<string, any> = {};
     
-    const featureofinterest:Record<string, any> = await executeSqlValues(ctx.service, ` SELECT coalesce( json_agg(t), '[]') AS results FROM ( select feature as geometry FROM "featureofinterest" WHERE "feature"::text LIKE '%coordinates%' ) as t`);
-    const locations:Record<string, any> = await executeSqlValues(ctx.service, `  SELECT coalesce( json_agg(t), '[]') AS results FROM ( select location as geometry FROM "location" WHERE "location"::text LIKE '%coordinates%' ) as t`);
+    const featureofinterest:Record<string, any> = await config.executeSqlValues(ctx.service, ` SELECT coalesce( json_agg(t), '[]') AS results FROM ( select feature as geometry FROM "featureofinterest" WHERE "feature"::text LIKE '%coordinates%' ) as t`);
+    const locations:Record<string, any> = await config.executeSqlValues(ctx.service, `  SELECT coalesce( json_agg(t), '[]') AS results FROM ( select location as geometry FROM "location" WHERE "location"::text LIKE '%coordinates%' ) as t`);
 
 	result["key"] = EConstant.key;
     result["featureofinterest"] = `http://geojson.io/#data=data:application/json,${encodeURIComponent(JSON.stringify({

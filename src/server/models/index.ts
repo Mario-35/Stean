@@ -1,7 +1,6 @@
 import { config } from "../configuration";
 import { log } from "../log";
 import { _STREAM } from "../db/constants";
-import { executeSqlValues } from "../db/helpers";
 import { asJson } from "../db/queries";
 import { EColumnType, EConstant, EExtensions, filterEntities } from "../enums";
 import { doubleQuotesString, deepClone, isTest, formatPgTableColumn, isString } from "../helpers";
@@ -63,7 +62,7 @@ class Models {
     
     result["extensions"] = extensions;
     result["options"] = ctx.service.options;
-    await executeSqlValues(ctx.service, ` select version(), (SELECT ARRAY(SELECT extname||'-'||extversion AS extension FROM pg_extension) AS extension), (SELECT c.relname||'.'||a.attname FROM pg_attribute a JOIN pg_class c ON (a.attrelid=c.relfilenode) WHERE a.atttypid = 114) ;`
+    await config.executeSqlValues(ctx.service, ` select version(), (SELECT ARRAY(SELECT extname||'-'||extversion AS extension FROM pg_extension) AS extension), (SELECT c.relname||'.'||a.attname FROM pg_attribute a JOIN pg_class c ON (a.attrelid=c.relfilenode) WHERE a.atttypid = 114) ;`
     ).then(res => {
       result["Postgres"]["version"] = res[0 as keyof object];
       result["Postgres"]["extensions"] = res[1 as keyof object];
@@ -83,7 +82,7 @@ class Models {
     const streamId: string | undefined = isNaN(searchKey) ? searchKey[EConstant.id] : searchKey;
     if (streamId) {
       const query = `SELECT "id", "observationType", "_default_featureofinterest" FROM ${doubleQuotesString(models.DBFull(service)[streamEntity].table)} WHERE "id" = ${BigInt(streamId)} LIMIT 1`;
-      return executeSqlValues(service, asJson({ query: query, singular: true, strip: false, count: false }))
+      return config.executeSqlValues(service, asJson({ query: query, singular: true, strip: false, count: false }))
         .then((res: object) => {        
           return res ? {
             type: stream,

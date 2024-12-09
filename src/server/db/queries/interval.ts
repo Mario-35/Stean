@@ -6,6 +6,12 @@
 *
 */
 import { PgVisitor } from "../../odata/visitor";
+
+/**
+ * 
+ * @param input Pg Visitor
+ * @returns interval query string
+ */
 export const interval = (input: PgVisitor): string =>  input.interval 
 ? `WITH src as (
     ${input.toString()}

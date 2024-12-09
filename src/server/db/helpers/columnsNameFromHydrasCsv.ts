@@ -10,6 +10,8 @@ import fs from "fs";
 import { IcsvFile, IcsvImport } from "../../types";
 import readline from "readline";
 import { log } from "../../log";
+
+
 export const columnsNameFromHydrasCsv = async ( paramsFile: IcsvFile ): Promise<IcsvImport | undefined> => {
   console.log(log.whereIam());
   const returnValue: IcsvImport = { header: false, dateSql: "", columns: [] };

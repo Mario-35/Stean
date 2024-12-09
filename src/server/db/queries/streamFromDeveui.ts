@@ -6,23 +6,23 @@
  *
  */
 export const streamFromDeveui = ( input: string ): string => 
-`WITH multidatastream as (
+`WITH multidatastream AS (
   SELECT 
-    json_agg(t) AS multidatastream 
+    JSON_AGG(t) AS multidatastream 
   FROM 
     (
       SELECT 
-        id as multidatastream, 
+        id AS multidatastream, 
         id, 
         _default_featureofinterest, 
         thing_id, 
         (
           SELECT 
-            jsonb_agg(tmp.units -> 'name') AS keys 
+            JSONB_AGG(tmp.units -> 'name') AS keys 
           FROM 
             (
               SELECT 
-                jsonb_array_elements("unitOfMeasurements") AS units
+                JSONB_ARRAY_ELEMENTS("unitOfMeasurements") AS units
             ) AS tmp
         ) 
       FROM 
@@ -36,19 +36,19 @@ export const streamFromDeveui = ( input: string ): string =>
           WHERE 
             "lora"."deveui" = '${input}'
         )
-    ) as t
+    ) AS t
 ), 
-datastream as (
+datastream AS (
   SELECT 
     json_agg(t) AS datastream 
   FROM 
     (
       SELECT 
-        id as datastream, 
+        id AS datastream, 
         id, 
         _default_featureofinterest, 
         thing_id, 
-        '{}' :: jsonb as keys 
+        '{}' :: jsonb AS keys 
       FROM 
         "datastream" 
       WHERE 
@@ -60,7 +60,7 @@ datastream as (
           WHERE 
             "lora"."deveui" = '${input}'
         )
-    ) as t
+    ) AS t
 ) 
 SELECT 
   datastream.datastream, 

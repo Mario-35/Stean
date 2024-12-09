@@ -8,7 +8,7 @@
 
 import { Common } from "./common";
 import { IcsvColumn, IcsvFile, IreturnResult, IstreamInfos, koaContext } from "../../types";
-import { queryInsertFromCsv, dateToDateWithTimeZone, executeSql, executeSqlValues } from "../helpers";
+import { queryInsertFromCsv, dateToDateWithTimeZone } from "../helpers";
 import { doubleQuotesString, asyncForEach } from "../../helpers";
 import { errors, msg } from "../../messages/";
 import { EChar, EDatesType, EExtensions, EHttpCode } from "../../enums";
@@ -16,6 +16,7 @@ import util from "util";
 import { models } from "../../models";
 import { log } from "../../log";
 import { OBSERVATION } from "../../models/entities";
+import { config } from "../../configuration";
 export class CreateObservations extends Common {
   public indexResult = -1;
   constructor(ctx: koaContext) {
@@ -55,13 +56,13 @@ export class CreateObservations extends Common {
   // Override get all to return error Bad request
   async getAll(): Promise<IreturnResult | undefined> {
     console.log(log.whereIam());
-    this.ctx.throw(400, { code: 400 });
+    this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest });
   }
   
   // Override get one to return error Bad request
   async getSingle(): Promise<IreturnResult | undefined> {
     console.log(log.whereIam());
-    this.ctx.throw(400, { code: 400 });
+    this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest });
   }
   // Override post to posted file as createObservations
   async postForm(dataInput: Record<string, any> ): Promise<IreturnResult | undefined> {
@@ -102,10 +103,10 @@ export class CreateObservations extends Common {
     if (sqlInsert) {
       const sqls = sqlInsert.query.map((e: string, index: number) => `${index === 0 ? 'WITH ' :', '}updated${index+1} as (${e})\n`);
       // Remove logs and triggers for speed insert
-      await executeSql(this.ctx.service, `SET session_replication_role = replica;`);
-      const resultSql:Record<string, any>  = await executeSql(this.ctx.service, `${sqls.join("")}SELECT (SELECT count(*) FROM ${paramsFile.tempTable}) AS total, (SELECT count(*) FROM updated1) AS inserted`);
+      await config.executeSql(this.ctx.service, `SET session_replication_role = replica;`);
+      const resultSql:Record<string, any>  = await config.executeSql(this.ctx.service, `${sqls.join("")}SELECT (SELECT count(*) FROM ${paramsFile.tempTable}) AS total, (SELECT count(*) FROM updated1) AS inserted`);
       // Restore logs and triggers
-      await executeSql(this.ctx.service, `SET session_replication_role = DEFAULT;`);
+      await config.executeSql(this.ctx.service, `SET session_replication_role = DEFAULT;`);
       return this.formatReturnResult({
         total: sqlInsert.count,
         body: [`Add ${ resultSql[0]["inserted"] } on ${resultSql[0]["total"]} lines from ${ paramsFile.filename.split("/").reverse()[0] }`],
@@ -126,7 +127,7 @@ export class CreateObservations extends Common {
         await asyncForEach(dataInput["dataArray"], async (elem: string[]) => {
       const keys = [`"${dataStreamId.type?.toLowerCase()}_id"`].concat( this.createListColumnsValues( "COLUMNS", dataInput["components"] ) );
           const values = this.createListColumnsValues("VALUES", [ String(dataStreamId.id), ...elem, ]);
-          await executeSqlValues(this.ctx.service, `INSERT INTO ${doubleQuotesString(OBSERVATION.table)} (${keys}) VALUES (${values}) RETURNING id`)
+          await config.executeSqlValues(this.ctx.service, `INSERT INTO ${doubleQuotesString(OBSERVATION.table)} (${keys}) VALUES (${values}) RETURNING id`)
             .then((res: Record<string, any> ) => {
               returnValue.push( this.linkBase.replace("Create", "") + "(" + res[0]+ ")" );
               total += 1;
@@ -135,14 +136,14 @@ export class CreateObservations extends Common {
               if (error.code === "23505") {
                 returnValue.push(`Duplicate (${elem})`);
                 if ( dataInput["duplicate"] && dataInput["duplicate"].toUpperCase() === "DELETE" ) {
-                  await executeSqlValues(this.ctx.service, `DELETE FROM ${doubleQuotesString(OBSERVATION.table)} WHERE 1=1 ` + keys .map((e, i) => `AND ${e} = ${values[i]}`) .join(" ") + ` RETURNING id` ) .then((res: Record<string, any> ) => {
+                  await config.executeSqlValues(this.ctx.service, `DELETE FROM ${doubleQuotesString(OBSERVATION.table)} WHERE 1=1 ` + keys .map((e, i) => `AND ${e} = ${values[i]}`) .join(" ") + ` RETURNING id` ) .then((res: Record<string, any> ) => {
                       returnValue.push(`delete id ==> ${res[0]}`);
                       total += 1;
                     }).catch((error) => {
                       console.log(error);                     
                     });
                 }
-              } else this.ctx.throw(400, { code: 400, detail: error });
+              } else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: error });
             });
         });
         if (returnValue) {
@@ -161,11 +162,11 @@ export class CreateObservations extends Common {
   // Override update to return error Bad request
   async update( idInput: bigint | string, dataInput: Record<string, any>  | undefined ): Promise<IreturnResult | undefined> {
     console.log(log.whereIam(idInput || dataInput));
-    this.ctx.throw(400, { code: 400 });
+    this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest });
   }
   // Override delete to return error Bad request
   async delete(idInput: bigint | string): Promise<IreturnResult | undefined> {
     console.log(log.whereIam(idInput));
-    this.ctx.throw(400, { code: 400 });
+    this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest });
   }
 }

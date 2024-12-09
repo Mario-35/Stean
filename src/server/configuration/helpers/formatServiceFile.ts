@@ -1,5 +1,5 @@
 /**
- * formatconfigFile
+ * formatServiceFile
  *
  * @copyright 2020-present Inrae
  * @author mario.adam@inrae.fr
@@ -11,7 +11,13 @@ import { unikeList, unique } from "../../helpers";
 import { errors } from "../../messages";
 import { Iservice, typeExtensions, typeOptions } from "../../types";
 
-export function formatconfigFile(name: string, input: Record<string, any>): Iservice {
+/**
+ * 
+ * @param name configuration name
+ * @param input record of the configuration
+ * @returns service
+ */
+export function formatServiceFile(name: string, input: Record<string, any>): Iservice {
     const options: typeof typeOptions = input["options"]
       ? unique([... String(input["options"]).split(",")]) as typeof typeOptions 
       : [];
@@ -29,12 +35,12 @@ export function formatconfigFile(name: string, input: Record<string, any>): Iser
     const returnValue: Iservice = {
       name: name,
       ports: name === EConstant.admin
-          ? {
-            "http": input["ports"]["http"] || 8029,
-            "tcp": input["ports"]["tcp"] || 9000,
-            "ws": input["ports"]["ws"] || 1883
-          }
-          : undefined,
+        ? {
+          "http": input["ports"]["http"] || 8029,
+          "tcp": input["ports"]["tcp"] || 9000,
+          "ws": input["ports"]["ws"] || 1883
+        }
+        : undefined,
       pg: {
         _ready: undefined,
         host: input["pg"] && input["pg"]["host"] ? String(input["pg"]["host"]) : `ERROR`,
@@ -50,6 +56,7 @@ export function formatconfigFile(name: string, input: Record<string, any>): Iser
       alias: input["alias"] ? unikeList(String(input["alias"]).split(",")) : [],
       extensions: extensions,
       options: options,
+      csvDelimiter: input["csvDelimiter"] ? input["csvDelimiter"]: ";",
       _connection: undefined,
     };
     

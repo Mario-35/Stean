@@ -22,8 +22,7 @@ export const asDataArray = (input: PgVisitor): string => {
   return asJson({
     query: `SELECT (ARRAY[${EConstant.newline}\t${names
       .map((e: string) => simpleQuotesString(ESCAPE_SIMPLE_QUOTE(e)))
-      .join( `,${EConstant.newline}\t`)}]) AS "component", count(*) AS "dataArray@iot.count", jsonb_agg(allkeys) AS "dataArray" FROM (SELECT json_build_array(${EConstant.newline}\t${names.map((e: string) => doubleQuotesString(e)).join(`,${EConstant.newline}\t`)}) AS allkeys \n\tFROM (${input.toString()}) AS p) AS l`,
-    singular: false,
+      .join( `,${EConstant.newline}\t`)}]) AS "component", COUNT(*) AS "dataArray@iot.count", JSONB_AGG(allkeys) AS "dataArray" FROM (SELECT JSON_BUILD_ARRAY(${EConstant.newline}\t${names.map((e: string) => doubleQuotesString(e)).join(`,${EConstant.newline}\t`)}) AS allkeys \n\tFROM (${input.toString()}) AS p) AS l`, singular: false,
     strip: false,
     count: false,
   });

@@ -1,5 +1,5 @@
 /**
- * createIndexes
+ * updateIndexes
  *
  * @copyright 2020-present Inrae
  * @author mario.adam@inrae.fr
@@ -9,8 +9,12 @@
 import { config } from "../../configuration";
 import { models } from "../../models";
 
-// this create index are executed without wait 
-export const createIndexes = (name: string): void => {
+/**
+ * this (re)create index without wait 
+ * 
+ * @param name 
+ */
+export const updateIndexes = (name: string): void => {
     Object.keys(models.DBFull(name)).forEach((entity: string) => {
         const tmp = models.DBFull(name)[entity].update;
         if (tmp) tmp.forEach(e => config

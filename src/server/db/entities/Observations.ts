@@ -7,13 +7,14 @@
  */
 
 import { Common } from "./common";
-import { executeSqlValues, getDBDateNow } from "../helpers";
+import { getDBDateNow } from "../helpers";
 import { IreturnResult, keyobj, koaContext } from "../../types";
 import { getBigIntFromString } from "../../helpers";
 import { errors, msg } from "../../messages";
 import { multiDatastreamsUnitsKeys } from "../queries";
 import { EConstant, EExtensions, EHttpCode } from "../../enums";
 import { log } from "../../log";
+import { config } from "../../configuration";
 
 export class Observations extends Common {
   constructor(ctx: koaContext) {
@@ -32,7 +33,7 @@ export class Observations extends Common {
           : getBigIntFromString(this.ctx.odata.parentId);
       if (!searchID) this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: msg(errors.noFound, "MultiDatastreams"), });
       // Search id keys
-      const tempSql = await executeSqlValues(this.ctx.service, multiDatastreamsUnitsKeys(searchID) );
+      const tempSql = await config.executeSqlValues(this.ctx.service, multiDatastreamsUnitsKeys(searchID) );
       if (tempSql[0 as keyof object] === null) 
         this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: msg(errors.noFound, "MultiDatastreams"), });
       
@@ -40,8 +41,8 @@ export class Observations extends Common {
       if (dataInput["result"] && typeof dataInput["result"] == "object") {
         console.log(log.debug_infos( "result : keys", `${Object.keys(dataInput["result"]).length} : ${ multiDatastream.length }` ));
         if ( Object.keys(dataInput["result"]).length != multiDatastream.length ) {
-          this.ctx.throw(400, {
-            code: 400,
+          this.ctx.throw(EHttpCode.badRequest, {
+            code: EHttpCode.badRequest,
             detail: msg(
               errors.sizeResultUnitOfMeasurements,
               String(Object.keys(dataInput["result"]).length),

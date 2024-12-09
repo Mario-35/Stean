@@ -17,10 +17,15 @@ import { createRole } from "../helpers/createRole";
 import { createExtension } from "../queries";
 import { pgFunctions } from ".";
 
-export const createDatabase = async (configName: string): Promise<IKeyString> => {
-  console.log(log.debug_head("createDatabase", configName));
+/**
+ * 
+ * @param configName service name
+ * @returns record log report
+ */
+export const createDatabase = async (serviceName: string): Promise<IKeyString> => {
+  console.log(log.debug_head("createDatabase", serviceName));
   // init result
-  const servicePg = config.getService(configName).pg;
+  const servicePg = config.getService(serviceName).pg;
   const returnValue: IKeyString = { "Start create Database": servicePg.database };
   const adminConnection = config.adminConnection();
   // Test connection Admin
@@ -52,7 +57,7 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
     }).catch((error: Error) => {
       console.log(error);
     });
-    const dbConnection = config.connection(configName);
+    const dbConnection = config.connection(serviceName);
     if (!dbConnection) {
       returnValue["DROP Error"] = `No DB connection ${EChar.notOk}`;
       return returnValue;
@@ -69,27 +74,27 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
     .catch((err: Error) => err.message);
     
   // Get complete model
-  const DB = models.DBFull(configName);  
+  const DB = models.DBFull(serviceName);  
   // loop to create each table
   await asyncForEach(
     Object.keys(DB).filter(e => e.trim() !== ""),
     async (keyName: string) => {
-      const res = await createTable(configName, DB[keyName], undefined);      
+      const res = await createTable(serviceName, DB[keyName], undefined);      
       Object.keys(res).forEach((e: string) => log.create(e, res[e]));
     }
   );
 
-  returnValue[`Create Role`] = await createRole(config.getService(configName))
+  returnValue[`Create Role`] = await createRole(config.getService(serviceName))
   .then(() => EChar.ok)
   .catch((err: Error) => err.message);
 
-  returnValue[`Create user`] = await createUser(config.getService(configName))
+  returnValue[`Create user`] = await createUser(config.getService(serviceName))
     .then(() => EChar.ok)
     .catch((err: Error) => err.message);
     
   // loop to create each triggers
-  if (!config.getService(configName).extensions.includes( EExtensions.file ) ) {   
-    await asyncForEach( pgFunctions(configName), async (query: string) => {
+  if (!config.getService(serviceName).extensions.includes( EExtensions.file ) ) {   
+    await asyncForEach( pgFunctions(), async (query: string) => {
       const name = query.split(" */")[0].split("/*")[1].trim();
       await dbConnection.unsafe(query)
         .then(() => {
@@ -125,7 +130,7 @@ export const createDatabase = async (configName: string): Promise<IKeyString> =>
   );
 
   // If only numeric extension
-  if ( config.getService(configName).extensions.includes( EExtensions.highPrecision ) ) {
+  if ( config.getService(serviceName).extensions.includes( EExtensions.highPrecision ) ) {
     await dbConnection.unsafe(`ALTER TABLE ${doubleQuotesString(DB.Observations.table)} ALTER COLUMN 'result' TYPE float4 USING null;`)
       .catch((error: Error) => {
         console.log(error);

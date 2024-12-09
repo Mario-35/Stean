@@ -13,6 +13,7 @@ export const enum EHttpCode {
     Unauthorized = 401,
     refused= 403,
     notFound = 404,
+    conflict = 409,
     internalServerError = 500,
     serverNotRespond= 504,
     redirectionPerm = 301,

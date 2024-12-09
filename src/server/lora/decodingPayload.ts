@@ -9,6 +9,7 @@
 import { log } from "../log";
 import { errors } from "../messages";
 import { ILoraDecodingResult } from "../types";
+
 export const decodingPayload = ( decoder: { name: string; code: string; nomenclature: string }, payload: string ): ILoraDecodingResult | undefined => {
   console.log(log.debug_head("decodingPayload"));
   if (decoder.name && decoder.nomenclature && decoder.code != 'undefined') {

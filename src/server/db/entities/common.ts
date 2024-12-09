@@ -9,11 +9,11 @@
 
 import { doubleQuotesString, returnFormats } from "../../helpers/index";
 import { IreturnResult, keyobj, koaContext } from "../../types";
-import { executeSqlValues, removeKeyFromUrl } from "../helpers";
+import { removeKeyFromUrl } from "../helpers";
 import { getErrorCode, info } from "../../messages";
 import { log } from "../../log";
 import { config } from "../../configuration";
-import { EConstant } from "../../enums";
+import { EConstant, EHttpCode } from "../../enums";
 import { asCsv } from "../queries";
 
 // Common class
@@ -97,7 +97,7 @@ export class Common {
        case returnFormats.sql:
          return this.formatReturnResult({ body: sql }); 
        case returnFormats.csv:
-          sql = asCsv(sql);          
+          sql = asCsv(sql, this.ctx.service.csvDelimiter);          
           config.writeLog(log.query(sql));
           this.ctx.attachment(`${this.ctx.odata.entity?.name || "export"}.csv`);
           return this.formatReturnResult({ body:  await config
@@ -105,7 +105,7 @@ export class Common {
               .unsafe(sql)
               .readable()});
        default:        
-         return await executeSqlValues(this.ctx.service, sql).then(async (res: Record<string, any>) => {         
+         return await config.executeSqlValues(this.ctx.service, sql).then(async (res: Record<string, any>) => {         
            return (res[0] > 0) 
            ? this.formatReturnResult({ 
               id: isNaN(res[0][0]) ? undefined : +res[0], 
@@ -113,7 +113,7 @@ export class Common {
               prevLink: this.prevLink(res[0]), 
               body: res[1], }) 
             : this.formatReturnResult({ body: res[0] == 0 ? [] : res[0]});
-         }).catch((err: Error) => this.ctx.throw(400, { code: 400, detail: err.message }));
+         }).catch((err: Error) => this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: err.message }));
      }
     }
   }
@@ -128,11 +128,11 @@ export class Common {
        case returnFormats.sql:
          return this.formatReturnResult({ body: sql }); 
          case returnFormats.GeoJSON:
-           return await executeSqlValues(this.ctx.service, sql).then((res: Record<string, any>) => {
+           return await config.executeSqlValues(this.ctx.service, sql).then((res: Record<string, any>) => {
              return this.formatReturnResult({ body: res[0] });
            });
        default:
-         return await executeSqlValues(this.ctx.service, sql).then((res: Record<string, any>) => {
+         return await config.executeSqlValues(this.ctx.service, sql).then((res: Record<string, any>) => {
            if (this.ctx.odata.query.select && this.ctx.odata.onlyValue  === true) {
              return this.formatReturnResult({ 
                body: String(res[ this.ctx.odata.query.select[0 as keyobj] == "id" ? EConstant.id : 0 ]),
@@ -144,7 +144,7 @@ export class Common {
                prevLink: this.prevLink(res[0]), 
                body: this.ctx.odata.single === true ?  res[1][0] : {value : res[1] },
              });
-         }).catch((err: Error) => this.ctx.throw(400, { code: 400, detail: err }) );
+         }).catch((err: Error) => this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: err }) );
      }
   }
   // Execute multilines SQL in one query
@@ -163,10 +163,10 @@ export class Common {
     // return results
     const results: Record<string, any>[] = [];
     // execute query
-    await executeSqlValues(this.ctx.service, sqls.join(";")).then((res: Record<string, any> ) => results.push(res[0 as keyobj]) )
+    await config.executeSqlValues(this.ctx.service, sqls.join(";")).then((res: Record<string, any> ) => results.push(res[0 as keyobj]) )
         .catch((error: Error) => { 
           console.log(error);           
-          this.ctx.throw(400, { code: 400, detail: error["detail" as keyobj] });
+          this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: error["detail" as keyobj] });
         });
     // Return results
     return this.formatReturnResult({
@@ -186,12 +186,12 @@ export class Common {
       case returnFormats.sql:
         return this.formatReturnResult({ body: sql }); 
       default:
-        return await executeSqlValues(this.ctx.service, sql) 
+        return await config.executeSqlValues(this.ctx.service, sql) 
           .then((res: Record<string, any>) => {
             if (res[0]) {
               if (res[0].duplicate)
-                this.ctx.throw(409, {
-                  code: 409,
+                this.ctx.throw(EHttpCode.conflict, {
+                  code: EHttpCode.conflict,
                   detail: `${this.constructor.name} already exist`,
                   link: `${this.linkBase}(${[res[0].duplicate]})`,
                 });
@@ -220,7 +220,7 @@ export class Common {
       case returnFormats.sql:
         return this.formatReturnResult({ body: sql });        
       default:
-        return await executeSqlValues(this.ctx.service, sql) 
+        return await config.executeSqlValues(this.ctx.service, sql) 
         .then((res: Record<string, any>) => {  
           if (res[0]) {
             return this.formatReturnResult({
@@ -245,7 +245,7 @@ export class Common {
       case returnFormats.sql:
         return this.formatReturnResult({ body: sql });          
       default:
-        return this.formatReturnResult( { id: await executeSqlValues(this.ctx.service, sql) .then((res) => res[0 as keyobj]) .catch(() => BigInt(0)) } );
+        return this.formatReturnResult( { id: await config.executeSqlValues(this.ctx.service, sql) .then((res) => res[0 as keyobj]) .catch(() => BigInt(0)) } );
     }
   }
 }
