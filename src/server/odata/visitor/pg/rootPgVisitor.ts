@@ -113,8 +113,14 @@ export class RootPgVisitor extends PgVisitor {
     }
 		this.VisitRessources(node.value.navigation, context);
 	}
-  protected VisitRessourcesEntityCollectionNavigationProperty(node:Token, context:any) {    
-    if (this.entity && this.entity.relations[node.value.name]) {
+  protected VisitRessourcesEntityCollectionNavigationProperty(node:Token, context:any) {
+    if (node.value.name.includes("/")) {
+      const temp  = node.value.name.split("/");
+      node.value.name =  temp[0];
+      this.VisitRessourcesEntityCollectionNavigationProperty(node, context);
+      node.value.name =  temp[1];
+      this.VisitRessourcesEntityCollectionNavigationProperty(node, context);
+    } else if (this.entity && this.entity.relations[node.value.name]) {
       const where = (this.parentEntity) ? `(SELECT ID FROM (${this.query.toWhere(this)}) as nop)` : this.id;
       const whereSql = link(this.ctx, this.entity.name, node.value.name)   
       .split("$ID")
@@ -127,7 +133,6 @@ export class RootPgVisitor extends PgVisitor {
           this.single = tempEntity.singular === node.value.name || BigInt(this.id) > 0  ? true : false;
         }
       } else if (this.entity && this.entity.columns[node.value.name]) {
-      console.log("two");
       this.query.select.add(`${doubleQuotesString(node.value.name)}${EConstant.columnSeparator}`);
       this.showRelations = false;
     } else this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: errors.notValid });

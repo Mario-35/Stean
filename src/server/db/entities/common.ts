@@ -133,10 +133,13 @@ export class Common {
            });
        default:
          return await config.executeSqlValues(this.ctx.service, sql).then((res: Record<string, any>) => {
+
            if (this.ctx.odata.query.select && this.ctx.odata.onlyValue  === true) {
-             return this.formatReturnResult({ 
-               body: String(res[ this.ctx.odata.query.select[0 as keyobj] == "id" ? EConstant.id : 0 ]),
-             });
+            const temp = res[ this.ctx.odata.query.select[0 as keyobj] == "id" ? EConstant.id : 0 ];
+            if(typeof temp === "object") {
+              this.ctx.odata.returnFormat = returnFormats.json;
+              return this.formatReturnResult({ body: temp });
+            } else return this.formatReturnResult({ body: String(temp), });
            }
              return this.formatReturnResult({ 
                id: isNaN(res[0]) ? undefined : +res[0], 

@@ -316,6 +316,36 @@ describe("endpoint : Locations [8.2.2]", () => {
 					done();
 				});
 		});
+		it(`Return value of property location ${entity.name} id: 1 ${nbColor}[9.2.5]`, (done) => {
+			const infos = addTest({
+				api: `{get} ${entity.name}(:id) Get only the value of a property`,
+				apiName: `GetLocationValue${entity.name}`,
+				apiDescription: `Get the value of the property of a specific Locanion.${apiInfos["9.2.5"]}`,
+				apiReference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-value-of-property",
+				apiExample: {
+					http: `${testVersion}/${entity.name}(1)/location/$value`,
+					curl: defaultGet("curl", "KEYHTTP"),
+					javascript: defaultGet("javascript", "KEYHTTP"),
+					python: defaultGet("python", "KEYHTTP")
+				}
+			});
+			chai.request(server)
+				.get(`/test/${infos.apiExample.http}`)
+				.end((err: Error, res: any) => {
+					// there should be no errors
+					should.not.exist(err);
+					// there should be a 200 status code
+					res.status.should.equal(200);
+					// the response should be text plain
+					res.type.should.equal("application/json");
+					res.body.should.include.keys("type");
+					addToApiDoc({
+						...infos,
+						result: res
+					});
+					done();
+				});
+		});
 	});
 	describe(`{post} ${entity.name} ${nbColorTitle}[10.2]`, () => {
 		afterEach(() => { writeLog(true); });

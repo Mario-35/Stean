@@ -127,16 +127,16 @@ export class Entity extends EntityPass {
         }
         
         if(entityRelation) {
-        this.addToUpdate(`WITH stream AS (SELECT DISTINCT "${this.table}_id" AS id FROM "${entityRelation}"),
-          datas AS (SELECT 
-            "${this.table}_id" AS id,
-            MIN("${e}") AS pmin ,
-            MAX("${e}") AS pmax
-            FROM "${entityRelation}", stream WHERE "${this.table}_id" = stream.id GROUP BY "${this.table}_id")
-          UPDATE "${this.table}" SET 
-            "_${e}Start" =  datas.pmin ,
-            "_${e}End" = datas.pmax
-          FROM datas WHERE "${this.table}".id = datas.id`);
+        // this.addToUpdate(`WITH stream AS (SELECT DISTINCT "${this.table}_id" AS id FROM "${entityRelation}"),
+        //   datas AS (SELECT 
+        //     "${this.table}_id" AS id,
+        //     MIN("${e}") AS pmin ,
+        //     MAX("${e}") AS pmax
+        //     FROM "${entityRelation}", stream WHERE "${this.table}_id" = stream.id GROUP BY "${this.table}_id")
+        //   UPDATE "${this.table}" SET 
+        //     "_${e}Start" =  datas.pmin ,
+        //     "_${e}End" = datas.pmax
+        //   FROM datas WHERE "${this.table}".id = datas.id`);
         
             if (!Entity.trigger[this.table]) Entity.trigger[this.table] = {};
           
@@ -162,11 +162,11 @@ export class Entity extends EntityPass {
     return Object.keys(this.columns).includes(`${elem.toLowerCase()}_id`);
   }
 
-  private addToUpdate(value: string) {
-    if (this.update) 
-      this.update.push(value);
-    else this.update = [value];
-  }
+  // private addToUpdate(value: string) {
+  //   if (this.update) 
+  //     this.update.push(value);
+  //   else this.update = [value];
+  // }
 
   private addToPass(key: string, value?: string) {
     value = value || `FOREIGN KEY ("${this.table}_id") REFERENCES "${this.table}"("id") ON UPDATE CASCADE ON DELETE CASCADE`;

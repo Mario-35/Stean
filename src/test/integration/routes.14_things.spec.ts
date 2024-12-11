@@ -698,7 +698,7 @@ describe("endpoint : Thing [8.2.1]", () => {
 		});
 		it(`Return ${entity.name} nested resource path property ${nbColor}[9.2.8]`, (done) => {
 			const infos = addTest({
-				api: `{get} ${entity.name}(:id)/entity(:id) Get nested resource path property`,				
+				api: `{get} ${entity.name}(:id)/entity(:id)/name Get nested resource path property`,				
 				apiName: `Get${entity.name}NestedPathProperty`,
 				apiDescription: `Get name property of a specific datastream resource from o specific thing. ${apiInfos["9.2.8"]}`,
 				apiReference: "https://docs.ogc.org/is/18-088/18-088.html#usage-nested-resource-path",
@@ -722,10 +722,11 @@ describe("endpoint : Thing [8.2.1]", () => {
 					});
 					done();
 				});
-		});		
+		});
+		
 		it(`Return ${entity.name} nested resource path entity ${nbColor}[9.2.8]`, (done) => {
 			const infos = addTest({
-				api: `{get} ${entity.name}(:id)/entity(:id) Get nested resource path entity`,				
+				api: `{get} ${entity.name}(:id)/entity(:id)/entity Get nested resource path entity`,				
 				apiName: `Get${entity.name}NestedPathEntity`,
 				apiDescription: `Get entity of a specific datastream resource from a specific thing. ${apiInfos["9.2.8"]}`,
 				apiReference: "https://docs.ogc.org/is/18-088/18-088.html#usage-nested-resource-path",
@@ -744,6 +745,37 @@ describe("endpoint : Thing [8.2.1]", () => {
 					res.type.should.equal("application/json");
 					res.body["@iot.id"].should.eql(6);
 					res.body["@iot.selfLink"].should.contain("/Things(6)");
+					addToApiDoc({
+						...infos,
+						result: limitResult(res)
+					});
+					done();
+				});
+		});
+
+		it(`Return ${entity.name} nested resource path entity and sub entity ${nbColor}[9.2.8]`, (done) => {
+			const infos = addTest({
+				api: `{get} ${entity.name}(:id)/entity(:id)/entity/subEntity Get nested resource path entity and sub entity`,				
+				apiName: `Get${entity.name}NestedSubEntity`,
+				apiDescription: `Get entity of a specific datastream resource from a specific nested thing. ${apiInfos["9.2.8"]}`,
+				apiReference: "https://docs.ogc.org/is/18-088/18-088.html#usage-nested-resource-path",
+				apiExample: {
+					http: `${testVersion}/${entity.name}(6)/Datastreams(7)/Thing/Datastreams`,
+					curl: defaultGet("curl", "KEYHTTP"),
+					javascript: defaultGet("javascript", "KEYHTTP"),
+					python: defaultGet("python", "KEYHTTP")
+				}
+			});
+			chai.request(server)
+				.get(`/test/${infos.apiExample.http}`)
+				.end((err: Error, res: any) => {
+					should.not.exist(err);
+					res.status.should.equal(200);
+					res.type.should.equal("application/json");
+					res.body["@iot.count"].should.eql(3);
+					res.body.value.length.should.eql(3);
+					res.body.value[0]["@iot.id"].should.eql(6);
+					res.body.value[0]["@iot.selfLink"].should.contain("/Datastreams(6)");
 					addToApiDoc({
 						...infos,
 						result: limitResult(res)

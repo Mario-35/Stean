@@ -244,7 +244,7 @@ install_stean() {
         echo "No key file found"
     fi
     save_dist
-    npm install --silent --omit=dev --prefix $APIDEST/api/
+    npm install --omit=dev --prefix $APIDEST/api/
 }
 
 # Function to stop stean
