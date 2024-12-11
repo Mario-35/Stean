@@ -33,14 +33,17 @@ export function odataUri(source: string, options?: any): Lexer.Token {
 // export function resourcePath(source: string, options?: any): Lexer.Token {
 //     return parserFactory(ResourcePath.resourcePath)(source, options);
 // }
-export function resourcePath(source: string, options?: any): Lexer.Token {
-    if ((source.match(/\//g) || []).length > 2 && (source.match(/\)/g) || []).length === 2) {
-        const temp = source.split("/");
+export function resourcePath(source: string, options?: any): Lexer.Token {    
+    if ((source.match(/\//g) || []).length >= 2 && (source.match(/\)\//g) || []).length >= 1) {
+        const temp = source.split("/");        
+    if(!temp[temp.length-2].includes("(")) {
         const original = [temp[temp.length-2], temp[temp.length-1]];
         temp[temp.length-1] = ``;
         temp[temp.length-2] = `REPLACEAFTER`;
         return JSON.parse(JSON.stringify(parserFactory(ResourcePath.resourcePath)(temp.filter(e => e != "").join("/"), options)).replace(/REPLACEAFTER+/g, original.join("/")));
-    } else return parserFactory(ResourcePath.resourcePath)(source, options);
+    }
+    } 
+    return parserFactory(ResourcePath.resourcePath)(source, options);
  }
 export function query(source: string, options?: any): Lexer.Token {
     return parserFactory(Query.queryOptions)(source, options);
