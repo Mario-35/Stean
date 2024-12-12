@@ -12,74 +12,6 @@ import PrimitiveLiteral from "./primitiveLiteral";
 import NameOrIdentifier from "./nameOrIdentifier";
 import Expressions from "./expressions";
 namespace ResourcePath {
-    export function subResourcePath(value: Utils.SourceArray, index: number, metadataContext?: any): Lexer.Token | undefined {
-        if (value[index] === 0x2f) index++;
-        const token = ResourcePath.batch(value, index) || ResourcePath.entity(value, index, metadataContext) || ResourcePath.metadata(value, index);
-        if (token) return token;
-        const resource =
-            NameOrIdentifier.entitySetName(value, index, metadataContext) ||
-            ResourcePath.functionImportCall(value, index, metadataContext) ||
-            ResourcePath.crossjoin(value, index) ||
-            ResourcePath.all(value, index) ||
-            ResourcePath.actionImportCall(value, index, metadataContext) ||
-            NameOrIdentifier.singletonEntity(value, index);
-        if (!resource) return;        
-        const start = index;
-        index = resource.next;
-        let navigation: Lexer.Token | undefined;
-        switch (resource.type) {
-            case Lexer.TokenType.EntitySetName:
-                navigation = ResourcePath.collectionNavigation(value, resource.next, resource.metadata);
-                metadataContext = resource.metadata;
-                delete resource.metadata;
-                break;
-            case Lexer.TokenType.EntityCollectionFunctionImportCall:
-                navigation = ResourcePath.collectionNavigation(value, resource.next, resource.value.import.metadata);
-                metadataContext = resource.value.import.metadata;
-                delete resource.value.import.metadata;
-                break;
-            case Lexer.TokenType.SingletonEntity:
-                navigation = ResourcePath.singleNavigation(value, resource.next, resource.metadata);
-                metadataContext = resource.metadata;
-                delete resource.metadata;
-                break;
-            case Lexer.TokenType.EntityFunctionImportCall:
-                navigation = ResourcePath.singleNavigation(value, resource.next, resource.value.import.metadata);
-                metadataContext = resource.value.import.metadata;
-                delete resource.value.import.metadata;
-                break;
-            case Lexer.TokenType.ComplexCollectionFunctionImportCall:
-            case Lexer.TokenType.PrimitiveCollectionFunctionImportCall:
-                navigation = ResourcePath.collectionPath(value, resource.next, resource.value.import.metadata);
-                metadataContext = resource.value.import.metadata;
-                delete resource.value.import.metadata;
-                break;
-            case Lexer.TokenType.ComplexFunctionImportCall:
-                navigation = ResourcePath.complexPath(value, resource.next, resource.value.import.metadata);
-                metadataContext = resource.value.import.metadata;
-                delete resource.value.import.metadata;
-                break;
-            case Lexer.TokenType.PrimitiveFunctionImportCall:
-                navigation = ResourcePath.singlePath(value, resource.next, resource.value.import.metadata);
-                metadataContext = resource.value.import.metadata;
-                delete resource.value.import.metadata;
-                break;
-        }
-        if (navigation) index = navigation.next;
-        if (value[index] === 0x2f) index++;
-
-        if (resource && navigation && navigation.value)
-            return Lexer.tokenize(
-                value,
-                start,
-                index,
-                navigation.value,
-                Lexer.TokenType.CollectionNavigation,
-                navigation || <any>{ metadata: metadataContext }
-            );
-
-        
-    }
     export function resourcePath(value: Utils.SourceArray, index: number, metadataContext?: any): Lexer.Token | undefined {
         if (value[index] === 0x2f) index++;
         const token = ResourcePath.batch(value, index) || ResourcePath.entity(value, index, metadataContext) || ResourcePath.metadata(value, index);
@@ -94,7 +26,7 @@ namespace ResourcePath {
         if (!resource) return;       
         const start = index;
         index = resource.next;
-        let navigation: Lexer.Token | undefined;
+        let navigation: Lexer.Token | undefined;        
         switch (resource.type) {
             case Lexer.TokenType.EntitySetName:
                 navigation = ResourcePath.collectionNavigation(value, resource.next, resource.metadata);
@@ -137,21 +69,7 @@ namespace ResourcePath {
             index = navigation.next;
         }
         
-        if (resource && value[index] === 0x2f) {
-            index++;
-            const subNavigation =  subResourcePath(value , index, metadataContext);
-            if (subNavigation) {
-                index = subNavigation.next;
-                return Lexer.tokenize(
-                    value,
-                    start,
-                    index,
-                    { resource, navigation, subNavigation },
-                    Lexer.TokenType.ResourcePath,
-                    navigation || <any>{ metadata: metadataContext }
-                );
-            }
-        } else if (resource) return Lexer.tokenize(
+        if (resource) return Lexer.tokenize(
             value,
             start,
             index,

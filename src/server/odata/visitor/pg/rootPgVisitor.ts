@@ -20,10 +20,11 @@ import { doubleQuotesString } from "../../../helpers";
 
 export class RootPgVisitor extends PgVisitor {
   static root = true;
-  
-  constructor(ctx: koaContext, options = <SqlOptions>{}, node?: Token) {
+  special: string[] = [];
+  constructor(ctx: koaContext, options = <SqlOptions>{}, node: Token, special?: string[]) {
       console.log(log.whereIam());
       super(ctx, options);      
+      if (special) this.special = special;
       if (node) this.StartVisitRessources(node);
   }
   protected verifyRessources = (): void => {
@@ -68,14 +69,12 @@ export class RootPgVisitor extends PgVisitor {
       this.VisitRessources(node.value.resource, context);
     if (node.value.navigation)
       this.VisitRessources(node.value.navigation, context);
-    if (node.value.subNavigation) {
-      if (node.value.subNavigation.raw.includes("/")) {
-        node.value.subNavigation.raw.split("/").forEach((element: string) => {
+    if (this.special) {
+      this.special.forEach((element: string) => {
           const nodeName = element.includes("(") ? element.split("(")[0] : element;
           const id = element.includes("(") ? String(element.split("(")[1].split(")")[0]) : undefined;
           this.VisitRessourcesResourcePatheTik(nodeName,id);            
         });
-      }
     } 
   }
   
@@ -128,11 +127,10 @@ export class RootPgVisitor extends PgVisitor {
   }
   protected VisitRessourcesEntityCollectionNavigationProperty(node:Token, context:any) {
     if (node.value.name.includes("/")) {
-      const temp  = node.value.name.split("/");
-      node.value.name =  temp[0];
-      this.VisitRessourcesEntityCollectionNavigationProperty(node, context);
-      node.value.name =  temp[1];
-      this.VisitRessourcesEntityCollectionNavigationProperty(node, context);
+      node.value.name.split("/").forEach((element: string) => {
+        node.value.name =  element;
+        this.VisitRessourcesEntityCollectionNavigationProperty(node, context);        
+      });
     } else if (this.entity && this.entity.relations[node.value.name]) {
       const where = (this.parentEntity) ? `(SELECT ID FROM (${this.query.toWhere(this)}) as nop)` : this.id;
       const whereSql = link(this.ctx, this.entity.name, node.value.name)   

@@ -23,10 +23,8 @@ export const parserFactory = function(fn: any) {
         }
         const result = fn(raw, pos, options.metadata);
         if (!result) throw new Error("Fail at " + pos);        
-        if (result.next < raw.length) {
-            console.log(result);            
+        if (result.next < raw.length) 
             throw new Error(`Unexpected character at [${source}]` + result.next);
-        }
         return result;
     };
 };
@@ -34,16 +32,7 @@ export function odataUri(source: string, options?: any): Lexer.Token {
     return parserFactory(ODataUri.odataUri)(source, options);
 }
 export function resourcePath(source: string, options?: any): Lexer.Token {
-    try {
-        return parserFactory(ResourcePath.resourcePath)(source, options);
-    } catch (error) {
-            const temp = source.split("/");
-            const original = [temp[temp.length-2], temp[temp.length-1]];
-            temp[temp.length-1] = ``;
-            temp[temp.length-2] = `REPLACEAFTER`;
-            return JSON.parse(JSON.stringify(parserFactory(ResourcePath.resourcePath)(temp.filter(e => e != "").join("/"), options)).replace(/REPLACEAFTER+/g, original.join("/")));
-            
-        }
+    return parserFactory(ResourcePath.resourcePath)(source, options);
 }
 export function query(source: string, options?: any): Lexer.Token {
     return parserFactory(Query.queryOptions)(source, options);

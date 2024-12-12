@@ -70,16 +70,17 @@ export const createOdata = async (ctx: koaContext): Promise<RootPgVisitor | unde
   if (urlSrcSplit[0].split("(").length != urlSrcSplit[0].split(")").length) urlSrcSplit[0] += ")";
   // INIT ressource
   let astRessources: Token;
-  
+  const src = urlSrcSplit[0].split("/");  
   try {
-    astRessources = <Token>resourcePath(<string>urlSrcSplit[0]);    
+    astRessources = src.length > 1 ?  <Token>resourcePath(<string>[src.shift(), src.shift()].filter(e => e !== "").join("/")) 
+    : <Token>resourcePath(<string>urlSrcSplit[0]) ;
   } catch (error) {
     console.log(error);    
     ctx.throw(EHttpCode.notFound, { code: EHttpCode.badRequest, detail: errors.notValid  });
   }
   // INIT query
   const astQuery: Token = <Token>query(decodeURIComponent(urlSrcSplit[1]));
-  const temp = new RootPgVisitor(ctx, options, astRessources).start(astQuery);
+  const temp = new RootPgVisitor(ctx, options, astRessources, src).start(astQuery);
   await doSomeWorkAfterCreateAst(temp, ctx);
   return temp;
 };
