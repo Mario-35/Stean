@@ -9,7 +9,6 @@
 import { Entity } from "../entity";
 import { ERelations, ETable } from "../../enums";
 import { Ientity } from "../../types";
-import { info } from "../../messages";
 import { Bigint, Jsonb, Text } from "../types";
 
 export const FEATUREOFINTEREST:Ientity  = new Entity("FeaturesOfInterest", {
@@ -18,8 +17,10 @@ export const FEATUREOFINTEREST:Ientity  = new Entity("FeaturesOfInterest", {
   order: 4,
   columns: {
     id: new Bigint().generated("id").type(),
-    name: new Text().notNull().default(info.noName).unique().type(),
-    description: new Text().notNull().default(info.noDescription).type(),
+    name: new Text().notNull().type(),
+    // name: new Text().notNull().default(info.noName).unique().type(),
+    description: new Text().notNull().type(),
+    // description: new Text().notNull().default(info.noDescription).type(),
     encodingType: new Text().type(),
     feature: new Jsonb().notNull().type(),
   },

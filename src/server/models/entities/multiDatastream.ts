@@ -9,7 +9,6 @@
 import { Entity } from "../entity";
 import { EObservationType, ERelations, ETable } from "../../enums";
 import { Ientity } from "../../types";
-import { info } from "../../messages";
 import { Bigint, Geometry, Jsonb, Relation, Text, Texts, Tmperiod } from "../types";
 export const MULTIDATASTREAM:Ientity  = new Entity("MultiDatastreams", {
   createOrder: 8,
@@ -17,8 +16,10 @@ export const MULTIDATASTREAM:Ientity  = new Entity("MultiDatastreams", {
   order: 2,
   columns: {
     id: new Bigint().generated("id").type(),
-    name: new Text().notNull().default(info.noName).unique().type(),
-    description: new Text().notNull().default(info.noDescription).type(),
+    name: new Text().notNull().type(),
+    // name: new Text().notNull().default(info.noName).unique().type(),
+    description: new Text().notNull().type(),
+    // description: new Text().notNull().default(info.noDescription).type(),
     unitOfMeasurements: new Jsonb().notNull().type(),
     observationType: new Text().notNull().default('http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement').verify(Object.keys(EObservationType)).type(),
     multiObservationDataTypes: new Texts().type(),

@@ -18,7 +18,6 @@ export const LINE:Ientity  = new Entity("Lines", {
       id: new Bigint().generated("id").type(),
       result: new Result().lines().type(),
       file_id: new Relation().relation("Files").type(),
-
     },
     relations: {
       File: {

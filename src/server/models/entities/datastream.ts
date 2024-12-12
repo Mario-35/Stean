@@ -17,7 +17,8 @@ export const DATASTREAM = new Entity("Datastreams", {
   order: 1,
   columns: {
     id: new Bigint().generated("id").type(),
-    name: new Text().notNull().default(info.noName).unique().type(),
+    name: new Text().notNull().type(),
+    // name: new Text().notNull().default(info.noName).unique().type(),
     description: new Text().notNull().default(info.noDescription).type(),
     observationType: new Text().notNull().default('http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement').verify(Object.keys(EObservationType)).type(),
     unitOfMeasurement: new Jsonb().notNull().type(),
