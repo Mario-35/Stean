@@ -10,15 +10,17 @@ import { IodataContext, IvisitRessource, koaContext } from "../../../types";
 import { Token } from "../../parser/lexer";
 import { SqlOptions } from "../../parser/sqlOptions";
 import { postSqlFromPgVisitor } from "../helper";
-import { EColumnType, EConstant, EExtensions, EHttpCode } from "../../../enums";
+import { EConstant, EExtensions, EHttpCode } from "../../../enums";
 import { log } from "../../../log";
 import { PgVisitor } from "../.";
 import { models } from "../../../models";
 import { errors } from "../../../messages";
 import { link } from "../../../models/helpers";
 import { doubleQuotesString } from "../../../helpers";
+
 export class RootPgVisitor extends PgVisitor {
   static root = true;
+  
   constructor(ctx: koaContext, options = <SqlOptions>{}, node?: Token) {
       console.log(log.whereIam());
       super(ctx, options);      
@@ -42,11 +44,39 @@ export class RootPgVisitor extends PgVisitor {
     }
     return this;
   }
+  protected VisitRessourcesResourcePatheTik(nodeName: string, id: string | undefined) {
+    if (this.entity && this.entity.relations[nodeName]) {      
+      const where = (this.parentEntity) ? `(SELECT ID FROM (${this.query.toWhere(this)}) as nop)${id ? `and id = ${id}` : ''}` : this.id;
+      const whereSql = link(this.ctx, this.entity.name, nodeName)   
+      .split("$ID")
+      .join(<string>where);
+      
+        this.query.where.init(whereSql);
+        const tempEntity =  models.getEntity(this.ctx.service, nodeName);
+        if (tempEntity) {
+          this.swapEntity(tempEntity);
+          this.single = tempEntity.singular === nodeName || BigInt(this.id) > 0  ? true : false;
+        }
+      } else if (this.entity && this.entity.columns[nodeName]) {
+      this.query.select.add(`${doubleQuotesString(nodeName)}${EConstant.columnSeparator}`);
+      this.showRelations = false;
+    }
+  }
+
   protected VisitRessourcesResourcePath(node: Token, context?: IodataContext) {
     if (node.value.resource)
       this.VisitRessources(node.value.resource, context);
     if (node.value.navigation)
       this.VisitRessources(node.value.navigation, context);
+    if (node.value.subNavigation) {
+      if (node.value.subNavigation.raw.includes("/")) {
+        node.value.subNavigation.raw.split("/").forEach((element: string) => {
+          const nodeName = element.includes("(") ? element.split("(")[0] : element;
+          const id = element.includes("(") ? String(element.split("(")[1].split(")")[0]) : undefined;
+          this.VisitRessourcesResourcePatheTik(nodeName,id);            
+        });
+      }
+    } 
   }
   
   protected VisitRessourcesEntitySetName(node: Token, _context: IodataContext) {
@@ -96,23 +126,6 @@ export class RootPgVisitor extends PgVisitor {
     if (node.value.path && node.value.path.type === "PropertyPath")
       this.VisitRessources(node.value.path, context);
   }
- 
-  protected VisitRessourcesPropertyPathNew(node:Token, context:any) {
-    if (this.entity && node.type == "PropertyPath") {
-      if (models.getRelationColumnTable(this.ctx.service, this.entity, node.value.path.raw) === EColumnType.Relation) {
-        this.parentId = this.id;
-        this.id = BigInt(0);
-        if ( node.value.navigation && node.value.navigation.type == "CollectionNavigation" ) {
-          this.VisitRessources(node.value.navigation, context);
-        }
-      } else if (this.entity.columns[node.value.path.raw]) {
-        this.query.select.add(`${doubleQuotesString(node.value.path.raw )}${EConstant.columnSeparator}`);
-        this.showRelations = false;
-      } else this.entity = node.value.path.raw;
-      this.entity = models.getEntity(this.ctx.service, node.value.path.raw);      
-    }
-		this.VisitRessources(node.value.navigation, context);
-	}
   protected VisitRessourcesEntityCollectionNavigationProperty(node:Token, context:any) {
     if (node.value.name.includes("/")) {
       const temp  = node.value.name.split("/");
@@ -137,6 +150,7 @@ export class RootPgVisitor extends PgVisitor {
       this.showRelations = false;
     } else this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: errors.notValid });
 	}
+  
   
   protected VisitRessourcesPropertyPath(node: Token, context: IodataContext) {
 		if (node.value.path)

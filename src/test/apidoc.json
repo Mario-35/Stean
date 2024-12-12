@@ -37,7 +37,7 @@
     "GetThingsSelectNavLink",
     "GetThingsNestedPath",
     "GetThingsNestedPathProperty",    
-    "GetThingsNestedPathEntity",    
+    "GetThingsNestedPathEntity", 
     "GetThingsNestedSubEntity",
     "GetThingsNestedFilter",
     "GetThingsComplexNestedFilter",
