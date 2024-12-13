@@ -587,6 +587,7 @@ describe("endpoint : Datastream", () => {
 				.end((err: Error, res: any) => {
 					should.not.exist(err);
 					res.status.should.equal(201);
+					res.header.selflink.should.contain(entity.name);
 					res.type.should.equal("application/json");
 					res.body.should.include.keys(testsKeys);
 					addToApiDoc({
@@ -638,6 +639,7 @@ describe("endpoint : Datastream", () => {
 				.end((err: Error, res: any) => {					
 					should.not.exist(err);
 					res.status.should.equal(201);
+					res.header.selflink.should.contain(entity.name);
 					res.type.should.equal("application/json");
 					res.body.should.include.keys(testsKeys);
 					addToApiDoc({
@@ -710,6 +712,7 @@ describe("endpoint : Datastream", () => {
 				.end(async (err: Error, res: any) => {
 					should.not.exist(err);
 					res.status.should.equal(201);
+					res.header.selflink.should.contain(entity.name);
 					res.type.should.equal("application/json");
 					res.body.should.include.keys(testsKeys);
 					addToApiDoc({
@@ -759,6 +762,7 @@ describe("endpoint : Datastream", () => {
 				.end(async (err: Error, res: any) => {
 					should.not.exist(err);
 					res.status.should.equal(201);
+					res.header.selflink.should.contain(entity.name);
 					res.type.should.equal("application/json");
 					res.body.should.include.keys(testsKeys);
 					done();

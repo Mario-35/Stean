@@ -1,3 +1,5 @@
+import { koaContext, IreturnResult } from "../../types";
+
 /**
  * Routes Helpers.
  *
@@ -13,3 +15,8 @@ export const sqlStopDbName = (dbName: string): string => `SELECT pg_terminate_ba
 export { decodeUrl } from "./decodeUrl";
 export { firstInstall } from "./firstInstall";
 export { getTest } from "./test";
+
+
+export function setHeader(ctx: koaContext, returnValue: IreturnResult): void {
+    if (returnValue.selfLink) ctx.set("selfLink ", returnValue.selfLink);
+}

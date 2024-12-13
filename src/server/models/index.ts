@@ -131,7 +131,7 @@ class Models {
   
   private version1_1(input: Ientities): Ientities {
     // add properties to entities
-    ["Things", "Locations", "FeaturesOfInterest", "ObservedProperties", "Sensors", "Datastreams", "MultiDatastreams"]
+    ["Locations", "FeaturesOfInterest", "ObservedProperties", "Sensors", "Datastreams", "MultiDatastreams"]
       .forEach((entityName: string) => { input[entityName].columns["properties"] =  new Jsonb().type() });
     // add geom to Location
     input.Locations.columns["geom"] =  new Geometry().type();

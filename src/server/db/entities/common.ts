@@ -52,11 +52,12 @@ export class Common {
     return input;
   }
   // create a blank ReturnResult
-  public formatReturnResult(args: Record<string, any>): IreturnResult {
-    console.log(log.whereIam());
+  public formatReturnResult(args: Record<string, any>): IreturnResult {    
+    console.log(log.whereIam());    
     return {
       ...{
         id: undefined,
+        selfLink: args.body && typeof args.body === 'object' ? args.body['@iot.selfLink' as keyof object] : undefined,
         nextLink: args.nextLink ? (args.nextLink as string) : undefined,
         prevLink: args.prevLink ? (args.prevLink as string) : undefined,
         body: undefined,

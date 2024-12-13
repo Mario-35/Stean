@@ -561,6 +561,7 @@ describe("endpoint : MultiDatastream", () => {
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(201);
+					res.header.selflink.should.contain(entity.name);
                     res.type.should.equal("application/json");
                     res.body.should.include.keys(testsKeys);
                     addToApiDoc({ ...infos, result: limitResult(res) });
@@ -655,6 +656,7 @@ describe("endpoint : MultiDatastream", () => {
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(201);
+					res.header.selflink.should.contain(entity.name);
                     res.type.should.equal("application/json");
                     res.body.should.include.keys(testsKeys);
                     addToApiDoc({ ...infos, result: limitResult(res) });
@@ -824,6 +826,7 @@ describe("endpoint : MultiDatastream", () => {
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(201);
+					res.header.selflink.should.contain(entity.name);
                     res.type.should.equal("application/json");
                     res.body.should.include.keys(testsKeys);
                     addToApiDoc({ ...infos, result: limitResult(res) });                    

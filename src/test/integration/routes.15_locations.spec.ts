@@ -378,6 +378,7 @@ describe("endpoint : Locations [8.2.2]", () => {
 				.end((err: Error, res: any) => {
 					should.not.exist(err);
 					res.status.should.equal(201);
+					res.header.selflink.should.contain(entity.name);
 					res.type.should.equal("application/json");
 					res.body.should.include.keys(testsKeys);
 					addToApiDoc({
@@ -436,6 +437,7 @@ describe("endpoint : Locations [8.2.2]", () => {
 				.end(async (err: Error, res: any) => {
 					should.not.exist(err);
 					res.status.should.equal(201);
+					res.header.selflink.should.contain(entity.name);
 					res.type.should.equal("application/json");
 					res.body.should.include.keys(testsKeys);
 					executeQuery(`SELECT * FROM "thinglocation" WHERE "thing_id" = 1 AND "location_id" = ${res.body["@iot.id"]}`).then((tempSearch: Record<string, any>) => {

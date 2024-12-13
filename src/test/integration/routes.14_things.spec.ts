@@ -878,6 +878,7 @@ describe("endpoint : Thing [8.2.1]", () => {
 				.end((err: Error, res: any) => {
 					should.not.exist(err);
 					res.status.should.equal(201);
+					res.header.selflink.should.contain(entity.name);
 					res.type.should.equal("application/json");
 					res.body.should.include.keys(testsKeys);
 					addToApiDoc({
@@ -946,6 +947,7 @@ describe("endpoint : Thing [8.2.1]", () => {
 				.end(async (err: Error, res: any) => {
 					should.not.exist(err);
 					res.status.should.equal(201);
+					res.header.selflink.should.contain(entity.name);
 					res.type.should.equal("application/json");
 					res.body.should.include.keys(testsKeys);
 					const thingId = +res.body["@iot.id"];
@@ -1007,6 +1009,7 @@ describe("endpoint : Thing [8.2.1]", () => {
 				.end((err: Error, res: any) => {
 					should.not.exist(err);
 					res.status.should.equal(201);
+					res.header.selflink.should.contain(entity.name);
 					res.type.should.equal("application/json");
 					res.body.should.include.keys(testsKeys);
 					const thingId = +res.body["@iot.id"];
@@ -1124,6 +1127,7 @@ describe("endpoint : Thing [8.2.1]", () => {
 				.end((err: Error, res: any) => {
 					should.not.exist(err);
 					res.status.should.equal(201);
+					res.header.selflink.should.contain(entity.name);
 					res.type.should.equal("application/json");
 					res.body.should.include.keys(testsKeys);
 					const thingId = String(res.body["@iot.id"]);
@@ -1246,6 +1250,7 @@ describe("endpoint : Thing [8.2.1]", () => {
 				.end((err: Error, res: any) => {
 					should.not.exist(err);
 					res.status.should.equal(201);
+					res.header.selflink.should.contain(entity.name);
 					res.type.should.equal("application/json");
 					res.body.should.include.keys(testsKeys);
 					res.body["name"].should.equal("Thing test For inner Post");
@@ -1286,6 +1291,7 @@ describe("endpoint : Thing [8.2.1]", () => {
 						.end((err: Error, res: any) => {
 							should.not.exist(err);
 							res.status.should.equal(200);
+							res.header.selflink.should.contain(entity.name);
 							res.type.should.equal("application/json");
 							res.body.should.include.keys(testsKeys);
 							const newThingObject = res.body;
@@ -1362,6 +1368,7 @@ describe("endpoint : Thing [8.2.1]", () => {
 						.end((err: Error, res: any) => {
 							should.not.exist(err);
 							res.status.should.equal(200);
+							res.header.selflink.should.contain(entity.name);
 							res.type.should.equal("application/json");
 							res.body.should.include.keys(testsKeys);
 							const thingId = +res.body["@iot.id"];
@@ -1416,6 +1423,7 @@ describe("endpoint : Thing [8.2.1]", () => {
 						.end((err: Error, res: any) => {
 							should.not.exist(err);
 							res.status.should.equal(200);
+							res.header.selflink.should.contain(entity.name);
 							res.type.should.equal("application/json");
 							res.body.should.include.keys(testsKeys);
 							const thingId = String(res.body["@iot.id"]);

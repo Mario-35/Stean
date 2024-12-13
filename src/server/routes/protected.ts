@@ -103,11 +103,13 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
     if (ctx.request.type.startsWith("application/json") && Object.keys(ctx.body).length > 0) {
       const odataVisitor = await createOdata(ctx);
       if (odataVisitor) ctx.odata = odataVisitor;
-      if (ctx.odata) {
+      if (ctx.odata) {        
         const objectAccess = new apiAccess(ctx);
         const returnValue: IreturnResult | undefined | void = await objectAccess.post();
         if (returnValue) {
+          console.log(`returnValue.selfLink :  ${returnValue.selfLink}`);
           returnFormats.json.type;
+          if (returnValue.selfLink) ctx.set("selfLink", returnValue.selfLink);
           ctx.status = EHttpCode.created;
           ctx.body = returnValue.body;
         }
@@ -135,6 +137,7 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
         const returnValue = await objectAccess.post();
         if (ctx.datas) fs.unlinkSync(ctx.datas["file" as keyof object]);
         if (returnValue) {
+          
           if (ctx.datas["source" as keyof object] == "query") {
             const tempContext = await createQueryParams(ctx);
             if (tempContext) {
@@ -148,11 +151,13 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
               ctx.set("script-src", "self");
               ctx.set("Content-Security-Policy", "self");
               ctx.type = returnFormats.html.type;
+              if (returnValue.selfLink) ctx.set("selfLink ", returnValue.selfLink);
               ctx.body = bodyQuery.toString();
             }
           } else {
             returnFormats.json.type;
             ctx.status = EHttpCode.created;
+            if (returnValue.selfLink) ctx.set("selfLink ", returnValue.selfLink);
             ctx.body = returnValue.body;
           }
         } else {
@@ -177,11 +182,12 @@ protectedRoutes.patch("/(.*)", async (ctx) => {
       const objectAccess = new apiAccess(ctx);
       if (ctx.odata.id) {
         const returnValue: IreturnResult | undefined | void =
-          await objectAccess.update(ctx.odata.id);
+        await objectAccess.update(ctx.odata.id);
         if (returnValue) {
           returnFormats.json.type;
           ctx.status = EHttpCode.ok;
           ctx.body = returnValue.body;
+          if (returnValue.selfLink) ctx.set("selfLink", returnValue.selfLink);
         }
       } else {
         ctx.throw(EHttpCode.badRequest, { detail: errors.idRequired });
