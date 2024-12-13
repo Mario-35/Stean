@@ -413,7 +413,7 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
                  .end((err: Error, res: any) => {                    
                      should.not.exist(err);
                      res.status.should.equal(201);
-                     res.header.selflink.should.contain(entity.name);
+                     res.header.location.should.contain(entity.name);
                      res.type.should.equal("application/json");
                      res.body.should.include.keys(testsKeys);
                      addToApiDoc({ ...infos, result: limitResult(res) });
@@ -451,7 +451,7 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
                  .end((err: Error, res: any) => {  
                      should.not.exist(err);
                      res.status.should.equal(201);
-                     res.header.selflink.should.contain(entity.name);
+                     res.header.location.should.contain(entity.name);
                      res.type.should.equal("application/json");
                      res.body.should.include.keys(testsKeys);
                      addToApiDoc({ ...infos, result: limitResult(res) });
@@ -517,7 +517,7 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
                  .end((err: Error, res: any) => {
                      should.not.exist(err);
                      res.status.should.equal(201);
-					res.header.selflink.should.contain("Observations");					
+					res.header.location.should.contain("Observations");					
                      res.type.should.equal("application/json");
                      res.body["@iot.selfLink"].should.contain("/Observations(");
                      res.body["result"][0].should.eql(18.75);
@@ -674,7 +674,7 @@ import { addStartNewTest, addTest, writeLog } from "./tests";
                  .end((err: Error, res: any) => {
                      should.not.exist(err);
                      res.status.should.equal(201);
-					res.header.selflink.should.contain("Observations");
+					res.header.location.should.contain("Observations");
                      res.type.should.equal("application/json");
                      res.body["@iot.selfLink"].should.contain("/Observations(");
                      res.body["result"][0].should.eql(100);

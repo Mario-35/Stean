@@ -211,6 +211,8 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
                 : returnValue.body;
             ctx.type = ctx.odata.returnFormat.type;
             ctx.body = ctx.odata.returnFormat.format(datas as object, ctx);
+          if (returnValue.selfLink) ctx.set("Location", returnValue.selfLink);
+
           } else ctx.throw(EHttpCode.notFound);
         // Get One
         } else if (ctx.odata.single === true) {

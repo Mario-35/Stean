@@ -107,9 +107,8 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
         const objectAccess = new apiAccess(ctx);
         const returnValue: IreturnResult | undefined | void = await objectAccess.post();
         if (returnValue) {
-          console.log(`returnValue.selfLink :  ${returnValue.selfLink}`);
           returnFormats.json.type;
-          if (returnValue.selfLink) ctx.set("selfLink", returnValue.selfLink);
+          if (returnValue.selfLink) ctx.set("Location", returnValue.selfLink);
           ctx.status = EHttpCode.created;
           ctx.body = returnValue.body;
         }
@@ -151,13 +150,13 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
               ctx.set("script-src", "self");
               ctx.set("Content-Security-Policy", "self");
               ctx.type = returnFormats.html.type;
-              if (returnValue.selfLink) ctx.set("selfLink ", returnValue.selfLink);
+              if (returnValue.selfLink) ctx.set("Location ", returnValue.selfLink);
               ctx.body = bodyQuery.toString();
             }
           } else {
             returnFormats.json.type;
             ctx.status = EHttpCode.created;
-            if (returnValue.selfLink) ctx.set("selfLink ", returnValue.selfLink);
+            if (returnValue.selfLink) ctx.set("Location ", returnValue.selfLink);
             ctx.body = returnValue.body;
           }
         } else {
@@ -187,7 +186,7 @@ protectedRoutes.patch("/(.*)", async (ctx) => {
           returnFormats.json.type;
           ctx.status = EHttpCode.created;
           ctx.body = returnValue.body;
-          if (returnValue.selfLink) ctx.set("selfLink", returnValue.selfLink);
+          if (returnValue.selfLink) ctx.set("Location", returnValue.selfLink);
         }
       } else {
         ctx.throw(EHttpCode.badRequest, { detail: errors.idRequired });

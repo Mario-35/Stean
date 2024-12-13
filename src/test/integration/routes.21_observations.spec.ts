@@ -449,7 +449,7 @@ describe("endpoint : Observations", () => {
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(201);
-					res.header.selflink.should.contain(entity.name);
+					res.header.location.should.contain(entity.name);
                     res.type.should.equal("application/json");
                     res.body.should.include.keys(testsKeys);
                     addToApiDoc({ ...infos, result: limitResult(res) });
@@ -511,7 +511,7 @@ describe("endpoint : Observations", () => {
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(201);
-					res.header.selflink.should.contain(entity.name);
+					res.header.location.should.contain(entity.name);
                     res.type.should.equal("application/json");
                     res.body.should.include.keys(testsKeys);
                     addToApiDoc({ ...infos, result: limitResult(res) });
@@ -544,7 +544,7 @@ describe("endpoint : Observations", () => {
                 .end(async (err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(201);
-					res.header.selflink.should.contain(entity.name);
+					res.header.location.should.contain(entity.name);
                     res.type.should.equal("application/json");
                     res.body.should.include.keys(testsKeys);
                     addToApiDoc({ ...infos, result: limitResult(res) });
@@ -583,7 +583,7 @@ describe("endpoint : Observations", () => {
                 .end(async (err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(201);
-					res.header.selflink.should.contain(entity.name);
+					res.header.location.should.contain(entity.name);
                     res.type.should.equal("application/json");
                     res.body.should.include.keys(testsKeys);
                     const observationId = res.body["@iot.id"];
@@ -630,7 +630,7 @@ describe("endpoint : Observations", () => {
                 .end(async (err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(201);
-					res.header.selflink.should.contain(entity.name);
+					res.header.location.should.contain(entity.name);
                     res.type.should.equal("application/json");
                     res.body.should.include.keys(testsKeys);
                     res.body.result[0].should.eql(10.1);
@@ -749,7 +749,7 @@ describe("endpoint : Observations", () => {
                         .end((err: Error, res: any) => {
                             should.not.exist(err);
                             res.status.should.equal(201);
-                            res.header.selflink.should.contain(entity.name);
+                            res.header.location.should.contain(entity.name);
                             res.type.should.equal("application/json");
                             res.body.should.include.keys(testsKeys);
                             const newItems = res.body;
@@ -815,7 +815,7 @@ describe("endpoint : Observations", () => {
                         .end((err: Error, res: any) => {
                             should.not.exist(err);
                             res.status.should.equal(201);
-                            res.header.selflink.should.contain(entity.name);
+                            res.header.location.should.contain(entity.name);
                             res.type.should.equal("application/json");
                             res.body.should.include.keys(testsKeys);
                             const newItems = res.body;
