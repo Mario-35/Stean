@@ -7,7 +7,7 @@
  */
 
 import postgres from "postgres";
-import { _DEBUG, _TRACE } from "../../constants";
+import { _DEBUG } from "../../constants";
 import { EConstant } from "../../enums";
 
 /**
@@ -23,7 +23,7 @@ import { EConstant } from "../../enums";
 export async function testDbConnection(host: string, username: string, password: string, port?: number, database?: string): Promise<boolean> {
   return await postgres( `postgres://${username}:${password}@${host}:${port || 5432}/${database || "postgres"}`,
     {
-      debug: _TRACE,          
+      debug: _DEBUG,          
       connection: { 
         application_name : `${EConstant.appName} ${EConstant.appVersion}`
       }

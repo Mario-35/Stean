@@ -6,7 +6,7 @@
 *
 */
 
-import { setReady, _DEBUG, _TRACE } from "../constants";
+import { setReady, _DEBUG } from "../constants";
 import { asyncForEach, decrypt, encrypt, isProduction, isTest, logToHtml, } from "../helpers";
 import { Iservice, IdbConnection, IserviceInfos, koaContext, keyobj } from "../types";
 import { errors, info, infos, msg } from "../messages";
@@ -22,6 +22,7 @@ import path from "path";
 import { formatServiceFile, testDbExists, validJSONService } from "./helpers";
 import { MqttServer } from "../mqtt";
 import { updateIndexes } from "../db/helpers";
+import util from "util";
 
 // class to lcreate configs environements
 class Configuration {
@@ -32,6 +33,7 @@ class Configuration {
   static MqttServer: MqttServer;
   static queries: { [key: string]: string[] } = {};
   public logFile = fs.createWriteStream(path.resolve(__dirname, "../", EFileName.logs), {flags : 'w'});
+  public traceFile = fs.createWriteStream(path.resolve(__dirname, "../", EFileName.trace), {flags : 'w'});
   static listenPorts: number[] = [];
 
   constructor() {    
@@ -45,7 +47,7 @@ class Configuration {
     } 
     else console.log = (data: any) => {
       if (data) this.writeLog(data);
-    };
+    }; 
   }
   
   /**
@@ -72,6 +74,14 @@ writeLog(input: any) {
     process.stdout.write(input + "\n");
     if (config && config.logFile) config.logFile.write(logToHtml(input));
   }
+}
+
+writeTrace(ctx: koaContext) {
+    let temp = "\n["  + ctx.request.method +"] " + ctx.href + "\n"
+    if (["POST","PATCH"].includes(ctx.request.method))
+       temp +=   "\n```js\n" +  util.inspect(ctx.request.body, { showHidden: false, depth: null, colors: false, }) + "\n```\n";
+    if (config && config.traceFile) config.traceFile.write(temp);
+  
 }
 
   /**
@@ -391,7 +401,7 @@ writeLog(input: any) {
     const input = Configuration.services[EConstant.admin].pg;    
       return postgres(`postgres://${input.user}:${input.password}@${input.host}:${input.port || 5432}/${EConstant.defaultDb}`,
         {
-          debug: _TRACE,          
+          debug: _DEBUG,          
           connection: { 
             application_name : `${EConstant.appName} ${EConstant.appVersion}`
           }
@@ -554,6 +564,7 @@ private async reCreatePgFunctions(connection: string): Promise<boolean> {
       }
       this.writeLog(log._head("Ready", EChar.ok));
       this.writeLog(log.logo(EConstant.appVersion));
+      config.traceFile.write(`## START ${EConstant.appName} ${info.ver} : ${EConstant.appVersion} [${EConstant.nodeEnv}]} ${new Date().toLocaleDateString()} : ${new Date().toLocaleTimeString()}`);
       return status;
       // no configuration file so First install    
     } else {

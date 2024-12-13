@@ -24,7 +24,10 @@ import { HtmlLogs } from "../views/class/logs";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const routerHandle = async (ctx: koaContext, next: any) => { 
   // First Install 
-  if (config.configFileExist() === false) await firstInstall(ctx);  
+  if (config.configFileExist() === false) await firstInstall(ctx);
+
+  config.writeTrace(ctx);
+
   // create token
   createBearerToken(ctx);
   // decode url

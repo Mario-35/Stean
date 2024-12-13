@@ -7,6 +7,7 @@
  */
 export enum EFileName {    
     logs = 'logs.html',
+    trace = 'trace.md',
     logsBak = 'logs.bak',
     config = 'configuration.json',
     key = '.key'
