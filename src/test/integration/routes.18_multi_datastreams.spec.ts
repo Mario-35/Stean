@@ -860,7 +860,8 @@ describe("endpoint : MultiDatastream", () => {
                         .set("Cookie", `${keyTokenName}=${token}`)
                         .end((err: Error, res: any) => {
                             should.not.exist(err);
-                            res.status.should.equal(200);
+                            res.status.should.equal(201);
+							res.header.selflink.should.contain(entity.name);
                             res.type.should.equal("application/json");
                             res.body.should.include.keys(testsKeys);
                             const newItems = res.body;

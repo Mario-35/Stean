@@ -185,7 +185,7 @@ protectedRoutes.patch("/(.*)", async (ctx) => {
         await objectAccess.update(ctx.odata.id);
         if (returnValue) {
           returnFormats.json.type;
-          ctx.status = EHttpCode.ok;
+          ctx.status = EHttpCode.created;
           ctx.body = returnValue.body;
           if (returnValue.selfLink) ctx.set("selfLink", returnValue.selfLink);
         }

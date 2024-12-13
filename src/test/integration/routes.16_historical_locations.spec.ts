@@ -340,6 +340,8 @@ describe("endpoint : HistoricalLocations", () => {
 					.set("Cookie", `${keyTokenName}=${token}`)
 					.end((err: Error, res: any) => {
 						should.not.exist(err);
+						res.status.should.equal(201);
+						res.header.selflink.should.contain(entity.name);
 						addToApiDoc({
 							...infos,
 							result: limitResult(res)
