@@ -196,7 +196,7 @@ protectedRoutes.patch("/(.*)", async (ctx) => {
       ctx.throw(EHttpCode.notFound);
     }
   } else {
-    ctx.throw(EHttpCode.Unauthorized);
+    ctx.throw(EHttpCode.Unauthorized); 
   }
 });
 protectedRoutes.delete("/(.*)", async (ctx) => {  
