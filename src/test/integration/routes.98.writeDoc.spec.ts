@@ -26,6 +26,9 @@ describe("Create ApiDoc", function () {
         } catch (error) {
             console.error(error);
         }
+        done();
+    });
+    it(`Done All tests done`, () => {
         process.exit(111);
     });
 });
