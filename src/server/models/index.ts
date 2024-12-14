@@ -2,13 +2,13 @@ import { config } from "../configuration";
 import { log } from "../log";
 import { _STREAM } from "../db/constants";
 import { asJson } from "../db/queries";
-import { EColumnType, EConstant, EExtensions, filterEntities } from "../enums";
+import { EColumnType, EConstant, EExtensions, EOptions, filterEntities } from "../enums";
 import { doubleQuotesString, deepClone, isTest, formatPgTableColumn, isString } from "../helpers";
-import { errors } from "../messages";
+import { errors, info } from "../messages";
 import { Iservice, Ientities, Ientity, IstreamInfos, koaContext, IentityRelation, getColumnType } from "../types";
 import fs from "fs";
 import { FEATUREOFINTEREST, THING, LOCATION, SERVICE, CREATEOBSERVATION, CREATEFILE, DATASTREAM, DECODER, HISTORICALLOCATION, LOG, LORA, MULTIDATASTREAM, MULTIDATASTREAMOBSERVEDPROPERTY, OBSERVATION, SENSOR, USER, LOCATIONHISTORICALLOCATION, OBSERVEDPROPERTY, THINGLOCATION, FILE, LINE } from "./entities";
-import { Geometry, Jsonb } from "./types";
+import { Geometry, Jsonb, Text } from "./types";
 
 class Models {
   static models : { 
@@ -165,14 +165,37 @@ class Models {
     return service.name === EConstant.admin ? this.DBAdmin(service) : this.filtering(service);
   }
   
-  public DBFull(service: Iservice | string): Ientities {
+  public getService(service: Iservice | string): Iservice {
     if (typeof service === "string") {
       const nameConfig = config.getConfigNameFromName(service);
       if (!nameConfig) throw new Error(errors.configName);
       if (this.testVersion(config.getService(nameConfig).apiVersion) === false) this.createVersion(config.getService(nameConfig).apiVersion);
-      service = config.getService(nameConfig);
-    }  
+      return config.getService(nameConfig);
+    }
+    return service;
+  }
+
+  public DBFullCreate(service: Iservice | string): Ientities {
+    service = this.getService(service);
+    
+    const  name = service.options.includes(EOptions.unique)
+      ?  new Text().notNull().default(info.noName).unique().type()
+      : new Text().notNull().type();
+      
+    const description = service.options.includes(EOptions.unique)
+      ?  new Text().notNull().default(info.noName).unique().type()
+      : new Text().notNull().type();
+
+      const s = Models.models[service.apiVersion];
+      Object.keys(s).forEach((k: string) => {
+        if (s[k].columns["name"]) s[k].columns.name = name;
+        if (s[k].columns["description"]) s[k].columns.name = description;
+      });
     return Models.models[service.apiVersion];
+  }
+
+  public DBFull(service: Iservice | string): Ientities {
+    return Models.models[this.getService(service).apiVersion];
   }
   
   public DBAdmin(service: Iservice ):Ientities {

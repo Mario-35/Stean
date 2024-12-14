@@ -63,9 +63,9 @@ export const defaultPostPatch = (lang: string, method: string, request: string, 
                 data
             )}|});|const valueJson = await response.json();|const valueTxt = await response.text();`;
         case "PYTHON":
-            return `import requests|import json|response_API = requests.${method}('proxy${request}', (headers = { "Content-Type": "application/json" }), (data = :${createJSON(
+            return `import requests|import json|response_API = requests.${method}('proxy${request}', (headers = { "Content-Type": "application/json" }), (data = json.dumps(${createJSON(
                 data
-            )}))|data = response_API.text|parse_json = json.loads(data)|print(parse_json)`;
+            )})))|data = response_API.text|parse_json = json.loads(data)|print(parse_json)`;
     }
     return "";
 };
