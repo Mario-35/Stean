@@ -8,7 +8,6 @@
 
 import { config } from "../configuration";
 import { apiAccess } from "../db/dataAccess";
-import { EChar } from "../enums";
 import { LOG } from "../models/entities";
 import { blankRootPgVisitor } from "../odata/visitor/helper";
 import { koaContext } from "../types";
@@ -20,9 +19,7 @@ import { koaContext } from "../types";
  */
 export const replayLoraLogs = async ( ctx: koaContext, sql: string | undefined ) => {
   const delLog = (id: bigint) => {
-    config.connection(ctx.service.name).unsafe(`DELETE FROM "${LOG.table}" WHERE id = ${id}`).then((e) => {
-      process.stdout.write( `replay log ----> ${id}` + EChar.ok + "\n"); 
-    });
+    config.connection(ctx.service.name).unsafe(`DELETE FROM "${LOG.table}" WHERE id = ${id}`);
   }
 
   await config.connection(ctx.service.name).unsafe(`SELECT "@iot.id","datas" FROM (${sql}) as t`).cursor(async (res: object) => {

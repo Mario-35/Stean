@@ -30,8 +30,6 @@ export class Loras extends Common {
     console.log(log.whereIam());
     const result:Record<string, any>  = {};
     const listKeys = ["deveui", "DevEUI", "sensor_id", "frame"];
-      if (notNull(dataInput["payload_deciphered"])) console.log(`----> ${dataInput["payload_deciphered"].toUpperCase()}`);
-      
       if (notNull(dataInput["payload_deciphered"]))
         result["frame"] = dataInput["payload_deciphered"].toUpperCase();
       
