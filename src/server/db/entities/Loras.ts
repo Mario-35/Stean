@@ -55,8 +55,8 @@ export class Loras extends Common {
     if (this.stean["frame"] === "000000000000000000") this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.frameNotConform });
 
     function gedataInputtDate(): string | undefined {
-      if (dataInput["timestamp"]) return String(new Date(dataInput["timestamp"] * 1000));
-      const  search = searchInJson(dataInput, ["datetime", "phenomenonTime", "Time"]);      
+      // if (dataInput["timestamp"]) return String(new Date(dataInput["timestamp"] * 1000));
+      const  search = searchInJson(dataInput, ["datetime", "phenomenonTime", "Time","timestamp"]);      
       if (search) return String(new Date(Date.parse(search)).toISOString().split(".")[0]+"+00:00");
     }
     // search for MultiDatastream
