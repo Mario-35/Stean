@@ -33,8 +33,9 @@ export const replayLoraLogs = async ( ctx: koaContext, sql: string | undefined )
           delLog(res[0 as keyof object]["@iot.id"]);
         })
       } catch (error: any) {
-        if (error["detail"].includes("already exist")) delLog(res[0 as keyof object]["@iot.id"]);
         process.stdout.write( error["detail"] + "\n"); 
+        if (error["detail"].includes("already exist")) delLog(res[0 as keyof object]["@iot.id"]);
+        else process.stdout.write( res[0 as keyof object]["datas"]+ "\n"); 
       }
     }
   });
