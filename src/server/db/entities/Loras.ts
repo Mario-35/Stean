@@ -56,6 +56,7 @@ export class Loras extends Common {
       if (dataInput["datetime"]) return String(dataInput["datetime"]);
       if (dataInput["phenomenonTime"]) return String(dataInput["phenomenonTime"]);
       if (dataInput["timestamp"]) return String(new Date(dataInput["timestamp"] * 1000));
+      if (dataInput["Time"]) return String(dataInput["Time"]);
     }
     // search for MultiDatastream
     if (notNull(dataInput["MultiDatastream"])) {
