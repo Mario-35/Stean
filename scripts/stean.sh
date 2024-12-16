@@ -24,7 +24,6 @@ SQLSCRIPT=./script.sql
 # prevent no found
 STEANVER="not installed"
 ACTIVE=000
-DATELOCAL=$(date -r ./api/index.js +"%Y-%m-%d %H:%M:%S")
 
 # Create run script
 create_run_script() {
@@ -339,7 +338,7 @@ selectOption() {
             logo;
             echo -e "\e[35m Execute \e[38m .\run.sh \e[0m"
             ;;
-        "Update stean $DATEREMOTE")
+        "Update stean")
             echo "┌───────────────────────────────────────────────────────────────┐"
             echo "│                         STEAN Update                          │"
             echo "└───────────────────────────────────────────────────────────────┘"
@@ -509,15 +508,15 @@ infos;
         WRITE;
         MARK;
         TPUT 1 5
-        $E "Stean :                           ->     ";
-        TPUT  0 13; $e $STEANVER $DATELOCAL;
-        # TPUT  0 12; $e $APIDEST; 
+        $E "Path :              Stean :               ";
+        TPUT  0 12; $e $APIDEST; 
+        TPUT  0 33; $e $STEANVER;
         if [[ "$STEANVER" != "not installed" ]]; then
             if [[ "$ACTIVE" == "000" ]]; 
                 then
                     TPUT  0 42; $e "STOP"; 
                 else
-                    TPUT  0 43; $e "RUN "; 
+                    TPUT  0 42; $e "RUN"; 
             fi
         fi
         UNMARK;

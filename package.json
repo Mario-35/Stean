@@ -26,7 +26,7 @@
         "git": "git add ./src/ ./package.json ./realease.md ./dist.zip ./scripts/ ./scripts/ ./README.md ",
         "build-ts": "rimraf ./build && tsc",
         "serve": "node build/index.js",
-        "upProd": "npm run build-ts && node build.js && git add ./src/ ./package.json ./realease.md ./dist.zip ./scripts/ ./README.md && git commit --file .git/COMMIT_EDITMSG && git push",
+        "upProd": "npm run build-ts && node build.js && git add -u && git commit --file .git/COMMIT_EDITMSG && git push",
         "upDev": "npm run build-ts && node build.js dev && git add -u && git commit --file .git/COMMIT_EDITMSG && git push",
         "------TEST-------": "",
         "test-all": "mocha -r ts-node/register src/server/**/*.spec.ts",
