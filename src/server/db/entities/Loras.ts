@@ -30,11 +30,15 @@ export class Loras extends Common {
     console.log(log.whereIam());
     const result:Record<string, any>  = {};
     const listKeys = ["deveui", "DevEUI", "sensor_id", "frame"];
+      if (notNull(dataInput["payload_deciphered"])) console.log(`----> ${dataInput["payload_deciphered"].toUpperCase()}`);
+      
       if (notNull(dataInput["payload_deciphered"]))
-      this.stean["frame"] = dataInput["payload_deciphered"].toUpperCase();      
+        result["frame"] = dataInput["payload_deciphered"].toUpperCase();
+      
       Object.entries(dataInput).forEach( ([k, v]) => (result[listKeys.includes(k) ? k.toLowerCase() : k] = listKeys.includes( k ) ? v.toUpperCase() : v) );
       if (!isNaN(dataInput["timestamp"])) 
-      result["timestamp"] = new Date( dataInput["timestamp"] * 1000 ).toISOString();
+        result["timestamp"] = new Date( dataInput["timestamp"] * 1000 ).toISOString();
+    
     return result;
   }
 
@@ -47,7 +51,7 @@ export class Loras extends Common {
   // Override post
   async post( dataInput: Record<string, any>, silent?: boolean ): Promise<IreturnResult | undefined | void> {
     console.log(log.whereIam());
-      const addToStean = (key: string) => (this.stean[key] = dataInput[key]);
+    const addToStean = (key: string) => (this.stean[key] = dataInput[key]);
     if (dataInput) this.stean = await this.prepareInputResult(dataInput);
     if (this.stean["frame"] === "000000000000000000") this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.frameNotConform });
     function gedataInputtDate(): string | undefined {
@@ -56,7 +60,7 @@ export class Loras extends Common {
       if (dataInput["timestamp"]) return String(new Date(dataInput["timestamp"] * 1000));
     }
     // search for MultiDatastream
-      if (notNull(dataInput["MultiDatastream"])) {
+    if (notNull(dataInput["MultiDatastream"])) {
       if (!notNull(this.stean["deveui"])) {
         if (silent) return this.formatReturnResult({ body: errors.deveuiMessage });
         else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.deveuiMessage });
@@ -65,7 +69,7 @@ export class Loras extends Common {
       return await super.post(this.stean);
     }
     // search for Datastream 
-      if (notNull(dataInput["Datastream"])) {
+    if (notNull(dataInput["Datastream"])) {
       if (!notNull(dataInput["deveui"])) {
         if (silent) return this.formatReturnResult({ body: errors.deveuiMessage });
         else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.deveuiMessage });
@@ -74,11 +78,12 @@ export class Loras extends Common {
       return await super.post(this.stean);
     }
     // search for deveui
-      if (!notNull(this.stean["deveui"])) {
+    if (!notNull(this.stean["deveui"])) {
       if (silent) return this.formatReturnResult({ body: errors.deveuiMessage });
       else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.deveuiMessage });
     }
-      const stream = await config.executeSql(this.ctx.service, streamFromDeveui(this.stean["deveui"])).then((res: Record<string, any> ) => {
+
+    const stream = await config.executeSql(this.ctx.service, streamFromDeveui(this.stean["deveui"])).then((res: Record<string, any> ) => {
       if (res[0]["multidatastream"] != null) return res[0]["multidatastream"][0];
       if (res[0]["datastream"] != null) return res[0]["datastream"][0];
       this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: msg( errors.deveuiNotFound, this.stean["deveui"] )}); 
@@ -87,29 +92,30 @@ export class Loras extends Common {
     console.log(log.debug_infos("stream", stream));
     // search for frame and decode payload if found
       if (notNull(this.stean["frame"])) {
-      const temp = await decodeloraDeveuiPayload( this.ctx, this.stean["deveui"], this.stean["frame"] );
-      if (!temp) return this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: "Error"});
-      if (temp && temp.error) {
-        if (silent) return this.formatReturnResult({ body: temp.error });
-        else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: temp.error });
-      }
+        const temp = await decodeloraDeveuiPayload( this.ctx, this.stean["deveui"], this.stean["frame"] );
+        if (!temp) return this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: "Error"});
+        if (temp && temp.error) {
+          if (silent) return this.formatReturnResult({ body: temp.error });
+          else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: temp.error });
+        }
       this.stean["decodedPayload"] = temp["result"];
       if (this.stean["decodedPayload"].valid === false) this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.InvalidPayload });
     }
-      const searchMulti = multiDatastreamFromDeveui(this.stean["deveui"]);
-      this.stean["formatedDatas"] = {};
     
+    const searchMulti = multiDatastreamFromDeveui(this.stean["deveui"]);
+    this.stean["formatedDatas"] = {};
+      
     if (stream["multidatastream"]) {
       if ( this.stean["decodedPayload"] && notNull(this.stean["decodedPayload"]["datas"]) )
-      Object.keys(this.stean["decodedPayload"]["datas"]).forEach((key) => {
-      this.stean["formatedDatas"][key.toLowerCase()] =
-      this.stean["decodedPayload"]["datas"][key];
+        Object.keys(this.stean["decodedPayload"]["datas"]).forEach((key) => {
+          this.stean["formatedDatas"][key.toLowerCase()] =
+          this.stean["decodedPayload"]["datas"][key];
         });
   
       // convert all keys in lowercase
       if (notNull(dataInput["data"]))
-      Object.keys(dataInput["data"]).forEach((key) => {
-      this.stean["formatedDatas"][key.toLowerCase()] = dataInput["data"][key];
+        Object.keys(dataInput["data"]).forEach((key) => {
+          this.stean["formatedDatas"][key.toLowerCase()] = dataInput["data"][key];
         });
   
       if (!notNull(this.stean["formatedDatas"])) {
