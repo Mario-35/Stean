@@ -23,6 +23,7 @@ export { hidePassword} from "./hidePassword";
 export { notNull } from "./notNull";
 export { returnFormats } from "./returnFormats";
 export { unique } from "./unique";
+export { searchInJson } from "./searchInJson";
 export { removeEmpty } from "./removeEmpty";
 export { upload } from "./upload";
 export { logToHtml } from "./logToHtml";

@@ -7,7 +7,7 @@
  */
 
 import { Common } from "./common";
-import { getBigIntFromString, notNull, } from "../../helpers/index";
+import { getBigIntFromString, notNull, searchInJson, } from "../../helpers/index";
 import { ESCAPE_SIMPLE_QUOTE } from "../../constants";
 import { IreturnResult, keyobj, koaContext } from "../../types";
 import { errors, msg } from "../../messages/";
@@ -17,6 +17,9 @@ import { decodeloraDeveuiPayload } from "../../lora";
 import { log } from "../../log";
 import { DATASTREAM, FEATUREOFINTEREST, OBSERVATION } from "../../models/entities";
 import { config } from "../../configuration";
+
+
+
 
 export class Loras extends Common {
   synonym: Record<string, any>  = {};
@@ -29,14 +32,12 @@ export class Loras extends Common {
   async prepareInputResult(dataInput: Record<string, any> ): Promise<Record<string, any> > {
     console.log(log.whereIam());
     const result:Record<string, any>  = {};
+    let search = searchInJson(dataInput, ["payload_deciphered", "payload"]);
+    if (search) result["frame"] = search.toUpperCase();
     const listKeys = ["deveui", "DevEUI", "sensor_id", "frame"];
-      if (notNull(dataInput["payload_deciphered"]))
-        result["frame"] = dataInput["payload_deciphered"].toUpperCase();
-      
       Object.entries(dataInput).forEach( ([k, v]) => (result[listKeys.includes(k) ? k.toLowerCase() : k] = listKeys.includes( k ) ? v.toUpperCase() : v) );
       if (!isNaN(dataInput["timestamp"])) 
         result["timestamp"] = new Date( dataInput["timestamp"] * 1000 ).toISOString();
-    
     return result;
   }
 
@@ -52,11 +53,11 @@ export class Loras extends Common {
     const addToStean = (key: string) => (this.stean[key] = dataInput[key]);
     if (dataInput) this.stean = await this.prepareInputResult(dataInput);
     if (this.stean["frame"] === "000000000000000000") this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.frameNotConform });
+
     function gedataInputtDate(): string | undefined {
-      if (dataInput["datetime"]) return String(dataInput["datetime"]);
-      if (dataInput["phenomenonTime"]) return String(dataInput["phenomenonTime"]);
       if (dataInput["timestamp"]) return String(new Date(dataInput["timestamp"] * 1000));
-      if (dataInput["Time"]) return String(dataInput["Time"]);
+      const  search = searchInJson(dataInput, ["datetime", "phenomenonTime", "Time"]);      
+      if (search) return String(new Date(Date.parse(search)).toISOString().split(".")[0]+"+00:00");
     }
     // search for MultiDatastream
     if (notNull(dataInput["MultiDatastream"])) {
@@ -81,7 +82,6 @@ export class Loras extends Common {
       if (silent) return this.formatReturnResult({ body: errors.deveuiMessage });
       else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.deveuiMessage });
     }
-
     const stream = await config.executeSql(this.ctx.service, streamFromDeveui(this.stean["deveui"])).then((res: Record<string, any> ) => {
       if (res[0]["multidatastream"] != null) return res[0]["multidatastream"][0];
       if (res[0]["datastream"] != null) return res[0]["datastream"][0];
@@ -131,8 +131,9 @@ export class Loras extends Common {
         }
     }
       console.log(log.debug_infos("Formated datas", this.stean["formatedDatas"]));
-      this.stean["date"] = gedataInputtDate();
-      if (!this.stean["date"]) {
+      this.stean["timestamp"] = gedataInputtDate();
+
+      if (!this.stean["timestamp"]) {
       if (silent) return this.formatReturnResult({ body: errors.noValidDate });
       else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.noValidDate });
     }    
