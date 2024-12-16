@@ -92,7 +92,7 @@ export class Common {
     console.log(log.whereIam());
     // create query
     let sql = this.ctx.odata.getSql();
-    if (this.ctx.odata.replay === true) replayLoraLogs(this.ctx, sql);
+    if (this.ctx.odata.replay === true) await replayLoraLogs(this.ctx, sql);
     // Return results
     if (sql) {      
       switch (this.ctx.odata.returnFormat) {
