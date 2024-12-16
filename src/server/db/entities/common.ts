@@ -15,6 +15,7 @@ import { log } from "../../log";
 import { config } from "../../configuration";
 import { EConstant, EHttpCode } from "../../enums";
 import { asCsv } from "../queries";
+import { replayLoraLogs } from "../../lora";
 
 // Common class
 export class Common {
@@ -91,7 +92,7 @@ export class Common {
     console.log(log.whereIam());
     // create query
     let sql = this.ctx.odata.getSql();
-    
+    if (this.ctx.odata.replay === true) replayLoraLogs(this.ctx, sql);
     // Return results
     if (sql) {      
       switch (this.ctx.odata.returnFormat) {

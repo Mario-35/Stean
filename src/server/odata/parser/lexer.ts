@@ -140,6 +140,7 @@ export enum TokenType {
     payload = "Payload",
     Root = "Root",
     Debug = "Debug",
+    Replay = "Replay",
     InlineCount = "InlineCount",
     Select = "Select",
     SelectItem = "SelectItem",

@@ -25,8 +25,7 @@ import { _isObservation, isFile } from "../../../helpers/tests";
 export class PgVisitor extends Visitor {
   entity: Ientity | undefined = undefined;
   columnSpecials:  { [key: string]: string[] } = {} ;
-  // columns:  string[] = this.valueskeys === true ? ["result->'valueskeys' AS result"] : ["result->'value' AS result"] ;
-  
+  replay = false;
   navigation : [{
     entity: string | undefined;  
     query: string | undefined;  
@@ -246,6 +245,11 @@ export class PgVisitor extends Visitor {
       node.value.options.forEach((item: Token) => this.Visit(item, context));
     this.payload = node.value;
   }
+  protected VisitReplay(node: Token, context: IodataContext) {
+    this.replay = true;
+    this.returnFormat = returnFormats.sql;
+  }
+
   protected VisitDebug(node: Token, context: IodataContext) {
     this.Visit(node.value.path, context);
     if (node.value.options)

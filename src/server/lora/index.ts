@@ -7,4 +7,5 @@
  */
 export { decodeloraDeveuiPayload } from "./decodeloraDeveuiPayload";
 export { decodingPayload } from "./decodingPayload";
+export { replayLoraLogs } from "./replayLoraLogs";
 

@@ -58,7 +58,8 @@ namespace Query {
             Query.skiptoken(value, index) ||
             Query.top(value, index) ||
             Query.log(value, index) ||
-            Query.debug(value, index)
+            Query.debug(value, index) ||
+            Query.replay(value, index)
         );
     }
     export function customQueryOption(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
@@ -72,6 +73,21 @@ namespace Query {
         while (value[index] !== 0x26 && index < value.length) index++;
         if (index === eq) return;
         return Lexer.tokenize(value, start, index, { key: key.raw, value: Utils.stringify(value, eq, index) }, Lexer.TokenType.CustomQueryOption);
+    }
+    export function replay(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
+        const start = index;
+        const add = addToIndex(value, start, "replay");
+        if (add) index += add; else return;
+        
+        const eq = Lexer.EQ(value, index);
+        if (!eq) return;
+        index = eq;
+        
+        const token = PrimitiveLiteral.booleanValue(value, index);
+        if (!token) return;
+        index = token.next;
+        
+        return Lexer.tokenize(value, start, index, token, Lexer.TokenType.Replay);
     }
     export function debug(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
         const start = index;

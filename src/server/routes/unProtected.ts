@@ -34,7 +34,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
     case `/`:
       ctx.body = models.getRoot(ctx);
       ctx.type = returnFormats.json.type;
-      return;    
+      return;
     // tests only for testing wip features
     case "TEST":
       ctx.type = returnFormats.json.type;
