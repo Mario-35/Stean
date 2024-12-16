@@ -25,7 +25,7 @@ export const replayLoraLogs = async ( ctx: koaContext, sql: string | undefined )
     });
   }
 
-  await config.connection(ctx.service.name).unsafe(`SELECT "@iot.id","datas" FROM (${sql})`).cursor(async (res: object) => {
+  await config.connection(ctx.service.name).unsafe(`SELECT "@iot.id","datas" FROM (${sql}) as t`).cursor(async (res: object) => {
     const temp = blankRootPgVisitor(ctx, ctx.model.Loras);
     if (temp) {
       ctx.odata = temp;
