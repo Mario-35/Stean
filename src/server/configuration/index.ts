@@ -48,15 +48,7 @@ class Configuration {
       if (data) this.writeLog(data);
     }; 
 
-    const input = Configuration.services[EConstant.admin].pg;
-    Configuration.adminConnection = postgres(`postgres://${input.user}:${input.password}@${input.host}:${input.port || 5432}/${EConstant.defaultDb}`,
-      {
-        debug: _DEBUG,          
-        connection: { 
-          application_name : `${EConstant.appName} ${EConstant.appVersion}`
-        }
-      }
-    );
+
   }
   
   /**
@@ -135,6 +127,16 @@ writeLog(input: any) {
       this.writeLog(log.error(errors.configFileError, error["message"]));
       process.exit(111);      
     }
+
+    const infosAdmin = Configuration.services[EConstant.admin].pg;
+    Configuration.adminConnection = postgres(`postgres://${infosAdmin.user}:${infosAdmin.password}@${infosAdmin.host}:${infosAdmin.port || 5432}/${EConstant.defaultDb}`,
+      {
+        debug: _DEBUG,          
+        connection: { 
+          application_name : `${EConstant.appName} ${EConstant.appVersion}`
+        }
+      }
+    );
     return true;
   }
   
