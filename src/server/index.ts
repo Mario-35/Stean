@@ -23,12 +23,13 @@ import { isTest, logToHtml } from "./helpers";
 import { RootPgVisitor } from "./odata/visitor";
 import { EChar, EConstant } from "./enums";
 import { protectedRoutes, routerHandle, unProtectedRoutes } from "./routes/";
-import { Iservice, IdecodedUrl, Ientities, Ilog, IuserToken, koaContext } from "./types";
+import { Iservice, IdecodedUrl, Ientities, Ilog, IuserToken } from "./types";
 // Extend koa context 
 declare module "koa" {
   export interface DefaultContext {
     decodedUrl: IdecodedUrl;
     service: Iservice ;
+    traceId: bigint;
     odata: RootPgVisitor;
     datas: Record<string, any>;
     user: IuserToken;
@@ -64,11 +65,6 @@ app.use(json());
 app.use(cors());
 // free routes
 app.use(unProtectedRoutes.routes());
-// app key
-app.use((ctx: koaContext, next) => {
-  ctx.body = ctx.request.body;  
-  return next();
-});
 // authenticated routes
 app.use(protectedRoutes.routes());
 // Start server initialisaion

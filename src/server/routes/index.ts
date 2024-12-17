@@ -23,11 +23,10 @@ import { writeLogToDb } from "../log/writeLogToDb";
 import { HtmlLogs } from "../views/class/logs";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const routerHandle = async (ctx: koaContext, next: any) => { 
+  ctx.body = ctx.request.body;
+  config.writeTrace(ctx);
   // First Install 
   if (config.configFileExist() === false) await firstInstall(ctx);
-
-  config.writeTrace(ctx);
-
   // create token
   createBearerToken(ctx);
   // decode url
@@ -67,7 +66,6 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
       ? ctx.originalUrl.replace(String(decodedUrl.version), ctx.service.apiVersion)
       : `${ctx.decodedUrl.linkbase}/${ctx.service.apiVersion}/`);
   }
-  
   
   // try to clean query string
   ctx.querystring = decodeURIComponent(querystring.unescape(ctx.querystring));

@@ -6,7 +6,7 @@
 *
 */
 
-import { setReady, _DEBUG } from "../constants";
+import { setReady, _DEBUG, ESCAPE_SIMPLE_QUOTE } from "../constants";
 import { asyncForEach, decrypt, encrypt, isProduction, isTest, logToHtml, } from "../helpers";
 import { Iservice, IdbConnection, IserviceInfos, koaContext, keyobj } from "../types";
 import { errors, info, infos, msg } from "../messages";
@@ -22,18 +22,17 @@ import path from "path";
 import { formatServiceFile, testDbExists, validJSONService } from "./helpers";
 import { MqttServer } from "../mqtt";
 import { updateIndexes } from "../db/helpers";
-import util from "util";
 
 // class to lcreate configs environements
 class Configuration {
   // store all services
   static services: { [key: string]: Iservice } = {};
+  static adminConnection: postgres.Sql<Record<string, unknown>>;
   // configuration complete file path
   static filePath: string;
   static MqttServer: MqttServer;
   static queries: { [key: string]: string[] } = {};
   public logFile = fs.createWriteStream(path.resolve(__dirname, "../", EFileName.logs), {flags : 'w'});
-  public traceFile = fs.createWriteStream(path.resolve(__dirname, "../", EFileName.trace), {flags : 'w'});
   static listenPorts: number[] = [];
 
   constructor() {    
@@ -48,6 +47,16 @@ class Configuration {
     else console.log = (data: any) => {
       if (data) this.writeLog(data);
     }; 
+
+    const input = Configuration.services[EConstant.admin].pg;
+    Configuration.adminConnection = postgres(`postgres://${input.user}:${input.password}@${input.host}:${input.port || 5432}/${EConstant.defaultDb}`,
+      {
+        debug: _DEBUG,          
+        connection: { 
+          application_name : `${EConstant.appName} ${EConstant.appVersion}`
+        }
+      }
+    );
   }
   
   /**
@@ -76,12 +85,17 @@ writeLog(input: any) {
   }
 }
 
-writeTrace(ctx: koaContext) {
-    let temp = "\n["  + ctx.request.method +"] " + ctx.href + "\n"
-    if (["POST","PATCH"].includes(ctx.request.method))
-       temp +=   "\n```js\n" +  util.inspect(ctx.request.body, { showHidden: false, depth: null, colors: false, }) + "\n```\n";
-    if (config && config.traceFile) config.traceFile.write(temp);
-  
+  async writeTrace(ctx: koaContext) {
+    const datas = `INSERT INTO trace ("method", url, datas) VALUES('${ctx.method}', '${ctx.request.url}', ('${ctx.body ? ESCAPE_SIMPLE_QUOTE(JSON.stringify(ctx.body)) : '{}'}')::text::jsonb) RETURNING id;`;
+    await Configuration.adminConnection.unsafe(datas)
+    .then(res => ctx.traceId = res[0].id)
+    .catch(async error => {
+      if (error.code === "42P01") {
+        await Configuration.adminConnection.unsafe(`CREATE TABLE public.trace ( id int8 GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1 NO CYCLE) NOT NULL, "date" timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL, "method" text NULL, url text NULL, datas jsonb NULL, CONSTRAINT log_pkey PRIMARY KEY (id) ); CREATE INDEX trace_id ON public.trace USING btree (id);`)
+        .catch(err => process.stdout.write(err + "\n"));
+        Configuration.adminConnection.unsafe(datas);      
+      } else process.stdout.write(error + "\n");
+  });
 }
 
   /**
@@ -398,15 +412,7 @@ writeTrace(ctx: koaContext) {
    * @returns return postgres.js connection with EConstant.admin rights
   */
   public adminConnection(): postgres.Sql<Record<string, unknown>> {
-    const input = Configuration.services[EConstant.admin].pg;    
-      return postgres(`postgres://${input.user}:${input.password}@${input.host}:${input.port || 5432}/${EConstant.defaultDb}`,
-        {
-          debug: _DEBUG,          
-          connection: { 
-            application_name : `${EConstant.appName} ${EConstant.appVersion}`
-          }
-        }
-      );
+      return Configuration.adminConnection;
   }
 
   /**
@@ -564,7 +570,6 @@ private async reCreatePgFunctions(connection: string): Promise<boolean> {
       }
       this.writeLog(log._head("Ready", EChar.ok));
       this.writeLog(log.logo(EConstant.appVersion));
-      config.traceFile.write(`## START ${EConstant.appName} ${info.ver} : ${EConstant.appVersion} [${EConstant.nodeEnv}]} ${new Date().toLocaleDateString()} : ${new Date().toLocaleTimeString()}`);
       return status;
       // no configuration file so First install    
     } else {

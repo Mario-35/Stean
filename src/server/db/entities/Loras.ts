@@ -30,17 +30,20 @@ export class Loras extends Common {
   }
   // prepare datas to lora input
   async prepareInputResult(dataInput: Record<string, any> ): Promise<Record<string, any> > {
-    let search = searchInJson(dataInput, ["payload_deciphered", "payload"]);
-
     console.log(log.whereIam());
     const result:Record<string, any>  = {};
+
+    let search = searchInJson(dataInput, ["payload_deciphered", "payload"]);
     if (search)
-      result["frame"] = search.toUpperCase();
+      result["FRAME"] = search.toUpperCase();
     
     const listKeys = ["deveui", "DevEUI", "sensor_id", "frame"];
       Object.entries(dataInput).forEach( ([k, v]) => (result[listKeys.includes(k) ? k.toLowerCase() : k] = listKeys.includes( k ) ? v.toUpperCase() : v) );
       if (!isNaN(dataInput["timestamp"])) 
         result["timestamp"] = new Date( dataInput["timestamp"] * 1000 ).toISOString();
+
+      if (result["Time"] && !result["timestamp"] ) 
+        result["timestamp"] = String(new Date(Date.parse(result["Time"])).toISOString().split(".")[0]+"+00:00");
     
     return result;
   }
@@ -54,15 +57,12 @@ export class Loras extends Common {
   // Override post
   async post( dataInput: Record<string, any>, silent?: boolean ): Promise<IreturnResult | undefined | void> {
     console.log(log.whereIam());
+    // this.stean store datas to insert
     const addToStean = (key: string) => (this.stean[key] = dataInput[key]);
+
     if (dataInput) this.stean = await this.prepareInputResult(dataInput);
+
     if (this.stean["frame"] === "000000000000000000") this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.frameNotConform });
-    function gedataInputtDate(): string | undefined {
-      if (dataInput["datetime"]) return String(dataInput["datetime"]);
-      if (dataInput["phenomenonTime"]) return String(dataInput["phenomenonTime"]);
-      if (dataInput["timestamp"]) return String(new Date(dataInput["timestamp"] * 1000));
-      if (dataInput["Time"]) return String(dataInput["Time"]);
-    }
     // search for MultiDatastream
     if (notNull(dataInput["MultiDatastream"])) {
       if (!notNull(this.stean["deveui"])) {
@@ -136,7 +136,7 @@ export class Loras extends Common {
         }
     }
       console.log(log.debug_infos("Formated datas", this.stean["formatedDatas"]));
-      this.stean["date"] = gedataInputtDate();
+      this.stean["date"] = searchInJson(dataInput, ["datetime", "phenomenonTime", "timestamp", "Time"]);
       if (!this.stean["date"]) {
       if (silent) return this.formatReturnResult({ body: errors.noValidDate });
       else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.noValidDate });
