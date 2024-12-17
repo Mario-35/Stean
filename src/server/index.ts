@@ -28,8 +28,8 @@ import { Iservice, IdecodedUrl, Ientities, Ilog, IuserToken } from "./types";
 declare module "koa" {
   export interface DefaultContext {
     decodedUrl: IdecodedUrl;
-    service: Iservice ;
     traceId: bigint;
+    service: Iservice ;
     odata: RootPgVisitor;
     datas: Record<string, any>;
     user: IuserToken;

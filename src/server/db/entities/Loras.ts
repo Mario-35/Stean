@@ -35,7 +35,7 @@ export class Loras extends Common {
 
     let search = searchInJson(dataInput, ["payload_deciphered", "payload"]);
     if (search)
-      result["FRAME"] = search.toUpperCase();
+      result["frame"] = search.toUpperCase();
     
     const listKeys = ["deveui", "DevEUI", "sensor_id", "frame"];
       Object.entries(dataInput).forEach( ([k, v]) => (result[listKeys.includes(k) ? k.toLowerCase() : k] = listKeys.includes( k ) ? v.toUpperCase() : v) );
@@ -55,7 +55,7 @@ export class Loras extends Common {
   }
 
   // Override post
-  async post( dataInput: Record<string, any>, silent?: boolean ): Promise<IreturnResult | undefined | void> {
+  async post( dataInput: Record<string, any>, silent?: boolean ): Promise<IreturnResult | undefined | void> {   
     console.log(log.whereIam());
     // this.stean store datas to insert
     const addToStean = (key: string) => (this.stean[key] = dataInput[key]);
@@ -108,6 +108,10 @@ export class Loras extends Common {
     
     const searchMulti = multiDatastreamFromDeveui(this.stean["deveui"]);
     this.stean["formatedDatas"] = {};
+      console.log("---------------------------------------> stean");
+      console.log(dataInput);
+      console.log("---------------------------------------> stean");
+      console.log(this.stean);
       
     if (stream["multidatastream"]) {
       if ( this.stean["decodedPayload"] && notNull(this.stean["decodedPayload"]["datas"]) )
