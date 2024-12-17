@@ -115,7 +115,7 @@ export class Loras extends Common {
           this.stean["decodedPayload"]["datas"][key];
         });
   
-      // convert all keys in lowercase
+      // convert all keys in lowercase 
       if (notNull(dataInput["data"]))
         Object.keys(dataInput["data"]).forEach((key) => {
           this.stean["formatedDatas"][key.toLowerCase()] = dataInput["data"][key];

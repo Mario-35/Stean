@@ -13,6 +13,7 @@ import { asyncForEach, isArray } from "../../helpers";
 import { models } from "../../models";
 import { log } from "../../log";
 import { errors } from "../../messages";
+import { setDebug } from "../../constants";
 
 // Interface API
 export class apiAccess implements Icomon {
@@ -48,13 +49,12 @@ export class apiAccess implements Icomon {
     console.log(log.whereIam());
     if (this.myEntity) {
       if (isArray(this.ctx.body)) {
+        setDebug(true);
         asyncForEach(
-          this.ctx.body, async (query: any) => {
-            try {              
-              if (this.myEntity) this.myEntity.post(query);
-            } catch (error) {
-              console.log(error);              
-            }
+          this.ctx.body, async (query: any) => {      
+            if (this.myEntity) this.myEntity.post(query).catch((err) => {
+              console.log(err);
+            });
           });
       } else return await this.myEntity.post(dataInput || this.ctx.body);
     }
