@@ -155,6 +155,8 @@ export class Common {
   // Execute multilines SQL in one query
   async addWultipleLines(dataInput: Record<string, any>  | undefined): Promise<IreturnResult | undefined> {
     console.log(log.whereIam());
+    process.stdout.write("***********************************************************************************************************" + "\n");
+
     // stop save to log cause if datainput too big 
     if (this.ctx.log) this.ctx.log.datas = {datas: info.MultilinesNotSaved};
     // create queries

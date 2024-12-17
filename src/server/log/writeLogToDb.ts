@@ -15,7 +15,7 @@ import { config } from "../configuration";
 import { EConstant } from "../enums";
 export const writeLogToDb = async ( ctx: koaContext, ...error: any[] ): Promise<void> => {
   console.log(log.whereIam());
-  if (ctx.odata.replay === true && ctx.log && ctx.log.method != "GET") {
+  if (!ctx.odata.replay === true && ctx.log && ctx.log.method != "GET") {
     ctx.log.code = error && error["code" as keyobj] ? +error["code" as keyobj] : +ctx.response.status;
     ctx.log.error = error;
     ctx.log.datas = ctx.body;

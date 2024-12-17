@@ -107,12 +107,7 @@ export class Loras extends Common {
     }
     
     const searchMulti = multiDatastreamFromDeveui(this.stean["deveui"]);
-    this.stean["formatedDatas"] = {};
-      console.log("---------------------------------------> stean");
-      console.log(dataInput);
-      console.log("---------------------------------------> stean");
-      console.log(this.stean);
-      
+    this.stean["formatedDatas"] = {};      
     if (stream["multidatastream"]) {
       if ( this.stean["decodedPayload"] && notNull(this.stean["decodedPayload"]["datas"]) )
         Object.keys(this.stean["decodedPayload"]["datas"]).forEach((key) => {
