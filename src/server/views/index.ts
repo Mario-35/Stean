@@ -6,8 +6,7 @@
  *
  */
 export { Admin } from './class/admin';
-export { First } from './class/first';
-export { Service } from './class/service';
+export { Update } from './class/update';
 export { Login } from './class/login';
 export { HtmlError } from './class/error';
 export { Status } from './class/status';

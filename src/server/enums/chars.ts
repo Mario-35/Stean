@@ -26,4 +26,8 @@ export const enum EChar {
   copyright = "©️",
   arrowleft = "🡸",
   arrowright = "🡺",
+  cut = "✂️",
+  copy = "📰",
+  paste = "📋",
+  json = "⛃"
 }

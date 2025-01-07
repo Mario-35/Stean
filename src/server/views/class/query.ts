@@ -6,10 +6,9 @@
  *
  */
 
-import { EConstant } from "../../enums";
 import { removeAllQuotes } from "../../helpers";
 import { log } from "../../log";
-import { IqueryOptions, koaContext } from "../../types";
+import { Idatas, IqueryOptions, koaContext } from "../../types";
 import { addCssFile, listaddCssFiles } from "../css";
 import { addJsFile, listaddJsFiles } from "../js";
 import { CoreHtmlView } from "./core";
@@ -17,9 +16,9 @@ import fs from "fs";
 import path from "path";
 export class Query extends CoreHtmlView {
     params: IqueryOptions;
-    constructor(ctx: koaContext, datas: IqueryOptions) {
-        super(ctx);
-        this.params = datas;
+    constructor(ctx: koaContext, datas: Idatas) {
+        super(ctx, datas);
+        if(datas.queryOptions) this.params = datas.queryOptions;
         this.createQueryHtmlString();
     }
     createQueryHtmlString() {
@@ -81,14 +80,13 @@ export class Query extends CoreHtmlView {
             replaceInReturnResult(`<script src="${fileWithOutMin(item)}"></script>`, `<script>${addJsFile(item)}</script>`);
         });
     };
+
     toString() {
-        const bigIntReplacer = <K,V>(key: K, value: V) => typeof value === "bigint" ? value.toString() : value;
-        return this._HTMLResult.join("").replace("_PARAMS={}", "_PARAMS=" + JSON.stringify(this.params, bigIntReplacer))
-        // execute a start of query
-        .replace("// @start@", this.params.results ? "jsonObj = JSON.parse(`" + this.params.results + "`); jsonViewer.showJSON(jsonObj);" : "")
-        // App version on query
-        .replace("@version@", EConstant.appVersion)
-        // default action form
-        .replace("@action@", `${this.params.decodedUrl.root}/${this.params.decodedUrl.version}/CreateObservations`);
+        this.replacers({
+            start: this.params.results ? "jsonObj = JSON.parse(`" + this.params.results + "`); jsonViewer.showJSON(jsonObj);" : "",
+            action: `${this.params.decodedUrl.root}/${this.params.decodedUrl.version}/CreateObservations`
+        });
+        this.replacer("_PARAMS={}", "_PARAMS=" + JSON.stringify(this.params, this.bigIntReplacer));
+        return super.toString();
       }
   }

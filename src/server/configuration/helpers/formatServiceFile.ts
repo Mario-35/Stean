@@ -58,6 +58,7 @@ export function formatServiceFile(name: string, input: Record<string, any>): Ise
       options: options,
       csvDelimiter: input["csvDelimiter"] ? input["csvDelimiter"]: ";",
       _connection: undefined,
+      _stats: undefined,
     };
     
     if (Object.values(returnValue).includes("ERROR"))

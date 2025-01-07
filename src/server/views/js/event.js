@@ -25,16 +25,6 @@ info.onclick = () => {
 	window.location.href = `${optHost.value}/${optVersion.value}/status`;
 };
 
-doc.onclick = () => {
-	var temp = optHost.value.split("/");
-	temp.pop();
-	window.location.href = temp.join("/");
-};
-
-git.onclick = () => {
-	window.location.href = "https://github.com/Mario-35/Stean";
-};
-
 debug.onclick = () => {
 	isDebug = !isDebug;
 	if (isDebug)

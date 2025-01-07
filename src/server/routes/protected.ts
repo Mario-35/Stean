@@ -25,7 +25,7 @@ import { USER } from "../models/entities";
 export const protectedRoutes = new Router<DefaultState, Context>();
 protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {  
   switch (ctx.decodedUrl.path.toUpperCase()) {
-    // login html page or connection login
+    // login html page or connection login      
     case "LOGIN":
       if (ctx.request["token" as keyof object]) ctx.redirect(`${ctx.decodedUrl.root}/status`);
       await loginUser(ctx).then((user: Iuser | undefined) => {
@@ -83,6 +83,7 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
         }
       } else {
         const createHtml = new Login(ctx, {
+          url: "", 
           login: false,
           body: ctx.request.body,
           why: why,
@@ -91,12 +92,7 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
         ctx.body = createHtml.toString();
       }
       return;
-  }
-  if(!ctx.decodedUrl.version && ctx.decodedUrl.path === "/" &&ctx.decodedUrl.service.toUpperCase() ==="CREATE") {
-    // intercept create
-    return;
-  }
-  
+  } 
   // Add new lora observation this is a special route without ahtorisatiaon to post (deveui and correct payload limit risks)
   console.log(ctx.request.headers["authorization"] );
   if ((ctx.user && ctx.user.id > 0) || !ctx.service.extensions.includes(EExtensions.users) || ctx.request.url.includes("/Lora") || (ctx.request.headers["authorization"] && ctx.request.headers["authorization"] === config.getBrokerId() )) {
@@ -141,11 +137,13 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
             const tempContext = await createQueryParams(ctx);
             if (tempContext) {
               const bodyQuery= new Query(ctx, {
+                url: "",
+                queryOptions: {
                 ...tempContext,
                 results: JSON.stringify({
                   added: returnValue.total,
                   value: returnValue.body,
-                }),
+                })},
               });
               ctx.set("script-src", "self");
               ctx.set("Content-Security-Policy", "self");

@@ -2,6 +2,7 @@
 <html lang="fr">
   <head>
     <script src="constant.js"></script>
+    <link rel="stylesheet" href="social.css">
     <link rel="stylesheet" href="patrom.css">
     <link rel="stylesheet" href="query.css">
     <link rel="stylesheet" href="spinner.css">
@@ -422,15 +423,8 @@
 
             <div class="patrom-row">
               <!-- Expand -->
-              <div class="patrom-col col-span-4">
+              <div class="patrom-col col-span-8">
                 <select class="patrom-select width100" tabindex="1" name="service" id="services"></select>
-              </div>
-
-              <div class="patrom-col col-span-4">
-                
-                <div class="version"> 
-                  Ver. @version@ by <a href="mailto:mario.adam@inrae.fr">@ADAM mario</a>
-                </div>
               </div>
               <div class="patrom-col col-span-2">
                 <label class="patrom-switch">
@@ -440,6 +434,8 @@
               </div>
             </div>        
       </div>
+      <!-- SOCIAL PANEL HTML -->
+      @social@
     </div>
     <div id="two">
       <div id="json"></div>
@@ -466,5 +462,6 @@
     <script src="window.js"></script>
     <script src="logs.js"></script>
     <script src="windowList.js"></script>
+    <script src="social.js"></script>
   </body>
 </html>

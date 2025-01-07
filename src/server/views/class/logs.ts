@@ -6,15 +6,15 @@
  *
  */
 
-import { koaContext } from "../../types";
+import { Idatas, koaContext } from "../../types";
 import { CoreHtmlView } from "./core";
 import fs from "fs";
 import path from "path";
 export class HtmlLogs extends CoreHtmlView {            
     // use data to name ifle
-    constructor(ctx: koaContext, datas: string) {
-        const fileContent = fs.readFileSync(path.resolve(__dirname, datas), "utf8");
-        super(ctx);
+    constructor(ctx: koaContext, datas: Idatas) {
+        const fileContent = fs.readFileSync(path.resolve(__dirname, datas.url), "utf8");
+        super(ctx, datas);
         this.logs(fileContent);
     }
     private logs(message: string) {

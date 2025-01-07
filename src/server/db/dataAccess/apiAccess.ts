@@ -9,11 +9,10 @@
 import * as entities from "../entities/index";
 import { Common } from "../entities/common";
 import { Icomon, IreturnResult, koaContext } from "../../types";
-import { asyncForEach, isArray } from "../../helpers";
+import { isArray } from "../../helpers";
 import { models } from "../../models";
 import { log } from "../../log";
 import { errors } from "../../messages";
-import { setDebug } from "../../constants";
 
 // Interface API
 export class apiAccess implements Icomon {
@@ -47,18 +46,26 @@ export class apiAccess implements Icomon {
 
   async post(dataInput?: object | undefined): Promise<IreturnResult | undefined | void> {
     console.log(log.whereIam());
-    if (this.myEntity) {
-      if (isArray(this.ctx.body)) {
-        setDebug(true);
-        asyncForEach(
-          this.ctx.body, async (query: any) => {      
-            if (this.myEntity) this.myEntity.post(query).catch((err) => {
-              console.log(err);
-            });
-          });
-      } else return await this.myEntity.post(dataInput || this.ctx.body);
-    }
+    if (this.myEntity) 
+      return isArray(this.ctx.body)
+        ? await this.myEntity.addWultipleLines(dataInput || this.ctx.body)
+        : await this.myEntity.post(dataInput || this.ctx.body);
   }
+
+  // async post(dataInput?: object | undefined): Promise<IreturnResult | undefined | void> {
+  //   console.log(log.whereIam());
+  //   if (this.myEntity) {
+  //     if (isArray(this.ctx.body)) {
+  //       setDebug(true);
+  //       asyncForEach(
+  //         this.ctx.body, async (query: any) => {      
+  //           if (this.myEntity) this.myEntity.post(query).catch((err) => {
+  //             console.log(err);
+  //           });
+  //         });
+  //     } else return await this.myEntity.post(dataInput || this.ctx.body);
+  //   }
+  // }
 
   async update(idInput: bigint | string): Promise<IreturnResult | undefined | void> {
     console.log(log.whereIam());

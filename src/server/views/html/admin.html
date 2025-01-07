@@ -1,0 +1,245 @@
+<!DOCTYPE text/html>
+<html lang="fr">
+  <head>
+    <script src="constant.js"></script>
+    <link rel="stylesheet" href="social.css">
+    <link rel="stylesheet" href="patrom.css">
+    <link rel="stylesheet" href="patrom.css">
+    <link rel="stylesheet" href="query.css">
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="spinner.css">
+    <link rel="stylesheet" href="modal.css">
+    <link rel="stylesheet" href="splitter.css">
+    <link rel="stylesheet" href="queryBuilder.css">
+    <link rel="stylesheet" href="highLight.css">
+    <link rel="stylesheet" href="window.css">
+    <script src="gui.js"></script>
+    <script src="splitter.js"></script>
+    <script src="prettyJs.js"></script>
+    <script>
+      (function(e, t, n) {
+        var r = e.querySelectorAll("html")[0];
+        r.className = r.className.replace(/(^|\s)no-js(\s|$)/, "$1js$2")
+      })(document, window, 0);
+    </script>
+  </head>
+  <body>
+    <div id="spinner" class="loading">Loading&#8230;</div>
+    <div id="container">
+      <div id="first">
+        <div id="popup" class="popup">
+          <div class='popup-text' id="parici">
+            <pre id="pre">Nothing</pre>
+          </div>
+          <a id="popupClose" class='popup-close' href="#">X</a>
+        </div>
+        <form id="actionForm" action="http://localhost:8029/admin" method="POST">
+        <div class="login-form">
+          <!-- <form action=""> -->
+            <!-- START ACCORDION -->
+            <div class="patrom-tabs pro-form">
+              <!-- New Service -->
+              <div class="patrom-tab">
+                <input class="patrom-tab-check" type="checkbox" id="chck1" checked>
+                <label class="patrom-tab-label" for="chck1">New Service</label>
+                <div class="patrom-tab-content">
+                  <div class="patrom-row">
+                    <!-- Name -->
+                    <div class="patrom-col col-span-6">
+                      <div class="field">
+                        <label for="optName">Name :</label>
+                        <input id="optName" name="optName" type="text" class="patrom-text-input width100"_100-100>
+                      </div>
+                    </div>
+                    <!-- Version -->
+                    <div class="patrom-col col-span-2">
+                      <div class="field">
+                        <label for="optVersion">version</label>
+                        <br>
+                        <select class="patrom-select width100" tabindex="1" name="optVersion" id="optVersion"></select>
+                      </div>
+                    </div>
+                  <!-- Page -->
+                  <div class="patrom-col col-span-2">
+                    <div class="field">
+                      <label for="pageOption">nb / page</label>
+                      <input id="pageOption" name="pageOption" maxlength="8" type="text" class="patrom-text-input width100" size="6">
+                    </div>
+                  </div>
+                  </div>
+                  <div class="patrom-row">
+                    <!-- Password -->
+                    <div class="patrom-col col-span-6">
+                      <div class="field">
+                        <label for="optPassword">Password :</label>
+                        <input id="optPassword" name="optPassword" type="text" class="patrom-text-input width100"_100-100>
+                      </div>
+                    </div>
+                    <!-- Repeat -->
+                    <div class="patrom-col col-span-6">
+                      <div class="field">
+                        <label for="optRepeat">Repeat :</label>
+                        <input id="optRepeat" name="optRepeat" type="text" class="patrom-text-input width100"_100-100>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Options -->
+                  <div class="patrom-row">
+                    <div class="patrom-col col-span-12">
+                      <div class="field">
+                        <label for="optionsOption">Options :</label>
+                        <select class="patrom-multiselect" id="optionsOption"></select>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Extensions -->
+                  <div class="patrom-row">                
+                    <div class="patrom-col col-span-12">
+                      <div class="field">
+                        <label for="extensionsOption">Extensions :</label>
+                        <select class="patrom-multiselect" id="extensionsOption"></select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="patrom-row">
+                    <!-- Date -->
+                    <div class="patrom-col col-span-5">
+                      <div class="field">
+                        <label for="dateOption">Date format</label>
+                        <input id="dateOption" name="dateOption" maxlength="8" type="text" class="patrom-text-input width100" size="6">
+                      </div>
+                    </div>
+                    <!-- Csv -->
+                    <div class="patrom-col col-span-1">
+                      <div class="field">
+                        <label for="csvOption">Csv</label>
+                        <input id="csvOption" name="csvOption" maxlength="8" type="text" class="patrom-text-input width100" size="6">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="patrom-row">
+                    <div class="patrom-button-bar__item">
+                      <button class="patrom-button-bar__button" id="btnService"> Create service </button>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+            <!-- Tools -->
+            <div class="patrom-tab">
+              <input class="patrom-tab-check" type="checkbox" name= "propertyTab" id="chck2">
+              <label class="patrom-tab-label" for="chck2">Tools</label>
+              <div class="patrom-tab-content">
+                <div class="patrom-col col-span-12">
+                  <div class="patrom-button-bar">
+                      <div class="patrom-button-bar__item">
+                          <button class="patrom-button-bar__button" id="btnExport">Export</button>
+                        </div>
+                      &nbsp;
+                      <div class="patrom-button-bar__item">
+                          <button class="patrom-button-bar__button" id="btnClear">clear</button>
+                        </div>
+                      &nbsp;
+                      <div class="patrom-button-bar__item">
+                          <button class="patrom-button-bar__button" id="btnPostTemplate">Template</button>
+                      </div>
+                      &nbsp;
+                      <div class="patrom-button-bar__item">
+                        <button class="patrom-button-bar__button" id="btnShowLinks">urls</button>
+                      </div>
+                      &nbsp;
+                      <div class="patrom-button-bar__item">
+                        <button class="patrom-button-bar__button" id="btnShowGeo">geos</button>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              <!-- Import File  -->
+              <div class="patrom-tab">
+                <input class="patrom-tab-check" type="checkbox" name= "importTab" id="chck7">
+                <label class="patrom-tab-label" for="chck7">Import File</label>
+                <div class="patrom-tab-content">
+                  <div class="patrom-row">
+                    <div class="patrom-col col-span-12">
+                        <input type="file" name="file" id="fileone" class="inputfile inputfile-1 size-default" accept=".csv, .txt, .json, kls, xlsx" data-multiple-caption="{count} files selected" multiple="">
+                        <label id="fileonelabel" for="fileone" class="_100-100" >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17">
+                                <path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"></path>
+                            </svg>
+                            <span>File(s) …</span>
+                        </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          <!-- Infos -->
+          <div class="patrom-row">
+            <div class="patrom-col col-span-2">
+              <label class="patrom-switch">
+                <input id="theme" type="checkbox" class="patrom-switch__input" onchange="toggleTheme()">
+                <div class="patrom-switch__theme"></div>
+              </label>
+            </div>
+          </div>  
+
+            </div>
+            <!-- END ACCORDION -->
+            <!-- JSON DATAS -->
+             @connection@
+            <div id="jsonDatasContainer" onpaste="jsonDatasPasteEvent(event)" ondrop="jsonDatasPasteEvent(event)">
+              <div contenteditable spellcheck="false" id="jsonDatas" class='blakkAll shj-lang-json'></div>
+            </div>
+        <!-- DATAS HIDE  -->
+        <textarea spellcheck="false" class="blakkAll shj-lang-json" id="datas" name="datas"></textarea>
+      </form>
+          <!-- </form> -->
+      </div>
+      <!-- SOCIAL PANEL HTML -->
+      @social@
+      @new@
+    </div>
+    <div id="two">
+      <div class="wrapper">
+        <div class="row">
+          @cards@
+        </div>
+      </div>
+    </div>
+    <div id="modalOverlay"></div>
+    </div>
+    <script src="patrom.js"></script>
+    <script src="helper.js"></script>
+    <script src="multiSelect.js"></script>
+    <script src="admin.js"></script>
+    <script src="graph.js"></script>
+    <script src="modal.js"></script>
+    <script src="drop.js"></script>
+    <script src="highLightLangs.js"></script>
+    <script src="highlight.js"></script>
+    <script src="window.js"></script>
+    <script src="windowList.js"></script>
+    <script src="social.js"></script>
+
+  </body>
+</html>

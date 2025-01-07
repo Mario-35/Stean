@@ -148,16 +148,13 @@ export class Loras extends Common {
         listOfSortedValues[element] = null;
         const searchStr = element .toLowerCase() .normalize("NFD") .replace(/[\u0300-\u036f]/g, "");
       if (this.stean["formatedDatas"][searchStr]) listOfSortedValues[element] = this.stean["formatedDatas"][searchStr];
-        else
-      Object.keys(this.stean["formatedDatas"]).forEach(
-            (subElem: string) => {
-      if (element.toUpperCase().includes(subElem.toUpperCase())) listOfSortedValues[element] = this.stean["formatedDatas"][subElem];
-      else if (this.synonym[element])
-      this.synonym[element].forEach((key: string) => {
-      if (key.toUpperCase().includes(subElem.toUpperCase())) listOfSortedValues[element] = this.stean["formatedDatas"][subElem];
-                });
-            }
-          );
+      else Object.keys(this.stean["formatedDatas"]).forEach(
+        (subElem: string) => {
+          if (element.toUpperCase().includes(subElem.toUpperCase())) listOfSortedValues[element] = this.stean["formatedDatas"][subElem];
+          else if (this.synonym[element]) this.synonym[element].forEach((key: string) => {
+            if (key.toUpperCase().includes(subElem.toUpperCase())) listOfSortedValues[element] = this.stean["formatedDatas"][subElem];
+          });
+        });
       });
       
       console.log(log.debug_infos("Values", listOfSortedValues));

@@ -7,13 +7,13 @@
  */
 
 import { log } from "../../log";
-import { koaContext } from "../../types";
+import { Idatas, koaContext } from "../../types";
 import { CoreHtmlView } from "./core";
 export class HtmlError extends CoreHtmlView {
-    constructor(ctx: koaContext, datas: string) {
+    constructor(ctx: koaContext, datas: Idatas) {
         console.log(log.whereIam("View"));
-        super(ctx);
-        this.error(datas);
+        super(ctx, datas);
+       this.error(datas.url);
     }
     private error(message: string) {
         this._HTMLResult = [`

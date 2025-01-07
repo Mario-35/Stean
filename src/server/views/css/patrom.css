@@ -389,12 +389,6 @@ input:checked + .slider:before {
 
 
 @font-face {
-  font-family: 'icomoon';
-  src:  url('./icon/icomoon.eot?wqupk0');
-  src:  url('./icon/icomoon.eot?wqupk0#iefix') format('embedded-opentype'),
-    url('./icon/icomoon.ttf?wqupk0') format('truetype'),
-    url('./icon/icomoon.woff?wqupk0') format('woff'),
-    url('./icon/icomoon.svg?wqupk0#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -1311,7 +1305,6 @@ body {
 .patrom-button-bar__button {
   vertical-align: middle;
   cursor: pointer;
-  /* color: var(--content-color); */
   color: var(--content-color);
   background-color: var(--background-color);
   border: solid 2px var(--button-border);

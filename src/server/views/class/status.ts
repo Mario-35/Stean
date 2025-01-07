@@ -9,13 +9,13 @@
 import { config } from "../../configuration";
 import { EChar, EExtensions } from "../../enums";
 import { log } from "../../log";
-import { Iuser, koaContext } from "../../types";
+import { Idatas, Iuser, koaContext } from "../../types";
 import { CoreHtmlView } from "./core";
 export class Status extends CoreHtmlView {
-    constructor(ctx: koaContext, datas: Iuser) {
+    constructor(ctx: koaContext, datas: Idatas) {
         console.log(log.whereIam("View"));
-        super(ctx);
-        this.status(ctx, datas);
+        super(ctx, datas);
+       if(datas.user) this.status(ctx, datas.user);
     }
     public status(ctx: koaContext, user: Iuser) {        
       const service = config.getConfigNameFromDatabase(user.database);  

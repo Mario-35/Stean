@@ -10,7 +10,7 @@
 import { config } from "../../configuration";
 import { setDebug } from "../../constants";
 import { EConstant, EFrom } from "../../enums";
-import { cleanUrl } from "../../helpers";
+import { cleanUrl, removeFromUrl } from "../../helpers";
 import { log } from "../../log";
 import { errors } from "../../messages";
 import { IdecodedUrl, koaContext  } from "../../types";
@@ -22,13 +22,13 @@ import { IdecodedUrl, koaContext  } from "../../types";
 //   |           |         |    |         |                |
 // protocol    host   service  version  pathname         search
 export const decodeUrl = (ctx: koaContext, input?: string): IdecodedUrl | undefined => {
+  console.log(log.whereIam());
   // get input
   input = input || ctx.href;
   // debug mode
   setDebug(input.includes("?$debug=true") || input.includes("&$debug=true"));
-  console.log(log.whereIam());
   // decode url
-  const url = new URL(cleanUrl(input.replace("&$debug=true", "").replace("$debug=true", "").normalize("NFD").replace(/[\u0300-\u036f]/g, ""))); 
+  const url = new URL(cleanUrl(removeFromUrl(input, "debug=true").normalize("NFD").replace(/[\u0300-\u036f]/g, ""))); 
   // get configName from port    
   let configName:  string | undefined = undefined;
   // path[0] : service, path[1] : version, path[...] : path

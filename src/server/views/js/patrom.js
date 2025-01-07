@@ -362,8 +362,8 @@ class PatromMultiSelect {
       this.logger.dataset.value = selectedOptions;
     
 	}
-	getData() {
-		var data = [];
+	getData(def = []) {
+		var data = def;
 		var i, selectChildrenLen = this.select.children.length;		
 		for (i = 0; i < selectChildrenLen; i++) {
 			if (!this.select.children[i].selected) {
@@ -373,6 +373,21 @@ class PatromMultiSelect {
 		}
 
 		return data;
+	}
+	selectedList(list = []) {		
+		var data = [];
+		var i, selectedChildren, selectChildrenLen;
+		selectedChildren = this.list.querySelectorAll('label:not(.hidden) li:not(.ignore) input');
+		selectChildrenLen = selectedChildren.length;
+		
+		for (i = 0; i < selectChildrenLen; i++) {
+			if(list.includes(selectedChildren[i].value)) data.push(selectedChildren[i].value);
+		}
+		this.setValue(data);
+		//callback
+		if (typeof this.settings.afterSelectAll == 'function') {
+			this.settings.afterSelectAll(isSetValue, data, this);
+		}
 	}
 	selectAll(isSetValue = false) {
 		var data = [];

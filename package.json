@@ -3,7 +3,7 @@
     "description": "SensorThings Enhanced API Node",
     "author": "Adam Mario",
     "license": "ISC",
-    "version": "0.9.7",
+    "version": "0.9.98",
     "lockfileVersion": 1,
     "requires": true,
     "repository": {
@@ -39,6 +39,7 @@
     "keywords": [],
     "dependencies": {
         "@koa/cors": "^3.4.3",
+        "adm-zip": "^0.5.16",
         "aedes": "^0.51.2",
         "aedes-server-factory": "^0.2.1",
         "async-mqtt": "^2.6.3",
@@ -64,6 +65,7 @@
         "@node-minify/html-minifier": "^6.2.0",
         "@node-minify/jsonminify": "^6.2.0",
         "@node-minify/uglify-js": "^6.2.0",
+        "@types/adm-zip": "^0.5.7",
         "@types/apidoc": "^0.50.0",
         "@types/busboy": "^0.2.3",
         "@types/chai": "^4.2.14",

@@ -22,6 +22,7 @@ import { Visitor } from "./visitor";
 import { Query } from "../builder";
 import { relationInfos } from "../../../models/helpers";
 import { _isObservation, isFile } from "../../../helpers/tests";
+import { DATASTREAM } from "../../../models/entities";
 export class PgVisitor extends Visitor {
   entity: Ientity | undefined = undefined;
   columnSpecials:  { [key: string]: string[] } = {} ;
@@ -116,12 +117,15 @@ export class PgVisitor extends Visitor {
   // ***                                                              QUERY                                                                                              ***
   // ***********************************************************************************************************************************************************************
   formatColumnResult(context: IodataContext, operation: string, ForceString?: boolean) {
+    console.log("formatColumnResult");
+    console.log(this.parentEntity?.name === DATASTREAM.name );
+    
     switch (context.target) {
       case EQuery.Where:
-        const nbs = Array.from({length: 5}, (v, k) => k+1);
+        const nbs = Array.from({length: this.parentEntity?.name === DATASTREAM.name ? 1 : 5}, (v, k) => k+1);
         const translate = `TRANSLATE (SUBSTRING ("result"->>'value' FROM '(([0-9]+.*)*[0-9]+)'), '[]','')`;
         const isOperation = operation.trim() != "";
-        return ForceString || isFile(this.ctx)
+        return ForceString || isFile(this.ctx) 
           ? `@EXPRESSIONSTRING@ ALL (ARRAY_REMOVE( ARRAY[\n${nbs.map(e => `${isOperation ? `${operation} (` : ''} SPLIT_PART ( ${translate}, ',', ${e}))`).join(",\n")}], null))`
           : `@EXPRESSION@ ALL (ARRAY_REMOVE( ARRAY[\n${nbs.map(e => `${isOperation ? `${operation} (` : ''}NULLIF (SPLIT_PART ( ${translate}, ',', ${e}),'')::numeric${isOperation ? `)` : ''}`).join(",\n")}], null))`;
     default:

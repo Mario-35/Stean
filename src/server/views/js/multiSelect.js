@@ -28,6 +28,7 @@
    */
   function populateMultiSelect(obj, list, selected) {
   	const element = getElement(obj);
-  	if (element) multiSelects[element.id].loadSourceArray(list, selected);
+  	if (element) multiSelects[element.id].loadSourceArray(list);
+  	if (element) multiSelects[element.id].selectedList(selected);
   }
   

@@ -8,18 +8,18 @@
 
 import { log } from "../../log";
 import { info } from "../../messages";
-import { IKeyString, koaContext } from "../../types";
+import { Idatas, koaContext } from "../../types";
 import { CoreHtmlView } from "./core";
-interface Idatas { 
-  login: boolean; 
-  body?: any; 
-  why?: IKeyString
-}
+// interface Idatas { 
+//   login: boolean; 
+//   body?: any; 
+//   why?: IKeyString
+// }
 
 export class Login extends CoreHtmlView {
     constructor(ctx: koaContext, datas: Idatas) {
         console.log(log.whereIam("View"));
-        super(ctx);
+        super(ctx, datas);
         this.login(datas);
     }
     private login(datas: Idatas) {

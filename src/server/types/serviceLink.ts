@@ -1,3 +1,4 @@
+
 /**
  * IserviceInfos interface
  *
@@ -11,4 +12,13 @@ export interface IserviceInfos {
     version:  string; // api version
     root:     string; // root url
     model:    string; // url to drawio
+    service:  {
+      apiVersion: string;
+      date_format: string;
+      nb_page: number;
+      extensions: string[];
+      options: string[];
+      csvDelimiter: string;
+    },
+    stats: JSON;
   }

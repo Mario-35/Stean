@@ -2,7 +2,7 @@ import { config } from "../configuration";
 import { log } from "../log";
 import { _STREAM } from "../db/constants";
 import { asJson } from "../db/queries";
-import { EColumnType, EConstant, EExtensions, EOptions, filterEntities } from "../enums";
+import { EColumnType, EConstant, EExtensions, EOptions, ETable, filterEntities } from "../enums";
 import { doubleQuotesString, deepClone, isTest, formatPgTableColumn, isString } from "../helpers";
 import { errors, info } from "../messages";
 import { Iservice, Ientities, Ientity, IstreamInfos, koaContext, IentityRelation, getColumnType } from "../types";
@@ -10,7 +10,7 @@ import fs from "fs";
 import { FEATUREOFINTEREST, THING, LOCATION, SERVICE, CREATEOBSERVATION, CREATEFILE, DATASTREAM, DECODER, HISTORICALLOCATION, LOG, LORA, MULTIDATASTREAM, MULTIDATASTREAMOBSERVEDPROPERTY, OBSERVATION, SENSOR, USER, LOCATIONHISTORICALLOCATION, OBSERVEDPROPERTY, THINGLOCATION, FILE, LINE } from "./entities";
 import { Geometry, Jsonb, Text } from "./types";
 
-class Models {
+export class Models {
   static models : { 
     [key: string]: Ientities;
   } = {};
@@ -46,7 +46,8 @@ class Models {
     const result: Record<string, any> = {
       ... temp,
       ready : ctx.service._connection ? true : false,
-      Postgres: {}
+      Postgres: {},
+      users: {}
     };
     const extensions: Record<string, any> = {};
     switch (ctx.service.apiVersion) {
@@ -66,6 +67,19 @@ class Models {
     ).then(res => {
       result["Postgres"]["version"] = res[0 as keyof object];
       result["Postgres"]["extensions"] = res[1 as keyof object];
+    });
+    await config.executeSql(ctx.service, `select username, "canPost", "canDelete", "canCreateUser", "canCreateDb", "admin", "superAdmin" FROM public.user ORDER By username;`
+    ).then(res => {
+      Object.keys(res).forEach(e => {        
+        result["users"][res[+e as keyof object]["username"]] = {
+          "canPost": res[+e as keyof object]["canPost"],
+          "canDelete": res[+e as keyof object]["canDelete"],
+          "canCreateUser": res[+e as keyof object]["canCreateUser"],
+          "canCreateDb": res[+e as keyof object]["canCreateDb"],
+          "admin": res[+e as keyof object]["admin"],
+          "superAdmin": res[+e as keyof object]["superAdmin"],
+        }
+      })
     });
     return result;
   }
@@ -165,7 +179,7 @@ class Models {
     return service.name === EConstant.admin ? this.DBAdmin(service) : this.filtering(service);
   }
   
-  public getService(service: Iservice | string): Iservice {
+  public get(service: Iservice | string): Iservice {    
     if (typeof service === "string") {
       const nameConfig = config.getConfigNameFromName(service);
       if (!nameConfig) throw new Error(errors.configName);
@@ -175,8 +189,15 @@ class Models {
     return service;
   }
 
+  public getStats(service: Iservice | string): string {
+    service = this.get(service);    
+    const a = this.filtered(service);
+    const b = Object.keys(a).filter(e => a[e].type === ETable.table).map(e => `(SELECT COUNT('${a[e].orderBy.split(" ")[0]}') FROM "${a[e].table}") AS "${a[e].name}"\n`)
+    return ` SELECT JSON_AGG(t) AS results FROM ( SELECT ${b.join()}) AS t`;
+  }
+
   public DBFullCreate(service: Iservice | string): Ientities {
-    service = this.getService(service);
+    service = this.get(service);
     
     const  name = service.options.includes(EOptions.unique)
       ?  new Text().notNull().default(info.noName).unique().type()
@@ -195,7 +216,7 @@ class Models {
   }
 
   public DBFull(service: Iservice | string): Ientities {
-    return Models.models[this.getService(service).apiVersion];
+    return Models.models[this.get(service).apiVersion];
   }
   
   public DBAdmin(service: Iservice ):Ientities {

@@ -35,4 +35,9 @@
 
 ## version 0.9.7
 
-    cruate auto trigger cruate for period
+    create auto trigger create for period
+    refactoring lora post
+    add trace
+    add replay key word
+    add location header return
+    

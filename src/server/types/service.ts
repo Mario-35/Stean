@@ -26,4 +26,5 @@ export interface Iservice {
     alias:          string[]; // alias name of the service
     csvDelimiter:   ";" | ","; // csv format delimiter
     _connection:    postgres.Sql<Record<string, unknown>> | undefined; // not in file only when running to store connection
+    _stats:         JSON | undefined; // not in file only for stats
 }

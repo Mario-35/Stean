@@ -1,121 +1,245 @@
-* {
-    box-sizing: border-box;
-  }
-  
-  html {
-    padding: 40px;
-    font-size: 62.5%;
-  }
-  
-  body {
-    padding: 20px;
-    background-color: #5BB9B8;
-    line-height: 1.6;
-    color: #fff;
-  }
-  
-  p {
-    text-align: center;
-    margin: 20px 0 60px;
-  }
-  
-  main {
-    background-color: #2C3845;
-    width: 100%;
-  }
-  
-  h1 {
-    text-align: center;
-    font-weight: 300;
-  }
-  
-  table {
-    width: 100%;
-  }
-  
-  tr, td, tbody, tfoot {
-    display: block;
-  }
-  
-  tr {
-    padding-bottom: 10px;
-  }
-  
-  td {
-    padding: 10px 10px 0;
-    text-align: center;
-  }
-  
-  th {
-    text-align: left;
-    font-weight: 700;
-  }
-  
-  thead th {
-    background-color: #202932;
-    text-align: center;
-    color: #fff;
-    border: 1px solid #202932;
-  }
-  
-  tfoot th {
-    display: block;
-    padding: 10px;
-    text-align: center;
-    color: #b8c4d2;
-  }
-  
-  .button {
-    line-height: 1;
-    display: inline-block;
-    font-size: 1.2rem;
-    text-decoration: none;
-    border-radius: 5px;
-    color: #fff;
-    padding: 8px;
-    background-color: #4b908f;
-  }
-  
-    tr {
-      display: table-row;
-    }
-  
-    td, th {
-      display: table-cell;
-    }
-  
-    tbody {
-      display: table-row-group;
-    }
-  
-    thead {
-      display: table-header-group;
-    }
-  
-    tfoot {
-      display: table-footer-group;
-    }
-  
-    td {
-      border: 1px solid #28333f;
-    }
-    td:before {
-      display: none;
-    }
-  
-    td, th {
-      padding: 10px;
-    }
-  
-    tr:nth-child(2n+2) td {
-      background-color: #242e39;
-    }
-  
-    tfoot th {
-      display: table-cell;
-    }
-  
-    .select {
-      padding: 10px;
-    }
-  
+.wrapper {
+  margin: 0 auto;
+}
+.row {
+  /* justify-content: space-evenly; */
+  display: flex;
+  flex-wrap: wrap;
+}
+.row .card {
+  flex: 1 250px;
+  margin:10px 10px 10px 0;
+  border: 1px solid black;
+  box-shadow: 0 5px 10px 1px;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: 0.2s linear;
+	background-color: var(--background-color);
+	color: var(--text-color);
+}
+.row .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 10px 1px;
+}
+.row .card .title {
+  overflow: hidden;
+  height: 35px;
+  background-color: var(--btn-primary-border);
+  text-align: center;
+  font-size: 25px;
+}
+
+.row .card button.copy-btn {
+  display: none;
+  margin-left: 5px;
+  padding: 5px 10px;
+  font-weight: bold;
+  background-color: var(--table-head-background);
+  color: var(--btn-success-background);
+  border-radius: 5px;
+	cursor: pointer;
+	font-size: 10px;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+}
+
+.row .card .title:hover +button.copy-btn {
+  display: block;
+	outline: none;
+}
+
+.product {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 30px; 
+}
+.product .service-name {
+  padding-left: 5px;
+  font-weight: bold;
+}
+.product .service-root {
+  padding-right: 10px;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--background-highlight-hover);
+  cursor: pointer;
+}
+.product .service-root:hover {
+  text-decoration: underline;
+}
+.card .description {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; 
+}
+.zobi {
+  width: 60%;
+}
+
+.card .description select {
+  background-color: var(--background-color-disabled);
+  color: var(--text-color);
+  resize: none;
+  width: 60%;
+  font-size: var(--font-size-less-2);
+  border: var(---content-window-background);
+  white-space: pre-wrap;
+  border: none !important;
+}
+.card .description textarea {
+  background-color: var(--background-color-disabled);
+  color: var(--text-color);
+  resize: none;
+  width: 60%;
+  font-size: var(--font-size-less-2);
+  border: var(---content-window-background);
+  white-space: pre-wrap;
+  border: none !important;
+}
+.card .item {
+  display: flex;
+  height: 50px;
+}
+.card .footer div .version {
+  margin-left: 5px;
+  padding: 5px 10px;
+  font-weight: bold;
+  background-color: var(--table-head-background);
+  color: var(--btn-success-background);
+  border-radius: 5px;
+}
+.card .description .page {
+  margin-left: 5px;
+  padding: 2px 5px;
+  font-weight: bold;
+  background-color: var(--btn-success-background);
+  color: white;
+  border-radius: 5px;
+  width: 30%;
+}
+.card .description .csv {
+  margin-left: 5px;
+  padding: 2px 5px;
+  font-weight: bold;
+  background-color: var(--btn-success-background);
+  color: white;
+  border-radius: 5px;
+  width: 15px;
+}
+
+.card .footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; 
+}
+
+.card .footer div button {
+  margin-right: 1px;
+  padding: 5px 10px;
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: black;
+  color: white;
+  box-shadow: 0 0 2px 1px black;
+  transition: 0.25s;
+}
+.card .footer div button:hover {
+  box-shadow: 0 0 10px 1px black;
+}
+
+
+
+.card-list {
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 5px 0;
+}
+
+.card-list-item {
+  position: relative;
+}
+
+.icon-yes::before {
+  position: absolute;
+  left: -30px;
+  top: 3px;
+  display: inline-block;
+  width: 20px;
+  height: 25px;
+  content: "✔️️";
+  background-size: 15px;
+}
+
+.icon-no::before {
+  position: absolute;
+  left: -30px;
+  top: 3px;
+  display: inline-block;
+  content: "❌";
+  width: 20px;
+  height: 25px;
+  background-size: 15px;
+}
+
+.icon-no {
+  color: #999;
+  text-decoration: line-through;
+}
+
+
+
+.show-list {
+	background: lightgreen;
+	width: 25%;
+	text-align: center;
+	padding: 6px;
+	border-radius: 6px;
+	box-shadow: 0px 3px 3px #ddd;
+	cursor: pointer;
+}
+
+.show-list:hover {
+	color: white;
+	background: green;
+}
+
+/* CSS code stagger show the list items - if I can figure it out...*/
+
+.list {
+	background: slategray;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	border-radius: 6px;
+	z-index: 100;
+	position: absolute;
+	top: 35px;
+	height: 0;
+	overflow: hidden;
+	transition: .6s;
+  visibility: hidden;
+  list-style-type: none;
+  padding: 0;
+  max-height: 400px; /* Increased height to make boxes longer */
+  overflow: hidden;
+  overflow-y: scroll; /* Enables scrolling */
+}
+
+.list li {
+	/* background: white; */
+	list-style-type: none;
+	width: 80%;
+	text-align: left;
+	border-radius: 4px;
+}
+
+.show {
+  visibility: visible ;
+  height: 100px;
+}
+
+
+

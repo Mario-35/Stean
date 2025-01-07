@@ -88,9 +88,14 @@ class Log {
       const tmp = infos ? `${color(EColor.Default)} ${infos} ${color(EColor.Reset)}` : '';
       return `${color(EColor.Red)}${this.line(4)} ${color(EColor.Cyan)} ${ new Error().stack?.split("\n")[2].trim().split("(")[0].split("at ")[1].trim() } ${tmp}${color(EColor.Red)} ${this.line(4)}${color(EColor.Reset)}`;
     };
-  }  
+  }
+  
   logo(ver: string) {
     return `${color(EColor.Code)}${color(EColor.Sql)}\n ____ __________    _     _   _ \n/ ___|_ __  ____|  / \\   | \\ | |\n\\___ \\| | |  _|   / _ \\  |  \\| |\n ___) | | | |___ / ___ \\ | |\\  |\n|____/|_| |_____|_/   \\_\\|_| \\_|  ${color(EColor.Blue)}run API ----> ${color(EColor.Green)}${ver}${color(EColor.Sql)}${color(EColor.Code)}\n${EChar.web} ${color(EColor.White)}https://github.com/Mario-35/Stean/ ${EChar.mail} ${color(EColor.Yellow)} mario.adam@inrae.fr${color( EColor.Reset )}`
+  }
+
+  public update<T>(value: T) { 
+    return `\x1b[${ EColor.Cyan }mUpdate\x1b[${EColor.White}m ${value}\x1b[${EColor.Reset}m`;
   }
   
 }

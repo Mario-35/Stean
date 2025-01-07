@@ -24,6 +24,7 @@ import { RootPgVisitor } from "./odata/visitor";
 import { EChar, EConstant } from "./enums";
 import { protectedRoutes, routerHandle, unProtectedRoutes } from "./routes/";
 import { Iservice, IdecodedUrl, Ientities, Ilog, IuserToken } from "./types";
+
 // Extend koa context 
 declare module "koa" {
   export interface DefaultContext {

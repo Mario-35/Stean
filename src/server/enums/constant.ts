@@ -18,6 +18,7 @@ const getKey = () => {
   }
   return res;
 };
+
 export const EConstant = Object.freeze({
     rights : "SUPERUSER CREATEDB NOCREATEROLE INHERIT LOGIN NOREPLICATION NOBYPASSRLS CONNECTION LIMIT -1",
     id : '@iot.id',
@@ -32,7 +33,9 @@ export const EConstant = Object.freeze({
     simpleQuotedComa :  "',\n'",
     newline : '\r\n',
     uploadPath : "./upload",
-    defaultDb : "postgres",
+    host : "localhost",
+    pg : "postgres",
+    port : 5432,
     voidtable  : "spatial_ref_sys",
     appName : process.env.npm_package_name || "_STEAN",
     nodeEnv: process.env.NODE_ENV ? process.env.NODE_ENV : "production",
@@ -43,5 +46,5 @@ export const EConstant = Object.freeze({
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'", "'unsafe-inline'", "cdnjs.cloudflare.com"],
       styleSrc: [ "'self'", "'unsafe-inline'", "cdnjs.cloudflare.com", "fonts.googleapis.com", ],  
-    },
+    }
 });

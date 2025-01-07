@@ -22,6 +22,8 @@ import path from "path";
 import { formatServiceFile, testDbExists, validJSONService } from "./helpers";
 import { MqttServer } from "../mqtt";
 import { updateIndexes } from "../db/helpers";
+import { models } from "../models";
+import { autoUpdate } from "../update";
 
 // class to lcreate configs environements
 class Configuration {
@@ -34,8 +36,11 @@ class Configuration {
   static queries: { [key: string]: string[] } = {};
   public logFile = fs.createWriteStream(path.resolve(__dirname, "../", EFileName.logs), {flags : 'w'});
   static listenPorts: number[] = [];
+  static appVersion: string = "";
+  static remoteVersion: string | undefined;
+  static upToDate: boolean = true;
 
-  constructor() {    
+  constructor() {
     const file: fs.PathOrFileDescriptor = __dirname + `/${EFileName.config}`;
     // Set path of the configuration file
     Configuration.filePath = file.toString();
@@ -47,10 +52,71 @@ class Configuration {
     else console.log = (data: any) => {
       if (data) this.writeLog(data);
     }; 
-
-
   }
   
+  version():string {
+    return Configuration.appVersion;
+  }
+  
+  remoteVersion():string | undefined {
+    return Configuration.remoteVersion;
+  }
+  
+  upToDate():boolean {
+    return Configuration.upToDate;
+  }
+
+
+  private serviceTable():string {
+    return `CREATE TABLE public.services (
+        "name" text NOT NULL,
+        "datas" jsonb NULL,
+        "infos" jsonb NULL,
+        "stats" jsonb NULL,
+        CONSTRAINT services_unik_name UNIQUE (name)
+      ); CREATE INDEX services_name ON public.services USING btree (name);`
+  }
+  private async updateService(input: Iservice ):Promise<void> {
+    if (input.name !== EConstant.admin) {
+      this.connection(input.name).unsafe(models.getStats(input)).then(async res => {
+        const datas = `UPDATE public.services SET stats = '${ESCAPE_SIMPLE_QUOTE(JSON.stringify(res[0].results[0]))}'::jsonb WHERE name = '${input.name}'`;   
+        Configuration.services[input.name]._stats = res[0].results[0];
+        await this.connection(EConstant.admin).unsafe(datas);
+      });
+    }
+  }
+
+  private async addService(input: Iservice ):Promise<boolean> {
+    if (input && input.name === EConstant.admin ) return false;
+    const datas = `INSERT INTO public.services ("name", "datas") VALUES('${input.name}', E'${ESCAPE_SIMPLE_QUOTE(JSON.stringify(input))}'::jsonb) ON CONFLICT DO NOTHING;`;   
+    return await this.connection(EConstant.admin).unsafe(datas)
+    .then(e => true)
+    .catch(async error => {     
+      console.log(error);
+      if (error.code === "42P01") {
+        return await this.connection(EConstant.admin).unsafe(this.serviceTable())
+        .then(async e => {
+          return await this.connection(EConstant.admin).unsafe(datas).then(e => true);
+        }).catch(async err => {
+          if (err.code === "42P07") {
+            return await this.connection(EConstant.admin).unsafe(datas).then(e => true);
+          } else {
+            process.stdout.write(err + "\n");
+            return false;
+          }
+        });
+      } else if( error.code === "23505") {
+        return true;
+      } else  {
+        console.log(error);
+        console.log(datas);
+        process.stdout.write(error + "\n");
+        return false;
+      } 
+     
+    });
+  }
+
   /**
    * log message of listening 
    * 
@@ -59,24 +125,29 @@ class Configuration {
    * @param db show db infos
   */
  
- messageListen(what: string, port: string, db?: boolean) {
-   if (db)
-    this.writeLog(log.booting(`${color(EColor.Magenta)}${info.db} => ${color(EColor.Yellow)}${what}${color(EColor.Default)} ${info.onLine}`, port));
-  else this.writeLog(log.booting(`${color(EColor.Yellow)}${what}${color(EColor.Yellow)} ${color(EColor.Green)}${info.listenPort}`, port));
-}
-
-/**
- * Override console log
- * 
- * @param input 
-*/
-writeLog(input: any) {
-  if (input) {
-    process.stdout.write(input + "\n");
-    if (config && config.logFile) config.logFile.write(logToHtml(input));
+  messageListen(what: string, port: string, db?: boolean) {
+    if (db)
+      this.writeLog(log.booting(`${color(EColor.Magenta)}${info.db} => ${color(EColor.Yellow)}${what}${color(EColor.Default)} ${info.onLine}`, port));
+    else this.writeLog(log.booting(`${color(EColor.Yellow)}${what}${color(EColor.Yellow)} ${color(EColor.Green)}${info.listenPort}`, port));
   }
-}
 
+  /**
+   * Override console log
+   * 
+   * @param input 
+  */
+  writeLog(input: any) {
+    if (input) {
+      process.stdout.write(input + "\n");
+      if (config && config.logFile) config.logFile.write(logToHtml(input));
+    }
+  }
+
+  /**
+   * Add to trace
+   * 
+   * @param ctx koa context 
+  */
   async writeTrace(ctx: koaContext) {
     const datas = `INSERT INTO trace ("method", url, datas) VALUES('${ctx.method}', '${ctx.request.url}', ('${ctx.body ? ESCAPE_SIMPLE_QUOTE(JSON.stringify(ctx.body)) : '{}'}')::text::jsonb) RETURNING id;`;
     await Configuration.adminConnection.unsafe(datas)
@@ -96,7 +167,7 @@ writeLog(input: any) {
    * @param input
    * @returns true if it's done
   */
- private readConfigFile(input?: string):boolean {
+  private async readConfigFile(input?: string):Promise<boolean> {
    this.writeLog(`${color(EColor.Red)}${"▬".repeat(24)} ${color( EColor.Cyan )} ${`START ${EConstant.appName} ${info.ver} : ${EConstant.appVersion} [${EConstant.nodeEnv}]`} ${color( EColor.White )} ${new Date().toLocaleDateString()} : ${new Date().toLocaleTimeString()} ${color( EColor.Red )} ${"▬".repeat(24)}${color(EColor.Reset)}`);
    this.writeLog(log.message(infos(["read", "config"]), input ? "content" : Configuration.filePath));
    try {
@@ -108,13 +179,30 @@ writeLog(input: any) {
       }
       // decrypt file
       Configuration.services = JSON.parse(decrypt(fileContent));
+      try {
+        if(!isTest()) await this.connection(EConstant.admin).unsafe("SELECT * FROM services").then((res: any) => {
+            res.forEach((element: object) => {
+                Configuration.services[element["name" as keyof object]] = element["datas" as keyof object];
+            });
+          });        
+      } catch (error: any) {
+        if (error.code === "42P01") 
+           await this.connection(EConstant.admin).unsafe(this.serviceTable()).catch(e => {
+            this.writeLog(log.error(errors.configFileError));
+            process.exit(112);
+          }
+          )
+      }
+
       if (validJSONService(Configuration.services)) {
         if (isTest()) {
           Configuration.services[EConstant.admin] = this.formatConfig(EConstant.admin);
           Configuration.services[EConstant.test] = this.formatConfig(testDatas["create"]);
         } else {
-          Object.keys(Configuration.services).forEach((element: string) => {
+          Object.keys(Configuration.services).forEach(async (element: string) => {
             Configuration.services[element] = this.formatConfig(element);
+            await this.addService(Configuration.services[element]);           
+            this.updateService(Configuration.services[element]);
           });
         }
       } else {
@@ -122,14 +210,16 @@ writeLog(input: any) {
         process.exit(112);
       }
       // rewrite file (to update config modification except in test mode)
-      if (!isTest()) this.writeConfig();    
+      if (!isTest() && config.configFileExist() === false) this.writeConfig();    
     } catch (error: any) {
+      console.log(error);
+      
       this.writeLog(log.error(errors.configFileError, error["message"]));
       process.exit(111);      
     }
 
     const infosAdmin = Configuration.services[EConstant.admin].pg;
-    Configuration.adminConnection = postgres(`postgres://${infosAdmin.user}:${infosAdmin.password}@${infosAdmin.host}:${infosAdmin.port || 5432}/${EConstant.defaultDb}`,
+    Configuration.adminConnection = postgres(`postgres://${infosAdmin.user}:${infosAdmin.password}@${infosAdmin.host}:${infosAdmin.port || 5432}/${EConstant.pg}`,
       {
         debug: _DEBUG,          
         connection: { 
@@ -144,8 +234,8 @@ writeLog(input: any) {
    * 
    * @returns http port number
   */
- private defaultHttp():number {
-   return Configuration.services[EConstant.admin] && Configuration.services[EConstant.admin].ports ? Configuration.services[EConstant.admin].ports?.http || 8029 : 8029;
+  private defaultHttp():number {
+    return Configuration.services[EConstant.admin] && Configuration.services[EConstant.admin].ports ? Configuration.services[EConstant.admin].ports?.http || 8029 : 8029;
   }
   
   /** Initialivze mqtt */
@@ -165,18 +255,18 @@ writeLog(input: any) {
    * 
    * @returns configuration file present 
   */
- configFileExist(): boolean {
+  configFileExist(): boolean {
    return fs.existsSync(Configuration.filePath);
   }
   
   /**
    * Return infos of a service
    * 
-   * @param ctx koa context
+   * @param 1
    * @param name service name
    * @returns infos as IserviceInfos
   */
- getInfos = (ctx: koaContext, name: string): IserviceInfos => {
+  getInfos = (ctx: koaContext, name: string): IserviceInfos => {
    const protocol:string = ctx.request.headers["x-forwarded-proto"]
    ? ctx.request.headers["x-forwarded-proto"].toString()
    : Configuration.services[name].options.includes(EOptions.forceHttps)
@@ -192,14 +282,23 @@ writeLog(input: any) {
     : "";
     // make rootName
     if (!linkBase.includes(name)) linkBase += "/" + name;    
-    const version = Configuration.services[name].apiVersion;
+    const version = Configuration.services[name].apiVersion || undefined;
     return {
       protocol: protocol,
       linkBase: linkBase,
-      version: version,
-      root : process.env.NODE_ENV?.trim() === EConstant.test ? `proxy/${version}` : `${linkBase}/${version}`,
-      model : `https://app.diagrams.net/?lightbox=1&edit=_blank#U${linkBase}/${version}/draw`
-    };
+      version: version || "",
+      root : process.env.NODE_ENV?.trim() === EConstant.test ? `proxy/${version || ""}` : `${linkBase}/${version || ""}`,
+      model : version ? `https://app.diagrams.net/?lightbox=1&edit=_blank#U${linkBase}/${version}/draw` : "",
+      service: {
+        apiVersion: Configuration.services[name].apiVersion || "",
+        date_format: Configuration.services[name].date_format,
+        nb_page: Configuration.services[name].nb_page,
+        extensions: Configuration.services[name].extensions,
+        options: Configuration.services[name].options,
+        csvDelimiter: Configuration.services[name].csvDelimiter        
+      },
+      stats: Configuration.services[name]._stats || JSON.parse('{}')
+    }
   };
   
   /**
@@ -209,7 +308,7 @@ writeLog(input: any) {
    * @param name service name
    * @returns infos as IserviceInfos
   */
- getInfosForAll(ctx: koaContext): { [key: string]: IserviceInfos } {
+  getInfosForAll(ctx: koaContext): { [key: string]: IserviceInfos } {
    const result:Record<string, any> = {};    
    this.getServicesNames().forEach((conf: string) => {
      result[conf] = this.getInfos(ctx, conf);
@@ -222,7 +321,7 @@ writeLog(input: any) {
    * @param name service name 
    * @returns service.
   */
- getService(name: string) {    
+  getService(name: string) {    
    return Configuration.services[name];
   }
   
@@ -230,29 +329,34 @@ writeLog(input: any) {
    * 
    * @returns service names
   */
- getServicesNames() {
+  getServicesNames() {
    return Object.keys(Configuration.services).filter(e => e !== EConstant.admin);
   }
-  
+
+
+    /**
+   * Write an encrypt config file in json file
+   * 
+   * @param input admin config file
+   * @returns true if it's done
+  */
+    async initConfig(input: string): Promise<boolean> {
+      this.writeLog(log.message(infos(["write","config"]), Configuration.filePath));
+       return await this.readConfigFile(input);
+     }
   
   /**
    * Write an encrypt config file in json file
    * 
    * @returns true if it's done
   */
- private writeConfig(): boolean {
+  private writeConfig(): boolean {
    this.writeLog(log.message(infos(["write","config"]), Configuration.filePath));
-   const result: Record<string, any> = {};
-   Object.entries(Configuration.services).forEach(([k, v]) => {
-     if (k !== EConstant.test) result[k] = Object.keys(v).filter(e => !e.startsWith("_")) .reduce((obj, key) => { obj[key as keyobj] = v[key as keyobj]; return obj; }, {} );
-    });
     // in some case of crash config is blank so prevent to overrite it
-    if (Object.keys(result).length > 0) fs.writeFile(
+    fs.writeFile(
       // encrypt only in production mode
       Configuration.filePath,
-      isProduction() === true 
-      ? encrypt(JSON.stringify(result, null, 4))
-      : JSON.stringify(result, null, 4),
+      JSON.stringify({admin:  isProduction() === true ? encrypt(JSON.stringify({admin: Configuration.services[EConstant.admin]}, null, 4)) : Configuration.services[EConstant.admin]}, null, 4),
       (error) => {
         if (error) {
           console.log(error);
@@ -542,8 +646,13 @@ private async reCreatePgFunctions(connection: string): Promise<boolean> {
    * @returns true if it's done
    */
   async init(input?: string): Promise<boolean> {
+    const temp = await autoUpdate.compareVersions();
+    Configuration.appVersion = temp.appVersion;
+    Configuration.remoteVersion = temp.remoteVersion || "";
+    Configuration.upToDate = temp.upToDate;
+
     if (this.configFileExist() === true || input) { 
-      this.readConfigFile(input);
+      await this.readConfigFile(input);
       console.log(log.message(info.config, info.loaded + " " + EChar.ok));    
       let status = true;
       await asyncForEach(
@@ -570,6 +679,8 @@ private async reCreatePgFunctions(connection: string): Promise<boolean> {
         // else await createService(testDatas);
         this.messageListen(EConstant.test, String(this.defaultHttp()), true);
       }
+
+      
       this.writeLog(log._head("Ready", EChar.ok));
       this.writeLog(log.logo(EConstant.appVersion));
       return status;
@@ -601,7 +712,7 @@ private async reCreatePgFunctions(connection: string): Promise<boolean> {
    * @param input config to search
    * @returns config name or undefined
    */  
-  public getConfigNameFromName = (name: string): string | undefined => {
+  public getConfigNameFromName(name: string): string | undefined  {
     if (name) {
       if (Object.keys(Configuration.services).includes(name)) return name;
       Object.keys(Configuration.services).forEach((configName: string) => {
@@ -640,7 +751,7 @@ private async reCreatePgFunctions(connection: string): Promise<boolean> {
       Configuration.services[addedConfig.name] = addedConfig;
       if(!isTest()) { // For TDD not create service
         await this.addToServer(addedConfig.name);
-        this.writeConfig();
+        this.addService(Configuration.services[addedConfig.name]);
       }
       return addedConfig;
     } catch (error) {
@@ -684,8 +795,22 @@ private async reCreatePgFunctions(connection: string): Promise<boolean> {
       process.exit(111);
     });
   }
+
+  async export() {
+    const fileContent = fs.readFileSync(Configuration.filePath, "utf8");
+    const f:JSON = JSON.parse(decrypt(fileContent));
+    await this.connection(EConstant.admin).unsafe("SELECT datas FROM services").then((res: any) => {
+        console.log(res);
+        res.forEach((e: JSON) => {
+          console.log(e["datas" as keyof object]["name"]);
+
+          f[e["datas" as keyof object]["name"]] = e["datas" as keyof object];
+        })
+      });
+    return f;
+  }
   
-    /**
+  /**
    * Create dataBase
    * 
    * @param serviceName service name 

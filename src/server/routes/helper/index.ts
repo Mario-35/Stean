@@ -11,6 +11,10 @@ export const emailIsValid = (email: string): boolean => /^[^\s@]+@[^\s@]+\.[^\s@
 export const checkPassword = (str: string): boolean => /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}$/.test(str);
 export const sqlStopDbName = (dbName: string): string => `SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname = ${dbName};`;
 export { decodeUrl } from "./decodeUrl";
-export { firstInstall } from "./firstInstall";
 export { getTest } from "./test";
 export { update } from "./update";
+export { adminConnectPg } from "./adminConnectPg";
+export { formatConfig } from "./formatConfig";
+export { adminRoute } from "./adminRoute";
+export { updateRoute } from "./updateRoute";
+export { fetchLastModified } from "./fetchLastModified";

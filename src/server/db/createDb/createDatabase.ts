@@ -119,10 +119,10 @@ export const createDatabase = async (serviceName: string): Promise<IKeyString> =
               // to preserve size
               DB[keyName].trigger = [];              
             })
-              .catch((error: Error) => {
-                console.log(error);
-                return error;
-              });     
+            .catch((error: Error) => {
+              console.log(error);
+              return error;
+            });     
           }
         );
       }

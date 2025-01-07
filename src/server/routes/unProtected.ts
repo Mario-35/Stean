@@ -47,7 +47,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
       return;
     // error show in html if query call
     case "ERROR":
-      const bodyError = new HtmlError(ctx, "what ?");
+      const bodyError = new HtmlError(ctx, { url: "what ?" });
       ctx.type = returnFormats.html.type;
       ctx.body = bodyError.toString();
       return;
@@ -56,7 +56,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
       ctx.redirect(`${ctx.decodedUrl.origin}/logging`);
       return;
     case "LOGSBAK":
-      const bodyLogsBak = new HtmlLogs(ctx, "../../../" + EFileName.logsBak);
+      const bodyLogsBak = new HtmlLogs(ctx, { url: "../../../" + EFileName.logsBak });
       ctx.type = returnFormats.html.type;
       ctx.body = bodyLogsBak.toString();
       return;
@@ -66,13 +66,13 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
       ctx.body = await exportService(ctx);
       return;
     // User login
-    case "SERVICE":
-      ctx.redirect(`${ctx.decodedUrl.origin}/service`);
+    case "ADMIN":
+      ctx.redirect(`${ctx.decodedUrl.origin}/admin`);
       return;
     case "LOGIN":
       if (userAuthenticated(ctx)) ctx.redirect(`${ctx.decodedUrl.root}/status`);
       else {
-        const bodyLogin = new Login(ctx,{ login: true });
+        const bodyLogin = new Login(ctx,{ url: '', login: true });
         ctx.type = returnFormats.html.type;
         ctx.body = bodyLogin.toString();
       }
@@ -82,7 +82,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
       if (userAuthenticated(ctx)) {
         const user = await getAuthenticatedUser(ctx);
         if (user) {
-          const bodyStatus = new Status(ctx, user);
+          const bodyStatus = new Status(ctx, { url: "", user: user });
           ctx.type = returnFormats.html.type;
           ctx.body = bodyStatus.toString();
           return;
@@ -93,7 +93,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
       return;
     // Create user 
     case "REGISTER":
-      const bodyLogin = new Login(ctx, { login: false });
+      const bodyLogin = new Login(ctx, { url: "", login: false });
       ctx.type = returnFormats.html.type;
       ctx.body = bodyLogin.toString();
       return;
@@ -175,7 +175,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
     case "QUERY":
       const tempContext = await createQueryParams(ctx);  
       if (tempContext) {
-        const bodyQuery= new Query(ctx, tempContext);
+        const bodyQuery= new Query(ctx, { url: "", queryOptions:  tempContext} );
         ctx.set("script-src", "self");
         ctx.set("Content-Security-Policy", "self");
         ctx.type = returnFormats.html.type;

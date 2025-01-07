@@ -15,8 +15,9 @@ import { models } from "../../models";
  * @param name 
  */
 export const updateIndexes = (name: string): void => {
-    Object.keys(models.DBFull(name)).forEach((entity: string) => {
-        const tmp = models.DBFull(name)[entity].update;
+    const mod = models.DBFull(name);
+    Object.keys(mod).forEach((entity: string) => {
+        const tmp = mod[entity].update;
         if (tmp) tmp.forEach(e => config
             .connection(name)
             .unsafe(e)

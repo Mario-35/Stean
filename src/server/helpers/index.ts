@@ -12,6 +12,7 @@ export { isTest, isProduction, isDataArray, isCsv, isGraph, isObservation, isGeo
 export { asyncForEach } from "./asyncForEach";
 export { cleanStringComma } from "./cleanStringComma";
 export { cleanUrl } from "./cleanUrl";
+export { removeFromUrl } from "./removeFromUrl";
 export { containsAll } from "./containsAll";
 export { createBearerToken } from "./createBearerToken";
 export { deepClone } from "./deepClone";

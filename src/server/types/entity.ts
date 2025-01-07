@@ -25,6 +25,6 @@ export interface Ientity extends IentityCore {
      table:         string;
      constraints:   { [key: string]: string };
      indexes:       { [key: string]: string };
-     update?:        string[];
+     update?:       string[];
      orderBy:       string;
 }
