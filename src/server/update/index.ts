@@ -82,21 +82,22 @@ class AutoUpdate {
      * If configured, a completion command will be executed and the process for the app will be stopped. 
      * @returns {Boolean} The result of the update.
      */
-    async update(): Promise<boolean> {
-        try {
-            process.stdout.write('Auto Git Update - Updating application from ' + this.repository + "\n");
-            if (await this.downloadUpdate() === true) {
-                await this.backupApp();
-                await this.installUpdate();
-                await this.installDependencies();
-                // process.stdout.write('Auto Git Update - Finished installing updated version.' + "\n");
-                await this.promiseBlindExecute("npm run dev");
-                process.exit(1);
-                return true;
+    async update(no?:boolean): Promise<boolean> {
+        if(no) {
+            try {
+                process.stdout.write('Auto Git Update - Updating application from ' + this.repository + "\n");
+                if (await this.downloadUpdate() === true) {
+                    await this.backupApp();
+                    await this.installUpdate();
+                    await this.installDependencies();
+                    // process.stdout.write('Auto Git Update - Finished installing updated version.' + "\n");
+                    await this.promiseBlindExecute("npm run dev");
+                    process.exit(1);
+                }
+            }catch(err) {
+                process.stdout.write('Auto Git Update - Error updating application' + "\n");
+                process.stdout.write(err + "\n");
             }
-        }catch(err) {
-            process.stdout.write('Auto Git Update - Error updating application' + "\n");
-            process.stdout.write(err + "\n");
         }
         return false;
     }
