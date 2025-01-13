@@ -21,4 +21,5 @@ export interface IserviceInfos {
       csvDelimiter: string;
     },
     stats: JSON;
+    users?: JSON;
   }

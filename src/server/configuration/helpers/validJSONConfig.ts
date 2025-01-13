@@ -1,4 +1,4 @@
-  /**
+/**
  * validJSONConfig
  *
  * @copyright 2020-present Inrae
@@ -10,7 +10,7 @@ import { EConstant } from "../../enums";
 import { keyobj } from "../../types";
 
 // verify is valid config
-export function validJSONConfig(input: Record<string, any> ): boolean {    
+export function validJSONConfig(input: Record<string, any>): boolean {
     if (!input.hasOwnProperty(EConstant.admin)) return false;
     if (!input[EConstant.admin].hasOwnProperty("pg")) return false;
     const admin = input[EConstant.admin]["pg" as keyobj] as JSON;
@@ -19,4 +19,4 @@ export function validJSONConfig(input: Record<string, any> ): boolean {
     if (!admin.hasOwnProperty("password")) return false;
     if (!admin.hasOwnProperty("database")) return false;
     return true;
-  }
+}

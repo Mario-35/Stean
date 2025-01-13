@@ -24,7 +24,7 @@
         "buildDocker": "npm run build-ts && node build.js docker && docker-compose up --build -d",
         "build": "npm run build-ts && node build.js",
         "git": "git add ./src/ ./package.json ./realease.md ./dist.zip ./scripts/ ./scripts/ ./README.md ",
-        "build-ts": "rimraf ./build && tsc",
+        "build-ts": "rimraf './src/server..\\newVersion' && tsc",
         "serve": "node build/index.js",
         "upProd": "npm run build-ts && node build.js && git add -u && git commit --file .git/COMMIT_EDITMSG && git push",
         "upDev": "npm run build-ts && node build.js dev && git add -u && git commit --file .git/COMMIT_EDITMSG && git push",

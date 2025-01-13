@@ -9,9 +9,13 @@
 import { Common } from "./common";
 import { koaContext } from "../../types";
 import { log } from "../../log";
+
+/**
+ * Lines Class
+ */
 export class Lines extends Common {
-  constructor(ctx: koaContext) {
-    console.log(log.whereIam());
-    super(ctx);
-  }
+    constructor(ctx: koaContext) {
+        console.log(log.whereIam());
+        super(ctx);
+    }
 }

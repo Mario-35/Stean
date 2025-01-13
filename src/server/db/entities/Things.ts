@@ -11,8 +11,8 @@ import { koaContext } from "../../types";
 import { Common } from "./common";
 
 export class Things extends Common {
-  constructor(ctx: koaContext) {
-    console.log(log.whereIam());
-    super(ctx);
-  }
+    constructor(ctx: koaContext) {
+        console.log(log.whereIam());
+        super(ctx);
+    }
 }

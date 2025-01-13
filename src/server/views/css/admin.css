@@ -155,7 +155,7 @@
   list-style-type: none;
   display: flex;
   flex-direction: column;
-  margin: 0 0 5px 0;
+  margin: 0 0 0 -15px;
 }
 
 .card-list-item {
@@ -243,3 +243,8 @@
 
 
 
+fieldset {
+  border: 1px solid var(--btn-gray-disabled-background);
+  font-size: 1px solid var(--font-size-less-2);
+  min-height: 115px;
+}

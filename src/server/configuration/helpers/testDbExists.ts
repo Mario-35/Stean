@@ -13,21 +13,21 @@ import { EConstant } from "../../enums";
 
 /**
  * Test if database exist with admin connection
- * 
+ *
  * @param adminConn admin connection
  * @param database DB name
  * @returns true if exist
  */
-export async function  testDbExists(adminConn: IdbConnection, database: string): Promise<boolean> {
-  return await postgres(`postgres://${adminConn.user}:${adminConn.password}@${adminConn.host}:${adminConn.port || 5432}/${database}`,
-    {
-      debug: _DEBUG,          
-      connection: { 
-        application_name : `${EConstant.appName} ${EConstant.appVersion}`
-      }
-    })`select 1+1 AS result`.then(async () => true)
-  .catch((error: Error) => {
-      console.log(error);
-      return false;
-    });
+export async function testDbExists(adminConn: IdbConnection, database: string): Promise<boolean> {
+    return await postgres(`postgres://${adminConn.user}:${adminConn.password}@${adminConn.host}:${adminConn.port || 5432}/${database}`, {
+        debug: _DEBUG,
+        connection: {
+            application_name: `${EConstant.appName} ${EConstant.appVersion}`
+        }
+    })`select 1+1 AS result`
+        .then(async () => true)
+        .catch((error: Error) => {
+            console.log(error);
+            return false;
+        });
 }

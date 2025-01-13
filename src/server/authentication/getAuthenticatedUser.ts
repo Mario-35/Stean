@@ -13,13 +13,19 @@ import { decrypt } from "../helpers";
 import { log } from "../log";
 import { Iuser, koaContext } from "../types";
 import { blankUser } from "../views/helpers/";
-export const getAuthenticatedUser = async ( ctx: koaContext ): Promise<Iuser | undefined> => {
-  console.log(log.whereIam());  
-  if (!ctx.service.extensions.includes(EExtensions.users)) return blankUser(ctx);
-  const token = decodeToken(ctx);  
-  if (token && token.id > 0) {
-    const user = await userAccess.getSingle(ctx.service.name, token.id); 
-    if (user && token.password.match(decrypt(user["password"])) !== null) return Object.freeze(user);    
-  }
-  return undefined;
+
+/**
+ * return Iuser from koa context
+ * @param ctx koaContext
+ * @returns Iuser
+ */
+export const getAuthenticatedUser = async (ctx: koaContext): Promise<Iuser | undefined> => {
+    console.log(log.whereIam());
+    if (!ctx.service.extensions.includes(EExtensions.users)) return blankUser(ctx);
+    const token = decodeToken(ctx);
+    if (token && token.id > 0) {
+        const user = await userAccess.getSingle(ctx.service.name, token.id);
+        if (user && token.password.match(decrypt(user["password"])) !== null) return Object.freeze(user);
+    }
+    return undefined;
 };

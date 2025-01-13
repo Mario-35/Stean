@@ -1,5 +1,5 @@
 import { EDataType, EDatesType } from "../../enums";
-import { IKeyBoolean, Iservice } from "../../types";
+import { Iservice } from "../../types";
 import { Core } from "./core";
 
 export class Timestamp extends Core {
@@ -7,23 +7,20 @@ export class Timestamp extends Core {
         super(tz ? EDataType.timestamptz : EDataType.timestamp, tz ? "TIMESTAMPTZ" : "TIMESTAMP");
     }
 
-    defaultCurrent()  {
-        this._create = this._create.replace('@DEFAULT@', ' DEFAULT CURRENT_TIMESTAMP');
+    defaultCurrent() {
+        this._create = this._create.replace("@DEFAULT@", " DEFAULT CURRENT_TIMESTAMP");
         return this;
     }
-    
+
     alias(alias: string) {
-        const tmpType  = this._dataType === EDataType.timestamptz ? EDatesType.dateTz : EDatesType.date;
+        const tmpType = this._dataType === EDataType.timestamptz ? EDatesType.dateTz : EDatesType.date;
         this._override = {
             create: "",
-            alias(service: Iservice, test: IKeyBoolean | undefined) {
-                return `CONCAT(to_char("_${alias}Start",'${tmpType}'),'/',to_char("_${alias}End",'${tmpType}')) AS "${alias}"`;    
+            alias(service: Iservice, test: Record<string, boolean> | undefined) {
+                return `CONCAT(to_char("_${alias}Start",'${tmpType}'),'/',to_char("_${alias}End",'${tmpType}')) AS "${alias}"`;
             },
             dataType: EDataType.text
-        }
+        };
         return this;
     }
 }
-
-
-

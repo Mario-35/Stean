@@ -26,8 +26,11 @@ import { HtmlLogs } from "../views/class/logs";
 export const routerHandle = async (ctx: koaContext, next: any) => {
     // copy body
     ctx.body = ctx.request.body;
-    // trace request
-    if (config.configFileExist() === true) config.writeTrace(ctx);
+    // if configuration exist
+    if (config.configFileExist() === true)
+        // trace request
+        config.writeTrace(ctx);
+    // admin coute foc first start
     else return await adminRoute(ctx);
 
     // create token
@@ -35,13 +38,12 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     // decode url
     const decodedUrl = decodeUrl(ctx);
 
-    if (ctx.path.toLocaleUpperCase() === "/ADMIN" || (decodedUrl && decodedUrl.configName && decodedUrl.configName.toLocaleUpperCase() === "ADMIN"))
-        return await adminRoute(ctx);
-    if (ctx.path.toLocaleUpperCase() === "/UPDATE" || (decodedUrl && decodedUrl.configName && decodedUrl.configName.toLocaleUpperCase() === "UPDATE"))
-        return await updateRoute(ctx);
+    if (ctx.path.toLocaleUpperCase() === "/ADMIN" || (decodedUrl && decodedUrl.configName && decodedUrl.configName.toLocaleUpperCase() === "ADMIN")) return await adminRoute(ctx);
+    if (ctx.path.toLocaleUpperCase() === "/UPDATE" || (decodedUrl && decodedUrl.configName && decodedUrl.configName.toLocaleUpperCase() === "UPDATE")) return await updateRoute(ctx);
     if (ctx.path.toLocaleUpperCase() === "/EXPORT" || (decodedUrl && decodedUrl.configName && decodedUrl.configName.toLocaleUpperCase() === "EXPORT")) {
-        const a = await config.export();
-        console.log(a);
+        ctx.type = returnFormats.json.type;
+        ctx.body = await config.export();
+        return;
     }
 
     if (!decodedUrl) {
@@ -67,12 +69,7 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     else return;
     // forcing post loras with different version IT'S POSSIBLE BECAUSE COLUMN ARE THE SAME FOR ALL VERSION
     if (decodedUrl.version != ctx.service.apiVersion) {
-        if (!(ctx.request.method === "POST" && ctx.originalUrl.includes(`${decodedUrl.version}/Loras`)))
-            ctx.redirect(
-                ctx.request.method === "GET"
-                    ? ctx.originalUrl.replace(String(decodedUrl.version), ctx.service.apiVersion)
-                    : `${ctx.decodedUrl.linkbase}/${ctx.service.apiVersion}/`
-            );
+        if (!(ctx.request.method === "POST" && ctx.originalUrl.includes(`${decodedUrl.version}/Loras`))) ctx.redirect(ctx.request.method === "GET" ? ctx.originalUrl.replace(String(decodedUrl.version), ctx.service.apiVersion) : `${ctx.decodedUrl.linkbase}/${ctx.service.apiVersion}/`);
     }
 
     // try to clean query string

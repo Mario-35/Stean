@@ -12,7 +12,7 @@ import { EConstant } from "../../enums";
 
 /**
  * Test if database exist with admin connection
- * 
+ *
  * @param host pg host name
  * @param username pg username name
  * @param password pg password name
@@ -21,15 +21,15 @@ import { EConstant } from "../../enums";
  * @returns true if connection valid
  */
 export async function testDbConnection(host: string, username: string, password: string, port?: number, database?: string): Promise<boolean> {
-  return await postgres( `postgres://${username}:${password}@${host}:${port || 5432}/${database || "postgres"}`,
-    {
-      debug: _DEBUG,          
-      connection: { 
-        application_name : `${EConstant.appName} ${EConstant.appVersion}`
-      }
-    })`select 1+1 AS result`.then(async () => true)
-  .catch((error: Error) => {
-      console.log(error);
-      return false;
-    });
+    return await postgres(`postgres://${username}:${password}@${host}:${port || 5432}/${database || "postgres"}`, {
+        debug: _DEBUG,
+        connection: {
+            application_name: `${EConstant.appName} ${EConstant.appVersion}`
+        }
+    })`select 1+1 AS result`
+        .then(async () => true)
+        .catch((error: Error) => {
+            console.log(error);
+            return false;
+        });
 }

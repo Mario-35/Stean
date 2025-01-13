@@ -33,10 +33,13 @@ export const decodeUrl = (ctx: koaContext, input?: string): IdecodedUrl | undefi
   let configName:  string | undefined = undefined;
   // path[0] : service, path[1] : version, path[...] : path
   const paths = url.pathname.split('/').filter(e => e != "");
+
   // no service
   if (paths[0]) 
     configName = configName || config.getConfigNameFromName(paths[0].toLowerCase());
-    else throw new Error(errors.noNameIdentified);
+  else 
+    throw new Error(errors.noNameIdentified);
+
   // get getLinkBase from service
   if (configName) {
     const LinkBase = config.getInfos(ctx, configName);
@@ -49,9 +52,9 @@ export const decodeUrl = (ctx: koaContext, input?: string): IdecodedUrl | undefi
       id = (paths[2].includes("(")) ?  paths[2].split("(")[1].split(")")[0] : 0;
       idStr = (isNaN(+id)) ? String(id).toLocaleUpperCase() : undefined;
       path = paths.slice(2).join("/");
-    }  
-    // result
+    }
     
+    // result    
     return  {
       origin: url.origin,
       search: url.search,

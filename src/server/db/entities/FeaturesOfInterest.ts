@@ -9,9 +9,13 @@
 import { log } from "../../log";
 import { koaContext } from "../../types";
 import { Common } from "./common";
+
+/**
+ * FeaturesOfInterest Class
+ */
 export class FeaturesOfInterest extends Common {
-  constructor(ctx: koaContext) {
-    console.log(log.whereIam());
-    super(ctx);
-  }
+    constructor(ctx: koaContext) {
+        console.log(log.whereIam());
+        super(ctx);
+    }
 }

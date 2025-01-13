@@ -36,35 +36,33 @@ export { IqueryMaker } from "./queryMaker";
 export { Idatas } from "./datas";
 export { IforwardConnection } from "./forwardConnection";
 export { IvisitRessource } from "./visitRessource";
-export interface IKeyBoolean { [key: string]: boolean; }
-export interface IKeyString { [key: string]: string; }
-export type Ientities = { [key in allEntitiesType as string]: Ientity }
-export type koaContext = Koa.ParameterizedContext<Koa.DefaultState,  Koa.DefaultContext>
+export type Ientities = { [key in allEntitiesType as string]: Ientity };
+export type koaContext = Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>;
 export const typeOptions = Object.keys(EOptions) as Array<keyof typeof EOptions>;
-export const typeExtensions= Object.keys(EExtensions) as Array<keyof typeof EExtensions>;
+export const typeExtensions = Object.keys(EExtensions) as Array<keyof typeof EExtensions>;
 export type keyobj = keyof object;
 
 export const getColumnType = (input: IentityColumn): string => {
-   switch (input.dataType) {
-    case EDataType.bigint:
-        return  "number";
-    case EDataType.text:
-        return  "text";   
-    case EDataType._text:
-        return  "text[]";
+    switch (input.dataType) {
+        case EDataType.bigint:
+            return "number";
+        case EDataType.text:
+            return "text";
+        case EDataType._text:
+            return "text[]";
         // return  "list";
-    case EDataType.timestamptz:
-        return "date";
-    case EDataType.json:
-    case EDataType.jsonb:
-        return  "json";
-    case EDataType.link:
-        return `relation:${input.entityRelation}`;
-    case EDataType.result:
-        return `result`;
-    case EDataType.boolean:
-        return `boolean`;
-    default:
-        return  "ERR_OR";
-   } 
-}
+        case EDataType.timestamptz:
+            return "date";
+        case EDataType.json:
+        case EDataType.jsonb:
+            return "json";
+        case EDataType.link:
+            return `relation:${input.entityRelation}`;
+        case EDataType.result:
+            return `result`;
+        case EDataType.boolean:
+            return `boolean`;
+        default:
+            return "ERR_OR";
+    }
+};

@@ -68,7 +68,6 @@ btnService.onclick = async (e) => {
 	} 
 	try {
 		const text = jsonDatas.innerText.replace(/[^\x00-\x7F]/g, '');
-		console.log(text);		
 		datas.innerText = text;
 		document.getElementById("actionForm").requestSubmit();
 	} catch (error) {
@@ -97,16 +96,18 @@ function editPage(name ,elem) {
 	if (temp !== null && temp !== "" && +temp > 0)elem.textContent = temp; 
 }
 
-function selectChange(name ,elem) {
+async function selectChange(name ,elem) {
 	switch (elem.value) {
 		case "Statistiques":
-			getElement("infos"+ name).innerHTML = Object.keys(_PARAMS.services[name].stats).map(e => `<option>${e} : ${_PARAMS.services[name].stats[e]}</option>`).join("\n");
+			getElement("infos"+ name).innerHTML = Object.keys(_PARAMS.services[name].stats).filter(e =>  e !== "Users").map(e => `<option>${e} : ${_PARAMS.services[name].stats[e]}</option>`).join("\n");
+			showInfos(name);
 			break;
-		case "Statistiques":
-			getElement("infos"+ name).innerHTML = Object.keys(jsonObj.users).filter(e => e !== "postgres").map(e => `<option value="${e}">${e}</option>`).join("\n");
+			case "Users":			
+			getElement("infos"+ name).innerHTML = _PARAMS.services[name].stats["Users"].map(e => `<option value="${e["username"]}" onclick="showUserInfos('${name}', '${e["username"]}')">${e["username"]}</option>`).join("\n");
 			break;
-		default:
-			getElement("infos"+ name).innerHTML = _PARAMS.services[name].service.extensions.map(e => `<option value="${e}">${e}</option>`).join("\n");
+			default:
+				getElement("infos"+ name).innerHTML = _PARAMS.services[name].service.extensions.map(e => `<option value="${e}">${e}</option>`).join("\n");
+				showInfos(name);
 
 	}
 }
@@ -123,29 +124,41 @@ async function executeSqlValues(e) {
 		const encoded = btoa(wins.Sql.content.innerText);
 		const url = `${optHost.value}/${optVersion.value}/Sql?$query=${encoded}`;
 		const jsonObj = await getFetchDatas(url);
-		console.log(jsonObj);		
+		return jsonObj;		
 	} catch (err) {
 		notifyError("Error", err);
 	} finally {
 		wait(false);
 	}
 }
-btnExport.onclick = () => {
-	executeSqlValues('SELECT name, datas FROM "services"');
+btnExport.onclick = async () => {
+	console.log("----------------------> btnExport");
+	console.log(_PARAMS.addUrl);
+	const url = `${_PARAMS.addUrl.split("service")[0]}export`;
+	console.log(url);
+	
+	const jsonObj = await getFetchDatas(url);
+	beautifyDatas(getElement("jsonDatas"), jsonObj, "json");
 }
 
 function mario(name) {
 	getElement("copy"+ name).style.display = _NONE;
 }
 
-async function usersService(name ,elem) {
-	const url = `${_PARAMS.services[name].linkBase}/${_PARAMS.services[name].version}/infos`;
-	const jsonObj = await getFetchDatas(url);
-	
-
+function showUserInfos(service, element) {
+	var obj = Object(_PARAMS.services[service].stats["Users"]).filter(e => e.username === element)[0];
+	var elem = (name) => `<li class="card-list-item icon-${obj[name] === true ? "yes" : "no"}">${name}</li>`;
+	getElement("options"+ service).innerHTML = `<legend>${element}</legend> <ul class="card-list"> ${[ elem("canPost"), elem("canDelete"), elem("canCreateDb"), elem("canCreateUser"), elem("admin"), elem("superAdmin") ].join("")} </ul>`;
 }
-function hideList(name) {
-	console.log("coucou");
-	
-	// getElement("list"+ name).classList.remove("show");	
+
+function showInfos(service) {
+	getElement("options"+ service).innerHTML = `
+	                        <legend>Options</legend>
+                        <ul class="card-list">
+                            <li class="card-list-item icon-${_PARAMS.services[service].service.options.includes("canDrop") ? "yes" : "no"}">canDrop</li>
+                            <li class="card-list-item icon-${_PARAMS.services[service].service.options.includes("forceHttps") ? "yes" : "no"}">forceHttps</li>
+                            <li class="card-list-item icon-${_PARAMS.services[service].service.options.includes("stripNull") ? "yes" : "no"}">stripNull</li>
+                            <li class="card-list-item icon-${_PARAMS.services[service].service.options.includes("unique") ? "yes" : "no"}">unique</li>
+                        </ul>
+	`
 }

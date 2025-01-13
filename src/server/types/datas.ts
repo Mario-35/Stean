@@ -1,4 +1,4 @@
-import { IKeyString, IqueryOptions, Iuser } from ".";
+import { Record<string, string>, IqueryOptions, Iuser } from ".";
 
 /**
  * Idatas interface
@@ -14,7 +14,7 @@ export interface Idatas {
     queryOptions?: IqueryOptions;
     user?: Iuser; 
     body?: any; 
-    why?: IKeyString;
+    why?: Record<string, string>;
     default?: string | string[];
     message?: string
   }

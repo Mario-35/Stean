@@ -19,9 +19,8 @@ export function httpsDownload( url: string, filename?: string ): Promise<void> {
           httpsDownload(
             buildNextUrl(url, response.headers.location),
             filename
-          )
-            .then(resolve)
-            .catch(reject);
+          ).then(resolve)
+          .catch(reject);
           return;
         }
 

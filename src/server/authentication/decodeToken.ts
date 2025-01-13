@@ -10,16 +10,23 @@ import jsonwebtoken from "jsonwebtoken";
 import { IuserToken, keyobj, koaContext } from "../types";
 import { blankUserToken } from "../types/userToken";
 import { log } from "../log";
+
+/**
+ * decode token from koa context
+ * @param ctx koaContext
+ * @returns IuserToken
+ */
 export const decodeToken = (ctx: koaContext): IuserToken => {
-  console.log(log.whereIam());
-  if (ctx.request.hasOwnProperty("token")) {
-    const token = jsonwebtoken.decode(ctx.request["token" as keyobj]);    
-    if (token && token["data" as keyobj]["id"] > 0)
-      return Object.freeze({
-         id: +token["data" as keyobj]["id"], 
-         username: token["data" as keyobj]["username"], 
-         password: token["data" as keyobj]["password"], 
-         PDCUAS: token["data" as keyobj]["PDCUAS"], });
-  }
-  return blankUserToken;
+    console.log(log.whereIam());
+    if (ctx.request.hasOwnProperty("token")) {
+        const token = jsonwebtoken.decode(ctx.request["token" as keyobj]);
+        if (token && token["data" as keyobj]["id"] > 0)
+            return Object.freeze({
+                id: +token["data" as keyobj]["id"],
+                username: token["data" as keyobj]["username"],
+                password: token["data" as keyobj]["password"],
+                PDCUAS: token["data" as keyobj]["PDCUAS"]
+            });
+    }
+    return blankUserToken;
 };

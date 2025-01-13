@@ -10,9 +10,12 @@ import { log } from "../../log";
 import { koaContext } from "../../types";
 import { Common } from "./common";
 
+/**
+ * HistoricalLocations Class
+ */
 export class HistoricalLocations extends Common {
-  constructor(ctx: koaContext) {
-    console.log(log.whereIam());
-    super(ctx);
-  }
+    constructor(ctx: koaContext) {
+        console.log(log.whereIam());
+        super(ctx);
+    }
 }

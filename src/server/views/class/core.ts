@@ -8,7 +8,9 @@
 
 import { config } from "../../configuration";
 import { EConstant } from "../../enums";
+import { decrypt } from "../../helpers";
 import { log } from "../../log";
+import { info } from "../../messages";
 import { Idatas, koaContext } from "../../types";
 import { addCssFile } from "../css";
 
@@ -16,12 +18,20 @@ export class CoreHtmlView {
     ctx: koaContext;
     datas: Idatas;
     _HTMLResult: string[];
-
+    adminConnection: boolean = false;
+    
     constructor(ctx: koaContext, datas: Idatas) {
-        console.log(log.whereIam("View"));
-        this.ctx = ctx;
-        this.datas = datas;
-        this._HTMLResult = datas.default ? (typeof datas.default === "string" ? [datas.default] : datas.default) : [];
+      console.log(log.whereIam("View"));
+      this.ctx = ctx;
+      this.datas = datas;
+      this._HTMLResult = datas.default ? (typeof datas.default === "string" ? [datas.default] : datas.default) : [];
+      if (this.datas.connection) {
+        try {
+            this.adminConnection = JSON.parse(decrypt(this.datas.connection)).login;
+        } catch (error) {
+            this.adminConnection = false;
+        }
+      }
     }
 
     title(message: string): string {
@@ -34,7 +44,7 @@ export class CoreHtmlView {
 
     head(title: string, css?: string | string[]): string {
         return `<head>
-                <meta charset="utf-8">
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
                 <style>${addCssFile(css || ["userForm.css", "message.css"])}</style>
                 <title>${title}</title>
               </head>`;
@@ -52,19 +62,19 @@ export class CoreHtmlView {
         return returnValue.join();
     }
 
-    addSubmitButton(label: string) {
+    submitButton(label: string) {
         return `<div class="group"> <input type="submit" class="button" value="${label}"> </div>`;
     }
 
-    AddErrorMessage(error: string) {
+    errorMessage(error: string) {
         return error === "undefined" ? "" : `<div class="message-container"> <div class="error"> ${error} </div> </div>`;
     }
 
-    addButton(action: string, label: string) {
+    button(action: string, label: string) {
         return `<div class="group"> <a href="${action}" class="button" >${label}</a> </div>`;
     }
 
-    addCheckBox(input: { name: string; checked: boolean; label?: string }) {
+    checkBox(input: { name: string; checked: boolean; label?: string }) {
         // const idName = this.makeIdName(input.name);
         return `<div class="group"> 
                 <input  id="${input.name}"
@@ -83,7 +93,7 @@ export class CoreHtmlView {
         return list.map((e: string) => `<option value="${e}">${e}</option>`).join("");
     }
 
-    addSelect(input: { name: string; message: string; list: string[]; value: any; alert?: string; toolType?: string; password?: boolean }) {
+    select(input: { name: string; message: string; list: string[]; value: any; alert?: string; toolType?: string; password?: boolean }) {
         return `<div class="group">
                 <label  for="${input.name}" class="label">
                  ${input.message}
@@ -94,7 +104,7 @@ export class CoreHtmlView {
               </div>`;
     }
 
-    addMultiSelect(input: { name: string; message: string; list: string[]; values: string[] }) {
+    multiSelect(input: { name: string; message: string; list: string[]; values: string[] }) {
         // const idName = this.makeIdName(input.name);
         const res = input.list.map((e: string, n: number) => `<option value="${e}">${e}</option>`);
         return `<div class="group">
@@ -103,7 +113,7 @@ export class CoreHtmlView {
                 </div>`;
     }
 
-    addTextInput(input: {
+    textInput(input: {
         name: string;
         label: string;
         value: string;
@@ -137,21 +147,21 @@ export class CoreHtmlView {
               </div>`;
     }
 
-    addHidden(name: string, datas: string | any) {
+    hidden(name: string, datas: string | any) {
         return typeof datas === "string"
             ? `<input type="hidden" id="${name}" name="${name}" value="${datas}" />`
             : `<input type="hidden" id="${name}" name="${name}" value="${datas.body[name] || ""}" />`;
     }
 
-    addMultiJs() {
+    multiJs() {
         return `var style = document.createElement("style"); function MultiselectDropdown(e, t) { var l = document.getElementById(e); function s(e, t) { var l = document.createElement(e); return void 0 !== t && Object.keys(t).forEach((e => { "class" === e ? Array.isArray(t[e]) ? t[e].forEach((e => "" !== e ? l.classList.add(e) : 0)) : "" !== t[e] && l.classList.add(t[e]) : "style" === e ? Object.keys(t[e]).forEach((s => { l.style[s] = t[e][s] })) : "text" === e ? "" === t[e] ? l.innerHTML = "&nbsp;" : l.innerText = t[e] : l[e] = t[e] })), l } var c = s("div", { class: "multiselect-dropdown" }); c.id = "multiselect-" + l.id, l.style.display = "none", l.parentNode.insertBefore(c, l.nextSibling); var d = s("div", { class: "multiselect-dropdown-list-wrapper" }), i = s("div", { class: "multiselect-dropdown-list", style: { height: "10rem" } }); c.appendChild(d), d.appendChild(i), l.loadOptions = () => { i.innerHTML = "", Array.from(l.options).map((e => { e.selected = t.split(",").includes(e.value); var c = s("div", { class: e.selected ? "checked" : "", optEl: e }), d = s("input", { type: "checkbox", checked: e.selected }); c.appendChild(d), c.appendChild(s("label", { text: e.text })), c.addEventListener("click", (() => { c.classList.toggle("checked"), c.querySelector("input").checked = !c.querySelector("input").checked, c.optEl.selected = !c.optEl.selected, l.dispatchEvent(new Event("change")) })), d.addEventListener("click", (e => { d.checked = !d.checked })), e.listitemEl = c, i.appendChild(c) })), c.listEl = d, c.refresh = () => { c.querySelectorAll("span.optext, span.placeholder").forEach((e => c.removeChild(e))); var e = Array.from(l.selectedOptions); e.length > (l.attributes["multiselect-max-items"]?.value ?? 5) ? c.appendChild(s("span", { class: ["optext", "maxselected"], text: e.length + " " + l.name })) : e.map((e => { var t = s("span", { class: "optext", text: e.text, srcOption: e }); "true" !== l.attributes["multiselect-hide-x"]?.value && t.appendChild(s("span", { class: "optdel", text: "🗙", onclick: e => { t.srcOption.listitemEl.dispatchEvent(new Event("click")), c.refresh(), e.stopPropagation() } })), c.appendChild(t) })), 0 == l.selectedOptions.length && c.appendChild(s("span", { class: "placeholder", text: l.attributes.placeholder?.value ?? l.placeholder })) }, c.refresh() }, l.loadOptions(), c.addEventListener("click", (() => { c.listEl.style.display = "block" })), document.addEventListener("click", (function(e) { c.contains(e.target) || (d.style.display = "none", c.refresh()) })) } style.setAttribute("id", "multiselect_dropdown_styles");`;
     }
 
-    addNewVersion() {
+    newVersion() {
         return (config.upToDate() === false) ? '' : `<div class="floating-text"> New version <a href="https://florin-pop.com/blog/2019/09/100-days-100-projects" target="_blank"> ${config.version()}</a> </div>`;
     }
 
-    addSocial() {
+    social() {
         return `<div class="social-panel-container">
   <div class="social-panel">
     <p>Created by <a target="_blank" href="https://linktr.ee/adammario">ADAM mario</a></p>
@@ -199,6 +209,11 @@ export class CoreHtmlView {
 <button class="floating-btn"> Contacts </button>`;
     }
 
+    /**
+     * replace in html page
+     * @param key to search
+     * @param value to replace
+     */
     replacer(key: string, value: string) {
         this._HTMLResult = this._HTMLResult.map((e) => e.replace(key, value));
     }
@@ -207,20 +222,73 @@ export class CoreHtmlView {
         return typeof value === "bigint" ? value.toString() : value;
     }
 
+    /**
+     * meltiple replace in html page
+     * @param values all replaces
+     */
     replacers(values: object) {
         Object.keys(values).forEach((key) => {
             this.replacer(`@${key}@`, values[key as keyof object]);
         });
     }
 
+    
     toArray() {
         return this._HTMLResult;
     }
 
     toString() {
-        this.replacer("@social@", this.addSocial());
-        this.replacer("@new@", this.addNewVersion());
-        this.replacer("@connection@", this.datas.connection ? this.addHidden("_connection", this.datas.connection) : "");
+        this.replacer("@social@", this.social());
+        this.replacer("@new@", this.newVersion());
+        this.replacer("@connection@", this.datas.connection ? this.hidden("_connection", this.datas.connection) : "");
         return this._HTMLResult.filter((e) => e !== "").join("");
     }
+    
+    /**
+     * Create HTML admin login page
+     * @param actionForm form name to be posted
+     */
+    adminLogin(actionForm: string) {
+      const alert = (name: string): string => (this.datas.why && this.datas.why[name] ? `<div class="alert">${this.datas.why[name]}</div>` : "");
+      this._HTMLResult = [
+          `<!DOCTYPE html>`,
+          `<html>`,
+          this.head("Login"),
+          `<body>`,
+          `<div class="login-wrap">`,
+          `<div class="login-html" color="#FF0000">`,
+          this.title("Admin Access"),
+          `<input id="tab-1" type="radio" name="tab" class="sign-in" checked>`,
+          `<label for="tab-1" class="tab">${info.pg} Admin</label>`,
+          `<input id="tab-2" type="radio" name="tab" class="sign-up">`,
+          `<label for="tab-2" class="tab">Help</label>`,
+          `<div class="login-form">`,
+          `<form action="/${actionForm}" method="post">`,
+          `<div class="sign-in-htm">`,
+          this.datas.connection ? this.hidden("_connection", this.datas.connection) : "",
+          this.textInput({ name: "host", label: info.host, value: (this.datas.body && this.datas.body.host) || EConstant.host, alert: alert("host") }),
+          this.textInput({
+              name: "port",
+              label: info.pg + " port",
+              value: (this.datas.body && this.datas.body.port) || EConstant.port,
+              alert: alert("port")
+          }),
+          this.textInput({
+              name: "adminname",
+              label: info.user,
+              value: (this.datas.body && this.datas.body.adminname) || EConstant.pg,
+              alert: alert("username")
+          }),
+          this.textInput({ name: "adminpassword", label: info.pass, password: true, value: "", alert: alert("password") }),
+          this.submitButton(info.conn),
+          this.datas.connection && this.datas.connection.startsWith("[error]") ? this.errorMessage(this.datas.connection.split("[error]")[1]) : "",
+          `</div> `,
+          `</form>`,
+          `</div>`,
+          `</div>`,
+          `</div>`,
+          `</body>`,
+          `</html>`
+      ];
+  }
 }
