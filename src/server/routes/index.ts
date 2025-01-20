@@ -9,9 +9,9 @@
 import { decodeToken } from "../authentication";
 import { _DEBUG } from "../constants";
 import { log } from "../log";
-import { EExtensions, EFileName, EHttpCode } from "../enums";
-import { createBearerToken, getUserId, returnFormats } from "../helpers";
-import { adminRoute, decodeUrl, updateRoute } from "./helper";
+import { EExtensions, EHttpCode } from "../enums";
+import { createBearerToken, getUserId } from "../helpers";
+import { adminRoute, decodeUrl, logsRoute, updateRoute, exportRoute } from "./helper";
 import { errors } from "../messages";
 import { config } from "../configuration";
 import { models } from "../models";
@@ -20,8 +20,7 @@ export { protectedRoutes } from "./protected";
 import querystring from "querystring";
 import { koaContext } from "../types";
 import { writeLogToDb } from "../log/writeLogToDb";
-import { HtmlLogs } from "../views/class/logs";
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+import { paths } from "../paths";
 
 export const routerHandle = async (ctx: koaContext, next: any) => {
     // copy body
@@ -30,37 +29,30 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     if (config.configFileExist() === true)
         // trace request
         config.writeTrace(ctx);
-    // admin coute foc first start
+    // admin coute for first start
     else return await adminRoute(ctx);
 
     // create token
     createBearerToken(ctx);
     // decode url
     const decodedUrl = decodeUrl(ctx);
-
-    if (ctx.path.toLocaleUpperCase() === "/ADMIN" || (decodedUrl && decodedUrl.configName && decodedUrl.configName.toLocaleUpperCase() === "ADMIN")) return await adminRoute(ctx);
-    if (ctx.path.toLocaleUpperCase() === "/UPDATE" || (decodedUrl && decodedUrl.configName && decodedUrl.configName.toLocaleUpperCase() === "UPDATE")) return await updateRoute(ctx);
-    if (ctx.path.toLocaleUpperCase() === "/EXPORT" || (decodedUrl && decodedUrl.configName && decodedUrl.configName.toLocaleUpperCase() === "EXPORT")) {
-        ctx.type = returnFormats.json.type;
-        ctx.body = await config.export();
-        return;
+    if (!decodedUrl && ctx.path.includes("/logs-")) return logsRoute(ctx, ctx.path);
+    switch (ctx.path.split("/").reverse()[0].toLocaleUpperCase()) {
+        case "ADMIN":
+            return await adminRoute(ctx);
+        // update page
+        case "UPDATE":
+            return await updateRoute(ctx);
+        // export page
+        case "EXPORT":
+            await exportRoute(ctx);
+        case "INFOS":
+            if (!decodedUrl) ctx.body = config.getInfosForAll(ctx);
+        // logging for all
+        case "LOGGING":
+            if (!decodedUrl) logsRoute(ctx, paths.logFile.fileName);
     }
-
-    if (!decodedUrl) {
-        // Get all infos services
-        switch (ctx.path.toLocaleUpperCase()) {
-            // Infos for all
-            case "/INFOS":
-                ctx.body = config.getInfosForAll(ctx);
-            // logging for all
-            case "/LOGGING":
-                const bodyLogs = new HtmlLogs(ctx, { url: "../../" + EFileName.logs });
-                ctx.type = returnFormats.html.type;
-                ctx.body = bodyLogs.toString();
-        }
-        return;
-    }
-
+    if (!decodedUrl) return;
     // set decodedUrl context
     ctx.decodedUrl = decodedUrl;
     if (_DEBUG) console.log(log.object("decodedUrl", decodedUrl));

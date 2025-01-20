@@ -23,6 +23,7 @@ import { createQueryParams } from "../views/helpers";
 import { log } from "../log";
 import { USER } from "../models/entities";
 export const protectedRoutes = new Router<DefaultState, Context>();
+
 protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
     switch (ctx.decodedUrl.path.toUpperCase()) {
         // login html page or connection login

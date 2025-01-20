@@ -9,7 +9,7 @@
 
 import postgres from "postgres";
 import { koaContext } from "../../types";
-import { formatConfig } from ".";
+import { adminRoute, formatConfig } from ".";
 import { config } from "../../configuration";
 import { encrypt } from "../../helpers";
 
@@ -39,12 +39,11 @@ export async function adminConnectPg(ctx: koaContext): Promise<string | undefine
     if (verifyItems(src, ["host", "adminname", "port", "adminpassword"]) === true) return;
     return await postgres(`postgres://${src["adminname"]}:${src["adminpassword"]}@${src["host"]}:${src["port"]}/postgres`, {})`select 1+1 AS result`
         .then(async () => {
-            if (config.configFileExist() === false) if (await config.initConfig(JSON.stringify({ "admin": formatConfig(src, true) }, null, 2))) ctx.redirect(`${ctx.request.origin}/admin`);
+            if (config.configFileExist() === false) if (await config.initConfig(JSON.stringify({ "admin": formatConfig(src, true) }, null, 2))) await adminRoute(ctx);
             return encrypt(JSON.stringify({ login: true, "host": src["host"], "adminname": src["adminname"], "port": src["port"], "adminpassword": src["adminpassword"] }));
         })
         .catch((error) => {
             // TODO
-
             return `[error]${decodeURI(error.message)}`;
         });
 }

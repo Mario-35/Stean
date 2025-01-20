@@ -12,9 +12,10 @@ export const checkPassword = (str: string): boolean => /^(?=.*\d)(?=.*[a-z])(?=.
 export const sqlStopDbName = (dbName: string): string => `SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname = ${dbName};`;
 export { decodeUrl } from "./decodeUrl";
 export { getTest } from "./test";
-export { update } from "./update";
 export { adminConnectPg } from "./adminConnectPg";
 export { formatConfig } from "./formatConfig";
 export { adminRoute } from "./adminRoute";
+export { exportRoute } from "./exportRoute";
 export { updateRoute } from "./updateRoute";
+export { logsRoute } from "./logsRoute";
 export { fetchLastModified } from "./fetchLastModified";

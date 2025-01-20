@@ -6,67 +6,67 @@
  *
  */
 
-import cookieParser from "cookie-parser";;
+import cookieParser from "cookie-parser";
 import { errors } from "../messages";
 import cookieModule from "cookie";
 import { keyobj, koaContext } from "../types";
-import { EConstant, EHttpCode } from "../enums";
-export const createBearerToken = (ctx: koaContext) => {  
+import { EHttpCode } from "../enums";
+import { paths } from "../paths";
+export const createBearerToken = (ctx: koaContext) => {
     const getCookie = (serializedCookies: string, key: string) => cookieModule.parse(serializedCookies)[key] ?? false;
     const queryKey = "access_token";
     const bodyKey = "access_token";
     const headerKey = "Bearer";
     const cookie = true;
-  
-    if (cookie && !EConstant.key) {
-      throw new Error(errors.tokenMissing);
+
+    if (cookie && !paths.key) {
+        throw new Error(errors.tokenMissing);
     }
-  
+
     const { body, header, query } = ctx.request;
-  
+
     let count = 0;
-    let token:string | string[] | undefined = undefined;    
-  
+    let token: string | string[] | undefined = undefined;
+
     if (query && query[queryKey]) {
-      token = query[queryKey];
-      count += 1;
+        token = query[queryKey];
+        count += 1;
     }
     if (body && body[bodyKey as keyobj]) {
-      token = body[bodyKey as keyobj];
-      count += 1;
+        token = body[bodyKey as keyobj];
+        count += 1;
     }
-  
+
     if (header) {
-      if (header.authorization) {
-        const parts = header.authorization.split(" ");
-        if (parts.length === 2 && parts[0] === headerKey) {
-          [, token] = parts;
-          count += 1;
+        if (header.authorization) {
+            const parts = header.authorization.split(" ");
+            if (parts.length === 2 && parts[0] === headerKey) {
+                [, token] = parts;
+                count += 1;
+            }
         }
-      }
-  
-      // cookie
-      if (cookie && header.cookie) {
-        const plainCookie = getCookie(header.cookie, "jwt-session"); // seeks the key
-        if (plainCookie) {
-          
-          const cookieToken = cookieParser.signedCookie(plainCookie, EConstant.key);
-          
-          if (cookieToken) {
-            token = cookieToken;
-            count += 1;
-          }
+
+        // cookie
+        if (cookie && header.cookie) {
+            const plainCookie = getCookie(header.cookie, "jwt-session"); // seeks the key
+            if (plainCookie) {
+                const cookieToken = cookieParser.signedCookie(plainCookie, paths.key);
+
+                if (cookieToken) {
+                    token = cookieToken;
+                    count += 1;
+                }
+            }
         }
-      }
     }
-    
+
     // RFC6750 states the access_token MUST NOT be provided
     // in more than one place in a single request.
     if (count > 1) {
-      ctx.throw(EHttpCode.badRequest, "token_invalid", {
-        message: errors.tokenInvalid,
-      });
+        ctx.throw(EHttpCode.badRequest, "token_invalid", {
+            message: errors.tokenInvalid
+        });
     }
-  // @ts-ignore
-  if (token) ctx.request["token"] = token;
+    // @ts-ignore
+    if (token) ctx.request["token"] = token;
 };
