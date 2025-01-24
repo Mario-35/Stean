@@ -6,7 +6,7 @@
  *
  */
 
-import { EConstant } from "../enums";
+import { paths } from "../paths";
 import { Iuser } from "../types";
 import jsonwebtoken from "jsonwebtoken";
 
@@ -27,6 +27,6 @@ export const createToken = (input: Iuser, password: string): string => {
             },
             exp: Math.floor(Date.now() / 1000) + 60 * 60 // 60 seconds * 60 minutes = 1 hour
         },
-        EConstant.key
+        paths.key
     );
 };

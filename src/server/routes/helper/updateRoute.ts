@@ -7,14 +7,14 @@
  *
  */
 
+import { postgresAdmin } from ".";
 import { returnFormats } from "../../helpers";
 import { koaContext } from "../../types";
 import { Update } from "../../views";
-import { adminConnectPg } from "./adminConnectPg";
 
 export const updateRoute = async (ctx: koaContext) => {
     ctx.set("script-src", "self");
     ctx.set("Content-Security-Policy", "self");
     ctx.type = returnFormats.html.type;
-    ctx.body = new Update(ctx, { connection: await adminConnectPg(ctx), url: ctx.request.url, body: ctx.request.body, why: {} }).toString();
+    ctx.body = new Update(ctx, { connection: await postgresAdmin(ctx), url: ctx.request.url, body: ctx.request.body, why: {} }).toString();
 };

@@ -10,12 +10,10 @@ import { log } from "../../log";
 import { info } from "../../messages";
 import { Idatas, koaContext } from "../../types";
 import { CoreHtmlView } from "./core";
-// interface Idatas {
-//   login: boolean;
-//   body?: any;
-//   why?: Record<string, string>
-// }
 
+/**
+ * Login Class for HTML View
+ */
 export class Login extends CoreHtmlView {
     constructor(ctx: koaContext, datas: Idatas) {
         console.log(log.whereIam("View"));

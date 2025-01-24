@@ -4,6 +4,7 @@
  * @author Matthias Thalmann (https://github.com/m-thalmann/)
  * @license MIT
  */
+
 function Window(title, options) {
 	'use strict';
 

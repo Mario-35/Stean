@@ -26,7 +26,6 @@ import { DATASTREAM } from "../../../models/entities";
 export class PgVisitor extends Visitor {
     entity: Ientity | undefined = undefined;
     columnSpecials: { [key: string]: string[] } = {};
-    replay = false;
     navigation:
         | [
               {
@@ -237,10 +236,6 @@ export class PgVisitor extends Visitor {
         this.Visit(node.value.path, context);
         if (node.value.options) node.value.options.forEach((item: Token) => this.Visit(item, context));
         this.payload = node.value;
-    }
-    protected VisitReplay(node: Token, context: IodataContext) {
-        this.replay = true;
-        this.returnFormat = returnFormats.sql;
     }
 
     protected VisitDebug(node: Token, context: IodataContext) {

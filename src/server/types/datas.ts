@@ -1,4 +1,4 @@
-import { Record<string, string>, IqueryOptions, Iuser } from ".";
+import { IqueryOptions, Iuser } from ".";
 
 /**
  * Idatas interface
@@ -7,14 +7,14 @@ import { Record<string, string>, IqueryOptions, Iuser } from ".";
  * @author mario.adam@inrae.fr
  *
  */
-export interface Idatas { 
-    url: string; 
-    login?: boolean; 
-    connection?: string; 
+export interface Idatas {
+    url: string;
+    login?: boolean;
+    connection?: string;
     queryOptions?: IqueryOptions;
-    user?: Iuser; 
-    body?: any; 
+    user?: Iuser;
+    body?: any;
     why?: Record<string, string>;
     default?: string | string[];
-    message?: string
-  }
+    message?: string;
+}

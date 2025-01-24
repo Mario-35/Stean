@@ -9,21 +9,26 @@
 import { Idatas, koaContext } from "../../types";
 import { CoreHtmlView } from "./core";
 import fs from "fs";
-import path from "path";
-export class HtmlLogs extends CoreHtmlView {            
+
+/**
+ * Logs Class for HTML View
+ */
+export class HtmlLogs extends CoreHtmlView {
     // use data to name ifle
     constructor(ctx: koaContext, datas: Idatas) {
-        const fileContent = fs.readFileSync(path.resolve(__dirname, datas.url), "utf8");
+        const fileContent = fs.readFileSync(datas.url, "utf8");
         super(ctx, datas);
         this.logs(fileContent);
     }
     private logs(message: string) {
-        this._HTMLResult = [`
+        this._HTMLResult = [
+            `
         <!DOCTYPE html>
             <html>
                 <body style="background-color:#353535;">
                     ${message}
                 </body>
-            </html>`];
-    };
-  }
+            </html>`
+        ];
+    }
+}

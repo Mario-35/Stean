@@ -6,17 +6,17 @@
  *
  */
 
-import { Record<string, boolean>, Iservice } from ".";
+import { Iservice } from ".";
 import { EDataType } from "../enums";
-export interface IentityColumn {    
-        dataType:           EDataType;
-        orderBy?:           string;
-        create:             string;
-        entityRelation?:    string;
-        coalesce?:          string;
-        alias(config:Iservice, test?: Record<string, boolean>): string | undefined | void;
-        verify?: {
-            list: string[];
-            default: string;
-        }
+export interface IentityColumn {
+    dataType: EDataType;
+    orderBy?: string;
+    create: string;
+    entityRelation?: string;
+    coalesce?: string;
+    alias(config: Iservice, test?: Record<string, boolean>): string | undefined | void;
+    verify?: {
+        list: string[];
+        default: string;
     };
+}

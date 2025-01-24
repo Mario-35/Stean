@@ -97,5 +97,9 @@ class Log {
     error<T>(cle: unknown, infos?: T) {
         process.stdout.write(infos ? `${color(EColor.Red)} ${cle} ${color(EColor.Blue)} : ${color(EColor.Yellow)} ${this.logAll(infos, this.debugFile)}${color(EColor.Reset)}` : `${color(EColor.Red)} Error ${color(EColor.Blue)} : ${color(EColor.Yellow)} ${this.logAll(cle)}${color(EColor.Reset)}` + "\n");
     }
+
+    newLog(input: any) {
+        if (input) process.stdout.write(input + "\n");
+    }
 }
 export const log = new Log();

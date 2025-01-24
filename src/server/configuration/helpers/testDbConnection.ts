@@ -7,7 +7,7 @@
  */
 
 import postgres from "postgres";
-import { _DEBUG } from "../../constants";
+import { _DEBUG, appVersion } from "../../constants";
 import { EConstant } from "../../enums";
 
 /**
@@ -24,7 +24,7 @@ export async function testDbConnection(host: string, username: string, password:
     return await postgres(`postgres://${username}:${password}@${host}:${port || 5432}/${database || "postgres"}`, {
         debug: _DEBUG,
         connection: {
-            application_name: `${EConstant.appName} ${EConstant.appVersion}`
+            application_name: `${EConstant.appName} ${appVersion}`
         }
     })`select 1+1 AS result`
         .then(async () => true)

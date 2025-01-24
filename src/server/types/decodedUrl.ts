@@ -8,15 +8,15 @@
 
 import { EFrom } from "../enums";
 export interface IdecodedUrl {
-    origin:     string;
-    linkbase:   string;
-    root:       string;
-    search:     string;
-    path:       string;
-    id:         bigint;
-    idStr:      string | undefined;
-    service:    string;
-    version:    string;
+    origin: string;
+    linkbase: string;
+    root: string;
+    search: string;
+    path: string;
+    id: bigint;
+    idStr: string | undefined;
+    service: string;
+    version: string;
     configName: string | undefined;
-    from:       EFrom;
+    from: EFrom;
 }

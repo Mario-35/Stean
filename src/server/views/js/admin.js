@@ -1,30 +1,11 @@
 const pretty = new pp();
 
-const testNull = (input) => (input.value == "<empty string>" || input.value.trim() == "" || input.value.trim()[0] == "0" || input.value.startsWith(_NONE));
-
-
 // DON'T REMOVE !!!!
 // @start@
 // @request@
 
-function init() {	  
-	console.log(_PARAMS);
-	hide(datas);
-	new SplitterBar(container, first, two);
-	wait(false);
-	populateSelect(optVersion, _PARAMS.versions, "v1.1");
-	populateMultiSelect("optionsOption", _PARAMS.options);
-	populateMultiSelect("extensionsOption", _PARAMS.extensions);
-	csvOption.value = ';';
-	pageOption.value = '200';
-	dateOption.value = "DD/MM/YYYY hh:mi:ss";
-	jsonViewer = new JSONViewer();
-}
-init();
 
-
-function buttonGo() {};
-
+// create json default configuration
 function updateDataService()  {
 	var obj = {
 		name: optName.value,
@@ -75,36 +56,76 @@ btnService.onclick = async (e) => {
 	}
 };
 
+// fill form service from another
+function fillService(name, newName) {
+	csvOption.value = _PARAMS.services[name].service.csvDelimiter;
+	pageOption.value = _PARAMS.services[name].service.nb_page;
+	dateOption.value = _PARAMS.services[name].service.date_format;
+	populateSelect(optVersion, _PARAMS.versions, _PARAMS.services[name].service.apiVersion);
+	populateMultiSelect("optionsOption", _PARAMS.options, _PARAMS.services[name].service.options);
+	populateMultiSelect("extensionsOption", _PARAMS.extensions, _PARAMS.services[name].service.extensions);
+	optName.value = newName || name;
+	optPassword.value = newName || "";
+	optRepeat.value = newName ||"";
+}
+
+
+// load Log file from log select
+getDatas = async (url) => {
+	try {
+		const response = await fetch(encodeURI(url), {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		return await response.json();
+	} catch (err) {
+		notifyError("Error", err);
+	}
+}
+
+// fill form for create service from another
+async function selectCard(name) {
+	console.log("selectCard");
+	fillService(name);	
+}
+
+// fill form for create service from another
 function copyService(name) {
 	const newName = window.prompt("Name of the service", "");
 	if (newName !== null && newName !== "") {
-		csvOption.value = _PARAMS.services[name].service.csvDelimiter;
-		pageOption.value = _PARAMS.services[name].service.nb_page;
-		dateOption.value = _PARAMS.services[name].service.date_format;
-		populateSelect(optVersion, _PARAMS.versions, _PARAMS.services[name].service.apiVersion);
-		populateMultiSelect("optionsOption", _PARAMS.options, _PARAMS.services[name].service.options);
-		populateMultiSelect("extensionsOption", _PARAMS.extensions, _PARAMS.services[name].service.extensions);
-		optName.value = newName;
-		optPassword.value = newName;
-		optRepeat.value = newName;
+		fillService(name, newName);
 		updateDataService();
 	}
 }
 
+// change nb Page
 function editPage(name ,elem) {
 	const temp = window.prompt("Number of page for " + name, elem.textContent);
 	if (temp !== null && temp !== "" && +temp > 0)elem.textContent = temp; 
 }
 
+// change csv delimiter
+function editCsv(name ,elem) {
+	const temp = window.prompt("Csv delimiter for " + name, elem.textContent);
+	if (temp === "," || temp === ";") elem.textContent = temp; 
+}
+
 async function selectChange(name ,elem) {
 	switch (elem.value) {
 		case "Statistiques":
-			getElement("infos"+ name).innerHTML = Object.keys(_PARAMS.services[name].stats).filter(e =>  e !== "Users").map(e => `<option>${e} : ${_PARAMS.services[name].stats[e]}</option>`).join("\n");
-			showInfos(name);
-			break;
+				getElement("infos"+ name).innerHTML = Object.keys(_PARAMS.services[name].stats).filter(e =>  e !== "Users").map(e => `<option>${e} : ${_PARAMS.services[name].stats[e]}</option>`).join("\n");
+				showInfos(name);
+				break;
 			case "Users":			
-			getElement("infos"+ name).innerHTML = _PARAMS.services[name].stats["Users"].map(e => `<option value="${e["username"]}" onclick="showUserInfos('${name}', '${e["username"]}')">${e["username"]}</option>`).join("\n");
-			break;
+				getElement("infos"+ name).innerHTML = _PARAMS.services[name].stats["Users"].map(e => `<option value="${e["username"]}" onclick="showUserInfos('${name}', '${e["username"]}')">${e["username"]}</option>`).join("\n");
+				break;
+			case "Lora":
+				const url = `${_PARAMS.services[name].linkBase}/${_PARAMS.services[name].version}/Decoders?$select=id,name`;		
+				const datas = await getDatas(url);
+				getElement("infos"+ name).innerHTML =  Object.values(datas.value).map(e => `<option value="${e.name}" onclick="showDecoderInfos('${name}','${e["@iot.id"]}')">${e.name}</option>`).join("\n");
+				break;
 			default:
 				getElement("infos"+ name).innerHTML = _PARAMS.services[name].service.extensions.map(e => `<option value="${e}">${e}</option>`).join("\n");
 				showInfos(name);
@@ -112,53 +133,71 @@ async function selectChange(name ,elem) {
 	}
 }
 
-function editCsv(name ,elem) {
-	const temp = window.prompt("Csv delimiter for " + name, elem.textContent);
-	if (temp === "," || temp === ";") elem.textContent = temp; 
-}
-
-async function executeSqlValues(e) {
-	wait(true);
-	if (e) e.preventDefault();
+// load Log file from log select
+optLogs.onclick = async () => {
 	try {
-		const encoded = btoa(wins.Sql.content.innerText);
-		const url = `${optHost.value}/${optVersion.value}/Sql?$query=${encoded}`;
-		const jsonObj = await getFetchDatas(url);
-		return jsonObj;		
+		const url = `${_PARAMS.addUrl.split("service")[0]}${optLogs.value}`;
+		const response = await fetch(encodeURI(url), {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		wrapper.classList.add("scrollable-div");
+		wrapper.innerHTML = await response.text();
 	} catch (err) {
 		notifyError("Error", err);
-	} finally {
-		wait(false);
 	}
 }
+
+// export config
 btnExport.onclick = async () => {
-	console.log("----------------------> btnExport");
-	console.log(_PARAMS.addUrl);
-	const url = `${_PARAMS.addUrl.split("service")[0]}export`;
-	console.log(url);
-	
-	const jsonObj = await getFetchDatas(url);
-	beautifyDatas(getElement("jsonDatas"), jsonObj, "json");
+	const url = `${_PARAMS.addUrl.split("service")[0]}export`;	
+	beautifyDatas(getElement("jsonDatas"), await getFetchDatas(url), "json");
 }
 
-function mario(name) {
-	getElement("copy"+ name).style.display = _NONE;
-}
-
+// change view for user infos
 function showUserInfos(service, element) {
 	var obj = Object(_PARAMS.services[service].stats["Users"]).filter(e => e.username === element)[0];
 	var elem = (name) => `<li class="card-list-item icon-${obj[name] === true ? "yes" : "no"}">${name}</li>`;
 	getElement("options"+ service).innerHTML = `<legend>${element}</legend> <ul class="card-list"> ${[ elem("canPost"), elem("canDelete"), elem("canCreateDb"), elem("canCreateUser"), elem("admin"), elem("superAdmin") ].join("")} </ul>`;
 }
 
+// change view for standard default infos
+async function showDecoderInfos(name, decoder) {
+	const datas = await getDatas(`${_PARAMS.services[name].linkBase}/${_PARAMS.services[name].version}/Decoders(${decoder})`);
+	beautifyDatas(getElement("jsonDecoderCode"), datas.code, "js");
+	beautifyDatas(getElement("jsonDecoderNomenclature"), datas.nomenclature, "json");
+	updateWinJsonResult(datas.nomenclature, "oo");
+
+}
+
+// change view for standard default infos
 function showInfos(service) {
-	getElement("options"+ service).innerHTML = `
-	                        <legend>Options</legend>
-                        <ul class="card-list">
-                            <li class="card-list-item icon-${_PARAMS.services[service].service.options.includes("canDrop") ? "yes" : "no"}">canDrop</li>
-                            <li class="card-list-item icon-${_PARAMS.services[service].service.options.includes("forceHttps") ? "yes" : "no"}">forceHttps</li>
-                            <li class="card-list-item icon-${_PARAMS.services[service].service.options.includes("stripNull") ? "yes" : "no"}">stripNull</li>
-                            <li class="card-list-item icon-${_PARAMS.services[service].service.options.includes("unique") ? "yes" : "no"}">unique</li>
-                        </ul>
+	getElement("options"+ service).innerHTML = `<legend>Options</legend>
+	<ul class="card-list">
+		<li class="card-list-item icon-${_PARAMS.services[service].service.options.includes("canDrop") ? "yes" : "no"}">canDrop</li>
+		<li class="card-list-item icon-${_PARAMS.services[service].service.options.includes("forceHttps") ? "yes" : "no"}">forceHttps</li>
+		<li class="card-list-item icon-${_PARAMS.services[service].service.options.includes("stripNull") ? "yes" : "no"}">stripNull</li>
+		<li class="card-list-item icon-${_PARAMS.services[service].service.options.includes("unique") ? "yes" : "no"}">unique</li>
+	</ul>
 	`
 }
+
+// Start
+(function init() {	  
+	console.log(_PARAMS);
+	hide(datas);
+	new SplitterBar(container, first, two);
+	wait(false);
+	populateSelect(optVersion, _PARAMS.versions, "v1.1");
+	populateSelect(optLogs, _PARAMS.logsFiles);
+	populateMultiSelect("optionsOption", _PARAMS.options);
+	populateMultiSelect("extensionsOption", _PARAMS.extensions);
+	csvOption.value = ';';
+	pageOption.value = '200';
+	dateOption.value = "DD/MM/YYYY hh:mi:ss";
+	jsonViewer = new JSONViewer();
+	if (_PARAMS.mussage) notifyConfirm("Confirmation", _PARAMS.mussage);
+}
+)();

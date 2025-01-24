@@ -9,17 +9,22 @@
 import { log } from "../../log";
 import { Idatas, koaContext } from "../../types";
 import { CoreHtmlView } from "./core";
+
+/**
+ * Error Class for HTML View
+ */
 export class HtmlError extends CoreHtmlView {
     constructor(ctx: koaContext, datas: Idatas) {
         console.log(log.whereIam("View"));
         super(ctx, datas);
-       this.error(datas.url);
+        this.error(datas.url);
     }
     private error(message: string) {
-        this._HTMLResult = [`
+        this._HTMLResult = [
+            `
         <!DOCTYPE html>
             <html>
-                ${this.head( "Error")}
+                ${this.head("Error")}
                 <body>
                     <div class="login-wrap">
                         <div class="login-html">
@@ -34,11 +39,12 @@ export class HtmlError extends CoreHtmlView {
                                     <a href="/Login" class="button-submit">Login</a>
                                 </div>
                                 <div class="inner">
-                                    <a  href="${ this.ctx.decodedUrl.linkbase + `/${this.ctx.service.apiVersion}/Query`}" class="button">query</a>
+                                    <a  href="${this.ctx.decodedUrl.linkbase + `/${this.ctx.service.apiVersion}/Query`}" class="button">query</a>
                                 </div>
                             </div>
                         </div>
                     </body>
-                </html>`];
-    };
-  }
+                </html>`
+        ];
+    }
+}

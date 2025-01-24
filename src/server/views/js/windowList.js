@@ -95,6 +95,7 @@ function simpleClick(link) {
 		canGo = true;
 	}
 }
+
 function openClick(link) {
 	if (link[link.length-1] === '"') link = link.slice(0, -1);
 	if (link[0] === '"') link = link.slice(1);
@@ -145,7 +146,7 @@ function updateWinJsonResult(input, title) {
 	});
 
 	jsonRenderer.appendChild(jsonViewer.getContainer());
-	jsonViewer.setRoot(optHost.value);
+	if (getElement("optHost")) jsonViewer.setRoot(optHost.value);
 	jsonViewer.showJSON(input);
 	wins.Json.show();
 }

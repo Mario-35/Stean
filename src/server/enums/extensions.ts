@@ -6,15 +6,14 @@
  * @author mario.adam@inrae.fr
  *
  */
-export enum EExtensions { 
+export enum EExtensions {
     base = "base",
     file = "file",
-    logs = "logs",
     users = "users",
     lora = "lora",
     tasking = "tasking",
     mqtt = "mqtt",
     multiDatastream = "multiDatastream",
     highPrecision = "highPrecision",
-    resultNumeric = "resultNumeric",
+    resultNumeric = "resultNumeric"
 }

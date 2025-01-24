@@ -7,6 +7,7 @@
  */
 
 import { config } from "../../configuration";
+import { appVersion } from "../../constants";
 import { EConstant } from "../../enums";
 import { decrypt } from "../../helpers";
 import { log } from "../../log";
@@ -14,24 +15,29 @@ import { info } from "../../messages";
 import { Idatas, koaContext } from "../../types";
 import { addCssFile } from "../css";
 
+/**
+ * Core Class to be extend for HTML Views
+ */
 export class CoreHtmlView {
     ctx: koaContext;
     datas: Idatas;
     _HTMLResult: string[];
+    message: string | undefined;
     adminConnection: boolean = false;
-    
+
     constructor(ctx: koaContext, datas: Idatas) {
-      console.log(log.whereIam("View"));
-      this.ctx = ctx;
-      this.datas = datas;
-      this._HTMLResult = datas.default ? (typeof datas.default === "string" ? [datas.default] : datas.default) : [];
-      if (this.datas.connection) {
-        try {
-            this.adminConnection = JSON.parse(decrypt(this.datas.connection)).login;
-        } catch (error) {
-            this.adminConnection = false;
+        console.log(log.whereIam("View"));
+        this.ctx = ctx;
+        this.datas = datas;
+        this.message = datas.message;
+        this._HTMLResult = datas.default ? (typeof datas.default === "string" ? [datas.default] : datas.default) : [];
+        if (this.datas.connection) {
+            try {
+                this.adminConnection = JSON.parse(decrypt(this.datas.connection)).login;
+            } catch (error) {
+                this.adminConnection = false;
+            }
         }
-      }
     }
 
     title(message: string): string {
@@ -64,6 +70,10 @@ export class CoreHtmlView {
 
     submitButton(label: string) {
         return `<div class="group"> <input type="submit" class="button" value="${label}"> </div>`;
+    }
+
+    infoMessage(message: string) {
+        return message === "undefined" ? "" : `<div class="message-container"> <div class="info"> ${message} </div> </div>`;
     }
 
     errorMessage(error: string) {
@@ -113,16 +123,7 @@ export class CoreHtmlView {
                 </div>`;
     }
 
-    textInput(input: {
-        name: string;
-        label: string;
-        value: string;
-        alert?: string;
-        toolType?: string;
-        password?: boolean;
-        disabled?: boolean;
-        onlyAlpha?: boolean;
-    }) {
+    textInput(input: { name: string; label: string; value: string; alert?: string; toolType?: string; password?: boolean; disabled?: boolean; onlyAlpha?: boolean }) {
         return `<div class="group">
                 <label  for="${input.name}" class="label">${input.label} </label>
                 ${
@@ -148,9 +149,7 @@ export class CoreHtmlView {
     }
 
     hidden(name: string, datas: string | any) {
-        return typeof datas === "string"
-            ? `<input type="hidden" id="${name}" name="${name}" value="${datas}" />`
-            : `<input type="hidden" id="${name}" name="${name}" value="${datas.body[name] || ""}" />`;
+        return typeof datas === "string" ? `<input type="hidden" id="${name}" name="${name}" value="${datas}" />` : `<input type="hidden" id="${name}" name="${name}" value="${datas.body[name] || ""}" />`;
     }
 
     multiJs() {
@@ -158,7 +157,7 @@ export class CoreHtmlView {
     }
 
     newVersion() {
-        return (config.upToDate() === false) ? '' : `<div class="floating-text"> New version <a href="https://florin-pop.com/blog/2019/09/100-days-100-projects" target="_blank"> ${config.version()}</a> </div>`;
+        return config.upToDate() === true ? "" : `<div class="floating-text"> New version <a href="${this.ctx.header.origin}/update" target="_blank"> ${config.version()}</a> </div>`;
     }
 
     social() {
@@ -166,7 +165,7 @@ export class CoreHtmlView {
   <div class="social-panel">
     <p>Created by <a target="_blank" href="https://linktr.ee/adammario">ADAM mario</a></p>
     <button class="close-btn"> ❌ </button>
-    <h4>Version : ${EConstant.appVersion}</h4>
+    <h4>Version : ${appVersion}</h4>
     <ul>
       <li>
         <button type="button" id="git" class="patrom-button-bar__button size-lg" title="Github">
@@ -232,7 +231,6 @@ export class CoreHtmlView {
         });
     }
 
-    
     toArray() {
         return this._HTMLResult;
     }
@@ -243,52 +241,52 @@ export class CoreHtmlView {
         this.replacer("@connection@", this.datas.connection ? this.hidden("_connection", this.datas.connection) : "");
         return this._HTMLResult.filter((e) => e !== "").join("");
     }
-    
+
     /**
      * Create HTML admin login page
      * @param actionForm form name to be posted
      */
     adminLogin(actionForm: string) {
-      const alert = (name: string): string => (this.datas.why && this.datas.why[name] ? `<div class="alert">${this.datas.why[name]}</div>` : "");
-      this._HTMLResult = [
-          `<!DOCTYPE html>`,
-          `<html>`,
-          this.head("Login"),
-          `<body>`,
-          `<div class="login-wrap">`,
-          `<div class="login-html" color="#FF0000">`,
-          this.title("Admin Access"),
-          `<input id="tab-1" type="radio" name="tab" class="sign-in" checked>`,
-          `<label for="tab-1" class="tab">${info.pg} Admin</label>`,
-          `<input id="tab-2" type="radio" name="tab" class="sign-up">`,
-          `<label for="tab-2" class="tab">Help</label>`,
-          `<div class="login-form">`,
-          `<form action="/${actionForm}" method="post">`,
-          `<div class="sign-in-htm">`,
-          this.datas.connection ? this.hidden("_connection", this.datas.connection) : "",
-          this.textInput({ name: "host", label: info.host, value: (this.datas.body && this.datas.body.host) || EConstant.host, alert: alert("host") }),
-          this.textInput({
-              name: "port",
-              label: info.pg + " port",
-              value: (this.datas.body && this.datas.body.port) || EConstant.port,
-              alert: alert("port")
-          }),
-          this.textInput({
-              name: "adminname",
-              label: info.user,
-              value: (this.datas.body && this.datas.body.adminname) || EConstant.pg,
-              alert: alert("username")
-          }),
-          this.textInput({ name: "adminpassword", label: info.pass, password: true, value: "", alert: alert("password") }),
-          this.submitButton(info.conn),
-          this.datas.connection && this.datas.connection.startsWith("[error]") ? this.errorMessage(this.datas.connection.split("[error]")[1]) : "",
-          `</div> `,
-          `</form>`,
-          `</div>`,
-          `</div>`,
-          `</div>`,
-          `</body>`,
-          `</html>`
-      ];
-  }
+        const alert = (name: string): string => (this.datas.why && this.datas.why[name] ? `<div class="alert">${this.datas.why[name]}</div>` : "");
+        this._HTMLResult = [
+            `<!DOCTYPE html>`,
+            `<html>`,
+            this.head("Login"),
+            `<body>`,
+            `<div class="login-wrap">`,
+            `<div class="login-html" color="#FF0000">`,
+            this.title("Admin Access"),
+            `<input id="tab-1" type="radio" name="tab" class="sign-in" checked>`,
+            `<label for="tab-1" class="tab">${info.pg} Admin</label>`,
+            `<input id="tab-2" type="radio" name="tab" class="sign-up">`,
+            `<label for="tab-2" class="tab">Help</label>`,
+            `<div class="login-form">`,
+            `<form action="/${actionForm}" method="post">`,
+            `<div class="sign-in-htm">`,
+            this.datas.connection ? this.hidden("_connection", this.datas.connection) : "",
+            this.textInput({ name: "host", label: info.host, value: (this.datas.body && this.datas.body.host) || EConstant.host, alert: alert("host") }),
+            this.textInput({
+                name: "port",
+                label: info.pg + " port",
+                value: (this.datas.body && this.datas.body.port) || EConstant.port,
+                alert: alert("port")
+            }),
+            this.textInput({
+                name: "adminname",
+                label: info.user,
+                value: (this.datas.body && this.datas.body.adminname) || EConstant.pg,
+                alert: alert("username")
+            }),
+            this.textInput({ name: "adminpassword", label: info.pass, password: true, value: "", alert: alert("password") }),
+            this.submitButton(info.conn),
+            this.datas.connection && this.datas.connection.startsWith("[error]") ? this.errorMessage(this.datas.connection.split("[error]")[1]) : "",
+            `</div> `,
+            `</form>`,
+            `</div>`,
+            `</div>`,
+            `</div>`,
+            `</body>`,
+            `</html>`
+        ];
+    }
 }

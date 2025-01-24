@@ -5,9 +5,9 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 // log debug test
 let isDebug = false;
-let isAdmin = false;
 let valueGeo = "";
 
 const _NONE = "none";

@@ -6,6 +6,7 @@
  *
  */
 export { Services } from "./Services";
+export { Logs } from "./Logs";
 export { Datastreams } from "./Datastreams";
 export { FeaturesOfInterest } from "./FeaturesOfInterest";
 export { HistoricalLocations } from "./HistoricalLocations";
@@ -21,6 +22,5 @@ export { ObservedProperties } from "./ObservedProperties";
 export { Sensors } from "./Sensors";
 export { Things } from "./Things";
 export { Loras } from "./Loras";
-export { Logs } from "./Logs";
 export { Users } from "./Users";
 export { Decoders } from "./Decoders";

@@ -1,6 +1,4 @@
 const pretty = new pp();
-const testNull = (input) => (input.value == "<empty string>" || input.value.trim() == "" || input.value.trim()[0] == "0" || input.value.startsWith(_NONE));
-
 
 /**
  * Show spinner for wating
@@ -33,17 +31,6 @@ function EnabledOrDisabled(obj, test) {
 		if (test) e.removeAttribute('disabled', '');
 		else e.setAttribute('disabled', '');
 	});
-}
-
-function getIfChecked(objName) {
-	const elemId = getElement(objName);
-	if (elemId) return (elemId.checked === true);
-	return false;
-}
-
-function getIfId(objName) {
-	const index = Number(nb.value);
-	return (index > 0);
 }
 
 function getDefaultValue(obj, list) {

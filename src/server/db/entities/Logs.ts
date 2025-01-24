@@ -1,21 +1,90 @@
 /**
- * Logs entity.
+ * Logs entity
  *
  * @copyright 2020-present Inrae
  * @author mario.adam@inrae.fr
  *
  */
 
-import { log } from "../../log";
-import { koaContext } from "../../types";
 import { Common } from "./common";
+import { IreturnResult, keyobj, koaContext } from "../../types";
+import { config } from "../../configuration";
+import { log } from "../../log";
+import { EConstant, EHttpCode } from "../../enums";
+import { returnFormats } from "../../helpers";
 
-/**
- * Logs Class
- */
 export class Logs extends Common {
     constructor(ctx: koaContext) {
         console.log(log.whereIam());
         super(ctx);
+    }
+
+    // Override Get All logs
+    async getAll(): Promise<IreturnResult | undefined> {
+        console.log(log.whereIam());
+        // create query
+        this.ctx.odata.query.where.add(`"url" LIKE '/%${this.ctx.service.name}%/'`);
+        let sql = this.ctx.odata.getSql();
+        // Return results
+        if (sql)
+            return await config.trace.get(this.ctx.service, sql).then(async (res: Record<string, any>) => {
+                return res[0] > 0
+                    ? this.formatReturnResult({
+                          id: isNaN(res[0][0]) ? undefined : +res[0],
+                          nextLink: this.nextLink(res[0]),
+                          prevLink: this.prevLink(res[0]),
+                          body: res[1]
+                      })
+                    : this.formatReturnResult({ body: res[0] == 0 ? [] : res[0] });
+            });
+    }
+
+    // Override Get one logs
+    async getSingle(): Promise<IreturnResult | undefined> {
+        console.log(log.whereIam());
+        // create query
+        this.ctx.odata.query.where.add(` AND url LIKE '/%${this.ctx.service.name}%/'`);
+        const sql = this.ctx.odata.getSql();
+        // Return results
+        if (sql)
+            return await config.trace
+                .get(this.ctx.service, sql)
+                .then((res: Record<string, any>) => {
+                    if (this.ctx.odata.query.select && this.ctx.odata.onlyValue === true) {
+                        const temp = res[this.ctx.odata.query.select[0 as keyobj] == "id" ? EConstant.id : 0];
+                        if (typeof temp === "object") {
+                            this.ctx.odata.returnFormat = returnFormats.json;
+                            return this.formatReturnResult({ body: temp });
+                        } else return this.formatReturnResult({ body: String(temp) });
+                    }
+                    return this.formatReturnResult({
+                        id: isNaN(res[0]) ? undefined : +res[0],
+                        nextLink: this.nextLink(res[0]),
+                        prevLink: this.prevLink(res[0]),
+                        body: this.ctx.odata.single === true ? res[1][0] : { value: res[1] }
+                    });
+                })
+                .catch((err: Error) => this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: err }));
+    }
+
+    // Override Post service
+    async post(dataInput: Record<string, any> | undefined): Promise<IreturnResult | undefined> {
+        console.log(log.whereIam());
+        // This function not exists
+        return;
+    }
+
+    // Override Update service
+    async update(dataInput: Record<string, any> | undefined): Promise<IreturnResult | undefined> {
+        console.log(log.whereIam());
+        // This function not exists
+        return;
+    }
+
+    // Override Delete service
+    async delete(idInput: bigint | string): Promise<IreturnResult | undefined> {
+        console.log(log.whereIam(idInput));
+        // This function not exists
+        return;
     }
 }

@@ -18,7 +18,7 @@ export const pgFunctions = (): string[] => {
     fs.readdirSync(path.join(__dirname))
         .filter((e: string) => e.endsWith(".sql"))
         .forEach((file) => {
-            const content = fs.readFileSync(__dirname + `/${file}`, "utf8");
+            const content = fs.readFileSync(path.join(__dirname, "/", file), "utf8");
             result.push(content);
         });
     return result;

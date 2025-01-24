@@ -58,8 +58,7 @@ namespace Query {
             Query.skiptoken(value, index) ||
             Query.top(value, index) ||
             Query.log(value, index) ||
-            Query.debug(value, index) ||
-            Query.replay(value, index)
+            Query.debug(value, index)
         );
     }
     export function customQueryOption(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
@@ -74,56 +73,43 @@ namespace Query {
         if (index === eq) return;
         return Lexer.tokenize(value, start, index, { key: key.raw, value: Utils.stringify(value, eq, index) }, Lexer.TokenType.CustomQueryOption);
     }
-    export function replay(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
-        const start = index;
-        const add = addToIndex(value, start, "replay");
-        if (add) index += add; else return;
-        
-        const eq = Lexer.EQ(value, index);
-        if (!eq) return;
-        index = eq;
-        
-        const token = PrimitiveLiteral.booleanValue(value, index);
-        if (!token) return;
-        index = token.next;
-        
-        return Lexer.tokenize(value, start, index, token, Lexer.TokenType.Replay);
-    }
     export function debug(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
         const start = index;
         const add = addToIndex(value, start, "debug");
-        if (add) index += add; else return;
-        
+        if (add) index += add;
+        else return;
+
         const eq = Lexer.EQ(value, index);
         if (!eq) return;
         index = eq;
-        
+
         const token = PrimitiveLiteral.booleanValue(value, index);
         if (!token) return;
         index = token.next;
-        
+
         return Lexer.tokenize(value, start, index, token, Lexer.TokenType.Debug);
     }
-    
+
     export function splitResult(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
         const start = index;
         const add = addToIndex(value, start, "splitResult");
-        
-        if (add) index += add; else return;
-        
+
+        if (add) index += add;
+        else return;
+
         const eq = Lexer.EQ(value, index);
         if (!eq) return;
         index = eq;
-        
+
         while (value[index] !== 0x26 && index < value.length) index++;
         if (index === eq) return;
         return Lexer.tokenize(value, start, index, Utils.stringify(value, eq, index), Lexer.TokenType.splitResult);
-        
     }
     export function payload(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
         const start = index;
         const add = addToIndex(value, start, "payload");
-        if (add) index += add; else return;
+        if (add) index += add;
+        else return;
         const eq = Lexer.EQ(value, index);
         if (!eq) return;
         index = eq;
@@ -134,7 +120,8 @@ namespace Query {
     export function interval(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
         const start = index;
         const add = addToIndex(value, start, "interval");
-        if (add) index += add; else return;
+        if (add) index += add;
+        else return;
         const eq = Lexer.EQ(value, index);
         if (!eq) return;
         index = eq;
@@ -145,7 +132,8 @@ namespace Query {
     export function resultFormat(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
         const start = index;
         const add = addToIndex(value, start, "resultFormat");
-        if (add) index += add; else return;
+        if (add) index += add;
+        else return;
         const eq = Lexer.EQ(value, index);
         if (!eq) return;
         index = eq;
@@ -153,7 +141,7 @@ namespace Query {
         Object.keys(returnFormats).forEach((key: string) => {
             if (Utils.equals(value, index, key)) {
                 format = key;
-                index += key.length ;
+                index += key.length;
             }
         });
         if (format) return Lexer.tokenize(value, start, index, { format }, Lexer.TokenType.resultFormat);
@@ -306,13 +294,7 @@ namespace Query {
         return Query.filter(value, index) || Query.search(value, index);
     }
     export function expandRefOption(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
-        return (
-            Query.expandCountOption(value, index) ||
-            Query.orderby(value, index) ||
-            Query.skip(value, index) ||
-            Query.top(value, index) ||
-            Query.InlineCount(value, index)
-        );
+        return Query.expandCountOption(value, index) || Query.orderby(value, index) || Query.skip(value, index) || Query.top(value, index) || Query.InlineCount(value, index);
     }
     export function expandOption(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
         return Query.expandRefOption(value, index) || Query.select(value, index) || Query.expand(value, index) || Query.levels(value, index);
@@ -320,8 +302,7 @@ namespace Query {
     export function expandPath(value: Utils.SourceArray, index: number, metadataContext?: any): Lexer.Token | undefined {
         const start = index;
         const path = [];
-        const token =
-            NameOrIdentifier.qualifiedEntityTypeName(value, index, metadataContext) || NameOrIdentifier.qualifiedComplexTypeName(value, index, metadataContext);
+        const token = NameOrIdentifier.qualifiedEntityTypeName(value, index, metadataContext) || NameOrIdentifier.qualifiedComplexTypeName(value, index, metadataContext);
         if (token) {
             index = token.next;
             path.push(token);
@@ -719,11 +700,7 @@ namespace Query {
         return index;
     }
     export function selectProperty(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
-        const token =
-            Query.selectPath(value, index) ||
-            NameOrIdentifier.primitiveProperty(value, index) ||
-            NameOrIdentifier.primitiveColProperty(value, index) ||
-            NameOrIdentifier.navigationProperty(value, index);
+        const token = Query.selectPath(value, index) || NameOrIdentifier.primitiveProperty(value, index) || NameOrIdentifier.primitiveColProperty(value, index) || NameOrIdentifier.navigationProperty(value, index);
         if (!token) return;
         const start = index;
         index = token.next;

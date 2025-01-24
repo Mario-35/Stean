@@ -29,6 +29,7 @@ class Paths {
         if (!fs.existsSync(this.upload())) fs.mkdirSync(this.upload());
         // backup log create new one stream it
         this.logFile = new File(path.join(this.root, "logs/"), "logs.html", ["backup", "stream"]);
+        this.logFile.writeStream(`<!DOCTYPE html>\n<html>\n<body style="background-color:#353535;">`);
         // get config file
         this.configFile = new File(path.join(this.app, "/configuration/"), "configuration.json", []);
         // check .key and create defaulh one if not exist or corrupt
@@ -67,10 +68,6 @@ class Paths {
         const folder = path.join(this.root, "newVersion/");
         if (create === true && !fs.existsSync(folder)) fs.mkdirSync(folder);
         return folder;
-    }
-
-    backupLogFile(myPath: string) {
-        return path.join(this.root, "logs/", myPath);
     }
 }
 

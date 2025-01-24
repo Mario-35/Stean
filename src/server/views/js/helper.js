@@ -90,8 +90,6 @@ function beautifyDatas(element, source, lang) {
 		if (element) highlightElement(element, source, lang);
 	} catch (err) {
 		notifyError("Error", err);
-	} finally {
-		buttonGo();
 	}
 }
 

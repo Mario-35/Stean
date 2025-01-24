@@ -29,6 +29,11 @@
   font-size: 25px;
 }
 
+.row .card .title:hover {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
 .row .card button.copy-btn {
   display: none;
   margin-left: 5px;
@@ -248,3 +253,18 @@ fieldset {
   font-size: 1px solid var(--font-size-less-2);
   min-height: 115px;
 }
+
+.scrollable-div {
+  height: 100%; /* set a fixed height for the div */
+  overflow-y: scroll; /* enable vertical scrollbar */
+}
+
+.pipo {
+  height: 200px;
+	overflow-y: scroll;
+	overflow-x: hidden;  
+  scrollbar-width: thin;
+  scrollbar-color: #6060dd #ffffff;	
+}
+
+

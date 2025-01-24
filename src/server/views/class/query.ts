@@ -14,27 +14,33 @@ import { addJsFile, listaddJsFiles } from "../js";
 import { CoreHtmlView } from "./core";
 import fs from "fs";
 import path from "path";
+
+/**
+ * Query Class for HTML View
+ */
 export class Query extends CoreHtmlView {
     params: IqueryOptions;
     constructor(ctx: koaContext, datas: Idatas) {
         super(ctx, datas);
-        if(datas.queryOptions) this.params = datas.queryOptions;
+        if (datas.queryOptions) this.params = datas.queryOptions;
         this.createQueryHtmlString();
     }
     createQueryHtmlString() {
         console.log(log.debug_head("commonHtml"));
         // if js or css .min
-        const fileWithOutMin = (input: string): string => input.replace(".min",'');
+        const fileWithOutMin = (input: string): string => input.replace(".min", "");
         // Split files for better search and replace
-        this._HTMLResult = fs.readFileSync(path.resolve(__dirname, "../html/", "query.html")).toString()
-                                .replace(/<link /g,'\n<link ')
-                                .replace(/<script /g,'\n<script ')
-                                .replace(/<\/script>/g,'</script>\n')
-                                .replace(/\r\n/g,'\n')
-                                .split('\n')
-                                .map((e:string) => e.trim())  
-                                .filter(e => e.trim() != "");
-        
+        this._HTMLResult = fs
+            .readFileSync(path.resolve(__dirname, "../html/", "query.html"))
+            .toString()
+            .replace(/<link /g, "\n<link ")
+            .replace(/<script /g, "\n<script ")
+            .replace(/<\/script>/g, "</script>\n")
+            .replace(/\r\n/g, "\n")
+            .split("\n")
+            .map((e: string) => e.trim())
+            .filter((e) => e.trim() != "");
+
         // replace in result
         const replaceInReturnResult = (searhText: string, content: string) => {
             let index = this._HTMLResult.indexOf(searhText);
@@ -43,7 +49,7 @@ export class Query extends CoreHtmlView {
                 index = this._HTMLResult.indexOf(removeAllQuotes(searhText));
                 if (index > 0) this._HTMLResult[index] = content;
             }
-        };    
+        };
         // users possibilities
         if (this.params.user.canPost) {
             this.params.methods.push("POST");
@@ -76,10 +82,10 @@ export class Query extends CoreHtmlView {
             replaceInReturnResult(`<link rel="stylesheet" href="${fileWithOutMin(item)}">`, `<style>${addCssFile(item)}</style>`);
         });
         // process all js files
-        listaddJsFiles().forEach((item: string) => {  
+        listaddJsFiles().forEach((item: string) => {
             replaceInReturnResult(`<script src="${fileWithOutMin(item)}"></script>`, `<script>${addJsFile(item)}</script>`);
         });
-    };
+    }
 
     toString() {
         this.replacers({
@@ -88,5 +94,5 @@ export class Query extends CoreHtmlView {
         });
         this.replacer("_PARAMS={}", "_PARAMS=" + JSON.stringify(this.params, this.bigIntReplacer));
         return super.toString();
-      }
-  }
+    }
+}

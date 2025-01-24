@@ -11,6 +11,7 @@ import { EConstant, EExtensions, enumKeys, EOptions } from "../../enums";
 import { removeAllQuotes } from "../../helpers";
 import { log } from "../../log";
 import { models } from "../../models";
+import { paths } from "../../paths";
 import { Idatas, koaContext } from "../../types";
 import { listaddCssFiles, addCssFile } from "../css";
 import { listaddJsFiles, addJsFile } from "../js";
@@ -18,25 +19,24 @@ import { CoreHtmlView } from "./core";
 import fs from "fs";
 import path from "path";
 
+/**
+ * Admin Class for HTML View
+ */
 export class Admin extends CoreHtmlView {
-    
     constructor(ctx: koaContext, datas: Idatas) {
         console.log(log.whereIam("View"));
         super(ctx, datas);
         this.init();
     }
 
-
     /**
      * if admin login not correct redirect to admin login or create htmlPage.
      */
     private init() {
-        if (this.adminConnection === true) 
-            this.adminHtml(); 
-        else 
-            this.adminLogin("admin");
+        if (this.adminConnection === true) this.adminHtml();
+        else this.adminLogin("admin");
     }
-    
+
     /**
      * create admin htmlPage for all services.
      */
@@ -56,7 +56,8 @@ export class Admin extends CoreHtmlView {
                 .reverse()
                 .map((e) => e.replace("_", ".")),
             extensions: enumKeys(EExtensions).filter((e) => !["file", "base"].includes(e)),
-            options: enumKeys(EOptions)
+            options: enumKeys(EOptions),
+            logsFiles: paths.logFile.list()
         };
 
         // if js or css .min
@@ -97,7 +98,7 @@ export class Admin extends CoreHtmlView {
             .filter((e) => e !== EConstant.test)
             .map(
                 (e) => `<div class="card">
-                <div class="title">${e}</div>
+                <div class="title" onclick="selectCard('${e}')">${e}</div>
                 <button class="copy-btn" id="copy${e}" onclick="copyService('${e}')"> COPY </button>
                 <div class="product">
                     <span class="service-name">${services[e].version}</span>
@@ -115,7 +116,7 @@ export class Admin extends CoreHtmlView {
                     </fieldset>
     
                     <select id="infos${e}" size="5">
-                        ${services[e].service.extensions.map(f => `<option value="${f}">${f}</option>`).join("\n")}
+                        ${services[e].service.extensions.map((f) => `<option value="${f}">${f}</option>`).join("\n")}
                     </select>
     
                 </div>
@@ -127,13 +128,15 @@ export class Admin extends CoreHtmlView {
                 <div class="description">
                     <span class="page" onclick="editPage('${e}', this)">${services[e].service.nb_page}</span>
                     <span class="csv" onclick="editCsv('${e}', this)">${services[e].service.csvDelimiter}</span>
-                    <select class="patrom-select tabindex="1" name="marios" id="marios" onchange="selectChange('${e}', this)">
+                    <select class="patrom-select tabindex="1" onchange="selectChange('${e}', this)">
                         <option selected="selected">Services</option>
                         <option>Statistiques</option>
-                        ${services[e].service.extensions.includes("users") ? '<option>Users</option>' : ''} 
+                        ${services[e].service.extensions.includes("users") ? "<option>Users</option>" : ""} 
+                        ${services[e].service.extensions.includes("lora") ? "<option>Lora</option>" : ""} 
                     </select>
                 </div>
-                </div>`);
+                </div>`
+            );
 
         this.replacers({ cards: cards.join("") });
         this.replacer("_PARAMS={}", "_PARAMS=" + JSON.stringify(params, this.bigIntReplacer));

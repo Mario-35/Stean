@@ -8,13 +8,13 @@
 
 import path from "path";
 import fs from "fs";
-import { spawn, exec } from "child_process";
-import https from "https";
-import { _TEMP_NAME_FILE, appVersion, newVersionPath, rootpath, uploadPath } from "../constants";
-import { httpsDownload } from "./helpers/httpsDownload ";
-import AdmZip from "adm-zip";
+import { exec } from "child_process";
+import { appVersion, dateFile } from "../constants";
+import { httpsDownload } from "../helpers/";
 import { log } from "../log";
 import { config } from "../configuration";
+import { promiseBlindExecute, unzipDirectory, zipDirectory } from "../helpers";
+import { paths } from "../paths";
 
 /**
  * AutoUpdate Class
@@ -25,47 +25,6 @@ class AutoUpdate {
     exitOnComplete: boolean = true;
 
     /**
-     * Create Zip from a folder
-     *
-     * @param sourceDir folder path
-     * @param outputFilePath destination file
-     * @returns boolean
-     */
-    async zipDirectory(sourceDir: string, outputFilePath: string): Promise<boolean> {
-        const zip = new AdmZip();
-        zip.addLocalFolder(sourceDir);
-        try {
-            await zip.writeZipPromise(outputFilePath);
-            return true;
-        } catch (error) {
-            process.stdout.write(log.update(error + "\n"));
-        }
-        return false;
-    }
-
-    /**
-     * unzip Zip file
-     *
-     * @param inputFilePath zip source file
-     * @param outputFilePath destination folder
-     * @returns boolean
-     */
-    async unzipDirectory(inputFilePath: string, outputDirectory: string) {
-        const zip = new AdmZip(inputFilePath);
-        return new Promise<boolean>((resolve, reject) => {
-            zip.extractAllToAsync(outputDirectory, true, true, (error: any) => {
-                if (error) {
-                    console.log(error);
-                    reject(error);
-                } else {
-                    process.stdout.write(log.update(`Extracted to "${outputDirectory}" successfully`));
-                    resolve(true);
-                }
-            });
-        });
-    }
-
-    /**
      * Checks the local version of the application against the remote repository.
      *
      * @param UpToDate - If the local version is the same as the remote version.
@@ -73,16 +32,14 @@ class AutoUpdate {
      * @param remoteVersion - The version of the application in the git repository.
      * @returns An object with the results of the version comparison.
      */
-    async compareVersions(): Promise<{ upToDate: boolean; appVersion: string; remoteVersion?: string }> {
+    async compareVersions(): Promise<{ upToDate: boolean; appVersion: string; remoteVersion: string | undefined }> {
+        const res = { upToDate: false, appVersion: "Error", remoteVersion: "Error" };
         try {
             const remoteVersion = await this.readRemoteVersion();
-            if (remoteVersion) {
-                if (appVersion != remoteVersion) return { upToDate: false, appVersion, remoteVersion };
-            } else return { upToDate: false, appVersion: "Error", remoteVersion: "Error" };
-            return { upToDate: true, appVersion, remoteVersion };
+            return remoteVersion ? { upToDate: appVersion == remoteVersion, appVersion: appVersion, remoteVersion: remoteVersion } : res;
         } catch (err) {
             process.stdout.write(log.update(err + "\n"));
-            return { upToDate: false, appVersion: "Error", remoteVersion: "Error" };
+            return res;
         }
     }
 
@@ -94,16 +51,16 @@ class AutoUpdate {
      */
     async update(): Promise<boolean> {
         try {
-            process.stdout.write(log.update("Updating application from " + AutoUpdate.repository + "\n"));
+            process.stdout.write(log._head("Updating application" + "\n"));
             if ((await this.downloadUpdate()) === true) {
                 await this.backupApp();
                 await this.installUpdate();
                 await this.installDependencies();
-                // await this.promiseBlindExecute("npm run dev");
-                process.exit(1);
+                await promiseBlindExecute("npm run dev", 1000);
+                process.exit(111);
             }
         } catch (err) {
-            process.stdout.write(log.update("Error updating application" + "\n"));
+            log.error("update", "Error updating application");
             process.stdout.write(log.update(err + "\n"));
         }
         return false;
@@ -114,8 +71,8 @@ class AutoUpdate {
      * The backup is stored in the configured tempLocation. Only one backup is kept at a time.
      */
     async backupApp() {
-        await this.zipDirectory(rootpath, uploadPath + `/backup${_TEMP_NAME_FILE}.zip`);
-        process.stdout.write(log.update("Backing up app to " + uploadPath + "\n"));
+        await zipDirectory(paths.app, paths.upload() + `backup${dateFile()}.zip`);
+        process.stdout.write(log.update("Backing up app to " + paths.upload + "\n"));
         return true;
     }
 
@@ -124,6 +81,7 @@ class AutoUpdate {
      * The repo is cloned to the configured tempLocation.
      */
     async downloadUpdate() {
+        process.stdout.write(log.update("Download from " + AutoUpdate.repository + "\n"));
         return await httpsDownload(AutoUpdate.repository + "/raw/main/builds/stean_latest.zip", "update.zip").then(() => true);
     }
 
@@ -133,15 +91,15 @@ class AutoUpdate {
     installDependencies() {
         return new Promise(function (resolve, reject) {
             //If this.testing is enabled, use alternative path to prevent overwrite of app.
-            let destination = path.join(newVersionPath);
-            process.stdout.write(log.update("Installing application dependencies in " + destination));
+            let destination = paths.newVersion(true);
+            process.stdout.write(log.update("Installing application dependencies in " + destination + "\n"));
             // Generate and execute command
             let command = `cd ${destination} && npm install`;
             let child = exec(command);
 
             // Wait for results
             child.stdout?.on("end", resolve);
-            child.stdout?.on("data", (data) => process.stdout.write(log.update("npm install: " + data.replace(/\r?\n|\r/g, ""))));
+            child.stdout?.on("data", (data) => process.stdout.write(log.update("npm install: " + data.replace(/\r?\n|\r/g, "")) + "\n"));
             child.stderr?.on("data", (data) => {
                 if (data.toLowerCase().includes("error")) {
                     // npm passes warnings as errors, only reject if "error" is included
@@ -161,20 +119,8 @@ class AutoUpdate {
      * The update is installed from  the configured tempLocation.
      */
     async installUpdate(): Promise<boolean> {
-        await this.unzipDirectory(path.join(uploadPath + "/update.zip"), newVersionPath);
-        config.saveConfig(newVersionPath + "configuration/");
-        // fs.copyFile(rootpath + "/configuration/.key", newVersionPath + "/configuration/.key", (err) => {
-        //     if (err) {
-        //         console.log("Error Found:", err);
-        //         return false;
-        //     }
-        // });
-        // fs.copyFile(rootpath + "/configuration/configuration.json", newVersionPath + "/configuration/configuration.json", (err) => {
-        //     if (err) {
-        //         console.log("Error Found:", err);
-        //         return false;
-        //     }
-        // });
+        await unzipDirectory(paths.updateFile(), paths.newVersion(false));
+        config.saveConfig(path.join(paths.newVersion(false), "configuration"));
         return true;
     }
 
@@ -183,55 +129,12 @@ class AutoUpdate {
      */
     async readRemoteVersion(): Promise<string | undefined> {
         try {
-            await httpsDownload(AutoUpdate.repository.replace("github.com", "raw.githubusercontent.com") + `/refs/heads/${AutoUpdate.branch}/package.json`, "2package.json");
-            return JSON.parse(fs.readFileSync(path.join(uploadPath, "2package.json"), "utf-8")).version;
+            await httpsDownload(AutoUpdate.repository.replace("github.com", "raw.githubusercontent.com") + `/refs/heads/${AutoUpdate.branch}/package.json`, "package.json");
+            return JSON.parse(fs.readFileSync(paths.packageFile(paths.upload()), "utf-8")).version;
         } catch (error) {
             console.log(error);
             return;
         }
-    }
-
-    /**
-     * A promise wrapper for the child-process spawn function. Does not listen for results.
-     * @param {String} command - The command to execute.
-     */
-    promiseBlindExecute(command: string) {
-        return new Promise(function (resolve, reject) {
-            spawn(command, [], { shell: true, detached: true });
-            setTimeout(resolve, 1000);
-        });
-    }
-
-    /**
-     * A promise wrapper for sending a get https requests.
-     * @param {String} url - The Https address to request.
-     * @param {String} options - The request options.
-     */
-    promiseHttpsRequest(url: string, options: https.RequestOptions) {
-        return new Promise(function (resolve, reject) {
-            let req = https.request(url, options, (res) => {
-                //Construct response
-                let body = "";
-                res.on("data", (data) => {
-                    body += data;
-                });
-                res.on("end", function () {
-                    if (res && res.statusCode && res.statusCode === 200) return resolve(body);
-                    process.stdout.write(log.update("Bad Response " + res.statusCode + "\n"));
-                    reject(res.statusCode);
-                });
-            });
-            process.stdout.write(log.update("Sending request to " + url + "\n"));
-            process.stdout.write(log.update("Options: " + JSON.stringify(options) + "\n"));
-            req.on("error", reject);
-            req.end();
-        });
-    }
-
-    async sleep(time: number) {
-        return new Promise(function (resolve, reject) {
-            setTimeout(resolve, time);
-        });
     }
 }
 

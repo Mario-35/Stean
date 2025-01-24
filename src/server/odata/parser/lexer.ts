@@ -140,7 +140,6 @@ export enum TokenType {
     payload = "Payload",
     Root = "Root",
     Debug = "Debug",
-    Replay = "Replay",
     InlineCount = "InlineCount",
     Select = "Select",
     SelectItem = "SelectItem",
@@ -204,14 +203,7 @@ export namespace Lexer {
     export const Token: typeof LexerToken = exports.Token;
     export type TokenType = LexerTokenType;
     export const TokenType: typeof LexerTokenType = exports.TokenType;
-    export function tokenize(
-        value: Utils.SourceArray,
-        index: number,
-        next: number,
-        tokenValue: any,
-        tokenType: TokenType,
-        metadataContextContainer?: Token
-    ): Token {
+    export function tokenize(value: Utils.SourceArray, index: number, next: number, tokenValue: any, tokenType: TokenType, metadataContextContainer?: Token): Token {
         const token = new exports.Token({
             position: index,
             next: next,
@@ -343,8 +335,7 @@ export namespace Lexer {
         return Lexer.pctEncoded(value, index);
     }
     export function pctEncodedUnescaped(value: Utils.SourceArray, index: number): number | undefined {
-        if (Utils.equals(value, index, "%22") || Utils.equals(value, index, "%3") || Utils.equals(value, index, "%4") || Utils.equals(value, index, "%5C"))
-            return index;
+        if (Utils.equals(value, index, "%22") || Utils.equals(value, index, "%3") || Utils.equals(value, index, "%4") || Utils.equals(value, index, "%5C")) return index;
         return Lexer.pctEncoded(value, index);
     }
     export function pchar(value: Utils.SourceArray, index: number): number | undefined {
@@ -353,44 +344,15 @@ export namespace Lexer {
     }
     export function pcarNoSQUOTE(value: Utils.SourceArray, index: number): number | undefined {
         if (Lexer.unreserved(value[index]) || value[index] === 0x24 || value[index] === 0x26) return index + 1;
-        else
-            return (
-                Lexer.otherDelims(value, index) ||
-                Lexer.EQ(value, index) ||
-                Lexer.COLON(value, index) ||
-                Lexer.AT(value, index) ||
-                Lexer.pctEncodedNoSQUOTE(value, index) ||
-                index
-            );
+        else return Lexer.otherDelims(value, index) || Lexer.EQ(value, index) || Lexer.COLON(value, index) || Lexer.AT(value, index) || Lexer.pctEncodedNoSQUOTE(value, index) || index;
     }
     export function qcharNoAMP(value: Utils.SourceArray, index: number): number | undefined {
-        if (
-            Lexer.unreserved(value[index]) ||
-            value[index] === 0x3a ||
-            value[index] === 0x40 ||
-            value[index] === 0x2f ||
-            value[index] === 0x3f ||
-            value[index] === 0x24 ||
-            value[index] === 0x27 ||
-            value[index] === 0x3d
-        )
-            return index + 1;
+        if (Lexer.unreserved(value[index]) || value[index] === 0x3a || value[index] === 0x40 || value[index] === 0x2f || value[index] === 0x3f || value[index] === 0x24 || value[index] === 0x27 || value[index] === 0x3d) return index + 1;
         else return Lexer.pctEncoded(value, index) || Lexer.otherDelims(value, index) || index;
     }
     export function qcharNoAMPDQUOTE(value: Utils.SourceArray, index: number): number | undefined {
         const temp = Lexer.BWS(value, index);
-        if (
-            temp != undefined &&
-            (Lexer.unreserved(value[index]) ||
-                value[index] === 0x3a ||
-                value[index] === 0x40 ||
-                value[index] === 0x2f ||
-                value[index] === 0x3f ||
-                value[index] === 0x24 ||
-                value[index] === 0x27 ||
-                value[index] === 0x3d)
-        )
-            return index + 1;
+        if (temp != undefined && (Lexer.unreserved(value[index]) || value[index] === 0x3a || value[index] === 0x40 || value[index] === 0x2f || value[index] === 0x3f || value[index] === 0x24 || value[index] === 0x27 || value[index] === 0x3d)) return index + 1;
         else return Lexer.otherDelims(value, index) || Lexer.pctEncodedUnescaped(value, index);
     }
     // export function pchar(value:number):boolean { return unreserved(value) || otherDelims(value) || value == 0x24 || value == 0x26 || EQ(value) || COLON(value) || AT(value); }
@@ -429,33 +391,19 @@ export namespace Lexer {
         const start = index;
         let end = index;
         if (value[index] === 0x2d) index++;
-        if (
-            (value[index] === 0x30 && (end = Utils.required(value, index + 1, Lexer.DIGIT, 3, 3))) ||
-            (Lexer.oneToNine(value[index]) && (end = Utils.required(value, index + 1, Lexer.DIGIT, 3)))
-        )
-            return end;
+        if ((value[index] === 0x30 && (end = Utils.required(value, index + 1, Lexer.DIGIT, 3, 3))) || (Lexer.oneToNine(value[index]) && (end = Utils.required(value, index + 1, Lexer.DIGIT, 3)))) return end;
         return start;
     }
     export function month(value: Utils.SourceArray, index: number): number | undefined {
-        if ((value[index] === 0x30 && Lexer.oneToNine(value[index + 1])) || (value[index] === 0x31 && value[index + 1] >= 0x30 && value[index + 1] <= 0x32))
-            return index + 2;
+        if ((value[index] === 0x30 && Lexer.oneToNine(value[index + 1])) || (value[index] === 0x31 && value[index + 1] >= 0x30 && value[index + 1] <= 0x32)) return index + 2;
         return index;
     }
     export function day(value: Utils.SourceArray, index: number): number | undefined {
-        if (
-            (value[index] === 0x30 && Lexer.oneToNine(value[index + 1])) ||
-            ((value[index] === 0x31 || value[index] === 0x32) && Lexer.DIGIT(value[index + 1])) ||
-            (value[index] === 0x33 && (value[index + 1] === 0x30 || value[index + 1] === 0x31))
-        )
-            return index + 2;
+        if ((value[index] === 0x30 && Lexer.oneToNine(value[index + 1])) || ((value[index] === 0x31 || value[index] === 0x32) && Lexer.DIGIT(value[index + 1])) || (value[index] === 0x33 && (value[index + 1] === 0x30 || value[index + 1] === 0x31))) return index + 2;
         return index;
     }
     export function hour(value: Utils.SourceArray, index: number): number | undefined {
-        if (
-            ((value[index] === 0x30 || value[index] === 0x31) && Lexer.DIGIT(value[index + 1])) ||
-            (value[index] === 0x32 && (value[index + 1] === 0x30 || value[index + 1] === 0x31 || value[index + 1] === 0x32 || value[index + 1] === 0x33 || value[index + 1] === 0x34))
-        )
-            return index + 2;
+        if (((value[index] === 0x30 || value[index] === 0x31) && Lexer.DIGIT(value[index + 1])) || (value[index] === 0x32 && (value[index + 1] === 0x30 || value[index + 1] === 0x31 || value[index + 1] === 0x32 || value[index + 1] === 0x33 || value[index + 1] === 0x34))) return index + 2;
         return index;
     }
     export function minute(value: Utils.SourceArray, index: number): number | undefined {
@@ -467,7 +415,7 @@ export namespace Lexer {
     export function fractionalSeconds(value: Utils.SourceArray, index: number): number | undefined {
         return Utils.required(value, index, DIGIT, 1, 12);
     }
-    export function geographyPrefix(value: Utils.SourceArray, index: number): number | undefined {  
+    export function geographyPrefix(value: Utils.SourceArray, index: number): number | undefined {
         return Utils.equals(value, index, "geography") ? index + 9 : index;
     }
     export function geometryPrefix(value: Utils.SourceArray, index: number): number | undefined {

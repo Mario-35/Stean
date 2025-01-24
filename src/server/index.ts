@@ -6,7 +6,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-
 import path from "path";
 import Koa from "koa";
 import bodyParser from "koa-bodyparser";
@@ -23,29 +22,31 @@ import { isTest, logToHtml } from "./helpers";
 import { RootPgVisitor } from "./odata/visitor";
 import { EChar, EConstant } from "./enums";
 import { protectedRoutes, routerHandle, unProtectedRoutes } from "./routes/";
-import { Iservice, IdecodedUrl, Ientities, Ilog, IuserToken } from "./types";
+import { Iservice, IdecodedUrl, Ientities, IuserToken } from "./types";
+import { appVersion } from "./constants";
+import { paths } from "./paths";
 
 // Extend koa context
 declare module "koa" {
     interface DefaultContext {
         decodedUrl: IdecodedUrl;
-        traceId: bigint;
+        traceId: bigint | undefined;
         service: Iservice;
         odata: RootPgVisitor;
         datas: Record<string, any>;
         user: IuserToken;
-        log: Ilog | undefined;
         model: Ientities;
         body: any;
     }
 }
+
 // Initialisation of models
 models.init();
 // new koa server https://koajs.com/
 export const app = new Koa();
-app.use(favicon(__dirname + "/favicon.ico"));
+app.use(favicon(path.join(__dirname, "/", "favicon.ico")));
 // add public folder [static]
-app.use(serve(path.join(__dirname, "/apidoc")));
+app.use(serve(path.join(__dirname, "/", "apidoc")));
 // helmet protection https://github.com/venables/koa-helmet
 app.use(helmet.contentSecurityPolicy({ directives: EConstant.helmetConfig }));
 // bodybarser https://github.com/koajs/bodyparser
@@ -59,7 +60,7 @@ if (!isTest())
             if (str.includes("/logs")) return;
             str = `[39m ${new Date().toLocaleString()}${str}`;
             process.stdout.write(str + "\n");
-            if (config.logFile) config.logFile.write(logToHtml(str));
+            paths.logFile.writeStream(logToHtml(str));
         })
     );
 // add json capabilities to KOA server
@@ -74,12 +75,10 @@ app.use(protectedRoutes.routes());
 export const server = isTest()
     ? // TDD init
       app.listen(config.getService(EConstant.admin).ports?.http || 8029, async () => {
-          await config.connection(
-              EConstant.admin
-          )`SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname = 'test'`.then(async () => {
+          await config.connection(EConstant.admin)`SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname = 'test'`.then(async () => {
               await config.connection(EConstant.admin)`DROP DATABASE IF EXISTS test`;
           });
-          console.log(log.message(`${EConstant.appName} version : ${EConstant.appVersion}`, "ready " + EChar.ok));
+          console.log(log.message(`${EConstant.appName} version : ${appVersion}`, "ready " + EChar.ok));
       })
     : // Production or dev init
       config.init();

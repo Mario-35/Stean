@@ -11,6 +11,9 @@ import { Idatas, koaContext } from "../../types";
 import { autoUpdate } from "../../update";
 import { CoreHtmlView } from "./core";
 
+/**
+ * Update Class for HTML View
+ */
 export class Update extends CoreHtmlView {
     constructor(ctx: koaContext, datas: Idatas) {
         console.log(log.whereIam("View"));
@@ -19,8 +22,7 @@ export class Update extends CoreHtmlView {
     }
 
     private init() {
-        if (this.adminConnection === true)
-            autoUpdate.update();
+        if (this.adminConnection === true) autoUpdate.update();
         else this.adminLogin("update");
     }
 }

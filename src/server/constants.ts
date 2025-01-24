@@ -6,9 +6,10 @@
  *
  */
 
-import path from "path";
 import fs from "fs";
-
+import { paths } from "./paths";
+process.env.NODE_ENV = process.env.NODE_ENV || "production";
+export const appVersion = String(JSON.parse(String(fs.readFileSync(paths.packageFile(), "utf-8"))).version);
 export const ESCAPE_ARRAY_JSON = (input: string) => (input ? input.replace("[", "{").replace("]", "}") : undefined);
 export const ESCAPE_SIMPLE_QUOTE = (input: string) => input.replace(/[']+/g, "''");
 export const timestampNow = (): string => new Date().toLocaleTimeString();
@@ -21,11 +22,6 @@ export function setReady(input: boolean) {
 export let _TRACE = true;
 export let _DEBUG = false;
 export let _READY = false;
-export const rootpath = path.join(path.resolve(__dirname, process.env.NODE_ENV?.trim() === "production" ? "../api/" : "../../src/server/"));
-export const packageJsonPath = path.join(__dirname, process.env.NODE_ENV?.trim() === "production" ? "./package.json" : "../../package.json");
-export const uploadPath = path.join(path.resolve(__dirname, process.env.NODE_ENV?.trim() === "production" ? "../upload/" : "../../upload/"));
-export const newVersionPath = path.join(path.resolve(__dirname, process.env.NODE_ENV?.trim() === "production" ? "../newVersion/" : "../../newVersion/"));
-export const appVersion = String(JSON.parse(String(fs.readFileSync(packageJsonPath, "utf-8"))).version);
 
 // function to be used in catch
 export function logDbError(err: any) {
@@ -33,7 +29,10 @@ export function logDbError(err: any) {
     return false;
 }
 
-export const _TEMP_NAME_FILE = new Date()
-    .toISOString()
-    .slice(0, 19)
-    .replace(/[^0-9]/g, "");
+export const dateFile = () =>
+    new Date()
+        .toISOString()
+        .slice(0, 19)
+        .replace(/[^0-9]/g, "");
+
+export const FORMAT_JSONB = (content: any) => `E'${content ? ESCAPE_SIMPLE_QUOTE(JSON.stringify(content)) : "{}"}'::text::jsonb`;

@@ -142,7 +142,7 @@ function toggleTheme() {
 	}
 }
 
-fileone.addEventListener("change", function(e) {
+if (document.getElementById('fileone')) fileone.addEventListener("change", function(e) {
 	var fileName = "";
 	try {
 		if (this.files && this.files.length > 1)

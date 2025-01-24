@@ -7,7 +7,7 @@
  */
 
 import postgres from "postgres";
-import { _DEBUG } from "../../constants";
+import { _DEBUG, appVersion } from "../../constants";
 import { IdbConnection } from "../../types";
 import { EConstant } from "../../enums";
 
@@ -22,7 +22,7 @@ export async function testDbExists(adminConn: IdbConnection, database: string): 
     return await postgres(`postgres://${adminConn.user}:${adminConn.password}@${adminConn.host}:${adminConn.port || 5432}/${database}`, {
         debug: _DEBUG,
         connection: {
-            application_name: `${EConstant.appName} ${EConstant.appVersion}`
+            application_name: `${EConstant.appName} ${appVersion}`
         }
     })`select 1+1 AS result`
         .then(async () => true)

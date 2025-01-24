@@ -9,8 +9,8 @@
 import { decodeToken } from "../authentication";
 import { _DEBUG } from "../constants";
 import { log } from "../log";
-import { EExtensions, EHttpCode } from "../enums";
-import { createBearerToken, getUserId } from "../helpers";
+import { EHttpCode } from "../enums";
+import { createBearerToken, returnFormats } from "../helpers";
 import { adminRoute, decodeUrl, logsRoute, updateRoute, exportRoute } from "./helper";
 import { errors } from "../messages";
 import { config } from "../configuration";
@@ -19,7 +19,6 @@ export { unProtectedRoutes } from "./unProtected";
 export { protectedRoutes } from "./protected";
 import querystring from "querystring";
 import { koaContext } from "../types";
-import { writeLogToDb } from "../log/writeLogToDb";
 import { paths } from "../paths";
 
 export const routerHandle = async (ctx: koaContext, next: any) => {
@@ -28,7 +27,7 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     // if configuration exist
     if (config.configFileExist() === true)
         // trace request
-        config.writeTrace(ctx);
+        await config.trace.write(ctx);
     // admin coute for first start
     else return await adminRoute(ctx);
 
@@ -36,23 +35,25 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     createBearerToken(ctx);
     // decode url
     const decodedUrl = decodeUrl(ctx);
+
     if (!decodedUrl && ctx.path.includes("/logs-")) return logsRoute(ctx, ctx.path);
     switch (ctx.path.split("/").reverse()[0].toLocaleUpperCase()) {
         case "ADMIN":
             return await adminRoute(ctx);
         // update page
         case "UPDATE":
-            return await updateRoute(ctx);
+            if (!decodedUrl) return await updateRoute(ctx);
         // export page
         case "EXPORT":
-            await exportRoute(ctx);
-        case "INFOS":
-            if (!decodedUrl) ctx.body = config.getInfosForAll(ctx);
+            if (!decodedUrl) await exportRoute(ctx);
         // logging for all
         case "LOGGING":
-            if (!decodedUrl) logsRoute(ctx, paths.logFile.fileName);
+            if (!decodedUrl) return await logsRoute(ctx, paths.logFile.fileName);
     }
-    if (!decodedUrl) return;
+    if (!decodedUrl) {
+        ctx.type = returnFormats.json.type;
+        ctx.throw(EHttpCode.notFound);
+    }
     // set decodedUrl context
     ctx.decodedUrl = decodedUrl;
     if (_DEBUG) console.log(log.object("decodedUrl", decodedUrl));
@@ -66,20 +67,6 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
 
     // try to clean query string
     ctx.querystring = decodeURIComponent(querystring.unescape(ctx.querystring));
-    // prepare logs object
-    try {
-        if (ctx.service.extensions.includes(EExtensions.logs))
-            ctx.log = {
-                datas: { ...ctx.body },
-                code: -999,
-                method: ctx.method,
-                url: ctx.url,
-                database: ctx.service.pg.database,
-                user_id: getUserId(ctx).toString()
-            };
-    } catch (error: any) {
-        ctx.log = undefined;
-    }
     // get model
     ctx.model = models.filtered(ctx.service);
 
@@ -89,13 +76,12 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
         ctx.user = decodeToken(ctx);
         await next().then(async () => {});
     } catch (error: any) {
-        console.log(error);
-        if (ctx.service && ctx.service.extensions.includes(EExtensions.logs)) writeLogToDb(ctx, error);
         const tempError = {
             code: error.statusCode,
             message: error.message,
             detail: error.detail
         };
+        config.trace.error(ctx, tempError);
         ctx.status = error.statusCode || error.status || EHttpCode.internalServerError;
         ctx.body = error.link ? { ...tempError, link: error.link } : tempError;
     }

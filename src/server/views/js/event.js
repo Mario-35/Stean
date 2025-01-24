@@ -76,6 +76,7 @@ btnPostTemplate.onclick = () => {
 	});
 
 	beautifyDatas(getElement("jsonDatas"), result, "json");
+	buttonGo();
 };
 
 btnRoot.onclick = async () => {

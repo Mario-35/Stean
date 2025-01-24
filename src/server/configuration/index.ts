@@ -6,24 +6,26 @@
  *
  */
 
-import { setReady, _DEBUG, ESCAPE_SIMPLE_QUOTE, timestampNow, logDbError } from "../constants";
+import { setReady, _DEBUG, timestampNow, logDbError, appVersion, FORMAT_JSONB } from "../constants";
 import { asyncForEach, decrypt, encrypt, hidePassword, isProduction, isTest, logToHtml } from "../helpers";
 import { Iservice, IdbConnection, IserviceInfos, koaContext, keyobj } from "../types";
 import { errors, info, infos, msg } from "../messages";
 import { app } from "..";
-import { color, EChar, EColor, EConstant, EExtensions, EFileName, EOptions, EUpdate } from "../enums";
+import { color, EChar, EColor, EConstant, EExtensions, EOptions, EUpdate } from "../enums";
+import path from "path";
 import fs from "fs";
 import update from "./update.json";
 import postgres from "postgres";
 import { log } from "../log";
 import { createDatabase, pgFunctions, testDatas } from "../db/createDb";
 import { userAccess } from "../db/dataAccess";
-import path from "path";
 import { formatServiceFile, testDbExists, validJSONService } from "./helpers";
 import { MqttServer } from "../mqtt";
 import { updateIndexes } from "../db/helpers";
 import { models } from "../models";
 import { autoUpdate } from "../update";
+import { paths } from "../paths";
+import { Trace } from "../log/trace";
 
 /**
  * Class to create configs environements
@@ -32,20 +34,15 @@ class Configuration {
     // store all services
     static services: { [key: string]: Iservice } = {};
     static adminConnection: postgres.Sql<Record<string, unknown>>;
-    // configuration complete file path
-    static filePath: string;
     static MqttServer: MqttServer;
     static queries: { [key: string]: string[] } = {};
-    public logFile = fs.createWriteStream(path.resolve(__dirname, "../", EFileName.logs), { flags: "w" });
     static listenPorts: number[] = [];
     static appVersion: string = "";
     static remoteVersion: string | undefined;
     static upToDate: boolean = true;
+    trace: Trace;
 
     constructor() {
-        const file: fs.PathOrFileDescriptor = __dirname + `/${EFileName.config}`;
-        // Set path of the configuration file
-        Configuration.filePath = file.toString();
         // override console log for TDD important in production build will remove all console.log
         if (isTest()) {
             console.log = (data: any) => {};
@@ -82,7 +79,7 @@ class Configuration {
             return this.connection(input.name)
                 .unsafe(models.getStats(input))
                 .then(async (res) => {
-                    const datas = `UPDATE public.services SET stats = '${ESCAPE_SIMPLE_QUOTE(JSON.stringify(res[0].results[0]))}'::jsonb WHERE name = '${input.name}'`;
+                    const datas = `UPDATE public.services SET stats = ${FORMAT_JSONB(res[0].results[0])} WHERE name = '${input.name}'`;
                     Configuration.services[input.name]._stats = res[0].results[0];
                     return await this.connection(EConstant.admin)
                         .unsafe(datas)
@@ -95,7 +92,7 @@ class Configuration {
 
     private async addService(input: Iservice): Promise<boolean> {
         if (input && input.name === EConstant.admin) return false;
-        const datas = `INSERT INTO public.services ("name", "datas") VALUES('${input.name}', E'${ESCAPE_SIMPLE_QUOTE(JSON.stringify(input))}'::jsonb) ON CONFLICT DO NOTHING;`;
+        const datas = `INSERT INTO public.services ("name", "datas") VALUES('${input.name}', ${FORMAT_JSONB(input)}) ON CONFLICT DO NOTHING;`;
         return await this.connection(EConstant.admin)
             .unsafe(datas)
             .then((e) => true)
@@ -151,26 +148,8 @@ class Configuration {
     writeLog(input: any) {
         if (input) {
             process.stdout.write(input + "\n");
-            if (config && config.logFile) config.logFile.write(logToHtml(input));
+            paths.logFile.writeStream(logToHtml(input));
         }
-    }
-
-    /**
-     * Add to trace
-     *
-     * @param ctx koa context
-     */
-    async writeTrace(ctx: koaContext) {
-        const datas = `INSERT INTO trace ("method", url, datas) VALUES('${ctx.method}', '${ctx.request.url}', ('${ctx.body ? ESCAPE_SIMPLE_QUOTE(JSON.stringify(ctx.body)) : "{}"}')::text::jsonb) RETURNING id;`;
-        await Configuration.adminConnection
-            .unsafe(datas)
-            .then((res) => (ctx.traceId = res[0].id))
-            .catch(async (error) => {
-                if (error.code === "42P01") {
-                    await Configuration.adminConnection.unsafe(`CREATE TABLE public.trace ( id int8 GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1 NO CYCLE ) NOT NULL, "date" timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL, "method" text NULL, url text NULL, datas jsonb NULL, CONSTRAINT log_pkey PRIMARY KEY (id) ); CREATE INDEX trace_id ON public.trace USING btree (id); `).catch((err) => process.stdout.write(err + "\n"));
-                    Configuration.adminConnection.unsafe(datas);
-                } else process.stdout.write(error + "\n");
-            });
     }
 
     /**
@@ -180,13 +159,14 @@ class Configuration {
      * @returns true if it's done
      */
     private async readConfigFile(input?: string): Promise<boolean> {
-        this.writeLog(`${color(EColor.Red)}${"▬".repeat(24)} ${color(EColor.Cyan)} ${`START ${EConstant.appName} ${info.ver} : ${EConstant.appVersion} [${EConstant.nodeEnv}]`} ${color(EColor.White)} ${new Date().toLocaleDateString()} : ${timestampNow()} ${color(EColor.Red)} ${"▬".repeat(24)}${color(EColor.Reset)}`);
-        this.writeLog(log.message(infos(["read", "config"]), input ? "content" : Configuration.filePath));
+        this.writeLog(`${color(EColor.Red)}${"▬".repeat(24)} ${color(EColor.Cyan)} ${`START ${EConstant.appName} ${info.ver} : ${appVersion} [${process.env.NODE_ENV}]`} ${color(EColor.White)} ${new Date().toLocaleDateString()} : ${timestampNow()} ${color(EColor.Red)} ${"▬".repeat(24)}${color(EColor.Reset)}`);
+        log.newLog(log.message("Root", paths.root));
+        this.writeLog(log.message(infos(["read", "config"]), input ? "content" : paths.configFile.fileName));
         try {
             // load File
-            const fileContent = input || fs.readFileSync(Configuration.filePath, "utf8");
+            const fileContent = input || fs.readFileSync(paths.configFile.fileName, "utf8");
             if (fileContent.trim() === "") {
-                log.error(msg(errors.fileEmpty, Configuration.filePath), Configuration.filePath);
+                log.error(msg(errors.fileEmpty, paths.configFile.fileName), paths.configFile.fileName);
                 process.exit(111);
             }
             // decrypt file
@@ -238,9 +218,10 @@ class Configuration {
         Configuration.adminConnection = postgres(`postgres://${infosAdmin.user}:${infosAdmin.password}@${infosAdmin.host}:${infosAdmin.port || 5432}/${EConstant.pg}`, {
             debug: _DEBUG,
             connection: {
-                application_name: `${EConstant.appName} ${EConstant.appVersion}`
+                application_name: `${EConstant.appName} ${appVersion}`
             }
         });
+        this.trace = new Trace(Configuration.adminConnection);
         return true;
     }
 
@@ -273,7 +254,7 @@ class Configuration {
      * @returns configuration file present
      */
     configFileExist(): boolean {
-        return fs.existsSync(Configuration.filePath);
+        return fs.existsSync(paths.configFile.fileName);
     }
 
     /**
@@ -350,7 +331,7 @@ class Configuration {
      * @returns true if it's done
      */
     async initConfig(input: string): Promise<boolean> {
-        this.writeLog(log.message(infos(["write", "config"]), Configuration.filePath));
+        this.writeLog(log.message(infos(["read", "config"]), paths.configFile.fileName));
         return await this.readConfigFile(input);
     }
 
@@ -360,21 +341,9 @@ class Configuration {
      * @returns true if it's done
      */
     private writeConfig(input?: JSON): boolean {
-        this.writeLog(log.message(infos(["write", "config"]), Configuration.filePath));
+        this.writeLog(log.message(infos(["write", "config"]), paths.configFile.fileName));
         const datas: string = input ? JSON.stringify(input, null, 4) : JSON.stringify({ admin: Configuration.services[EConstant.admin] }, null, 4);
-        // in some case of crash config is blank so prevent to overrite it
-        fs.writeFile(
-            // encrypt only in production mode
-            Configuration.filePath,
-            isProduction() === true ? encrypt(datas) : datas,
-            (error) => {
-                if (error) {
-                    console.log(error);
-                    return false;
-                }
-            }
-        );
-        return true;
+        return this.writeFile(paths.configFile.fileName, isProduction() === true ? encrypt(datas) : datas);
     }
 
     /**
@@ -554,7 +523,7 @@ class Configuration {
             debug: true,
             max: 2000,
             connection: {
-                application_name: `${EConstant.appName} ${EConstant.appVersion}`
+                application_name: `${EConstant.appName} ${appVersion}`
             }
         });
     }
@@ -705,11 +674,11 @@ class Configuration {
             }
 
             this.writeLog(log._head("Ready", EChar.ok));
-            this.writeLog(log.logo(EConstant.appVersion));
+            this.writeLog(log.logo(appVersion));
             return status;
             // no configuration file so First install
         } else {
-            console.log(log.message("file", Configuration.filePath + " " + EChar.notOk));
+            console.log(log.message("file", paths.configFile.fileName + " " + EChar.notOk));
             this.addListening(this.defaultHttp(), "First launch");
             return true;
         }
@@ -822,7 +791,7 @@ class Configuration {
         return await this.connection(EConstant.admin)
             .unsafe("SELECT datas FROM services")
             .then((res: any) => {
-                const fileContent = fs.readFileSync(Configuration.filePath, "utf8");
+                const fileContent = fs.readFileSync(paths.configFile.fileName, "utf8");
                 const result: JSON = JSON.parse(decrypt(fileContent));
                 res.forEach((e: JSON) => {
                     result[e["datas" as keyof object]["name"]] = e["datas" as keyof object];
@@ -915,18 +884,17 @@ class Configuration {
     }
 
     /**
-     * Write an encrypt config file in json file
      *
-     * @returns true if it's done
+     * @param path ath with filename
+     * @param content content to write
+     * @returns true when its done
      */
-    public saveConfig(path: string): boolean {
-        this.writeLog(log.message(infos(["write", "config"]), Configuration.filePath));
-        const datas: string = JSON.stringify({ admin: Configuration.services[EConstant.admin] }, null, 4);
+    public writeFile(path: string, content: string): boolean {
         // in some case of crash config is blank so prevent to overrite it
         fs.writeFile(
             // encrypt only in production mode
             path,
-            isProduction() === true ? encrypt(datas) : datas,
+            content,
             (error) => {
                 if (error) {
                     console.log(error);
@@ -934,17 +902,19 @@ class Configuration {
                 }
             }
         );
-        fs.writeFile(
-            // encrypt only in production mode
-            path,
-            EConstant.key,
-            (error) => {
-                if (error) {
-                    console.log(error);
-                    return false;
-                }
-            }
-        );
+        return true;
+    }
+    /**
+     * Write an encrypt config file in json file
+     *
+     * @returns true if it's done
+     */
+    public saveConfig(myPath: string): boolean {
+        this.writeLog(log.message(infos(["write", "config"]), `in ${myPath}`));
+        const datas: string = JSON.stringify({ admin: Configuration.services[EConstant.admin] }, null, 4);
+        if (this.writeFile(path.join(myPath, "configuration.json"), isProduction() === true ? encrypt(datas) : datas) === false) return false;
+        if (this.writeFile(path.join(myPath, ".key"), paths.key) === false) return false;
+
         return true;
     }
 }

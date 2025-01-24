@@ -20,7 +20,6 @@ export { IdbConnection } from "./dbConnection";
 export { IentityCore, Ientity } from "./entity";
 export { IentityColumn } from "./entityColumn";
 export { IentityRelation } from "./entityRelation";
-export { Ilog } from "./log";
 export { ILoraDecodingResult } from "./loraDecodingResult";
 export { IodataContext } from "./odataContext";
 export { IpgQuery } from "./pgQuery";
