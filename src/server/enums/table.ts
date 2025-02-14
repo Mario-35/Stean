@@ -8,6 +8,5 @@
 export enum ETable {
     blank,
     table,
-    link,
-    logs
+    link
 }

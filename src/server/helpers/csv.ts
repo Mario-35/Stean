@@ -1,3 +1,11 @@
+/**
+ * Csv
+ *
+ * @copyright 2020-present Inrae
+ * @author mario.adam@inrae.fr
+ *
+ */
+
 import { errors } from "../messages";
 export class Csv {
     flattenArray(array: Record<string, any>, ancestors?: Record<string, any>) {
@@ -52,13 +60,16 @@ export class Csv {
         }
         return rows;
     }
+
     isObject(o: Record<string, any>) {
         return o && typeof o == "object";
     }
+
     getKeys(o: Record<string, any>) {
         if (!this.isObject(o)) return [];
         return Object.keys(o);
     }
+
     convert(data: Record<string, any>, options?: Record<string, any>) {
         options || (options = {});
 

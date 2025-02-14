@@ -12,6 +12,7 @@ import cookieModule from "cookie";
 import { keyobj, koaContext } from "../types";
 import { EHttpCode } from "../enums";
 import { paths } from "../paths";
+
 export const createBearerToken = (ctx: koaContext) => {
     const getCookie = (serializedCookies: string, key: string) => cookieModule.parse(serializedCookies)[key] ?? false;
     const queryKey = "access_token";
@@ -51,7 +52,6 @@ export const createBearerToken = (ctx: koaContext) => {
             const plainCookie = getCookie(header.cookie, "jwt-session"); // seeks the key
             if (plainCookie) {
                 const cookieToken = cookieParser.signedCookie(plainCookie, paths.key);
-
                 if (cookieToken) {
                     token = cookieToken;
                     count += 1;

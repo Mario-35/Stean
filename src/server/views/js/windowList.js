@@ -26,10 +26,7 @@ function updateWinLinks(input) {
 		str += "<hr>";
 		str += `<input type="text" class="urlForm" v-model="url" value="${input.sqlUrl}"/>`;
 	}
-
 	str += "</center> </div>";
-
-
 	wins.Links.content.innerHTML = str;
 	wins.Links.show();
 
@@ -171,9 +168,9 @@ function updateWinCsvResult(input) {
 	wins.Csv.show();
 }
 
-function updateWinLogs(input) {
+function updateWinDecoders(input) {
 	if (!wins.Logs || wins.Logs === null || wins.Logs.content === null) {
-		const temp = new Window("Result", {
+		const temp = new Window(`Decoder : ${input.name}`, {
 			state: getWinActives() ? WindowState.NORMAL : WindowState.MAXIMIZED,
 			size: {
 				width: 750,
@@ -186,61 +183,70 @@ function updateWinLogs(input) {
 		});
 		wins.Logs = temp;
 	}
-	const lines = [];
-	input.value.forEach((log) => {
-		lines.push(`<dt class="collapsible-title" id="log${log["@iot.id"]} " ><button class="patrom-button--${log.code < 300 ? 'success' : 'danger'} size-xs" disabled="">${log.method}</button>&nbsp;${log["date"]} </dt>`);
-		lines.push(`<dd class="collapsible-content">pipo</dd>`);
-	});
-	wins.Logs.content.innerHTML = `<div spellcheck="false" id="wins.Logs"> <dl class="collapsible"> ${lines.join("")} </dl> </div>`;
-	wins.Logs.content.addEventListener("click", async function(event) {
-		if (Array.from(event.target.classList).includes('collapsible-title') && event.target.innerHTML !== "Deleted") {
-			await openLineTabLog(event.target);
-		} else if (Array.from(event.target.classList).includes('patrom-button--success')) {
-			const id = getId(event.target.id);
-			await replayLog(id);
-		} else if (Array.from(event.target.classList).includes('patrom-button--danger')) {
-			const id = getId(event.target.id);
-			await deleteLog(id);
-		} else if (Array.from(event.target.classList).includes('patrom-button--primary')) {
-			const id = getId(event.target.id);
-			await patchLog(id);
-		}
-	});
+const lines = [
+`<div class="tabs">`,
+`<input type="hidden" id="optDecoderId" name="optDecoderId" />`,
+`  <input type="radio" name="tabs" id="tabone" checked="checked">`,
+`  	<label for="tabone">Code Javascript</label>`,
+`  		<div class="tab">`,
+`			<div id="jsonDecoderCodeContainer">`,
+`			<div contenteditable spellcheck="false" id="jsonDecoderCode" class='blakkAll shj-lang-js'></div>`,
+`			</div>`,
+`		</div>`,
+``,
+`  <input type="radio" name="tabs" id="tabtwo">`,
+`  <label for="tabtwo">Nomenclature</label>`,
+`  		<div class="tab">`,
+`			<div id="jsonDecoderNomenclatureContainer">`,
+`			<div contenteditable spellcheck="false" id="jsonDecoderNomenclature" class='blakkAll shj-lang-js'></div>`,
+`		</div>`,
+`	</div>`,
+``,
+`  <input type="radio" name="tabs" id="tabthree">`,
+`  <label for="tabthree">Tests and ...</label>`,
+`  <div class="tab">`,
+`  		<div class="pro-form">`,
+`       	<div class="patrom-row">`,
+`           	<!-- Name -->`,
+`               <div class="patrom-col col-span-2">`,
+`					<div class="field">`,
+`						<label for="optDecoderName">Name :</label>`,
+`						<input id="optDecoderName" name="optDecoderName" type="text" class="patrom-text-input width100"_100-100>`,
+`					</div>`,
+`               </div>`,
+`               <!-- Payload -->`,
+`               <div class="patrom-col col-span-2">`,
+`               	<div class="field">`,
+`                        <label for="optPayload">Payload :</label>`,
+`                        <input id="optPayload" name="optPayload" type="text" class="patrom-text-input width100"_100-100>`,
+`                    </div>`,
+`                </div>`,
+`                <!-- Test Btn -->`,
+`                <div class="patrom-col col-span-2">`,
+`                   <label for="testDecoder">Tests the execution of the code with payload</label>`,
+`					<button id="testDecoder" onclick="testDecoder()"> test decoder </button>`,
+`				</div>`,
+`            </div>`,
+`          </div>`,
+
+
+`<div class="patrom-row">`,
+`<div class="patrom-col col-span-12">`,
+`  <div class="field">`,
+`	<label for="jsonDecoderResult">Result :</label>`,
+`		<div id="jsonDecoderResultContainer">`,
+`			<div contenteditable spellcheck="false" id="jsonDecoderResult" class='blakkAll shj-lang-js'></div>`,
+`		</div>`,
+`  </div>`,
+`</div>`,
+`</div>`,
+
+`</div>`];
+	wins.Logs.content.innerHTML = lines.join("");
 	wins.Logs.show();
-	if (isLog()) {
-		const menuitems = [{
-				"text": "Errors only",
-				"events": { // Adds eventlisteners to the item (you can use any event there is)
-					"click": function(e) {
-						Logfilter = "code gt 400";
-						go.onclick();
-					}
-				}
-			},
-			{
-				"text": "Good Only",
-				"events": {
-					"click": function(e) {
-						Logfilter = "code gt 199 and code lt 300";
-						go.onclick();
-					}
-				}
-			},
-			{
-				"text": "all",
-				"events": {
-					"click": function(e) {
-						Logfilter = undefined;
-						go.onclick();
-					}
-				}
-			}
-		];
-
-		var menu = new ContextMenu(menuitems);
-
-		wins.Logs.content.addEventListener("contextmenu", function(e) {
-			menu.display(e);
-		});
-	}
+	wins.Logs.normalSize();
+	getElement("optDecoderName").value = input.name;
+	getElement("optDecoderId").value = input.id;
+	beautifyDatas(getElement("jsonDecoderCode"), input.code, "js");
+	beautifyDatas(getElement("jsonDecoderNomenclature"), input.nomenclature, "json");
 }

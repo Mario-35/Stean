@@ -124,8 +124,6 @@ go.onclick = async (e) => {
 					updateWinCsvResult(jsonObj);
 				else if (resultFormatOption.value === "graph")
 					updateWinGraph(jsonObj);
-				else if (resultFormatOption.value === "logs")
-					updateWinLogs(jsonObj);
 				else if (resultFormatOption.value === "GeoJSON") {
 					updateWinJsonResult(jsonObj, `[${methodOption.value}]:${url}`);
 					show(btnShowGeo);

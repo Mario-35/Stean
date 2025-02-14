@@ -166,10 +166,7 @@ function showUserInfos(service, element) {
 // change view for standard default infos
 async function showDecoderInfos(name, decoder) {
 	const datas = await getDatas(`${_PARAMS.services[name].linkBase}/${_PARAMS.services[name].version}/Decoders(${decoder})`);
-	beautifyDatas(getElement("jsonDecoderCode"), datas.code, "js");
-	beautifyDatas(getElement("jsonDecoderNomenclature"), datas.nomenclature, "json");
-	updateWinJsonResult(datas.nomenclature, "oo");
-
+	updateWinDecoders(datas);
 }
 
 // change view for standard default infos
@@ -183,6 +180,56 @@ function showInfos(service) {
 	</ul>
 	`
 }
+
+function testDecoder(){
+	const payload = getElement("optPayload").value || window.prompt("payload", "");
+	if (payload !== null && payload !== "") {
+		getElement("optPayload").value = payload;
+		decodingPayload(payload) ;
+	}
+}
+
+function decodingPayload(payload)  {
+	try {
+		const F = new Function("input", "nomenclature", `${getElement("jsonDecoderCode").innerText}; return decode(input, nomenclature);`);
+		let nomenclature = JSON.parse(getElement("jsonDecoderNomenclature").innerText);
+		const result = F(payload, nomenclature);
+		beautifyDatas(getElement("jsonDecoderResult"), result, "json");		
+	}
+	catch (error) {
+		notifyError("Error", error);
+	}
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Start
 (function init() {	  

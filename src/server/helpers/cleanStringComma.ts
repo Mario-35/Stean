@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 /**
  *
  * @param input: string
@@ -12,7 +13,10 @@
  * @returns clean string without undesired comma(s)
  */
 export const cleanStringComma = (input: string, list?: string[]): string => {
-    input = input.split(",").filter((word: string) => word.trim() != "").join(", ");
-    if (list) list.forEach((e: string) => input = input.split(` ${e}"`).join(`" ${e}`));
+    input = input
+        .split(",")
+        .filter((word: string) => word.trim() != "")
+        .join(", ");
+    if (list) list.forEach((e: string) => (input = input.split(` ${e}"`).join(`" ${e}`)));
     return input;
 };

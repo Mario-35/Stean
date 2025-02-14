@@ -11,10 +11,9 @@ import { asyncForEach, decrypt, encrypt, hidePassword, isProduction, isTest, log
 import { Iservice, IdbConnection, IserviceInfos, koaContext, keyobj } from "../types";
 import { errors, info, infos, msg } from "../messages";
 import { app } from "..";
-import { color, EChar, EColor, EConstant, EExtensions, EOptions, EUpdate } from "../enums";
+import { color, EChar, EColor, EConstant, EExtensions, EOptions } from "../enums";
 import path from "path";
 import fs from "fs";
-import update from "./update.json";
 import postgres from "postgres";
 import { log } from "../log";
 import { createDatabase, pgFunctions, testDatas } from "../db/createDb";
@@ -35,7 +34,6 @@ class Configuration {
     static services: { [key: string]: Iservice } = {};
     static adminConnection: postgres.Sql<Record<string, unknown>>;
     static MqttServer: MqttServer;
-    static queries: { [key: string]: string[] } = {};
     static listenPorts: number[] = [];
     static appVersion: string = "";
     static remoteVersion: string | undefined;
@@ -468,32 +466,15 @@ class Configuration {
 
     /**
      *
-     * @param title of the operation
-     * @returns true if it's done
-     */
-    private async executeQueriesForAllServices(title: string): Promise<boolean> {
-        try {
-            await asyncForEach(Object.keys(Configuration.queries), async (connectName: string) => {
-                await this.executeSql(connectName, Configuration.queries[connectName]);
-                log.create(`${title} : [${connectName}]`, EChar.ok);
-            });
-        } catch (error) {
-            console.log(error);
-        }
-        return true;
-    }
-
-    /**
-     *
      * @param string
      * @returns Hash code number
      */
-    private hashCode(s: string): number {
-        return s.split("").reduce((a, b) => {
-            a = (a << 5) - a + b.charCodeAt(0);
-            return a & a;
-        }, 0);
-    }
+    // private hashCode(s: string): number {
+    //     return s.split("").reduce((a, b) => {
+    //         a = (a << 5) - a + b.charCodeAt(0);
+    //         return a & a;
+    //     }, 0);
+    // }
 
     /**
      *
@@ -541,16 +522,6 @@ class Configuration {
 
     /**
      *
-     * @param connectName name
-     * @param query sql query
-     */
-    addToQueries(connectName: string, query: string) {
-        if (Configuration.queries[connectName]) Configuration.queries[connectName].push(query);
-        else Configuration.queries[connectName] = [query];
-    }
-
-    /**
-     *
      * @param connection name
      * @returns true if it's done
      */
@@ -569,53 +540,6 @@ class Configuration {
                 });
         });
         this.writeLog(log.message(info.createFunc, connection));
-        return true;
-    }
-
-    /**
-     * Executes queries present in updates afterAll json file
-     *
-     * @returns true if it's done
-     */
-    async afterAll(): Promise<boolean> {
-        // Updates database after init
-        if (update && update[EUpdate.afterAll] && Object.entries(update[EUpdate.afterAll]).length > 0) {
-            Configuration.queries = {};
-            Object.keys(Configuration.services)
-                .filter((e) => e != EConstant.admin)
-                .forEach(async (connectName: string) => {
-                    update[EUpdate.afterAll].forEach((operation: string) => {
-                        this.addToQueries(connectName, operation);
-                    });
-                });
-            await this.executeQueriesForAllServices(EUpdate.afterAll);
-        }
-
-        // epdate decoders
-        if (update && update[EUpdate.decoders] && Object.entries(update[EUpdate.decoders]).length > 0) {
-            Configuration.queries = {};
-            Object.keys(Configuration.services)
-                .filter((e) => e != EConstant.admin && Configuration.services[e].extensions.includes(EExtensions.lora))
-                .forEach((connectName: string) => {
-                    if (Configuration.services[connectName].extensions.includes(EExtensions.lora)) {
-                        const decs: string[] = [];
-                        Object.keys(update[EUpdate.decoders]).forEach(async (name: string) => {
-                            const hash = this.hashCode(update[EUpdate.decoders as keyobj][name]);
-                            decs.push(name);
-                            const sql = `UPDATE decoder SET code='${update[EUpdate.decoders as keyobj][name]}', hash = '${hash}' WHERE name = '${name}' AND hash <> '${hash}' `;
-                            await config
-                                .connection(connectName)
-                                .unsafe(sql)
-                                .catch((error: Error) => {
-                                    console.log(error);
-                                    return false;
-                                });
-                        });
-                        this.writeLog(log.booting(`UPDATE decoder ${color(EColor.Yellow)} [${connectName}]`, decs));
-                    }
-                });
-        }
-
         return true;
     }
 
@@ -664,7 +588,6 @@ class Configuration {
             this.initMqtt();
             setReady(status);
             // note that is executed without async to not block start processus
-            if (status === true) this.afterAll();
             if (!isTest()) {
                 if (await testDbExists(Configuration.services[EConstant.admin].pg, EConstant.test)) {
                     Configuration.services[EConstant.test] = this.formatConfig(testDatas["create"]);
@@ -848,24 +771,6 @@ class Configuration {
                         )
                     );
                 await this.reCreatePgFunctions(serviceName);
-                if (update[EUpdate.beforeAll] && Object.entries(update[EUpdate.beforeAll]).length > 0) {
-                    if (update[EUpdate.beforeAll] && Object.entries(update[EUpdate.beforeAll]).length > 0) {
-                        console.log(log._head(EUpdate.beforeAll));
-                        try {
-                            Object.keys(Configuration.services)
-                                .filter((e) => ![EConstant.admin as String, EConstant.test as String].includes(e))
-                                .forEach((connectName: string) => {
-                                    update[EUpdate.beforeAll].forEach((operation: string) => {
-                                        this.addToQueries(connectName, operation);
-                                    });
-                                });
-                            await this.executeQueriesForAllServices(EUpdate.beforeAll);
-                            // RelogCreate triggers for this service
-                        } catch (error) {
-                            console.log(error);
-                        }
-                    }
-                }
                 return true;
             })
             .catch(async (error: Error) => {

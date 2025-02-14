@@ -626,7 +626,7 @@ function js_beautify(js_source_text, options) {
 	whitespace = "\n\r\t ".split('');
 	wordchar = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_$'.split('');
 	digits = '0123456789'.split('');
-	punct = '+ - * / % & ++ -- = += -= *= /= %= == === != !== > < >= <= >> << >>> >>>= >>= <<= && &= | || ! !!, : ? ^ ^= |= ::'.split(' ');
+	punct = '+ - * / % & ++ -- = += -= *= /= %= == === != !== > < >= <= >> << >>> >>>= >>= <<= && &= | || ! !!, : ? ^ ^= |= :: =>'.split(' ');
 
 	// words which should always start on new line.
 	line_starters = 'continue,try,throw,return,var,if,switch,case,default,for,while,break,function'.split(',');

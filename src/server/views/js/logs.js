@@ -1,11 +1,6 @@
 let openedLog = undefined;
 let Logfilter = undefined;
 
-logs.onclick = async () => {
-	const jsonObj = await getFetchDatas(`${optHost.value}/${optVersion.value}/Logs?$select=id,date,code,method,database&$orderby=date%20desc`, "json");
-	updateWinLogs(jsonObj);
-};
-
 function closeLineTabLog() {
 	if (openedLog) {
 		openedLog.classList.remove('is-active');

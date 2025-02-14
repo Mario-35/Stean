@@ -24,7 +24,6 @@ export { EObservationType } from "./observationType";
 export { EOperation } from "./operation";
 export { ERelations } from "./relations";
 export { EOptions } from "./options";
-export { EUpdate } from "./update";
 export { EQuery } from "./query";
 export { EUserRights } from "./userRights";
 export const color = (col: number) => `\x1b[${col}m`;

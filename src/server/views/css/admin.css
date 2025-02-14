@@ -259,12 +259,42 @@ fieldset {
   overflow-y: scroll; /* enable vertical scrollbar */
 }
 
-.pipo {
-  height: 200px;
-	overflow-y: scroll;
-	overflow-x: hidden;  
-  scrollbar-width: thin;
-  scrollbar-color: #6060dd #ffffff;	
+
+/**
+ * Tabs
+ */
+ .tabs {
+  display: flex;
+  flex-wrap: wrap;
 }
 
+.tabs label {
+  order: 1;
+  display: block;
+  padding: 6px 21px;
+  font-size: 12px;
+  cursor: pointer;
+  background: var(--btn-gray-active-border);
+  transition: background ease 0.2s;
+}
 
+.tabs .tab {
+  order: 99;
+  flex-grow: 1;
+  width: 100%;
+  display: none;
+  padding: 1rem;
+  background: var(--btn-gray-border);
+}
+
+.tabs input[type=radio] {
+  display: none;
+}
+
+.tabs input[type=radio]:checked + label {
+  background: var(--btn-gray-background);
+}
+
+.tabs input[type=radio]:checked + label + .tab {
+  display: block;
+}

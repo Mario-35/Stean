@@ -8,6 +8,7 @@
 
 import crypto from "crypto";
 import { paths } from "../paths";
+
 /**
  *
  * @param input string
@@ -19,6 +20,7 @@ export const encrypt = (input: string): string => {
     const encrypted = Buffer.concat([cipher.update(input), cipher.final()]);
     return `${iv.toString("hex")}.${encrypted.toString("hex")}`;
 };
+
 /**
  *
  * @param input string

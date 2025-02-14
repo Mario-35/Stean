@@ -10,15 +10,8 @@ var mkdirp = require("mkdirp");
 var archiver = require("archiver");
 var crypto = require("crypto");
 process.env.NODE_ENV = "build";
-const updateJson = require("./src/server/configuration/update.json");
 const _DEST = "build/server/";
 const FINAL = "build/";
-
-updateJson["decoders"] = {
-  "rhf1s001" : require("./sandbox/loras/RHF1S001.js"),
-  "senscap" : require("./sandbox/loras/Sensecap.js"),
-  "wattEco" : require("./sandbox/loras/Watteco.js") 
-};
 
 function extend() {
   var defineProperty = Object.defineProperty;
@@ -328,7 +321,6 @@ fs.writeFile(FINAL + "package.json", JSON.stringify(packageJson, null, 2), { enc
       };
       if (mode.includes("docker")) writeFile(_DEST + "configuration/config.json", JSON.stringify(conf, null, 2));
       writeFile(_DEST + "configuration/.key", key, "Write .Key");
-      writeFile(_DEST + "configuration/update.json", JSON.stringify(updateJson, null, 2), "Write update json file");
 
       minify({ compressor: htmlMinifier, content: queryHtml.replace("@version@", packageJson.version) }).then(function (min) {
         writeFile(_DEST + "views/html/query.html", min, "minify HTML");

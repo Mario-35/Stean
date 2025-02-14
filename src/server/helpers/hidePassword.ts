@@ -7,11 +7,11 @@
  */
 
 import { isObject } from "./tests";
+
 export function hidePassword(obj: object): object {
-    if (Array.isArray(obj))  
-      return obj
-          .map(v => (v && isObject(v)) ? hidePassword(v) : v);
-    else return Object.entries(obj)
-          .map(([k, v]) => [k, v && isObject(v) ? hidePassword(v) : v])
-          .reduce((a: Record<string, any>, [k, v]) => (k == "password" ? (a[k]="*****", a) : (a[k]=v, a)), {});
+    if (Array.isArray(obj)) return obj.map((v) => (v && isObject(v) ? hidePassword(v) : v));
+    else
+        return Object.entries(obj)
+            .map(([k, v]) => [k, v && isObject(v) ? hidePassword(v) : v])
+            .reduce((a: Record<string, any>, [k, v]) => (k == "password" ? ((a[k] = "*****"), a) : ((a[k] = v), a)), {});
 }
