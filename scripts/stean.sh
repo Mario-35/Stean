@@ -40,7 +40,7 @@ create_run_script() {
     echo "mv $APIDEST/api/logs.html $APIDEST/logs.bak" >> $FILERUN
     echo "pm2 start $APIDEST/api/index.js" >> $FILERUN
     echo "pm2 logs --lines 500" >> $FILERUN
-    sudo chmod -R 777 $FILERUN
+    chmod -R 777 $FILERUN
     echo "Create script => $FILERUN"
 }
 
@@ -87,8 +87,8 @@ check_node() {
     if ! command -v node > /dev/null
     then
         echo "Installing Node..."
-        sudo  curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-        sudo apt install nodejs
+        curl -fsSL https://deb.nodesource.com/setup_20.x | -E bash -
+        apt install nodejs
         NODEVER=$(node -v) 
     else
         NODEVER=$(node -v) 
@@ -99,16 +99,16 @@ check_node() {
 check_pg() {
     if ! psql --version | grep -q "psql (PostgreSQL)"; then
         echo "Installing postgresql-postgis ..."
-        wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add - 
-        echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list 
-        sudo apt update
-        sudo apt install postgis postgresql-16-postgis-3 -y
+        wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - 
+        echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list 
+        apt update
+        apt install postgis postgresql-16-postgis-3 -y
             if ! psql --version | grep -q "psql (PostgreSQL)"; then
             exit
         fi
-        sudo -i -u postgres psql -c "SELECT PostGIS_version();"    
-        sudo -i -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'postgres';"    
-        sudo -i -u postgres psql -c "CREATE USER stean WITH PASSWORD 'stean';"    
+        -i -u postgres psql -c "SELECT PostGIS_version();"    
+        -i -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'postgres';"    
+        -i -u postgres psql -c "CREATE USER stean WITH PASSWORD 'stean';"    
         update_pg_hba
         PGVER=$(psql --version)
     else
@@ -119,7 +119,7 @@ check_pg() {
 # Function to create PostgreSQL default postcres user
 update_pg_hba() {
     SQLPATH=/etc/postgresql/14/main/pg_hba.conf
-    sudo cp $SQLPATH $SQLPATH.bak
+    cp $SQLPATH $SQLPATH.bak
     if [ -f $SQLSCRIPT ]; then
         echo "rm $SQLSCRIPT"
         rm $SQLSCRIPT
@@ -131,7 +131,7 @@ update_pg_hba() {
     echo "insert into hba (lines) values ('listen_addresses = ''*''');" >> $SQLSCRIPT
     echo "copy hba to '$SQLPATH';" >> $SQLSCRIPT
     echo "select pg_infos_conf();" >> $SQLSCRIPT
-    sudo psql -U postgres -f $SQLSCRIPT
+    psql -U postgres -f $SQLSCRIPT
     rm $SQLSCRIP
 }
 
@@ -140,7 +140,7 @@ check_pm2() {
     if ! command -v pm2 > /dev/null
     then
         echo "Installing pm2..."
-        sudo npm install pm2@latest -g
+        npm install pm2@latest -g
         PM2VER=$(pm2 -v) 
     else
         PM2VER=$(pm2 -v) 
@@ -152,7 +152,7 @@ check_unzip() {
     if ! command -v unzip > /dev/null
     then
         echo "Installing unzip..."
-        sudo apt-get install unzip
+        apt-get install unzip
     else
         echo "unzip is already installed."
     fi
@@ -189,7 +189,7 @@ save_dist() {
 # Function to get stean
 download_dist() {
     save_dist
-    sudo curl -o $FILEDIST -L https://github.com/Mario-35/Stean/raw/main/builds/stean_latest.zip
+    curl -o $FILEDIST -L https://github.com/Mario-35/Stean/raw/main/builds/stean_latest.zip
 }
 
 # Function to save configuration
@@ -226,7 +226,7 @@ install_stean() {
         echo "Move $APIDEST/api => $APIDEST/apiBak"
     fi
     # create path
-    sudo mkdir -p -m 777 $APIDEST/api
+    mkdir -p -m 777 $APIDEST/api
     echo "Create folder => $APIDEST/api"
     # unzip actual
     unzip -qq -o $FILEDIST -d $APIDEST/api/  
@@ -386,8 +386,8 @@ selectOption() {
             echo "┌───────────────────────────────────────────────────────────────┐"
             echo "│                         Check postGis                         │"
             echo "└───────────────────────────────────────────────────────────────┘"
-            sudo -i -u postgres psql -c "create extension postgis;"
-            sudo -i -u postgres psql -c "SELECT PostGIS_version();"
+            -i -u postgres psql -c "create extension postgis;"
+            -i -u postgres psql -c "SELECT PostGIS_version();"
             ;;
         "Create blank configuration")
             echo "┌───────────────────────────────────────────────────────────────┐"
