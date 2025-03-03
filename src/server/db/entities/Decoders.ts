@@ -17,6 +17,7 @@ import { config } from "../../configuration";
 /**
  * Decoders Class
  */
+
 export class Decoders extends Common {
     constructor(ctx: koaContext) {
         console.log(log.whereIam());

@@ -35,6 +35,7 @@ const getUser = async (configName: string, username: string, password: string): 
  * @param login object
  * @returns Iuser | undefined
  */
+
 export const loginUser = async (ctx: koaContext | undefined, login?: { configName: string; username: string; password: string }): Promise<Iuser | undefined> => {
     if (login) return await getUser(login.configName, login.username, login.password);
     if (ctx) {

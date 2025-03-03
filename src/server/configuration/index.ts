@@ -110,7 +110,7 @@ class Configuration {
                                     .unsafe(datas)
                                     .then((e) => true);
                             } else {
-                                process.stdout.write(err + "\n");
+                                process.stdout.write(err + EConstant.return);
                                 return false;
                             }
                         });
@@ -119,7 +119,7 @@ class Configuration {
                 } else {
                     console.log(error);
                     console.log(datas);
-                    process.stdout.write(error + "\n");
+                    process.stdout.write(error + EConstant.return);
                     return false;
                 }
             });
@@ -145,7 +145,7 @@ class Configuration {
      */
     writeLog(input: any) {
         if (input) {
-            process.stdout.write(input + "\n");
+            process.stdout.write(input + EConstant.return);
             paths.logFile.writeStream(logToHtml(input));
         }
     }

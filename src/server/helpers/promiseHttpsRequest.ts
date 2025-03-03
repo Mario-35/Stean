@@ -8,12 +8,14 @@
 
 import https from "https";
 import { log } from "../log";
+import { EConstant } from "../enums";
 
 /**
  * A promise wrapper for sending a get https requests.
  * @param {String} url - The Https address to request.
  * @param {String} options - The request options.
  */
+
 export function promiseHttpsRequest(url: string, options: https.RequestOptions) {
     return new Promise(function (resolve, reject) {
         let req = https.request(url, options, (res) => {
@@ -24,12 +26,12 @@ export function promiseHttpsRequest(url: string, options: https.RequestOptions) 
             });
             res.on("end", function () {
                 if (res && res.statusCode && res.statusCode === 200) return resolve(body);
-                process.stdout.write(log.update("Bad Response " + res.statusCode + "\n"));
+                process.stdout.write(log.update("Bad Response " + res.statusCode + EConstant.return));
                 reject(res.statusCode);
             });
         });
-        process.stdout.write(log.update("Sending request to " + url + "\n"));
-        process.stdout.write(log.update("Options: " + JSON.stringify(options) + "\n"));
+        process.stdout.write(log.update("Sending request to " + url + EConstant.return));
+        process.stdout.write(log.update("Options: " + JSON.stringify(options) + EConstant.return));
         req.on("error", reject);
         req.end();
     });

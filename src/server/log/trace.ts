@@ -8,14 +8,16 @@
 
 import { _DEBUG, FORMAT_JSONB } from "../constants";
 import { isTest, logToHtml, notNull } from "../helpers";
-import { Iservice, koaContext } from "../types";
+import { koaContext } from "../types";
 import postgres from "postgres";
 import { log } from ".";
 import { paths } from "../paths";
+import { EConstant } from "../enums";
 
 /**
  * Class to trace requests
  */
+
 export class Trace {
     // store all services
     static adminConnection: postgres.Sql<Record<string, unknown>>;
@@ -43,14 +45,14 @@ export class Trace {
                 })
                 .catch(async (error) => {
                     if (error.code === "42P01") {
-                        await Trace.adminConnection.unsafe(`CREATE TABLE public.log ( id int8 GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1 NO CYCLE ) NOT NULL, "date" timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL, "method" text NULL, url text NULL, datas jsonb NULL, CONSTRAINT log_pkey PRIMARY KEY (id) ); CREATE INDEX log_id ON public.log USING btree (id); `).catch((err) => process.stdout.write(err + "\n"));
+                        await Trace.adminConnection.unsafe(`CREATE TABLE public.log ( id int8 GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1 NO CYCLE ) NOT NULL, "date" timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL, "method" text NULL, url text NULL, datas jsonb NULL, CONSTRAINT log_pkey PRIMARY KEY (id) ); CREATE INDEX log_id ON public.log USING btree (id); `).catch((err) => process.stdout.write(err + EConstant.return));
                         Trace.adminConnection.unsafe(datas);
-                    } else process.stdout.write(error + "\n");
+                    } else process.stdout.write(error + EConstant.return);
                 });
     }
 
     /**
-     * Add to trace
+     * Trace error
      *
      * @param ctx koa context
      */
@@ -58,7 +60,7 @@ export class Trace {
         await Trace.adminConnection.unsafe(this.query(ctx, error));
     }
 
-    async get(service: Iservice, query: string): Promise<object> {
+    async get(query: string): Promise<object> {
         return new Promise(async function (resolve, reject) {
             await Trace.adminConnection
                 .unsafe(query)
@@ -69,7 +71,7 @@ export class Trace {
                 .catch((err: Error) => {
                     if (!isTest() && +err["code" as keyof object] === 23505) {
                         const input = log.queryError(query, err);
-                        process.stdout.write(input + "\n");
+                        process.stdout.write(input + EConstant.return);
                         paths.logFile.writeStream(logToHtml(input));
                     }
                     reject(err);

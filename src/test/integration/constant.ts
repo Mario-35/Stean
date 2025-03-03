@@ -32,8 +32,9 @@ export const testLog = (input: any) => {
 };
 export const proxy = (moi: boolean) => (moi !== true ? "http://localhost:8029/test" : `${apidocJson.proxy}/`);
 import packageJson from "../../../package.json";
+import { EConstant.tab } from "../../server/constants";
 export const VERSION = packageJson.version;
-const createJSON = (data: any) => JSON.stringify(data, null, 4).replace(/[\n]+/g, "|\t");
+const createJSON = (data: any) => JSON.stringify(data, null, 4).replace(/[\n]+/g, `|${EConstant.tab}`);
 export interface Iinfos {
     api: string;
     apiName: string;
@@ -64,7 +65,7 @@ export const defaultPostPatch = (lang: string, method: string, request: string, 
         case "CURL":
             return `curl -X ${method.toUpperCase()} -H 'Content-Type: application/json' -d '${createJSON(data)}}' proxy${request}`;
         case "JAVASCRIPT":
-            return `const response = await fetch("proxy${request}", {|\tmethod: "${method.toUpperCase()}",|\theaders: {|\t    "Content-Type": "application/json",|\t},|\tbody:${createJSON(data)}|});|const valueJson = await response.json();|const valueTxt = await response.text();`;
+            return `const response = await fetch("proxy${request}", {|${EConstant.tab}method: "${method.toUpperCase()}",|\theaders: {|${EConstant.tab}    "Content-Type": "application/json",|\t},|\tbody:${createJSON(data)}|});|const valueJson = await response.json();|const valueTxt = await response.text();`;
         case "PYTHON":
             return `import requests|import json|response_API = requests.${method}('proxy${request}', (headers = { "Content-Type": "application/json" }), (data = json.dumps(${createJSON(data)})))|data = response_API.text|parse_json = json.loads(data)|print(parse_json)`;
     }
@@ -185,7 +186,7 @@ export const generateApiDoc = (input: IApiDoc[], filename: string): boolean => {
                 });
             } else if (Object.keys(_HEADERS).includes(key) && value) {
                 lines.push(`*    @${key} ${_HEADERS[key]}`);
-                const successLines: string[] = value.split("\n");
+                const successLines: string[] = value.split(EConstant.return);
                 successLines.forEach((successLine: string) => {
                     lines.push(`*    ${successLine}`);
                 });
@@ -193,12 +194,12 @@ export const generateApiDoc = (input: IApiDoc[], filename: string): boolean => {
                 lines.push(`*    @${key} ${value}`);
             }
         }
-        lines.push("*/\n");
+        lines.push(`*/${EConstant.return}`);
     });
     lines.forEach((element, index) => {
         lines[index] = element.replace("proxy", proxy);
     });
-    fs.writeFileSync(path.resolve(__dirname, "../apiDocs/", filename), `${lines.join("\n")}`, {
+    fs.writeFileSync(path.resolve(__dirname, "../apiDocs/", filename), `${lines.join(EConstant.return)}`, {
         encoding: "utf-8"
     });
     return true;

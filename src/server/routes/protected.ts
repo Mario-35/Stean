@@ -165,6 +165,7 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
         }
     } else ctx.throw(EHttpCode.Unauthorized);
 });
+
 protectedRoutes.patch("/(.*)", async (ctx) => {
     if ((!ctx.service.extensions.includes(EExtensions.users) || isAllowedTo(ctx, EUserRights.Post) === true) && Object.keys(ctx.body).length > 0) {
         const odataVisitor = await createOdata(ctx);
@@ -190,6 +191,7 @@ protectedRoutes.patch("/(.*)", async (ctx) => {
         ctx.throw(EHttpCode.Unauthorized);
     }
 });
+
 protectedRoutes.delete("/(.*)", async (ctx) => {
     if (!ctx.service.extensions.includes(EExtensions.users) || isAllowedTo(ctx, EUserRights.Delete) === true) {
         const odataVisitor = await createOdata(ctx);

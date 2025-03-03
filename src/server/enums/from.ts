@@ -5,9 +5,10 @@
  * @author mario.adam@inrae.fr
  *
  */
-export enum EFrom {    
-    unknown = 'unknown',
-    mqtt = 'mqtt',
-    query = 'query',
-    test = 'test'
+
+export enum EFrom {
+    unknown = "unknown",
+    mqtt = "mqtt",
+    query = "query",
+    test = "test"
 }

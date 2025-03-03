@@ -7,6 +7,7 @@ import { IqueryOptions, Iuser } from ".";
  * @author mario.adam@inrae.fr
  *
  */
+
 export interface Idatas {
     url: string;
     login?: boolean;

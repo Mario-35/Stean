@@ -27,7 +27,7 @@ export class Logs extends Common {
         let sql = this.ctx.odata.getSql();
         // Return results
         if (sql)
-            return await config.trace.get(this.ctx.service, sql).then(async (res: Record<string, any>) => {
+            return await config.trace.get(sql).then(async (res: Record<string, any>) => {
                 return res[0] > 0
                     ? this.formatReturnResult({
                           id: isNaN(res[0][0]) ? undefined : +res[0],
@@ -48,7 +48,7 @@ export class Logs extends Common {
         // Return results
         if (sql)
             return await config.trace
-                .get(this.ctx.service, sql)
+                .get(sql)
                 .then((res: Record<string, any>) => {
                     if (this.ctx.odata.query.select && this.ctx.odata.onlyValue === true) {
                         const temp = res[this.ctx.odata.query.select[0 as keyobj] == "id" ? EConstant.id : 0];

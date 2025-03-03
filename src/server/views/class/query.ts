@@ -6,6 +6,7 @@
  *
  */
 
+import { EConstant } from "../../enums";
 import { removeAllQuotes } from "../../helpers";
 import { log } from "../../log";
 import { Idatas, IqueryOptions, koaContext } from "../../types";
@@ -18,6 +19,7 @@ import path from "path";
 /**
  * Query Class for HTML View
  */
+
 export class Query extends CoreHtmlView {
     params: IqueryOptions;
     constructor(ctx: koaContext, datas: Idatas) {
@@ -33,11 +35,11 @@ export class Query extends CoreHtmlView {
         this._HTMLResult = fs
             .readFileSync(path.resolve(__dirname, "../html/", "query.html"))
             .toString()
-            .replace(/<link /g, "\n<link ")
-            .replace(/<script /g, "\n<script ")
-            .replace(/<\/script>/g, "</script>\n")
-            .replace(/\r\n/g, "\n")
-            .split("\n")
+            .replace(/<link /g, `${EConstant.return}<link `)
+            .replace(/<script /g, `${EConstant.return}<script `)
+            .replace(/<\/script>/g, "</script>${EConstant.return}")
+            .replace(/\r\n/g, EConstant.return)
+            .split(EConstant.return)
             .map((e: string) => e.trim())
             .filter((e) => e.trim() != "");
 

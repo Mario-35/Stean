@@ -13,6 +13,7 @@ import { spawn } from "child_process";
  * @param command - The command to execute.
  * @param waitTime - milisecond to wait
  */
+
 export async function promiseBlindExecute(command: string, waitTime: number) {
     return new Promise(function (resolve, reject) {
         spawn(command, [], { shell: true, detached: true });

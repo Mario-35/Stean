@@ -21,6 +21,7 @@ import { config } from "../../configuration";
 /**
  * Logs Loras
  */
+
 export class Loras extends Common {
     synonym: Record<string, any> = {};
     stean: Record<string, any> = {};

@@ -19,6 +19,8 @@ export const EConstant = Object.freeze({
     doubleQuotedComa: '",\n"',
     simpleQuotedComa: "',\n'",
     newline: "\r\n",
+    tab: "\t",
+    return: "\n",
     host: "localhost",
     pg: "postgres",
     port: 5432,

@@ -1,30 +1,38 @@
-// ===============================================================================
-// |                                   EVENTS                                    |
-// ===============================================================================
+/**
+ * Events for Query.
+ *
+ * @copyright 2023-present Inrae
+ * @author mario.adam@inrae.fr
+ *
+ */
 
-
-
+// change service in service name select
 services.addEventListener("change", () => {
 	window.location.href = `${_PARAMS.services[services.value].root}/Query`;
 });
 
+// update after change expand
 expandOption.addEventListener("exit", () => {
 	show(subExpandOption);
 	populateMultiSelect("subExpandOption", getRelationsList(expandOption.value));
 });
 
+// load datas in json viewer
 preview.onclick = () => {
-	updateWinJsonResult(jsonDatas.innerText, "Preview datas");
+	jsonWindow(jsonDatas.innerText, "Preview datas");
 };
 
+// logout actual user
 logout.onclick = () => {
 	window.location.href = `${optHost.value}/${optVersion.value}/logout`;
 };
 
+// show user status
 info.onclick = () => {
 	window.location.href = `${optHost.value}/${optVersion.value}/status`;
 };
 
+// toggle debug
 debug.onclick = () => {
 	isDebug = !isDebug;
 	if (isDebug)
@@ -32,18 +40,51 @@ debug.onclick = () => {
 	else debug.classList.remove("debug");
 };
 
+// show url created links
 btnShowLinks.onclick = () => {
 	const temp = createUrl();
-	updateWinLinks(JSON.parse(` { "direct" : "${temp.direct}", "query" : "${temp.query}"}`));
+	urlWindow(JSON.parse(` { "direct" : "${temp.direct}", "query" : "${temp.query}"}`));
 	
 };
 
+// geoJson datas
 btnShowGeo.onclick = () => {	
 	if (valueGeo.startsWith("http://geojson")) window.location.href = valueGeo;
 };
 
+
+function essai(entity) {
+	let result = {};
+	if (_PARAMS._DATAS[entity])
+	Object.keys(_PARAMS._DATAS[entity].columns).forEach(e => {
+		if (_PARAMS._DATAS[entity].columns[e].dataType)
+			switch (_PARAMS._DATAS[entity].columns[e].dataType) {
+				case 16:
+					result[e] = {};
+					break;
+				// case 1:
+				// 	result[e.split("_id")[0]] = {
+				// 		"@iot.id": -1
+				// 	};
+				// 	break;
+				case 44:				
+					const name = getEntityName(e.split("_id")[0]);
+					result[e.split("_id")[0]] = essai(name);
+					break;
+				case 32:
+					result[e] = "";
+					break;
+
+				default:
+					break;
+			} else console.log(e);
+		});
+	return result;
+}
+
+// templane generator
 btnPostTemplate.onclick = () => {
-	const result = (importFile == true) ? JSON.stringify({
+	let result = (importFile == true) ? JSON.stringify({
 		"header": true,
 		"nan": true,
 		"duplicates": true,
@@ -54,26 +95,9 @@ btnPostTemplate.onclick = () => {
 			}
 		}
 	}) : {};
-	const src = Object.keys(_PARAMS._DATAS[entityOption.value].columns);
-	src.forEach(e => {
-		if (_PARAMS._DATAS[entityOption.value].columns[e].type)
-			switch (_PARAMS._DATAS[entityOption.value].columns[e].type.split(":")[0]) {
-				case "json":
-					result[e] = {};
-					break;
-				case "relation":
-					result[e.split("_id")[0]] = {
-						"@iot.id": -1
-					};
-					break;
-				case "text":
-					result[e] = "";
-					break;
-
-				default:
-					break;
-			} else console.log(e);
-	});
+	console.log(_PARAMS._DATAS[entityOption.value].relations);
+	
+	result = essai(entityOption.value, true);
 
 	beautifyDatas(getElement("jsonDatas"), result, "json");
 	buttonGo();
@@ -82,13 +106,13 @@ btnPostTemplate.onclick = () => {
 btnRoot.onclick = async () => {
 	const url = `${optHost.value}/${optVersion.value}/`;
 	const jsonObj = await getFetchDatas(url, "GET");
-	updateWinJsonResult(jsonObj, `[GET]:${url}`);
+	jsonWindow(jsonObj, `[GET]:${url}`);
 };
 
 btnClear.onclick = async () => {
 	const url = `${optHost.value}/${optVersion.value}/createDBTEST`;
 	const jsonObj = await getFetchDatas(url, "GET");
-	updateWinJsonResult(jsonObj, `[GET]:${url}`);
+	jsonWindow(jsonObj, `[GET]:${url}`);
 	buttonGo();
 };
 
@@ -119,16 +143,16 @@ go.onclick = async (e) => {
 			const jsonObj = await getFetchDatas(url, resultFormatOption.value);
 			try {
 				if (resultFormatOption.value === "sql")
-					updateWinSqlQuery(jsonObj);
+					sqlWindow(jsonObj);
 				else if (resultFormatOption.value === "csv")
-					updateWinCsvResult(jsonObj);
+					csvWindow(jsonObj);
 				else if (resultFormatOption.value === "graph")
 					updateWinGraph(jsonObj);
 				else if (resultFormatOption.value === "GeoJSON") {
-					updateWinJsonResult(jsonObj, `[${methodOption.value}]:${url}`);
+					jsonWindow(jsonObj, `[${methodOption.value}]:${url}`);
 					show(btnShowGeo);
 					valueGeo = `http://geojson.io/#data=data:application/json,${encodeURIComponent(JSON.stringify(jsonObj))}`;					
-				} else updateWinJsonResult(jsonObj, `[${methodOption.value}]:${url}`);
+				} else jsonWindow(jsonObj, `[${methodOption.value}]:${url}`);
 			} catch (err) {
 				notifyError("Error", err);
 			} finally {
@@ -153,7 +177,7 @@ go.onclick = async (e) => {
 					window.location.href = `${_PARAMS.decodedUrl.root}/login`;
 				}
 				wait(false);
-				updateWinJsonResult(JSON.parse(value), `[${methodOption.value}]:${url}`);
+				jsonWindow(JSON.parse(value), `[${methodOption.value}]:${url}`);
 			} else {
 				const response = await fetch(url, {
 					method: methodOption.value,
@@ -165,7 +189,7 @@ go.onclick = async (e) => {
 				const value = await response.json();
 				if (response.status == 401) window.location.href = "/login";
 				wait(false);
-				updateWinJsonResult(value, `[${methodOption.value}]:${url}`);
+				jsonWindow(value, `[${methodOption.value}]:${url}`);
 			}
 			break;
 		case "DELETE":
@@ -194,6 +218,10 @@ go.onclick = async (e) => {
 		default:
 			break;
 	}
+};
+
+submit.onclick = () => {
+	runForm();
 };
 
 idOption.addEventListener("change", () => {
@@ -254,9 +282,7 @@ function addToResultList(key, value, plus) {
 	span.innerText = value;
 	li.appendChild(span);
 	getElement("listResult").appendChild(li);
-	if (plus) {
-		addToResultList("-->", plus);
-	}
+	if (plus) addToResultList("-->", plus);
 }
 
 function runForm() {
@@ -267,11 +293,8 @@ function runForm() {
 		document.getElementById("actionForm").requestSubmit();
 	} catch (error) {
 		console.error(error);
+		wait(false);
 	}
-};
-
-submit.onclick = () => {
-	runForm();
 };
 
 function prepareForm() {

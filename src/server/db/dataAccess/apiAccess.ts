@@ -17,6 +17,7 @@ import { errors } from "../../messages";
 /**
  * Interface API
  */
+
 export class apiAccess implements Icomon {
     readonly myEntity: Common | undefined;
     readonly ctx: koaContext;
@@ -59,5 +60,10 @@ export class apiAccess implements Icomon {
     async delete(idInput: bigint | string): Promise<IreturnResult | undefined> {
         console.log(log.whereIam());
         if (this.myEntity) return await this.myEntity.delete(idInput);
+    }
+
+    async put(dataInput?: Record<string, any> | undefined): Promise<IreturnResult | undefined> {
+        console.log(log.whereIam());
+        if (this.myEntity) return isArray(this.ctx.body) ? await this.myEntity.addMultiLines(dataInput || this.ctx.body) : await this.myEntity.put(dataInput || this.ctx.body);
     }
 }

@@ -13,6 +13,7 @@
  * @param array for loop
  * @param callback fn to execute in loop
  */
+
 export async function asyncForEach<T>(array: T[], callback: (item: T, index: number, allItems: T[]) => void) {
     for (let index = 0; index < array.length; index++) {
         // ATTENTION AWAIT Before callback is important (it send error BUT IS NOT)

@@ -5,24 +5,25 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 export interface IforwardConnection {
-  /*
-  * The address or interface we want to listen on.
-  * @default ServerOptions.address
-  **/
-  srcAddr?: string;
-  /*
-  * The port or interface we want to listen on.
-  * @default ServerOptions.port
-  **/
-  srcPort?: number;
-  /*
-  * the address we want to forward the traffic to.
-  * @default "0.0.0.0"
-  **/
-  dstAddr?: string;
-  /*
-  * the port we want to forward the traffic to.
-  */
-  dstPort: number;
+    /*
+     * The address or interface we want to listen on.
+     * @default ServerOptions.address
+     **/
+    srcAddr?: string;
+    /*
+     * The port or interface we want to listen on.
+     * @default ServerOptions.port
+     **/
+    srcPort?: number;
+    /*
+     * the address we want to forward the traffic to.
+     * @default "0.0.0.0"
+     **/
+    dstAddr?: string;
+    /*
+     * the port we want to forward the traffic to.
+     */
+    dstPort: number;
 }

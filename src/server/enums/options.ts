@@ -6,9 +6,10 @@
  * @author mario.adam@inrae.fr
  *
  */
-export enum EOptions { 
+
+export enum EOptions {
     forceHttps = "forceHttps",
     stripNull = "stripNull",
     canDrop = "canDrop",
-    unique = "unique",
+    unique = "unique"
 }

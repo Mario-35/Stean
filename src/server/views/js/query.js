@@ -65,7 +65,6 @@ function clear() {
 
 // Start
 (function init() {
-	wait(false);
 	header("==== Init ====");
 	hide(datas);
 	hide(btnShowGeo);
@@ -90,6 +89,7 @@ function clear() {
 	queryOptions.value = _PARAMS.options;
 	if (window.location.href.includes('Query?')) decodeUrl(window.location.href);
 	jsonViewer = new JSONViewer();
+	wait(false);
 })();
 
 

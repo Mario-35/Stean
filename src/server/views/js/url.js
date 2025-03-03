@@ -1,9 +1,24 @@
   
+/**
+ * url reader / maker
+ *
+ * @copyright 2023-present Inrae
+ * @author mario.adam@inrae.fr
+ *
+ */
+
 const removeAllQuotes = (input) => (input != null && input.length >= 2 && input.charAt(0) == '\"' && input.charAt(input.length - 1) === '\"') ? input.substring(1, input.length - 1) : input;
 
+function cleanUrl(input) {
+  while (["$", "&", "?"].includes(input[input.length - 1])) {
+      input = input.slice(0, -1);
+  }
+  return input;
+}
+
 function decodeUrl(input) {
-  input = removeAllQuotes(input);
   header("decodeUrl", input);
+  input = removeAllQuotes(input);
   try {
     // return true if some works are done (for init to not delete value)
     let decode = false;
@@ -71,13 +86,6 @@ function decodeUrl(input) {
     console.error(error);
       return false;
   } 
-}
-
-function cleanUrl(input) {
-  while (["$", "&", "?"].includes(input[input.length - 1])) {
-      input = input.slice(0, -1);
-  }
-  return input;
 }
 
 function createUrl() {

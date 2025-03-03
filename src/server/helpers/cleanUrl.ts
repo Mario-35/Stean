@@ -6,12 +6,12 @@
  *
  */
 
-
 /**
  *
  * @param input: string
  * @returns clean string with ["$", "&", "?"] undesired removed
  */
+
 export const cleanUrl = (input: string): string => {
     input = input.replace("?&$", "?$");
     while (["$", "&", "?"].includes(input[input.length - 1])) {

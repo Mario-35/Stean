@@ -6,6 +6,7 @@
  *
  */
 
+import { EConstant } from "../enums";
 import { errors } from "../messages";
 export class Csv {
     flattenArray(array: Record<string, any>, ancestors?: Record<string, any>) {
@@ -108,7 +109,7 @@ export class Csv {
         for (let i = 0; i < allKeys.length; i++) {
             keyValues.push('"' + allKeys[i].replace(/"/g, options.output_csvjson_variant ? '\\"' : '""') + '"');
         }
-        let csv = keyValues.join(separator) + "\n";
+        let csv = keyValues.join(separator) + EConstant.return;
         for (let r = 0; r < allRows.length; r++) {
             const row = allRows[r],
                 rowArray = [];
@@ -116,7 +117,7 @@ export class Csv {
                 const key = allKeys[k];
                 rowArray.push(row[key] || (options.output_csvjson_variant ? "null" : ""));
             }
-            csv += rowArray.join(separator) + (r < allRows.length - 1 ? "\n" : "");
+            csv += rowArray.join(separator) + (r < allRows.length - 1 ? EConstant.return : "");
         }
 
         return csv;

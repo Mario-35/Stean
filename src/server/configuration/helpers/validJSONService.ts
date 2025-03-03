@@ -15,6 +15,7 @@ import { keyobj } from "../../types";
  * @param input record service
  * @returns true if the service is valid
  */
+
 export function validJSONService(input: Record<string, any>): boolean {
     if (!input.hasOwnProperty(EConstant.admin)) return false;
     if (!input[EConstant.admin].hasOwnProperty("pg")) return false;

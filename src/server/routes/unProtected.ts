@@ -211,3 +211,23 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
         }
     }
 });
+
+// Put only for add decoder from admin
+unProtectedRoutes.put("/(.*)", async (ctx) => {
+    if (ctx.request.url.includes("/Decoders")) {
+        if (ctx.request.type.startsWith("application/json") && Object.keys(ctx.body).length > 0) {
+            const odataVisitor = await createOdata(ctx);
+            if (odataVisitor) ctx.odata = odataVisitor;
+            if (ctx.odata) {
+                const objectAccess = new apiAccess(ctx);
+                const returnValue: IreturnResult | undefined | void = await objectAccess.put();
+                if (returnValue) {
+                    returnFormats.json.type;
+                    if (returnValue.selfLink) ctx.set("Location", returnValue.selfLink);
+                    ctx.status = EHttpCode.created;
+                    ctx.body = returnValue.body;
+                }
+            } else ctx.throw(EHttpCode.badRequest);
+        }
+    }
+});

@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 export enum EUserRights {
     Post = 0,
     Delete = 1,

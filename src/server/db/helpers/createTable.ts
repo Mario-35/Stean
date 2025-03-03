@@ -19,6 +19,7 @@ import { EChar } from "../../enums";
  * @param doAfter query to execute after create table Ok
  * @returns record log report
  */
+
 export const createTable = async (serviceName: string, tableEntity: Ientity, doAfter: string | undefined): Promise<Record<string, string>> => {
     console.log(log.debug_head(`CreateTable [${tableEntity.table || `pseudo ${tableEntity.name}`}] for ${serviceName}`));
     if (!tableEntity) return {};

@@ -5,7 +5,8 @@
  * @author mario.adam@inrae.fr
  *
  */
-export enum EQuery { 
+
+export enum EQuery {
     Where = "where",
     Select = "select",
     GroubBy = "groubBy",

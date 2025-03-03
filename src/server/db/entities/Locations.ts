@@ -13,6 +13,7 @@ import { Common } from "./common";
 /**
  * Locations Class
  */
+
 export class Locations extends Common {
     constructor(ctx: koaContext) {
         console.log(log.whereIam());

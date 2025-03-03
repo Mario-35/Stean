@@ -14,6 +14,7 @@ import { CoreHtmlView } from "./core";
 /**
  * Login Class for HTML View
  */
+
 export class Login extends CoreHtmlView {
     constructor(ctx: koaContext, datas: Idatas) {
         console.log(log.whereIam("View"));

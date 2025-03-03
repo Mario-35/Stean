@@ -13,6 +13,7 @@ import path from "path";
  *
  * @returns all sql files in directory
  */
+
 export const pgFunctions = (): string[] => {
     const result: string[] = [];
     fs.readdirSync(path.join(__dirname))

@@ -8,6 +8,7 @@
 
 import AdmZip from "adm-zip";
 import { log } from "../log";
+import { EConstant } from "../enums";
 
 /**
  * Create Zip from a folder
@@ -16,6 +17,7 @@ import { log } from "../log";
  * @param outputFilePath destination file
  * @returns boolean
  */
+
 export async function zipDirectory(sourceDir: string, outputFilePath: string): Promise<boolean> {
     const zip = new AdmZip();
     zip.addLocalFolder(sourceDir);
@@ -23,7 +25,7 @@ export async function zipDirectory(sourceDir: string, outputFilePath: string): P
         await zip.writeZipPromise(outputFilePath);
         return true;
     } catch (error) {
-        process.stdout.write(log.update(error + "\n"));
+        process.stdout.write(log.update(error + EConstant.return));
     }
     return false;
 }

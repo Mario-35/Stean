@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 export const emailIsValid = (email: string): boolean => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 // at least one number, one lowercase and one uppercase letter
 // at least six characters that are letters, numbers or the underscore

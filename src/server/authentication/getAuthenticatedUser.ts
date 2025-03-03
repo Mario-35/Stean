@@ -19,6 +19,7 @@ import { blankUser } from "../views/helpers/";
  * @param ctx koaContext
  * @returns Iuser
  */
+
 export const getAuthenticatedUser = async (ctx: koaContext): Promise<Iuser | undefined> => {
     console.log(log.whereIam());
     if (!ctx.service.extensions.includes(EExtensions.users)) return blankUser(ctx);

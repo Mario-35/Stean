@@ -12,6 +12,7 @@ import fs from "fs";
 /**
  * File Class
  */
+
 export class File {
     // path of the file
     public pathName: string;

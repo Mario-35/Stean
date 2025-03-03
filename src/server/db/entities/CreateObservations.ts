@@ -11,7 +11,7 @@ import { IcsvColumn, IcsvFile, IreturnResult, IstreamInfos, koaContext } from ".
 import { queryInsertFromCsv, dateToDateWithTimeZone } from "../helpers";
 import { doubleQuotesString, asyncForEach } from "../../helpers";
 import { errors, msg } from "../../messages/";
-import { EChar, EDatesType, EExtensions, EHttpCode } from "../../enums";
+import { EChar, EConstant, EDatesType, EExtensions, EHttpCode } from "../../enums";
 import util from "util";
 import { models } from "../../models";
 import { log } from "../../log";
@@ -21,6 +21,7 @@ import { config } from "../../configuration";
 /**
  * CreateFile Class
  */
+
 export class CreateObservations extends Common {
     public indexResult = -1;
     constructor(ctx: koaContext) {
@@ -86,7 +87,7 @@ export class CreateObservations extends Common {
         const sqlInsert = await queryInsertFromCsv(this.ctx, paramsFile);
         console.log(log.debug_infos(`Stream csv file ${paramsFile.filename} in PostgreSql`, sqlInsert ? EChar.ok : EChar.notOk));
         if (sqlInsert) {
-            const sqls = sqlInsert.query.map((e: string, index: number) => `${index === 0 ? "WITH " : ", "}updated${index + 1} as (${e})\n`);
+            const sqls = sqlInsert.query.map((e: string, index: number) => `${index === 0 ? "WITH " : ", "}updated${index + 1} as (${e})${EConstant.return}`);
             // Remove logs and triggers for speed insert
             await config.executeSql(this.ctx.service, `SET session_replication_role = replica;`);
             const resultSql: Record<string, any> = await config.executeSql(this.ctx.service, `${sqls.join("")}SELECT (SELECT count(*) FROM ${paramsFile.tempTable}) AS total, (SELECT count(*) FROM updated1) AS inserted`);

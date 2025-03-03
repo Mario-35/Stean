@@ -119,7 +119,7 @@ export class PgVisitor extends Visitor {
                 const nbs = Array.from({ length: this.parentEntity?.name === DATASTREAM.name ? 1 : 5 }, (v, k) => k + 1);
                 const translate = `TRANSLATE (SUBSTRING ("result"->>'value' FROM '(([0-9]+.*)*[0-9]+)'), '[]','')`;
                 const isOperation = operation.trim() != "";
-                return ForceString || isFile(this.ctx) ? `@EXPRESSIONSTRING@ ALL (ARRAY_REMOVE( ARRAY[\n${nbs.map((e) => `${isOperation ? `${operation} (` : ""} SPLIT_PART ( ${translate}, ',', ${e}))`).join(",\n")}], null))` : `@EXPRESSION@ ALL (ARRAY_REMOVE( ARRAY[\n${nbs.map((e) => `${isOperation ? `${operation} (` : ""}NULLIF (SPLIT_PART ( ${translate}, ',', ${e}),'')::numeric${isOperation ? `)` : ""}`).join(",\n")}], null))`;
+                return ForceString || isFile(this.ctx) ? `@EXPRESSIONSTRING@ ALL (ARRAY_REMOVE( ARRAY[${EConstant.return}${nbs.map((e) => `${isOperation ? `${operation} (` : ""} SPLIT_PART ( ${translate}, ',', ${e}))`).join(`,${EConstant.return}`)}], null))` : `@EXPRESSION@ ALL (ARRAY_REMOVE( ARRAY${EConstant.return}${nbs.map((e) => `${isOperation ? `${operation} (` : ""}NULLIF (SPLIT_PART ( ${translate}, ',', ${e}),'')::numeric${isOperation ? `)` : ""}`).join(EConstant.return)}], null))`;
             default:
                 return `CASE 
           WHEN JSONB_TYPEOF( "result"->'value') = 'number' THEN ("result"->${this.numeric == true ? ">" : ""}'value')::jsonb

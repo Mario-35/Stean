@@ -1,3 +1,11 @@
+/**
+ * Drop for Query.
+ *
+ * @copyright 2023-present Inrae
+ * @author mario.adam@inrae.fr
+ *
+ */
+
 function jsonDatasPasteEvent(event) {
 	setTimeout(() => {
 		try {

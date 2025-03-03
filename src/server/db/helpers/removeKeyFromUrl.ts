@@ -13,18 +13,18 @@ import { cleanUrl } from "../../helpers";
  * @param keys array of keys to remove
  * @returns clean url string
  * */
+
 export const removeKeyFromUrl = (input: string, keys: string[]): string => {
-  // Clean input
-  input = decodeURIComponent(input);
-  if (!input.includes("?")) return input;
-  const firstSplit = input.split("?");
-  const returnValue: string[] = [];
-  firstSplit[1].split("&").forEach((element: string) => {
-    if (element.includes("=")) {
-      const temp = element.split("=");
-      if (!( keys.includes(temp[0]) || keys.includes(`${temp[0].replace("$", "")}`))) returnValue.push(element);
-    }
-  });
- return cleanUrl(`${firstSplit[0]}?${ returnValue[0] && returnValue[0].startsWith("$") ? "" : "$" }${returnValue.join("&")}` );
+    // Clean input
+    input = decodeURIComponent(input);
+    if (!input.includes("?")) return input;
+    const firstSplit = input.split("?");
+    const returnValue: string[] = [];
+    firstSplit[1].split("&").forEach((element: string) => {
+        if (element.includes("=")) {
+            const temp = element.split("=");
+            if (!(keys.includes(temp[0]) || keys.includes(`${temp[0].replace("$", "")}`))) returnValue.push(element);
+        }
+    });
+    return cleanUrl(`${firstSplit[0]}?${returnValue[0] && returnValue[0].startsWith("$") ? "" : "$"}${returnValue.join("&")}`);
 };
- 

@@ -5,7 +5,8 @@
  * @author mario.adam@inrae.fr
  *
  */
-export enum EOperation { 
+
+export enum EOperation {
     Table,
     Relation,
     Association

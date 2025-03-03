@@ -36,6 +36,7 @@ function loopThroughJSON(obj: Record<string, any>, search: string): string | und
  * @param search key string or array of string to search
  * @returns value or undefined if not found
  */
+
 export function searchInJson(obj: Record<string, any>, search: string | string[]): string | undefined {
     let result: string | undefined = undefined;
     if (typeof search === "string") result = loopThroughJSON(obj, search);

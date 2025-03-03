@@ -570,7 +570,6 @@ body {
 [class^="icon-"], [class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'icomoon' !important;
-  speak: never;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -2059,9 +2058,6 @@ input[type="radio"]:disabled:active + .patrom-radio-button__checkmark:before {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
   }
-.patrom-multi-select-container {
-  /* display: inline-block; */
-}
 
 .patrom-multi-select li .buttonMini-all {
   font-size: var(--font-size-less-2);
@@ -2976,7 +2972,6 @@ input[type="radio"]:disabled:active + .patrom-radio-button__checkmark:before {
 }
 
 .center .col {
-  flex-gpatrom-flex-row: 0;
   flex-shrink: 0;
 }
 

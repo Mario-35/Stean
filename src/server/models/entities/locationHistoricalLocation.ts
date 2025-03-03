@@ -11,13 +11,13 @@ import { ETable } from "../../enums";
 import { Ientity } from "../../types";
 import { Bigint } from "../types";
 
-export const LOCATIONHISTORICALLOCATION:Ientity  = new Entity("LocationsHistoricalLocations", {
-  createOrder: -1,
-  type: ETable.link,
-  order: -1,
-  columns: {
-    location_id: new Bigint().notNull().type(),
-    historicallocation_id: new Bigint().notNull().type(),
-  },
-  relations: {},
+export const LOCATIONHISTORICALLOCATION: Ientity = new Entity("LocationsHistoricalLocations", {
+    createOrder: -1,
+    type: ETable.link,
+    order: -1,
+    columns: {
+        location_id: new Bigint().notNull().type(),
+        historicallocation_id: new Bigint().notNull().type()
+    },
+    relations: {}
 });

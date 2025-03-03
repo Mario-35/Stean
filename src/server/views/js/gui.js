@@ -1,19 +1,41 @@
-// ===============================================================================
-// |                                     GUI                                     |
-// ===============================================================================
+/**
+ * Gui.
+ *
+ * @copyright 2023-present Inrae
+ * @author mario.adam@inrae.fr
+ *
+ */
 
+/**
+ * Show / Hide object
+ * @param {any} obj // object to Show / Hide
+ * @param {boolean} test  
+ */
 function toggleShowHide(obj, test) {
 	obj.style.display = test === true ? "block" : _NONE;
 }
 
+/**
+ * Hide object
+ * @param {any} obj // object to Hide
+ */
 function hide(obj) {
 	obj.style.display = _NONE;
 }
 
+/**
+ * Show object
+ * @param {any} obj // object to Show
+ */
 function show(obj) {
 	obj.style.display = "table-cell";
 }
 
+/**
+ * enabled / disabled object
+ * @param {any} obj // object to enabled / disabled
+ * @param {boolean} test  
+ */
 function EnabledOrDisabled(obj, test) {
 	if (obj.length == undefined) obj = [obj];
 	obj.forEach(e => {
@@ -30,11 +52,10 @@ function wait(on) {
 	toggleShowHide(spinner, on);
 }
 
-
 /**
- * Show message popup
+ * Show Error message popup
  * @param {*} titleMess 
- * @param {*} bodyMess 
+ * @param {*} err 
  */
 function notifyError(titleMess, err) {
 	new Error({
@@ -43,6 +64,11 @@ function notifyError(titleMess, err) {
 	});
 }
 
+/**
+ * Show message popup
+ * @param {*} titleMess 
+ * @param {*} message 
+ */
 function notifyAlert(titleMess, message) {
 	new Alert({
 		title: titleMess,
@@ -50,6 +76,13 @@ function notifyAlert(titleMess, message) {
 	});
 }
 
+/**
+ * Show message prompt popup
+ * @param {*} titleMess 
+ * @param {*} message 
+ * @param {*} submitText 
+ * @param {*} placeholderText 
+ */
 function notifyPrompt(titleMess, message, submitText, placeholderText) {
 	new Prompt({
 		title: titleMess,
@@ -59,6 +92,11 @@ function notifyPrompt(titleMess, message, submitText, placeholderText) {
 	});
 }
 
+/**
+ * Show message Json format
+ * @param {*} titleMess 
+ * @param {*} contentJson 
+ */
 function notifyJson(titleMess, contentJson) {
 	new ViewJson({
 		title: titleMess,
@@ -66,6 +104,11 @@ function notifyJson(titleMess, contentJson) {
 	});
 }
 
+/**
+ * Show message cosfirmation
+ * @param {*} titleMess 
+ * @param {*} message 
+ */
 function notifyConfirm(titleMess, message) {
 	new Confirm({
 		title: titleMess,

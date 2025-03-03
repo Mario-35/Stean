@@ -5,8 +5,9 @@
  * @author mario.adam@inrae.fr
  *
  */
-export const streamFromDeveui = ( input: string ): string => 
-`WITH multidatastream AS (
+
+export const streamFromDeveui = (input: string): string =>
+    `WITH multidatastream AS (
   SELECT 
     JSON_AGG(t) AS multidatastream 
   FROM 
@@ -68,4 +69,3 @@ SELECT
 FROM 
   multidatastream, 
   datastream`;
-

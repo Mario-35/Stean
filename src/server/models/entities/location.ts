@@ -10,26 +10,24 @@ import { Entity } from "../entity";
 import { ERelations, ETable } from "../../enums";
 import { Ientity } from "../../types";
 import { Bigint, Jsonb, Text } from "../types";
-export const LOCATION:Ientity  = new Entity("Locations", {
-  createOrder: 2,
-  type: ETable.table,
-  order: 6,
-  columns: {
-    id: new Bigint().generated("id").type(),
-    name: new Text().notNull().type(),
-    // name: new Text().notNull().default(info.noName).unique().type(),
-    description: new Text().notNull().type(),
-    // description: new Text().notNull().default(info.noDescription).type(),
-    encodingType: new Text().notNull().default("application/vnd.geo+json").type(),
-    location: new Jsonb().notNull().type(),
-  },
-  relations: {
-    Things: {
-      type: ERelations.belongsToMany,
-      entityRelation: "ThingsLocations"
+export const LOCATION: Ientity = new Entity("Locations", {
+    createOrder: 2,
+    type: ETable.table,
+    order: 6,
+    columns: {
+        id: new Bigint().generated("id").type(),
+        name: new Text().notNull().type(),
+        description: new Text().notNull().type(),
+        encodingType: new Text().notNull().default("application/vnd.geo+json").type(),
+        location: new Jsonb().notNull().type()
     },
-    HistoricalLocations: {
-      type: ERelations.belongsToMany,
-    },
-  },
+    relations: {
+        Things: {
+            type: ERelations.belongsToMany,
+            entityRelation: "ThingsLocations"
+        },
+        HistoricalLocations: {
+            type: ERelations.belongsToMany
+        }
+    }
 });

@@ -9,6 +9,7 @@
 import path from "path";
 import fs from "fs";
 import { File } from "./files";
+import { EConstant } from "../enums";
 
 /**
  * Paths Class
@@ -29,7 +30,7 @@ class Paths {
         if (!fs.existsSync(this.upload())) fs.mkdirSync(this.upload());
         // backup log create new one stream it
         this.logFile = new File(path.join(this.root, "logs/"), "logs.html", ["backup", "stream"]);
-        this.logFile.writeStream(`<!DOCTYPE html>\n<html>\n<body style="background-color:#353535;">`);
+        this.logFile.writeStream(`<!DOCTYPE html>${EConstant.return}<html>${EConstant.return}<body style="background-color:#353535;">`);
         // get config file
         this.configFile = new File(path.join(this.app, "/configuration/"), "configuration.json", []);
         // check .key and create defaulh one if not exist or corrupt

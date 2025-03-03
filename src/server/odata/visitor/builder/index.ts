@@ -6,6 +6,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 export { Core } from "./core";
 export { GroupBy } from "./groupBy";
 export { OrderBy } from "./orderBy";

@@ -5,14 +5,16 @@
  * @author mario.adam@inrae.fr
  *
  */
-export interface IpgQuery { // postgresSql query simple Interface
-    select:     string;
-    from:       string[]; 
-    count?:     string;
-    where?:     string;
-    orderBy?:   string;
-    groupBy?:   string;
-    skip?:      number;
-    limit?:     number;
-    keys:       string[];
+
+export interface IpgQuery {
+    // postgresSql query simple Interface
+    select: string;
+    from: string[];
+    count?: string;
+    where?: string;
+    orderBy?: string;
+    groupBy?: string;
+    skip?: number;
+    limit?: number;
+    keys: string[];
 }

@@ -192,7 +192,7 @@ export class Query {
                                 }
                             });
                     const res = {
-                        select: select.join(",\n\t\t"),
+                        select: select.join(`,${EConstant.return}${EConstant.tab}${EConstant.tab}`),
                         from: [doubleQuotesString(element.entity.table)],
                         where: element.query.where.toString(),
                         groupBy: element.query.groupBy.notNull() === true ? element.query.groupBy.toString() : undefined,
@@ -210,14 +210,18 @@ export class Query {
         return undefined;
     }
     private pgQueryToString(input: IpgQuery | undefined): string | undefined {
-        return input ? `SELECT ${input.select}\n FROM ${input.from}\n ${input.where ? `WHERE ${input.where}\n` : ""}${input.groupBy ? `GROUP BY ${cleanStringComma(input.groupBy)}\n` : ""}${input.orderBy ? `ORDER BY ${cleanStringComma(input.orderBy, ["ASC", "DESC"])}\n` : ""}${input.skip && input.skip > 0 ? `OFFSET ${input.skip}\n` : ""} ${input.limit && input.limit > 0 ? `LIMIT ${input.limit}\n` : ""}` : undefined;
+        return input
+            ? `SELECT ${input.select}${EConstant.return} FROM ${input.from}${EConstant.return} ${input.where ? `WHERE ${input.where}${EConstant.return}` : ""}${input.groupBy ? `GROUP BY ${cleanStringComma(input.groupBy)}${EConstant.return}` : ""}${input.orderBy ? `ORDER BY ${cleanStringComma(input.orderBy, ["ASC", "DESC"])}${EConstant.return}` : ""}${input.skip && input.skip > 0 ? `OFFSET ${input.skip}${EConstant.return}` : ""} ${
+                  input.limit && input.limit > 0 ? `LIMIT ${input.limit}${EConstant.return}` : ""
+              }`
+            : undefined;
     }
 
     toWhere(main: RootPgVisitor | PgVisitor, _element?: PgVisitor): string {
         console.log(log.whereIam());
         this._pgQuery = this.create(main, true, _element);
         if (this._pgQuery) {
-            const query = `SELECT ${this._pgQuery.select}\n FROM ${this._pgQuery.from}\n ${this._pgQuery.where ? `WHERE ${this._pgQuery.where}\n` : ""}`;
+            const query = `SELECT ${this._pgQuery.select}${EConstant.return} FROM ${this._pgQuery.from}${EConstant.return} ${this._pgQuery.where ? `WHERE ${this._pgQuery.where}${EConstant.return}` : ""}`;
             if (query) {
                 this._pgQuery = undefined;
                 return query;

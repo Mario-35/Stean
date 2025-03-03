@@ -16,6 +16,7 @@ import jsonwebtoken from "jsonwebtoken";
  * @param password string
  * @returns token as string
  */
+
 export const createToken = (input: Iuser, password: string): string => {
     return jsonwebtoken.sign(
         {

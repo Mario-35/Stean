@@ -10,9 +10,10 @@
 
 import fs from "fs";
 import crypto from "crypto";
+import { EConstant } from "../enums";
 
 const decrypt = (input: string, key: string): string => {
-    input = input.split("\r\n").join("");
+    input = input.split(EConstant.return + EConstant.newline).join("");
     if (typeof input === "string" && input[32] == ".") {
         try {
             const decipher = crypto.createDecipheriv("aes-256-ctr", key, Buffer.from(input.substring(32, 0), "hex"));
@@ -31,4 +32,4 @@ function decode(file: fs.PathOrFileDescriptor) {
     return decrypt(fileTemp, key);
 }
 
-process.stdout.write(decode(__dirname + `/configuration.json`) + "\n");
+process.stdout.write(decode(__dirname + `/configuration.json`) + EConstant.return);

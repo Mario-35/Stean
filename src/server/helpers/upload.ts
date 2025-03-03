@@ -18,6 +18,7 @@ import { paths } from "../paths";
  * @param ctx Koa context
  * @returns KeyString
  */
+
 export const upload = (ctx: koaContext): Promise<object> => {
     // Init results
     const data: Record<string, any> = {};

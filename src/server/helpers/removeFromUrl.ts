@@ -12,9 +12,10 @@
  * @param remove: string or string[] to remove
  * @returns clean url
  */
+
 export const removeFromUrl = (input: string, remove: string | string[]): string => {
-    if (typeof remove == 'string') remove = [remove];
-    remove.forEach(e => {
+    if (typeof remove == "string") remove = [remove];
+    remove.forEach((e) => {
         input = input.replace(`&$${e}`, "").replace(`$${e}`, "");
     });
     return input;

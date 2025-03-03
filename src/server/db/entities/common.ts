@@ -19,6 +19,7 @@ import { asCsv } from "../queries";
 /**
  * Common Class for all entities
  */
+
 export class Common {
     readonly ctx: koaContext;
     public nextLinkBase: string;
@@ -275,6 +276,35 @@ export class Common {
                         });
             }
     }
+
+    /**
+     * Put an item
+     *
+     * @param dataInput Recocd input
+     * @returns IreturnResult
+     */
+    async put(dataInput: Record<string, any> | undefined): Promise<IreturnResult | undefined> {
+        console.log(log.whereIam());
+        if (dataInput && this.ctx.odata.entity) {
+            // Format datas
+            dataInput = this.formatDataInput(dataInput);
+            if (dataInput)
+                return await config
+                    .executeSqlValues(this.ctx.service, `SELECT id FROM "${this.ctx.odata.entity.table}" WHERE "name" = '${dataInput["name" as keyof object]}'`)
+                    .then((res) => {
+                        // search id from name
+                        this.ctx.odata.id = res[0 as keyof object];
+                        // update
+                        return this.update(dataInput);
+                    })
+                    .catch((err: Error) => {
+                        console.log(err);
+                        // insert
+                        return this.post(dataInput);
+                    });
+        }
+    }
+
     /**
      * Update (Patch) an item
      *

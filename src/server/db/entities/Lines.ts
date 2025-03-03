@@ -13,6 +13,7 @@ import { log } from "../../log";
 /**
  * Lines Class
  */
+
 export class Lines extends Common {
     constructor(ctx: koaContext) {
         console.log(log.whereIam());

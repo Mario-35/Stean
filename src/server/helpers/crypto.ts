@@ -8,12 +8,14 @@
 
 import crypto from "crypto";
 import { paths } from "../paths";
+import { EConstant } from "../enums";
 
 /**
  *
  * @param input string
  * @returns encrypted string
  */
+
 export const encrypt = (input: string): string => {
     const iv = crypto.randomBytes(16);
     const cipher = crypto.createCipheriv("aes-256-ctr", paths.key, iv);
@@ -26,8 +28,9 @@ export const encrypt = (input: string): string => {
  * @param input string
  * @returns decrypted string
  */
+
 export const decrypt = (input: string): string => {
-    input = input.split("\r\n").join("");
+    input = input.split(`${EConstant.return}${EConstant.tab}`).join("");
     if (typeof input === "string" && input[32] == ".") {
         try {
             const decipher = crypto.createDecipheriv("aes-256-ctr", paths.key, Buffer.from(input.substring(32, 0), "hex"));

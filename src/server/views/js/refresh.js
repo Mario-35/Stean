@@ -10,6 +10,7 @@ function updateForm() {
 	tabEnabledDisabled("importTab", _PARAMS.user.canPost);
 	tabEnabledDisabled("observationsTab", isObservation());
 	tabEnabledDisabled("AdminTab", (_PARAMS.user.admin || _PARAMS.user.superAdmin));
+	ended("updateForm");
 }
 
 function refresh() {
@@ -23,7 +24,8 @@ function refresh() {
 	updateBuilder();
 	canShowQueryButton();
 	toggleShowHide(getElement("payloadPartTab"), entityOption.value === "Decoders");
-	toggleShowHide(getElement("logsPartTab"), entityOption.value === "Logs");
+	ended("refresh");
+
 }
 
 function refresh_entity() {

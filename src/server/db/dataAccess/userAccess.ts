@@ -31,21 +31,15 @@ export const userAccess = {
     },
     post: async (configName: string, data: Iuser) => {
         const conn = config.connection(configName);
-        return await conn
-            .unsafe(
-                `INSERT INTO "user" ("username", "email", "password", "database", "canPost", "canDelete", "canCreateUser", "canCreateDb", "superAdmin", "admin") 
-       VALUES ('${data.username}', '${data.email}', '${encrypt(data.password)}', '${data.database || "all"}', ${data.canPost || false}, ${data.canDelete || false}, ${data.canCreateUser || false}, ${data.canCreateDb || false}, ${data.superAdmin || false}, ${data.admin || false}) 
-      RETURNING *`
-            )
-            .catch(async (err) => {
-                if (err.code === "23505") {
-                    const id = await conn.unsafe(`SELECT id FROM "${USER.table}" WHERE "username" = '${data.username}'`);
-                    if (id[0]) {
-                        data.id = id[0].id;
-                        return await conn.unsafe(`UPDATE "user" SET "username" = '${data.username}', "email" = '${data.email}', "database" = '${data.database}', "canPost" = ${data.canPost || false}, "canDelete" = ${data.canDelete || false}, "canCreateUser" = ${data.canCreateUser || false}, "canCreateDb" = ${data.canCreateDb || false}, "superAdmin" = ${data.superAdmin || false}, "admin" = ${data.admin || false} WHERE "id" = ${data.id} RETURNING *`);
-                    }
+        return await conn.unsafe(`INSERT INTO "user" ("username", "email", "password", "database", "canPost", "canDelete", "canCreateUser", "canCreateDb", "superAdmin", "admin") VALUES ('${data.username}', '${data.email}', '${encrypt(data.password)}', '${data.database || "all"}', ${data.canPost || false}, ${data.canDelete || false}, ${data.canCreateUser || false}, ${data.canCreateDb || false}, ${data.superAdmin || false}, ${data.admin || false}) RETURNING *`).catch(async (err) => {
+            if (err.code === "23505") {
+                const id = await conn.unsafe(`SELECT id FROM "${USER.table}" WHERE "username" = '${data.username}'`);
+                if (id[0]) {
+                    data.id = id[0].id;
+                    return await conn.unsafe(`UPDATE "user" SET "username" = '${data.username}', "email" = '${data.email}', "database" = '${data.database}', "canPost" = ${data.canPost || false}, "canDelete" = ${data.canDelete || false}, "canCreateUser" = ${data.canCreateUser || false}, "canCreateDb" = ${data.canCreateDb || false}, "superAdmin" = ${data.superAdmin || false}, "admin" = ${data.admin || false} WHERE "id" = ${data.id} RETURNING *`);
                 }
-            });
+            }
+        });
     },
     update: async (configName: string, data: Iuser): Promise<Iuser | any> => {
         const conn = config.connection(configName);

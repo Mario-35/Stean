@@ -4,7 +4,6 @@ const pretty = new pp();
 // @start@
 // @request@
 
-
 // create json default configuration
 function updateDataService()  {
 	var obj = {
@@ -28,6 +27,7 @@ function updateDataService()  {
 	beautifyDatas(getElement("jsonDatas"), obj, "json");	
 };
 
+// catch click on service block
 btnService.onclick = async (e) => {
 	e.preventDefault();
 	updateDataService();
@@ -69,7 +69,6 @@ function fillService(name, newName) {
 	optRepeat.value = newName ||"";
 }
 
-
 // load Log file from log select
 getDatas = async (url) => {
 	try {
@@ -87,7 +86,6 @@ getDatas = async (url) => {
 
 // fill form for create service from another
 async function selectCard(name) {
-	console.log("selectCard");
 	fillService(name);	
 }
 
@@ -166,22 +164,20 @@ function showUserInfos(service, element) {
 // change view for standard default infos
 async function showDecoderInfos(name, decoder) {
 	const datas = await getDatas(`${_PARAMS.services[name].linkBase}/${_PARAMS.services[name].version}/Decoders(${decoder})`);
-	updateWinDecoders(datas);
+	decoderWindow(datas, name);
 }
 
-// change view for standard default infos
+// Change view for standard default infos
 function showInfos(service) {
-	getElement("options"+ service).innerHTML = `<legend>Options</legend>
-	<ul class="card-list">
-		<li class="card-list-item icon-${_PARAMS.services[service].service.options.includes("canDrop") ? "yes" : "no"}">canDrop</li>
-		<li class="card-list-item icon-${_PARAMS.services[service].service.options.includes("forceHttps") ? "yes" : "no"}">forceHttps</li>
-		<li class="card-list-item icon-${_PARAMS.services[service].service.options.includes("stripNull") ? "yes" : "no"}">stripNull</li>
-		<li class="card-list-item icon-${_PARAMS.services[service].service.options.includes("unique") ? "yes" : "no"}">unique</li>
-	</ul>
-	`
+	const li = (operation) => `<li class="card-list-item icon-${_PARAMS.services[service].service.options.includes(operation) ? "yes" : "no" }">${operation}</li>`;
+	const ul = ['<legend>Options</legend>','<ul class="card-list">'];
+	["canDrop","forceHttps","stripNull","unique"].forEach( e => ul.push(li(e)));
+	ul.push("</ul>");	
+	getElement("options"+ service).innerHTML = ul.join("");
 }
 
-function testDecoder(){
+// Launch test decoder
+function testDecoder() {
 	const payload = getElement("optPayload").value || window.prompt("payload", "");
 	if (payload !== null && payload !== "") {
 		getElement("optPayload").value = payload;
@@ -189,7 +185,43 @@ function testDecoder(){
 	}
 }
 
-function decodingPayload(payload)  {
+// Delete decoder
+async function deleteDecoder() {
+	const serviceName = getElement("optDecoderId").name;
+	const id = getElement("optDecoderId").value;	
+	if (Number(id) > 0) {
+		let response = await fetch(`${_PARAMS.services[serviceName].linkBase}/${_PARAMS.services[serviceName].version}/Decoders(${id})`, {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+
+		if (response.status == 204)
+			notifyAlert("Delete", `delete Ok`);
+		else 
+			notifyError("Error", `delete Error`);
+	}	
+}
+
+// Save decoder as PUT http verb
+async function saveDecoder() {
+	const serviceName = getElement("optDecoderId").name;	
+	await fetch(`${_PARAMS.services[serviceName].linkBase}/${_PARAMS.services[serviceName].version}/Decoders?$debug=true`, {
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({
+			"name": getElement("optDecoderName").value,
+			"code": String(getElement("jsonDecoderCode").innerText.split("\n").join("")),
+			"nomenclature": String(getElement("jsonDecoderNomenclature").innerText.split("\n").join(""))
+		})
+	});
+}
+
+// Decode payload test
+function decodingPayload(payload) {
 	try {
 		const F = new Function("input", "nomenclature", `${getElement("jsonDecoderCode").innerText}; return decode(input, nomenclature);`);
 		let nomenclature = JSON.parse(getElement("jsonDecoderNomenclature").innerText);
@@ -201,42 +233,11 @@ function decodingPayload(payload)  {
 	}
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Start
-(function init() {	  
-	console.log(_PARAMS);
+(function init() {
+	wait(false);
 	hide(datas);
 	new SplitterBar(container, first, two);
-	wait(false);
 	populateSelect(optVersion, _PARAMS.versions, "v1.1");
 	populateSelect(optLogs, _PARAMS.logsFiles);
 	populateMultiSelect("optionsOption", _PARAMS.options);

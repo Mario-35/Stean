@@ -13,6 +13,7 @@ import fs from "fs";
 /**
  * Logs Class for HTML View
  */
+
 export class HtmlLogs extends CoreHtmlView {
     // use data to name ifle
     constructor(ctx: koaContext, datas: Idatas) {

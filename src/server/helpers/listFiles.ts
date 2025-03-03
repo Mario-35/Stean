@@ -15,6 +15,7 @@ import path from "path";
  * @param extension file extenson
  * @returns Array of files
  */
+
 export function listFiles(source: string, extension: string): string[] {
     const result: string[] = [];
     fs.readdirSync(path.join(source))

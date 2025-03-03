@@ -20,6 +20,7 @@ import { EConstant } from "../../enums";
  * @param database pg database name
  * @returns true if connection valid
  */
+
 export async function testDbConnection(host: string, username: string, password: string, port?: number, database?: string): Promise<boolean> {
     return await postgres(`postgres://${username}:${password}@${host}:${port || 5432}/${database || "postgres"}`, {
         debug: _DEBUG,

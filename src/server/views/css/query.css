@@ -25,6 +25,7 @@
   .blakkAll {
 	background-color: #000;
 	width: 100%;
+	overflow: auto;
 }
 
 .mini {

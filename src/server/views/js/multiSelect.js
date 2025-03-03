@@ -1,4 +1,14 @@
-  /**
+ 
+ /**
+ * Select & MultiSelect helpers.
+ *
+ * @copyright 2023-present Inrae
+ * @author mario.adam@inrae.fr
+ *
+ */
+
+ 
+ /**
    * 
    * @param {*} obj HTML object to fill
    * @param {*} list list of items

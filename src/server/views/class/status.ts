@@ -15,6 +15,7 @@ import { CoreHtmlView } from "./core";
 /**
  * Status Class for HTML View
  */
+
 export class Status extends CoreHtmlView {
     constructor(ctx: koaContext, datas: Idatas) {
         console.log(log.whereIam("View"));

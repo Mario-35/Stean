@@ -12,6 +12,7 @@
  * @param list: string[] a list of key to clean outside comma ("DESC" "ASC")
  * @returns clean string without undesired comma(s)
  */
+
 export const cleanStringComma = (input: string, list?: string[]): string => {
     input = input
         .split(",")

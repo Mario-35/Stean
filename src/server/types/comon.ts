@@ -13,6 +13,7 @@ export interface Icomon {
     getAll(): Promise<IreturnResult | Iuser | undefined>; // get all items with pagination
     getSingle(id: bigint | string): Promise<IreturnResult | Iuser | undefined>; // get one item
     post(dataInput?: Record<string, any> | undefined): Promise<IreturnResult | undefined>; // post item
+    put(dataInput: Record<string, any> | undefined): Promise<IreturnResult | undefined>; // put item
     update(dataInput?: Record<string, any> | undefined): Promise<IreturnResult | undefined>; // update item
     delete(id: bigint | string): Promise<IreturnResult | undefined>; // delete item
 }

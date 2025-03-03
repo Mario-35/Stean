@@ -1,7 +1,30 @@
+/**
+ * windowList for Query.
+ *
+ * @copyright 2023-present Inrae
+ * @author mario.adam@inrae.fr
+ *
+ */
+
 var clickCount = 0;
 var singleClickTimer = 0;
 
-function updateWinLinks(input) {
+function simpleClick(link) {
+	if (link.includes && optHost && link.includes(optHost.value)) {
+		clear();
+		decodeUrl(link);
+		refresh();
+		canGo = true;
+	}
+}
+
+function openClick(link) {
+	if (link[link.length-1] === '"') link = link.slice(0, -1);
+	if (link[0] === '"') link = link.slice(1);
+	window.open(link.trim(), '_blank').focus();
+}
+
+function urlWindow(input) {
 	if (!wins.Links || wins.Links === null || wins.Links.content === null) {
 		const temp = new Window("Links", {
 			state: WindowState.NORMAL,
@@ -41,7 +64,7 @@ function updateWinLinks(input) {
 	}
 }
 
-function updateWinSqlQuery(input) {
+function sqlWindow(input) {
 	if (!wins.Sql || wins.Sql === null || wins.Sql.content === null) {
 		const temp = new Window("Script SQL", {
 			state: WindowState.NORMAL,
@@ -71,7 +94,7 @@ function updateWinSqlQuery(input) {
 			"text": "Encoded html",
 			"events": {
 				"click": function(e) {
-					updateWinLinks(JSON.parse(` { "sqlUrl" : "${optHost.value}/${optVersion.value}/Sql?$query=${btoa(wins.Sql.content.innerText)}"}`));
+					urlWindow(JSON.parse(` { "sqlUrl" : "${optHost.value}/${optVersion.value}/Sql?$query=${btoa(wins.Sql.content.innerText)}"}`));
 				}
 			}
 		}
@@ -84,22 +107,7 @@ function updateWinSqlQuery(input) {
 	});
 }
 
-function simpleClick(link) {
-	if (link.includes && optHost && link.includes(optHost.value)) {
-		clear();
-		decodeUrl(link);
-		refresh();
-		canGo = true;
-	}
-}
-
-function openClick(link) {
-	if (link[link.length-1] === '"') link = link.slice(0, -1);
-	if (link[0] === '"') link = link.slice(1);
-	window.open(link.trim(), '_blank').focus();
-}
-
-function updateWinJsonResult(input, title) {
+function jsonWindow(input, title) {
 	if (!wins.Json || wins.Json === null || wins.Json.content === null) {
 		wins.Json = new Window(title, {
 			state: getWinActives() ? WindowState.NORMAL : WindowState.MAXIMIZED,
@@ -138,7 +146,6 @@ function updateWinJsonResult(input, title) {
 			} else if (Array.from(event.target.classList).includes('type-url-external')) {
 				openClick(event.target.innerHTML);
 			}
-
 		}
 	});
 
@@ -148,7 +155,7 @@ function updateWinJsonResult(input, title) {
 	wins.Json.show();
 }
 
-function updateWinCsvResult(input) {
+function csvWindow(input) {
 	if (!wins.Csv || wins.Csv === null || wins.Csv.content === null) {
 		const temp = new Window("Csv file", {
 			state: getWinActives() ? WindowState.NORMAL : WindowState.MAXIMIZED,
@@ -168,7 +175,7 @@ function updateWinCsvResult(input) {
 	wins.Csv.show();
 }
 
-function updateWinDecoders(input) {
+function decoderWindow(input, serviceName) {
 	if (!wins.Logs || wins.Logs === null || wins.Logs.content === null) {
 		const temp = new Window(`Decoder : ${input.name}`, {
 			state: getWinActives() ? WindowState.NORMAL : WindowState.MAXIMIZED,
@@ -185,7 +192,7 @@ function updateWinDecoders(input) {
 	}
 const lines = [
 `<div class="tabs">`,
-`<input type="hidden" id="optDecoderId" name="optDecoderId" />`,
+`<input type="hidden" id="optDecoderId" name="${serviceName}"/>`,
 `  <input type="radio" name="tabs" id="tabone" checked="checked">`,
 `  	<label for="tabone">Code Javascript</label>`,
 `  		<div class="tab">`,
@@ -207,24 +214,30 @@ const lines = [
 `  <div class="tab">`,
 `  		<div class="pro-form">`,
 `       	<div class="patrom-row">`,
-`           	<!-- Name -->`,
 `               <div class="patrom-col col-span-2">`,
 `					<div class="field">`,
-`						<label for="optDecoderName">Name :</label>`,
+`						<label for="optDecoderName">Name</label>`,
 `						<input id="optDecoderName" name="optDecoderName" type="text" class="patrom-text-input width100"_100-100>`,
+`						<input id="optDecoderId" name="optDecoderId" type="hidden" _100-100>`,
 `					</div>`,
 `               </div>`,
-`               <!-- Payload -->`,
 `               <div class="patrom-col col-span-2">`,
 `               	<div class="field">`,
-`                        <label for="optPayload">Payload :</label>`,
+`                        <label for="optPayload">Payload for testing</label>`,
 `                        <input id="optPayload" name="optPayload" type="text" class="patrom-text-input width100"_100-100>`,
 `                    </div>`,
 `                </div>`,
-`                <!-- Test Btn -->`,
 `                <div class="patrom-col col-span-2">`,
-`                   <label for="testDecoder">Tests the execution of the code with payload</label>`,
+`                   <label for="testDecoder">Tests</label>`,
 `					<button id="testDecoder" onclick="testDecoder()"> test decoder </button>`,
+`				</div>`,
+`                <div class="patrom-col col-span-2">`,
+`                   <label for="testDecoder">Save</label>`,
+`					<button id="saveDecoder" onclick="saveDecoder()"> Save </button>`,
+`				</div>`,
+`                <div class="patrom-col col-span-2">`,
+`                   <label for="deleteDecoder">Delete</label>`,
+`					<button id="deleteDecoder" onclick="deleteDecoder()"> Delete </button>`,
 `				</div>`,
 `            </div>`,
 `          </div>`,
@@ -243,10 +256,11 @@ const lines = [
 
 `</div>`];
 	wins.Logs.content.innerHTML = lines.join("");
+	wins.Logs.name = serviceName;
 	wins.Logs.show();
 	wins.Logs.normalSize();
 	getElement("optDecoderName").value = input.name;
-	getElement("optDecoderId").value = input.id;
+	getElement("optDecoderId").value = input["@iot.id"];
 	beautifyDatas(getElement("jsonDecoderCode"), input.code, "js");
 	beautifyDatas(getElement("jsonDecoderNomenclature"), input.nomenclature, "json");
 }

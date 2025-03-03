@@ -1,19 +1,21 @@
 /**
  * interval.
-*
-* @copyright 2020-present Inrae
-* @author mario.adam@inrae.fr
-*
-*/
+ *
+ * @copyright 2020-present Inrae
+ * @author mario.adam@inrae.fr
+ *
+ */
 import { PgVisitor } from "../../odata/visitor";
 
 /**
- * 
+ *
  * @param input Pg Visitor
  * @returns interval query string
  */
-export const interval = (input: PgVisitor): string =>  input.interval 
-? `WITH src as (
+
+export const interval = (input: PgVisitor): string =>
+    input.interval
+        ? `WITH src as (
     ${input.toString()}
 ), 
 range_values AS (
@@ -30,8 +32,7 @@ time_range AS (
         range_values
 ) 
 SELECT 
-    ${input.intervalColumns ? input.intervalColumns.join(", ") : '' } 
+    ${input.intervalColumns ? input.intervalColumns.join(", ") : ""} 
 FROM 
     src RIGHT JOIN time_range on srcdate = step`
-: input.toString();
-
+        : input.toString();

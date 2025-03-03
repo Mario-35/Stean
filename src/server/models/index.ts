@@ -201,7 +201,7 @@ export class Models {
         const a = this.filtered(service);
         const b = Object.keys(a)
             .filter((e) => a[e].type === ETable.table)
-            .map((e) => (a[e].name === "Users" ? `(SELECT JSON_AGG(u) AS mario FROM ( select username, "canPost", "canDelete", "canCreateUser", "canCreateDb", "admin", "superAdmin" FROM public.user WHERE username <> 'postgres' ORDER By username ) as u) AS "Users"` : `(SELECT COUNT('${a[e].orderBy.split(" ")[0]}') FROM "${a[e].table}") AS "${a[e].name}"\n`));
+            .map((e) => (a[e].name === "Users" ? `(SELECT JSON_AGG(u) AS mario FROM ( select username, "canPost", "canDelete", "canCreateUser", "canCreateDb", "admin", "superAdmin" FROM public.user WHERE username <> 'postgres' ORDER By username ) as u) AS "Users"` : `(SELECT COUNT('${a[e].orderBy.split(" ")[0]}') FROM "${a[e].table}") AS "${a[e].name}"${EConstant.return}`));
         return ` SELECT JSON_AGG(t) AS results FROM ( SELECT ${b.join()}) AS t`;
     }
 

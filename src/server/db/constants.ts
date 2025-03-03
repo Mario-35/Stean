@@ -9,7 +9,7 @@
 export type _STREAM = "Datastream" | "MultiDatastream" | undefined;
 
 
-export const _CREATE_SERVICE_TABLE = `CREATE TABLE public.services (
+export const _CREATE_SERVICEEConstant.tabLE = `CREATE TABLE public.services (
     "name" text NOT NULL,
     "datas" jsonb NULL,
     "stats" jsonb NULL,

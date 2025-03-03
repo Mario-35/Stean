@@ -5,8 +5,9 @@
  * @author mario.adam@inrae.fr
  *
  */
-export const multiDatastreamFromDeveui = ( input: string ): string => 
-`(SELECT 
+
+export const multiDatastreamFromDeveui = (input: string): string =>
+    `(SELECT 
       jsonb_agg(tmp.units -> 'name') AS keys 
     FROM 
       ( SELECT jsonb_array_elements("unitOfMeasurements") AS units ) AS tmp

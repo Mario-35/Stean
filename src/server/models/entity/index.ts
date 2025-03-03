@@ -1,4 +1,4 @@
-import { EDataType, ERelations, ETable, allEntities } from "../../enums";
+import { EConstant, EDataType, ERelations, ETable, allEntities } from "../../enums";
 import { msg, errors } from "../../messages";
 import { IentityColumn, IentityCore, IentityRelation } from "../../types";
 import { singular } from "../helpers";
@@ -63,9 +63,9 @@ export class Entity extends EntityPass {
     }
 
     insertStr(table: string, column: string, relTable: string, coalesce?: string) {
-        const datas = `IF ( NEW."${column}" < "DS_ROW"."_${column}Start" OR "DS_ROW"."_${column}Start" IS NULL ) ${this.querySet(column, "Start")}\n IF (${coalesce ? ` COALESCE( NEW."${column}", NEW."${coalesce}") ` : `NEW."${column}"`} > "DS_ROW"."_${column}End" OR "DS_ROW"."_${column}End" IS NULL ) ${this.querySet(column, "End")}`;
+        const datas = `IF ( NEW."${column}" < "DS_ROW"."_${column}Start" OR "DS_ROW"."_${column}Start" IS NULL ) ${this.querySet(column, "Start")}${EConstant.return} IF (${coalesce ? ` COALESCE( NEW."${column}", NEW."${coalesce}") ` : `NEW."${column}"`} > "DS_ROW"."_${column}End" OR "DS_ROW"."_${column}End" IS NULL ) ${this.querySet(column, "End")}`;
         Entity.trigger[table].insert = Entity.trigger[table].hasOwnProperty("insert")
-            ? Entity.trigger[table].insert.replace("@DATAS@", `\n${datas}@DATAS@`)
+            ? Entity.trigger[table].insert.replace("@DATAS@", `${EConstant.return}${datas}@DATAS@`)
             : `CREATE OR REPLACE FUNCTION ${table}s_update_insert() RETURNS TRIGGER LANGUAGE PLPGSQL AS $$ DECLARE "DS_ROW" RECORD; queryset TEXT := ''; delimitr char(1) := ' '; BEGIN IF (NEW."${table}_id" is not null) THEN SELECT "id", "_${column}Start", "_${column}End", "_resultTimeStart", "_resultTimeEnd" INTO "DS_ROW" FROM "${table}" WHERE "${table}"."id" = NEW."${table}_id"; ${datas} @DATAS@ IF (delimitr = ',') THEN EXECUTE 'update "${table}" SET ' || queryset || ' where "${table}"."id"=$1."${table}_id"' using NEW; END IF; RETURN new; END IF; RETURN new; END; $$`;
         Entity.trigger[table].doInsert = this.addTrigger("insert", table, relTable);
     }
@@ -73,7 +73,7 @@ export class Entity extends EntityPass {
     updateStr(table: string, column: string, relTable: string, coalesce?: string) {
         const datas = `IF (NEW."${column}" != OLD."${column}") THEN for "DS_ROW" IN SELECT * FROM "${table}" WHERE "id"=NEW."${table}_id" LOOP IF (${coalesce ? ` COALESCE( NEW."${column}", NEW."${coalesce}") ` : `NEW."${column}"`} < "DS_ROW"."_${column}Start") ${this.querySet(column, "End")} END LOOP; END IF;`;
         Entity.trigger[table].update = Entity.trigger[table].hasOwnProperty("update")
-            ? Entity.trigger[table].update.replace("@DATAS@", `\n${datas}@DATAS@`)
+            ? Entity.trigger[table].update.replace("@DATAS@", `${EConstant.return}${datas}@DATAS@`)
             : `CREATE OR REPLACE FUNCTION ${table}s_update_update() RETURNS TRIGGER LANGUAGE PLPGSQL AS $$ DECLARE "DS_ROW" "${table}"%rowtype; queryset TEXT := ''; delimitr char(1) := ' '; BEGIN IF (NEW."${table}_id" is not null) THEN ${datas} @DATAS@ IF (delimitr = ',') THEN EXECUTE 'update "${table}" SET ' || queryset ||  ' where "${table}"."id"=$1."${table}_id"' using NEW; END IF; END IF; RETURN NEW; END; $$`;
         Entity.trigger[table].doUpdate = this.addTrigger("update", table, relTable);
     }
@@ -81,7 +81,7 @@ export class Entity extends EntityPass {
     deleteStr(table: string, column: string, relTable: string) {
         const datas = `IF (OLD."${column}" = "DS_ROW"."_${column}Start" OR OLD."${column}" = "DS_ROW"."_${column}End") THEN queryset := queryset || delimitr || '"_${column}Start" = (select min("${column}") from "${relTable}" where "${relTable}"."${table}_id" = $1."${table}_id")'; delimitr := ','; queryset := queryset || delimitr || '"_${column}End" = (select max(coalesce("${column}", "resultTime")) from "${relTable}" where "${relTable}"."${table}_id" = $1."${table}_id")'; END IF;`;
         Entity.trigger[table].delete = Entity.trigger[table].hasOwnProperty("delete")
-            ? Entity.trigger[table].delete.replace("@DATAS@", `\n${datas}@DATAS@`)
+            ? Entity.trigger[table].delete.replace("@DATAS@", `${EConstant.return}${datas}@DATAS@`)
             : `CREATE OR REPLACE FUNCTION ${table}s_update_delete() RETURNS TRIGGER LANGUAGE PLPGSQL AS $$ DECLARE "DS_ROW" "${table}"%rowtype; queryset TEXT := ''; delimitr char(1) := ' '; BEGIN IF (OLD."${table}_id" is not null) THEN SELECT * INTO "DS_ROW" FROM "${table}" WHERE "${table}"."id"=OLD."${table}_id"; ${datas} @DATAS@ IF (delimitr = ',') THEN EXECUTE 'update "${table}" SET ' || queryset ||  ' where "${table}"."id"=$1."${table}_id"' using OLD; END IF; END IF; RETURN NULL; END; $$`;
         Entity.trigger[table].doDelete = this.addTrigger("delete", table, relTable);
     }

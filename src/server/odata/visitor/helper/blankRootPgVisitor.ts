@@ -10,18 +10,22 @@ import { RootPgVisitor } from "..";
 import { Ientity, koaContext } from "../../../types";
 import { Token } from "../../parser";
 import { query, resourcePath } from "../../parser/parser";
-export const blankRootPgVisitor = (ctx: koaContext, entity: Ientity): RootPgVisitor | undefined => {  
-    const astRessources: Token = <Token>resourcePath(entity.name);  
+
+export const blankRootPgVisitor = (ctx: koaContext, entity: Ientity): RootPgVisitor | undefined => {
+    const astRessources: Token = <Token>resourcePath(entity.name);
     const astQuery: Token = <Token>query(decodeURIComponent(`$top=${ctx.service.nb_page ? ctx.service.nb_page : 200}`));
     try {
-      return new RootPgVisitor(ctx, {
-        onlyValue: false,
-        onlyRef: false,
-        valueskeys: false,
-      },
-      astRessources).start(astQuery);    
+        return new RootPgVisitor(
+            ctx,
+            {
+                onlyValue: false,
+                onlyRef: false,
+                valueskeys: false
+            },
+            astRessources
+        ).start(astQuery);
     } catch (error) {
-      console.log(error);
-      return undefined;
+        console.log(error);
+        return undefined;
     }
-  }
+};

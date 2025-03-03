@@ -59,7 +59,7 @@ if (!isTest())
         logger((str) => {
             if (str.includes("/logs")) return;
             str = `[39m ${new Date().toLocaleString()}${str}`;
-            process.stdout.write(str + "\n");
+            process.stdout.write(str + EConstant.return);
             paths.logFile.writeStream(logToHtml(str));
         })
     );

@@ -102,7 +102,7 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
                 returnValue.push(`RETURNING ${postEntity.table == queryMaker[element].entity.table ? allFields : queryMaker[element].keyId})`);
             }
         });
-        return returnValue.join("\n").replace(/\'@/g, "").replace(/\@'/g, "");
+        return returnValue.join(EConstant.return).replace(/\'@/g, "").replace(/\@'/g, "");
     };
 
     /**
@@ -299,14 +299,14 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
     if ((names[postEntity.table] && queryMaker[postEntity.table] && queryMaker[postEntity.table].datas) || root === undefined) {
         queryMaker[postEntity.table].datas = Object.assign(root as object, queryMaker[postEntity.table].datas);
         queryMaker[postEntity.table].keyId = src.id ? "id" : "*";
-        sqlResult = queryMakerToString(`WITH "log_request" AS (\n\tSELECT srid FROM ${doubleQuotesString(EConstant.voidtable)} LIMIT 1\n)`);
+        sqlResult = queryMakerToString(`WITH "log_request" AS (${EConstant.return}${EConstant.tab}SELECT srid FROM ${doubleQuotesString(EConstant.voidtable)} LIMIT 1${EConstant.return})`);
     } else {
         sqlResult = queryMakerToString(
             src.id
                 ? root && Object.entries(root).length > 0
-                    ? `WITH ${postEntity.table} AS (\n\tUPDATE ${doubleQuotesString(postEntity.table)}\n\tSET ${createUpdateValues(postEntity, root)} WHERE "id" = (\n\tselect verifyId('${postEntity.table}', ${src.id}) as id\n) RETURNING ${allFields})`
-                    : `WITH ${postEntity.table} AS (\n\tSELECT * FROM ${doubleQuotesString(postEntity.table)}\n\tWHERE "id" = ${src.id.toString()})`
-                : `WITH ${postEntity.table} AS (\n\tINSERT INTO ${doubleQuotesString(postEntity.table)} ${createInsertValues(src.ctx, formatInsertEntityData(postEntity.name, root, src))} RETURNING ${allFields})`
+                    ? `WITH ${postEntity.table} AS (${EConstant.return}${EConstant.tab}UPDATE ${doubleQuotesString(postEntity.table)}${EConstant.return}${EConstant.tab}SET ${createUpdateValues(postEntity, root)} WHERE "id" = (${EConstant.return}${EConstant.tab}select verifyId('${postEntity.table}', ${src.id}) as id) RETURNING ${allFields})`
+                    : `WITH ${postEntity.table} AS (${EConstant.return}${EConstant.tab}SELECT * FROM ${doubleQuotesString(postEntity.table)}${EConstant.return}${EConstant.tab}WHERE "id" = ${src.id.toString()})`
+                : `WITH ${postEntity.table} AS (${EConstant.return}${EConstant.tab}INSERT INTO ${doubleQuotesString(postEntity.table)} ${createInsertValues(src.ctx, formatInsertEntityData(postEntity.name, root, src))} RETURNING ${allFields})`
         );
     }
     const temp = src.toPgQuery();

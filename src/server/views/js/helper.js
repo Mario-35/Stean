@@ -7,8 +7,12 @@ const capitalize = s => s && s[0].toUpperCase() + s.slice(1);
 const getVersion = (input) => input.replace(/[//]+/g, '/').split('/').filter((value) => value.match(/v{1}\d\.\d/g))[0];
 
 function header(message, infos) {
-	if (isDebug) console.log(`==================== ${message} ====================`);
+	if (isDebug) console.log(`▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ ${message} ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬`);
 	if (isDebug && infos) typeof infos === "object" ? console.log(infos) : console.log(`==>${infos}<==`);
+}
+
+function ended(message) {
+	if (isDebug) console.log(`====[END]=======> ${message}`);
 }
 
 function message(message) {
@@ -100,7 +104,7 @@ async function executeSqlValues(e) {
 		const encoded = btoa(wins.Sql.content.innerText);
 		const url = `${optHost.value}/${optVersion.value}/Sql?$query=${encoded}`;
 		const jsonObj = await getFetchDatas(url);
-		updateWinJsonResult(jsonObj, url);
+		jsonWindow(jsonObj, url);
 	} catch (err) {
 		notifyError("Error", err);
 	} finally {

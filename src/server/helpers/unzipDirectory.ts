@@ -8,6 +8,7 @@
 
 import AdmZip from "adm-zip";
 import { log } from "../log";
+import { EConstant } from "../enums";
 
 /**
  * unzip Zip file
@@ -16,6 +17,7 @@ import { log } from "../log";
  * @param outputFilePath destination folder
  * @returns boolean
  */
+
 export async function unzipDirectory(inputFilePath: string, outputDirectory: string) {
     const zip = new AdmZip(inputFilePath);
     return new Promise<boolean>((resolve, reject) => {
@@ -24,7 +26,7 @@ export async function unzipDirectory(inputFilePath: string, outputDirectory: str
                 console.log(error);
                 reject(error);
             } else {
-                process.stdout.write(log.update(`Extracted to "${outputDirectory}" successfully` + "\n"));
+                process.stdout.write(log.update(`Extracted to "${outputDirectory}" successfully` + EConstant.return));
                 resolve(true);
             }
         });

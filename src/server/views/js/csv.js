@@ -1,6 +1,11 @@
-// ===============================================================================
-// |                                     CSV                                     |
-// ===============================================================================
+/**
+ * Csv for Query.
+ *
+ * @copyright 2023-present Inrae
+ * @author mario.adam@inrae.fr
+ *
+ */
+
 /**
  * 
  * @param {*} input csv Array Input
@@ -22,8 +27,7 @@ buildTableWithCsv = (input, separator, container) => {
 	_table.setAttribute("id", "csv");
 	var _thead = document.createElement("thead");
 	var _tbody = document.createElement("tbody");
-
-	// _tr = document.createElement(singleRow === 0 ? "thead" : "tr"); 
+	
 	for (var singleRow = 0; singleRow < allRows.length; singleRow++) {
 		var _tr = document.createElement("tr");
 		const rowCells = allRows[singleRow].split(separator);

@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 export { createToken } from "./createToken";
 export { decodeToken } from "./decodeToken";
 export { getAuthenticatedUser } from "./getAuthenticatedUser";

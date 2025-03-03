@@ -13,6 +13,7 @@ import { CoreHtmlView } from "./core";
 /**
  * Error Class for HTML View
  */
+
 export class HtmlError extends CoreHtmlView {
     constructor(ctx: koaContext, datas: Idatas) {
         console.log(log.whereIam("View"));

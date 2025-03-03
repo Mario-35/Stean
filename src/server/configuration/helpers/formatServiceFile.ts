@@ -17,6 +17,7 @@ import { Iservice, typeExtensions, typeOptions } from "../../types";
  * @param input record of the configuration
  * @returns service
  */
+
 export function formatServiceFile(name: string, input: Record<string, any>): Iservice {
     const options: typeof typeOptions = input["options"] ? (unique([...String(input["options"]).split(",")]) as typeof typeOptions) : [];
 

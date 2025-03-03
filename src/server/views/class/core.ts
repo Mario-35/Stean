@@ -18,6 +18,7 @@ import { addCssFile } from "../css";
 /**
  * Core Class to be extend for HTML Views
  */
+
 export class CoreHtmlView {
     ctx: koaContext;
     datas: Idatas;

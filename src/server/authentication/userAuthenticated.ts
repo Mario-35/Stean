@@ -16,6 +16,7 @@ import { koaContext } from "../types";
  * @param ctx koaContext
  * @returns boolean
  */
+
 export const userAuthenticated = (ctx: koaContext): boolean => {
     console.log(log.whereIam());
     if (ctx.service && ctx.service.extensions.includes(EExtensions.users)) {

@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 export interface SqlOptions {
     onlyRef: boolean;
     onlyValue: boolean;

@@ -5,7 +5,8 @@
  * @author mario.adam@inrae.fr
  *
  */
-export enum EColumnType { 
+
+export enum EColumnType {
     Null,
     Column,
     SelfLink,

@@ -7,8 +7,9 @@ import { Ientity } from "./";
  * @author mario.adam@inrae.fr
  *
  */
+
 export interface IrelationInfos {
-    type:  string; 
+    type: string;
     entity: Ientity | undefined;
     column: string;
     leftKey: string;

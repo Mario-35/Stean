@@ -16,6 +16,7 @@ import { log } from "../log";
  * @param ctx koaContext
  * @returns IuserToken
  */
+
 export const decodeToken = (ctx: koaContext): IuserToken => {
     console.log(log.whereIam());
     if (ctx.request.hasOwnProperty("token")) {

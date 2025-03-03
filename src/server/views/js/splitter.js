@@ -1,3 +1,11 @@
+/**
+ * Splitter for Query an Admin.
+ *
+ * @copyright 2023-present Inrae
+ * @author mario.adam@inrae.fr
+ *
+ */
+
 const SplitterBar = function(container, leftContent, rightContent) {
 	// We want two div that we're dividing
 	const leftSide = document.createElement("div");

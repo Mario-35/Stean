@@ -16,6 +16,7 @@ import { Common } from "./common";
 /**
  * Datastreams Class
  */
+
 export class Datastreams extends Common {
     constructor(ctx: koaContext) {
         console.log(log.whereIam());

@@ -1,5 +1,12 @@
+/**
+ * Graph for Query.
+ *
+ * @copyright 2023-present Inrae
+ * @author mario.adam@inrae.fr
+ *
+ */
+
 function showGraph(element, infos, value) {
-  console.log(infos);
     new Dygraph(
         document.getElementById(element),
         value,

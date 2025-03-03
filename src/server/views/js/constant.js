@@ -1,5 +1,5 @@
 /**
- * Constantsfor Query.
+ * Constants for Query.
  *
  * @copyright 2023-present Inrae
  * @author mario.adam@inrae.fr
@@ -8,6 +8,7 @@
 
 // log debug test
 let isDebug = false;
+// store url for geoJson
 let valueGeo = "";
 
 const _NONE = "none";
@@ -15,10 +16,9 @@ const _NONE = "none";
 // load file json
 let importFile = false;
 var jsonObj = {};
-var listOptions = {};
+// use for catch double click
 var canGo = false;
-let builder = undefined;
-
+// store windows flags
 const wins = {
     SqlQuery: false,
     Json: false,
@@ -29,8 +29,9 @@ const wins = {
     Graph: false
 };
 
-const cardDatas = {};
-let dragText = "";
+// store builder object
+let builder = undefined;
+// store jsonViewer object
 let jsonViewer = undefined; 
 
 // replace at execution
@@ -38,7 +39,7 @@ const _PARAMS={};
 
 function getEntityList() {
     return Object.keys(_PARAMS._DATAS).filter((elem) => _PARAMS._DATAS[elem].order > 0).sort((a, b) => (_PARAMS._DATAS[a].order > _PARAMS._DATAS[b].order ? 1 : -1)) ; 
-  }
+}
   
 function getColumnsList(input) {
     const ent = getEntityName(input);

@@ -417,6 +417,7 @@ class QueryBuilder {
 }
 
 function updateBuilder() {
+	header("updateBuilder");
 	const ent = getEntityName(SubOrNot());
 	if (!ent) return;
 	const columns = getColumnsList(ent);
@@ -430,4 +431,5 @@ function updateBuilder() {
 	});
 	if (builder) builder.clear("query-builder", fields);
 	else builder = new QueryBuilder("query-builder", fields);
+	ended("updateBuilder");
 }

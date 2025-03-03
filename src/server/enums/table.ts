@@ -5,6 +5,7 @@
  * @author mario.adam@inrae.fr
  *
  */
+
 export enum ETable {
     blank,
     table,

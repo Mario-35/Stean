@@ -38,6 +38,7 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
 
     if (!decodedUrl && ctx.path.includes("/logs-")) return logsRoute(ctx, ctx.path);
     switch (ctx.path.split("/").reverse()[0].toLocaleUpperCase()) {
+        // admin page
         case "ADMIN":
             return await adminRoute(ctx);
         // update page
@@ -50,12 +51,14 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
         case "LOGGING":
             if (!decodedUrl) return await logsRoute(ctx, paths.logFile.fileName);
     }
+
     if (!decodedUrl) {
         ctx.type = returnFormats.json.type;
         ctx.throw(EHttpCode.notFound);
     }
     // set decodedUrl context
     ctx.decodedUrl = decodedUrl;
+
     if (_DEBUG) console.log(log.object("decodedUrl", decodedUrl));
     if (!decodedUrl.service) throw new Error(errors.noNameIdentified);
     if (decodedUrl.service && decodedUrl.configName) ctx.service = config.getService(decodedUrl.configName);
