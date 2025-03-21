@@ -29,12 +29,12 @@ create_run_script() {
         echo "Delete => $FILERUN"
     fi
     echo "#!/bin/bash" > $FILERUN
-    echo "pm2 stop index" >> $FILERUN
+    echo "pm2 stop stean" >> $FILERUN
     echo "pm2 flush" >> $FILERUN
-    echo "pm2 delete index" >> $FILERUN
+    echo "pm2 delete stean" >> $FILERUN
     echo "echo \"API starting ...\"" >> $FILERUN
     echo "export NODE_ENV=production" >> $FILERUN
-    echo "pm2 start ./stean/start.js" >> $FILERUN
+    echo "pm2 start ./stean/stean.js" >> $FILERUN
     echo "pm2 logs --lines 500" >> $FILERUN
     sudo chmod -R 777 $FILERUN
     echo "Create script => $FILERUN"
