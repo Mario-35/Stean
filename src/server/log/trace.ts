@@ -6,13 +6,14 @@
  *
  */
 
-import { _DEBUG, FORMAT_JSONB } from "../constants";
+import { _DEBUG } from "../constants";
 import { isTest, logToHtml, notNull } from "../helpers";
 import { koaContext } from "../types";
 import postgres from "postgres";
 import { log } from ".";
 import { paths } from "../paths";
 import { EConstant } from "../enums";
+import { FORMAT_JSONB } from "../db/constants";
 
 /**
  * Class to trace requests

@@ -1,4 +1,11 @@
-// const fs = require("node:fs");
+/**
+ * Start of The API
+ *
+ * @copyright 2020-present Inrae
+ * @review 29-01-2024
+ * @author mario.adam@inrae.fr
+ *
+ */
 const fs = require("fs");
 import { server } from ".";
 import { EConstant } from "./enums";

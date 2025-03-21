@@ -6,12 +6,7 @@
  *
  */
 
+import { ESCAPE_SIMPLE_QUOTE } from "../constants";
+
 export type _STREAM = "Datastream" | "MultiDatastream" | undefined;
-
-
-export const _CREATE_SERVICEEConstant.tabLE = `CREATE TABLE public.services (
-    "name" text NOT NULL,
-    "datas" jsonb NULL,
-    "stats" jsonb NULL,
-    CONSTRAINT services_unik_name UNIQUE (name)
-  ); CREATE INDEX services_name ON public.services USING btree (name);`
+export const FORMAT_JSONB = (content: any) => `E'${content ? ESCAPE_SIMPLE_QUOTE(JSON.stringify(content)) : "{}"}'::text::jsonb`;

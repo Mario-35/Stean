@@ -37,8 +37,8 @@ export class Query extends CoreHtmlView {
             .toString()
             .replace(/<link /g, `${EConstant.return}<link `)
             .replace(/<script /g, `${EConstant.return}<script `)
-            .replace(/<\/script>/g, "</script>${EConstant.return}")
-            .replace(/\r\n/g, EConstant.return)
+            .replace(/<\/script>/g, `</script>${EConstant.return}`)
+            .replace(`/\r${EConstant.return}/g`, EConstant.return)
             .split(EConstant.return)
             .map((e: string) => e.trim())
             .filter((e) => e.trim() != "");

@@ -6,7 +6,7 @@
  *
  */
 
-import { setReady, _DEBUG, timestampNow, logDbError, appVersion, FORMAT_JSONB } from "../constants";
+import { setReady, _DEBUG, timestampNow, logDbError, appVersion } from "../constants";
 import { asyncForEach, decrypt, encrypt, hidePassword, isProduction, isTest, logToHtml } from "../helpers";
 import { Iservice, IdbConnection, IserviceInfos, koaContext, keyobj } from "../types";
 import { errors, info, infos, msg } from "../messages";
@@ -25,6 +25,7 @@ import { models } from "../models";
 import { autoUpdate } from "../update";
 import { paths } from "../paths";
 import { Trace } from "../log/trace";
+import { FORMAT_JSONB } from "../db/constants";
 
 /**
  * Class to create configs environements
