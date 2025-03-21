@@ -8,14 +8,13 @@
  */
 const fs = require("fs");
 import { server } from ".";
-import { EConstant } from "./enums";
 
 function message<T>(cle: string, infos: T) {
-    process.stdout.write(`\x1b[36m${cle} \x1b[32m:\x1b[37m ${infos}\x1b[0m ${EConstant.return}`);
+    process.stdout.write(`\x1b[36m${cle} \x1b[32m:\x1b[37m ${infos}\x1b[0m \n`);
 }
 
 if (fs.existsSync("./newVersion")) {
-    process.stdout.write(`\x1b[34m${"▬".repeat(24)} \x1b[32m New Versin detected \x1b[34m${"▬".repeat(24)}\x1b[0m ${EConstant.return}`);
+    process.stdout.write(`\x1b[34m${"▬".repeat(24)} \x1b[32m New Versin detected \x1b[34m${"▬".repeat(24)}\x1b[0m \n`);
     fs.rename("./server", "./bak", (err: Error) => {
         message("update", "Backup server");
         if (err) {
@@ -31,6 +30,6 @@ if (fs.existsSync("./newVersion")) {
         });
     });
 }
-process.stdout.write(`\x1b[34m${"▬".repeat(24)}\x1b[32m Run index.js \x1b[34m${"▬".repeat(24)}\x1b[0m ${EConstant.return}`);
+process.stdout.write(`\x1b[34m${"▬".repeat(24)}\x1b[32m Run index.js \x1b[34m${"▬".repeat(24)}\x1b[0m \n`);
 
 server;
