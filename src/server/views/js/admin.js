@@ -48,8 +48,7 @@ btnService.onclick = async (e) => {
 		return;
 	} 
 	try {
-		const text = jsonDatas.innerText.replace(/[^\x00-\x7F]/g, '');
-		datas.innerText = text;
+		datas.innerText = jsonDatas.innerText.replace(/[^\x00-\x7F]/g, '');
 		document.getElementById("actionForm").requestSubmit();
 	} catch (error) {
 		console.error(error);
