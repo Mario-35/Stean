@@ -78,10 +78,20 @@ check_node() {
 }
 
 # Function to check PostgreSQL-postgis and install it if not
+check_gnupg() {
+    if which gpg >/dev/null; then 
+        echo "gnupg2 Installed"
+    else
+        echo "gnupg2 Not installed" #If not installed
+        echo "gnupg2 Installing..."
+        sudo apt install gnupg2 #installation
+    fi
+}
+
+# Function to check PostgreSQL-postgis and install it if not
 check_pg() {
     if ! psql --version | grep -q "psql (PostgreSQL)"; then
         echo "Installing postgresql-postgis ..."
-        apt install gnupg2
         sudo install -d /usr/share/postgresql-common/pgdg
         sudo curl -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc --fail https://www.postgresql.org/media/keys/ACCC4CF8.asc
         sudo sh -c 'echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
@@ -246,6 +256,7 @@ run_stean() {
     pm2 start ./stean/start.js
 }
 
+check_gnupg;
 check_pg;
 check_node;
 check_pm2;

@@ -28,7 +28,7 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     if (config.configFileExist() === true)
         // trace request
         await config.trace.write(ctx);
-    // admin coute for first start
+    // admin route for first start
     else return await adminRoute(ctx);
 
     // create token
@@ -72,7 +72,6 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     ctx.querystring = decodeURIComponent(querystring.unescape(ctx.querystring));
     // get model
     ctx.model = models.filtered(ctx.service);
-
     try {
         // Init config context
         if (!ctx.service) return;
@@ -80,12 +79,12 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
         await next().then(async () => {});
     } catch (error: any) {
         const tempError = {
-            code: error.statusCode,
-            message: error.message,
+            code: error.statusCode || null,
+            message: error.message || null,
             detail: error.detail
         };
-        config.trace.error(ctx, tempError);
         ctx.status = error.statusCode || error.status || EHttpCode.internalServerError;
         ctx.body = error.link ? { ...tempError, link: error.link } : tempError;
+        config.trace.error(ctx, tempError);
     }
 };

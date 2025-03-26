@@ -34,13 +34,14 @@
           <a id="popupClose" class='popup-close' href="#">X</a>
         </div>
         <div class="login-form">
-          <form action="">
+          <form id="actionForm" action="" method="post">
             <!-- START ACCORDION -->
             <div class="patrom-tabs pro-form">
+              <input type="hidden" id="_action" name="_action" value=""/>
               <!-- New Service -->
               <div class="patrom-tab">
                 <input class="patrom-tab-check" type="checkbox" id="chck1" checked>
-                <label class="patrom-tab-label" for="chck1">New Service</label>
+                <label class="patrom-tab-label" for="chck1" id="Labelchck1">New Service</label>
                 <div class="patrom-tab-content">
                   <div class="patrom-row">
                     <!-- Name -->
@@ -176,13 +177,13 @@
             </div>
             <!-- END ACCORDION -->
             <!-- JSON DATAS -->
-             @connection@
+              @connection@
             <div id="jsonDatasContainer" onpaste="jsonDatasPasteEvent(event)" ondrop="jsonDatasPasteEvent(event)">
               <div contenteditable spellcheck="false" id="jsonDatas" class='blakkAll shj-lang-json'></div>
             </div>
-           </form>
-        <!-- DATAS HIDE  -->
-        <textarea spellcheck="false" class="blakkAll shj-lang-json" id="datas" name="datas"></textarea>
+            <!-- DATAS HIDE  -->
+            <textarea spellcheck="false" class="blakkAll shj-lang-json" id="datas" name="datas"></textarea>
+          </form>
       </div>
       <!-- SOCIAL PANEL HTML -->
       @social@

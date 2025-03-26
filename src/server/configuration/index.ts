@@ -661,14 +661,17 @@ class Configuration {
      */
     public async addConfig(addJson: object): Promise<Iservice | undefined> {
         try {
-            const addedConfig = this.formatConfig(addJson);
-            Configuration.services[addedConfig.name] = addedConfig;
-            if (!isTest()) {
-                // For TDD not create service
-                await this.addToServer(addedConfig.name);
-                this.addService(Configuration.services[addedConfig.name]);
+            const formatedConfig = this.formatConfig(addJson);
+            if (Configuration.services[formatedConfig.name]) {
+                throw new Error(`Same configuration name found for ${formatedConfig.name}`);
             }
-            return addedConfig;
+            Configuration.services[formatedConfig.name] = formatedConfig;
+            if (!isTest()) {
+                // In TDD not create service
+                await this.addToServer(formatedConfig.name);
+                this.addService(Configuration.services[formatedConfig.name]);
+            }
+            return formatedConfig;
         } catch (error) {
             return undefined;
         }
@@ -820,7 +823,6 @@ class Configuration {
         const datas: string = JSON.stringify({ admin: Configuration.services[EConstant.admin] }, null, 4);
         if (this.writeFile(path.join(myPath, "configuration.json"), isProduction() === true ? encrypt(datas) : datas) === false) return false;
         if (this.writeFile(path.join(myPath, ".key"), paths.key) === false) return false;
-
         return true;
     }
 }

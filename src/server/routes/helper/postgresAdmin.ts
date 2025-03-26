@@ -14,8 +14,15 @@ import { config } from "../../configuration";
 import { encrypt } from "../../helpers";
 
 export async function postgresAdmin(ctx: koaContext): Promise<string | undefined> {
-    // test if connection is in context
-    if (ctx.request.body && ctx.request.body["_connection" as keyof object]) return ctx.request.body["_connection" as keyof object];
+    // valid connection ?
+    if (ctx.request.body && ctx.request.body["_connection" as keyof object]) {
+        // Adding service
+        if (ctx.request.body && ctx.request.body["_action" as keyof object] && ctx.request.body["_action" as keyof object] === "addService") {
+            const src = JSON.parse(JSON.stringify(ctx.request.body["datas" as keyof object], null, 2));
+            await config.addConfig(JSON.parse(src));
+        } else return ctx.request.body["_connection" as keyof object];
+    }
+    // connection not found so ...
     const src = JSON.parse(JSON.stringify(ctx.request.body, null, 2));
     function missingItems(src: any, search: string[]): Record<string, string> | undefined {
         const mess: Record<string, string> = {};

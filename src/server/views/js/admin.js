@@ -23,12 +23,11 @@ function updateDataService()  {
         "options": multiSelects["optionsOption"].getData(),
         "csvDelimiter": csvOption.value || ";"
 	}
-
 	beautifyDatas(getElement("jsonDatas"), obj, "json");	
 };
 
 // catch click on service block
-btnService.onclick = async (e) => {
+btnService.onclick = async (e) => {	
 	e.preventDefault();
 	updateDataService();
 	if (optName.value === "") {
@@ -49,9 +48,12 @@ btnService.onclick = async (e) => {
 	} 
 	try {
 		datas.innerText = jsonDatas.innerText.replace(/[^\x00-\x7F]/g, '');
+		getElement("actionForm").action = `${_PARAMS.addUrl.split("service")[0]}admin`;
+		getElement("_action").value = "addService";
 		document.getElementById("actionForm").requestSubmit();
 	} catch (error) {
 		console.error(error);
+		wait(false);
 	}
 };
 
@@ -66,6 +68,7 @@ function fillService(name, newName) {
 	optName.value = newName || name;
 	optPassword.value = newName || "";
 	optRepeat.value = newName ||"";
+	Labelchck1.innerText = "Service " + optName.value;
 }
 
 // load Log file from log select
@@ -85,7 +88,8 @@ getDatas = async (url) => {
 
 // fill form for create service from another
 async function selectCard(name) {
-	fillService(name);	
+	fillService(name);
+	
 }
 
 // fill form for create service from another
@@ -109,24 +113,24 @@ function editCsv(name ,elem) {
 	if (temp === "," || temp === ";") elem.textContent = temp; 
 }
 
+// change card selector
 async function selectChange(name ,elem) {
 	switch (elem.value) {
 		case "Statistiques":
-				getElement("infos"+ name).innerHTML = Object.keys(_PARAMS.services[name].stats).filter(e =>  e !== "Users").map(e => `<option>${e} : ${_PARAMS.services[name].stats[e]}</option>`).join("\n");
-				showInfos(name);
-				break;
-			case "Users":			
-				getElement("infos"+ name).innerHTML = _PARAMS.services[name].stats["Users"].map(e => `<option value="${e["username"]}" onclick="showUserInfos('${name}', '${e["username"]}')">${e["username"]}</option>`).join("\n");
-				break;
-			case "Lora":
-				const url = `${_PARAMS.services[name].linkBase}/${_PARAMS.services[name].version}/Decoders?$select=id,name`;		
-				const datas = await getDatas(url);
-				getElement("infos"+ name).innerHTML =  Object.values(datas.value).map(e => `<option value="${e.name}" onclick="showDecoderInfos('${name}','${e["@iot.id"]}')">${e.name}</option>`).join("\n");
-				break;
-			default:
-				getElement("infos"+ name).innerHTML = _PARAMS.services[name].service.extensions.map(e => `<option value="${e}">${e}</option>`).join("\n");
-				showInfos(name);
-
+			getElement("infos"+ name).innerHTML = Object.keys(_PARAMS.services[name].stats).filter(e =>  e !== "Users").map(e => `<option>${e} : ${_PARAMS.services[name].stats[e]}</option>`).join("\n");
+			showInfos(name);
+			break;
+		case "Users":			
+			getElement("infos"+ name).innerHTML = _PARAMS.services[name].stats["Users"].map(e => `<option value="${e["username"]}" onclick="showUserInfos('${name}', '${e["username"]}')">${e["username"]}</option>`).join("\n");
+			break;
+		case "Lora":
+			const url = `${_PARAMS.services[name].linkBase}/${_PARAMS.services[name].version}/Decoders?$select=id,name`;		
+			const datas = await getDatas(url);
+			getElement("infos"+ name).innerHTML =  Object.values(datas.value).map(e => `<option value="${e.name}" onclick="showDecoderInfos('${name}','${e["@iot.id"]}')">${e.name}</option>`).join("\n");
+			break;
+		default:
+			getElement("infos"+ name).innerHTML = _PARAMS.services[name].service.extensions.map(e => `<option value="${e}">${e}</option>`).join("\n");
+			showInfos(name);
 	}
 }
 

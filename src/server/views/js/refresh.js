@@ -25,7 +25,6 @@ function refresh() {
 	canShowQueryButton();
 	toggleShowHide(getElement("payloadPartTab"), entityOption.value === "Decoders");
 	ended("refresh");
-
 }
 
 function refresh_entity() {

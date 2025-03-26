@@ -111,15 +111,14 @@ export class PgVisitor extends Visitor {
     // ***                                                              QUERY                                                                                              ***
     // ***********************************************************************************************************************************************************************
     formatColumnResult(context: IodataContext, operation: string, ForceString?: boolean) {
-        console.log("formatColumnResult");
-        console.log(this.parentEntity?.name === DATASTREAM.name);
-
         switch (context.target) {
             case EQuery.Where:
                 const nbs = Array.from({ length: this.parentEntity?.name === DATASTREAM.name ? 1 : 5 }, (v, k) => k + 1);
                 const translate = `TRANSLATE (SUBSTRING ("result"->>'value' FROM '(([0-9]+.*)*[0-9]+)'), '[]','')`;
                 const isOperation = operation.trim() != "";
-                return ForceString || isFile(this.ctx) ? `@EXPRESSIONSTRING@ ALL (ARRAY_REMOVE( ARRAY[${EConstant.return}${nbs.map((e) => `${isOperation ? `${operation} (` : ""} SPLIT_PART ( ${translate}, ',', ${e}))`).join(`,${EConstant.return}`)}], null))` : `@EXPRESSION@ ALL (ARRAY_REMOVE( ARRAY${EConstant.return}${nbs.map((e) => `${isOperation ? `${operation} (` : ""}NULLIF (SPLIT_PART ( ${translate}, ',', ${e}),'')::numeric${isOperation ? `)` : ""}`).join(EConstant.return)}], null))`;
+                return ForceString || isFile(this.ctx)
+                    ? `@EXPRESSIONSTRING@ ALL (ARRAY_REMOVE( ARRAY[${EConstant.return}${nbs.map((e) => `${isOperation ? `${operation} (` : ""} SPLIT_PART ( ${translate}, ',', ${e}))`).join(`,${EConstant.return}`)}], null))`
+                    : `@EXPRESSION@ ALL (ARRAY_REMOVE( ARRAY[${EConstant.return}${nbs.map((e) => `${isOperation ? `${operation} (` : ""}NULLIF (SPLIT_PART ( ${translate}, ',', ${e}),'')::numeric${isOperation ? `)` : ""}`).join(`,${EConstant.return}`)}], null))`;
             default:
                 return `CASE 
           WHEN JSONB_TYPEOF( "result"->'value') = 'number' THEN ("result"->${this.numeric == true ? ">" : ""}'value')::jsonb
@@ -128,6 +127,7 @@ export class PgVisitor extends Visitor {
       END${this.isSelect(context) === true ? ' AS "result"' : ""}`;
         }
     }
+
     getColumnNameOrAlias(entity: Ientity, column: string, options: Record<string, boolean>): string | undefined {
         let result: string | undefined | void = undefined;
         if (entity && column != "" && entity.columns[column]) {

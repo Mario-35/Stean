@@ -37,8 +37,8 @@ export class Trace {
      * @param ctx koa context
      */
     async write(ctx: koaContext) {
-        const datas = this.query(ctx);
-        if (ctx.method !== "GET")
+        if (ctx.method !== "GET") {
+            const datas = this.query(ctx);
             await Trace.adminConnection
                 .unsafe(datas)
                 .then((res) => {
@@ -50,6 +50,7 @@ export class Trace {
                         Trace.adminConnection.unsafe(datas);
                     } else process.stdout.write(error + EConstant.return);
                 });
+        }
     }
 
     /**
@@ -58,7 +59,11 @@ export class Trace {
      * @param ctx koa context
      */
     async error(ctx: koaContext, error: any) {
-        await Trace.adminConnection.unsafe(this.query(ctx, error));
+        try {
+            await Trace.adminConnection.unsafe(this.query(ctx, error));
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     async get(query: string): Promise<object> {

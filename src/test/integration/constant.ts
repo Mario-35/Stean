@@ -32,7 +32,7 @@ export const testLog = (input: any) => {
 };
 export const proxy = (moi: boolean) => (moi !== true ? "http://localhost:8029/test" : `${apidocJson.proxy}/`);
 import packageJson from "../../../package.json";
-import { EConstant.tab } from "../../server/constants";
+import { EConstant } from "../../server/enums";
 export const VERSION = packageJson.version;
 const createJSON = (data: any) => JSON.stringify(data, null, 4).replace(/[\n]+/g, `|${EConstant.tab}`);
 export interface Iinfos {
