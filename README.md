@@ -5,6 +5,8 @@
 ## Installation / Deploy  [![node](https://img.shields.io/badge/NodeJs-%20>16-blue)](https://nodejs.org/) [![postgreSql](https://img.shields.io/badge/PostgreSQL-%20>14-blue)](https://www.postgresql.org/) [![postGIS](https://img.shields.io/badge/postGIS-%20>3-blue)](https://postgis.net/) [![pm2](https://img.shields.io/badge/pm2-%20>5-blue)](https://pm2.keymetrics.io/)
 
 
+You must have curl installed on your server.
+
 ```curl -fsSL https://raw.githubusercontent.com/Mario-35/Stean/main/scripts/stean.sh -o stean.sh && chmod +x stean.sh && ./stean.sh```
 
 <details>
