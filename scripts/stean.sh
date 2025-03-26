@@ -62,6 +62,7 @@ logo() {
     echo -e "\e[32m  ___) | | | |___/ ___ \ | |\  |\e[0m"
     echo -e "\e[32m |____/|_| |______/   \_\|_| \_|   \e[34m$STEANVER\e[0m"
     echo ""
+    echo "You can run ./run.sh to start stean (postgres default admin passmord)"
 }
 
 # Function to check Node and install it if not
