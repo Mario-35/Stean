@@ -80,18 +80,31 @@ Now you are able to use cURL from your Mac PC!
 
 
 
-## STEAN configuration
+## Running
 
-after install : (if localhost) 
+after install if all is good run 
+```
+./run.sh
+```
+
+you have something like this :
+
+![run](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/run.jpg "run")
+
 http://localhost:8029/ show the documentation
+
 http://localhost:8029/admin (to admin stean and install services)
 
-The configuration.json file must be found by the api in the configuration folder if the file not exist the api redirect you to th first install page to create that file with your firs service :
+To access admin panel you hawe to be indentified with admin postgres access enter on installatitg process.
 
 ![firstStart](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/firstStart.jpg "firstStart")
 
 
 ## use on local windows as production (for testing) use :  [script](https://raw.githubusercontent.com/Mario-35/Stean/main/scripts/install.ps1) as install.ps1
+
+
+
+
 
 ## for developper
 
