@@ -439,7 +439,7 @@ export class PgVisitor extends Visitor {
             if (!models.getEntity(this.ctx.service, entity)) return;
             const tempEntity = models.getEntity(this.ctx.service, node.value.name);
             if (tempEntity) {
-                const relation = relationInfos(this.ctx, entity, node.value.name);
+                const relation = relationInfos(this.ctx.service, entity, node.value.name);
                 if (context.relation) {
                     context.sql = `${formatPgTableColumn(this.ctx.model[entity].table, relation.column)} IN (SELECT ${formatPgTableColumn(tempEntity.table, relation.rightKey)} FROM ${formatPgTableColumn(tempEntity.table)}`;
                 } else {
@@ -502,7 +502,7 @@ export class PgVisitor extends Visitor {
                 .filter((e) => e != "");
             context.sign = temp.pop();
             this.query.where.init(temp.join(" "));
-            const relation = relationInfos(this.ctx, this.entity.name, context.relation);
+            const relation = relationInfos(this.ctx.service, this.entity.name, context.relation);
             this.addToWhere(` ${context.in && context.in === true ? "" : " IN @START@"}(SELECT ${this.entity.relations[context.relation] ? doubleQuotesString(relation.rightKey) : `${doubleQuotesString(context.table)}."id"`} FROM ${doubleQuotesString(context.table)} WHERE `, context);
             context.in = true;
             if (context.identifier) {
@@ -557,7 +557,7 @@ export class PgVisitor extends Visitor {
             // if (FeatureOfInterest/feature)
             if (this.entity && test.includes("/")) {
                 const tests = test.split("/");
-                const relation = relationInfos(this.ctx, this.entity.name, tests[0]);
+                const relation = relationInfos(this.ctx.service, this.entity.name, tests[0]);
                 if (relation && relation.entity) {
                     const relationEntity = models.getEntity(this.ctx.service, tests[0]);
                     if (relationEntity) this.subQuery.from.push(relationEntity.table);

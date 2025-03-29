@@ -5,7 +5,7 @@ import { createService } from "./createService";
 
 export const createDbTest = async (ctx: koaContext) => {
     try {
-        ctx.body = await createService(ctx, testDatas);
+        ctx.body = await createService(ctx.service, testDatas);
         ctx.status = EHttpCode.created;
     } catch (error) {
         console.log(error);

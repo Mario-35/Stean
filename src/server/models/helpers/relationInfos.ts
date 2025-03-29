@@ -12,7 +12,7 @@ import { ERelations, ETable } from "../../enums";
 import { formatPgTableColumn } from "../../helpers";
 import { log } from "../../log";
 import { errorMessage } from "../../messages";
-import { IrelationInfos, Ientity, koaContext } from "../../types";
+import { IrelationInfos, Ientity, Iservice } from "../../types";
 
 const _KeyLink = (entity: Ientity, column: string) => Object.keys(entity.columns).filter((e) => e !== column)[0];
 
@@ -25,13 +25,13 @@ const extractEntityNames = (input: string, search: string | string[]): string[] 
     return search.map((e) => input.replace(e, "")).filter((e) => e != input);
 };
 
-export const relationInfos = (ctx: koaContext, entityName: string, relationName: string, loop?: boolean): IrelationInfos => {
+export const relationInfos = (ctxService: Iservice, entityName: string, relationName: string, loop?: boolean): IrelationInfos => {
     console.log(log.whereIam());
-    const leftEntity = models.getEntity(ctx.service, entityName);
-    const rightEntity = models.getEntity(ctx.service, relationName);
+    const leftEntity = models.getEntity(ctxService, entityName);
+    const rightEntity = models.getEntity(ctxService, relationName);
     if (entityName !== relationName && leftEntity && rightEntity) {
         console.log(log.debug_head("Entity", `====> ${leftEntity.name} : ${rightEntity.name}`));
-        const leftRelation = models.getRelation(ctx.service, leftEntity, rightEntity);
+        const leftRelation = models.getRelation(ctxService, leftEntity, rightEntity);
         const rightRelationName = models.getRelationName(rightEntity, [entityName, leftEntity.name, leftEntity.singular, entityName.replace(relationName, ""), relationName.replace(entityName, "")]);
         const rightRelation = rightRelationName ? rightEntity.relations[rightRelationName] : undefined;
         if (leftRelation && leftRelation.type) {
@@ -42,7 +42,7 @@ export const relationInfos = (ctx: koaContext, entityName: string, relationName:
                 return { type: "ERROR", rightKey: "", leftKey: "", entity: undefined, column: "cardinality ERROR", expand: "", link: "" };
             };
             const fnHasMany = () => {
-                const complexEntity = models.getEntity(ctx.service, `${leftEntity.name}${rightEntity.name}`) || models.getEntity(ctx.service, `${rightEntity.name}${leftEntity.name}`) || models.getEntity(ctx.service, `${leftEntity.singular}${rightEntity.singular}`) || models.getEntity(ctx.service, `${rightEntity.singular}${leftEntity.singular}`);
+                const complexEntity = models.getEntity(ctxService, `${leftEntity.name}${rightEntity.name}`) || models.getEntity(ctxService, `${rightEntity.name}${leftEntity.name}`) || models.getEntity(ctxService, `${leftEntity.singular}${rightEntity.singular}`) || models.getEntity(ctxService, `${rightEntity.singular}${leftEntity.singular}`);
                 if (complexEntity && rightRelation) {
                     leftKey = _Key(complexEntity, leftEntity);
                     rightKey = _Key(complexEntity, rightEntity);
@@ -100,7 +100,7 @@ export const relationInfos = (ctx: koaContext, entityName: string, relationName:
                             // ===> 2.3
                             case ERelations.belongsToMany:
                                 if (leftRelation.entityRelation) {
-                                    const tempEntity = models.getEntity(ctx.service, leftRelation.entityRelation);
+                                    const tempEntity = models.getEntity(ctxService, leftRelation.entityRelation);
                                     if (leftRelation && tempEntity && tempEntity.type === ETable.link && !loop) {
                                         leftKey = _Key(tempEntity, rightEntity);
                                         rightKey = _KeyLink(tempEntity, leftKey);
@@ -116,8 +116,8 @@ export const relationInfos = (ctx: koaContext, entityName: string, relationName:
                                         };
                                     }
                                 } else if (rightRelationName && !loop && leftEntity.type !== ETable.link) {
-                                    const entityName = relationInfos(ctx, rightRelationName, rightEntity.name, true);
-                                    const complexEntity = models.getEntity(ctx.service, `${rightRelationName}${rightEntity.name}`) || models.getEntity(ctx.service, `${rightEntity.name}${rightRelationName}`);
+                                    const entityName = relationInfos(ctxService, rightRelationName, rightEntity.name, true);
+                                    const complexEntity = models.getEntity(ctxService, `${rightRelationName}${rightEntity.name}`) || models.getEntity(ctxService, `${rightEntity.name}${rightRelationName}`);
                                     if (complexEntity && entityName.external) {
                                         leftKey = entityName.external.leftKey;
                                         rightKey = entityName.external.rightKey;
@@ -155,13 +155,13 @@ export const relationInfos = (ctx: koaContext, entityName: string, relationName:
                         switch (rightRelation.type) {
                             // ===> 3.2
                             case ERelations.belongsTo:
-                                const complexEntity2 = models.getEntity(ctx.service, `${leftEntity.name}${rightEntity.name}`) || models.getEntity(ctx.service, `${rightEntity.name}${leftEntity.name}`) || models.getEntity(ctx.service, `${leftEntity.singular}${rightEntity.singular}`) || models.getEntity(ctx.service, `${rightEntity.singular}${leftEntity.singular}`);
+                                const complexEntity2 = models.getEntity(ctxService, `${leftEntity.name}${rightEntity.name}`) || models.getEntity(ctxService, `${rightEntity.name}${leftEntity.name}`) || models.getEntity(ctxService, `${leftEntity.singular}${rightEntity.singular}`) || models.getEntity(ctxService, `${rightEntity.singular}${leftEntity.singular}`);
                                 // ===> 3.2.1
                                 if (rightRelation.entityRelation) {
                                     const tmp = extractEntityNames(rightRelation.entityRelation, [leftEntity.name, rightEntity.name]);
-                                    const tempEntity = models.getEntity(ctx.service, tmp[0]);
+                                    const tempEntity = models.getEntity(ctxService, tmp[0]);
                                     if (tempEntity && !loop) {
-                                        const tempCardinality = relationInfos(ctx, leftEntity.name, tempEntity.name, true);
+                                        const tempCardinality = relationInfos(ctxService, leftEntity.name, tempEntity.name, true);
                                         if (complexEntity2 && tempCardinality.entity && complexEntity2.type !== ETable.link) {
                                             leftKey = _Key(complexEntity2, rightEntity);
                                             rightKey = _Key(complexEntity2, leftEntity);

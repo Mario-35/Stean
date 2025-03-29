@@ -129,7 +129,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
             if (ctx.decodedUrl.service === EConstant.test) {
                 console.log(log.debug_head("Create service"));
                 try {
-                    (ctx.body = await createService(ctx, testDatas)), (ctx.status = EHttpCode.created);
+                    (ctx.body = await createService(ctx.service, testDatas)), (ctx.status = EHttpCode.created);
                 } catch (error) {
                     ctx.status = EHttpCode.badRequest;
                     ctx.redirect(`${ctx.decodedUrl.root}/error`);

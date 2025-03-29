@@ -11,7 +11,7 @@ import { config } from "../../configuration";
 import { doubleQuotesString, asyncForEach } from "../../helpers";
 import { models } from "../../models";
 import { createInsertValues } from "../../models/helpers";
-import { keyobj, koaContext } from "../../types";
+import { keyobj, Iservice } from "../../types";
 import { log } from "../../log";
 import { EChar } from "../../enums";
 
@@ -22,7 +22,7 @@ import { EChar } from "../../enums";
  * @returns result postgres.js object
  */
 
-export const createService = async (ctx: koaContext, dataInput: Record<string, any>): Promise<Record<string, any>> => {
+export const createService = async (ctxService: Iservice, dataInput: Record<string, any>): Promise<Record<string, any>> => {
     console.log(log.whereIam());
 
     const prepareDatas = (dataInput: Record<string, string>, entity: string): object => {
@@ -69,7 +69,7 @@ export const createService = async (ctx: koaContext, dataInput: Record<string, a
                 const goodEntity = models.getEntity(service, entityName);
                 if (goodEntity) {
                     try {
-                        const sqls: string[] = dataInput[entityName].map((element: any) => `INSERT INTO ${doubleQuotesString(goodEntity.table)} ${createInsertValues(ctx, prepareDatas(element, goodEntity.name), goodEntity.name)}`);
+                        const sqls: string[] = dataInput[entityName].map((element: any) => `INSERT INTO ${doubleQuotesString(goodEntity.table)} ${createInsertValues(ctxService, prepareDatas(element, goodEntity.name), goodEntity.name)}`);
                         await config
                             .executeSqlValues(config.getService(serviceName), sqls.join(";"))
                             .then((res: Record<string, any>) => {

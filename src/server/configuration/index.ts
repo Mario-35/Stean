@@ -20,7 +20,7 @@ import { createDatabase, pgFunctions, testDatas } from "../db/createDb";
 import { userAccess } from "../db/dataAccess";
 import { formatServiceFile, validJSONService } from "./helpers";
 import { MqttServer } from "../mqtt";
-import { updateIndexes } from "../db/helpers";
+import { createService, updateIndexes } from "../db/helpers";
 import { models } from "../models";
 import { autoUpdate } from "../update";
 import { paths } from "../paths";
@@ -73,9 +73,8 @@ class Configuration {
         return Configuration.upToDate;
     }
 
-    private async updateService(input: Iservice): Promise<boolean> {
-        try {
-            if (input.name !== EConstant.admin) {
+    private async updateService(input: Iservice, fromInside?: boolean): Promise<boolean> {
+            if (input.name !== EConstant.admin) 
                 return this.connection(input.name)
                     .unsafe(models.getStats(input))
                     .then(async (res) => {
@@ -84,13 +83,19 @@ class Configuration {
                         return await this.connection(EConstant.admin)
                             .unsafe(datas)
                             .then((e) => true)
-                            .catch((err) => logDbError(err));
+                            .catch((err) => {
+                                return logDbError(err)
                     });
-            }
+                    }).catch(async (err) => {
+                        if (!fromInside && isTest() === false && input.name === EConstant.test && err.code == "3D000") {
+                            await createService(input, testDatas);
+                            return this.updateService(input, true);
+                        }
+                        console.log(err);
+                        return false;
+                    });
             return false;
-        } catch (error) {
-            return false;
-        }
+
     }
 
     private async addService(input: Iservice): Promise<boolean> {
@@ -201,10 +206,11 @@ class Configuration {
                     Object.keys(Configuration.services).forEach(async (element: string) => {
                         Configuration.services[element] = this.formatConfig(element);
                         await this.addService(Configuration.services[element]);
-                        this.updateService(Configuration.services[element]);
+                        await this.updateService(Configuration.services[element]);
                     });
                 }
             } else {
+
                 log.error(errors.configFileError);
                 process.exit(112);
             }
@@ -652,7 +658,7 @@ class Configuration {
             name = input;
             input = Configuration.services[input];
         }
-        const goodDbName = name ? name : input["pg" as keyobj] && input["pg" as keyobj]["database"] ? input["pg" as keyobj]["database"] : `ERROR` || "ERROR";
+        const goodDbName = name ? name : input["pg" as keyobj] && input["pg" as keyobj]["database"] ? input["pg" as keyobj]["database"] : `ERROR`;
         return formatServiceFile(goodDbName, input);
     }
 

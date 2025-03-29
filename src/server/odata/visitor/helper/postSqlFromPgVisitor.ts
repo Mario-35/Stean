@@ -95,9 +95,9 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
                 returnValue.push(`, ${element} AS (`);
                 if (src.id) {
                     if (queryMaker[element].type == EOperation.Association) {
-                        returnValue.push(`INSERT INTO "${queryMaker[element].entity.table}" ${createInsertValues(src.ctx, formatInsertEntityData(queryMaker[element].entity.table, queryMaker[element].datas, src))}${onConflict(element)} WHERE "${queryMaker[element].entity.table}"."${queryMaker[element].keyId}" = ${BigInt(src.id).toString()}`);
+                        returnValue.push(`INSERT INTO "${queryMaker[element].entity.table}" ${createInsertValues(src.ctx.service, formatInsertEntityData(queryMaker[element].entity.table, queryMaker[element].datas, src))}${onConflict(element)} WHERE "${queryMaker[element].entity.table}"."${queryMaker[element].keyId}" = ${BigInt(src.id).toString()}`);
                     } else returnValue.push(`UPDATE "${queryMaker[element].entity.table}" SET ${createUpdateValues(queryMaker[element].entity, queryMaker[element].datas)} WHERE "${queryMaker[element].entity.table}"."${queryMaker[element].keyId}" = (select verifyId('${queryMaker[element].entity.table}', ${src.id}) as id)`);
-                } else returnValue.push(`INSERT INTO "${queryMaker[element].entity.table}" ${createInsertValues(src.ctx, formatInsertEntityData(queryMaker[element].entity.table, queryMaker[element].datas, src))}${queryMaker[element].entity.type === ETable.link ? onConflict(element) : ""}`);
+                } else returnValue.push(`INSERT INTO "${queryMaker[element].entity.table}" ${createInsertValues(src.ctx.service, formatInsertEntityData(queryMaker[element].entity.table, queryMaker[element].datas, src))}${queryMaker[element].entity.type === ETable.link ? onConflict(element) : ""}`);
 
                 returnValue.push(`RETURNING ${postEntity.table == queryMaker[element].entity.table ? allFields : queryMaker[element].keyId})`);
             }
@@ -192,8 +192,8 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
             const relationName = getRelationNameFromEntity(subEntity, subParentEntity);
             const parentRelationName = getRelationNameFromEntity(subParentEntity, subEntity);
             if (parentRelationName && relationName) {
-                const relCardinality = relationInfos(src.ctx, subEntity.name, relationName);
-                const parentCardinality = relationInfos(src.ctx, subParentEntity.name, subEntity.name);
+                const relCardinality = relationInfos(src.ctx.service, subEntity.name, relationName);
+                const parentCardinality = relationInfos(src.ctx.service, subParentEntity.name, subEntity.name);
                 console.log(log.debug_infos(`Found a parent relation in ${subEntity.name}`, subParentEntity.name));
                 if (relCardinality.entity && parentCardinality.entity && relCardinality.entity.table == parentCardinality.entity.table && relCardinality.entity.table == subEntity.table) {
                     console.log(log.debug_infos("Found a relation to do in sub query", subParentEntity.name));
@@ -306,7 +306,7 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
                 ? root && Object.entries(root).length > 0
                     ? `WITH ${postEntity.table} AS (${EConstant.return}${EConstant.tab}UPDATE ${doubleQuotesString(postEntity.table)}${EConstant.return}${EConstant.tab}SET ${createUpdateValues(postEntity, root)} WHERE "id" = (${EConstant.return}${EConstant.tab}select verifyId('${postEntity.table}', ${src.id}) as id) RETURNING ${allFields})`
                     : `WITH ${postEntity.table} AS (${EConstant.return}${EConstant.tab}SELECT * FROM ${doubleQuotesString(postEntity.table)}${EConstant.return}${EConstant.tab}WHERE "id" = ${src.id.toString()})`
-                : `WITH ${postEntity.table} AS (${EConstant.return}${EConstant.tab}INSERT INTO ${doubleQuotesString(postEntity.table)} ${createInsertValues(src.ctx, formatInsertEntityData(postEntity.name, root, src))} RETURNING ${allFields})`
+                : `WITH ${postEntity.table} AS (${EConstant.return}${EConstant.tab}INSERT INTO ${doubleQuotesString(postEntity.table)} ${createInsertValues(src.ctx.service, formatInsertEntityData(postEntity.name, root, src))} RETURNING ${allFields})`
         );
     }
     const temp = src.toPgQuery();

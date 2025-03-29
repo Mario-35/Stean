@@ -61,7 +61,7 @@ export class Services extends Common {
         if (!this.ctx.service.extensions.includes(EExtensions.users)) this.ctx.throw(EHttpCode.Unauthorized);
         if (dataInput && dataInput["create"] && dataInput["create"]["name"]) {
             return this.formatReturnResult({
-                body: await createService(this.ctx, dataInput)
+                body: await createService(this.ctx.service, dataInput)
             });
         }
         if (!userAuthenticated(this.ctx)) this.ctx.throw(EHttpCode.Unauthorized);
