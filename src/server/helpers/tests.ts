@@ -10,7 +10,7 @@ import { EConstant, EExtensions, EUserRights } from "../enums";
 import { PgVisitor, RootPgVisitor } from "../odata/visitor";
 import { Ientity, koaContext } from "../types";
 import { returnFormats } from "./returnFormats";
-export const isTest = () => process.env.NODE_ENV?.trim() === "test" || false;
+export const isTest = () => process.env.NODE_ENV?.trim() === EConstant.test || false;
 export const isProduction = () => process.env.NODE_ENV?.trim() === "production" || false;
 export const isCsv = (input: RootPgVisitor |PgVisitor) => input.returnFormat === returnFormats.csv ? true : undefined;
 export const isDataArray = (input: RootPgVisitor |PgVisitor) => input.returnFormat === returnFormats.dataArray ? true : undefined;

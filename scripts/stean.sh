@@ -97,7 +97,7 @@ check_pg() {
         sudo curl -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc --fail https://www.postgresql.org/media/keys/ACCC4CF8.asc
         sudo sh -c 'echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
         sudo apt update
-        sudo apt install postgis postgresql-17-postgis-3 -y
+        sudo apt install postgresql-17-postgis-3 -y
             if ! psql --version | grep -q "psql (PostgreSQL)"; then
             exit
         fi
@@ -113,7 +113,7 @@ check_pg() {
 
 # Function to create PostgreSQL default postcres user
 update_pg_hba() {
-    SQLPATH=/etc/postgresql/14/main/pg_hba.conf
+    SQLPATH=/etc/postgresql/17/main/pg_hba.conf
     sudo cp $SQLPATH $SQLPATH.bak
     if [ -f $SQLSCRIPT ]; then
         echo "rm $SQLSCRIPT"

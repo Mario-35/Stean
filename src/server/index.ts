@@ -25,6 +25,7 @@ import { protectedRoutes, routerHandle, unProtectedRoutes } from "./routes/";
 import { Iservice, IdecodedUrl, Ientities, IuserToken } from "./types";
 import { appVersion } from "./constants";
 import { paths } from "./paths";
+import { disconectDb } from "./db/helpers";
 
 // Extend koa context
 declare module "koa" {
@@ -75,9 +76,7 @@ app.use(protectedRoutes.routes());
 export const server = isTest()
     ? // TDD init
       app.listen(config.getService(EConstant.admin).ports?.http || 8029, async () => {
-          await config.connection(EConstant.admin)`SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname = 'test'`.then(async () => {
-              await config.connection(EConstant.admin)`DROP DATABASE IF EXISTS test`;
-          });
+          await disconectDb(EConstant.test, true);
           console.log(log.message(`${EConstant.appName} version : ${appVersion}`, "ready " + EChar.ok));
       })
     : // Production or dev init

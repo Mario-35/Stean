@@ -8,7 +8,7 @@
 import Router from "koa-router";
 import { userAuthenticated, getAuthenticatedUser } from "../authentication";
 import { _READY } from "../constants";
-import { getUrlKey, returnFormats, simpleQuotesString } from "../helpers";
+import { getUrlKey, isAdmin, returnFormats } from "../helpers";
 import { apiAccess } from "../db/dataAccess";
 import { IreturnResult } from "../types";
 import { DefaultState, Context } from "koa";
@@ -16,9 +16,9 @@ import { createOdata } from "../odata";
 import { info } from "../messages";
 import { config } from "../configuration";
 import { createDatabase, testDatas } from "../db/createDb";
-import { exportService } from "../db/helpers";
+import { disconectDb, exportService } from "../db/helpers";
 import { models } from "../models";
-import { sqlStopDbName, testRoute } from "./helper";
+import { testRoute } from "./helper";
 import { createService } from "../db/helpers";
 import { HtmlError, Login, Status, Query } from "../views/";
 import { createQueryParams } from "../views/helpers";
@@ -27,7 +27,7 @@ import { getMetrics } from "../db/monitoring";
 import { log } from "../log";
 
 export const unProtectedRoutes = new Router<DefaultState, Context>();
-// ALl others
+// ALL others
 unProtectedRoutes.get("/(.*)", async (ctx) => {
     switch (ctx.decodedUrl.path.toUpperCase()) {
         // Root path
@@ -37,10 +37,13 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
             return;
         // tests only for testing wip features
         case "TEST":
-            ctx.type = returnFormats.json.type;
-            ctx.body = await testRoute(ctx);
-            return;
-        // metrics for moinoring
+            if (!isAdmin(ctx)) {
+                ctx.type = returnFormats.json.type;
+                ctx.body = await testRoute(ctx);
+                return;
+            }
+            ctx.throw(EHttpCode.notFound);
+        // metrics for monitoring
         case "METRICS":
             ctx.type = returnFormats.json.type;
             ctx.body = await getMetrics(ctx);
@@ -121,47 +124,34 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
             ctx.type = returnFormats.json.type;
             ctx.body = await models.getInfos(ctx);
             return;
+        // Create DB test
+        case "CREATE":
+            if (ctx.decodedUrl.service === EConstant.test) {
+                console.log(log.debug_head("Create service"));
+                try {
+                    (ctx.body = await createService(ctx, testDatas)), (ctx.status = EHttpCode.created);
+                } catch (error) {
+                    ctx.status = EHttpCode.badRequest;
+                    ctx.redirect(`${ctx.decodedUrl.root}/error`);
+                }
+                return;
+            }
+            ctx.throw(EHttpCode.notFound);
+        // Drop DB
         case "DROP":
             console.log(log.debug_head("drop database"));
             if (ctx.service.options.includes(EOptions.canDrop)) {
-                await config.executeAdmin(sqlStopDbName(simpleQuotesString(ctx.service.pg.database))).then(async () => {
-                    await config.executeAdmin(`DROP DATABASE IF EXISTS ${ctx.service.pg.database}`);
-                    try {
-                        ctx.status = EHttpCode.created;
-                        ctx.body = await createDatabase(ctx.service.pg.database);
-                    } catch (error) {
-                        ctx.status = EHttpCode.badRequest;
-                        ctx.redirect(`${ctx.decodedUrl.root}/error`);
-                    }
-                });
+                await disconectDb(ctx.service.pg.database, true);
+                try {
+                    ctx.status = EHttpCode.created;
+                    ctx.body = await createDatabase(ctx.service.pg.database);
+                } catch (error) {
+                    ctx.status = EHttpCode.badRequest;
+                    ctx.redirect(`${ctx.decodedUrl.root}/error`);
+                }
+                return;
             }
-            return;
-        // Create DB test
-        case "CREATEDBTEST":
-            console.log(log.debug_head("GET createDB"));
-            try {
-                await config.connection(EConstant.admin)`DROP DATABASE IF EXISTS test`;
-                (ctx.body = await createService(ctx, testDatas)), (ctx.status = EHttpCode.created);
-            } catch (error) {
-                ctx.status = EHttpCode.badRequest;
-                ctx.redirect(`${ctx.decodedUrl.root}/error`);
-            }
-            return;
-        // Drop DB test
-        case "REMOVEDBTEST":
-            console.log(log.debug_head("GET remove DB test"));
-            const returnDel = await config.connection(EConstant.admin)`${sqlStopDbName("test")}`.then(async () => {
-                await config.connection(EConstant.admin)`DROP DATABASE IF EXISTS test`;
-                return true;
-            });
-            if (returnDel) {
-                ctx.status = EHttpCode.noContent;
-                ctx.body = returnDel;
-            } else {
-                ctx.status = EHttpCode.badRequest;
-                ctx.redirect(`${ctx.decodedUrl.root}/error`);
-            }
-            return;
+            ctx.throw(EHttpCode.notFound);
         // Return Query HTML Page Tool
         case "QUERY":
             const tempContext = await createQueryParams(ctx);

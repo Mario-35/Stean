@@ -20,6 +20,7 @@ export { queryInsertFromCsv } from "./queryInsertFromCsv";
 export { getEntityIdInDatas } from "./getEntityIdInDatas";
 export { getColumnsNamesFromCsvFile } from "./getColumnsNamesFromCsvFile";
 export { streamCsvFile } from "./streamCsvFile";
+export { disconectDb } from "./disconectDb";
 export { updateIndexes } from "./updateIndexes";
 export { columnsNameFromHydrasCsv } from "./columnsNameFromHydrasCsv";
 export const exportService = async (ctx: koaContext) => exportToJson(ctx);

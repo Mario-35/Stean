@@ -18,7 +18,7 @@ import postgres from "postgres";
 import { log } from "../log";
 import { createDatabase, pgFunctions, testDatas } from "../db/createDb";
 import { userAccess } from "../db/dataAccess";
-import { formatServiceFile, testDbExists, validJSONService } from "./helpers";
+import { formatServiceFile, validJSONService } from "./helpers";
 import { MqttServer } from "../mqtt";
 import { updateIndexes } from "../db/helpers";
 import { models } from "../models";
@@ -74,19 +74,23 @@ class Configuration {
     }
 
     private async updateService(input: Iservice): Promise<boolean> {
-        if (input.name !== EConstant.admin) {
-            return this.connection(input.name)
-                .unsafe(models.getStats(input))
-                .then(async (res) => {
-                    const datas = `UPDATE public.services SET stats = ${FORMAT_JSONB(res[0].results[0])} WHERE name = '${input.name}'`;
-                    Configuration.services[input.name]._stats = res[0].results[0];
-                    return await this.connection(EConstant.admin)
-                        .unsafe(datas)
-                        .then((e) => true)
-                        .catch((err) => logDbError(err));
-                });
+        try {
+            if (input.name !== EConstant.admin) {
+                return this.connection(input.name)
+                    .unsafe(models.getStats(input))
+                    .then(async (res) => {
+                        const datas = `UPDATE public.services SET stats = ${FORMAT_JSONB(res[0].results[0])} WHERE name = '${input.name}'`;
+                        Configuration.services[input.name]._stats = res[0].results[0];
+                        return await this.connection(EConstant.admin)
+                            .unsafe(datas)
+                            .then((e) => true)
+                            .catch((err) => logDbError(err));
+                    });
+            }
+            return false;
+        } catch (error) {
+            return false;
         }
-        return false;
     }
 
     private async addService(input: Iservice): Promise<boolean> {
@@ -190,7 +194,7 @@ class Configuration {
             }
 
             if (validJSONService(Configuration.services)) {
-                if (isTest()) {
+                if (isTest() === true) {
                     Configuration.services[EConstant.admin] = this.formatConfig(EConstant.admin);
                     Configuration.services[EConstant.test] = this.formatConfig(testDatas["create"]);
                 } else {
@@ -589,13 +593,12 @@ class Configuration {
             this.initMqtt();
             setReady(status);
             // note that is executed without async to not block start processus
-            if (!isTest()) {
-                if (await testDbExists(Configuration.services[EConstant.admin].pg, EConstant.test)) {
-                    Configuration.services[EConstant.test] = this.formatConfig(testDatas["create"]);
-                }
-                // else await createService(testDatas);
-                this.messageListen(EConstant.test, String(this.defaultHttp()), true);
-            }
+            // if (!isTest()) {
+            //     if (await testDbExists(Configuration.services[EConstant.admin].pg, EConstant.test)) {
+            //         Configuration.services[EConstant.test] = this.formatConfig(testDatas["create"]);
+            //     } else await createService(ctx, testDatas);
+            //     this.messageListen(EConstant.test, String(this.defaultHttp()), true);
+            // }
 
             this.writeLog(log._head("Ready", EChar.ok));
             this.writeLog(log.logo(appVersion));

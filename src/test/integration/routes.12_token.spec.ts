@@ -3,7 +3,7 @@ import chai from "chai";
 import chaiHttp from "chai-http";
 import fs from "fs";
 import path from "path";
-import { IApiDoc, prepareToApiDoc, IApiInput, identification, generateApiDoc, testVersion, _RAWDB } from "./constant";
+import { IApiDoc, prepareToApiDoc, IApiInput, identification, generateApiDoc, testVersion, _RAWDB, testLog } from "./constant";
 chai.use(chaiHttp);
 const should = chai.should();
 import { server } from "../../server/index";
@@ -22,14 +22,16 @@ addToApiDoc({
     <div class="text">
       <p>You have to be registered to be able to POST PUT OR DELETE datas.</p>
       </div>`,
-      result: ""
-    });
-    
-    describe("Identification : Token", () => {
-        describe("GET a token", () => {
-            afterEach(() => { writeLog(true); });
-            it("should return JWT Identification", (done) => {     
-                addStartNewTest("Token");
+    result: ""
+});
+
+describe("Identification : Token", () => {
+    describe("GET a token", () => {
+        afterEach(() => {
+            writeLog(true);
+        });
+        it("should return JWT Identification", (done) => {
+            addStartNewTest("Token");
             const infos = addTest({
                 api: `{post} login get a new token`,
                 apiName: `TokenLogin`,
@@ -45,6 +47,7 @@ addToApiDoc({
                 .type("form")
                 .send(identification)
                 .end((err: Error, res: any) => {
+                    testLog(res.body);
                     should.not.exist(err);
                     res.body.should.include.keys("token");
                     res.body.should.include.keys("message");
@@ -60,7 +63,7 @@ addToApiDoc({
                 apiName: `TokenError`,
                 apiDescription: "Identification failed.",
                 apiExample: {
-                    http: `${testVersion}/login`,                    
+                    http: `${testVersion}/login`,
                     curl: `curl -X POST KEYHTTP/login -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' -d 'username=test&password=test'`
                 },
                 apiParamExample: { "username": identification.username, "password": "nowhere" }
@@ -75,7 +78,7 @@ addToApiDoc({
                     res.body.should.include.keys("message");
                     res.body.message.should.eql("Unauthorized");
                     const myError = JSON.stringify(res.body, null, 4);
-                    docs[docs.length - 1].apiErrorExample = myError;					
+                    docs[docs.length - 1].apiErrorExample = myError;
                     done();
                 });
         });
@@ -85,7 +88,7 @@ addToApiDoc({
                 apiName: `TokenLogout`,
                 apiDescription: "Logout actual connection.",
                 apiExample: {
-                    http: `${testVersion}/logout`,                    
+                    http: `${testVersion}/logout`,
                     curl: `curl -X GET KEYHTTP/logout`
                 }
             });
