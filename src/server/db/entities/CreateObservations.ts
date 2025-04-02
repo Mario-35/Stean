@@ -84,7 +84,7 @@ export class CreateObservations extends Common {
             stream: streamInfos
         };
         // stream file in temp table and get query to insert
-        const sqlInsert = await queryInsertFromCsv(this.ctx, paramsFile);
+        const sqlInsert = await queryInsertFromCsv(this.ctx.service, paramsFile);
         console.log(log.debug_infos(`Stream csv file ${paramsFile.filename} in PostgreSql`, sqlInsert ? EChar.ok : EChar.notOk));
         if (sqlInsert) {
             const sqls = sqlInsert.query.map((e: string, index: number) => `${index === 0 ? "WITH " : ", "}updated${index + 1} as (${e})${EConstant.return}`);

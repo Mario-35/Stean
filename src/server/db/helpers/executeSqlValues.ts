@@ -10,6 +10,7 @@ import { config } from "../../configuration";
 import { log } from "../../log";
 import { asyncForEach, isTest } from "../../helpers";
 import { Iservice } from "../../types";
+
 export const executeSqlValues = async (service: Iservice | string, query: string | string[]): Promise<object> => {
     config.writeLog(log.query(query));
     if (typeof query === "string") {

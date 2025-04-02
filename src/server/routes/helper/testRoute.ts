@@ -6,14 +6,11 @@
  *
  */
 
-import { Token } from "../../odata/parser";
-import { query } from "../../odata/parser/parser";
 import { koaContext } from "../../types";
-export const testRoute = async (ctx: koaContext): Promise<string[] | { [key: string]: any }> => {
-    const a = `$expand=Products($filter=hour('alfred') eq 'cake')`;
 
+export const testRoute = async (ctx: koaContext): Promise<string[] | { [key: string]: any }> => {
     try {
-        return <Token>query(decodeURIComponent(a));
+        return { "Test": "No Test" };
     } catch (error) {
         console.log(error);
         return { error: error };

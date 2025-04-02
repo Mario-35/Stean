@@ -75,7 +75,7 @@ export class Query {
     }
 
     private columnList(tableName: string, main: PgVisitor, element: PgVisitor): string[] | undefined {
-        this.isFile = isFile(element.ctx);
+        this.isFile = isFile(element.ctx.service);
         if (this.isFile === true && element.query.select.toString() === "*") return element.columnSpecials["result"];
         // get good entity name
         const tempEntity = models.getEntity(main.ctx.service, tableName);
@@ -167,7 +167,7 @@ export class Query {
                             // if is relation
                             if (element.entity && index >= 0) {
                                 item.entity = models.getEntity(main.ctx.service, name);
-                                item.query.where.add(`${item.query.where.notNull() === true ? " AND " : ""}${expand(main.ctx, element.entity.name, name)}`);
+                                item.query.where.add(`${item.query.where.notNull() === true ? " AND " : ""}${expand(main.ctx.service, element.entity.name, name)}`);
                                 // create sql query for this relatiion (IN JSON result)
                                 const query = this.pgQueryToString(this.create(item, false));
                                 if (query)

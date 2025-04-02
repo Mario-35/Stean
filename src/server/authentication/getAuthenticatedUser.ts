@@ -22,7 +22,7 @@ import { blankUser } from "../views/helpers/";
 
 export const getAuthenticatedUser = async (ctx: koaContext): Promise<Iuser | undefined> => {
     console.log(log.whereIam());
-    if (!ctx.service.extensions.includes(EExtensions.users)) return blankUser(ctx);
+    if (!ctx.service.extensions.includes(EExtensions.users)) return blankUser(ctx.service);
     const token = decodeToken(ctx);
     if (token && token.id > 0) {
         const user = await userAccess.getSingle(ctx.service.name, token.id);

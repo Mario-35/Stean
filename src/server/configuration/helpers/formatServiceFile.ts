@@ -41,7 +41,7 @@ export function formatServiceFile(name: string, input: Record<string, any>): Ise
             port: input["pg"] && input["pg"]["port"] ? input["pg"]["port"] : 5432,
             user: input["pg"] && input["pg"]["user"] ? input["pg"]["user"] : `ERROR`,
             password: input["pg"] && input["pg"]["password"] ? input["pg"]["password"] : `ERROR`,
-            database: name && name === EConstant.test ? "test" : input["pg"] && input["pg"]["database"] ? input["pg"]["database"] : `ERROR`,
+            database: name && name === EConstant.test ? EConstant.test : input["pg"] && input["pg"]["database"] ? input["pg"]["database"] : `ERROR`,
             retry: input["retry"] ? +input["retry"] : 2
         },
         apiVersion: version,

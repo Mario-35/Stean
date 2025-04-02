@@ -7,19 +7,19 @@
  */
 
 import { EExtensions } from "../../enums";
-import { Iuser, koaContext } from "../../types";
-export function blankUser(ctx: koaContext):Iuser  {    
+import { Iuser, Iservice } from "../../types";
+export function blankUser(service: Iservice): Iuser {
     return {
         id: 0,
         username: "query",
         password: "",
         email: "",
-        database: ctx.service.pg.database,
-        canPost: !ctx.service.extensions.includes(EExtensions.users),
-        canDelete: !ctx.service.extensions.includes(EExtensions.users),
-        canCreateUser: !ctx.service.extensions.includes(EExtensions.users),
-        canCreateDb: !ctx.service.extensions.includes(EExtensions.users),
+        database: service.pg.database,
+        canPost: !service.extensions.includes(EExtensions.users),
+        canDelete: !service.extensions.includes(EExtensions.users),
+        canCreateUser: !service.extensions.includes(EExtensions.users),
+        canCreateDb: !service.extensions.includes(EExtensions.users),
         admin: false,
         superAdmin: false
-    }
-};
+    };
+}

@@ -37,7 +37,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
             return;
         // tests only for testing wip features
         case "TEST":
-            if (!isAdmin(ctx)) {
+            if (!isAdmin(ctx.service)) {
                 ctx.type = returnFormats.json.type;
                 ctx.body = await testRoute(ctx);
                 return;
@@ -46,7 +46,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
         // metrics for monitoring
         case "METRICS":
             ctx.type = returnFormats.json.type;
-            ctx.body = await getMetrics(ctx);
+            ctx.body = await getMetrics(ctx.service);
             return;
         // error show in html if query call
         case "ERROR":
@@ -117,7 +117,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
         // Show draw.io model
         case "DRAW":
             ctx.type = returnFormats.xml.type;
-            ctx.body = models.getDrawIo(ctx);
+            ctx.body = models.getDrawIo(ctx.service);
             return;
         // Infos and link of a services
         case "INFOS":

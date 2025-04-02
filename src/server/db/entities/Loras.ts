@@ -94,7 +94,7 @@ export class Loras extends Common {
         console.log(log.debug_infos("stream", stream));
         // search for frame and decode payload if found
         if (notNull(this.stean["frame"])) {
-            const temp = await decodeloraDeveuiPayload(this.ctx, this.stean["deveui"], this.stean["frame"]);
+            const temp = await decodeloraDeveuiPayload(this.ctx.service, this.stean["deveui"], this.stean["frame"]);
             if (!temp) return this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: "Error" });
             if (temp && temp.error) {
                 if (silent) return this.formatReturnResult({ body: temp.error });

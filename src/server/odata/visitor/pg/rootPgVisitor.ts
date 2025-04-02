@@ -48,7 +48,7 @@ export class RootPgVisitor extends PgVisitor {
     protected VisitRessourcesResourcePatheTik(nodeName: string, id: string | undefined) {
         if (this.entity && this.entity.relations[nodeName]) {
             const where = this.parentEntity ? `(SELECT ID FROM (${this.query.toWhere(this)}) as nop)${id ? `and id = ${id}` : ""}` : this.id;
-            const whereSql = link(this.ctx, this.entity.name, nodeName)
+            const whereSql = link(this.ctx.service, this.entity.name, nodeName)
                 .split("$ID")
                 .join(<string>where);
 
@@ -123,7 +123,7 @@ export class RootPgVisitor extends PgVisitor {
             });
         } else if (this.entity && this.entity.relations[node.value.name]) {
             const where = this.parentEntity ? `(SELECT ID FROM (${this.query.toWhere(this)}) as nop)` : this.id;
-            const whereSql = link(this.ctx, this.entity.name, node.value.name)
+            const whereSql = link(this.ctx.service, this.entity.name, node.value.name)
                 .split("$ID")
                 .join(<string>where);
 

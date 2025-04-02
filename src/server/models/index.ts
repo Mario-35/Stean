@@ -20,16 +20,16 @@ export class Models {
         return Models.models.hasOwnProperty(verStr);
     }
 
-    public getDrawIo(ctx: koaContext) {
+    public getDrawIo(service: Iservice) {
         const deleteId = (id: string) => {
             const start = `<mxCell id="${id}"`;
             const end = "</mxCell>";
             fileContent = fileContent.replace(`${start}${fileContent.split(start)[1].split(end)[0]}${end}`, "");
         };
-        const entities = Models.models[ctx.service.apiVersion];
+        const entities = Models.models[service.apiVersion];
         let fileContent = fs.readFileSync(path.join(__dirname, "/", "model.drawio"), "utf8");
-        fileContent = fileContent.replace("&gt;Version&lt;", `&gt;version : ${ctx.service.apiVersion}&lt;`);
-        if (!ctx.service.extensions.includes(EExtensions.multiDatastream)) {
+        fileContent = fileContent.replace("&gt;Version&lt;", `&gt;version : ${service.apiVersion}&lt;`);
+        if (!service.extensions.includes(EExtensions.multiDatastream)) {
             ["114", "115", "117", "118", "119", "116", "120", "121"].forEach((e) => deleteId(e));
             fileContent = fileContent.replace(`&lt;hr&gt;COLUMNS.${entities.MultiDatastreams.name}`, "");
             fileContent = fileContent.replace(`&lt;hr&gt;COLUMNS.${entities.MultiDatastreams.name}`, "");

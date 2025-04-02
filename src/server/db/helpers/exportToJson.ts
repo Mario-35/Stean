@@ -11,6 +11,7 @@ import { EConstant } from "../../enums";
 import { doubleQuotesString, asyncForEach, getUrlKey, hidePassword, removeEmpty } from "../../helpers";
 import { THINGLOCATION } from "../../models/entities";
 import { koaContext } from "../../types";
+
 export const exportToJson = async (ctx: koaContext) => {
     // get config with hidden password
     const result: Record<string, any> = { "create": hidePassword(config.getService(ctx.service.name)) };

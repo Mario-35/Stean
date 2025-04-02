@@ -11,7 +11,7 @@ function start_stean {
     if (Test-Path $FILEAPP) {
         Write-Host "$FILEAPP starting ..."
         $env:NODE_ENV = "production"
-        nodemon -x "node $FILEAPP || copy /b $FILEAPP +,," --ignore configuration.json
+        nodemon -x "node $FILEAPP" --ignore *.json
     } else {
         Write-Host "$FILEAPP does not exist, can't launch app."
     }

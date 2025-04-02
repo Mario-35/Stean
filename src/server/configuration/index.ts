@@ -74,49 +74,49 @@ class Configuration {
     }
 
     private async updateService(input: Iservice, fromInside?: boolean): Promise<boolean> {
-            if (input.name !== EConstant.admin) 
-                return this.connection(input.name)
-                    .unsafe(models.getStats(input))
-                    .then(async (res) => {
-                        const datas = `UPDATE public.services SET stats = ${FORMAT_JSONB(res[0].results[0])} WHERE name = '${input.name}'`;
-                        Configuration.services[input.name]._stats = res[0].results[0];
-                        return await this.connection(EConstant.admin)
-                            .unsafe(datas)
-                            .then((e) => true)
-                            .catch((err) => {
-                                return logDbError(err)
-                    });
-                    }).catch(async (err) => {
-                        if (!fromInside && isTest() === false && input.name === EConstant.test && err.code == "3D000") {
-                            await createService(input, testDatas);
-                            return this.updateService(input, true);
-                        }
-                        console.log(err);
-                        return false;
-                    });
-            return false;
-
+        if (input.name !== EConstant.admin)
+            return this.connection(input.name)
+                .unsafe(models.getStats(input))
+                .then(async (res) => {
+                    const datas = `UPDATE public.services SET stats = ${FORMAT_JSONB(res[0].results[0])} WHERE name = '${input.name}'`;
+                    Configuration.services[input.name]._stats = res[0].results[0];
+                    return await this.adminConnection()
+                        .unsafe(datas)
+                        .then((e) => true)
+                        .catch((err) => {
+                            return logDbError(err);
+                        });
+                })
+                .catch(async (err) => {
+                    if (!fromInside && isTest() === false && input.name === EConstant.test && err.code == "3D000") {
+                        await createService(input, testDatas);
+                        return this.updateService(input, true);
+                    }
+                    console.log(err);
+                    return false;
+                });
+        return false;
     }
 
     private async addService(input: Iservice): Promise<boolean> {
         if (input && input.name === EConstant.admin) return false;
         const datas = `INSERT INTO public.services ("name", "datas") VALUES('${input.name}', ${FORMAT_JSONB(input)}) ON CONFLICT DO NOTHING;`;
-        return await this.connection(EConstant.admin)
+        return await this.adminConnection()
             .unsafe(datas)
             .then((e) => true)
             .catch(async (error) => {
                 console.log(error);
                 if (error.code === "42P01") {
-                    return await this.connection(EConstant.admin)
+                    return await this.adminConnection()
                         .unsafe(this.createServiceTable())
                         .then(async (e) => {
-                            return await this.connection(EConstant.admin)
+                            return await this.adminConnection()
                                 .unsafe(datas)
                                 .then((e) => true);
                         })
                         .catch(async (err) => {
                             if (err.code === "42P07") {
-                                return await this.connection(EConstant.admin)
+                                return await this.adminConnection()
                                     .unsafe(datas)
                                     .then((e) => true);
                             } else {
@@ -179,9 +179,18 @@ class Configuration {
             }
             // decrypt file
             Configuration.services = JSON.parse(decrypt(fileContent));
+
+            const infosAdmin = Configuration.services[EConstant.admin].pg;
+            Configuration.adminConnection = postgres(`postgres://${infosAdmin.user}:${infosAdmin.password}@${infosAdmin.host}:${infosAdmin.port || 5432}/${EConstant.pg}`, {
+                debug: _DEBUG,
+                connection: {
+                    application_name: `${EConstant.appName} ${appVersion}`
+                }
+            });
+
             try {
                 if (!isTest())
-                    await this.connection(EConstant.admin)
+                    await this.adminConnection()
                         .unsafe("SELECT * FROM services")
                         .then((res: any) => {
                             res.forEach((element: object) => {
@@ -190,7 +199,7 @@ class Configuration {
                         });
             } catch (error: any) {
                 if (error.code === "42P01")
-                    await this.connection(EConstant.admin)
+                    await this.adminConnection()
                         .unsafe(this.createServiceTable())
                         .catch((e) => {
                             log.error(errors.configFileError);
@@ -210,7 +219,6 @@ class Configuration {
                     });
                 }
             } else {
-
                 log.error(errors.configFileError);
                 process.exit(112);
             }
@@ -223,13 +231,6 @@ class Configuration {
             process.exit(111);
         }
 
-        const infosAdmin = Configuration.services[EConstant.admin].pg;
-        Configuration.adminConnection = postgres(`postgres://${infosAdmin.user}:${infosAdmin.password}@${infosAdmin.host}:${infosAdmin.port || 5432}/${EConstant.pg}`, {
-            debug: _DEBUG,
-            connection: {
-                application_name: `${EConstant.appName} ${appVersion}`
-            }
-        });
         this.trace = new Trace(Configuration.adminConnection);
         return true;
     }
@@ -421,7 +422,7 @@ class Configuration {
         this.writeLog(log.query(query));
         return new Promise(async function (resolve, reject) {
             await config
-                .connection(EConstant.admin)
+                .adminConnection()
                 .unsafe(query)
                 .then((res: object) => {
                     resolve(res);
@@ -499,7 +500,7 @@ class Configuration {
 
     /**
      *
-     * @returns return postgres.js connection with EConstant.admin rights
+     * @returns return postgres.js connection with admin rights
      */
     public adminConnection(): postgres.Sql<Record<string, unknown>> {
         return Configuration.adminConnection;
@@ -724,7 +725,7 @@ class Configuration {
     }
 
     async export(): Promise<Record<string, any>> {
-        return await this.connection(EConstant.admin)
+        return await this.adminConnection()
             .unsafe("SELECT datas FROM services")
             .then((res: any) => {
                 const fileContent = fs.readFileSync(paths.configFile.fileName, "utf8");

@@ -116,7 +116,7 @@ export class PgVisitor extends Visitor {
                 const nbs = Array.from({ length: this.parentEntity?.name === DATASTREAM.name ? 1 : 5 }, (v, k) => k + 1);
                 const translate = `TRANSLATE (SUBSTRING ("result"->>'value' FROM '(([0-9]+.*)*[0-9]+)'), '[]','')`;
                 const isOperation = operation.trim() != "";
-                return ForceString || isFile(this.ctx)
+                return ForceString || isFile(this.ctx.service)
                     ? `@EXPRESSIONSTRING@ ALL (ARRAY_REMOVE( ARRAY[${EConstant.return}${nbs.map((e) => `${isOperation ? `${operation} (` : ""} SPLIT_PART ( ${translate}, ',', ${e}))`).join(`,${EConstant.return}`)}], null))`
                     : `@EXPRESSION@ ALL (ARRAY_REMOVE( ARRAY[${EConstant.return}${nbs.map((e) => `${isOperation ? `${operation} (` : ""}NULLIF (SPLIT_PART ( ${translate}, ',', ${e}),'')::numeric${isOperation ? `)` : ""}`).join(`,${EConstant.return}`)}], null))`;
             default:
@@ -300,7 +300,7 @@ export class PgVisitor extends Visitor {
     }
     protected VisitSelectItem(node: Token, context: IodataContext) {
         const tempColumn = this.getColumn(node.raw, "", context);
-        if (isFile(this.ctx)) {
+        if (isFile(this.ctx.service)) {
             context.identifier = `(result->'valueskeys')->>'${node.raw}' AS "${node.raw}"`;
             // this.ctx.columnSpecials["result"] =`(result->'valueskeys')->>'${node.raw}' AS "${node.raw}"`;
         } else context.identifier = tempColumn ? tempColumn : node.raw;

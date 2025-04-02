@@ -12,7 +12,7 @@ $CONFIGFILE = "configuration.json"
 $APIBak = "apiBak" # api saved folder name
 $POSTGRES = "C:\Program Files\PostgreSQL" # postgres windows install path
 $NODEJS = "C:\Program Files\nodejs" # nodeJS windows install path
-$FILEAPP = ".\$APIDEST\index.js" # app path
+$FILEAPP = ".\$APIDEST\stean.js" # app path
 $FILEDIST = ".\dist.zip" # name ditrib file path
 $FILEDISTOLD = ".\distBak.zip" # name saved ditrib file
 
@@ -58,8 +58,7 @@ function install_stean {
     }
     # unzip actual
     # Expand-Archive -Path $FILEDIST -DestinationPath $APIDEST
-    Add-Type -AssemblyName System.IO.Compression.FileSystem
-    [System.IO.Compression.ZipFile]::ExtractToDirectory($FILEDIST, $APIDEST)
+    Expand-Archive -Path $FILEDIST -DestinationPath $APIDEST -Force
     # Save config
     if (Test-Path .\$APIBak\configuration\$CONFIGFILE) {
         Write-Host "configuration exists."
@@ -88,7 +87,7 @@ function start_stean {
     if (Test-Path $FILEAPP) {
         Write-Host "$FILEAPP starting ..."
         $env:NODE_ENV = "production"
-        nodemon -x "node $FILEAPP || copy /b $FILEAPP +,," --ignore configuration.json
+        nodemon -x "node $FILEAPP" --ignore *.json
     } else {
         Write-Host "$FILEAPP does not exist, can't launch app."
     }

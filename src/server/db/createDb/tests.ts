@@ -6,6 +6,7 @@
  *
  */
 
+import { EConstant } from "../../enums";
 import { keyobj } from "../../types";
 // Shortcuts for space
 let startDate = new Date("2023-02-11T00:00:01.000Z");
@@ -257,14 +258,14 @@ const addMinutesToDate = (dat?: string) => {
 };
 export const testDatas: Record<string, any> = {
     "create": {
-        "name": "test",
+        "name": EConstant.test,
         "port": 8029,
         "pg": {
             "host": "localhost",
             "port": 5432,
             "user": "stean",
             "password": "stean",
-            "database": "test",
+            "database": EConstant.test,
             "retry": 2
         },
         "apiVersion": "v1.1",
@@ -1019,20 +1020,17 @@ export const testDatas: Record<string, any> = {
         {
             "name": "Temperature",
             "definition": n["ozcar"] + "c_650214c2",
-            "description":
-                "Temperature is a physical quantity that expresses hot and cold. It is the manifestation of thermal energy, present in all matter, which is the source of the occurrence of heat, a flow of energy, when a body is in contact with another that is colder or hotter."
+            "description": "Temperature is a physical quantity that expresses hot and cold. It is the manifestation of thermal energy, present in all matter, which is the source of the occurrence of heat, a flow of energy, when a body is in contact with another that is colder or hotter."
         },
         {
             "name": "Relative humidity",
             "definition": n["ozcar"] + "c_b9bb91f1",
-            "description":
-                "The ratio of the partial pressure of water vapor in the air–water mixture to the saturated vapor pressure of water at those conditions. The relative humidity of air is a function of both its water content and temperature.It is normally expressed as a percentage."
+            "description": "The ratio of the partial pressure of water vapor in the air–water mixture to the saturated vapor pressure of water at those conditions. The relative humidity of air is a function of both its water content and temperature.It is normally expressed as a percentage."
         },
         {
             "name": "Radon",
             "definition": "https://www.georisques.gouv.fr/sites/default/files/2023-05/Fiche-radon.pdf",
-            "description":
-                "Le radon est un gaz radioactif naturel inodore, incolore et inerte chimiquement. Il est issu de la désintégration de l’uranium et du radium présents dans le sol et les roches."
+            "description": "Le radon est un gaz radioactif naturel inodore, incolore et inerte chimiquement. Il est issu de la désintégration de l’uranium et du radium présents dans le sol et les roches."
         },
         {
             "name": "stream level",
