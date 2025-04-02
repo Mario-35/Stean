@@ -1,5 +1,5 @@
 $APIDEST = "api" # api folder name
-$FILEAPP = ".\$APIDEST\index.js" # app path
+$FILEAPP = ".\$APIDEST\stean.js" # app path
 
 # Function to stop stean if running
 function stop_stean {
