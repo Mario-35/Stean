@@ -14,6 +14,7 @@ $POSTGRES = "C:\Program Files\PostgreSQL" # postgres windows install path
 $NODEJS = "C:\Program Files\nodejs" # nodeJS windows install path
 $FILEAPP = ".\$APIDEST\stean.js" # app path
 $FILEDIST = ".\dist.zip" # name ditrib file path
+$FILERUN = ".\run.ps1" # name ditrib file path
 $FILEDISTOLD = ".\distBak.zip" # name saved ditrib file
 
 Write-Host "Installing Stean..."
@@ -74,23 +75,6 @@ function install_stean {
     npm install --omit=dev
     npm install -g nodemon
     Set-Location ..
-}
-
-# Function to stop stean if running
-function stop_stean {
-    Write-Host "node stop"
-}
-
-# Function to run stean
-function start_stean {
-    stop_stean
-    if (Test-Path $FILEAPP) {
-        Write-Host "$FILEAPP starting ..."
-        $env:NODE_ENV = "production"
-        nodemon -x "node $FILEAPP" --ignore *.json
-    } else {
-        Write-Host "$FILEAPP does not exist, can't launch app."
-    }
 }
 
 #------------------------------------------------------------------
@@ -155,4 +139,26 @@ if (Test-Path $FILEDIST) {
 }
 
 install_stean
-start_stean
+
+$lines = @(
+"`$APIDEST = `"api`" # api folder name",
+"`$FILEAPP = `".\`$APIDEST\stean.js`" # app path",
+"# Function to stop stean if running",
+"function stop_stean {",
+"    Write-Host `"node stop`"",
+"}",
+"function start_stean {",
+"    stop_stean",
+"    if (Test-Path `$FILEAPP) {",
+"        Write-Host `"`$FILEAPP starting ...`"",
+"        `$env:NODE_ENV = `"production`"",
+"        nodemon -x `"node `$FILEAPP`" --ignore *.json",
+"    } else {",
+"        Write-Host `"`$FILEAPP does not exist, can`'t launch app.`"",
+"    }",
+"}",
+"start_stean"
+
+)
+
+Set-Content -Path $FILERUN -Value $lines
