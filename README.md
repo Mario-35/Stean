@@ -99,12 +99,11 @@ To access admin panel you hawe to be indentified with admin postgres access ente
 
 ![firstStart](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/firstStart.jpg "firstStart")
 
+## use on local windows as production (for testing)
 
-## use on local windows as production (for testing) use :  [script](https://raw.githubusercontent.com/Mario-35/Stean/main/scripts/install.ps1) as install.ps1
+You must have postgresSql with postGis installed.
 
-
-
-
+use :  [script](https://raw.githubusercontent.com/Mario-35/Stean/main/scripts/install.ps1) as install.ps1
 
 ## for developper
 
