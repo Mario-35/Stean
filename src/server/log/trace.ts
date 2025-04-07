@@ -20,7 +20,6 @@ import { FORMAT_JSONB } from "../db/constants";
  */
 
 export class Trace {
-    // store all services
     static adminConnection: postgres.Sql<Record<string, unknown>>;
 
     constructor(adminConnection: postgres.Sql<Record<string, unknown>>) {

@@ -260,6 +260,7 @@ class Configuration {
     }
 
     /**
+     * Test if config file exists
      *
      * @returns configuration file present
      */
@@ -570,11 +571,12 @@ class Configuration {
     }
 
     /**
+     * initialize configuration class
      *
      * @param input specific config file
      * @returns true if it's done
      */
-    async init(input?: string): Promise<boolean> {
+    async initialisation(input?: string): Promise<boolean> {
         const temp = await autoUpdate.compareVersions();
         Configuration.appVersion = temp.appVersion;
         Configuration.remoteVersion = temp.remoteVersion || "";
@@ -724,6 +726,10 @@ class Configuration {
             });
     }
 
+    /**
+     *
+     * @returns JSON service create
+     */
     async export(): Promise<Record<string, any>> {
         return await this.adminConnection()
             .unsafe("SELECT datas FROM services")
@@ -823,6 +829,7 @@ class Configuration {
         );
         return true;
     }
+
     /**
      * Write an encrypt config file in json file
      *

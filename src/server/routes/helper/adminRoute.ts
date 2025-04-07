@@ -12,6 +12,12 @@ import { returnFormats } from "../../helpers";
 import { koaContext } from "../../types";
 import { Admin } from "../../views";
 
+/**
+ * Generate admin page
+ *
+ * @param ctx koa context
+ * @param message optional mussage
+ */
 export const adminRoute = async (ctx: koaContext, message?: string) => {
     ctx.set("script-src", "self");
     ctx.set("Content-Security-Policy", "self");

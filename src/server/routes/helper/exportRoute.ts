@@ -11,6 +11,11 @@ import { config } from "../../configuration";
 import { returnFormats } from "../../helpers";
 import { koaContext } from "../../types";
 
+/**
+ * Generate uxport root page
+ *
+ * @param ctx koa context
+ */
 export const exportRoute = async (ctx: koaContext) => {
     ctx.type = returnFormats.json.type;
     ctx.body = await config.export();

@@ -1,5 +1,11 @@
 import { EConstant } from "../../enums";
 
+/**
+ *
+ * @param input Key values record
+ * @param admin is admin configuration
+ * @returns Key values formated formated config
+ */
 export function formatConfig(input: Record<string, any>, admin?: boolean): Record<string, any> {
     const name = admin ? EConstant.admin : input.name.toLowerCase();
     return {

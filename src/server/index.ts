@@ -25,7 +25,7 @@ import { protectedRoutes, routerHandle, unProtectedRoutes } from "./routes/";
 import { Iservice, IdecodedUrl, Ientities, IuserToken } from "./types";
 import { appVersion } from "./constants";
 import { paths } from "./paths";
-import { disconectDb } from "./db/helpers";
+import { disconnectDb } from "./db/helpers";
 
 // Extend koa context
 declare module "koa" {
@@ -42,7 +42,7 @@ declare module "koa" {
 }
 
 // Initialisation of models
-models.init();
+models.initialisation();
 // new koa server https://koajs.com/
 export const app = new Koa();
 app.use(favicon(path.join(__dirname, "/", "favicon.ico")));
@@ -74,10 +74,10 @@ app.use(unProtectedRoutes.routes());
 app.use(protectedRoutes.routes());
 // Start server initialisaion
 export const server = isTest()
-    ? // TDD init
+    ? // Test-driven development init
       app.listen(config.getService(EConstant.admin).ports?.http || 8029, async () => {
-          await disconectDb(EConstant.test, true);
+          await disconnectDb(EConstant.test, true);
           console.log(log.message(`${EConstant.appName} version : ${appVersion}`, "ready " + EChar.ok));
       })
     : // Production or dev init
-      config.init();
+      config.initialisation();

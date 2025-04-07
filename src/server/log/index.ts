@@ -18,36 +18,83 @@ class Log {
     private logAll = (input: any, colors?: boolean) => (typeof input === "object" ? util.inspect(input, { showHidden: false, depth: null, colors: colors || false }) : input);
     private separator = (title: string, nb: number) => `${color(EColor.Green)} ${this.line(nb)} ${color(EColor.Yellow)} ${title} ${color(EColor.Green)} ${this.line(nb)}${color(EColor.Reset)}`;
     private logCleInfos = (cle: string, infos: object) => `${color(EColor.Green)} ${cle} ${color(EColor.White)} : ${color(EColor.Cyan)} ${this.logAll(infos, this.debugFile)}${color(EColor.Reset)}`;
+
+    /**
+     *
+     * @param cle key message
+     * @param value  message
+     * @returns formated string
+     */
     public booting<T>(cle: string, value: T) {
-        return `\x1b[${EColor.Cyan}m${cle}\x1b[${EColor.White}m ${value}\x1b[${EColor.Reset}m`;
+        return `\x1b[${EColor.Cyan}m${cle} ${EChar.arrowright}\x1b[${EColor.White}m ${value}\x1b[${EColor.Reset}m`;
     }
+
     public showAll<T>(input: T, colors?: boolean) {
         return typeof input === "object" ? util.inspect(input, { showHidden: false, depth: null, colors: colors || false }) : input;
     }
 
+    /**
+     *
+     * @param cle key message
+     * @param value  message
+     * @returns formated string
+     */
     public create(cle: string, value: string | number) {
         return `${color(EColor.White)} -->${color(EColor.Cyan)} ${cle} ${color(EColor.White)} ${this.showAll(value)}${color(EColor.Reset)}`;
     }
+
+    /**
+     *
+     * @param cle key message
+     * @param infos  message
+     * @returns formated string
+     */
     public message<T>(cle: string, infos: T) {
         return `${color(EColor.Yellow)}${cle} ${color(EColor.White)}:${color(EColor.Cyan)} ${this.showAll(infos)}${color(EColor.Reset)}`;
     }
+
+    /**
+     *
+     * @param sql sql query
+     * @returns formated string
+     */
     public query(sql: unknown) {
         if (_DEBUG) return `${color(EColor.Code)}${"=".repeat(5)}[ Query Start ]${"=".repeat(5)}${EConstant.return}${color(EColor.Sql)} ${this.showAll(sql)}${EConstant.return}${color(EColor.Sql)}${color(EColor.Code)}${color(EColor.Reset)}`;
     }
+
+    /**
+     * format Sql error
+     *
+     * @param query sql query
+     * @param error error message
+     * @returns formated string
+     */
     public queryError<T>(query: unknown, error: T) {
         return `${color(EColor.Green)} ${"=".repeat(15)} ${color(EColor.Cyan)} ERROR ${color(EColor.Green)} ${"=".repeat(15)}${color(EColor.Reset)}
       ${color(EColor.Red)} ${error} ${color(EColor.Blue)}
       ${color(EColor.Cyan)} ${this.showAll(query, false)}${color(EColor.Reset)}`;
     }
-    // Usefull for id not used ;)
+
+    /**
+     * format Odata token
+     *
+     * @param infos Odata Token
+     * @returns formated string
+     */
     oData(infos: Lexer.Token | undefined) {
         if (infos && _DEBUG) {
             const tmp = `${color(EColor.White)} ${infos} ${color(EColor.Reset)}`;
             return `${color(EColor.Red)} ${"=".repeat(8)} ${color(EColor.Cyan)} ${new Error().stack?.split(EConstant.return)[2].trim().split("(")[0].split("at ")[1].trim()} ${tmp}${color(EColor.Red)} ${"=".repeat(8)}${color(EColor.Reset)}`;
         }
-        return infos;
     }
-    // log an object or json
+
+    /**
+     * format Object
+     *
+     * @param title string message
+     * @param input object
+     * @returns formated string
+     */
     object(title: string, input: object) {
         if (_DEBUG) {
             const res = [this._head(title)];
@@ -57,6 +104,7 @@ class Log {
             return res.join(EConstant.return);
         }
     }
+
     url(link: string) {
         return `${EChar.web} ${color(EColor.Default)} : ${color(EColor.Cyan)} ${link}${color(EColor.Reset)}`;
     }

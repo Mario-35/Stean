@@ -6,7 +6,7 @@
  *
  */
 
-import { createDatabase, disconectDb } from ".";
+import { createDatabase, disconnectDb } from ".";
 import { config } from "../../configuration";
 import { doubleQuotesString, asyncForEach } from "../../helpers";
 import { models } from "../../models";
@@ -43,7 +43,7 @@ export const createService = async (service: Iservice, dataInput: Record<string,
     const mess = `Database [${newServiceName}]`;
 
     try {
-        await disconectDb(newServiceName, true);
+        await disconnectDb(newServiceName, true);
         results[`Drop ${mess}`] = EChar.ok;
     } catch (error) {
         results[`Drop ${mess}`] = EChar.notOk;

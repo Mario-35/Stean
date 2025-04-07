@@ -21,6 +21,13 @@ import { IdecodedUrl, koaContext } from "../../types";
 // _____/________________/____/____/___________________/___________________/
 //   |           |         |    |         |                |
 // protocol    host   service  version  pathname         search
+
+/**
+ *
+ * @param ctx koa context
+ * @param input own url (use ctx.href if not)
+ * @returns IdecodedUrl
+ */
 export const decodeUrl = (ctx: koaContext, input?: string): IdecodedUrl | undefined => {
     console.log(log.whereIam());
     // get input

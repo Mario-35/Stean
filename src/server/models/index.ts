@@ -373,7 +373,10 @@ export class Models {
         }
     }
 
-    public init() {
+    /**
+     * initialize model class
+     */
+    public initialisation() {
         if (isTest()) this.createVersion("v1.1");
     }
 }

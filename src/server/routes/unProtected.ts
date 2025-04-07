@@ -16,7 +16,7 @@ import { createOdata } from "../odata";
 import { info } from "../messages";
 import { config } from "../configuration";
 import { createDatabase, testDatas } from "../db/createDb";
-import { disconectDb, exportService } from "../db/helpers";
+import { disconnectDb, exportService } from "../db/helpers";
 import { models } from "../models";
 import { testRoute } from "./helper";
 import { createService } from "../db/helpers";
@@ -141,7 +141,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
         case "DROP":
             console.log(log.debug_head("drop database"));
             if (ctx.service.options.includes(EOptions.canDrop)) {
-                await disconectDb(ctx.service.pg.database, true);
+                await disconnectDb(ctx.service.pg.database, true);
                 try {
                     ctx.status = EHttpCode.created;
                     ctx.body = await createDatabase(ctx.service.pg.database);
