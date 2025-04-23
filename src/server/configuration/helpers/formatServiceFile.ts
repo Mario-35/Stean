@@ -51,6 +51,7 @@ export function formatServiceFile(name: string, input: Record<string, any>): Ise
         extensions: extensions,
         options: options,
         csvDelimiter: input["csvDelimiter"] ? input["csvDelimiter"] : ";",
+        synonyms: input["synonyms"] ? input["synonyms"] : undefined,
         _connection: undefined,
         _stats: undefined
     };

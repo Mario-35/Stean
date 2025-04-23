@@ -27,7 +27,7 @@ export class Trace {
     }
 
     private query(ctx: koaContext, error?: any[]) {
-        return ctx.traceId && error ? `UPDATE log SET error = '${FORMAT_JSONB(error)} WHERE id = ${ctx.traceId}` : `INSERT INTO log (method, url${notNull(ctx.body) ? ", datas" : ""}${notNull(error) ? ", error" : ""}) VALUES('${ctx.method}', '${ctx.request.url}'${notNull(ctx.body) ? `,${FORMAT_JSONB(ctx.body)}` : ""}${notNull(error) ? `,${FORMAT_JSONB(error)}` : ""}) RETURNING id;`;
+        return ctx.traceId && error ? `UPDATE log SET error = ${FORMAT_JSONB(error)} WHERE id = ${ctx.traceId}` : `INSERT INTO log (method, url${notNull(ctx.body) ? ", datas" : ""}${notNull(error) ? ", error" : ""}) VALUES('${ctx.method}', '${ctx.request.url}'${notNull(ctx.body) ? `,${FORMAT_JSONB(ctx.body)}` : ""}${notNull(error) ? `,${FORMAT_JSONB(error)}` : ""}) RETURNING id;`;
     }
 
     /**
@@ -60,8 +60,8 @@ export class Trace {
     async error(ctx: koaContext, error: any) {
         try {
             await Trace.adminConnection.unsafe(this.query(ctx, error));
-        } catch (error) {
-            console.log(error);
+        } catch (err) {
+            console.log(err);
         }
     }
 

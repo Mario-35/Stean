@@ -220,4 +220,14 @@ unProtectedRoutes.put("/(.*)", async (ctx) => {
             } else ctx.throw(EHttpCode.badRequest);
         }
     }
+
+    if (ctx.request.url.includes("/synonyms")) {
+        console.log("===========================================");
+        console.log(ctx.body);
+        if (ctx.request.type.startsWith("application/json") && Object.keys(ctx.body).length > 0) {
+            console.log(ctx.body);
+            ctx.service.synonyms = ctx.body;
+            ctx.body = await config.updateConfig(ctx.service);
+        }
+    }
 });

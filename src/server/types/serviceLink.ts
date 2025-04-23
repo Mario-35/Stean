@@ -18,6 +18,7 @@ export interface IserviceInfos {
         nb_page: number;
         extensions: string[];
         options: string[];
+        synonyms: JSON | undefined;
         csvDelimiter: string;
     };
     stats: JSON;

@@ -296,6 +296,7 @@ class Configuration {
                 nb_page: Configuration.services[name].nb_page,
                 extensions: Configuration.services[name].extensions,
                 options: Configuration.services[name].options,
+                synonyms: Configuration.services[name].synonyms,
                 csvDelimiter: Configuration.services[name].csvDelimiter
             },
             stats: Configuration.services[name]._stats || JSON.parse("{}"),
@@ -841,6 +842,25 @@ class Configuration {
         if (this.writeFile(path.join(myPath, "configuration.json"), isProduction() === true ? encrypt(datas) : datas) === false) return false;
         if (this.writeFile(path.join(myPath, ".key"), paths.key) === false) return false;
         return true;
+    }
+
+    /**
+     * Write an encrypt config file in json file
+     *
+     * @returns true if it's done
+     */
+    public async updateConfig(input: Iservice): Promise<boolean> {
+        if (input.name !== EConstant.admin) {
+            const datas = `UPDATE public.services SET "datas" = ${FORMAT_JSONB(input)} WHERE "name" = '${input.name}'`;
+            return await this.adminConnection()
+                .unsafe(datas)
+                .then((e) => true)
+                .catch((err) => {
+                    return logDbError(err);
+                });
+        }
+
+        return false;
     }
 }
 

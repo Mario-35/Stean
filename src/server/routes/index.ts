@@ -36,7 +36,7 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     // decode url
     const decodedUrl = decodeUrl(ctx);
 
-    if (!decodedUrl && ctx.path.includes("/logs-")) return logsRoute(ctx, ctx.path);
+    if (!decodedUrl && ctx.path.includes("logs-")) return logsRoute(ctx, ctx.path);
     switch (ctx.path.split("/").reverse()[0].toLocaleUpperCase()) {
         // admin page
         case "ADMIN":

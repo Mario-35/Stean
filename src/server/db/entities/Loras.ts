@@ -33,15 +33,19 @@ export class Loras extends Common {
     async prepareInputResult(dataInput: Record<string, any>): Promise<Record<string, any>> {
         console.log(log.whereIam());
         const result: Record<string, any> = {};
-
-        let search = searchInJson(dataInput, ["payload_deciphered", "payload"]);
+        if (dataInput["DevEUI_uplink"]) dataInput = dataInput["DevEUI_uplink"];
+        let search = searchInJson(dataInput, ["payload_deciphered", "payload", "payload_hex"]);
         if (search) result["frame"] = search.toUpperCase();
+        search = searchInJson(dataInput, ["deveui", "DevEUI", "sensor_id"]);
+        if (search) result["deveui"] = search.toUpperCase();
+        search = searchInJson(dataInput, ["timestamp", "Time"]);
+        if (search) result["timestamp"] = search;
 
         const listKeys = ["deveui", "DevEUI", "sensor_id", "frame"];
-        Object.entries(dataInput).forEach(([k, v]) => (result[listKeys.includes(k) ? k.toLowerCase() : k] = listKeys.includes(k) ? v.toUpperCase() : v));
+        Object.entries(dataInput).forEach(([k, v]) => (result[k] = listKeys.includes(k) ? v.toUpperCase() : v));
         if (!isNaN(dataInput["timestamp"])) result["timestamp"] = new Date(dataInput["timestamp"] * 1000).toISOString();
 
-        if (result["Time"] && !result["timestamp"]) result["timestamp"] = String(new Date(Date.parse(result["Time"])).toISOString().split(".")[0] + "+00:00");
+        // if (result["Time"] && !result["timestamp"]) result["timestamp"] = String(new Date(Date.parse(result["Time"])).toISOString().split(".")[0] + "+00:00");
 
         return result;
     }
@@ -90,7 +94,6 @@ export class Loras extends Common {
             if (res[0]["datastream"] != null) return res[0]["datastream"][0];
             this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: msg(errors.deveuiNotFound, this.stean["deveui"]) });
         });
-
         console.log(log.debug_infos("stream", stream));
         // search for frame and decode payload if found
         if (notNull(this.stean["frame"])) {

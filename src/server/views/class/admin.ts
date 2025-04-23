@@ -106,6 +106,9 @@ export class Admin extends CoreHtmlView {
                     <span id="root" class="service-root" onclick="location.href = '${services[e].root}';">${services[e].root}</span>
                 </div>
                 <div class="description">
+                    <div id="editList${e}"class="editList">
+                        <textarea></textarea>
+                    </div>
                     <fieldset id="options${e}">
                         <legend>Options</legend>
                         <ul class="card-list">
@@ -133,7 +136,8 @@ export class Admin extends CoreHtmlView {
                         <option selected="selected">Services</option>
                         <option>Statistiques</option>
                         ${services[e].service.extensions.includes("users") ? "<option>Users</option>" : ""} 
-                        ${services[e].service.extensions.includes("lora") ? "<option>Lora</option>" : ""} 
+                        ${services[e].service.extensions.includes("lora") ? "<option>Loras</option>" : ""} 
+                        ${services[e].service.extensions.includes("lora") ? "<option>Synonyms</option>" : ""} 
                     </select>
                 </div>
                 </div>`
