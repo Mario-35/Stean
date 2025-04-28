@@ -6,6 +6,7 @@
  *
  */
 
+import { paths } from "../../paths";
 import { Idatas, koaContext } from "../../types";
 import { CoreHtmlView } from "./core";
 import fs from "fs";
@@ -17,7 +18,7 @@ import fs from "fs";
 export class HtmlLogs extends CoreHtmlView {
     // use data to name ifle
     constructor(ctx: koaContext, datas: Idatas) {
-        const fileContent = fs.readFileSync(datas.url, "utf8");
+        const fileContent = fs.readFileSync(paths.root + "logs\\" + datas.url, "utf8");
         super(ctx, datas);
         this.logs(fileContent);
     }
