@@ -27,7 +27,7 @@ export class Trace {
     }
 
     private query(ctx: koaContext, error?: any[]) {
-        return ctx.traceId && error ? `UPDATE log SET error = ${FORMAT_JSONB(error)} WHERE id = ${ctx.traceId}` : `INSERT INTO log (method, url${notNull(ctx.body) ? ", datas" : ""}${notNull(error) ? ", error" : ""}) VALUES('${ctx.method}', '${ctx.request.url}'${notNull(ctx.body) ? `,${FORMAT_JSONB(ctx.body)}` : ""}${notNull(error) ? `,${FORMAT_JSONB(error)}` : ""}) RETURNING id;`;
+        return ctx.traceId && error ? `UPDATE public.log SET error = ${FORMAT_JSONB(error)} WHERE id = ${ctx.traceId}` : `INSERT INTO public.log (method, url${notNull(ctx.body) ? ", datas" : ""}${notNull(error) ? ", error" : ""}) VALUES('${ctx.method}', '${ctx.request.url}'${notNull(ctx.body) ? `,${FORMAT_JSONB(ctx.body)}` : ""}${notNull(error) ? `,${FORMAT_JSONB(error)}` : ""}) RETURNING id;`;
     }
 
     /**

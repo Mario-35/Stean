@@ -42,7 +42,9 @@ export const createOdata = async (ctx: koaContext): Promise<RootPgVisitor | unde
     // clean id in url
     urlSrc = cleanUrl(replaceElement(EConstant.id, "id"));
     // if nothing to do return
-    if (urlSrc === "/" || urlSrc.includes("LrnDevEui")) return;
+    if (urlSrc === "/") return;
+    // If params after ? in loras post delete them to not be catch by odata
+    if (ctx.request.method === "POST" && ctx.originalUrl.includes(`/Loras`)) urlSrc = urlSrc.split("?")[0];
     // Remove actions that are not odata
     if (urlSrc.includes("$"))
         urlSrc.split("$").forEach((element: string) => {

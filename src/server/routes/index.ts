@@ -69,7 +69,9 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     }
 
     // try to clean query string
-    ctx.querystring = decodeURIComponent(querystring.unescape(ctx.querystring));
+    ctx.querystring = ctx.request.method === "POST" && ctx.originalUrl.includes(`${decodedUrl.version}/Loras`) ? "" : decodeURIComponent(querystring.unescape(ctx.querystring));
+    console.log(ctx.querystring);
+
     // get model
     ctx.model = models.filtered(ctx.service);
     try {
@@ -78,6 +80,8 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
         ctx.user = decodeToken(ctx);
         await next().then(async () => {});
     } catch (error: any) {
+        console.log("-------------------- route error----------------------------");
+        console.log(error);
         const tempError = {
             code: error.statusCode || null,
             message: error.message || null,
