@@ -6,6 +6,8 @@
  *
  */
 
+import { Isynonyms } from "./synonyms";
+
 export interface IserviceInfos {
     protocol: string; // protocol http or https
     linkBase: string; // linkBase of the service
@@ -18,7 +20,7 @@ export interface IserviceInfos {
         nb_page: number;
         extensions: string[];
         options: string[];
-        synonyms: JSON | undefined;
+        synonyms: Isynonyms | undefined;
         csvDelimiter: string;
     };
     stats: JSON;

@@ -12,25 +12,23 @@ import { ILoraDecodingResult } from "../types";
 
 export const decodingPayload = (decoder: { name: string; code: string; nomenclature: string }, payload: string): ILoraDecodingResult | undefined => {
     console.log(log.debug_head("decodingPayload"));
-    if (decoder.name && decoder.nomenclature && decoder.code != "undefined") {
-        try {
-            const F = new Function("input", "nomenclature", `${String(decoder.code)}; return decode(input, nomenclature);`);
-            let nomenclature = "";
-            if (decoder.nomenclature.trim() != "")
-                try {
-                    nomenclature = JSON.parse(decoder.nomenclature);
-                } catch (error) {
-                    nomenclature = JSON.parse(decoder.nomenclature);
-                }
-            const result = F(payload, decoder.nomenclature === "{}" || decoder.nomenclature === "" ? null : nomenclature);
-            return { decoder: decoder.name, result: result };
-        } catch (error) {
-            console.log(error);
-            return {
-                decoder: decoder.name,
-                result: undefined,
-                error: errors.DecodingPayloadError
-            };
-        }
+    try {
+        const F = new Function("input", "nomenclature", `${String(decoder.code)}; return decode(input, nomenclature);`);
+        let nomenclature = "";
+        if (decoder.nomenclature.trim() != "")
+            try {
+                nomenclature = JSON.parse(decoder.nomenclature);
+            } catch (error) {
+                nomenclature = JSON.parse(decoder.nomenclature);
+            }
+        const result = F(payload, decoder.nomenclature === "{}" || decoder.nomenclature === "" ? null : nomenclature);
+        return { decoder: decoder.name, result: result };
+    } catch (error) {
+        console.log(error);
+        return {
+            decoder: decoder.name,
+            result: undefined,
+            error: errors.DecodingPayloadError
+        };
     }
 };

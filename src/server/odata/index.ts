@@ -42,7 +42,7 @@ export const createOdata = async (ctx: koaContext): Promise<RootPgVisitor | unde
     // clean id in url
     urlSrc = cleanUrl(replaceElement(EConstant.id, "id"));
     // if nothing to do return
-    if (urlSrc === "/") return;
+    if (urlSrc === "/" || urlSrc.includes("LrnDevEui")) return;
     // Remove actions that are not odata
     if (urlSrc.includes("$"))
         urlSrc.split("$").forEach((element: string) => {

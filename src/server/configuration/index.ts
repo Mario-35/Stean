@@ -198,11 +198,14 @@ class Configuration {
                             });
                         });
             } catch (error: any) {
+                console.log(error);
+
                 if (error.code === "42P01")
                     await this.adminConnection()
                         .unsafe(this.createServiceTable())
                         .catch((e) => {
-                            log.error(errors.configFileError);
+                            console.log(this.createServiceTable());
+                            log.error(errors.serviceCreateError);
                             process.exit(112);
                         });
             }

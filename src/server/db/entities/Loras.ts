@@ -33,19 +33,14 @@ export class Loras extends Common {
     async prepareInputResult(dataInput: Record<string, any>): Promise<Record<string, any>> {
         console.log(log.whereIam());
         const result: Record<string, any> = {};
-        if (dataInput["DevEUI_uplink"]) dataInput = dataInput["DevEUI_uplink"];
-        let search = searchInJson(dataInput, ["payload_deciphered", "payload", "payload_hex"]);
-        if (search) result["frame"] = search.toUpperCase();
-        search = searchInJson(dataInput, ["deveui", "DevEUI", "sensor_id"]);
-        if (search) result["deveui"] = search.toUpperCase();
-        search = searchInJson(dataInput, ["timestamp", "Time"]);
-        if (search) result["timestamp"] = search;
-
-        const listKeys = ["deveui", "DevEUI", "sensor_id", "frame"];
-        Object.entries(dataInput).forEach(([k, v]) => (result[k] = listKeys.includes(k) ? v.toUpperCase() : v));
+        if (Object.keys(dataInput).length === 1) dataInput = dataInput[Object.keys(dataInput)[0]];
+        if (this.ctx.service.synonyms)
+            Object.keys(this.ctx.service.synonyms).forEach((e: string) => {
+                let search = searchInJson(dataInput, [...(this.ctx.service.synonyms ? this.ctx.service.synonyms[e as keyof object] : []), ...[e]]);
+                if (search) result[e] = search.toUpperCase();
+            });
+        else Object.entries(dataInput).forEach(([k, v]) => (result[k] = ["frame", "deveui", "timestamp"].includes(k) ? v.toUpperCase() : v));
         if (!isNaN(dataInput["timestamp"])) result["timestamp"] = new Date(dataInput["timestamp"] * 1000).toISOString();
-
-        // if (result["Time"] && !result["timestamp"]) result["timestamp"] = String(new Date(Date.parse(result["Time"])).toISOString().split(".")[0] + "+00:00");
 
         return result;
     }
@@ -63,6 +58,7 @@ export class Loras extends Common {
         const addToStean = (key: string) => (this.stean[key] = dataInput[key]);
 
         if (dataInput) this.stean = await this.prepareInputResult(dataInput);
+        console.log(log.debug_infos("input formated", this.stean));
 
         if (this.stean["frame"] === "000000000000000000") this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.frameNotConform });
         // search for MultiDatastream
@@ -76,7 +72,7 @@ export class Loras extends Common {
         }
         // search for Datastream
         if (notNull(dataInput["Datastream"])) {
-            if (!notNull(dataInput["deveui"])) {
+            if (!notNull(this.stean["deveui"])) {
                 if (silent) return this.formatReturnResult({ body: errors.deveuiMessage });
                 else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.deveuiMessage });
             }

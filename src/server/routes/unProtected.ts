@@ -222,8 +222,6 @@ unProtectedRoutes.put("/(.*)", async (ctx) => {
     }
 
     if (ctx.request.url.includes("/synonyms")) {
-        console.log("===========================================");
-        console.log(ctx.body);
         if (ctx.request.type.startsWith("application/json") && Object.keys(ctx.body).length > 0) {
             console.log(ctx.body);
             ctx.service.synonyms = ctx.body;

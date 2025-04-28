@@ -44,6 +44,7 @@ export class Trace {
                     ctx.traceId = BigInt(res[0].id);
                 })
                 .catch(async (error) => {
+                    console.log(error);
                     if (error.code === "42P01") {
                         await Trace.adminConnection.unsafe(`CREATE TABLE public.log ( id int8 GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1 NO CYCLE ) NOT NULL, "date" timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL, "method" text NULL, url text NULL, datas jsonb NULL, CONSTRAINT log_pkey PRIMARY KEY (id) ); CREATE INDEX log_id ON public.log USING btree (id); `).catch((err) => process.stdout.write(err + EConstant.return));
                         Trace.adminConnection.unsafe(datas);
@@ -61,7 +62,9 @@ export class Trace {
         try {
             await Trace.adminConnection.unsafe(this.query(ctx, error));
         } catch (err) {
+            console.log("---- [Error]-------------");
             console.log(err);
+            console.log(this.query(ctx, error));
         }
     }
 

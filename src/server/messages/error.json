@@ -4,6 +4,7 @@
 	"invalidQuery": "Invalid Query",
 	"inConfigFile": "Error in config file",
 	"configFileError": "Config is not correct",
+	"serviceCreateError": "Error while creating services table",
 	"configName": "Configname $1 not found",
 	"noNameIdentified": "No name indentified",
     "notPresentInConfigName": "$1 : not present in config File",  

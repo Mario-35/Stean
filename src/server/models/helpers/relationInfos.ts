@@ -94,7 +94,7 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                     rightKey: rightKey,
                                     entity: leftEntity,
                                     column: idColumnName(leftEntity, rightEntity) || "id",
-                                    link: `${formatPgTableColumn(rightEntity.table, rightKey)} = (SELECT ${formatPgTableColumn(leftEntity.table, leftKey)} FROM ${formatPgTableColumn(leftEntity.table)} WHERE ${formatPgTableColumn(leftEntity.table, rightKey)} =$ID)`,
+                                    link: `${formatPgTableColumn(rightEntity.table, rightKey)} = (SELECT ${formatPgTableColumn(leftEntity.table, leftKey)} FROM ${formatPgTableColumn(leftEntity.table)} WHERE ${formatPgTableColumn(leftEntity.table, "id")} =$ID)`,
                                     expand: `${formatPgTableColumn(rightEntity.table, rightKey)} = ${formatPgTableColumn(leftEntity.table, leftKey)}`
                                 };
                             // ===> 2.3

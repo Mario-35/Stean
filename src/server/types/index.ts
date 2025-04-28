@@ -26,6 +26,7 @@ export { IpgQuery } from "./pgQuery";
 export { IqueryOptions } from "./queryOptions";
 export { IreturnFormat } from "./returnFormat";
 export { IreturnResult } from "./returnResult";
+export { Isynonyms } from "./synonyms";
 export { IserviceInfos } from "./serviceLink";
 export { IstreamInfos } from "./streamInfos";
 export { Iuser } from "./user";
