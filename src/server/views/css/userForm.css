@@ -48,9 +48,26 @@ a {
     box-shadow: 0 12px 15px 0 rgba(0, 0, 0, .24), 0 17px 50px 0 rgba(0, 0, 0, .19)
 }
 
+.login-error {
+    width: 100%;
+    margin: auto;
+    max-width: 525px;
+    min-height: 400px;
+    position: relative;
+    box-shadow: 0 12px 15px 0 rgba(0, 0, 0, .24), 0 17px 50px 0 rgba(0, 0, 0, .19)
+}
+
 .login-html .title {
     position: relative;
     color: #a1a6ab;
+    top: -50px;
+    font-size: 38px;
+    text-align: center;
+}
+
+.login-html .titleError {
+    position: relative;
+    color: #F00;
     top: -50px;
     font-size: 38px;
     text-align: center;
@@ -323,6 +340,7 @@ a {
 .inner {
     display: inline-block;
 }
+
 
 .tooltip {
     float: right;

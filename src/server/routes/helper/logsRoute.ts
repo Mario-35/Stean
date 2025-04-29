@@ -17,8 +17,6 @@ import { HtmlLogs } from "../../views/class/logs";
  * @param ctx koa context
  */
 export const logsRoute = async (ctx: koaContext, file: string) => {
-    console.log(file);
-
     const bodyLogs = new HtmlLogs(ctx, { url: file });
     ctx.type = returnFormats.html.type;
     ctx.body = bodyLogs.toString();

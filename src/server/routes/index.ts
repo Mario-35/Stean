@@ -25,18 +25,14 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     // copy body
     ctx.body = ctx.request.body;
     // if configuration exist
-    if (config.configFileExist() === true)
-        // trace request
-        await config.trace.write(ctx);
-    // admin route for first start
-    else return await adminRoute(ctx);
+    if (config.configFileExist() === true) await config.trace.write(ctx); // trace request
+    else return await adminRoute(ctx); // admin route for first start
 
     // create token
     createBearerToken(ctx);
     // decode url
     const decodedUrl = decodeUrl(ctx);
-
-    if (!decodedUrl && ctx.path.includes("logs-")) return logsRoute(ctx, ctx.path);
+    if (!decodedUrl && ctx.path.includes("logs-")) return logsRoute(ctx, paths.root + "logs\\" + ctx.path);
     switch (ctx.path.split("/").reverse()[0].toLocaleUpperCase()) {
         // admin page
         case "ADMIN":

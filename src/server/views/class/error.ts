@@ -18,34 +18,32 @@ export class HtmlError extends CoreHtmlView {
     constructor(ctx: koaContext, datas: Idatas) {
         console.log(log.whereIam("View"));
         super(ctx, datas);
-        this.error(datas.url);
+        this.error(datas.message, datas.url);
     }
-    private error(message: string) {
+    private error(message: string | undefined, url: string) {
+        // const ref = this.ctx.decodedUrl && this.ctx.decodedUrl.linkbase ? `${this.ctx.decodedUrl.linkbase + `/${this.ctx.service.apiVersion}/Query`}` : "";
         this._HTMLResult = [
-            `
-        <!DOCTYPE html>
+            `<!DOCTYPE html>
             <html>
                 ${this.head("Error")}
                 <body>
-                    <div class="login-wrap">
+                    <div class="login-error">
                         <div class="login-html">
-                            ${this.title("Error")}
-                            <h1>Error.</h1>
-                            <div class="hr">
-                            </div>
-                            <h3>On error page</h3> <h3>${message}</h3>
+                            ${this.title("Error", "titleError")}
+                            <h3>${message}</h3>
                             ${this.hr()}
                             <div id="outer">
                                 <div class="inner">
-                                    <a href="/Login" class="button-submit">Login</a>
+                                    <a href="${url}" class="button-submit">${url.includes("admin") ? "Admin login" : "Login"}</a>
                                 </div>
                                 <div class="inner">
-                                    <a  href="${this.ctx.decodedUrl.linkbase + `/${this.ctx.service.apiVersion}/Query`}" class="button">query</a>
+                                    <a  href="/" class="button">Documentation</a>
                                 </div>
                             </div>
                         </div>
-                    </body>
-                </html>`
+                    </div>
+                </body>
+            </html>`
         ];
     }
 }

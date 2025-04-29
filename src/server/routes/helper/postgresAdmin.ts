@@ -41,6 +41,6 @@ export async function postgresAdmin(ctx: koaContext): Promise<string | undefined
             return encrypt(JSON.stringify({ login: true, "host": src["host"], "adminname": src["adminname"], "port": src["port"], "adminpassword": src["adminpassword"] }));
         })
         .catch((error) => {
-            return `[error]${decodeURI(error.message)}`;
+            return `[error]${error.message}`;
         });
 }

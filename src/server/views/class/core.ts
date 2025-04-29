@@ -41,8 +41,8 @@ export class CoreHtmlView {
         }
     }
 
-    title(message: string): string {
-        return `<div class="title">${message}</div>`;
+    title(message: string, className?: string): string {
+        return `<div class="${className || "title"}">${message}</div>`;
     }
 
     hr(): string {

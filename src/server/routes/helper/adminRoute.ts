@@ -10,7 +10,7 @@
 import { postgresAdmin } from ".";
 import { returnFormats } from "../../helpers";
 import { koaContext } from "../../types";
-import { Admin } from "../../views";
+import { Admin, HtmlError } from "../../views";
 
 /**
  * Generate admin page
@@ -22,5 +22,7 @@ export const adminRoute = async (ctx: koaContext, message?: string) => {
     ctx.set("script-src", "self");
     ctx.set("Content-Security-Policy", "self");
     ctx.type = returnFormats.html.type;
-    ctx.body = new Admin(ctx, { connection: await postgresAdmin(ctx), url: ctx.request.url, body: ctx.request.body, why: {}, message: message }).toString();
+    const connection = await postgresAdmin(ctx);
+    if (connection?.startsWith("[error]")) ctx.body = new HtmlError(ctx, { message: connection.replace("[error]", ""), url: ctx.path }).toString();
+    else ctx.body = new Admin(ctx, { connection: connection, url: ctx.request.url, body: ctx.request.body, why: {}, message: message }).toString();
 };
