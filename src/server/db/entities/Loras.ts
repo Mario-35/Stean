@@ -65,7 +65,7 @@ export class Loras extends Common {
         if (notNull(dataInput["MultiDatastream"])) {
             if (!notNull(this.stean["deveui"])) {
                 if (silent) return this.formatReturnResult({ body: errors.deveuiMessage });
-                else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.deveuiMessage });
+                else this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: errors.deveuiMessage });
             }
             addToStean("MultiDatastream");
             return await super.post(this.stean);
@@ -74,7 +74,7 @@ export class Loras extends Common {
         if (notNull(dataInput["Datastream"])) {
             if (!notNull(this.stean["deveui"])) {
                 if (silent) return this.formatReturnResult({ body: errors.deveuiMessage });
-                else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.deveuiMessage });
+                else this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: errors.deveuiMessage });
             }
             addToStean("Datastream");
             return await super.post(this.stean);
@@ -82,13 +82,13 @@ export class Loras extends Common {
         // search for deveui
         if (!notNull(this.stean["deveui"])) {
             if (silent) return this.formatReturnResult({ body: errors.deveuiMessage });
-            else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.deveuiMessage });
+            else this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: errors.deveuiMessage });
         }
 
         const stream = await config.executeSql(this.ctx.service, streamFromDeveui(this.stean["deveui"])).then((res: Record<string, any>) => {
             if (res[0]["multidatastream"] != null) return res[0]["multidatastream"][0];
             if (res[0]["datastream"] != null) return res[0]["datastream"][0];
-            this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: msg(errors.deveuiNotFound, this.stean["deveui"]) });
+            this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: msg(errors.deveuiNotFound, this.stean["deveui"]) });
         });
         console.log(log.debug_infos("stream", stream));
         // search for frame and decode payload if found
