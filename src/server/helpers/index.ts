@@ -26,6 +26,7 @@ export { returnFormats } from "./returnFormats";
 export { unique } from "./unique";
 export { searchInJson } from "./searchInJson";
 export { zipDirectory } from "./zipDirectory";
+export { flatten } from "./flatten";
 export { unzipDirectory } from "./unzipDirectory";
 export { listFiles } from "./listFiles";
 export { promiseBlindExecute } from "./promiseBlindExecute";

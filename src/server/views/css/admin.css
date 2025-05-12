@@ -32,6 +32,9 @@
   transform: scale(1.2);
   cursor: pointer;
 }
+.canPoint {
+  cursor: pointer;
+}
 
 .row .card button.copy-btn {
   display: none;
@@ -248,9 +251,8 @@
 
 
 fieldset {
-  border: 1px solid var(--btn-gray-disabled-background);
+  border: none;
   font-size: 1px solid var(--font-size-less-2);
-  min-height: 115px;
 }
 
 .scrollable-div {

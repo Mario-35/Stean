@@ -204,28 +204,39 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
 
 // Put only for add decoder from admin
 unProtectedRoutes.put("/(.*)", async (ctx) => {
-    if (ctx.request.url.includes("/Decoders")) {
-        if (ctx.request.type.startsWith("application/json") && Object.keys(ctx.body).length > 0) {
-            const odataVisitor = await createOdata(ctx);
-            if (odataVisitor) ctx.odata = odataVisitor;
-            if (ctx.odata) {
-                const objectAccess = new apiAccess(ctx);
-                const returnValue: IreturnResult | undefined | void = await objectAccess.put();
-                if (returnValue) {
-                    returnFormats.json.type;
-                    if (returnValue.selfLink) ctx.set("Location", returnValue.selfLink);
-                    ctx.status = EHttpCode.created;
-                    ctx.body = returnValue.body;
-                }
-            } else ctx.throw(EHttpCode.badRequest);
-        }
-    }
-
-    if (ctx.request.url.includes("/synonyms")) {
-        if (ctx.request.type.startsWith("application/json") && Object.keys(ctx.body).length > 0) {
-            console.log(ctx.body);
-            ctx.service.synonyms = ctx.body;
-            ctx.body = await config.updateConfig(ctx.service);
-        }
+    const action = ctx.request.url.split("/").reverse()[0];
+    switch (action.toUpperCase()) {
+        case "DECODERS":
+            if (ctx.request.type.startsWith("application/json") && Object.keys(ctx.body).length > 0) {
+                const odataVisitor = await createOdata(ctx);
+                if (odataVisitor) ctx.odata = odataVisitor;
+                if (ctx.odata) {
+                    const objectAccess = new apiAccess(ctx);
+                    const returnValue: IreturnResult | undefined | void = await objectAccess.put();
+                    if (returnValue) {
+                        returnFormats.json.type;
+                        if (returnValue.selfLink) ctx.set("Location", returnValue.selfLink);
+                        ctx.status = EHttpCode.created;
+                        ctx.body = returnValue.body;
+                    }
+                } else ctx.throw(EHttpCode.badRequest);
+            }
+            break;
+        case "SYNONYMS":
+        case "OPTIONS":
+            if (ctx.request.type.startsWith("application/json") && Object.keys(ctx.body).length > 0) {
+                ctx.service[action as keyof object] = ctx.body as never;
+                ctx.body = await config.updateConfig(ctx.service);
+            }
+            break;
+        case "NB_PAGE":
+        case "CSVDELIMITER":
+            if (ctx.request.type.startsWith("application/json") && Object.keys(ctx.body).length > 0) {
+                ctx.service[action as keyof object] = ctx.body[action] as never;
+                ctx.body = await config.updateConfig(ctx.service);
+            }
+            break;
+        default:
+            break;
     }
 });

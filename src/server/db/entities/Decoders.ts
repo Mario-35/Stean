@@ -47,8 +47,6 @@ export class Decoders extends Common {
         console.log(log.whereIam());
         if (this.ctx.odata.payload) {
             const decoder: Record<string, any> = await config.executeSql(this.ctx.service, `SELECT "id", "name", "code", "nomenclature", "synonym" FROM "${DECODER.table}" WHERE id = ${this.ctx.odata.id}`);
-            console.log(decoder);
-
             return decoder[0]
                 ? this.formatReturnResult({
                       body: decodingPayload({ name: decoder[0]["name"], code: String(decoder[0]["code"]), nomenclature: decoder[0]["nomenclature"] }, this.ctx.odata.payload)

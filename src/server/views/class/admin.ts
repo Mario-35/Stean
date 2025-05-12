@@ -112,10 +112,10 @@ export class Admin extends CoreHtmlView {
                     <fieldset id="options${e}">
                         <legend>Options</legend>
                         <ul class="card-list">
-                            <li class="card-list-item icon-${services[e].service.options.includes(EOptions.canDrop) ? "yes" : "no"}">canDrop</li>
-                            <li class="card-list-item icon-${services[e].service.options.includes(EOptions.forceHttps) ? "yes" : "no"}">forceHttps</li>
-                            <li class="card-list-item icon-${services[e].service.options.includes(EOptions.stripNull) ? "yes" : "no"}">stripNull</li>
-                            <li class="card-list-item icon-${services[e].service.options.includes(EOptions.unique) ? "yes" : "no"}">unique</li>
+                            <li class="card-list-item canPoint icon-${services[e].service.options.includes(EOptions.canDrop) ? "yes" : "no"}" onclick="selectChange('${e}', this)">canDrop</li>
+                            <li class="card-list-item canPoint icon-${services[e].service.options.includes(EOptions.forceHttps) ? "yes" : "no"}" onclick="selectChange('${e}', this)">forceHttps</li>
+                            <li class="card-list-item canPoint icon-${services[e].service.options.includes(EOptions.stripNull) ? "yes" : "no"}" onclick="selectChange('${e}', this)">stripNull</li>
+                            <li class="card-list-item canPoint icon-${services[e].service.options.includes(EOptions.unique) ? "yes" : "no"}" onclick="selectChange('${e}', this)">unique</li>
                         </ul>
                     </fieldset>
     

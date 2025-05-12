@@ -7,7 +7,7 @@
  */
 
 import { Common } from "./common";
-import { getBigIntFromString, notNull, searchInJson } from "../../helpers/index";
+import { flatten, getBigIntFromString, notNull, searchInJson } from "../../helpers/index";
 import { ESCAPE_SIMPLE_QUOTE } from "../../constants";
 import { IreturnResult, keyobj, koaContext } from "../../types";
 import { errors, msg } from "../../messages/";
@@ -30,17 +30,21 @@ export class Loras extends Common {
         super(ctx);
     }
     // prepare datas to lora input
+
     async prepareInputResult(dataInput: Record<string, any>): Promise<Record<string, any>> {
         console.log(log.whereIam());
+        // const temp = Object.keys(dataInput).length === 1 ? flatten(dataInput[Object.keys(dataInput)[0]]) : dataInput;
+        const temp = Object.keys(dataInput).length === 1 ? flatten(dataInput[Object.keys(dataInput)[0]]) : dataInput;
         const result: Record<string, any> = {};
-        if (Object.keys(dataInput).length === 1) dataInput = dataInput[Object.keys(dataInput)[0]];
+        // if sub json get it
         if (this.ctx.service.synonyms)
             Object.keys(this.ctx.service.synonyms).forEach((e: string) => {
-                let search = searchInJson(dataInput, [...(this.ctx.service.synonyms ? this.ctx.service.synonyms[e as keyof object] : []), ...[e]]);
+                let search = searchInJson(temp, [...(this.ctx.service.synonyms ? this.ctx.service.synonyms[e as keyof object] : []), ...[e]]);
                 if (search) result[e] = search.toUpperCase();
             });
-        else Object.entries(dataInput).forEach(([k, v]) => (result[k] = ["frame", "deveui", "timestamp"].includes(k) ? v.toUpperCase() : v));
-        if (!isNaN(dataInput["timestamp"])) result["timestamp"] = new Date(dataInput["timestamp"] * 1000).toISOString();
+        else Object.entries(temp).forEach(([k, v]) => (result[k] = ["frame", "deveui", "timestamp"].includes(k) ? String(v).toUpperCase() : v));
+
+        if (!isNaN(dataInput["timestamp"])) result["timestamp"] = new Date(temp["timestamp" as keyof object] * 1000).toISOString();
 
         return result;
     }

@@ -104,7 +104,16 @@ function copyService(name) {
 // change nb Page
 function editPage(name ,elem) {
 	const temp = window.prompt("Number of page for " + name, elem.textContent);
-	if (temp !== null && temp !== "" && +temp > 0)elem.textContent = temp; 
+	if (temp !== null && temp !== "" && +temp > 0) {
+		elem.textContent = temp; 		
+		fetch(`${_PARAMS.services[name].linkBase}/${_PARAMS.services[name].version}/nb_page`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: `{"nb_page": ${temp}}`
+		});
+	}
 }
 
 // edit synonyms
@@ -128,9 +137,18 @@ async function editList(name ,elem) {
 }
 
 // change csv delimiter
-function editCsv(name ,elem) {
+async function editCsv(name ,elem) {
 	const temp = window.prompt("Csv delimiter for " + name, elem.textContent);
 	if (temp === "," || temp === ";") elem.textContent = temp; 
+	if (temp === "," || temp === ";") {
+		await fetch(`${_PARAMS.services[name].linkBase}/${_PARAMS.services[name].version}/csvDelimiter`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: `{"csvDelimiter": "${temp}"}`
+		});
+	}
 }
 
 
@@ -152,7 +170,24 @@ async function selectChange(name ,elem) {
 		case "Synonyms": 
 			if (_PARAMS.services[name].service)
 				getElement("infos"+ name).innerHTML = Object.keys(_PARAMS.services[name].service.synonyms).map(e => `<option value="${e["username"]}" onclick="editList('${name}','${e}')">${e}</option>`).join("\n");
-			break;
+			break;	
+		case 0: 
+			if (["canDrop", "forceHttps", "stripNull","unique"].includes(elem.textContent)) {
+				if (_PARAMS.services[name].service.options.includes(elem.textContent)) {
+					var index = _PARAMS.services[name].service.options.indexOf(elem.textContent);
+					_PARAMS.services[name].service.options.splice(index, 1);
+				} else _PARAMS.services[name].service.options.push(elem.textContent);
+
+				await fetch(`${_PARAMS.services[name].linkBase}/${_PARAMS.services[name].version}/options`, {
+					method: "PUT",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(_PARAMS.services[name].service.options)
+				});
+			}
+			showInfos(name);
+			break;						
 		default:
 			getElement("infos"+ name).innerHTML = _PARAMS.services[name].service.extensions.map(e => `<option value="${e}">${e}</option>`).join("\n");
 			showInfos(name);
@@ -197,7 +232,7 @@ async function showDecoderInfos(name, decoder) {
 
 // Change view for standard default infos
 function showInfos(service) {
-	const li = (operation) => `<li class="card-list-item icon-${_PARAMS.services[service].service.options.includes(operation) ? "yes" : "no" }">${operation}</li>`;
+	const li = (operation) => `<li class="card-list-item canPoint icon-${_PARAMS.services[service].service.options.includes(operation) ? "yes" : "no" }"  onclick="selectChange('${service}', this)">${operation}</li>`;
 	const ul = ['<legend>Options</legend>','<ul class="card-list">'];
 	["canDrop","forceHttps","stripNull","unique"].forEach( e => ul.push(li(e)));
 	ul.push("</ul>");	
@@ -279,7 +314,6 @@ async function saveDecoder() {
 
 // Start
 (function init() {
-	console.log(_PARAMS);
 	wait(false);
 	hide(datas);
 	new SplitterBar(container, first, two);

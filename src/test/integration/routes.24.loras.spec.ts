@@ -552,7 +552,7 @@ describe("endpoint : Lora", () => {
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
-                    res.status.should.equal(400);
+                    res.status.should.equal(404);
                     res.type.should.equal("application/json");
                     done();
                 });
