@@ -168,7 +168,7 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
     },
     css: {
         name: "css",
-        type: EEncodingType.css + ";" + EEncodingType.utf8,
+        type: EEncodingType.css,
         format: defaultFunction,
         generateSql: defaultForwat
     },
