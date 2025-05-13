@@ -32,7 +32,7 @@ export const testLog = (input: any) => {
 };
 export const proxy = (moi: boolean) => (moi !== true ? "http://localhost:8029/test" : `${apidocJson.proxy}/`);
 import packageJson from "../../../package.json";
-import { EConstant } from "../../server/enums";
+import { EConstant, EEncodingType } from "../../server/enums";
 export const VERSION = packageJson.version;
 const createJSON = (data: any) => JSON.stringify(data, null, 4).replace(/[\n]+/g, `|${EConstant.tab}`);
 export interface Iinfos {
@@ -65,9 +65,9 @@ export const defaultPostPatch = (lang: string, method: string, request: string, 
         case "CURL":
             return `curl -X ${method.toUpperCase()} -H 'Content-Type: application/json' -d '${createJSON(data)}}' proxy${request}`;
         case "JAVASCRIPT":
-            return `const response = await fetch("proxy${request}", {|${EConstant.tab}method: "${method.toUpperCase()}",|\theaders: {|${EConstant.tab}    "Content-Type": "application/json",|\t},|\tbody:${createJSON(data)}|});|const valueJson = await response.json();|const valueTxt = await response.text();`;
+            return `const response = await fetch("proxy${request}", {|${EConstant.tab}method: "${method.toUpperCase()}",|\theaders: {|${EConstant.tab}    "Content-Type": "${EEncodingType.json}",|\t},|\tbody:${createJSON(data)}|});|const valueJson = await response.json();|const valueTxt = await response.text();`;
         case "PYTHON":
-            return `import requests|import json|response_API = requests.${method}('proxy${request}', (headers = { "Content-Type": "application/json" }), (data = json.dumps(${createJSON(data)})))|data = response_API.text|parse_json = json.loads(data)|print(parse_json)`;
+            return `import requests|import json|response_API = requests.${method}('proxy${request}', (headers = { "Content-Type": "${EEncodingType.json}" }), (data = json.dumps(${createJSON(data)})))|data = response_API.text|parse_json = json.loads(data)|print(parse_json)`;
     }
     return "";
 };
@@ -93,7 +93,7 @@ export const defaultGet = (lang: string, request: string): string => {
         case "CURL":
             return `curl -GET "proxy${request}"`;
         case "JAVASCRIPT":
-            return `const response = await fetch("proxy${request}", {|\tmethod: "GET",|\theaders: {|\t    "Content-Type": "application/json",|\t},|});|const valueJson = await response.json();|const valueTxt = await response.text();`;
+            return `const response = await fetch("proxy${request}", {|\tmethod: "GET",|\theaders: {|\t    "Content-Type": ${EEncodingType.json},|\t},|});|const valueJson = await response.json();|const valueTxt = await response.text();`;
         case "PYTHON":
             return `import requests|import json|response_API = requests.get('proxy${request}')|data = response_API.text|parse_json = json.loads(data)|print(parse_json)`;
     }
@@ -136,7 +136,7 @@ export const prepareToApiDoc = (input: IApiInput, Entity: string): IApiDoc => {
         apiSuccess: input.apiSuccess,
         apiParamExample: input.apiParamExample ? JSON.stringify(input.apiParamExample, null, 4) : undefined,
         apiSampleRequest: input.api.startsWith("{get}") && input.apiExample ? `proxy${input.apiExample.http}` : "",
-        apiSuccessExample: input.result.type === "text/plain" || input.result.type === "text/csv" ? input.result.text : input.result && input.result.body ? JSON.stringify(input.result.body, null, 4) : undefined
+        apiSuccessExample: input.result.type === EEncodingType.txt || input.result.type === EEncodingType.csv ? input.result.text : input.result && input.result.body ? JSON.stringify(input.result.body, null, 4) : undefined
     };
 };
 export const generateApiDoc = (input: IApiDoc[], filename: string): boolean => {

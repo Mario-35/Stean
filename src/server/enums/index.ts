@@ -22,6 +22,7 @@ export { EHttpCode } from "./httpCode";
 export { EReturnFormats } from "./resultFormats";
 export { EObservationType } from "./observationType";
 export { EOperation } from "./operation";
+export { EEncodingType } from "./encodingType";
 export { ERelations } from "./relations";
 export { EOptions } from "./options";
 export { EQuery } from "./query";

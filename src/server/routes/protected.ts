@@ -14,7 +14,7 @@ import { IreturnResult, Iuser, koaContext } from "../types";
 import { DefaultState, Context } from "koa";
 import { createOdata } from "../odata";
 import { errors, info, msg } from "../messages";
-import { EConstant, EExtensions, EHttpCode, EUserRights } from "../enums";
+import { EConstant, EEncodingType, EExtensions, EHttpCode, EUserRights } from "../enums";
 import { loginUser } from "../authentication";
 import { config } from "../configuration";
 import { checkPassword, emailIsValid } from "./helper";
@@ -94,7 +94,7 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
     // Add new lora observation this is a special route without ahtorisatiaon to post (deveui and correct payload limit risks)
     console.log(ctx.request.headers["authorization"]);
     if ((ctx.user && ctx.user.id > 0) || !ctx.service.extensions.includes(EExtensions.users) || ctx.request.url.includes("/Lora") || (ctx.request.headers["authorization"] && ctx.request.headers["authorization"] === config.getBrokerId())) {
-        if (ctx.request.type.startsWith("application/json") && Object.keys(ctx.body).length > 0) {
+        if (ctx.request.type.startsWith(EEncodingType.json) && Object.keys(ctx.body).length > 0) {
             const odataVisitor = await createOdata(ctx);
             if (odataVisitor) ctx.odata = odataVisitor;
             if (ctx.odata) {
@@ -167,11 +167,11 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
 });
 
 protectedRoutes.patch("/(.*)", async (ctx) => {
+    console.log(log.debug_head("PATCH"));
     if ((!ctx.service.extensions.includes(EExtensions.users) || isAllowedTo(ctx, EUserRights.Post) === true) && Object.keys(ctx.body).length > 0) {
         const odataVisitor = await createOdata(ctx);
         if (odataVisitor) ctx.odata = odataVisitor;
         if (ctx.odata) {
-            console.log(log.debug_head("PATCH"));
             const objectAccess = new apiAccess(ctx);
             if (ctx.odata.id) {
                 const returnValue: IreturnResult | undefined | void = await objectAccess.update();
@@ -185,7 +185,7 @@ protectedRoutes.patch("/(.*)", async (ctx) => {
                 ctx.throw(EHttpCode.badRequest, { detail: errors.idRequired });
             }
         } else {
-            ctx.throw(EHttpCode.notFound);
+            ctx.throw(EHttpCode.badRequest);
         }
     } else {
         ctx.throw(EHttpCode.Unauthorized);
@@ -193,11 +193,11 @@ protectedRoutes.patch("/(.*)", async (ctx) => {
 });
 
 protectedRoutes.delete("/(.*)", async (ctx) => {
+    console.log(log.debug_head("DELETE"));
     if (!ctx.service.extensions.includes(EExtensions.users) || isAllowedTo(ctx, EUserRights.Delete) === true) {
         const odataVisitor = await createOdata(ctx);
         if (odataVisitor) ctx.odata = odataVisitor;
         if (ctx.odata) {
-            console.log(log.debug_head("DELETE"));
             const objectAccess = new apiAccess(ctx);
             if (!ctx.odata.id) ctx.throw(EHttpCode.badRequest, { detail: errors.idRequired });
             const returnValue = await objectAccess.delete(ctx.odata.id);
@@ -206,7 +206,7 @@ protectedRoutes.delete("/(.*)", async (ctx) => {
                 ctx.status = EHttpCode.noContent;
             } else ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: errors.noId + ctx.odata.id });
         } else {
-            ctx.throw(EHttpCode.notFound);
+            ctx.throw(EHttpCode.badRequest);
         }
     } else {
         ctx.throw(EHttpCode.Unauthorized);

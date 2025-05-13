@@ -171,7 +171,7 @@ async function selectChange(name ,elem) {
 			if (_PARAMS.services[name].service)
 				getElement("infos"+ name).innerHTML = Object.keys(_PARAMS.services[name].service.synonyms).map(e => `<option value="${e["username"]}" onclick="editList('${name}','${e}')">${e}</option>`).join("\n");
 			break;	
-		case 0: 
+		case 0: 		
 			if (["canDrop", "forceHttps", "stripNull","unique"].includes(elem.textContent)) {
 				if (_PARAMS.services[name].service.options.includes(elem.textContent)) {
 					var index = _PARAMS.services[name].service.options.indexOf(elem.textContent);

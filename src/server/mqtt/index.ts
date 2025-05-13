@@ -9,7 +9,7 @@
 import Aedes, { AedesPublishPacket, Client, PublishPacket, Subscription } from "aedes";
 import { config } from "../configuration";
 import { log } from "../log";
-import { color, EColor } from "../enums";
+import { color, EColor, EEncodingType } from "../enums";
 import { errors, infos } from "../messages";
 import { loginUser } from "../authentication";
 import { createServer } from "aedes-server-factory";
@@ -50,7 +50,7 @@ export class MqttServer {
                     headers: {
                         "Authorization": this.broker.id,
                         "Host": "mqtt",
-                        "Content-Type": "application/json"
+                        "Content-Type": EEncodingType.json
                     },
                     body: packet.payload.toString()
                 });

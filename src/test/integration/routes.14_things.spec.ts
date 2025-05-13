@@ -18,6 +18,7 @@ import { executeQuery, last } from "./executeQuery";
 import { testDatas } from "../../server/db/createDb";
 import { addStartNewTest, addTest, writeLog } from "./tests";
 import geo from "./files/geo.json";
+import { EEncodingType } from "../../server/enums";
 
 chai.use(chaiHttp);
 const should = chai.should();
@@ -238,7 +239,7 @@ describe("endpoint : Thing [8.2.1]", () => {
                     // there should be a 200 status code
                     res.status.should.equal(200);
                     // the response should be text plain
-                    res.type.should.equal("text/plain");
+                    res.type.should.equal(EEncodingType.txt);
                     res.text.should.include(testDatas.Things[0].name);
                     addToApiDoc({
                         ...infos,

@@ -102,7 +102,7 @@ export class Admin extends CoreHtmlView {
                 <div class="title" onclick="selectCard('${e}')">${e}</div>
                 <button class="copy-btn" id="copy${e}" onclick="copyService('${e}')"> COPY </button>
                 <div class="product">
-                    <span class="service-name">${services[e].version}</span>
+                    <span class="service-name">${services[e].version}&nbsp;:&nbsp;</span>
                     <span id="root" class="service-root" onclick="location.href = '${services[e].root}';">${services[e].root}</span>
                 </div>
                 <div class="description">
@@ -130,8 +130,8 @@ export class Admin extends CoreHtmlView {
                     .join("")}
                 </ul>
                 <div class="description">
-                    <span class="page" onclick="editPage('${e}', this)">${services[e].service.nb_page}</span>
-                    <span class="csv" onclick="editCsv('${e}', this)">${services[e].service.csvDelimiter}</span>
+                    <span class="page canPoint" onclick="editPage('${e}', this)">${services[e].service.nb_page}</span>
+                    <span class="csv canPoint" onclick="editCsv('${e}', this)">${services[e].service.csvDelimiter}</span>
                     <select class="patrom-select tabindex="1" onchange="selectChange('${e}', this)">
                         <option selected="selected">Services</option>
                         <option>Statistiques</option>

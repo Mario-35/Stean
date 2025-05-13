@@ -32,7 +32,9 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     createBearerToken(ctx);
     // decode url
     const decodedUrl = decodeUrl(ctx);
+    // if logs show log file
     if (!decodedUrl && ctx.path.includes("logs-")) return logsRoute(ctx, paths.root + "logs\\" + ctx.path);
+    // Specials routes
     switch (ctx.path.split("/").reverse()[0].toLocaleUpperCase()) {
         // admin page
         case "ADMIN":
@@ -47,26 +49,26 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
         case "LOGGING":
             if (!decodedUrl) return await logsRoute(ctx, paths.logFile.fileName);
     }
-
+    // error decodedUrl
     if (!decodedUrl) {
         ctx.type = returnFormats.json.type;
         ctx.throw(EHttpCode.notFound);
     }
-    // set decodedUrl context
+    // copy decodedUrl context
     ctx.decodedUrl = decodedUrl;
 
     if (_DEBUG) console.log(log.object("decodedUrl", decodedUrl));
+    // if service is not identified get out
     if (!decodedUrl.service) throw new Error(errors.noNameIdentified);
+    // get service
     if (decodedUrl.service && decodedUrl.configName) ctx.service = config.getService(decodedUrl.configName);
     else return;
     // forcing post loras with different version IT'S POSSIBLE BECAUSE COLUMN ARE THE SAME FOR ALL VERSION
     if (decodedUrl.version != ctx.service.apiVersion) {
         if (!(ctx.request.method === "POST" && ctx.originalUrl.includes(`${decodedUrl.version}/Loras`))) ctx.redirect(ctx.request.method === "GET" ? ctx.originalUrl.replace(String(decodedUrl.version), ctx.service.apiVersion) : `${ctx.decodedUrl.linkbase}/${ctx.service.apiVersion}/`);
     }
-
-    // try to clean query string
+    // Clean query string
     ctx.querystring = ctx.request.method === "POST" && ctx.originalUrl.includes(`${decodedUrl.version}/Loras`) ? "" : decodeURIComponent(querystring.unescape(ctx.querystring));
-    console.log(ctx.querystring);
 
     // get model
     ctx.model = models.filtered(ctx.service);

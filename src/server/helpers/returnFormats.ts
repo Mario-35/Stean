@@ -11,7 +11,7 @@ import { IreturnFormat, koaContext } from "../types";
 import { addCssFile } from "../views/css";
 import { addJsFile } from "../views/js";
 import util from "util";
-import { EConstant, EOptions, EReturnFormats } from "../enums";
+import { EConstant, EEncodingType, EOptions, EReturnFormats } from "../enums";
 import { isGraph } from ".";
 import { PgVisitor } from "../odata/visitor";
 import { errors } from "../messages";
@@ -55,14 +55,14 @@ const generateGrahSql = (input: PgVisitor) => {
 const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
     xlsx: {
         name: "xlsx",
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        type: EEncodingType.xlsx,
         format: defaultFunction,
         generateSql: defaultForwat
     },
     // IMPORTANT TO HAVE THIS BEFORE GRAPHDATAS
     json: {
         name: "json",
-        type: "application/json",
+        type: EEncodingType.json,
         format: defaultFunction,
         generateSql(input: PgVisitor) {
             return input.interval
@@ -81,7 +81,7 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
     // IMPORTANT TO HAVE THIS BEFORE GRAPH
     graphDatas: {
         name: "graphDatas",
-        type: "application/json",
+        type: EEncodingType.json,
         format: defaultFunction,
         generateSql(input: PgVisitor) {
             return generateGrahSql(input);
@@ -90,7 +90,7 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
 
     graph: {
         name: "graph",
-        type: "text/html;charset=utf8",
+        type: EEncodingType.html + ";" + EEncodingType.utf8,
         format(input: string | object, ctx: koaContext): string | Record<string, any> {
             const graphNames: string[] = [];
             const formatedDatas: string[] = [];
@@ -123,7 +123,7 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
 
     dataArray: {
         name: "dataArray",
-        type: "application/json",
+        type: EEncodingType.json,
         format: defaultFunction,
         generateSql(input: PgVisitor) {
             return asDataArray(input);
@@ -132,7 +132,7 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
 
     GeoJSON: {
         name: "GeoJSON",
-        type: "application/json",
+        type: EEncodingType.json,
         format: defaultFunction,
         generateSql(input: PgVisitor) {
             return asGeoJSON(input);
@@ -140,7 +140,7 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
     },
     csv: {
         name: "csv",
-        type: "text/csv",
+        type: EEncodingType.csv,
         format: defaultFunction,
         generateSql(input: PgVisitor) {
             return input.toString();
@@ -148,7 +148,7 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
     },
     txt: {
         name: "txt",
-        type: "text/plain",
+        type: EEncodingType.txt,
         format: (input: string | object) => (Object.entries(input).length > 0 ? util.inspect(input, { showHidden: true, depth: 4 }) : JSON.stringify(input)),
         generateSql(input: PgVisitor) {
             return asJson({ query: input.toString(), singular: false, strip: false, count: false });
@@ -156,25 +156,25 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
     },
     sql: {
         name: "sql",
-        type: "text/plain",
+        type: EEncodingType.txt,
         format: defaultFunction,
         generateSql: defaultForwat
     },
     html: {
         name: "html",
-        type: "text/html;charset=utf8",
+        type: EEncodingType.html + ";" + EEncodingType.utf8,
         format: defaultFunction,
         generateSql: defaultForwat
     },
     css: {
         name: "css",
-        type: "text/css;charset=utf8",
+        type: EEncodingType.css + ";" + EEncodingType.utf8,
         format: defaultFunction,
         generateSql: defaultForwat
     },
     js: {
         name: "js",
-        type: "application/javascript;charset=utf8",
+        type: EEncodingType.js + ";" + EEncodingType.utf8,
         format: defaultFunction,
         generateSql: defaultForwat
     },
@@ -211,7 +211,7 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
 
     xml: {
         name: "xml",
-        type: "application/xml",
+        type: EEncodingType.xml,
         format: defaultFunction,
         generateSql: defaultForwat
     }
