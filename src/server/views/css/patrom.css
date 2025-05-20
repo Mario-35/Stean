@@ -456,7 +456,7 @@ body {
   color: inherit;
   background: transparent;
   border: none;
-  cursor: gray;
+  color: gray;
   user-select: none;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -578,7 +578,6 @@ body {
 
   /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 .icon-adobeacrobatreader:before {
@@ -1206,7 +1205,7 @@ body {
     padding: 0 12px;
     color: var(--content-color);
     background-color: var(--background-content);
-    border: 1px solid 1px solid rgb(105, 105, 105);
+    border: solid 1px rgb(105, 105, 105);
     transition: all 0.35s;
 
     /* body-background : #4b4d4e;
@@ -1272,7 +1271,7 @@ body {
 
 .button-bar__item:disabled {
   opacity: 0.3;
-  cursor: gray;
+  color: gray;
   pointer-events: none;
 }
 
@@ -1646,7 +1645,7 @@ input[type=checkbox]:disabled+label {
 .input:disabled,
 .patrom-text-input:disabled {
   opacity: 0.3;
-  cursor: gray;
+  color: gray;
   pointer-events: none;
 }
 
@@ -1666,18 +1665,6 @@ input[type=checkbox]:disabled+label {
   background-color: var(--background-color);
   color: var(--text-color);
   border: 1px solid var(--border-focus);
-}
-
-.patrom-text-input:disabled::-webkit-input-placeholder {
-  color: var(--text-color);
-}
-
-.patrom-text-input:disabled::-moz-placeholder {
-  color: var(--text-color);
-}
-
-.patrom-text-input:disabled:-ms-input-placeholder {
-  color: var(--text-color);
 }
 
 .patrom-text-input:invalid {
@@ -1703,7 +1690,7 @@ input[type=checkbox]:disabled+label {
 
 .input:disabled {
   opacity: 0.3;
-  cursor: gray;
+  color: gray;
   pointer-events: none;
 }
 
@@ -1725,7 +1712,7 @@ input[type="radio"] {
   position: relative;
   display: inline-block;
   vertical-align: top;
-  cursor: gray;
+  color: gray;
   user-select: none;
 }
 
@@ -1734,7 +1721,7 @@ input[type="radio"] {
   position: relative;
   display: inline-block;
   vertical-align: top;
-  cursor: gray;
+  color: gray;
   user-select: none;
 }
 
@@ -1763,7 +1750,7 @@ input[type="radio"] {
 .radio-button--disabled,
 input[type="radio"]:disabled + .patrom-radio-button__checkmark {
   opacity: 0.3;
-  cursor: gray;
+  color: gray;
   pointer-events: none;
 }
 
@@ -1883,7 +1870,7 @@ input[type="radio"]:disabled:active + .patrom-radio-button__checkmark:before {
     color: inherit;
     background: transparent;
     border: none;
-    cursor: gray;
+    color: gray;
     user-select: none;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
@@ -1914,7 +1901,7 @@ input[type="radio"]:disabled:active + .patrom-radio-button__checkmark:before {
     color: inherit;
     background: transparent;
     border: none;
-    cursor: gray;
+    color: gray;
     user-select: none;
   }
   
@@ -1955,7 +1942,7 @@ input[type="radio"]:disabled:active + .patrom-radio-button__checkmark:before {
   color: inherit;
   background: transparent;
   border: none;
-  cursor: gray;
+  color: gray;
   user-select: none;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1996,7 +1983,7 @@ input[type="radio"]:disabled:active + .patrom-radio-button__checkmark:before {
   .range:disabled,
   .patrom-range:disabled {
     opacity: 0.3;
-    cursor: gray;
+    color: gray;
     pointer-events: none;
   }
   
@@ -2176,7 +2163,7 @@ input[type="radio"]:disabled:active + .patrom-radio-button__checkmark:before {
   padding: 0;
   margin: 0;
   border: none;
-  cursor: gray;
+  color: gray;
   user-select: none;
 }
 
@@ -2199,7 +2186,7 @@ input[type="radio"]:disabled:active + .patrom-radio-button__checkmark:before {
 .patrom-switch__input:disabled + .patrom-switch__toggle,
 .patrom-switch__input:disabled + .patrom-switch__theme {
   opacity: 0.3;
-  cursor: gray;
+  color: gray;
   pointer-events: none;
 }
 
@@ -2296,7 +2283,7 @@ input[type="radio"]:disabled:active + .patrom-radio-button__checkmark:before {
   color: inherit;
   background: transparent;
   border: none;
-  cursor: gray;
+  color: gray;
   user-select: none;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -2312,7 +2299,7 @@ input[type="radio"]:disabled:active + .patrom-radio-button__checkmark:before {
 .button--disabled,
 .patrom-tab-bar__button:disabled {
   opacity: 0.3;
-  cursor: gray;
+  color: gray;
   pointer-events: none;
 }
 
@@ -2350,7 +2337,7 @@ input[type="radio"]:disabled:active + .patrom-radio-button__checkmark:before {
 
 .button-bar__item:disabled {
   opacity: 0.3;
-  cursor: gray;
+  color: gray;
   pointer-events: none;
 }
 
@@ -2391,7 +2378,7 @@ input[type="radio"]:disabled:active + .patrom-radio-button__checkmark:before {
   
   .textarea:disabled {
     opacity: 0.3;
-    cursor: gray;
+    color: gray;
     pointer-events: none;
   }
   
@@ -2415,7 +2402,7 @@ input[type="radio"]:disabled:active + .patrom-radio-button__checkmark:before {
   .patrom-textarea:disabled,
   .patrom-textarea--large:disabled {
     opacity: 0.3;
-    cursor: gray;
+    color: gray;
     pointer-events: none;
   }
   
@@ -2439,15 +2426,7 @@ input[type="radio"]:disabled:active + .patrom-radio-button__checkmark:before {
     border: 1px solid var(--border-focus);
   }
   
-  .patrom-textarea:disabled::-webkit-input-placeholder {
-    color: var(--text-color);
-  }
-  
   .patrom-textarea:disabled::-moz-placeholder {
-    color: var(--text-color);
-  }
-  
-  .patrom-textarea:disabled:-ms-input-placeholder {
     color: var(--text-color);
   }
   
@@ -2460,17 +2439,10 @@ input[type="radio"]:disabled:active + .patrom-radio-button__checkmark:before {
     color: var(--text-color);
   }
   
-  .patrom-textarea--large:disabled::-webkit-input-placeholder {
-    color: var(--text-color);
-  }
-  
   .patrom-textarea--large:disabled::-moz-placeholder {
     color: var(--text-color);
-  }
-  
-  .patrom-textarea--large:disabled:-ms-input-placeholder {
-    color: var(--text-color);
-  }
+  } 
+
    .patrom-row {
   margin-top: 0.5rem;
   display: flex;
@@ -2762,7 +2734,6 @@ input[type="radio"]:disabled:active + .patrom-radio-button__checkmark:before {
     border: 15px solid var(--btn-gray-border);
     border-radius: 4px;
     -webkit-transition: all 1s ease-in-out;
-    -moz-transition: all 1s ease-in-out;
     -o-transition: all 1s ease-in-out;
     -ms-transition: all 1s ease-in-out;
     transition: all 1s ease-in-out;
@@ -2943,7 +2914,7 @@ input[type="radio"]:disabled:active + .patrom-radio-button__checkmark:before {
 .patrom-flex-row {
   margin-top: 0.5rem;
   display: flex;
-  flex-direction: patrom-flex-row;
+  flex-direction: row;
   flex-wrap: wrap;
 }
 

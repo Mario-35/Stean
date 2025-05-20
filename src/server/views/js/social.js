@@ -20,7 +20,7 @@ close_btn.addEventListener('click', () => {
 });
 
 doc.onclick = () => {
-	var temp = optHost.value.split("/");
+	var temp =  optHost.value.split("/");
 	temp.pop();
 	window.location.href = temp.join("/");
 };

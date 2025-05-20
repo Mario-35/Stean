@@ -1,8 +1,8 @@
 {
   "title": "Sensorthings Documentation",
   "version": "1.1.0",
-  "url": "https://sensorthings.geosas.fr/sensorthings/v1.0/",
-  "proxy": "https://sensorthings.geosas.fr/test",
+  "url": "@_URL_@",
+  "proxy": "@_PROXY_@",
   "output": "/tmp/apidoc-output",
   "forceLanguage": "en",
   "order": [

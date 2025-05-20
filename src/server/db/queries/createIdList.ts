@@ -7,15 +7,22 @@
  *
  */
 
+/**
+ * create ids list input `1,2,5` return `1,2,5`
+ *                 input `1:5` return `1,2,2,4,5`
+ *
+ * @param input sting id
+ * @returns array of ids
+ */
 export const createIdList = (input: string): string[] => {
-  let result: string[] = [];
-      if (input.includes(":")) {
-          const f = input.split(":");
-          for (let g = +f[0]; g <= +f[1]; g++) {
+    let result: string[] = [];
+    if (input.includes(":")) {
+        const f = input.split(":");
+        for (let g = +f[0]; g <= +f[1]; g++) {
             result.push(String(g));
-            } 
-      } else if (input.includes(",")) {
+        }
+    } else if (input.includes(",")) {
         result = input.split(",");
-      } else result.push(String(input));
-  return result.filter(e => e.trim() != "");
+    } else result.push(String(input));
+    return result.filter((e) => e.trim() != "");
 };

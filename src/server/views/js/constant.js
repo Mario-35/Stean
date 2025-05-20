@@ -15,7 +15,6 @@ const _NONE = "none";
 
 // load file json
 let importFile = false;
-var jsonObj = {};
 // use for catch double click
 var canGo = false;
 // store windows flags

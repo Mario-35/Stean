@@ -35,11 +35,11 @@ export class Query extends CoreHtmlView {
         this._HTMLResult = fs
             .readFileSync(path.resolve(__dirname, "../html/", "query.html"))
             .toString()
-            .replace(/<link /g, `${EConstant.return}<link `)
-            .replace(/<script /g, `${EConstant.return}<script `)
-            .replace(/<\/script>/g, `</script>${EConstant.return}`)
-            .replace(`/\r${EConstant.return}/g`, EConstant.return)
-            .split(EConstant.return)
+            .replace(/<link /g, `${EConstant.newline}<link `)
+            .replace(/<script /g, `${EConstant.newline}<script `)
+            .replace(/<\/script>/g, `</script>${EConstant.newline}`)
+            .replace(`/\r${EConstant.newline}/g`, EConstant.newline)
+            .split(EConstant.newline)
             .map((e: string) => e.trim())
             .filter((e) => e.trim() != "");
 
