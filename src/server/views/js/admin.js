@@ -16,7 +16,7 @@ function updateDataService()  {
             "database": optRepeat.value,
             "retry": 2
         },
-		"apiVersion": optVersion.value || "v1.1",
+		"version": optVersion.value || "v1.1",
 		"date_format": dateOption.value || "DD/MM/YYYY hh:mi:ss",
         "nb_page": pageOption.value || 200,
 		"extensions": multiSelects["extensionsOption"].getData(["base"]),
@@ -62,7 +62,7 @@ function fillService(name, newName) {
 	csvOption.value = _PARAMS.services[name].service.csvDelimiter;
 	pageOption.value = _PARAMS.services[name].service.nb_page;
 	dateOption.value = _PARAMS.services[name].service.date_format;
-	populateSelect(optVersion, _PARAMS.versions, _PARAMS.services[name].service.apiVersion);
+	populateSelect(optVersion, _PARAMS.versions, _PARAMS.services[name].service.version);
 	populateMultiSelect("optionsOption", _PARAMS.options, _PARAMS.services[name].service.options);
 	populateMultiSelect("extensionsOption", _PARAMS.extensions, _PARAMS.services[name].service.extensions);
 	optName.value = newName || name;

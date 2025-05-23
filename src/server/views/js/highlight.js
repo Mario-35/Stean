@@ -144,14 +144,14 @@ function tokenize(src, lang, token) {
  * @param {ShjOptions} [opt={}] Customization options
  * @returns {Promise<String>} The highlighted string
  */
-function highlightText(src, lang, opt = {}) {
+function highlightText(src, lang, multiline, opt = {}) {
 	let tmp = '';
 	tokenize(src, lang, (str, type) => tmp += toSpan(sanitize(str), type));
 
-	return tmp;
-	// return multiline
-	// 	? `<div><div class="shj-numbers">${'<div></div>'.repeat(!opt.hideLineNumbers && src.split('\n').length)}</div><div>${tmp}</div></div>`
-	// 	: tmp;
+	// return tmp;
+	return multiline
+		? `<div><div class="shj-numbers">${'<div></div>'.repeat(!opt.hideLineNumbers && src.split('\n').length)}</div><div>${tmp}</div></div>`
+		: tmp;
 }
 
 /**

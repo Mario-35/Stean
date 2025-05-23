@@ -258,7 +258,6 @@ if (process.argv.includes("dev")) mode.push("dev");
 if (process.argv.includes("docker")) mode.push("docker");
 
 copyFolderRecursiveSync("./scripts", _DEST);
-copyFolderRecursiveSync("./src/server/apidoc", _DEST);
 copyFolderRecursiveSync("./src/server/views", _DEST);
 copyFolderRecursiveSync("./src/server/views/js", _DEST + "views/");
 copyFolderRecursiveSync( "./src/server/views/css", _DEST + "views/" );
@@ -269,7 +268,6 @@ copyFileSync("./src/server/models/model.drawio", _DEST + "models/");
 const packageJson = require("./package.json");
 delete packageJson.scripts;
 delete packageJson.devDependencies;
-delete packageJson.apidoc;
 packageJson["scripts"] = {
   "start": "pm2 start stean.js --watch"
 }
@@ -313,9 +311,9 @@ fs.writeFile(FINAL + "package.json", JSON.stringify(packageJson, null, 2), { enc
             "pg_user": "sensorthings",
             "pg_password": "sensorthings",
             "pg_database": "sensorthings",
-            "apiVersion": "v1.0",
+            "version": "v1.0",
             "date_format": "DD/MM/YYYY hh:mm:ss",
-            "webSite": "https://api.geosas.fr/sensorthings/",
+            "webSite": "@_URL_@",
             "retry": 10,
         }
       };

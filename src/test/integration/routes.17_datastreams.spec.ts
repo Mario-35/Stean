@@ -24,16 +24,14 @@ const addToApiDoc = (input: IApiInput) => {
     docs.push(prepareToApiDoc(input, entity.name));
 };
 addToApiDoc({
-    api: `{infos} ${entity.name} infos`,
-    apiName: `Infos${entity.name}`,
-    apiDescription: infos[entity.name].definition,
-    apiReference: infos[entity.name].reference,
+    type: "infos",
+    short: "Presentation",
+    description: infos[entity.name].definition,
+    reference: infos[entity.name].reference,
     result: ""
 });
 describe("endpoint : Datastream", () => {
     const temp = listOfColumns(entity);
-    const success = temp.success;
-    const params = temp.params;
     let token = "";
     before((done) => {
         addStartNewTest(entity.name);
@@ -51,20 +49,22 @@ describe("endpoint : Datastream", () => {
         });
         it(`Return all ${entity.name} ${nbColor}[9.2.2]`, (done) => {
             const infos = addTest({
-                api: `{get} ${entity.name} Get all`,
-                apiName: `GetAll${entity.name}`,
-                apiDescription: `Retrieve all ${entity.name}.${showHide(`Get${entity.name}`, apiInfos["9.2.2"])}`,
-                apiReference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-collection-entities",
-                apiExample: {
+                type: "get",
+                short: "all",
+
+                description: `Retrieve all ${entity.name}.${showHide(`Get${entity.name}`, apiInfos["9.2.2"])}`,
+                reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-collection-entities",
+                examples: {
                     http: `${testVersion}/${entity.name}`,
                     curl: defaultGet("curl", "KEYHTTP"),
                     javascript: defaultGet("javascript", "KEYHTTP"),
                     python: defaultGet("python", "KEYHTTP")
                 },
-                apiSuccess: ["{number} id @iot.id", "{relation} selfLink @iot.selfLink", ...success]
+                // structure: ["{number} id @iot.id", "{relation} selfLink @iot.selfLink", ...success]
+                structure: temp
             });
             chai.request(server)
-                .get(`/test/${infos.apiExample.http}`)
+                .get(`/test/${infos.examples.http}`)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -73,7 +73,7 @@ describe("endpoint : Datastream", () => {
                         ...infos,
                         result: limitResult(res)
                     });
-                    docs[docs.length - 1].apiErrorExample = JSON.stringify(
+                    docs[docs.length - 1].error = JSON.stringify(
                         {
                             "code": 404,
                             "message": "Not Found"
@@ -86,11 +86,12 @@ describe("endpoint : Datastream", () => {
         });
         it(`Return ${entity.name} id: 1 ${nbColor}[9.2.3]`, (done) => {
             const infos = addTest({
-                api: `{get} ${entity.name}(:id) Get one`,
-                apiName: `GetOne${entity.name}`,
-                apiDescription: `Get a specific ${entity.singular}.${apiInfos["9.2.3"]}`,
-                apiReference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity",
-                apiExample: {
+                type: "get",
+                short: "one",
+
+                description: `Get a specific ${entity.singular}.${apiInfos["9.2.3"]}`,
+                reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity",
+                examples: {
                     http: `${testVersion}/${entity.name}(1)`,
                     curl: defaultGet("curl", "KEYHTTP"),
                     javascript: defaultGet("javascript", "KEYHTTP"),
@@ -98,7 +99,7 @@ describe("endpoint : Datastream", () => {
                 }
             });
             chai.request(server)
-                .get(`/test/${infos.apiExample.http}`)
+                .get(`/test/${infos.examples.http}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -119,37 +120,39 @@ describe("endpoint : Datastream", () => {
         });
         it(`Return error if ${entity.name} not exist ${nbColor}[9.2.4]`, (done) => {
             const infos = addTest({
-                api: `{get} return error if ${entity.name} not exist`,
-                apiName: "",
-                apiDescription: "",
-                apiReference: "",
-                apiExample: {
+                type: "get",
+                short: "Return error if exist",
+
+                description: "",
+                reference: "",
+                examples: {
                     http: `${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`
                 }
             });
             chai.request(server)
-                .get(`/test/${infos.apiExample.http}`)
+                .get(`/test/${infos.examples.http}`)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.status.should.equal(404);
                     res.type.should.equal("application/json");
-                    docs[docs.length - 1].apiErrorExample = JSON.stringify(res.body, null, 4).replace(Number.MAX_SAFE_INTEGER.toString(), "1");
+                    docs[docs.length - 1].error = JSON.stringify(res.body, null, 4).replace(Number.MAX_SAFE_INTEGER.toString(), "1");
 
                     done();
                 });
         });
         it(`Return error ${entity.singular} not found`, (done) => {
             const infos = addTest({
-                api: `{get} return error ${entity.singular} not found`,
-                apiName: "",
-                apiDescription: "",
-                apiReference: "",
-                apiExample: {
+                type: "get",
+                short: "Return error not found",
+
+                description: "",
+                reference: "",
+                examples: {
                     http: `${testVersion}/${entity.singular}`
                 }
             });
             chai.request(server)
-                .get(`/test/${infos.apiExample.http}`)
+                .get(`/test/${infos.examples.http}`)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.status.should.equal(404);
@@ -160,10 +163,10 @@ describe("endpoint : Datastream", () => {
         it(`Return ${entity.name} of a specific Thing`, (done) => {
             const id = 6;
             const infos = addTest({
-                api: `{get} Things(${id})/${entity.name} Get from a specific Thing`,
-                apiName: `GetThings${entity.name}`,
-                apiDescription: "Get Datastream(s) from Things.",
-                apiExample: {
+                type: "get",
+                short: "from a specific Thing",
+                description: "Get Datastream(s) from Things.",
+                examples: {
                     http: `${testVersion}/Things(${id})/${entity.name}`,
                     curl: defaultGet("curl", "KEYHTTP"),
                     javascript: defaultGet("javascript", "KEYHTTP"),
@@ -171,7 +174,7 @@ describe("endpoint : Datastream", () => {
                 }
             });
             chai.request(server)
-                .get(`/test/${infos.apiExample.http}`)
+                .get(`/test/${infos.examples.http}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -194,10 +197,10 @@ describe("endpoint : Datastream", () => {
         });
         it(`Return ${entity.name} with inline related entities information using $expand query option`, (done) => {
             const infos = addTest({
-                api: `{get} ${entity.name}(:id) Get Expands`,
-                apiName: `GetExpandObservations${entity.name}`,
-                apiDescription: "Get a specific Datastream with expand Observations and ObservedProperty.",
-                apiExample: {
+                type: "get",
+                short: "Expands",
+                description: "Get a specific Datastream with expand Observations and ObservedProperty.",
+                examples: {
                     http: `${testVersion}/${entity.name}(9)?$expand=Observations,ObservedProperty`,
                     curl: defaultGet("curl", "KEYHTTP"),
                     javascript: defaultGet("javascript", "KEYHTTP"),
@@ -205,7 +208,7 @@ describe("endpoint : Datastream", () => {
                 }
             });
             chai.request(server)
-                .get(`/test/${infos.apiExample.http}`)
+                .get(`/test/${infos.examples.http}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -225,10 +228,10 @@ describe("endpoint : Datastream", () => {
         it(`Return ${entity.name} All infos`, (done) => {
             const id = 9;
             const infos = addTest({
-                api: `{get} ${entity.name}(:id) Get All infos`,
-                apiName: `GetAllInfos${entity.name}`,
-                apiDescription: "Get all infos of a datastream.",
-                apiExample: {
+                type: "get",
+                short: "All infos",
+                description: "Get all infos of a datastream.",
+                examples: {
                     http: `${testVersion}/${entity.name}(${id})?$expand=Thing/Locations,Sensor,ObservedProperty`,
                     curl: defaultGet("curl", "KEYHTTP"),
                     javascript: defaultGet("javascript", "KEYHTTP"),
@@ -236,7 +239,7 @@ describe("endpoint : Datastream", () => {
                 }
             });
             chai.request(server)
-                .get(`/test/${infos.apiExample.http}`)
+                .get(`/test/${infos.examples.http}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -255,16 +258,16 @@ describe("endpoint : Datastream", () => {
         });
         it(`Return error if ${entity.name} Path is invalid`, (done) => {
             const infos = addTest({
-                api: `{get} return error if ${entity.name} Path is invalid`,
-                apiName: "",
-                apiDescription: "",
-                apiReference: "",
-                apiExample: {
+                type: "get",
+                short: "Return error if Path is invalid",
+                description: "",
+                reference: "",
+                examples: {
                     http: `${testVersion}/${entity.name}(2)?$expand=Things/Locations,Sensor,ObservedProperty`
                 }
             });
             chai.request(server)
-                .get(`/test/${infos.apiExample.http}`)
+                .get(`/test/${infos.examples.http}`)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.status.should.equal(400);
@@ -276,10 +279,10 @@ describe("endpoint : Datastream", () => {
         });
         it(`Return ${entity.name} phenomenonTime search`, (done) => {
             const infos = addTest({
-                api: `{get} ${entity.name} Get From phenomenonTime search`,
-                apiName: `GetPhenomenonTime${entity.name}`,
-                apiDescription: "Get Datastream(s) from phenomenonTime filter.",
-                apiExample: {
+                type: "get",
+                short: "From phenomenonTime search",
+                description: "Get Datastream(s) from phenomenonTime filter.",
+                examples: {
                     http: `${testVersion}/${entity.name}?$filter=resultTime eq 2024-06-01T03:00:01Z/2024-06-03T03:45:01Z`,
                     curl: defaultGet("curl", "KEYHTTP"),
                     javascript: defaultGet("javascript", "KEYHTTP"),
@@ -287,7 +290,7 @@ describe("endpoint : Datastream", () => {
                 }
             });
             chai.request(server)
-                .get(`/test/${infos.apiExample.http}`)
+                .get(`/test/${infos.examples.http}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -304,10 +307,10 @@ describe("endpoint : Datastream", () => {
         });
         it(`Return ${entity.name} from an observation filter`, (done) => {
             const infos = addTest({
-                api: `{get} ${entity.name} Get From observations filter`,
-                apiName: `GetObservationFilter${entity.name}`,
-                apiDescription: "Get Datastream(s) from Observations filter.",
-                apiExample: {
+                type: "get",
+                short: "From observations filter",
+                description: "Get Datastream(s) from Observations filter.",
+                examples: {
                     http: `${testVersion}/${entity.name}?$filter=Observations/result eq 63.15`,
                     curl: defaultGet("curl", "KEYHTTP"),
                     javascript: defaultGet("javascript", "KEYHTTP"),
@@ -315,7 +318,7 @@ describe("endpoint : Datastream", () => {
                 }
             });
             chai.request(server)
-                .get(`/test/${infos.apiExample.http}`)
+                .get(`/test/${infos.examples.http}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -337,16 +340,17 @@ describe("endpoint : Datastream", () => {
         it(`Return ${entity.name} Subentity Thing ${nbColor}[9.2.6]`, (done) => {
             const name = "Thing";
             const infos = addTest({
-                api: `{get} ${entity.name}(:id) Get Subentity ${name}`,
-                apiName: "",
-                apiDescription: "",
-                apiReference: "",
-                apiExample: {
+                type: "get",
+                short: `Subentity ${name}`,
+
+                description: "",
+                reference: "",
+                examples: {
                     http: `${testVersion}/${entity.name}(2)/${name}`
                 }
             });
             chai.request(server)
-                .get(`/test/${infos.apiExample.http}`)
+                .get(`/test/${infos.examples.http}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -363,16 +367,17 @@ describe("endpoint : Datastream", () => {
         it(`Return ${entity.name} Subentity Sensor ${nbColor}[9.2.6]`, (done) => {
             const name = "Sensor";
             const infos = addTest({
-                api: `{get} ${entity.name}(:id) Get Subentity ${name}`,
-                apiName: "",
-                apiDescription: "",
-                apiReference: "",
-                apiExample: {
+                type: "get",
+                short: `Subentity ${name}`,
+
+                description: "",
+                reference: "",
+                examples: {
                     http: `${testVersion}/${entity.name}(2)/${name}`
                 }
             });
             chai.request(server)
-                .get(`/test/${infos.apiExample.http}`)
+                .get(`/test/${infos.examples.http}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -388,16 +393,17 @@ describe("endpoint : Datastream", () => {
         it(`Return ${entity.name} Subentity ObservedProperty ${nbColor}[9.2.6]`, (done) => {
             const name = "ObservedProperty";
             const infos = addTest({
-                api: `{get} ${entity.name}(:id) Get Subentity ${name}`,
-                apiName: "",
-                apiDescription: "",
-                apiReference: "",
-                apiExample: {
+                type: "get",
+                short: `Subentity ${name}`,
+
+                description: "",
+                reference: "",
+                examples: {
                     http: `${testVersion}/${entity.name}(2)/${name}`
                 }
             });
             chai.request(server)
-                .get(`/test/${infos.apiExample.http}`)
+                .get(`/test/${infos.examples.http}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -412,16 +418,17 @@ describe("endpoint : Datastream", () => {
         it(`Return ${entity.name} Subentity Observations ${nbColor}[9.2.6]`, (done) => {
             const name = "Observations";
             const infos = addTest({
-                api: `{get} ${entity.name}(:id) Get Subentity ${name}`,
-                apiName: "",
-                apiDescription: "",
-                apiReference: "",
-                apiExample: {
+                type: "get",
+                short: `Subentity ${name}`,
+
+                description: "",
+                reference: "",
+                examples: {
                     http: `${testVersion}/${entity.name}(1)/${name}`
                 }
             });
             chai.request(server)
-                .get(`/test/${infos.apiExample.http}`)
+                .get(`/test/${infos.examples.http}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -438,16 +445,17 @@ describe("endpoint : Datastream", () => {
         it(`Return ${entity.name} Expand Things ${nbColor}[9.3.2.1]`, (done) => {
             const name = "Thing";
             const infos = addTest({
-                api: `{get} return ${entity.name} Expand ${name}`,
-                apiName: "",
-                apiDescription: "",
-                apiReference: "",
-                apiExample: {
+                type: "get",
+                short: `Return error${entity.name} Expand ${name}`,
+
+                description: "",
+                reference: "",
+                examples: {
                     http: `${testVersion}/${entity.name}(1)?$expand=${name}`
                 }
             });
             chai.request(server)
-                .get(`/test/${infos.apiExample.http}`)
+                .get(`/test/${infos.examples.http}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -465,16 +473,17 @@ describe("endpoint : Datastream", () => {
         it(`Return ${entity.name} Expand Sensor ${nbColor}[9.3.2.1]`, (done) => {
             const name = "Sensor";
             const infos = addTest({
-                api: `{get} return ${entity.name} Expand ${name}`,
-                apiName: "",
-                apiDescription: "",
-                apiReference: "",
-                apiExample: {
+                type: "get",
+                short: `Return error${entity.name} Expand ${name}`,
+
+                description: "",
+                reference: "",
+                examples: {
                     http: `${testVersion}/${entity.name}(1)?$expand=${name}`
                 }
             });
             chai.request(server)
-                .get(`/test/${infos.apiExample.http}`)
+                .get(`/test/${infos.examples.http}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -490,16 +499,17 @@ describe("endpoint : Datastream", () => {
         it(`Return ${entity.name} Expand Observations ${nbColor}[9.3.2.1]`, (done) => {
             const name = "Observations";
             const infos = addTest({
-                api: `{get} return ${entity.name} Expand ${name}`,
-                apiName: "",
-                apiDescription: "",
-                apiReference: "",
-                apiExample: {
+                type: "get",
+                short: `Return error${entity.name} Expand ${name}`,
+
+                description: "",
+                reference: "",
+                examples: {
                     http: `${testVersion}/${entity.name}(1)?$expand=${name}`
                 }
             });
             chai.request(server)
-                .get(`/test/${infos.apiExample.http}`)
+                .get(`/test/${infos.examples.http}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -516,16 +526,17 @@ describe("endpoint : Datastream", () => {
         it(`Return ${entity.name} Expand ObservedProperty ${nbColor}[9.3.2.1]`, (done) => {
             const name = "ObservedProperty";
             const infos = addTest({
-                api: `{get} return ${entity.name} Expand ${name}`,
-                apiName: "",
-                apiDescription: "",
-                apiReference: "",
-                apiExample: {
+                type: "get",
+                short: `Return error${entity.name} Expand ${name}`,
+
+                description: "",
+                reference: "",
+                examples: {
                     http: `${testVersion}/${entity.name}(1)?$expand=${name}`
                 }
             });
             chai.request(server)
-                .get(`/test/${infos.apiExample.http}`)
+                .get(`/test/${infos.examples.http}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -564,22 +575,21 @@ describe("endpoint : Datastream", () => {
                 }
             };
             const infos = addTest({
-                api: `{post} ${entity.name} Post with existing Thing`,
-                apiName: `Post${entity.name}`,
-                apiDescription: `Post a new ${entity.name}.${showHide(`Post${entity.name}`, apiInfos["10.2"])}`,
-                apiReference: "https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating",
-                apiExample: {
+                type: "post",
+                short: "Post with existing Thing",
+                description: `Post a new ${entity.name}.${showHide(`Post${entity.name}`, apiInfos["10.2"])}`,
+                reference: "https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating",
+                examples: {
                     http: `${testVersion}/${entity.name}`,
-                    curl: defaultPost("curl", "KEYHTTP", datas),
-                    javascript: defaultPost("javascript", "KEYHTTP", datas),
-                    python: defaultPost("python", "KEYHTTP", datas)
+                    curl: defaultPost("curl", "KEYHTTP"),
+                    javascript: defaultPost("javascript", "KEYHTTP"),
+                    python: defaultPost("python", "KEYHTTP")
                 },
-                apiParam: params,
-                apiParamExample: datas
+                params: datas
             });
             chai.request(server)
-                .post(`/test/${infos.apiExample.http}`)
-                .send(infos.apiParamExample)
+                .post(`/test/${infos.examples.http}`)
+                .send(infos.params)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
@@ -617,21 +627,21 @@ describe("endpoint : Datastream", () => {
                 }
             };
             const infos = addTest({
-                api: `{post} ${entity.name} Post with default FOI`,
-                apiName: `Post${entity.name}FOI`,
-                apiDescription: `Post a new ${entity.name} with default FOI`,
-                apiReference: "",
-                apiExample: {
+                type: "post",
+                short: "Post with default FOI",
+                description: `Post a new ${entity.name} with default FOI`,
+                reference: "",
+                examples: {
                     http: `${testVersion}/${entity.name}`,
-                    curl: defaultPost("curl", "KEYHTTP", datas),
-                    javascript: defaultPost("javascript", "KEYHTTP", datas),
-                    python: defaultPost("python", "KEYHTTP", datas)
+                    curl: defaultPost("curl", "KEYHTTP"),
+                    javascript: defaultPost("javascript", "KEYHTTP"),
+                    python: defaultPost("python", "KEYHTTP")
                 },
-                apiParamExample: datas
+                params: datas
             });
             chai.request(server)
-                .post(`/test/${infos.apiExample.http}`)
-                .send(infos.apiParamExample)
+                .post(`/test/${infos.examples.http}`)
+                .send(infos.params)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
@@ -648,23 +658,24 @@ describe("endpoint : Datastream", () => {
         });
         it(`Return Error if the payload is malformed ${nbColor}[10.2.2]`, (done) => {
             const infos = addTest({
-                api: `{post} ${entity.name} return Error if the payload is malformed`,
-                apiName: "",
-                apiDescription: "",
-                apiReference: "",
-                apiExample: {
+                type: "post",
+                short: "return Error if the payload is malformed",
+
+                description: "",
+                reference: "",
+                examples: {
                     http: `${testVersion}/${entity.name}`
                 }
             });
             chai.request(server)
-                .post(`/test/${infos.apiExample.http}`)
+                .post(`/test/${infos.examples.http}`)
                 .send({})
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(400);
                     res.type.should.equal("application/json");
-                    docs[docs.length - 1].apiErrorExample = JSON.stringify(res.body, null, 4);
+                    docs[docs.length - 1].error = JSON.stringify(res.body, null, 4);
                     done();
                 });
         });
@@ -690,21 +701,21 @@ describe("endpoint : Datastream", () => {
                 }
             };
             const infos = addTest({
-                api: `{post} ${entity.name} Post with a Thing`,
-                apiName: `PostLocationThing${entity.name}`,
-                apiDescription: "POST a new Datastream with existing Thing.",
-                apiReference: "https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating",
-                apiExample: {
+                type: "post",
+                short: "Post with a Thing",
+                description: "POST a new Datastream with existing Thing.",
+                reference: "https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating",
+                examples: {
                     http: `${testVersion}/Things(1)/${entity.name}`,
-                    curl: defaultPost("curl", "KEYHTTP", datas),
-                    javascript: defaultPost("javascript", "KEYHTTP", datas),
-                    python: defaultPost("python", "KEYHTTP", datas)
+                    curl: defaultPost("curl", "KEYHTTP"),
+                    javascript: defaultPost("javascript", "KEYHTTP"),
+                    python: defaultPost("python", "KEYHTTP")
                 },
-                apiParamExample: datas
+                params: datas
             });
             chai.request(server)
-                .post(`/test/${infos.apiExample.http}`)
-                .send(infos.apiParamExample)
+                .post(`/test/${infos.examples.http}`)
+                .send(infos.params)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end(async (err: Error, res: any) => {
                     should.not.exist(err);
@@ -716,7 +727,7 @@ describe("endpoint : Datastream", () => {
                         ...infos,
                         result: limitResult(res)
                     });
-                    docs[docs.length - 1].apiErrorExample = JSON.stringify(res.body, null, 4);
+                    docs[docs.length - 1].error = JSON.stringify(res.body, null, 4);
 
                     done();
                 });
@@ -744,16 +755,16 @@ describe("endpoint : Datastream", () => {
                 }
             };
             const infos = addTest({
-                api: `{post} return added ${entity.name} from Thing`,
-                apiName: "",
-                apiDescription: "",
-                apiReference: "",
-                apiExample: {
+                type: "post",
+                short: "return added from Thing",
+                description: "",
+                reference: "",
+                examples: {
                     http: `${testVersion}/Things(1)/${entity.name}`
                 }
             });
             chai.request(server)
-                .post(`/test/${infos.apiExample.http}`)
+                .post(`/test/${infos.examples.http}`)
                 .send(datas)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end(async (err: Error, res: any) => {
@@ -782,21 +793,21 @@ describe("endpoint : Datastream", () => {
                     description: "Water Temperature of Bow river"
                 };
                 const infos = addTest({
-                    api: `{patch} ${entity.name} Patch one`,
-                    apiName: `Patch${entity.name}`,
-                    apiDescription: `Patch a ${entity.singular}.${showHide(`Patch${entity.name}`, apiInfos["10.3"])}`,
-                    apiReference: "https://docs.ogc.org/is/18-088/18-088.html#_request_2",
-                    apiExample: {
+                    type: "patch",
+                    short: "One",
+                    description: `Patch a ${entity.singular}.${showHide(`Patch${entity.name}`, apiInfos["10.3"])}`,
+                    reference: "https://docs.ogc.org/is/18-088/18-088.html#_request_2",
+                    examples: {
                         http: `${testVersion}/${entity.name}(12)`,
-                        curl: defaultPatch("curl", "KEYHTTP", datas),
-                        javascript: defaultPatch("javascript", "KEYHTTP", datas),
-                        python: defaultPatch("python", "KEYHTTP", datas)
+                        curl: defaultPatch("curl", "KEYHTTP"),
+                        javascript: defaultPatch("javascript", "KEYHTTP"),
+                        python: defaultPatch("python", "KEYHTTP")
                     },
-                    apiParamExample: datas
+                    params: datas
                 });
                 chai.request(server)
-                    .patch(`/test/${infos.apiExample.http}`)
-                    .send(infos.apiParamExample)
+                    .patch(`/test/${infos.examples.http}`)
+                    .send(infos.params)
                     .set("Cookie", `${keyTokenName}=${token}`)
                     .end((err: Error, res: any) => {
                         should.not.exist(err);
@@ -827,23 +838,24 @@ describe("endpoint : Datastream", () => {
                 name: "temp_readings"
             };
             const infos = addTest({
-                api: `{patch} return Error if the ${entity.name} not exist`,
-                apiName: "",
-                apiDescription: "",
-                apiReference: "",
-                apiExample: {
+                type: "patch",
+                short: "Return Error if not exist",
+
+                description: "",
+                reference: "",
+                examples: {
                     http: `${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`
                 }
             });
             chai.request(server)
-                .patch(`/test/${infos.apiExample.http}`)
+                .patch(`/test/${infos.examples.http}`)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .send(datas)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(404);
                     res.type.should.equal("application/json");
-                    docs[docs.length - 1].apiErrorExample = JSON.stringify(res.body, null, 4);
+                    docs[docs.length - 1].error = JSON.stringify(res.body, null, 4);
                     done();
                 });
         });
@@ -855,11 +867,11 @@ describe("endpoint : Datastream", () => {
         it(`Delete ${entity.name} return no content with code 204 ${nbColor}[10.4.1]`, (done) => {
             executeQuery(`SELECT (SELECT count(id) FROM "${entity.table}")::int as count, (${last(entity.table)})::int as id `).then((beforeDelete: Record<string, any>) => {
                 const infos = addTest({
-                    api: `{delete} ${entity.name} Delete one`,
-                    apiName: `Delete${entity.name}`,
-                    apiDescription: `Delete a ${entity.singular}.${showHide(`Delete${entity.name}`, apiInfos["10.4"])}`,
-                    apiReference: "https://docs.ogc.org/is/18-088/18-088.html#_request_3",
-                    apiExample: {
+                    type: "delete",
+                    short: "One",
+                    description: `Delete a ${entity.singular}.${showHide(`Delete${entity.name}`, apiInfos["10.4"])}`,
+                    reference: "https://docs.ogc.org/is/18-088/18-088.html#_request_3",
+                    examples: {
                         http: `${testVersion}/${entity.name}(${beforeDelete["id"]})`,
                         curl: defaultDelete("curl", "KEYHTTP"),
                         javascript: defaultDelete("javascript", "KEYHTTP"),
@@ -867,7 +879,7 @@ describe("endpoint : Datastream", () => {
                     }
                 });
                 chai.request(server)
-                    .delete(`/test/${infos.apiExample.http}`)
+                    .delete(`/test/${infos.examples.http}`)
                     .set("Cookie", `${keyTokenName}=${token}`)
                     .end((err: Error, res: any) => {
                         should.not.exist(err);
@@ -886,11 +898,12 @@ describe("endpoint : Datastream", () => {
         });
         it(`Return Error if the ${entity.name} not exist`, (done) => {
             addTest({
-                api: `{delete} return Error if the ${entity.name} not exist`,
-                apiName: "",
-                apiDescription: "",
-                apiReference: "",
-                apiExample: {
+                type: "delete",
+                short: "Return Error if not exist",
+
+                description: "",
+                reference: "",
+                examples: {
                     http: `${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`
                 }
             });
@@ -901,8 +914,8 @@ describe("endpoint : Datastream", () => {
                     should.not.exist(err);
                     res.status.should.equal(404);
                     res.type.should.equal("application/json");
-                    docs[docs.length - 1].apiErrorExample = JSON.stringify(res.body, null, 4);
-                    generateApiDoc(docs, `apiDoc${entity.name}.js`);
+                    docs[docs.length - 1].error = JSON.stringify(res.body, null, 4);
+                    generateApiDoc(docs, entity.name);
                     done();
                 });
         });

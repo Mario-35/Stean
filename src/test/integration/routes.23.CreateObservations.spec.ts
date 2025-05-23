@@ -23,13 +23,13 @@ const addToApiDoc = (input: IApiInput) => {
     docs.push(prepareToApiDoc(input, "CreateObservations"));
 };
 addToApiDoc({
-    api: `{infos} /CreateObservations Infos.`,
-    apiName: "InfosCreateObservations",
-    apiDescription: `Besides creating Observation entities one by one with multiple HTTP POST requests, there is a need to create multiple Observation entities with a lighter message body in a single HTTP request. In this case, a sensing system can buffer multiple Observations and send them to a SensorThings service in one HTTP request. Here we propose an Action operation CreateObservations.
+    type: "infos",
+    short: "CreateObservations Infos.",
+    description: `Besides creating Observation entities one by one with multiple HTTP POST requests, there is a need to create multiple Observation entities with a lighter message body in a single HTTP request. In this case, a sensing system can buffer multiple Observations and send them to a SensorThings service in one HTTP request. Here we propose an Action operation CreateObservations.
     ${blank(1)}The message body aggregates Observations by Datastreams, which means all the Observations linked to one Datastream SHALL be aggregated in one JSON object. The parameters of each JSON object are shown in the following table.
     ${blank(2)}As an Observation links to one FeatureOfInterest, to establish the link between an Observation and a FeatureOfInterest, users should include the FeatureOfInterest ids in the dataArray. If no FeatureOfInterest id presented, the FeatureOfInterest will be created based on the Location entities of the linked Thing entity by default.
     <table> <thead> <tr> <th style="width: 10%">Name</th> <th style="width: 60%">Definition</th> <th style="width: 15%">Data type</th> <th style="width: 15%">Multiplicity and use</th> </tr> </thead> <tbody> <tr> <td>Datastream or MultiDatastream</td> <td><p>The unique identifier of the Datastream or MultiDatastream linking to the group of Observation entities in the dataArray.</p></td> <td><p>The unique identifier of a Datastream or MultiDatastream</p></td> <td>One (mandatory)</td> </tr> <tr> <td>components</td> <td><p>An ordered array of Observation property names whose matched values are included in the dataArray. At least the phenomenonTime and result properties SHALL be included. To establish the link between an Observation and a FeatureOfInterest, the component name is "FeatureOfInterest/id" and the FeatureOfInterest ids should be included in the dataArray array. If no FeatureOfInterest id is presented, the FeatureOfInterest will be created based on the Location entities of the linked Thing entity by default.</p></td> <td><p>An ordered array of Observation property names</p></td> <td>One (mandatory)</td> </tr> <tr> <td>dataArray</td> <td><p>A JSON Array containing Observations. Each Observation is represented by the ordered property values. The ordered property values match with the ordered property names in components.</p></td> <td>JSON Array</td> <td>One (mandatory)</td> </tr> </tbody> </table>`,
-    apiReference: "https://docs.ogc.org/is/18-088/18-088.html#create-observation-dataarray",
+    reference: "https://docs.ogc.org/is/18-088/18-088.html#create-observation-dataarray",
     result: ""
 });
 const datasObs = (datastream: number) => {
@@ -75,20 +75,20 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
     });
     it("should return 4 observations links added that was added", (done) => {
         const infos = addTest({
-            api: `{post} CreateObservations Add datastream`,
-            apiName: "PostCreateObservationsDatastream",
-            apiDescription: "Create Observations with CreateObservations",
-            apiExample: {
+            type: "post",
+            short: "CreateObservations Add datastream",
+            description: "Create Observations with CreateObservations",
+            examples: {
                 http: `${testVersion}/CreateObservations`,
-                curl: defaultPost("curl", "KEYHTTP", datasObs(1)),
-                javascript: defaultPost("javascript", "KEYHTTP", datasObs(1)),
-                python: defaultPost("python", "KEYHTTP", datasObs(1))
+                curl: defaultPost("curl", "KEYHTTP"),
+                javascript: defaultPost("javascript", "KEYHTTP"),
+                python: defaultPost("python", "KEYHTTP")
             },
-            apiParamExample: datasObs(1)
+            params: datasObs(1)
         });
         chai.request(server)
-            .post(`/test/${infos.apiExample.http}`)
-            .send(infos.apiParamExample)
+            .post(`/test/${infos.examples.http}`)
+            .send(infos.params)
             .set("Cookie", `${keyTokenName}=${token}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
@@ -113,38 +113,38 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
             ]
         };
         const infos = addTest({
-            api: `{post} return Error if datastream does not exist`,
-            apiName: "",
-            apiDescription: "",
-            apiReference: "",
-            apiExample: {
+            type: "post",
+            short: "return Error if datastream does not exist",
+            description: "",
+            reference: "",
+            examples: {
                 http: `${testVersion}/${entity.name}`
             }
         });
         chai.request(server)
-            .post(`/test/${infos.apiExample.http}`)
+            .post(`/test/${infos.examples.http}`)
             .send(datas)
             .set("Cookie", `${keyTokenName}=${token}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(404);
                 res.type.should.equal("application/json");
-                docs[docs.length - 1].apiErrorExample = JSON.stringify(res.body, null, 4);
+                docs[docs.length - 1].error = JSON.stringify(res.body, null, 4);
                 done();
             });
     });
     it("should return 4 observations in datastream 2", (done) => {
         const infos = addTest({
-            api: `{post} return Error if datastream does not exist`,
-            apiName: "",
-            apiDescription: "",
-            apiReference: "",
-            apiExample: {
+            type: "post",
+            short: "return Error if datastream does not exist",
+            description: "",
+            reference: "",
+            examples: {
                 http: `${testVersion}/${entity.name}`
             }
         });
         chai.request(server)
-            .post(`/test/${infos.apiExample.http}`)
+            .post(`/test/${infos.examples.http}`)
             .send(datasObs(2))
             .set("Cookie", `${keyTokenName}=${token}`)
             .end((err: Error, res: any) => {
@@ -159,19 +159,19 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
     });
     it("should return 4 observations duplicate", (done) => {
         const infos = addTest({
-            api: `{post} CreateObservations Add datastream duplicate.`,
-            apiName: "PostCreateObservationsDatastreamDuplicate",
-            apiDescription: "Create Observations duplicate with CreateObservations",
-            apiExample: {
+            type: "post",
+            short: "CreateObservations Add datastream duplicate.",
+            description: "Create Observations duplicate with CreateObservations",
+            examples: {
                 http: `${testVersion}/${entity.name}`,
-                curl: defaultPost("curl", "KEYHTTP", datasObs(2)),
-                javascript: defaultPost("javascript", "KEYHTTP", datasObs(2)),
-                python: defaultPost("python", "KEYHTTP", datasObs(2))
+                curl: defaultPost("curl", "KEYHTTP"),
+                javascript: defaultPost("javascript", "KEYHTTP"),
+                python: defaultPost("python", "KEYHTTP")
             },
-            apiParamExample: datasObs(2)
+            params: datasObs(2)
         });
         chai.request(server)
-            .post(`/test/${infos.apiExample.http}`)
+            .post(`/test/${infos.examples.http}`)
             .send(datasObs(2))
             .set("Cookie", `${keyTokenName}=${token}`)
             .end((err: Error, res: any) => {
@@ -190,19 +190,19 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
             ...datasObs(2)
         };
         const infos = addTest({
-            api: `{post} CreateObservations Add datastream duplicate = delete.`,
-            apiName: "PostCreateObservationsDatastreamDuplicateDelete",
-            apiDescription: "Create Observations duplicate delete with CreateObservations",
-            apiExample: {
+            type: "post",
+            short: "CreateObservations Add datastream duplicate = delete.",
+            description: "Create Observations duplicate delete with CreateObservations",
+            examples: {
                 http: `${testVersion}/${entity.name}`,
-                curl: defaultPost("curl", "KEYHTTP", datas),
-                javascript: defaultPost("javascript", "KEYHTTP", datas),
-                python: defaultPost("python", "KEYHTTP", datas)
+                curl: defaultPost("curl", "KEYHTTP"),
+                javascript: defaultPost("javascript", "KEYHTTP"),
+                python: defaultPost("python", "KEYHTTP")
             },
-            apiParamExample: datas
+            params: datas
         });
         chai.request(server)
-            .post(`/test/${infos.apiExample.http}`)
+            .post(`/test/${infos.examples.http}`)
             .send(datas)
             .set("Cookie", `${keyTokenName}=${token}`)
             .end((err: Error, res: any) => {
@@ -219,19 +219,19 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
     it("should return 4 observations with multiDatastream", (done) => {
         const datas = muliDatasObs(2);
         const infos = addTest({
-            api: `{post} CreateObservations Add multiDatastream`,
-            apiName: "PostCreateObservationsMultiDatastream",
-            apiDescription: "Create Observations duplicate with CreateObservations",
-            apiExample: {
+            type: "post",
+            short: "CreateObservations Add multiDatastream",
+            description: "Create Observations duplicate with CreateObservations",
+            examples: {
                 http: `${testVersion}/${entity.name}`,
-                curl: defaultPost("curl", "KEYHTTP", datas),
-                javascript: defaultPost("javascript", "KEYHTTP", datas),
-                python: defaultPost("python", "KEYHTTP", datas)
+                curl: defaultPost("curl", "KEYHTTP"),
+                javascript: defaultPost("javascript", "KEYHTTP"),
+                python: defaultPost("python", "KEYHTTP")
             },
-            apiParamExample: datas
+            params: datas
         });
         chai.request(server)
-            .post(`/test/${infos.apiExample.http}`)
+            .post(`/test/${infos.examples.http}`)
             .send(datas)
             .set("Cookie", `${keyTokenName}=${token}`)
             .end((err: Error, res: any) => {
@@ -247,19 +247,19 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
     it("should return 4 observations in MultiDatastream", (done) => {
         const datas = muliDatasObs(2);
         const infos = addTest({
-            api: `{post} CreateObservations Add multiDatastream duplicate.`,
-            apiName: "PostCreateObservationsMultiDatastreamDuplicate",
-            apiDescription: "Create Observations duplicate with CreateObservations",
-            apiExample: {
+            type: "post",
+            short: "CreateObservations Add multiDatastream duplicate.",
+            description: "Create Observations duplicate with CreateObservations",
+            examples: {
                 http: `${testVersion}/${entity.name}`,
-                curl: defaultPost("curl", "KEYHTTP", datas),
-                javascript: defaultPost("javascript", "KEYHTTP", datas),
-                python: defaultPost("python", "KEYHTTP", datas)
+                curl: defaultPost("curl", "KEYHTTP"),
+                javascript: defaultPost("javascript", "KEYHTTP"),
+                python: defaultPost("python", "KEYHTTP")
             },
-            apiParamExample: datas
+            params: datas
         });
         chai.request(server)
-            .post(`/test/${infos.apiExample.http}`)
+            .post(`/test/${infos.examples.http}`)
             .send(datas)
             .set("Cookie", `${keyTokenName}=${token}`)
             .end((err: Error, res: any) => {
@@ -278,19 +278,19 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
             ...muliDatasObs(2)
         };
         const infos = addTest({
-            api: `{post} CreateObservations Add multiDatastream duplicate = delete.`,
-            apiName: "PostCreateObservationsMultiDatastreamDuplicateDelete",
-            apiDescription: "Create Observations duplicate delete with CreateObservations",
-            apiExample: {
+            type: "post",
+            short: "CreateObservations Add multiDatastream duplicate = delete.",
+            description: "Create Observations duplicate delete with CreateObservations",
+            examples: {
                 http: `${testVersion}/${entity.name}`,
-                curl: defaultPost("curl", "KEYHTTP", datas),
-                javascript: defaultPost("javascript", "KEYHTTP", datas),
-                python: defaultPost("python", "KEYHTTP", datas)
+                curl: defaultPost("curl", "KEYHTTP"),
+                javascript: defaultPost("javascript", "KEYHTTP"),
+                python: defaultPost("python", "KEYHTTP")
             },
-            apiParamExample: datas
+            params: datas
         });
         chai.request(server)
-            .post(`/test/${infos.apiExample.http}`)
+            .post(`/test/${infos.examples.http}`)
             .send(datas)
             .set("Cookie", `${keyTokenName}=${token}`)
             .end((err: Error, res: any) => {
@@ -301,7 +301,7 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
                 res.body[0].should.eql("Duplicate (2017-01-13T10:20:00.000Z,591,592,593,2017-01-13T10:20:00.000Z,1)");
                 res.body[1].should.include("delete id ==>");
                 addToApiDoc({ ...infos, result: limitResult(res) });
-                generateApiDoc(docs, `apiDoc${entity.name}.js`);
+                generateApiDoc(docs, entity.name);
                 done();
             });
     });

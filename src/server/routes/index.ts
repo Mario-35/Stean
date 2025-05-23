@@ -11,7 +11,7 @@ import { _DEBUG } from "../constants";
 import { log } from "../log";
 import { EHttpCode } from "../enums";
 import { createBearerToken, returnFormats } from "../helpers";
-import { adminRoute, decodeUrl, logsRoute, updateRoute, exportRoute } from "./helper";
+import { adminRoute, decodeUrl, logsRoute, updateRoute, exportRoute, docRoute } from "./helper";
 import { errors } from "../messages";
 import { config } from "../configuration";
 import { models } from "../models";
@@ -46,6 +46,8 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
         case "EXPORT":
             if (!decodedUrl) await exportRoute(ctx);
         // logging for all
+        case "DOCUMENTATION":
+            if (!decodedUrl) return await docRoute(ctx);
         case "LOGGING":
             if (!decodedUrl) return await logsRoute(ctx, paths.logFile.fileName);
     }

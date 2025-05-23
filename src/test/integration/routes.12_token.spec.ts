@@ -1,9 +1,7 @@
 process.env.NODE_ENV = "test";
 import chai from "chai";
 import chaiHttp from "chai-http";
-import fs from "fs";
-import path from "path";
-import { IApiDoc, prepareToApiDoc, IApiInput, identification, generateApiDoc, testVersion, _RAWDB, testLog } from "./constant";
+import { IApiDoc, prepareToApiDoc, IApiInput, identification, generateApiDoc, testVersion, _RAWDB } from "./constant";
 chai.use(chaiHttp);
 const should = chai.should();
 import { server } from "../../server/index";
@@ -12,13 +10,11 @@ const docs: IApiDoc[] = [];
 const addToApiDoc = (input: IApiInput) => {
     docs.push(prepareToApiDoc(input, "Token"));
 };
-fs.mkdirSync(path.resolve(__dirname, "../server/apiDocs/"), {
-    recursive: true
-});
+
 addToApiDoc({
-    api: `{infos} /Identification Extension`,
-    apiName: `InfosToken`,
-    apiDescription: `<hr>
+    type: "infos",
+    short: "Identification Extension",
+    description: `<hr>
     <div class="text">
       <p>You have to be registered to be able to POST PUT OR DELETE datas.</p>
       </div>`,
@@ -33,21 +29,20 @@ describe("Identification : Token", () => {
         it("should return JWT Identification", (done) => {
             addStartNewTest("Token");
             const infos = addTest({
-                api: `{post} login get a new token`,
-                apiName: `TokenLogin`,
-                apiDescription: "Get a new token.",
-                apiExample: {
+                type: "post",
+                short: "login get a new token",
+                description: "Get a new token.",
+                examples: {
                     http: `${testVersion}/login`,
                     curl: `curl -X POST KEYHTTP/login -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' -d 'username=stean&password=stean'`
                 },
-                apiParamExample: { "username": identification.username, "password": identification.password }
+                params: { "username": identification.username, "password": identification.password }
             });
             chai.request(server)
-                .post(`/test/${infos.apiExample.http}`)
+                .post(`/test/${infos.examples.http}`)
                 .type("form")
                 .send(identification)
                 .end((err: Error, res: any) => {
-                    testLog(res.body);
                     should.not.exist(err);
                     res.body.should.include.keys("token");
                     res.body.should.include.keys("message");
@@ -59,48 +54,48 @@ describe("Identification : Token", () => {
         });
         it("Return Error if the identification wrong", (done) => {
             const infos = addTest({
-                api: `{post} login Post basic`,
-                apiName: `TokenError`,
-                apiDescription: "Identification failed.",
-                apiExample: {
+                type: "post",
+                short: "login Post basic",
+                description: "Identification failed.",
+                examples: {
                     http: `${testVersion}/login`,
                     curl: `curl -X POST KEYHTTP/login -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' -d 'username=test&password=test'`
                 },
-                apiParamExample: { "username": identification.username, "password": "nowhere" }
+                params: { "username": identification.username, "password": "nowhere" }
             });
             chai.request(server)
-                .post(`/test/${infos.apiExample.http}`)
+                .post(`/test/${infos.examples.http}`)
                 .type("form")
-                .send(infos.apiParamExample)
+                .send(infos.params)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(401);
                     res.body.should.include.keys("message");
                     res.body.message.should.eql("Unauthorized");
                     const myError = JSON.stringify(res.body, null, 4);
-                    docs[docs.length - 1].apiErrorExample = myError;
+                    docs[docs.length - 1].error = myError;
                     done();
                 });
         });
         it("should logout", (done) => {
             const infos = addTest({
-                api: `{get} logout logout actual connection.`,
-                apiName: `TokenLogout`,
-                apiDescription: "Logout actual connection.",
-                apiExample: {
+                type: "get",
+                short: "logout logout actual connection.",
+                description: "Logout actual connection.",
+                examples: {
                     http: `${testVersion}/logout`,
                     curl: `curl -X GET KEYHTTP/logout`
                 }
             });
             chai.request(server)
-                .get(`/test/${infos.apiExample.http}`)
+                .get(`/test/${infos.examples.http}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.body.should.include.keys("message");
                     res.body.message.should.eql("Logout succeeded");
                     res.status.should.equal(200);
                     addToApiDoc({ ...infos, result: res });
-                    generateApiDoc(docs, `apiDocToken.js`);
+                    generateApiDoc(docs, `Token`);
                     done();
                 });
         });

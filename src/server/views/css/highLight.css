@@ -88,6 +88,7 @@
 
 [class*="shj-lang-"] {
 	color: var(--text-Color);
+	font-size: var(--font-size);
 }
 [class*="shj-lang-"]:before {color: #6f9aff}
 

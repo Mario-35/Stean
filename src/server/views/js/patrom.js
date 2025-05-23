@@ -166,10 +166,12 @@ if (document.getElementById('fileone')) fileone.addEventListener("change", funct
 (function () {
 	if (localStorage.getItem('theme') === 'theme-dark') {
 		setTheme('theme-dark');
-		document.getElementById('theme').checked = false;
+		const elem = document.getElementById('theme');
+		if (elem) elem.checked = false;
 	} else {
 		setTheme('theme-light');
-	  document.getElementById('theme').checked = true;
+		const elem = document.getElementById('theme');
+		if (elem) elem.checked = false;
 	}
 })();
 

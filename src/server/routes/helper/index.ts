@@ -18,3 +18,4 @@ export { adminRoute } from "./adminRoute";
 export { exportRoute } from "./exportRoute";
 export { updateRoute } from "./updateRoute";
 export { logsRoute } from "./logsRoute";
+export { docRoute } from "./docRoute";

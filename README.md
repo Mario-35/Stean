@@ -169,11 +169,9 @@ The project run under nodeJS.
  ┃ ┃ ┗ 📂js
  ┃ ┣ 📜constants.ts // App constants
  ┃ ┗ 📜index.ts // starting file
- ┣ 📂template // ApiDoc template
  ┣ 📂test
  ┃ ┣ 📂integration // Tests
  ┃ ┃ ┗ 📂files // files For importation tests
- ┃ ┣ 📜apidoc.json // Apidoc configuration
  ┃ ┗ 📜dbTest.ts // DB test connection
  ┗ 📜build.js // js file for building app
 ```

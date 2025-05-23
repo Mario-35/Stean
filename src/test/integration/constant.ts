@@ -11,7 +11,6 @@ import fs from "fs";
 import path from "path";
 import { getColumnType, Ientity } from "../../server/types";
 import util from "util";
-import apidocJson from "../apidoc.json";
 import { models } from "../../server/models";
 let NB = 0;
 export const nbAdd = () => {
@@ -30,61 +29,61 @@ export const nbColorTitle = "\x1b[35m";
 export const testLog = (input: any) => {
     process.stdout.write(util.inspect(input, { showHidden: false, depth: null, colors: false }));
 };
-export const proxy = (moi: boolean) => (moi !== true ? "http://localhost:8029/test" : `${apidocJson.proxy}/`);
+export const proxy = (moi: boolean) => (moi !== true ? "http://localhost:8029/test" : `@PROXY@/`);
 import packageJson from "../../../package.json";
 import { EConstant, EEncodingType } from "../../server/enums";
 export const VERSION = packageJson.version;
-const createJSON = (data: any) => JSON.stringify(data, null, 4).replace(/[\n]+/g, `|${EConstant.tab}`);
+
+const documentation: { [key: string]: IApiDoc[] } = {};
+
 export interface Iinfos {
-    api: string;
-    apiName: string;
+    type: string;
+    short: string;
     apiPermission?: string;
-    apiDescription: string;
-    apiReference?: string;
-    apiExample: { [key: string]: string };
-    apiSuccess?: string[];
-    apiParam?: string[];
-    apiParamExample?: Record<string, any>;
+    description: string;
+    reference?: string;
+    examples: { [key: string]: string };
+    structure?: Istructure;
+    params?: Record<string, any>;
 }
 export const keyTokenName = "jwt-session";
 export interface IApiInput {
-    api: string;
-    apiName: string;
-    apiDescription: string;
-    apiReference?: string;
+    short: string;
+    type: string;
+    description: string;
+    reference?: string;
     apiPermission?: string;
-    apiExample?: { [key: string]: string };
+    examples?: { [key: string]: string };
     apiError?: string[];
-    apiParam?: string[];
-    apiSuccess?: string[];
-    apiParamExample?: Record<string, any>;
+    structure?: Istructure;
+    params?: Record<string, any>;
     result: any;
 }
-export const defaultPostPatch = (lang: string, method: string, request: string, data: any): string => {
+export const defaultPostPatch = (lang: string, method: string, request: string): string => {
     switch (lang.toUpperCase()) {
         case "CURL":
-            return `curl -X ${method.toUpperCase()} -H 'Content-Type: application/json' -d '${createJSON(data)}}' proxy${request}`;
+            return `curl -X ${method.toUpperCase()} -H 'Content-Type: application/json' -d '@DATAS@}' proxy${request}`;
         case "JAVASCRIPT":
-            return `const response = await fetch("proxy${request}", {|${EConstant.tab}method: "${method.toUpperCase()}",|\theaders: {|${EConstant.tab}    "Content-Type": "${EEncodingType.json}",|\t},|\tbody:${createJSON(data)}|});|const valueJson = await response.json();|const valueTxt = await response.text();`;
+            return `const response = await fetch("proxy${request}", {\r\n${EConstant.tab}method: "${method.toUpperCase()}",\r\n\theaders: {\r\n${EConstant.tab}    "Content-Type": "${EEncodingType.json}",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();`;
         case "PYTHON":
-            return `import requests|import json|response_API = requests.${method}('proxy${request}', (headers = { "Content-Type": "${EEncodingType.json}" }), (data = json.dumps(${createJSON(data)})))|data = response_API.text|parse_json = json.loads(data)|print(parse_json)`;
+            return `import requests\r\nimport json\r\nresponse_API = requests.${method}('proxy${request}', (headers = { "Content-Type": "${EEncodingType.json}" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)`;
     }
     return "";
 };
-export const defaultPost = (lang: string, request: string, data: any): string => {
-    return defaultPostPatch(lang, "post", request, data);
+export const defaultPost = (lang: string, request: string): string => {
+    return defaultPostPatch(lang, "post", request);
 };
-export const defaultPatch = (lang: string, request: string, data: any): string => {
-    return defaultPostPatch(lang, "patch", request, data);
+export const defaultPatch = (lang: string, request: string): string => {
+    return defaultPostPatch(lang, "patch", request);
 };
 export const defaultDelete = (lang: string, request: string): string => {
     switch (lang.toUpperCase()) {
         case "CURL":
             return `curl -DELETE "proxy${request}"`;
         case "JAVASCRIPT":
-            return `const response = await fetch("proxy${request}", {|\tmethod: "DELETE"|});|const valueJson = await response.json();|const valueTxt = await response.text();`;
+            return `const response = await fetch("proxy${request}", {\r\n\tmethod: "DELETE"\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();`;
         case "PYTHON":
-            return `import requests|import json|response_API = requests.delete('proxy${request}')|data = response_API.text|parse_json = json.loads(data)|print(parse_json)`;
+            return `import requests\r\nimport json\r\nresponse_API = requests.delete('proxy${request}')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)`;
     }
     return "";
 };
@@ -93,115 +92,52 @@ export const defaultGet = (lang: string, request: string): string => {
         case "CURL":
             return `curl -GET "proxy${request}"`;
         case "JAVASCRIPT":
-            return `const response = await fetch("proxy${request}", {|\tmethod: "GET",|\theaders: {|\t    "Content-Type": ${EEncodingType.json},|\t},|});|const valueJson = await response.json();|const valueTxt = await response.text();`;
+            return `const response = await fetch("proxy${request}", {\r\n\tmethod: "GET",\r\n\theaders: {\r\n\t    "Content-Type": ${EEncodingType.json},\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();`;
         case "PYTHON":
-            return `import requests|import json|response_API = requests.get('proxy${request}')|data = response_API.text|parse_json = json.loads(data)|print(parse_json)`;
+            return `import requests\r\nimport json\r\nresponse_API = requests.get('proxy${request}')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)`;
     }
     return "";
 };
 export interface IApiDoc {
-    api: string;
-    apiDescription: string;
-    apiVersion: string;
-    apiName: string;
-    apiGroup: string;
-    apiParam?: string[];
+    short: string;
+    type: string;
+    description: string;
+    version: string;
     apiError?: string[];
-    apiSuccess?: string[];
-    apiExample?: { [key: string]: string };
-    apiParamExample?: string;
-    apiSuccessExample?: string;
-    apiErrorExample?: string;
+    structure?: Istructure;
+    examples?: { [key: string]: string };
+    params?: Record<string, any>;
+    success?: string;
+    error?: string;
     apiUse?: string;
     apiPermission?: string;
     text?: string;
-    apiSampleRequest?: string;
+    request?: string;
 }
-const _HEADERS: { [key: string]: string } = {
-    apiParamExample: "{json} Request-Example:",
-    apiSuccessExample: "{json} Success-Response:",
-    apiErrorExample: "{json} Error-Response:"
-};
-export const prepareToApiDoc = (input: IApiInput, Entity: string): IApiDoc => {
-    return {
-        api: input.api,
-        apiVersion: "1.1.0",
-        apiName: input.apiName,
-        apiPermission: input.apiPermission,
-        apiGroup: Entity,
-        apiDescription: `${input.apiDescription} ${input.apiReference ? ` <a href="${input.apiReference}" target="_blank">[${input.apiReference.includes("docs.ogc.org") ? "OGC " : ""}reference]</a>` : ""}`,
-        apiExample: input.apiExample,
-        apiError: input.apiError,
-        apiParam: input.apiParam,
-        apiSuccess: input.apiSuccess,
-        apiParamExample: input.apiParamExample ? JSON.stringify(input.apiParamExample, null, 4) : undefined,
-        apiSampleRequest: input.api.startsWith("{get}") && input.apiExample ? `proxy${input.apiExample.http}` : "",
-        apiSuccessExample: input.result.type === EEncodingType.txt || input.result.type === EEncodingType.csv ? input.result.text : input.result && input.result.body ? JSON.stringify(input.result.body, null, 4) : undefined
-    };
-};
-export const generateApiDoc = (input: IApiDoc[], filename: string): boolean => {
-    const createExamplesLines = (input: string) => {
-        const tempLines = input.split("|");
-        tempLines.forEach((elemTemp: string) => {
-            lines.push(`*          ${elemTemp.replace(/[\t]+/g, "   ")}`);
-        });
-    };
-    const proxy = apidocJson.proxy + "/";
-    const lines: string[] = [];
-    lines.push("/**");
-    lines.push("* @apiDefine admin:computer User access only");
-    lines.push("* This optional description belong to to the group admin.");
-    lines.push("*/");
-    lines.push("");
-    input.forEach((element: IApiDoc) => {
-        lines.push("/**");
-        for (const [key, value] of Object.entries(element)) {
-            if (key === "apiSuccess" && value) {
-                value.forEach((tab: string) => {
-                    lines.push(`*    @apiSuccess ${tab}`);
-                });
-            } else if (key === "apiParam" && value) {
-                value.forEach((tab: string) => {
-                    lines.push(`*    @apiParam ${tab}`);
-                });
-            } else if (key === "apiPermission " && value) {
-                lines.push(`*    @apiPermission value`);
-            } else if (key === "apiExample" && value) {
-                Object.keys(value).forEach((elem: string) => {
-                    lines.push(`*    @${key} {${elem}} ${elem}`);
-                    switch (elem) {
-                        case "http":
-                            createExamplesLines(`${proxy}${value[elem]}`);
-                            break;
-                        case "curl":
-                        case "javascript":
-                        case "python":
-                            createExamplesLines(value[elem].replace("KEYHTTP", value.http).replace("proxy", proxy).replace("KEYDATA", element.apiParamExample));
-                            break;
-                    }
-                });
-            } else if (key === "apiError" && value) {
-                value.forEach((tab: string) => {
-                    lines.push(`*    @apiError ${tab}`);
-                });
-            } else if (Object.keys(_HEADERS).includes(key) && value) {
-                lines.push(`*    @${key} ${_HEADERS[key]}`);
-                const successLines: string[] = value.split(EConstant.return);
-                successLines.forEach((successLine: string) => {
-                    lines.push(`*    ${successLine}`);
-                });
-            } else if (value) {
-                lines.push(`*    @${key} ${value}`);
-            }
-        }
-        lines.push(`*/${EConstant.return}`);
-    });
-    lines.forEach((element, index) => {
-        lines[index] = element.replace("proxy", proxy);
-    });
-    fs.writeFileSync(path.resolve(__dirname, "../apiDocs/", filename), `${lines.join(EConstant.return)}`, {
+
+export const saveDoc = () => {
+    fs.writeFileSync(path.resolve(__dirname, "../../server/views/js/docDatas.js"), `const doc = \r\n ${JSON.stringify(documentation, null, 4)}`, {
         encoding: "utf-8"
     });
+};
+
+export const prepareToApiDoc = (input: IApiInput, Entity: string): IApiDoc => {
+    return {
+        short: input.short,
+        type: input.type,
+        version: "1.1.0",
+        apiPermission: input.apiPermission,
+        description: `${input.description} ${input.reference ? ` <a href="${input.reference}" target="_blank">[${input.reference.includes("docs.ogc.org") ? "OGC " : ""}reference]</a>` : ""}`,
+        examples: input.examples,
+        apiError: input.apiError,
+        structure: input.structure,
+        params: input.params ? input.params : undefined,
+        request: input.type == "get" && input.examples ? `proxy${input.examples.http}` : "",
+        success: input.result.type === EEncodingType.txt || input.result.type === EEncodingType.csv ? input.result.text : input.result && input.result.body ? JSON.stringify(input.result.body, null, 4) : undefined
+    };
+};
+export const generateApiDoc = (input: IApiDoc[], entity: string): boolean => {
+    documentation[entity] = input;
     return true;
 };
 export const limitResult = (input: Record<string, any>, keyName?: string) => {
@@ -472,7 +408,7 @@ export const infos: Record<string, any> = {
         definition: `Service is an extension that  represent the configuration of one service and the possibility to create a new service with an assistant with the route /service:<br><table><tr><td class="noBorder">The screen below appear</td><td class="noBorder">and after admin postgres connection ok</td><tr><td class="noBorder"><img src="./assets/admin.jpg" alt="admin login"></td><td class="noBorder"><img src="./assets/service.jpg" alt="service"></td></tr></table>`,
         columns: {
             name: "Name of the service.",
-            apiVersion: "version of the model",
+            version: "version of the model",
             date_format: "date format",
             nb_page: "Default number of item by page for pagination",
             alias: "List of alias for calling the API",
@@ -511,24 +447,56 @@ export const infos: Record<string, any> = {
         relations: {}
     }
 };
+
+export interface Istructure {
+    columns: {
+        [key: string]: {
+            "description": string;
+            "type": string;
+            "requis": boolean;
+        };
+    };
+    relations: {
+        [key: string]: {
+            "description": string;
+            "type": string;
+            "requis": boolean;
+        };
+    };
+}
+
 export const listOfColumns = (inputEntity: Ientity) => {
+    const structure: Istructure = {
+        columns: {},
+        relations: {}
+    };
     const success: string[] = [];
+
     const params: string[] = [];
     const infosEntity: Record<string, any> = infos[inputEntity.name];
+
     Object.keys(infosEntity.columns).forEach((elem: string) => {
         const optional = inputEntity.columns[elem] && inputEntity.columns[elem].create.includes("NOT NULL") ? elem : `[${elem}]`;
         success.push(`{${getColumnType(inputEntity.columns[elem])}} ${elem} ${infosEntity["columns"][elem] || elem}`);
         if (inputEntity.columns[elem] && !inputEntity.columns[elem].create.includes("GENERATED")) params.push(`{${getColumnType(inputEntity.columns[elem])}} ${optional} ${infosEntity["type"] && infosEntity["type"][elem] ? infosEntity["type"][elem] : ""}`);
+
+        structure["columns"][elem] = {
+            "description": infosEntity["columns"][elem],
+            "type": getColumnType(inputEntity.columns[elem]),
+            "requis": inputEntity.columns[elem].create.includes("NOT NULL") ? true : false
+        };
     });
     Object.keys(inputEntity.relations).forEach((elem: string) => {
         const optional = inputEntity.columns[elem] && inputEntity.columns[elem].create.includes("NOT NULL") ? elem : `[${elem}]`;
         success.push(`{relation} ${elem} ${infosEntity["relations"][elem] || ""}`);
         params.push(`{relation} ${optional} ${infosEntity["type"] && infosEntity["type"][elem] ? infosEntity["type"][elem] : ""}`);
+        structure["relations"][elem] = {
+            "description": infosEntity["type"] && infosEntity["type"][elem] ? infosEntity["type"][elem] : "",
+            "type": "relation",
+            "requis": inputEntity.columns[elem] && inputEntity.columns[elem].create.includes("NOT NULL") ? true : false
+        };
     });
-    return {
-        success,
-        params
-    };
+    return structure;
 };
 export const blank = (nb: number) => "</br>".repeat(nb);
 export const showHide = (name: string, content: string) => `<input id="show${name}" type=checkbox> <label for="show${name}">Click for Help</label> <span id="content${name}">${content}</span>`;

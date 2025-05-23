@@ -52,11 +52,11 @@ describe("Various Get tests", () => {
     Object.keys(tests).forEach((test: string) => {
         it(test, (done) => {
             addTest({
-                api: `result => ${+tests[test]} : `,
-                apiName: "",
-                apiDescription: "",
-                apiReference: "",
-                apiExample: {
+                type: "get",
+                short: `result => ${+tests[test]} : `,
+                description: "",
+                reference: "",
+                examples: {
                     http: test
                 }
             });

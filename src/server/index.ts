@@ -47,7 +47,7 @@ models.initialisation();
 export const app = new Koa();
 app.use(favicon(path.join(__dirname, "/", "favicon.ico")));
 // add public folder [static]
-app.use(serve(path.join(__dirname, "/", "apidoc")));
+app.use(serve(path.join(__dirname, "/", "public")));
 // helmet protection https://github.com/venables/koa-helmet
 app.use(helmet.contentSecurityPolicy({ directives: EConstant.helmetConfig }));
 // bodybarser https://github.com/koajs/bodyparser

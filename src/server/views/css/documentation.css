@@ -1,0 +1,184 @@
+/**
+ * documentation css file
+ */
+ 
+ :root {
+    --meth-get: #61affe;
+    --meth-put: #fca130;
+    --meth-patch: #fca130;
+    --meth-post: #49cc90;
+    --meth-delete: #f93e3e;
+    --meth-infos: gray;
+  }
+  
+  #content {
+    margin-top: 10px;
+    padding-left: 10px;
+  }
+  
+  p {
+    font-size: var(--font-size);
+    color: var(--content-color);
+  }
+  
+  section {
+    padding: 10px 0;
+  }
+  
+  article {
+    border-top: 1px solid var(--light-gray);
+    padding: 14px 0 30px 0;
+  }
+  
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 0 0 20px 0;
+  }
+  
+  th {
+    background-color: var(--table-head-background);
+    color: var(--text-color);
+    text-align: left;
+    padding: 5px 8px;
+    border: 1px solid var(--table-hover-background);
+  }
+  
+  td {
+    padding: 5px;
+    border: 1px solid var(--window-border-head);
+  }
+  
+  .open-left {
+    right: 0;
+    left: auto;
+  }
+  
+  .invisible {
+    visibility: hidden;
+  }
+  
+  /* ------------------------------------------------------------------------------------------
+   * Request method (HTTP verb)
+   * ------------------------------------------------------------------------------------------ */
+  .method {
+    font-weight: 600;
+    display: inline-block;
+    padding: 3px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    color: var(--text-color);
+    width: 60px;
+    text-align: center;
+    font-size: var(--font-size-less-2);
+    margin-right: 5px;
+  }
+  
+  .meth-infos {
+    background-color: var(--meth-infos);
+  }
+
+  .meth-get {
+    background-color: var(--meth-get);
+  }
+  
+  .meth-put {
+    background-color: var(--meth-put);
+  }
+  
+  .meth-post {
+    background-color: var(--meth-post);
+  }
+
+  .meth-patch {
+    background-color: var(--meth-patch);
+  }
+  
+  .meth-delete {
+    background-color: var(--meth-delete);
+  }
+
+  
+  .search-reset {
+    position: absolute;
+    display: block;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    right: 28px;
+    top: 17px;
+    background-color: #fff;
+  }
+
+
+.datasBox {
+    display: flex;
+    flex-direction: column;
+    height: 350px;
+    width: 95%;
+    border-radius: 20px;
+  }
+.successBox {
+    display: flex;
+    flex-direction: column;
+    height: 350px;
+    width: 95%;
+    border-radius: 20px;
+  }
+
+  .errorBox {
+    display: flex;
+    flex-direction: column;
+    height: 150px;
+    width: 95%;
+    border-radius: 20px;
+  }
+  
+  .title{
+    width: 25%;
+    padding: 5px 0;
+    font-size: 1.2em;
+    font-weight: lighter;
+    text-align: center;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    margin: 0 0 0 0;
+    
+    color: var(--white-smoke);
+}
+
+.successBox .title{
+  background: var(--btn-success-border);
+}
+
+.errorBox .title{
+  background: var(--btn-danger-border);
+}
+
+.datasBox .title{
+  background: var(--btn-info-border);
+}
+
+
+.view{
+  overflow: auto;
+  background-color: var(--content-window-background);
+  width: 100%;
+  height: 100%;
+  padding: 0 0 0 5px;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 20%);
+}
+
+  
+.menuItem {
+  cursor: pointer;
+  font-size: var(--font-size);
+}
+.menuItem:hover {
+  cursor: pointer;
+  font-size: var(--font-size-add-2);
+  color: var(--color-hover);
+}
+
+

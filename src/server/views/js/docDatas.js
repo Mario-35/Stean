@@ -1,0 +1,4209 @@
+const doc = 
+ {
+    "sensorThings": [
+        {
+            "short": "SensorThings",
+            "type": "infos",
+            "version": "1.1.0",
+            "description": "<img src=\"./assets/logo.png\" alt=\"Stean\"></br>\n    <span class=\"tabLogo\">SensorThings Enhanced API Node</span></br></br>\n    <a class=\"tabLogo\" href=\"https://github.com/Mario-35/Stean\" target=\"_blank\"><img src=\"./assets/github.png\" alt=\"github\"></a><span class=\"tabLink\">https://github.com/Mario-35/Stean</span></br></br>\n    <a class=\"tabLogo\" href=\"mailto: sensorThings@inrae.fr\"><img src=\"./assets/mail.png\" alt=\"mail\"></a><span class=\"tabLink\">sensorThings@inrae.fr</span></br></br>\n    <a class=\"tabLogo\" href=\"https://sensorthings.wiki.inrae.fr\" target=\"_blank\"><img src=\"./assets/wiki.png\" alt=\"wiki\"></a><span class=\"tabLink\">https://sensorthings.wiki.inrae.fr</span></br></br>\n    <a class=\"tabLogo\" href=\"./assets/tests.html\" target=\"_blank\"><img src=\"./assets/tests.png\" alt=\"wiki\"></a><span class=\"tabLink\">All Tests</span></br></br>\n    <div class=\"text\"><b>\n      <p>Welcome to API documentation for the Open Geospatial Consortium (OGC) SensorThings international standard. This\n        API provides an open and unified way to interconnect Internet of Things (IoT) devices over the Web as well as\n        interfaces to interact with and analyze their observations. Part 1:Sensing was released in 2016 and allowed\n        management and reception of observations or measurements made by IoT sensors. Part 2: Tasking Core, which was\n        released in 2019, provides a mechanism to tell the sensor/actuator what to do.</p>\n        </br>\n      <p>The foundation of the SensorThings API are the relational connections between entities in the system and the way\n        they are used to model systems in the real world. The entities have a natural relationship which enables any IoT\n        sensing device from any vertical industry to be modelled in the system. An IoT device or system is modelled as a\n        Thing. A Thing has a Location with one or more Datastreams. Each Datastream observes one ObservedProperty with one\n        Sensor and has many Observations from the Sensor. Each Observation read by the Sensor observes one particular\n        FeatureOfInterest. Together, these relationships provide a flexible standard way to describe and model any sensing\n        system. It allows SensorThings to be a single data exchange system for heterogeneous devices within any\n        organization.</b></p>\n    </div></br><img src=\"./assets/entities.png\" alt=\"Model\">  <a href=\"https://docs.ogc.org/is/18-088/18-088.html\" target=\"_blank\">[OGC reference]</a>",
+            "request": ""
+        },
+        {
+            "short": "Resource uri",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "<div class=\"text\"><b><p>There are three major URI components : <br> - the service root URI<br> - the resource path<br> - the query options<br>In addition, the service root URI consists of two parts: The location of the SensorThings service and the version number. The version number follows the format indicated below :</b></p></div>\n                    <br>\"v\"majorversionnumber + \".\" + minorversionnumber\n                    <pre>\n                    service root URI                   resource path     query options\n                    __________|______________________________|___________ _______|____________\n                                                    /                   /                  /\n                    http://example.org:8029/test/v1.1/Things(1)/Locations?$orderby=ID&$top=10\n                    _____/________________/____/____/___________________/___________________/\n                      |           |         |    |         |                |\n                    protocol    host   service  version  pathname         search</pre>\n                    <div class=\"text\"><b><p>By attaching the resource path after the service root URI, clients can address to different types of resources such as an entity set, an entity, a property, or a navigation property. Finally, clients can apply query options after the resource path to further process the addressed resources, such as sorting by properties or filtering with criteria.</b></p></div>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#uri-components\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/"
+            },
+            "request": "proxyv1.1/",
+            "success": "{\n    \"value\": [\n        {\n            \"name\": \"Datastreams\",\n            \"url\": \"http://127.0.0.1:51176/test/v1.1/Datastreams\"\n        },\n        {\n            \"name\": \"MultiDatastreams\",\n            \"url\": \"http://127.0.0.1:51176/test/v1.1/MultiDatastreams\"\n        },\n        {\n            \"name\": \"FeaturesOfInterest\",\n            \"url\": \"http://127.0.0.1:51176/test/v1.1/FeaturesOfInterest\"\n        },\n        {\n            \"name\": \"HistoricalLocations\",\n            \"url\": \"http://127.0.0.1:51176/test/v1.1/HistoricalLocations\"\n        },\n        {\n            \"name\": \"Locations\",\n            \"url\": \"http://127.0.0.1:51176/test/v1.1/Locations\"\n        },\n        {\n            \"name\": \"Observations\",\n            \"url\": \"http://127.0.0.1:51176/test/v1.1/Observations\"\n        },\n        {\n            \"name\": \"ObservedProperties\",\n            \"url\": \"http://127.0.0.1:51176/test/v1.1/ObservedProperties\"\n        },\n        {\n            \"name\": \"Sensors\",\n            \"url\": \"http://127.0.0.1:51176/test/v1.1/Sensors\"\n        },\n        {\n            \"name\": \"Things\",\n            \"url\": \"http://127.0.0.1:51176/test/v1.1/Things\"\n        },\n        {\n            \"name\": \"Loras\",\n            \"url\": \"http://127.0.0.1:51176/test/v1.1/Loras\"\n        },\n        {\n            \"name\": \"Decoders\",\n            \"url\": \"http://127.0.0.1:51176/test/v1.1/Decoders\"\n        },\n        {\n            \"name\": \"Users\",\n            \"url\": \"http://127.0.0.1:51176/test/v1.1/Users\"\n        }\n    ],\n    \"serverSettings\": {\n        \"conformance\": [\n            \"https://docs.ogc.org/is/18-088/18-088.html\",\n            \"https://docs.ogc.org/is/18-088/18-088.html#uri-components\",\n            \"https://docs.ogc.org/is/18-088/18-088.html#resource-path\",\n            \"https://docs.ogc.org/is/18-088/18-088.html#req-resource-path-resource-path-to-entities\",\n            \"https://docs.ogc.org/is/18-088/18-088.html#requesting-data\",\n            \"https://docs.ogc.org/is/18-088/18-088.html#create-update-delete\",\n            \"https://docs.ogc.org/is/18-088/18-088.html#req-data-array-data-array\",\n            \"https://docs.ogc.org/is/18-088/18-088.html#req-resource-path-resource-path-to-entities\",\n            \"http://docs.oasis-open.org/odata/odata-json-format/v4.01/odata-json-format-v4.01.html\",\n            \"https://datatracker.ietf.org/doc/html/rfc4180\",\n            \"http://127.0.0.1:51176/#api-Loras\",\n            \"https://docs.ogc.org/is/18-088/18-088.html#multidatastream-extension\",\n            \"https://docs.ogc.org/is/18-088/18-088.html#req-create-observations-via-mqtt-observations-creation\",\n            \"https://docs.ogc.org/is/18-088/18-088.html#mqtt-extension\",\n            \"http://127.0.0.1:51176/#api-Services\",\n            \"http://127.0.0.1:51176/#api-Token\",\n            \"http://127.0.0.1:51176/#api-Import\",\n            \"http://127.0.0.1:51176/#api-Format\"\n        ]\n    },\n    \"http://127.0.0.1:51176/test/v1.1/req/receive-updates-via-mqtt/receive-updates\": {\n        \"endpoints\": [\n            \"mqtt://server.example.com:1883\",\n            \"ws://server.example.com/sensorThings\"\n        ]\n    }\n}"
+        },
+        {
+            "short": "Resource result",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Stean use differents type of result : List of some code values used for identifying observations result types defined in the Datastream or MultiDatastream observationType.</b> <table> <thead> <tr> <th style=\"width: 20%\">Type (O&M 2.0)</th> <th style=\"width: 70%\">Value Code</th> <th style=\"width: 10%\">Result</th> </tr> </thead> <tbody> <tr> <td>OM_CategoryObservation</td> <td>http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_CategoryObservation</td> <td>URI</td> </tr> <tr> <td>OM_CountObservation</td> <td>http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_CountObservation</td> <td>integer</td> </tr> <tr> <td>OM_Measurement</td> <td>http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement</td> <td>double</td> <tr> <td>OM_complexObservation</td> <td>http://www.opengis.net/def/observation-type/ogc-om/2.0/om_complex-observation</td> <td>array of double</td> </tr> <tr> <td>OM_Observation</td> <td>http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Observation</td> <td>any</td> </tr> <tr> <td>OM_TruthObservation</td> <td>http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_TruthObservation</td> <td>boolean</td> </tr> <tr> <td>OM_SWEArrayObservation</td> <td>http://www.opengis.net/def/observation-type/ogc-omxml/2.0/swe-array-observation</td> <td>array</td> </tr> </tbody> </table>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#resource-path\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/"
+            },
+            "request": "proxyv1.1/",
+            "success": "{\n    \"value\": [\n        {\n            \"name\": \"Datastreams\",\n            \"url\": \"http://127.0.0.1:51178/test/v1.1/Datastreams\"\n        },\n        {\n            \"name\": \"MultiDatastreams\",\n            \"url\": \"http://127.0.0.1:51178/test/v1.1/MultiDatastreams\"\n        },\n        {\n            \"name\": \"FeaturesOfInterest\",\n            \"url\": \"http://127.0.0.1:51178/test/v1.1/FeaturesOfInterest\"\n        },\n        {\n            \"name\": \"HistoricalLocations\",\n            \"url\": \"http://127.0.0.1:51178/test/v1.1/HistoricalLocations\"\n        },\n        {\n            \"name\": \"Locations\",\n            \"url\": \"http://127.0.0.1:51178/test/v1.1/Locations\"\n        },\n        {\n            \"name\": \"Observations\",\n            \"url\": \"http://127.0.0.1:51178/test/v1.1/Observations\"\n        },\n        {\n            \"name\": \"ObservedProperties\",\n            \"url\": \"http://127.0.0.1:51178/test/v1.1/ObservedProperties\"\n        },\n        {\n            \"name\": \"Sensors\",\n            \"url\": \"http://127.0.0.1:51178/test/v1.1/Sensors\"\n        },\n        {\n            \"name\": \"Things\",\n            \"url\": \"http://127.0.0.1:51178/test/v1.1/Things\"\n        },\n        {\n            \"name\": \"Loras\",\n            \"url\": \"http://127.0.0.1:51178/test/v1.1/Loras\"\n        },\n        {\n            \"name\": \"Decoders\",\n            \"url\": \"http://127.0.0.1:51178/test/v1.1/Decoders\"\n        },\n        {\n            \"name\": \"Users\",\n            \"url\": \"http://127.0.0.1:51178/test/v1.1/Users\"\n        }\n    ],\n    \"serverSettings\": {\n        \"conformance\": [\n            \"https://docs.ogc.org/is/18-088/18-088.html\",\n            \"https://docs.ogc.org/is/18-088/18-088.html#uri-components\",\n            \"https://docs.ogc.org/is/18-088/18-088.html#resource-path\",\n            \"https://docs.ogc.org/is/18-088/18-088.html#req-resource-path-resource-path-to-entities\",\n            \"https://docs.ogc.org/is/18-088/18-088.html#requesting-data\",\n            \"https://docs.ogc.org/is/18-088/18-088.html#create-update-delete\",\n            \"https://docs.ogc.org/is/18-088/18-088.html#req-data-array-data-array\",\n            \"https://docs.ogc.org/is/18-088/18-088.html#req-resource-path-resource-path-to-entities\",\n            \"http://docs.oasis-open.org/odata/odata-json-format/v4.01/odata-json-format-v4.01.html\",\n            \"https://datatracker.ietf.org/doc/html/rfc4180\",\n            \"http://127.0.0.1:51178/#api-Loras\",\n            \"https://docs.ogc.org/is/18-088/18-088.html#multidatastream-extension\",\n            \"https://docs.ogc.org/is/18-088/18-088.html#req-create-observations-via-mqtt-observations-creation\",\n            \"https://docs.ogc.org/is/18-088/18-088.html#mqtt-extension\",\n            \"http://127.0.0.1:51178/#api-Services\",\n            \"http://127.0.0.1:51178/#api-Token\",\n            \"http://127.0.0.1:51178/#api-Import\",\n            \"http://127.0.0.1:51178/#api-Format\"\n        ]\n    },\n    \"http://127.0.0.1:51178/test/v1.1/req/receive-updates-via-mqtt/receive-updates\": {\n        \"endpoints\": [\n            \"mqtt://server.example.com:1883\",\n            \"ws://server.example.com/sensorThings\"\n        ]\n    }\n}"
+        }
+    ],
+    "Token": [
+        {
+            "short": "Identification Extension",
+            "type": "infos",
+            "version": "1.1.0",
+            "description": "<hr>\n    <div class=\"text\">\n      <p>You have to be registered to be able to POST PUT OR DELETE datas.</p>\n      </div> ",
+            "request": ""
+        },
+        {
+            "short": "login get a new token",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "Get a new token. ",
+            "examples": {
+                "http": "v1.1/login",
+                "curl": "curl -X POST KEYHTTP/login -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' -d 'username=stean&password=stean'"
+            },
+            "params": {
+                "username": "stean",
+                "password": "stean"
+            },
+            "request": "",
+            "success": "{\n    \"message\": \"Login succeeded\",\n    \"user\": \"stean\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiMSIsInVzZXJuYW1lIjoic3RlYW4iLCJwYXNzd29yZCI6InN0ZWFuIiwiUERDVUFTIjpbdHJ1ZSx0cnVlLHRydWUsdHJ1ZSxmYWxzZSxmYWxzZV19LCJleHAiOjE3NDgwMTU4NzEsImlhdCI6MTc0ODAxMjI3MX0.CmvMzDKIguE4kgSOaXsZG3YFf4qI7lqCFojp7OBjlNw\"\n}",
+            "error": "{\n    \"code\": 401,\n    \"message\": \"Unauthorized\"\n}"
+        },
+        {
+            "short": "logout logout actual connection.",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Logout actual connection. ",
+            "examples": {
+                "http": "v1.1/logout",
+                "curl": "curl -X GET KEYHTTP/logout"
+            },
+            "request": "proxyv1.1/logout",
+            "success": "{\n    \"message\": \"Logout succeeded\"\n}"
+        }
+    ],
+    "Services": [
+        {
+            "short": "entity.name} Extension",
+            "type": "infos",
+            "version": "1.1.0",
+            "description": "Service is an extension that  represent the configuration of one service and the possibility to create a new service with an assistant with the route /service:<br><table><tr><td class=\"noBorder\">The screen below appear</td><td class=\"noBorder\">and after admin postgres connection ok</td><tr><td class=\"noBorder\"><img src=\"./assets/admin.jpg\" alt=\"admin login\"></td><td class=\"noBorder\"><img src=\"./assets/service.jpg\" alt=\"service\"></td></tr></table> ",
+            "request": ""
+        },
+        {
+            "short": "infos",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Retrieve all services ",
+            "examples": {
+                "http": "v1.1/infos",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/infos",
+            "success": "{\n    \"protocol\": \"http\",\n    \"linkBase\": \"http://127.0.0.1:51188/test\",\n    \"version\": \"v1.1\",\n    \"root\": \"proxy/v1.1\",\n    \"model\": \"https://app.diagrams.net/?lightbox=1&edit=_blank#Uhttp://127.0.0.1:51188/test/v1.1/draw\",\n    \"service\": {\n        \"apiVersion\": \"v1.1\",\n        \"date_format\": \"DD/MM/YYYY HH24:MI:SS\",\n        \"nb_page\": 1000,\n        \"extensions\": [\n            \"base\",\n            \"multiDatastream\",\n            \"lora\",\n            \"users\",\n            \"mqtt\",\n            \"logs\"\n        ],\n        \"options\": [\n            \"canDrop\"\n        ],\n        \"csvDelimiter\": \";\"\n    },\n    \"stats\": {},\n    \"users\": {\n        \"stean\": {\n            \"canPost\": true,\n            \"canDelete\": true,\n            \"canCreateUser\": true,\n            \"canCreateDb\": true,\n            \"admin\": false,\n            \"superAdmin\": false\n        }\n    },\n    \"ready\": true,\n    \"Postgres\": {\n        \"version\": \"PostgreSQL 16.0, compiled by Visual C++ build 1935, 64-bit\",\n        \"extensions\": [\n            \"plpgsql-1.0\",\n            \"postgis-3.4.0\",\n            \"tablefunc-1.0\"\n        ]\n    },\n    \"Ogc link\": \"https://docs.ogc.org/is/15-078r6/15-078r6.html\",\n    \"extensions\": {},\n    \"options\": [\n        \"canDrop\"\n    ]\n}"
+        },
+        {
+            "short": "all",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Retrieve all Services} ",
+            "examples": {
+                "http": "v1.1/Services",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Services",
+            "success": "{\n    \"value\": {\n        \"name\": \"test\",\n        \"pg\": {\n            \"host\": \"localhost\",\n            \"port\": 5432,\n            \"user\": \"stean\",\n            \"password\": \"*****\",\n            \"database\": \"test\",\n            \"retry\": 2\n        },\n        \"apiVersion\": \"v1.1\",\n        \"date_format\": \"DD/MM/YYYY HH24:MI:SS\",\n        \"nb_page\": 1000,\n        \"alias\": [\n            \"\"\n        ],\n        \"extensions\": [\n            \"base\",\n            \"multiDatastream\",\n            \"lora\",\n            \"users\",\n            \"mqtt\",\n            \"logs\"\n        ],\n        \"options\": [\n            \"canDrop\"\n        ],\n        \"csvDelimiter\": \";\"\n    }\n}"
+        },
+        {
+            "short": "one",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get a specific Service  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Services(1)",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Services(1)",
+            "success": "{\n    \"name\": \"test\",\n    \"pg\": {\n        \"host\": \"localhost\",\n        \"port\": 5432,\n        \"user\": \"stean\",\n        \"password\": \"*****\",\n        \"database\": \"test\",\n        \"retry\": 2\n    },\n    \"apiVersion\": \"v1.1\",\n    \"date_format\": \"DD/MM/YYYY HH24:MI:SS\",\n    \"nb_page\": 1000,\n    \"alias\": [\n        \"\"\n    ],\n    \"extensions\": [\n        \"base\",\n        \"multiDatastream\",\n        \"lora\",\n        \"users\",\n        \"mqtt\",\n        \"logs\"\n    ],\n    \"options\": [\n        \"canDrop\"\n    ],\n    \"csvDelimiter\": \";\"\n}"
+        },
+        {
+            "short": "Post basic",
+            "type": "post",
+            "version": "1.1.0",
+            "apiPermission": "admin:computer",
+            "description": "Post a new service</br>List of Extensions : <table> <thead> <tr> <th style=\"width: 20%\">Option</th> <th style=\"width: 70%\">Extensions</th> </tr> </thead> <tbody> <tr> <td>base</td> <td>Core Sensorthings</td> </tr> <tr> <td>logs</td> <td>Add log entity to save logs</td> </tr> <tr> <td>users</td> <td>Add users mangement</td> </tr> <tr> <td>lora</td> <td>Add lora to manage lora sensors</td> </tr> <tr> <td>multiDatastream</td> <td>Add multiDatastream extension</td> </tr> <tr> <td>highPrecision</td> <td>Result are on float8 instead of float4</td> </tr> <tr> <td>mqtt</td> <td>Not use yet</td> </tr> <tr> <td>tasking</td> <td>Not use yet</td> </tr> </tbody> </table></br>List of Options : <table> <thead> <tr> <th style=\"width: 20%\">Option</th> <th style=\"width: 70%\">Description</th> </tr> </thead> <tbody> <tr> <td>canDrop</td> <td>Can drop database (usefull when setting system)</td> </tr> <tr> <td>stripNull</td> <td>Remove null value to json</td> </tr> <tr> <td>forceHttps</td> <td>add s to http:</td> </tr> </tbody> </table>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_request\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Services",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "name": "[newservice]Name of the service",
+                "pg": {
+                    "host": "[localhost] Postgres Host",
+                    "port": "[5432] Postgres Port",
+                    "user": "Postgres username to create",
+                    "password": "Postgres password to create",
+                    "database": "Name of the database (create it if not exist)",
+                    "retry": "[2] number of connection retry"
+                },
+                "version": "[v1.1] Model",
+                "date_format": "[DD/MM/YYYY hh:mi:ss] Date format",
+                "webSite": "Web site",
+                "nb_page": "[200] Default pagination number",
+                "alias": [
+                    "name",
+                    "Alias"
+                ],
+                "extensions": [
+                    "List of extensions"
+                ],
+                "options": [
+                    "List of options"
+                ]
+            },
+            "request": "",
+            "success": "{\n    \"name\": \"newdb\",\n    \"pg\": {\n        \"host\": \"localhost\",\n        \"port\": 5432,\n        \"user\": \"newuser\",\n        \"password\": \"*****\",\n        \"database\": \"newdb\",\n        \"retry\": 2\n    },\n    \"apiVersion\": \"undefined\",\n    \"date_format\": \"DD/MM/YYYY hh:mi:ss\",\n    \"nb_page\": 200,\n    \"alias\": [\n        \"\"\n    ],\n    \"extensions\": [\n        \"base\",\n        \"multiDatastream\",\n        \"logs\",\n        \"users\"\n    ],\n    \"options\": [\n        \"canDrop\"\n    ],\n    \"csvDelimiter\": \";\"\n}"
+        }
+    ],
+    "Things": [
+        {
+            "short": "Presentation",
+            "type": "infos",
+            "version": "1.1.0",
+            "description": "A Thing is an object of the physical world (physical Things) or the information world (virtual Things) that is capable of being identified and integrated into communication networks<br>Thing is a good starting point to start creating the SensorThings model structure.<br><br>A Thing has Locations and one or more Datastreams to collect Observations. A minimal Thing can be created without a Location and Datastream and there are options to create a Things with a nested linked Location and Datastream.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#thing\" target=\"_blank\">[OGC reference]</a>",
+            "request": ""
+        },
+        {
+            "short": "all",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Retrieve all Things.<input id=\"showGetThings\" type=checkbox> <label for=\"showGetThings\">Click for Help</label> <span id=\"contentGetThings\">To address to an entity set, users can simply put the entity set name after the service root URI. The service returns a JSON object with a property of value. The value of the property SHALL be a list of the entities in the specified entity set.</span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-address-collection-entities\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "structure": {
+                "columns": {
+                    "id": {
+                        "description": "Is the system-generated identifier of an entity. id is unique among the entities of the same entity type in a SensorThings service.",
+                        "type": "number",
+                        "requis": false
+                    },
+                    "name": {
+                        "description": "A property provides a label for Thing entity, commonly a descriptive name.",
+                        "type": "text",
+                        "requis": true
+                    },
+                    "description": {
+                        "description": "This is a short description of the corresponding Thing entity.",
+                        "type": "text",
+                        "requis": true
+                    },
+                    "properties": {
+                        "description": "A JSON Object containing user-annotated properties as key-value pairs.",
+                        "type": "json",
+                        "requis": false
+                    }
+                },
+                "relations": {
+                    "Locations": {
+                        "description": "Many optional to many optional",
+                        "type": "relation",
+                        "requis": false
+                    },
+                    "HistoricalLocations": {
+                        "description": "One mandatory to many optional",
+                        "type": "relation",
+                        "requis": false
+                    },
+                    "Datastreams": {
+                        "description": "One mandatory to many optional",
+                        "type": "relation",
+                        "requis": false
+                    },
+                    "MultiDatastreams": {
+                        "description": "One mandatory to many optional",
+                        "type": "relation",
+                        "requis": false
+                    }
+                }
+            },
+            "request": "proxyv1.1/Things",
+            "success": "{\n    \"@iot.count\": 11,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Things(1)\",\n            \"@iot.id\": 1,\n            \"name\": \"classic Thing\",\n            \"description\": \"Description of classic Thing\",\n            \"properties\": null,\n            \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(1)/Locations\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(1)/HistoricalLocations\",\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(1)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(1)/MultiDatastreams\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Things(2)\",\n            \"@iot.id\": 2,\n            \"name\": \"This is the stean's Thing\",\n            \"description\": \"Description of This is the stean's Thing\",\n            \"properties\": {\n                \"owner\": \"Mozilla version one\",\n                \"organization\": \"Mozilla\"\n            },\n            \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(2)/Locations\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(2)/HistoricalLocations\",\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(2)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(2)/MultiDatastreams\"\n        },\n        \"...\"\n    ]\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\"\n}"
+        },
+        {
+            "short": "one",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get a specific Thing.Users can address to a specific entity in an entity set by place the unique identifier of the entity between brace symbol “()” and put after the entity set name. The service then returns the entity with all its properties.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things(1)",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things(1)",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Things(1)\",\n    \"@iot.id\": 1,\n    \"name\": \"classic Thing\",\n    \"description\": \"Description of classic Thing\",\n    \"properties\": null,\n    \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(1)/Locations\",\n    \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(1)/HistoricalLocations\",\n    \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(1)/Datastreams\",\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(1)/MultiDatastreams\"\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"id : 1 not found\"\n}"
+        },
+        {
+            "short": "only a property",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get the name of a specific Thing.Users can address to a property of an entity by specifying the property name after the URI addressing to the entity. The service then returns the value of the specified property. If the property has a complex type value, properties of that value can be addressed by further property name composition.</br>If the property is single-valued and has the null value, the service SHALL respond with 204 No Content. If the property is not available, for example due to permissions, the service SHALL respond with 404 Not Found.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-address-property-of-entity\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things(1)/name",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things(1)/name",
+            "success": "{\n    \"name\": \"classic Thing\"\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"Not a valid id: Path is not valid.\"\n}"
+        },
+        {
+            "short": "only the value of a property",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get the value of the property of a specific Thing.To address the raw value of a primitive property, clients append a path segment containing the string $value to the property URL.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-address-value-of-property\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things(1)/name/$value",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things(1)/name/$value",
+            "success": "'classic Thing'"
+        },
+        {
+            "short": "Select with @iot.id",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get with SELECT with @iot.id.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#expand\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things?$select=name,description,@iot.id",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things?$select=name,description,@iot.id",
+            "success": "{\n    \"@iot.count\": 11,\n    \"value\": [\n        {\n            \"name\": \"classic Thing\",\n            \"description\": \"Description of classic Thing\",\n            \"@iot.id\": 1\n        },\n        {\n            \"name\": \"This is the stean's Thing\",\n            \"description\": \"Description of This is the stean's Thing\",\n            \"@iot.id\": 2\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Select with navigation link",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get SELECT with navigation link  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#expand\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things?$select=name,description,Datastreams",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things?$select=name,description,Datastreams",
+            "success": "{\n    \"@iot.count\": 11,\n    \"value\": [\n        {\n            \"name\": \"classic Thing\",\n            \"description\": \"Description of classic Thing\",\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(1)/Datastreams\"\n        },\n        {\n            \"name\": \"This is the stean's Thing\",\n            \"description\": \"Description of This is the stean's Thing\",\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(2)/Datastreams\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Subentity Locations",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get Subentity Locations of a specific Things.As the entities in different entity sets may hold some relationships, users can request the linked entities by addressing to a navigation property of an entity. The service then returns one or many entities that hold a certain relationship with the specified entity.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-address-navigation-property\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things(6)/Locations",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things(6)/Locations",
+            "success": "{\n    \"@iot.count\": 1,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Locations(7)\",\n            \"@iot.id\": 7,\n            \"name\": \"Institut Agro\",\n            \"description\": \"Institut Agro Rennes-Angers\",\n            \"encodingType\": \"application/geo+json\",\n            \"location\": {\n                \"type\": \"Point\",\n                \"coordinates\": [\n                    -1.6567440482485551,\n                    48.11256463781973\n                ]\n            },\n            \"properties\": null,\n            \"geom\": null,\n            \"Things@iot.navigationLink\": \"proxy/v1.1/Locations(7)/Things\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Locations(7)/HistoricalLocations\"\n        },\n        null,\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Expand Locations",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get Expand Locations of a specific Thing.The $expand system query option indicates the related entities to be represented inline. The value of the $expand query option SHALL be a comma separated list of navigation property names. Additionally, each navigation property can be followed by a forward slash and another navigation property to enable identifying a multi-level relationship.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#expand\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things(6)?$expand=Locations",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things(6)?$expand=Locations",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Things(6)\",\n    \"@iot.id\": 6,\n    \"name\": \"Climatic chamber\",\n    \"description\": \"Climate chamber for stean's tests\",\n    \"properties\": {\n        \"Creator\": \"The greek\",\n        \"Publisher\": \"Projet Zorba\",\n        \"Description\": \"@@@\"\n    },\n    \"Locations\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Locations(7)\",\n            \"@iot.id\": 7,\n            \"name\": \"Institut Agro\",\n            \"description\": \"Institut Agro Rennes-Angers\",\n            \"encodingType\": \"application/geo+json\",\n            \"location\": {\n                \"type\": \"Point\",\n                \"coordinates\": [\n                    -1.6567440482485551,\n                    48.11256463781973\n                ]\n            },\n            \"properties\": null,\n            \"geom\": null,\n            \"Things@iot.navigationLink\": \"proxy/v1.1/Locations(7)/Things\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Locations(7)/HistoricalLocations\"\n        }\n    ],\n    \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(6)/HistoricalLocations\",\n    \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(6)/Datastreams\",\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(6)/MultiDatastreams\"\n}"
+        },
+        {
+            "short": "Expand with Select",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get Expand Locations of a specific Thing with a SELECT inside.The $expand system query option indicates the related entities to be represented inline. The value of the $expand query option SHALL be a comma separated list of navigation property names. Additionally, each navigation property can be followed by a forward slash and another navigation property to enable identifying a multi-level relationship.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#expand\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things(6)?$expand=Locations($select=location)",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things(6)?$expand=Locations($select=location)",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Things(6)\",\n    \"@iot.id\": 6,\n    \"name\": \"Climatic chamber\",\n    \"description\": \"Climate chamber for stean's tests\",\n    \"properties\": {\n        \"Creator\": \"The greek\",\n        \"Publisher\": \"Projet Zorba\",\n        \"Description\": \"@@@\"\n    },\n    \"Locations\": [\n        {\n            \"location\": {\n                \"type\": \"Point\",\n                \"coordinates\": [\n                    -1.6567440482485551,\n                    48.11256463781973\n                ]\n            }\n        }\n    ],\n    \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(6)/HistoricalLocations\",\n    \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(6)/Datastreams\",\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(6)/MultiDatastreams\"\n}"
+        },
+        {
+            "short": "Expand coma separation",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get Expand Locations and Historical Location of a specific Thing..The $expand system query option indicates the related entities to be represented inline. The value of the $expand query option SHALL be a comma separated list of navigation property names. Additionally, each navigation property can be followed by a forward slash and another navigation property to enable identifying a multi-level relationship.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#expand\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things(6)?$expand=Locations,HistoricalLocations",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things(6)?$expand=Locations,HistoricalLocations",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Things(6)\",\n    \"@iot.id\": 6,\n    \"name\": \"Climatic chamber\",\n    \"description\": \"Climate chamber for stean's tests\",\n    \"properties\": {\n        \"Creator\": \"The greek\",\n        \"Publisher\": \"Projet Zorba\",\n        \"Description\": \"@@@\"\n    },\n    \"Locations\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Locations(7)\",\n            \"@iot.id\": 7,\n            \"name\": \"Institut Agro\",\n            \"description\": \"Institut Agro Rennes-Angers\",\n            \"encodingType\": \"application/geo+json\",\n            \"location\": {\n                \"type\": \"Point\",\n                \"coordinates\": [\n                    -1.6567440482485551,\n                    48.11256463781973\n                ]\n            },\n            \"properties\": null,\n            \"geom\": null,\n            \"Things@iot.navigationLink\": \"proxy/v1.1/Locations(7)/Things\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Locations(7)/HistoricalLocations\"\n        }\n    ],\n    \"HistoricalLocations\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/HistoricalLocations(6)\",\n            \"@iot.id\": 6,\n            \"time\": \"2025-05-23T16:57:50.983173+02:00\",\n            \"Thing@iot.navigationLink\": \"proxy/v1.1/HistoricalLocations(6)/Thing\",\n            \"Locations@iot.navigationLink\": \"proxy/v1.1/HistoricalLocations(6)/Locations\"\n        }\n    ],\n    \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(6)/Datastreams\",\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(6)/MultiDatastreams\"\n}"
+        },
+        {
+            "short": "Expand slash separation",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get Expand Locations and it's Historical Location of a specific Thing..The $expand system query option indicates the related entities to be represented inline. The value of the $expand query option SHALL be a comma separated list of navigation property names. Additionally, each navigation property can be followed by a forward slash and another navigation property to enable identifying a multi-level relationship.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#expand\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things(6)?$expand=Locations/HistoricalLocations",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things(6)?$expand=Locations/HistoricalLocations",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Things(6)\",\n    \"@iot.id\": 6,\n    \"name\": \"Climatic chamber\",\n    \"description\": \"Climate chamber for stean's tests\",\n    \"properties\": {\n        \"Creator\": \"The greek\",\n        \"Publisher\": \"Projet Zorba\",\n        \"Description\": \"@@@\"\n    },\n    \"Locations\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Locations(7)\",\n            \"@iot.id\": 7,\n            \"name\": \"Institut Agro\",\n            \"description\": \"Institut Agro Rennes-Angers\",\n            \"encodingType\": \"application/geo+json\",\n            \"location\": {\n                \"type\": \"Point\",\n                \"coordinates\": [\n                    -1.6567440482485551,\n                    48.11256463781973\n                ]\n            },\n            \"properties\": null,\n            \"geom\": null,\n            \"Things@iot.navigationLink\": \"proxy/v1.1/Locations(7)/Things\",\n            \"HistoricalLocations\": [\n                {\n                    \"@iot.selfLink\": \"proxy/v1.1/HistoricalLocations(6)\",\n                    \"@iot.id\": 6,\n                    \"time\": \"2025-05-23T16:57:50.983173+02:00\",\n                    \"Thing@iot.navigationLink\": \"proxy/v1.1/HistoricalLocations(6)/Thing\",\n                    \"Locations@iot.navigationLink\": \"proxy/v1.1/HistoricalLocations(6)/Locations\"\n                }\n            ]\n        }\n    ],\n    \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(6)/HistoricalLocations\",\n    \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(6)/Datastreams\",\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(6)/MultiDatastreams\"\n}"
+        },
+        {
+            "short": "only references",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get only references of all Things.As the entities in different entity sets may hold some relationships, users can request the linked entities’ selfLinks by addressing to an association link of an entity. An associationLink can be used to retrieve a reference to an entity or an entity set related to the current entity. Only the selfLinks of related entities are returned when resolving associationLinks.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-address-associationlink\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things/$ref",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things/$ref",
+            "success": "{\n    \"@iot.count\": 11,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Things(1)\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Things(2)\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "nested resource path",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get a specific datastream resource from o specific thing. As users can use navigation properties to link from one entity set to another, users can further extend the resource path with unique identifiers, properties, or links (i.e., Usage 3, 4 and 6).  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-nested-resource-path\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things(6)/Datastreams(7)",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things(6)/Datastreams(7)",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Datastreams(7)\",\n    \"@iot.id\": 7,\n    \"name\": \"Humidité de la chambre climatique\",\n    \"description\": \"Humidité relative de l’air de la chambre climatique, observations toutes les 15 minutes\",\n    \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n    \"unitOfMeasurement\": {\n        \"name\": \"Pourcentage\",\n        \"symbol\": \"%\",\n        \"definition\": \"\"\n    },\n    \"observedArea\": null,\n    \"phenomenonTime\": \"2024-06-01T02:45:01Z/2024-06-03T04:15:01Z\",\n    \"resultTime\": \"2024-06-01T02:45:01Z/2024-06-03T04:15:01Z\",\n    \"properties\": null,\n    \"Thing@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/Thing\",\n    \"Sensor@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/Sensor\",\n    \"ObservedProperty@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/ObservedProperty\",\n    \"Observations@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/Observations\",\n    \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/Lora\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/FeatureOfInterest\"\n}"
+        },
+        {
+            "short": "nested resource path property",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get name property of a specific datastream resource from o specific thing. As users can use navigation properties to link from one entity set to another, users can further extend the resource path with unique identifiers, properties, or links (i.e., Usage 3, 4 and 6).  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-nested-resource-path\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things(6)/Datastreams(7)/name",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things(6)/Datastreams(7)/name",
+            "success": "{\n    \"name\": \"Humidité de la chambre climatique\"\n}"
+        },
+        {
+            "short": "nested resource path entity",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get entity of a specific datastream resource from a specific thing. As users can use navigation properties to link from one entity set to another, users can further extend the resource path with unique identifiers, properties, or links (i.e., Usage 3, 4 and 6).  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-nested-resource-path\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things(6)/Datastreams(7)/Thing",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things(6)/Datastreams(7)/Thing",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Things(6)\",\n    \"@iot.id\": 6,\n    \"name\": \"Climatic chamber\",\n    \"description\": \"Climate chamber for stean's tests\",\n    \"properties\": {\n        \"Creator\": \"The greek\",\n        \"Publisher\": \"Projet Zorba\",\n        \"Description\": \"@@@\"\n    },\n    \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(6)/Locations\",\n    \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(6)/HistoricalLocations\",\n    \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(6)/Datastreams\",\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(6)/MultiDatastreams\"\n}"
+        },
+        {
+            "short": "nested resource path entity and sub entity",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get entity of a specific datastream resource from a specific nested thing. As users can use navigation properties to link from one entity set to another, users can further extend the resource path with unique identifiers, properties, or links (i.e., Usage 3, 4 and 6).  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-nested-resource-path\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things(6)/Datastreams(7)/Thing/Datastreams",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things(6)/Datastreams(7)/Thing/Datastreams",
+            "success": "{\n    \"@iot.count\": 3,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Datastreams(6)\",\n            \"@iot.id\": 6,\n            \"name\": \"Température de la chambre climatique\",\n            \"description\": \"Température de l'air de la chambre climatique, observations toutes les 15 minutes\",\n            \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n            \"unitOfMeasurement\": {\n                \"name\": \"Degree Celsius\",\n                \"symbol\": \"°C\",\n                \"definition\": \"http://unitsofmeasure.org/ucum.html#para-30\"\n            },\n            \"observedArea\": null,\n            \"phenomenonTime\": \"2024-06-01T03:00:01Z/2024-06-03T03:45:01Z\",\n            \"resultTime\": \"2024-06-01T03:00:01Z/2024-06-03T03:45:01Z\",\n            \"properties\": null,\n            \"Thing@iot.navigationLink\": \"proxy/v1.1/Datastreams(6)/Thing\",\n            \"Sensor@iot.navigationLink\": \"proxy/v1.1/Datastreams(6)/Sensor\",\n            \"ObservedProperty@iot.navigationLink\": \"proxy/v1.1/Datastreams(6)/ObservedProperty\",\n            \"Observations@iot.navigationLink\": \"proxy/v1.1/Datastreams(6)/Observations\",\n            \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(6)/Lora\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(6)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Datastreams(7)\",\n            \"@iot.id\": 7,\n            \"name\": \"Humidité de la chambre climatique\",\n            \"description\": \"Humidité relative de l’air de la chambre climatique, observations toutes les 15 minutes\",\n            \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n            \"unitOfMeasurement\": {\n                \"name\": \"Pourcentage\",\n                \"symbol\": \"%\",\n                \"definition\": \"\"\n            },\n            \"observedArea\": null,\n            \"phenomenonTime\": \"2024-06-01T02:45:01Z/2024-06-03T04:15:01Z\",\n            \"resultTime\": \"2024-06-01T02:45:01Z/2024-06-03T04:15:01Z\",\n            \"properties\": null,\n            \"Thing@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/Thing\",\n            \"Sensor@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/Sensor\",\n            \"ObservedProperty@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/ObservedProperty\",\n            \"Observations@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/Observations\",\n            \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/Lora\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "filter nested resource path",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get Things that's have a datastream description equal to ...  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-nested-resource-path\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things?$filter=Datastreams/description eq 'Pressure sensor'",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things?$filter=Datastreams/description eq 'Pressure sensor'",
+            "success": "{\n    \"@iot.count\": 1,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Things(11)\",\n            \"@iot.id\": 11,\n            \"name\": \"BeautifulEyes Thing\",\n            \"description\": \"Thing from the BeautifulEyes site\",\n            \"properties\": null,\n            \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(11)/Locations\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(11)/HistoricalLocations\",\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(11)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(11)/MultiDatastreams\"\n        },\n        null,\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "complex filter nested resource path",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get Things that's have a datastream Wich have an observed property with description equal to ... ",
+            "examples": {
+                "http": "v1.1/Things?$filter=Datastreams/ObservedProperty/description eq 'Mesure de la profondeur de la nappe'",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things?$filter=Datastreams/ObservedProperty/description eq 'Mesure de la profondeur de la nappe'",
+            "success": "{\n    \"@iot.count\": 2,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Things(9)\",\n            \"@iot.id\": 9,\n            \"name\": \"Piezo F5b\",\n            \"description\": \"Watershed F5b piezometer of Kerrien\",\n            \"properties\": null,\n            \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(9)/Locations\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(9)/HistoricalLocations\",\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(9)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(9)/MultiDatastreams\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Things(10)\",\n            \"@iot.id\": 10,\n            \"name\": \"Piezometer F4\",\n            \"description\": \"Watershed F4 piezometer of Kerrien\",\n            \"properties\": null,\n            \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(10)/Locations\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(10)/HistoricalLocations\",\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(10)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(10)/MultiDatastreams\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Post basic",
+            "type": "post",
+            "version": "1.1.0",
+            "apiPermission": "admin:computer",
+            "description": "Post a new Things.<input id=\"showPostThings\" type=checkbox> <label for=\"showPostThings\">Click for Help</label> <span id=\"contentPostThings\"></br></br>To create an entity in a collection, the client SHALL send a HTTP POST request to that collection’s URL. The POST body SHALL contain a single valid entity representation.\n    </br></br>If the target URL for the collection is a navigationLink, the new entity is automatically linked to the entity containing the navigationLink.\n    </br></br>Upon successful completion, the response SHALL contain a HTTP location header that contains the selfLink of the created entity.\n    </br></br>Upon successful completion the service SHALL respond with either 201 Created, or 204 No Content.\n    </br></br>In addition, the link between entities SHALL be established upon creating an entity. Two use cases SHALL be considered: (1) link to existing entities when creating an entity, and (2) create related entities when creating an entity. The requests for these two use cases are described in the following subsection.\n    </br></br>When clients create resources in a SensorThings service, they SHALL follow the integrity constraints listed in Table 24. For example, a Datastream entity SHALL link to a Thing entity. When a client wants to create a Datastream entity, the client needs to either (1) create a linked Thing entity in the same request or (2) link to an already created Thing entity. The complete integrity constraints for creating resources are shown in the following table.\n    </br></br>Special case #1 - When creating an Observation entity that links to a FeatureOfInterest entity: Sometimes the FeatureOfInterest of an Observation is the Location of the Thing. For example, a wifi-connected thermostat’s temperature observation’s feature-of-interest can be the location of the smart thermostat, that is the room WHERE the smart thermostat is located in.\n    </br></br>In this case, when a client creates an Observation entity, the client SHOULD omit the link to a FeatureOfInterest entity in the POST body message and SHOULD not create a related FeatureOfInterest entity with deep insert. And if the service detects that there is no link to a FeatureOfInterest entity in the POST body message that creates an Observation entity, the service SHALL either (1) create a FeatureOfInterest entity by using the location property from the Location of the Thing entity when there is no FeatureOfInterest whose location property is from the Location of the Thing entity or (2) link to the FeatureOfInterest whose location property is from the Location of the Thing entity.\n    </br></br>Special case #2: In the context of IoT, many Observations’ resultTime and phenomenonTime cannot be distinguished or the resultTime is not available. In this case, when a client creates an Observation entity, the client MAY omit the resultTime and the service SHOULD assign a null value to the resultTime.\n    </br><table> <thead> <tr> <th style=\"width: 30%\">Scenario</th> <th style=\"width: 70%\">Integrity Constraints</th> </tr> </thead> <tbody> <tr> <td>Create a Thing entity</td> <td></td> </tr> <tr> <td>Create a Location entity</td> <td></td> </tr> <tr> <td>Create a Datastream entity</td> <td>SHALL link to a Thing entity</br>SHALL link to a Sensor entity.</br>SHALL link to an ObservedProperty entity.</td> </tr> <tr> <td>Create a Sensor entity</td> <td></td> </tr> <tr> <td>Create an ObservedProperty entity</td> <td></td> </tr> <tr> <td>Create an Observation entity</td> <td>SHALL link to a Datastream or MultiDatastream entity.</br>SHALL link to a FeatureOfInterest entity. If no link specified, the service SHALL create a FeatureOfInterest entity from the content of the Location entities.</td> </tr> <tr> <td>Create a FeatureOfInterest entity</td> <td></td> </tr> </tbody> </table></span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_request\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "name": "Thing test",
+                "description": "Create Thing inside tests",
+                "properties": {
+                    "organization": "Mozilla",
+                    "owner": "Mozilla"
+                }
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Things(12)\",\n    \"@iot.id\": 12,\n    \"name\": \"Thing test\",\n    \"description\": \"Create Thing inside tests\",\n    \"properties\": {\n        \"owner\": \"Mozilla\",\n        \"organization\": \"Mozilla\"\n    },\n    \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(12)/Locations\",\n    \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(12)/HistoricalLocations\",\n    \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(12)/Datastreams\",\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(12)/MultiDatastreams\"\n}",
+            "error": "{\n    \"code\": 400,\n    \"message\": \"Bad Request\"\n}"
+        },
+        {
+            "short": "Post with new Location",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "A Location entity can be linked to a Thing at its creation time. The Location provided will be a new Location in the system.</br></br>A request to create an entity that includes related entities, represented using the appropriate inline representation, is referred to as a \"deep insert\". A SensorThings service that supports entity creation SHALL support deep insert.\n    </br></br>If the inline representation contains a value for a computed property (i.e., id), the service SHALL ignore that value when creating the related entity.\n    </br></br>On success, the service SHALL create all entities and relate them. On failure, the service SHALL NOT create any of the entities.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#create-related-entities\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "name": "Thing with new Location test",
+                "description": "Create Thing with new location inside tests",
+                "properties": {
+                    "Deployment Condition": "Deployed in a third floor balcony",
+                    "Case Used": "Radiation shield"
+                },
+                "Locations": {
+                    "name": "Saint-Malo",
+                    "description": "City of Saint-Malo",
+                    "encodingType": "application/geo+json",
+                    "location": {
+                        "coordinates": [
+                            -2.7462126107293727,
+                            48.48952830328679
+                        ],
+                        "type": "Point"
+                    }
+                }
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Things(13)\",\n    \"@iot.id\": 13,\n    \"name\": \"Thing with new Location test\",\n    \"description\": \"Create Thing with new location inside tests\",\n    \"properties\": {\n        \"Case Used\": \"Radiation shield\",\n        \"Deployment Condition\": \"Deployed in a third floor balcony\"\n    },\n    \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(13)/Locations\",\n    \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(13)/HistoricalLocations\",\n    \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(13)/Datastreams\",\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(13)/MultiDatastreams\"\n}",
+            "error": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Things(13)\",\n    \"@iot.id\": 13,\n    \"name\": \"Thing with new Location test\",\n    \"description\": \"Create Thing with new location inside tests\",\n    \"properties\": {\n        \"Case Used\": \"Radiation shield\",\n        \"Deployment Condition\": \"Deployed in a third floor balcony\"\n    },\n    \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(13)/Locations\",\n    \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(13)/HistoricalLocations\",\n    \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(13)/Datastreams\",\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(13)/MultiDatastreams\"\n}"
+        },
+        {
+            "short": "Post with existing Location",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "Create a Thing with existing location.A SensorThings API service, that supports entity creation, SHALL support linking new entities to existing entities upon creation. To create a new entity with links to existing entities in a single request, the client SHALL include the unique identifiers of the related entities associated with the corresponding navigation properties in the request body.\n    </br></br>In the case of creating an Observation whose FeatureOfInterest is the Thing’s Location (that means the Thing entity has a related Location entity), the request of creating the Observation SHOULD NOT include a link to a FeatureOfInterest entity. The service will first automatically create a FeatureOfInterest entity from the Location of the Thing and then link to the Observation.\n    </br></br>In the complex use case of a Thing has multiple Location representations, the service SHOULD decide the default Location encoding when an Observation’s FeatureOfInterest is the Thing’s Location.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "name": "Thing with existing Location test",
+                "description": "Create Thing with existing location inside tests",
+                "properties": {
+                    "Deployment Condition": "Deployed in a third floor balcony",
+                    "Case Used": "Radiation shield"
+                },
+                "Locations": [
+                    {
+                        "@iot.id": "1"
+                    }
+                ]
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Things(14)\",\n    \"@iot.id\": 14,\n    \"name\": \"Thing with existing Location test\",\n    \"description\": \"Create Thing with existing location inside tests\",\n    \"properties\": {\n        \"Case Used\": \"Radiation shield\",\n        \"Deployment Condition\": \"Deployed in a third floor balcony\"\n    },\n    \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(14)/Locations\",\n    \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(14)/HistoricalLocations\",\n    \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(14)/Datastreams\",\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(14)/MultiDatastreams\"\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"exist no location ID --> 1908\"\n}"
+        },
+        {
+            "short": "Post with Location and Datastream",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "Create a Thing with new location & datastream.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#create-related-entities\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "name": "Thing with new Location & Datastream test",
+                "description": "Create Thing with new location & Datastream inside tests",
+                "properties": {
+                    "Deployment Condition": "Deployed in a third floor balcony",
+                    "Case Used": "Radiation shield"
+                },
+                "Locations": [
+                    {
+                        "name": "Fougères",
+                        "description": "City of Fougères",
+                        "encodingType": "application/geo+json",
+                        "location": {
+                            "coordinates": [
+                                -1.9867722904692187,
+                                48.643104431904845
+                            ],
+                            "type": "Point"
+                        }
+                    }
+                ],
+                "Datastreams": [
+                    {
+                        "name": "Air Temperature DS",
+                        "description": "Datastream for recording temperature",
+                        "observationType": "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement",
+                        "unitOfMeasurement": {
+                            "name": "Degree Celsius for test",
+                            "symbol": "degC",
+                            "definition": "http://www.qudt.org/qudt/owl/1.0.0/unit/Instances.html#DegreeCelsius"
+                        },
+                        "ObservedProperty": {
+                            "name": "Area Temperature for test",
+                            "description": "The degree or intensity of heat present in the area",
+                            "definition": "http://www.qudt.org/qudt/owl/1.0.0/quantity/Instances.html#AreaTemperature"
+                        },
+                        "Sensor": {
+                            "name": "`DHT22 for test",
+                            "description": "DHT22 temperature sensor",
+                            "encodingType": "application/pdf",
+                            "metadata": "https://cdn-shop.adafruit.com/datasheets/DHT22.pdf"
+                        }
+                    }
+                ]
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Things(16)\",\n    \"@iot.id\": 16,\n    \"name\": \"Thing with new Location & Datastream test\",\n    \"description\": \"Create Thing with new location & Datastream inside tests\",\n    \"properties\": {\n        \"Case Used\": \"Radiation shield\",\n        \"Deployment Condition\": \"Deployed in a third floor balcony\"\n    },\n    \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(16)/Locations\",\n    \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(16)/HistoricalLocations\",\n    \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(16)/Datastreams\",\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(16)/MultiDatastreams\"\n}",
+            "error": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Things(16)\",\n    \"@iot.id\": 16,\n    \"name\": \"Thing with new Location & Datastream test\",\n    \"description\": \"Create Thing with new location & Datastream inside tests\",\n    \"properties\": {\n        \"Case Used\": \"Radiation shield\",\n        \"Deployment Condition\": \"Deployed in a third floor balcony\"\n    },\n    \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(16)/Locations\",\n    \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(16)/HistoricalLocations\",\n    \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(16)/Datastreams\",\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(16)/MultiDatastreams\"\n}"
+        },
+        {
+            "short": "Things Patch a Thing",
+            "type": "patch",
+            "version": "1.1.0",
+            "description": "Patch a Thing.<input id=\"showPatchThings\" type=checkbox> <label for=\"showPatchThings\">Click for Help</label> <span id=\"contentPatchThings\"></br></br>In SensorThings PATCH is the preferred means of updating an entity. PATCH provides more resiliency between clients and services by directly modifying only those values specified by the client.\n    </br></br>The semantics of PATCH, as defined in [RFC5789], are to merge the content in the request payload with the entity’s current state, applying the update only to those components specified in the request body. The properties provided in the payload corresponding to updatable properties SHALL replace the value of the corresponding property in the entity. Missing properties of the containing entity or complex property SHALL NOT be directly altered.\n    </br></br>Services MAY additionally support PUT, but should be aware of the potential for data-loss in round-tripping properties that the client may not know about in advance, such as open or added properties, or properties not specified in metadata. Services that do not support PUT SHALL respond with an HTTP code 501 Not Implemented.\n    </br></br>Key and other non-updatable properties that are not tied to key properties of the principal entity, can be omitted from the request. If the request contains a value for one of these properties, the service SHALL ignore that value when applying the update.\n    </br></br>On success, the response SHALL be a valid success response.</span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_request_2\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things(17)",
+                "curl": "curl -X PATCH -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"PATCH\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.patch('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "name": "New SensorWebThing Patch",
+                "properties": {
+                    "organization": "Mozilla",
+                    "owner": "Mozilla"
+                }
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Things(17)\",\n    \"@iot.id\": 17,\n    \"name\": \"New SensorWebThing Patch\",\n    \"description\": \"Thing test For inner Post\",\n    \"properties\": {\n        \"owner\": \"Mozilla\",\n        \"organization\": \"Mozilla\"\n    },\n    \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(17)/Locations\",\n    \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(17)/HistoricalLocations\",\n    \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(17)/Datastreams\",\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(17)/MultiDatastreams\"\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"exist no thing ID --> 0\"\n}"
+        },
+        {
+            "short": "Things Patch with New location",
+            "type": "patch",
+            "version": "1.1.0",
+            "description": "Modify location of a Thing.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_request_2\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things(17)",
+                "curl": "curl -X PATCH -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"PATCH\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.patch('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "name": "New SensorWebThing back",
+                "properties": {
+                    "organization": "Mozilla",
+                    "owner": "Mozilla"
+                },
+                "Locations": [
+                    {
+                        "@iot.id": 10
+                    }
+                ]
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Things(17)\",\n    \"@iot.id\": 17,\n    \"name\": \"New SensorWebThing back\",\n    \"description\": \"Thing test For inner Post\",\n    \"properties\": {\n        \"owner\": \"Mozilla\",\n        \"organization\": \"Mozilla\"\n    },\n    \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(17)/Locations\",\n    \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(17)/HistoricalLocations\",\n    \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(17)/Datastreams\",\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(17)/MultiDatastreams\"\n}"
+        },
+        {
+            "short": "Things Patch with existing Location",
+            "type": "patch",
+            "version": "1.1.0",
+            "description": "Patch a Thing and only location change.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_request_2\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things(17)",
+                "curl": "curl -X PATCH -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"PATCH\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.patch('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "Locations": [
+                    {
+                        "@iot.id": 2
+                    }
+                ]
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Things(17)\",\n    \"@iot.id\": 17,\n    \"name\": \"New SensorWebThing back\",\n    \"description\": \"Thing test For inner Post\",\n    \"properties\": {\n        \"owner\": \"Mozilla\",\n        \"organization\": \"Mozilla\"\n    },\n    \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(17)/Locations\",\n    \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(17)/HistoricalLocations\",\n    \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(17)/Datastreams\",\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(17)/MultiDatastreams\"\n}"
+        },
+        {
+            "short": "One",
+            "type": "delete",
+            "version": "1.1.0",
+            "description": "Delete a Thing.<input id=\"showDeleteThings\" type=checkbox> <label for=\"showDeleteThings\">Click for Help</label> <span id=\"contentDeleteThings\"></br> A successful DELETE request to an entity’s edit URL deletes the entity. The request body SHOULD be empty. Services SHALL implicitly remove relations to and from an entity when deleting it; clients need not delete the relations explicitly.\n    </br>Services MAY implicitly delete or modify related entities if required by integrity constraints.\n    <table> <thead> <tr> <th style=\"width: 30%\">Scenario</th> <th style=\"width: 70%\">Integrity Constraints</th> </tr> </thead> <tbody> <tr> <td>Delete a Thing entity</td> <td>Delete all the Datastream and HistoricalLocation entities linked to the Thing entity.</td> </tr> <tr> <td>Delete a Location entity</td> <td>Delete all the HistoricalLocation entities linked to the Location entity</td> </tr> <tr> <td>Delete a Datastream entity</td> <td>Delete all the Observation entities linked to the Datastream entity.</td> </tr> <tr> <td>Delete a Sensor entity</td> <td>Delete all the Datastream entities linked to the Sensor entity.</td> </tr> <tr> <td>Delete an ObservedProperty entity</td> <td>Delete all the Datastream entities linked to the ObservedProperty entity.</td> </tr> <tr> <td>Delete an Observation entity</td> <td></td> </tr> <tr> <td>Delete a FeatureOfInterest entity</td> <td>Delete all the Observation entities linked to the FeatureOfInterest entity.</td> </tr> <tr> <td>Delete a HistoricalLocation entity entity</td> <td></td> </tr> </tbody> </table></span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_request_3\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things(17)",
+                "curl": "curl -DELETE \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"DELETE\"\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.delete('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "",
+            "success": "{}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"No id found for : 0\"\n}"
+        }
+    ],
+    "Locations": [
+        {
+            "short": "Presentation",
+            "type": "infos",
+            "version": "1.1.0",
+            "description": "The Location entity locates the Thing(s) it associated with.<br>A Thing’s Location entity is defined as the last known location of the Thing.<br>\n        A Thing can have multiple Locations if all Locations are different representations of same Location with different encodingType  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#location\" target=\"_blank\">[OGC reference]</a>",
+            "request": ""
+        },
+        {
+            "short": "all",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Retrieve all Locations.<input id=\"showGetLocations\" type=checkbox> <label for=\"showGetLocations\">Click for Help</label> <span id=\"contentGetLocations\">To address to an entity set, users can simply put the entity set name after the service root URI. The service returns a JSON object with a property of value. The value of the property SHALL be a list of the entities in the specified entity set.</span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-address-collection-entities\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Locations",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "structure": {
+                "columns": {
+                    "id": {
+                        "description": "Is the system-generated identifier of an entity. id is unique among the entities of the same entity type in a SensorThings service.",
+                        "type": "number",
+                        "requis": false
+                    },
+                    "name": {
+                        "description": "A property provides a label for Location entity, commonly a descriptive name.",
+                        "type": "text",
+                        "requis": true
+                    },
+                    "description": {
+                        "description": "The description about the Location.",
+                        "type": "text",
+                        "requis": true
+                    },
+                    "encodingType": {
+                        "description": "The encoding type of the Location property. Its value is GeoJSON.",
+                        "type": "text",
+                        "requis": true
+                    },
+                    "location": {
+                        "description": "The location type is defined by encodingType.",
+                        "type": "json",
+                        "requis": true
+                    },
+                    "geom": {
+                        "description": "json",
+                        "type": "json",
+                        "requis": false
+                    },
+                    "properties": {
+                        "description": "A JSON Object containing user-annotated properties as key-value pairs.",
+                        "type": "json",
+                        "requis": false
+                    }
+                },
+                "relations": {
+                    "Things": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    },
+                    "HistoricalLocations": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    }
+                }
+            },
+            "request": "proxyv1.1/Locations",
+            "success": "{\n    \"@iot.count\": 15,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Locations(1)\",\n            \"@iot.id\": 1,\n            \"name\": \"On the Moon\",\n            \"description\": \"Climatic chamber location\",\n            \"encodingType\": \"application/geo+json\",\n            \"location\": {\n                \"type\": \"Point\",\n                \"coordinates\": [\n                    -4.108433416883344,\n                    47.99535576613954\n                ]\n            },\n            \"properties\": null,\n            \"geom\": null,\n            \"Things@iot.navigationLink\": \"proxy/v1.1/Locations(1)/Things\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Locations(1)/HistoricalLocations\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Locations(2)\",\n            \"@iot.id\": 2,\n            \"name\": \"classic Location\",\n            \"description\": \"Description of classic Location\",\n            \"encodingType\": \"application/geo+json\",\n            \"location\": {\n                \"type\": \"Point\",\n                \"coordinates\": [\n                    -0.5528847276950444,\n                    47.46996912080425\n                ]\n            },\n            \"properties\": null,\n            \"geom\": null,\n            \"Things@iot.navigationLink\": \"proxy/v1.1/Locations(2)/Things\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Locations(2)/HistoricalLocations\"\n        },\n        \"...\"\n    ]\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\"\n}"
+        },
+        {
+            "short": "one",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get a specific Location.Users can address to a specific entity in an entity set by place the unique identifier of the entity between brace symbol “()” and put after the entity set name. The service then returns the entity with all its properties.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Locations(1)",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Locations(1)",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Locations(1)\",\n    \"@iot.id\": 1,\n    \"name\": \"On the Moon\",\n    \"description\": \"Climatic chamber location\",\n    \"encodingType\": \"application/geo+json\",\n    \"location\": {\n        \"type\": \"Point\",\n        \"coordinates\": [\n            -4.108433416883344,\n            47.99535576613954\n        ]\n    },\n    \"properties\": null,\n    \"geom\": null,\n    \"Things@iot.navigationLink\": \"proxy/v1.1/Locations(1)/Things\",\n    \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Locations(1)/HistoricalLocations\"\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"id : 1 not found\"\n}"
+        },
+        {
+            "short": "from specific Thing",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Retrieve Locations of a specific Thing.As the entities in different entity sets may hold some relationships, users can request the linked entities by addressing to a navigation property of an entity. The service then returns one or many entities that hold a certain relationship with the specified entity.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-address-navigation-property\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things(6)/Locations",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "structure": {
+                "columns": {
+                    "id": {
+                        "description": "Is the system-generated identifier of an entity. id is unique among the entities of the same entity type in a SensorThings service.",
+                        "type": "number",
+                        "requis": false
+                    },
+                    "name": {
+                        "description": "A property provides a label for Location entity, commonly a descriptive name.",
+                        "type": "text",
+                        "requis": true
+                    },
+                    "description": {
+                        "description": "The description about the Location.",
+                        "type": "text",
+                        "requis": true
+                    },
+                    "encodingType": {
+                        "description": "The encoding type of the Location property. Its value is GeoJSON.",
+                        "type": "text",
+                        "requis": true
+                    },
+                    "location": {
+                        "description": "The location type is defined by encodingType.",
+                        "type": "json",
+                        "requis": true
+                    },
+                    "geom": {
+                        "description": "json",
+                        "type": "json",
+                        "requis": false
+                    },
+                    "properties": {
+                        "description": "A JSON Object containing user-annotated properties as key-value pairs.",
+                        "type": "json",
+                        "requis": false
+                    }
+                },
+                "relations": {
+                    "Things": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    },
+                    "HistoricalLocations": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    }
+                }
+            },
+            "request": "proxyv1.1/Things(6)/Locations",
+            "success": "{\n    \"@iot.count\": 1,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Locations(7)\",\n            \"@iot.id\": 7,\n            \"name\": \"Institut Agro\",\n            \"description\": \"Institut Agro Rennes-Angers\",\n            \"encodingType\": \"application/geo+json\",\n            \"location\": {\n                \"type\": \"Point\",\n                \"coordinates\": [\n                    -1.6567440482485551,\n                    48.11256463781973\n                ]\n            },\n            \"properties\": null,\n            \"geom\": null,\n            \"Things@iot.navigationLink\": \"proxy/v1.1/Locations(7)/Things\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Locations(7)/HistoricalLocations\"\n        },\n        null,\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "only the value of a property",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get the value of the property of a specific Locanion.To address the raw value of a primitive property, clients append a path segment containing the string $value to the property URL.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-address-value-of-property\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Locations(1)/location/$value",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Locations(1)/location/$value",
+            "success": "{\n    \"type\": \"Point\",\n    \"coordinates\": [\n        -4.108433416883344,\n        47.99535576613954\n    ]\n}"
+        },
+        {
+            "short": "Post basic",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "Post a new Location.<input id=\"showPostLocations\" type=checkbox> <label for=\"showPostLocations\">Click for Help</label> <span id=\"contentPostLocations\"></br></br>To create an entity in a collection, the client SHALL send a HTTP POST request to that collection’s URL. The POST body SHALL contain a single valid entity representation.\n    </br></br>If the target URL for the collection is a navigationLink, the new entity is automatically linked to the entity containing the navigationLink.\n    </br></br>Upon successful completion, the response SHALL contain a HTTP location header that contains the selfLink of the created entity.\n    </br></br>Upon successful completion the service SHALL respond with either 201 Created, or 204 No Content.\n    </br></br>In addition, the link between entities SHALL be established upon creating an entity. Two use cases SHALL be considered: (1) link to existing entities when creating an entity, and (2) create related entities when creating an entity. The requests for these two use cases are described in the following subsection.\n    </br></br>When clients create resources in a SensorThings service, they SHALL follow the integrity constraints listed in Table 24. For example, a Datastream entity SHALL link to a Thing entity. When a client wants to create a Datastream entity, the client needs to either (1) create a linked Thing entity in the same request or (2) link to an already created Thing entity. The complete integrity constraints for creating resources are shown in the following table.\n    </br></br>Special case #1 - When creating an Observation entity that links to a FeatureOfInterest entity: Sometimes the FeatureOfInterest of an Observation is the Location of the Thing. For example, a wifi-connected thermostat’s temperature observation’s feature-of-interest can be the location of the smart thermostat, that is the room WHERE the smart thermostat is located in.\n    </br></br>In this case, when a client creates an Observation entity, the client SHOULD omit the link to a FeatureOfInterest entity in the POST body message and SHOULD not create a related FeatureOfInterest entity with deep insert. And if the service detects that there is no link to a FeatureOfInterest entity in the POST body message that creates an Observation entity, the service SHALL either (1) create a FeatureOfInterest entity by using the location property from the Location of the Thing entity when there is no FeatureOfInterest whose location property is from the Location of the Thing entity or (2) link to the FeatureOfInterest whose location property is from the Location of the Thing entity.\n    </br></br>Special case #2: In the context of IoT, many Observations’ resultTime and phenomenonTime cannot be distinguished or the resultTime is not available. In this case, when a client creates an Observation entity, the client MAY omit the resultTime and the service SHOULD assign a null value to the resultTime.\n    </br><table> <thead> <tr> <th style=\"width: 30%\">Scenario</th> <th style=\"width: 70%\">Integrity Constraints</th> </tr> </thead> <tbody> <tr> <td>Create a Thing entity</td> <td></td> </tr> <tr> <td>Create a Location entity</td> <td></td> </tr> <tr> <td>Create a Datastream entity</td> <td>SHALL link to a Thing entity</br>SHALL link to a Sensor entity.</br>SHALL link to an ObservedProperty entity.</td> </tr> <tr> <td>Create a Sensor entity</td> <td></td> </tr> <tr> <td>Create an ObservedProperty entity</td> <td></td> </tr> <tr> <td>Create an Observation entity</td> <td>SHALL link to a Datastream or MultiDatastream entity.</br>SHALL link to a FeatureOfInterest entity. If no link specified, the service SHALL create a FeatureOfInterest entity from the content of the Location entities.</td> </tr> <tr> <td>Create a FeatureOfInterest entity</td> <td></td> </tr> </tbody> </table></span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_request\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Locations",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "name": "Inrae - Saint-Gilles",
+                "description": "New location test Inrae - Saint-Gilles",
+                "encodingType": "application/geo+json",
+                "location": {
+                    "coordinates": [
+                        -1.9867722904692187,
+                        48.643104431904845
+                    ],
+                    "type": "Point"
+                }
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Locations(16)\",\n    \"@iot.id\": 16,\n    \"name\": \"Inrae - Saint-Gilles\",\n    \"description\": \"New location test Inrae - Saint-Gilles\",\n    \"encodingType\": \"application/geo+json\",\n    \"location\": {\n        \"type\": \"Point\",\n        \"coordinates\": [\n            -1.9867722904692187,\n            48.643104431904845\n        ]\n    },\n    \"properties\": null,\n    \"geom\": null,\n    \"Things@iot.navigationLink\": \"proxy/v1.1/Locations(16)/Things\",\n    \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Locations(16)/HistoricalLocations\"\n}",
+            "error": "{\n    \"code\": 400,\n    \"message\": \"Bad Request\"\n}"
+        },
+        {
+            "short": "Post with existing Thing",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "POST a new Location with existing Thing.A SensorThings API service, that supports entity creation, SHALL support linking new entities to existing entities upon creation. To create a new entity with links to existing entities in a single request, the client SHALL include the unique identifiers of the related entities associated with the corresponding navigation properties in the request body.\n    </br></br>In the case of creating an Observation whose FeatureOfInterest is the Thing’s Location (that means the Thing entity has a related Location entity), the request of creating the Observation SHOULD NOT include a link to a FeatureOfInterest entity. The service will first automatically create a FeatureOfInterest entity from the Location of the Thing and then link to the Observation.\n    </br></br>In the complex use case of a Thing has multiple Location representations, the service SHOULD decide the default Location encoding when an Observation’s FeatureOfInterest is the Thing’s Location.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things(1)/Locations",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "name": "Au Comptoir Vénitien Locations 1",
+                "description": "Au Comptoir Vénitien",
+                "encodingType": "application/geo+json",
+                "location": {
+                    "coordinates": [
+                        -3.148594867800796,
+                        48.55556794006753
+                    ],
+                    "type": "Point"
+                }
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Locations(17)\",\n    \"@iot.id\": 17,\n    \"name\": \"Au Comptoir Vénitien Locations 1\",\n    \"description\": \"Au Comptoir Vénitien\",\n    \"encodingType\": \"application/geo+json\",\n    \"location\": {\n        \"type\": \"Point\",\n        \"coordinates\": [\n            -3.148594867800796,\n            48.55556794006753\n        ]\n    },\n    \"properties\": null,\n    \"geom\": null,\n    \"Things@iot.navigationLink\": \"proxy/v1.1/Locations(17)/Things\",\n    \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Locations(17)/HistoricalLocations\"\n}",
+            "error": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Locations(17)\",\n    \"@iot.id\": 17,\n    \"name\": \"Au Comptoir Vénitien Locations 1\",\n    \"description\": \"Au Comptoir Vénitien\",\n    \"encodingType\": \"application/geo+json\",\n    \"location\": {\n        \"type\": \"Point\",\n        \"coordinates\": [\n            -3.148594867800796,\n            48.55556794006753\n        ]\n    },\n    \"properties\": null,\n    \"geom\": null,\n    \"Things@iot.navigationLink\": \"proxy/v1.1/Locations(17)/Things\",\n    \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Locations(17)/HistoricalLocations\"\n}"
+        },
+        {
+            "short": "One",
+            "type": "patch",
+            "version": "1.1.0",
+            "description": "Patch a Location.<input id=\"showPatchLocations\" type=checkbox> <label for=\"showPatchLocations\">Click for Help</label> <span id=\"contentPatchLocations\"></br></br>In SensorThings PATCH is the preferred means of updating an entity. PATCH provides more resiliency between clients and services by directly modifying only those values specified by the client.\n    </br></br>The semantics of PATCH, as defined in [RFC5789], are to merge the content in the request payload with the entity’s current state, applying the update only to those components specified in the request body. The properties provided in the payload corresponding to updatable properties SHALL replace the value of the corresponding property in the entity. Missing properties of the containing entity or complex property SHALL NOT be directly altered.\n    </br></br>Services MAY additionally support PUT, but should be aware of the potential for data-loss in round-tripping properties that the client may not know about in advance, such as open or added properties, or properties not specified in metadata. Services that do not support PUT SHALL respond with an HTTP code 501 Not Implemented.\n    </br></br>Key and other non-updatable properties that are not tied to key properties of the principal entity, can be omitted from the request. If the request contains a value for one of these properties, the service SHALL ignore that value when applying the update.\n    </br></br>On success, the response SHALL be a valid success response.</span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_request_2\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Locations(17)",
+                "curl": "curl -X PATCH -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"PATCH\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.patch('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "name": "My Location has changed",
+                "description": "Inrae - Site De Saint-Gilles",
+                "encodingType": "application/geo+json",
+                "location": {
+                    "type": "Point",
+                    "coordinates": [
+                        48.14523718972358,
+                        -1.8305352019940178
+                    ]
+                }
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Locations(17)\",\n    \"@iot.id\": 17,\n    \"name\": \"My Location has changed\",\n    \"description\": \"Inrae - Site De Saint-Gilles\",\n    \"encodingType\": \"application/geo+json\",\n    \"location\": {\n        \"type\": \"Point\",\n        \"coordinates\": [\n            48.14523718972358,\n            -1.8305352019940178\n        ]\n    },\n    \"properties\": null,\n    \"geom\": null,\n    \"Things@iot.navigationLink\": \"proxy/v1.1/Locations(17)/Things\",\n    \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Locations(17)/HistoricalLocations\"\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"exist no location ID --> 9007199254740991\"\n}"
+        },
+        {
+            "short": "One",
+            "type": "delete",
+            "version": "1.1.0",
+            "description": "Delete a Location.<input id=\"showDeleteLocations\" type=checkbox> <label for=\"showDeleteLocations\">Click for Help</label> <span id=\"contentDeleteLocations\"></br> A successful DELETE request to an entity’s edit URL deletes the entity. The request body SHOULD be empty. Services SHALL implicitly remove relations to and from an entity when deleting it; clients need not delete the relations explicitly.\n    </br>Services MAY implicitly delete or modify related entities if required by integrity constraints.\n    <table> <thead> <tr> <th style=\"width: 30%\">Scenario</th> <th style=\"width: 70%\">Integrity Constraints</th> </tr> </thead> <tbody> <tr> <td>Delete a Thing entity</td> <td>Delete all the Datastream and HistoricalLocation entities linked to the Thing entity.</td> </tr> <tr> <td>Delete a Location entity</td> <td>Delete all the HistoricalLocation entities linked to the Location entity</td> </tr> <tr> <td>Delete a Datastream entity</td> <td>Delete all the Observation entities linked to the Datastream entity.</td> </tr> <tr> <td>Delete a Sensor entity</td> <td>Delete all the Datastream entities linked to the Sensor entity.</td> </tr> <tr> <td>Delete an ObservedProperty entity</td> <td>Delete all the Datastream entities linked to the ObservedProperty entity.</td> </tr> <tr> <td>Delete an Observation entity</td> <td></td> </tr> <tr> <td>Delete a FeatureOfInterest entity</td> <td>Delete all the Observation entities linked to the FeatureOfInterest entity.</td> </tr> <tr> <td>Delete a HistoricalLocation entity entity</td> <td></td> </tr> </tbody> </table></span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_request_3\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Locations(17)",
+                "curl": "curl -DELETE \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"DELETE\"\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.delete('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "",
+            "success": "{}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"No id found for : 9007199254740991\"\n}"
+        }
+    ],
+    "HistoricalLocations": [
+        {
+            "short": "Presentation",
+            "type": "infos",
+            "version": "1.1.0",
+            "description": "A Thing’s HistoricalLocation entity set provides the times of the current (last known) and previous locations of the Thing.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#historicallocation\" target=\"_blank\">[OGC reference]</a>",
+            "request": ""
+        },
+        {
+            "short": "all",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Retrieve all HistoricalLocations.<input id=\"showGetHistoricalLocations\" type=checkbox> <label for=\"showGetHistoricalLocations\">Click for Help</label> <span id=\"contentGetHistoricalLocations\">To address to an entity set, users can simply put the entity set name after the service root URI. The service returns a JSON object with a property of value. The value of the property SHALL be a list of the entities in the specified entity set.</span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-address-collection-entities\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/HistoricalLocations",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "structure": {
+                "columns": {
+                    "id": {
+                        "description": "Is the system-generated identifier of an entity. id is unique among the entities of the same entity type in a SensorThings service.",
+                        "type": "number",
+                        "requis": false
+                    },
+                    "time": {
+                        "description": "The time when the Thing is known at the Location.",
+                        "type": "date",
+                        "requis": false
+                    }
+                },
+                "relations": {
+                    "Thing": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    },
+                    "Locations": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    }
+                }
+            },
+            "request": "proxyv1.1/HistoricalLocations",
+            "success": "{\n    \"@iot.count\": 15,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/HistoricalLocations(1)\",\n            \"@iot.id\": 1,\n            \"time\": \"2025-05-23T16:57:50.983173+02:00\",\n            \"Thing@iot.navigationLink\": \"proxy/v1.1/HistoricalLocations(1)/Thing\",\n            \"Locations@iot.navigationLink\": \"proxy/v1.1/HistoricalLocations(1)/Locations\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/HistoricalLocations(2)\",\n            \"@iot.id\": 2,\n            \"time\": \"2025-05-23T16:57:50.983173+02:00\",\n            \"Thing@iot.navigationLink\": \"proxy/v1.1/HistoricalLocations(2)/Thing\",\n            \"Locations@iot.navigationLink\": \"proxy/v1.1/HistoricalLocations(2)/Locations\"\n        },\n        \"...\"\n    ]\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\"\n}"
+        },
+        {
+            "short": "one",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get a specific HistoricalLocation.Users can address to a specific entity in an entity set by place the unique identifier of the entity between brace symbol “()” and put after the entity set name. The service then returns the entity with all its properties.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/HistoricalLocations(1)",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/HistoricalLocations(1)",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/HistoricalLocations(1)\",\n    \"@iot.id\": 1,\n    \"time\": \"2025-05-23T16:57:50.983173+02:00\",\n    \"Thing@iot.navigationLink\": \"proxy/v1.1/HistoricalLocations(1)/Thing\",\n    \"Locations@iot.navigationLink\": \"proxy/v1.1/HistoricalLocations(1)/Locations\"\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"id : 1 not found\"\n}"
+        },
+        {
+            "short": "Expand Locations",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get Expand Locations of a specific Thing.The $expand system query option indicates the related entities to be represented inline. The value of the $expand query option SHALL be a comma separated list of navigation property names. Additionally, each navigation property can be followed by a forward slash and another navigation property to enable identifying a multi-level relationship.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#expand\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/HistoricalLocations(6)?$expand=Locations",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/HistoricalLocations(6)?$expand=Locations",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/HistoricalLocations(6)\",\n    \"@iot.id\": 6,\n    \"time\": \"2025-05-23T16:57:50.983173+02:00\",\n    \"Thing@iot.navigationLink\": \"proxy/v1.1/HistoricalLocations(6)/Thing\",\n    \"Locations\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Locations(7)\",\n            \"@iot.id\": 7,\n            \"name\": \"Institut Agro\",\n            \"description\": \"Institut Agro Rennes-Angers\",\n            \"encodingType\": \"application/geo+json\",\n            \"location\": {\n                \"type\": \"Point\",\n                \"coordinates\": [\n                    -1.6567440482485551,\n                    48.11256463781973\n                ]\n            },\n            \"properties\": null,\n            \"geom\": null,\n            \"Things@iot.navigationLink\": \"proxy/v1.1/Locations(7)/Things\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Locations(7)/HistoricalLocations\"\n        }\n    ]\n}"
+        },
+        {
+            "short": "Selected time",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Retrieve time for a specific Historical Location. ",
+            "examples": {
+                "http": "v1.1/HistoricalLocations(6)?$select=time",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/HistoricalLocations(6)?$select=time",
+            "success": "{\n    \"time\": \"2025-05-23T16:57:50.983173+02:00\"\n}"
+        },
+        {
+            "short": "One",
+            "type": "patch",
+            "version": "1.1.0",
+            "description": "Patch a HistoricalLocation.<input id=\"showPatchHistoricalLocations\" type=checkbox> <label for=\"showPatchHistoricalLocations\">Click for Help</label> <span id=\"contentPatchHistoricalLocations\"></br></br>In SensorThings PATCH is the preferred means of updating an entity. PATCH provides more resiliency between clients and services by directly modifying only those values specified by the client.\n    </br></br>The semantics of PATCH, as defined in [RFC5789], are to merge the content in the request payload with the entity’s current state, applying the update only to those components specified in the request body. The properties provided in the payload corresponding to updatable properties SHALL replace the value of the corresponding property in the entity. Missing properties of the containing entity or complex property SHALL NOT be directly altered.\n    </br></br>Services MAY additionally support PUT, but should be aware of the potential for data-loss in round-tripping properties that the client may not know about in advance, such as open or added properties, or properties not specified in metadata. Services that do not support PUT SHALL respond with an HTTP code 501 Not Implemented.\n    </br></br>Key and other non-updatable properties that are not tied to key properties of the principal entity, can be omitted from the request. If the request contains a value for one of these properties, the service SHALL ignore that value when applying the update.\n    </br></br>On success, the response SHALL be a valid success response.</span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_request_2\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/HistoricalLocations(18)",
+                "curl": "curl -X PATCH -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"PATCH\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.patch('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "time": "2015-02-07T19:22:11.297Z"
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/HistoricalLocations(18)\",\n    \"@iot.id\": 18,\n    \"time\": \"2015-02-07T20:22:11.297+01:00\",\n    \"Thing@iot.navigationLink\": \"proxy/v1.1/HistoricalLocations(18)/Thing\",\n    \"Locations@iot.navigationLink\": \"proxy/v1.1/HistoricalLocations(18)/Locations\"\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"exist no historicallocation ID --> 9007199254740991\"\n}"
+        },
+        {
+            "short": "One",
+            "type": "delete",
+            "version": "1.1.0",
+            "description": "Delete a HistoricalLocation.<input id=\"showDeleteHistoricalLocations\" type=checkbox> <label for=\"showDeleteHistoricalLocations\">Click for Help</label> <span id=\"contentDeleteHistoricalLocations\"></br> A successful DELETE request to an entity’s edit URL deletes the entity. The request body SHOULD be empty. Services SHALL implicitly remove relations to and from an entity when deleting it; clients need not delete the relations explicitly.\n    </br>Services MAY implicitly delete or modify related entities if required by integrity constraints.\n    <table> <thead> <tr> <th style=\"width: 30%\">Scenario</th> <th style=\"width: 70%\">Integrity Constraints</th> </tr> </thead> <tbody> <tr> <td>Delete a Thing entity</td> <td>Delete all the Datastream and HistoricalLocation entities linked to the Thing entity.</td> </tr> <tr> <td>Delete a Location entity</td> <td>Delete all the HistoricalLocation entities linked to the Location entity</td> </tr> <tr> <td>Delete a Datastream entity</td> <td>Delete all the Observation entities linked to the Datastream entity.</td> </tr> <tr> <td>Delete a Sensor entity</td> <td>Delete all the Datastream entities linked to the Sensor entity.</td> </tr> <tr> <td>Delete an ObservedProperty entity</td> <td>Delete all the Datastream entities linked to the ObservedProperty entity.</td> </tr> <tr> <td>Delete an Observation entity</td> <td></td> </tr> <tr> <td>Delete a FeatureOfInterest entity</td> <td>Delete all the Observation entities linked to the FeatureOfInterest entity.</td> </tr> <tr> <td>Delete a HistoricalLocation entity entity</td> <td></td> </tr> </tbody> </table></span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_request_3\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/HistoricalLocations(18)",
+                "curl": "curl -DELETE \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"DELETE\"\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.delete('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "",
+            "success": "{}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"No id found for : 9007199254740991\"\n}"
+        }
+    ],
+    "Datastreams": [
+        {
+            "short": "Presentation",
+            "type": "infos",
+            "version": "1.1.0",
+            "description": "A Datastream groups a collection of Observations measuring the same ObservedProperty and produced by the same Sensor.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#datastream\" target=\"_blank\">[OGC reference]</a>",
+            "request": ""
+        },
+        {
+            "short": "all",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Retrieve all Datastreams.<input id=\"showGetDatastreams\" type=checkbox> <label for=\"showGetDatastreams\">Click for Help</label> <span id=\"contentGetDatastreams\">To address to an entity set, users can simply put the entity set name after the service root URI. The service returns a JSON object with a property of value. The value of the property SHALL be a list of the entities in the specified entity set.</span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-address-collection-entities\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Datastreams",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "structure": {
+                "columns": {
+                    "id": {
+                        "description": "Is the system-generated identifier of an entity. id is unique among the entities of the same entity type in a SensorThings service.",
+                        "type": "number",
+                        "requis": false
+                    },
+                    "name": {
+                        "description": "A property provides a label for Datastream entity, commonly a descriptive name.",
+                        "type": "text",
+                        "requis": true
+                    },
+                    "description": {
+                        "description": "The description of the Datastream entity.",
+                        "type": "text",
+                        "requis": true
+                    },
+                    "observationType": {
+                        "description": "The type of Observation (with unique result type), which is used by the service to encode observations.",
+                        "type": "text",
+                        "requis": true
+                    },
+                    "unitOfMeasurement": {
+                        "description": "A JSON Object containing three key-value pairs. The name property presents the full name of the unitOfMeasurement; the symbol property shows the textual form of the unit symbol; and the definition contains the URI defining the unitOfMeasurement.</br></br>The values of these properties SHOULD follow the Unified Code for Unit of Measure (UCUM).",
+                        "type": "json",
+                        "requis": true
+                    },
+                    "observedArea": {
+                        "description": "The spatial bounding box of the spatial extent of all FeaturesOfInterest that belong to the Observations associated with this Datastream.",
+                        "type": "json",
+                        "requis": false
+                    },
+                    "phenomenonTime": {
+                        "description": "The temporal interval of the phenomenon times of all observations belonging to this Datastream.",
+                        "type": "text",
+                        "requis": false
+                    },
+                    "resultTime": {
+                        "description": "The temporal interval of the result times of all observations belonging to this Datastream.",
+                        "type": "text",
+                        "requis": false
+                    },
+                    "properties": {
+                        "description": "A JSON Object containing user-annotated properties as key-value pairs.",
+                        "type": "json",
+                        "requis": false
+                    }
+                },
+                "relations": {
+                    "Thing": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    },
+                    "Sensor": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    },
+                    "ObservedProperty": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    },
+                    "Observations": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    },
+                    "Lora": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    },
+                    "FeatureOfInterest": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    }
+                }
+            },
+            "request": "proxyv1.1/Datastreams",
+            "success": "{\n    \"@iot.count\": 14,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Datastreams(1)\",\n            \"@iot.id\": 1,\n            \"name\": \"classic Datastream\",\n            \"description\": \"Description of classic Datastream\",\n            \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n            \"unitOfMeasurement\": {\n                \"name\": \"classic unit of measurement\",\n                \"definition\": \"http://unitsofmeasure.org/ucum.html#para-30\",\n                \"description\": \"Description of classic unit of measurement\"\n            },\n            \"observedArea\": null,\n            \"phenomenonTime\": \"2023-03-01T01:30:01Z/2023-03-01T04:15:01Z\",\n            \"resultTime\": \"2023-03-01T01:30:01Z/2023-03-01T04:15:01Z\",\n            \"properties\": null,\n            \"Thing@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/Thing\",\n            \"Sensor@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/Sensor\",\n            \"ObservedProperty@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/ObservedProperty\",\n            \"Observations@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/Observations\",\n            \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/Lora\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Datastreams(2)\",\n            \"@iot.id\": 2,\n            \"name\": \"This is the stean's Datastream\",\n            \"description\": \"Description of This is the stean's Datastream\",\n            \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n            \"unitOfMeasurement\": {\n                \"name\": \"apostrophe unit of measurement\",\n                \"definition\": \"http://unitsofmeasure.org/ucum.html#para-30\",\n                \"description\": \"Description of This is the stean's unit of measurement\"\n            },\n            \"observedArea\": null,\n            \"phenomenonTime\": \"2023-03-01T07:30:01Z/2023-03-01T10:15:01Z\",\n            \"resultTime\": \"2023-03-01T07:30:01Z/2023-03-01T10:15:01Z\",\n            \"properties\": null,\n            \"Thing@iot.navigationLink\": \"proxy/v1.1/Datastreams(2)/Thing\",\n            \"Sensor@iot.navigationLink\": \"proxy/v1.1/Datastreams(2)/Sensor\",\n            \"ObservedProperty@iot.navigationLink\": \"proxy/v1.1/Datastreams(2)/ObservedProperty\",\n            \"Observations@iot.navigationLink\": \"proxy/v1.1/Datastreams(2)/Observations\",\n            \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(2)/Lora\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(2)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\"\n}"
+        },
+        {
+            "short": "one",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get a specific Datastream.Users can address to a specific entity in an entity set by place the unique identifier of the entity between brace symbol “()” and put after the entity set name. The service then returns the entity with all its properties.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Datastreams(1)",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Datastreams(1)",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Datastreams(1)\",\n    \"@iot.id\": 1,\n    \"name\": \"classic Datastream\",\n    \"description\": \"Description of classic Datastream\",\n    \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n    \"unitOfMeasurement\": {\n        \"name\": \"classic unit of measurement\",\n        \"definition\": \"http://unitsofmeasure.org/ucum.html#para-30\",\n        \"description\": \"Description of classic unit of measurement\"\n    },\n    \"observedArea\": null,\n    \"phenomenonTime\": \"2023-03-01T01:30:01Z/2023-03-01T04:15:01Z\",\n    \"resultTime\": \"2023-03-01T01:30:01Z/2023-03-01T04:15:01Z\",\n    \"properties\": null,\n    \"Thing@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/Thing\",\n    \"Sensor@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/Sensor\",\n    \"ObservedProperty@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/ObservedProperty\",\n    \"Observations@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/Observations\",\n    \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/Lora\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/FeatureOfInterest\"\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"id : 1 not found\"\n}"
+        },
+        {
+            "short": "from a specific Thing",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get Datastream(s) from Things. ",
+            "examples": {
+                "http": "v1.1/Things(6)/Datastreams",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things(6)/Datastreams",
+            "success": "{\n    \"@iot.count\": 3,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Datastreams(6)\",\n            \"@iot.id\": 6,\n            \"name\": \"Température de la chambre climatique\",\n            \"description\": \"Température de l'air de la chambre climatique, observations toutes les 15 minutes\",\n            \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n            \"unitOfMeasurement\": {\n                \"name\": \"Degree Celsius\",\n                \"symbol\": \"°C\",\n                \"definition\": \"http://unitsofmeasure.org/ucum.html#para-30\"\n            },\n            \"observedArea\": null,\n            \"phenomenonTime\": \"2024-06-01T03:00:01Z/2024-06-03T03:45:01Z\",\n            \"resultTime\": \"2024-06-01T03:00:01Z/2024-06-03T03:45:01Z\",\n            \"properties\": null,\n            \"Thing@iot.navigationLink\": \"proxy/v1.1/Datastreams(6)/Thing\",\n            \"Sensor@iot.navigationLink\": \"proxy/v1.1/Datastreams(6)/Sensor\",\n            \"ObservedProperty@iot.navigationLink\": \"proxy/v1.1/Datastreams(6)/ObservedProperty\",\n            \"Observations@iot.navigationLink\": \"proxy/v1.1/Datastreams(6)/Observations\",\n            \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(6)/Lora\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(6)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Datastreams(7)\",\n            \"@iot.id\": 7,\n            \"name\": \"Humidité de la chambre climatique\",\n            \"description\": \"Humidité relative de l’air de la chambre climatique, observations toutes les 15 minutes\",\n            \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n            \"unitOfMeasurement\": {\n                \"name\": \"Pourcentage\",\n                \"symbol\": \"%\",\n                \"definition\": \"\"\n            },\n            \"observedArea\": null,\n            \"phenomenonTime\": \"2024-06-01T02:45:01Z/2024-06-03T04:15:01Z\",\n            \"resultTime\": \"2024-06-01T02:45:01Z/2024-06-03T04:15:01Z\",\n            \"properties\": null,\n            \"Thing@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/Thing\",\n            \"Sensor@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/Sensor\",\n            \"ObservedProperty@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/ObservedProperty\",\n            \"Observations@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/Observations\",\n            \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/Lora\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Expands",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get a specific Datastream with expand Observations and ObservedProperty. ",
+            "examples": {
+                "http": "v1.1/Datastreams(9)?$expand=Observations,ObservedProperty",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Datastreams(9)?$expand=Observations,ObservedProperty",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Datastreams(9)\",\n    \"@iot.id\": 9,\n    \"name\": \"Outlet E30_OTT Thalimede_stream level\",\n    \"description\": \"à renseigner\",\n    \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n    \"unitOfMeasurement\": {\n        \"name\": \"mètre\",\n        \"symbol\": \"m\",\n        \"definition\": \"https://www.bipm.org/en/si-base-units/metre\"\n    },\n    \"observedArea\": null,\n    \"phenomenonTime\": \"/\",\n    \"resultTime\": \"/\",\n    \"properties\": null,\n    \"Thing@iot.navigationLink\": \"proxy/v1.1/Datastreams(9)/Thing\",\n    \"Sensor@iot.navigationLink\": \"proxy/v1.1/Datastreams(9)/Sensor\",\n    \"ObservedProperty\": {\n        \"@iot.selfLink\": \"proxy/v1.1/ObservedProperties(9)\",\n        \"@iot.id\": 9,\n        \"name\": \"stream level\",\n        \"description\": \"Mesure du niveau du cours d'eau\",\n        \"definition\": \"http://opendata.inrae.fr/thesaurusINRAE/c_16420\",\n        \"properties\": {\n            \"family\": \"hydrologie\"\n        },\n        \"Datastreams@iot.navigationLink\": \"proxy/v1.1/ObservedProperties(9)/Datastreams\",\n        \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/ObservedProperties(9)/MultiDatastreams\"\n    },\n    \"Observations\": [],\n    \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(9)/Lora\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(9)/FeatureOfInterest\"\n}"
+        },
+        {
+            "short": "All infos",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get all infos of a datastream. ",
+            "examples": {
+                "http": "v1.1/Datastreams(9)?$expand=Thing/Locations,Sensor,ObservedProperty",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Datastreams(9)?$expand=Thing/Locations,Sensor,ObservedProperty",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Datastreams(9)\",\n    \"@iot.id\": 9,\n    \"name\": \"Outlet E30_OTT Thalimede_stream level\",\n    \"description\": \"à renseigner\",\n    \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n    \"unitOfMeasurement\": {\n        \"name\": \"mètre\",\n        \"symbol\": \"m\",\n        \"definition\": \"https://www.bipm.org/en/si-base-units/metre\"\n    },\n    \"observedArea\": null,\n    \"phenomenonTime\": \"/\",\n    \"resultTime\": \"/\",\n    \"properties\": null,\n    \"Thing\": {\n        \"@iot.selfLink\": \"proxy/v1.1/Things(7)\",\n        \"@iot.id\": 7,\n        \"name\": \"Outlet E30\",\n        \"description\": \"Watershed outlet of Puits\",\n        \"properties\": null,\n        \"Locations\": [\n            {\n                \"@iot.selfLink\": \"proxy/v1.1/Locations(8)\",\n                \"@iot.id\": 8,\n                \"name\": \"Outlet E30\",\n                \"description\": \"Exutoire du bassin versant du Puits\",\n                \"encodingType\": \"application/geo+json\",\n                \"location\": {\n                    \"type\": \"Point\",\n                    \"coordinates\": [\n                        -3.9733716628968807,\n                        48.22237203586653\n                    ]\n                },\n                \"properties\": null,\n                \"geom\": null,\n                \"Things@iot.navigationLink\": \"proxy/v1.1/Locations(8)/Things\",\n                \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Locations(8)/HistoricalLocations\"\n            }\n        ],\n        \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(7)/HistoricalLocations\",\n        \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(7)/Datastreams\",\n        \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(7)/MultiDatastreams\"\n    },\n    \"Sensor\": {\n        \"@iot.selfLink\": \"proxy/v1.1/Sensors(8)\",\n        \"@iot.id\": 8,\n        \"name\": \"OTT Thalimede\",\n        \"description\": \"Capteur de niveau d'eau\",\n        \"encodingType\": \"application/pdf\",\n        \"metadata\": \"https://www.ott.com/download/leaflet-shaft-encoder-for-depth-and-water-level-measurement-ott-thalimedes-1/\",\n        \"properties\": {\n            \"Vmax\": \"\",\n            \"Vmin\": \"\",\n            \"Accuracy\": \"0,001m\"\n        },\n        \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Sensors(8)/Datastreams\",\n        \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Sensors(8)/MultiDatastreams\"\n    },\n    \"ObservedProperty\": {\n        \"@iot.selfLink\": \"proxy/v1.1/ObservedProperties(9)\",\n        \"@iot.id\": 9,\n        \"name\": \"stream level\",\n        \"description\": \"Mesure du niveau du cours d'eau\",\n        \"definition\": \"http://opendata.inrae.fr/thesaurusINRAE/c_16420\",\n        \"properties\": {\n            \"family\": \"hydrologie\"\n        },\n        \"Datastreams@iot.navigationLink\": \"proxy/v1.1/ObservedProperties(9)/Datastreams\",\n        \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/ObservedProperties(9)/MultiDatastreams\"\n    },\n    \"Observations@iot.navigationLink\": \"proxy/v1.1/Datastreams(9)/Observations\",\n    \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(9)/Lora\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(9)/FeatureOfInterest\"\n}"
+        },
+        {
+            "short": "From phenomenonTime search",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get Datastream(s) from phenomenonTime filter. ",
+            "examples": {
+                "http": "v1.1/Datastreams?$filter=resultTime eq 2024-06-01T03:00:01Z/2024-06-03T03:45:01Z",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Datastreams?$filter=resultTime eq 2024-06-01T03:00:01Z/2024-06-03T03:45:01Z",
+            "success": "{\n    \"@iot.count\": 1,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Datastreams(6)\",\n            \"@iot.id\": 6,\n            \"name\": \"Température de la chambre climatique\",\n            \"description\": \"Température de l'air de la chambre climatique, observations toutes les 15 minutes\",\n            \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n            \"unitOfMeasurement\": {\n                \"name\": \"Degree Celsius\",\n                \"symbol\": \"°C\",\n                \"definition\": \"http://unitsofmeasure.org/ucum.html#para-30\"\n            },\n            \"observedArea\": null,\n            \"phenomenonTime\": \"2024-06-01T03:00:01Z/2024-06-03T03:45:01Z\",\n            \"resultTime\": \"2024-06-01T03:00:01Z/2024-06-03T03:45:01Z\",\n            \"properties\": null,\n            \"Thing@iot.navigationLink\": \"proxy/v1.1/Datastreams(6)/Thing\",\n            \"Sensor@iot.navigationLink\": \"proxy/v1.1/Datastreams(6)/Sensor\",\n            \"ObservedProperty@iot.navigationLink\": \"proxy/v1.1/Datastreams(6)/ObservedProperty\",\n            \"Observations@iot.navigationLink\": \"proxy/v1.1/Datastreams(6)/Observations\",\n            \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(6)/Lora\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(6)/FeatureOfInterest\"\n        }\n    ]\n}"
+        },
+        {
+            "short": "From observations filter",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get Datastream(s) from Observations filter. ",
+            "examples": {
+                "http": "v1.1/Datastreams?$filter=Observations/result eq 63.15",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Datastreams?$filter=Observations/result eq 63.15",
+            "success": "{\n    \"@iot.count\": 1,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Datastreams(7)\",\n            \"@iot.id\": 7,\n            \"name\": \"Humidité de la chambre climatique\",\n            \"description\": \"Humidité relative de l’air de la chambre climatique, observations toutes les 15 minutes\",\n            \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n            \"unitOfMeasurement\": {\n                \"name\": \"Pourcentage\",\n                \"symbol\": \"%\",\n                \"definition\": \"\"\n            },\n            \"observedArea\": null,\n            \"phenomenonTime\": \"2024-06-01T02:45:01Z/2024-06-03T04:15:01Z\",\n            \"resultTime\": \"2024-06-01T02:45:01Z/2024-06-03T04:15:01Z\",\n            \"properties\": null,\n            \"Thing@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/Thing\",\n            \"Sensor@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/Sensor\",\n            \"ObservedProperty@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/ObservedProperty\",\n            \"Observations@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/Observations\",\n            \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/Lora\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/FeatureOfInterest\"\n        }\n    ]\n}"
+        },
+        {
+            "short": "Post with existing Thing",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "Post a new Datastreams.<input id=\"showPostDatastreams\" type=checkbox> <label for=\"showPostDatastreams\">Click for Help</label> <span id=\"contentPostDatastreams\"></br></br>To create an entity in a collection, the client SHALL send a HTTP POST request to that collection’s URL. The POST body SHALL contain a single valid entity representation.\n    </br></br>If the target URL for the collection is a navigationLink, the new entity is automatically linked to the entity containing the navigationLink.\n    </br></br>Upon successful completion, the response SHALL contain a HTTP location header that contains the selfLink of the created entity.\n    </br></br>Upon successful completion the service SHALL respond with either 201 Created, or 204 No Content.\n    </br></br>In addition, the link between entities SHALL be established upon creating an entity. Two use cases SHALL be considered: (1) link to existing entities when creating an entity, and (2) create related entities when creating an entity. The requests for these two use cases are described in the following subsection.\n    </br></br>When clients create resources in a SensorThings service, they SHALL follow the integrity constraints listed in Table 24. For example, a Datastream entity SHALL link to a Thing entity. When a client wants to create a Datastream entity, the client needs to either (1) create a linked Thing entity in the same request or (2) link to an already created Thing entity. The complete integrity constraints for creating resources are shown in the following table.\n    </br></br>Special case #1 - When creating an Observation entity that links to a FeatureOfInterest entity: Sometimes the FeatureOfInterest of an Observation is the Location of the Thing. For example, a wifi-connected thermostat’s temperature observation’s feature-of-interest can be the location of the smart thermostat, that is the room WHERE the smart thermostat is located in.\n    </br></br>In this case, when a client creates an Observation entity, the client SHOULD omit the link to a FeatureOfInterest entity in the POST body message and SHOULD not create a related FeatureOfInterest entity with deep insert. And if the service detects that there is no link to a FeatureOfInterest entity in the POST body message that creates an Observation entity, the service SHALL either (1) create a FeatureOfInterest entity by using the location property from the Location of the Thing entity when there is no FeatureOfInterest whose location property is from the Location of the Thing entity or (2) link to the FeatureOfInterest whose location property is from the Location of the Thing entity.\n    </br></br>Special case #2: In the context of IoT, many Observations’ resultTime and phenomenonTime cannot be distinguished or the resultTime is not available. In this case, when a client creates an Observation entity, the client MAY omit the resultTime and the service SHOULD assign a null value to the resultTime.\n    </br><table> <thead> <tr> <th style=\"width: 30%\">Scenario</th> <th style=\"width: 70%\">Integrity Constraints</th> </tr> </thead> <tbody> <tr> <td>Create a Thing entity</td> <td></td> </tr> <tr> <td>Create a Location entity</td> <td></td> </tr> <tr> <td>Create a Datastream entity</td> <td>SHALL link to a Thing entity</br>SHALL link to a Sensor entity.</br>SHALL link to an ObservedProperty entity.</td> </tr> <tr> <td>Create a Sensor entity</td> <td></td> </tr> <tr> <td>Create an ObservedProperty entity</td> <td></td> </tr> <tr> <td>Create an Observation entity</td> <td>SHALL link to a Datastream or MultiDatastream entity.</br>SHALL link to a FeatureOfInterest entity. If no link specified, the service SHALL create a FeatureOfInterest entity from the content of the Location entities.</td> </tr> <tr> <td>Create a FeatureOfInterest entity</td> <td></td> </tr> </tbody> </table></span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Datastreams",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "unitOfMeasurement": {
+                    "symbol": "μg/m³",
+                    "name": "PM 2.5 Particulates (ug/m3)",
+                    "definition": "http://unitsofmeasure.org/ucum.html"
+                },
+                "name": "Datastream Air quality readings",
+                "description": "New Datastream Air quality readings for test",
+                "Thing": {
+                    "@iot.id": 1
+                },
+                "ObservedProperty": {
+                    "@iot.id": 1
+                },
+                "Sensor": {
+                    "@iot.id": 1
+                }
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Datastreams(17)\",\n    \"@iot.id\": 17,\n    \"name\": \"Datastream Air quality readings\",\n    \"description\": \"New Datastream Air quality readings for test\",\n    \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n    \"unitOfMeasurement\": {\n        \"name\": \"PM 2.5 Particulates (ug/m3)\",\n        \"symbol\": \"μg/m³\",\n        \"definition\": \"http://unitsofmeasure.org/ucum.html\"\n    },\n    \"observedArea\": null,\n    \"phenomenonTime\": \"/\",\n    \"resultTime\": \"/\",\n    \"properties\": null,\n    \"Thing@iot.navigationLink\": \"proxy/v1.1/Datastreams(17)/Thing\",\n    \"Sensor@iot.navigationLink\": \"proxy/v1.1/Datastreams(17)/Sensor\",\n    \"ObservedProperty@iot.navigationLink\": \"proxy/v1.1/Datastreams(17)/ObservedProperty\",\n    \"Observations@iot.navigationLink\": \"proxy/v1.1/Datastreams(17)/Observations\",\n    \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(17)/Lora\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(17)/FeatureOfInterest\"\n}"
+        },
+        {
+            "short": "Post with default FOI",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "Post a new Datastreams with default FOI ",
+            "examples": {
+                "http": "v1.1/Datastreams",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "unitOfMeasurement": {
+                    "symbol": "μg/m³",
+                    "name": "PM 2.5 Particulates (ug/m3)",
+                    "definition": "http://unitsofmeasure.org/ucum.html"
+                },
+                "name": "Another datastream Air quality readings with default FOI",
+                "description": "New Datastream Air quality readings with default FOI for test",
+                "Thing": {
+                    "@iot.id": 1
+                },
+                "ObservedProperty": {
+                    "@iot.id": 1
+                },
+                "Sensor": {
+                    "@iot.id": 1
+                },
+                "FeatureOfInterest": {
+                    "@iot.id": 2
+                }
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Datastreams(18)\",\n    \"@iot.id\": 18,\n    \"name\": \"Another datastream Air quality readings with default FOI\",\n    \"description\": \"New Datastream Air quality readings with default FOI for test\",\n    \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n    \"unitOfMeasurement\": {\n        \"name\": \"PM 2.5 Particulates (ug/m3)\",\n        \"symbol\": \"μg/m³\",\n        \"definition\": \"http://unitsofmeasure.org/ucum.html\"\n    },\n    \"observedArea\": null,\n    \"phenomenonTime\": \"/\",\n    \"resultTime\": \"/\",\n    \"properties\": null,\n    \"Thing@iot.navigationLink\": \"proxy/v1.1/Datastreams(18)/Thing\",\n    \"Sensor@iot.navigationLink\": \"proxy/v1.1/Datastreams(18)/Sensor\",\n    \"ObservedProperty@iot.navigationLink\": \"proxy/v1.1/Datastreams(18)/ObservedProperty\",\n    \"Observations@iot.navigationLink\": \"proxy/v1.1/Datastreams(18)/Observations\",\n    \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(18)/Lora\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(18)/FeatureOfInterest\"\n}",
+            "error": "{\n    \"code\": 400,\n    \"message\": \"Bad Request\"\n}"
+        },
+        {
+            "short": "Post with a Thing",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "POST a new Datastream with existing Thing.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things(1)/Datastreams",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "name": "Datastream Air Air Temperature DS",
+                "description": "New Datastream Air Temperature DS for test",
+                "unitOfMeasurement": {
+                    "name": "New Degree Celsius",
+                    "symbol": "°C",
+                    "definition": "http://unitsofmeasure.org/ucum.html#para-30"
+                },
+                "ObservedProperty": {
+                    "name": "New Area Temperature",
+                    "description": "The degree or intensity of heat present in the area",
+                    "definition": "http://www.qudt.org/qudt/owl/1.0.0/quantity/Instances.html#AreaTemperature"
+                },
+                "Sensor": {
+                    "name": "New Sensor DHT22",
+                    "description": "DHT22 temperature sensor [1]",
+                    "encodingType": "application/pdf",
+                    "metadata": "https://cdn-shop.adafruit.com/datasheets/DHT22.pdf"
+                }
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Datastreams(19)\",\n    \"@iot.id\": 19,\n    \"name\": \"Datastream Air Air Temperature DS\",\n    \"description\": \"New Datastream Air Temperature DS for test\",\n    \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n    \"unitOfMeasurement\": {\n        \"name\": \"New Degree Celsius\",\n        \"symbol\": \"°C\",\n        \"definition\": \"http://unitsofmeasure.org/ucum.html#para-30\"\n    },\n    \"observedArea\": null,\n    \"phenomenonTime\": \"/\",\n    \"resultTime\": \"/\",\n    \"properties\": null,\n    \"Thing@iot.navigationLink\": \"proxy/v1.1/Datastreams(19)/Thing\",\n    \"Sensor@iot.navigationLink\": \"proxy/v1.1/Datastreams(19)/Sensor\",\n    \"ObservedProperty@iot.navigationLink\": \"proxy/v1.1/Datastreams(19)/ObservedProperty\",\n    \"Observations@iot.navigationLink\": \"proxy/v1.1/Datastreams(19)/Observations\",\n    \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(19)/Lora\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(19)/FeatureOfInterest\"\n}",
+            "error": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Datastreams(19)\",\n    \"@iot.id\": 19,\n    \"name\": \"Datastream Air Air Temperature DS\",\n    \"description\": \"New Datastream Air Temperature DS for test\",\n    \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n    \"unitOfMeasurement\": {\n        \"name\": \"New Degree Celsius\",\n        \"symbol\": \"°C\",\n        \"definition\": \"http://unitsofmeasure.org/ucum.html#para-30\"\n    },\n    \"observedArea\": null,\n    \"phenomenonTime\": \"/\",\n    \"resultTime\": \"/\",\n    \"properties\": null,\n    \"Thing@iot.navigationLink\": \"proxy/v1.1/Datastreams(19)/Thing\",\n    \"Sensor@iot.navigationLink\": \"proxy/v1.1/Datastreams(19)/Sensor\",\n    \"ObservedProperty@iot.navigationLink\": \"proxy/v1.1/Datastreams(19)/ObservedProperty\",\n    \"Observations@iot.navigationLink\": \"proxy/v1.1/Datastreams(19)/Observations\",\n    \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(19)/Lora\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(19)/FeatureOfInterest\"\n}"
+        },
+        {
+            "short": "One",
+            "type": "patch",
+            "version": "1.1.0",
+            "description": "Patch a Datastream.<input id=\"showPatchDatastreams\" type=checkbox> <label for=\"showPatchDatastreams\">Click for Help</label> <span id=\"contentPatchDatastreams\"></br></br>In SensorThings PATCH is the preferred means of updating an entity. PATCH provides more resiliency between clients and services by directly modifying only those values specified by the client.\n    </br></br>The semantics of PATCH, as defined in [RFC5789], are to merge the content in the request payload with the entity’s current state, applying the update only to those components specified in the request body. The properties provided in the payload corresponding to updatable properties SHALL replace the value of the corresponding property in the entity. Missing properties of the containing entity or complex property SHALL NOT be directly altered.\n    </br></br>Services MAY additionally support PUT, but should be aware of the potential for data-loss in round-tripping properties that the client may not know about in advance, such as open or added properties, or properties not specified in metadata. Services that do not support PUT SHALL respond with an HTTP code 501 Not Implemented.\n    </br></br>Key and other non-updatable properties that are not tied to key properties of the principal entity, can be omitted from the request. If the request contains a value for one of these properties, the service SHALL ignore that value when applying the update.\n    </br></br>On success, the response SHALL be a valid success response.</span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_request_2\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Datastreams(12)",
+                "curl": "curl -X PATCH -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"PATCH\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.patch('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "unitOfMeasurement": {
+                    "name": "Degrees Fahrenheit",
+                    "symbol": "degF",
+                    "definition": "http://www.qudt.org/qudt/owl/1.0.0/unit/Instances.html#DegreeFahrenheit"
+                },
+                "description": "Water Temperature of Bow river"
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Datastreams(12)\",\n    \"@iot.id\": 12,\n    \"name\": \"Piezometer F4_OTT CTD_water table level\",\n    \"description\": \"Water Temperature of Bow river\",\n    \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n    \"unitOfMeasurement\": {\n        \"name\": \"Degrees Fahrenheit\",\n        \"symbol\": \"degF\",\n        \"definition\": \"http://www.qudt.org/qudt/owl/1.0.0/unit/Instances.html#DegreeFahrenheit\"\n    },\n    \"observedArea\": null,\n    \"phenomenonTime\": \"/\",\n    \"resultTime\": \"/\",\n    \"properties\": null,\n    \"Thing@iot.navigationLink\": \"proxy/v1.1/Datastreams(12)/Thing\",\n    \"Sensor@iot.navigationLink\": \"proxy/v1.1/Datastreams(12)/Sensor\",\n    \"ObservedProperty@iot.navigationLink\": \"proxy/v1.1/Datastreams(12)/ObservedProperty\",\n    \"Observations@iot.navigationLink\": \"proxy/v1.1/Datastreams(12)/Observations\",\n    \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(12)/Lora\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(12)/FeatureOfInterest\"\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"exist no datastream ID --> 9007199254740991\"\n}"
+        },
+        {
+            "short": "One",
+            "type": "delete",
+            "version": "1.1.0",
+            "description": "Delete a Datastream.<input id=\"showDeleteDatastreams\" type=checkbox> <label for=\"showDeleteDatastreams\">Click for Help</label> <span id=\"contentDeleteDatastreams\"></br> A successful DELETE request to an entity’s edit URL deletes the entity. The request body SHOULD be empty. Services SHALL implicitly remove relations to and from an entity when deleting it; clients need not delete the relations explicitly.\n    </br>Services MAY implicitly delete or modify related entities if required by integrity constraints.\n    <table> <thead> <tr> <th style=\"width: 30%\">Scenario</th> <th style=\"width: 70%\">Integrity Constraints</th> </tr> </thead> <tbody> <tr> <td>Delete a Thing entity</td> <td>Delete all the Datastream and HistoricalLocation entities linked to the Thing entity.</td> </tr> <tr> <td>Delete a Location entity</td> <td>Delete all the HistoricalLocation entities linked to the Location entity</td> </tr> <tr> <td>Delete a Datastream entity</td> <td>Delete all the Observation entities linked to the Datastream entity.</td> </tr> <tr> <td>Delete a Sensor entity</td> <td>Delete all the Datastream entities linked to the Sensor entity.</td> </tr> <tr> <td>Delete an ObservedProperty entity</td> <td>Delete all the Datastream entities linked to the ObservedProperty entity.</td> </tr> <tr> <td>Delete an Observation entity</td> <td></td> </tr> <tr> <td>Delete a FeatureOfInterest entity</td> <td>Delete all the Observation entities linked to the FeatureOfInterest entity.</td> </tr> <tr> <td>Delete a HistoricalLocation entity entity</td> <td></td> </tr> </tbody> </table></span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_request_3\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Datastreams(20)",
+                "curl": "curl -DELETE \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"DELETE\"\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.delete('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "",
+            "success": "{}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"No id found for : 9007199254740991\"\n}"
+        }
+    ],
+    "MultiDatastreams": [
+        {
+            "short": "MultiDatastreams Extension",
+            "type": "infos",
+            "version": "1.1.0",
+            "description": "MultiDatastream entity is an extension to handle complex observations when the result is an array.<br><img src=\"./assets/multi.jpg\" alt=\"MultiDatastream\"></br>multi-datastream constraints</br></br>The size and the order of each element of a MultiDatastream’s unitOfMeasurements array (i.e., MultiDatastream(id)/unitOfMeasurements) SHALL match the size and the order of each element of the related ObservedProperties collection (i.e., MultiDatastreams(id)/ObservedProperties).</br></br>The size and the order of each element of a MultiDatastream’s unitOfMeasurements array (i.e., MultiDatastreams(id)/unitOfMeasurements) SHALL match the size and the order of each element of all related Observations’ result (i.e., MultiDatastreams(id)/Observations?$select=result).</br></br>The size and the order of each element of a MultiDatastream’s unitOfMeasurements array (i.e., MultiDatastreams(id)/unitOfMeasurements) SHALL match the size and the order of each element of the MultiDatastream’s multiObservationDataTypes array (i.e., MultiDatastreams(id)/multiObservationDataTypes).</br></br> When a complex result’s element does not have a unit of measurement (e.g., a OM_TruthObservation type), the corresponding unitOfMeasurement element SHALL have null values.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#multidatastream-extension\" target=\"_blank\">[OGC reference]</a>",
+            "request": ""
+        },
+        {
+            "short": "all",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Retrieve all MultiDatastreams.<input id=\"showGetMultiDatastreams\" type=checkbox> <label for=\"showGetMultiDatastreams\">Click for Help</label> <span id=\"contentGetMultiDatastreams\">To address to an entity set, users can simply put the entity set name after the service root URI. The service returns a JSON object with a property of value. The value of the property SHALL be a list of the entities in the specified entity set.</span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-address-collection-entities\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/MultiDatastreams",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "structure": {
+                "columns": {
+                    "id": {
+                        "description": "Is the system-generated identifier of an entity. id is unique among the entities of the same entity type in a SensorThings service.",
+                        "type": "number",
+                        "requis": false
+                    },
+                    "name": {
+                        "description": "A property provides a label for Datastream entity, commonly a descriptive name.",
+                        "type": "text",
+                        "requis": true
+                    },
+                    "description": {
+                        "description": "The description of the Datastream entity.",
+                        "type": "text",
+                        "requis": true
+                    },
+                    "unitOfMeasurements": {
+                        "description": "A JSON array of JSON objects that containing three key-value pairs. The name property presents the full name of the unitOfMeasurement; the symbol property shows the textual form of the unit symbol; and the definition contains the URI defining the unitOfMeasurement. (see Req 42 for the constraints between unitOfMeasurement, multiObservationDataType and result).",
+                        "type": "json",
+                        "requis": true
+                    },
+                    "observationType": {
+                        "description": "The type of Observation (with unique result type), which is used by the service to encode observations.",
+                        "type": "text",
+                        "requis": true
+                    },
+                    "multiObservationDataTypes": {
+                        "description": "This property defines the observationType of each element of the result of a complex Observation.",
+                        "type": "text[]",
+                        "requis": false
+                    },
+                    "observedArea": {
+                        "description": "The spatial bounding box of the spatial extent of all FeatureOfInterests that belong to the Observations associated with this MultiDatastream.",
+                        "type": "json",
+                        "requis": false
+                    },
+                    "phenomenonTime": {
+                        "description": "The temporal interval of the phenomenon times of all observations belonging to this MultiDatastream.",
+                        "type": "text",
+                        "requis": false
+                    },
+                    "resultTime": {
+                        "description": "The temporal interval of the result times of all observations belonging to this MultiDatastream.",
+                        "type": "text",
+                        "requis": false
+                    },
+                    "properties": {
+                        "description": "A JSON Object containing user-annotated properties as key-value pairs.",
+                        "type": "json",
+                        "requis": false
+                    }
+                },
+                "relations": {
+                    "Thing": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    },
+                    "Sensor": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    },
+                    "Observations": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    },
+                    "ObservedProperties": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    },
+                    "Lora": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    },
+                    "FeatureOfInterest": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    }
+                }
+            },
+            "request": "proxyv1.1/MultiDatastreams",
+            "success": "{\n    \"@iot.count\": 9,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/MultiDatastreams(1)\",\n            \"@iot.id\": 1,\n            \"name\": \"classic MultiDatastream\",\n            \"description\": \"Description of classic MultiDatastream\",\n            \"unitOfMeasurements\": [\n                {\n                    \"name\": \"Unit one of classic\",\n                    \"symbol\": \"%\",\n                    \"definition\": \"https://in-situ.theia-land.fr/skosmos/theia_ozcar_thesaurus/en/page/c_cd6670c7\"\n                },\n                {\n                    \"name\": \"Unit two of classic\",\n                    \"symbol\": \"€\",\n                    \"definition\": \"https://in-situ.theia-land.fr/skosmos/theia_ozcar_thesaurus/en/page/c_759e6eec\"\n                }\n            ],\n            \"observationType\": \"http://www.opengis.net/def/observation-type/ogc-om/2.0/om_complex-observation\",\n            \"multiObservationDataTypes\": [\n                \"Measurement\",\n                \"Measurement\"\n            ],\n            \"observedArea\": null,\n            \"phenomenonTime\": \"2023-03-01T04:30:01Z/2023-03-01T07:15:01Z\",\n            \"resultTime\": \"2023-03-01T04:30:01Z/2023-03-01T07:15:01Z\",\n            \"properties\": null,\n            \"Thing@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(1)/Thing\",\n            \"Sensor@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(1)/Sensor\",\n            \"Observations@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(1)/Observations\",\n            \"ObservedProperties@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(1)/ObservedProperties\",\n            \"Lora@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(1)/Lora\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(1)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/MultiDatastreams(2)\",\n            \"@iot.id\": 2,\n            \"name\": \"This is the stean's MultiDatastream\",\n            \"description\": \"Description of This is the stean's MultiDatastream\",\n            \"unitOfMeasurements\": [\n                {\n                    \"name\": \"Unit one of apostrophe\",\n                    \"symbol\": \"%\",\n                    \"definition\": \"https://in-situ.theia-land.fr/skosmos/theia_ozcar_thesaurus/en/page/c_cd6670c7\"\n                },\n                {\n                    \"name\": \"Unit two of apostrophe\",\n                    \"symbol\": \"€\",\n                    \"definition\": \"https://in-situ.theia-land.fr/skosmos/theia_ozcar_thesaurus/en/page/c_759e6eec\"\n                }\n            ],\n            \"observationType\": \"http://www.opengis.net/def/observation-type/ogc-om/2.0/om_complex-observation\",\n            \"multiObservationDataTypes\": [\n                \"Measurement\",\n                \"Measurement\"\n            ],\n            \"observedArea\": null,\n            \"phenomenonTime\": \"2023-03-01T10:30:01Z/2023-03-01T13:15:01Z\",\n            \"resultTime\": \"2023-03-01T10:30:01Z/2023-03-01T13:15:01Z\",\n            \"properties\": null,\n            \"Thing@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(2)/Thing\",\n            \"Sensor@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(2)/Sensor\",\n            \"Observations@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(2)/Observations\",\n            \"ObservedProperties@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(2)/ObservedProperties\",\n            \"Lora@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(2)/Lora\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(2)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\"\n}"
+        },
+        {
+            "short": "one",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get a specific MultiDatastream.Users can address to a specific entity in an entity set by place the unique identifier of the entity between brace symbol “()” and put after the entity set name. The service then returns the entity with all its properties.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/MultiDatastreams(1)",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/MultiDatastreams(1)",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/MultiDatastreams(1)\",\n    \"@iot.id\": 1,\n    \"name\": \"classic MultiDatastream\",\n    \"description\": \"Description of classic MultiDatastream\",\n    \"unitOfMeasurements\": [\n        {\n            \"name\": \"Unit one of classic\",\n            \"symbol\": \"%\",\n            \"definition\": \"https://in-situ.theia-land.fr/skosmos/theia_ozcar_thesaurus/en/page/c_cd6670c7\"\n        },\n        {\n            \"name\": \"Unit two of classic\",\n            \"symbol\": \"€\",\n            \"definition\": \"https://in-situ.theia-land.fr/skosmos/theia_ozcar_thesaurus/en/page/c_759e6eec\"\n        }\n    ],\n    \"observationType\": \"http://www.opengis.net/def/observation-type/ogc-om/2.0/om_complex-observation\",\n    \"multiObservationDataTypes\": [\n        \"Measurement\",\n        \"Measurement\"\n    ],\n    \"observedArea\": null,\n    \"phenomenonTime\": \"2023-03-01T04:30:01Z/2023-03-01T07:15:01Z\",\n    \"resultTime\": \"2023-03-01T04:30:01Z/2023-03-01T07:15:01Z\",\n    \"properties\": null,\n    \"Thing@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(1)/Thing\",\n    \"Sensor@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(1)/Sensor\",\n    \"Observations@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(1)/Observations\",\n    \"ObservedProperties@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(1)/ObservedProperties\",\n    \"Lora@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(1)/Lora\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(1)/FeatureOfInterest\"\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"id : 1 not found\"\n}"
+        },
+        {
+            "short": "from specific Thing",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get Multi Datastreams(s) from Thing. ",
+            "examples": {
+                "http": "v1.1/Things(11)/MultiDatastreams",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things(11)/MultiDatastreams",
+            "success": "{\n    \"@iot.count\": 4,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/MultiDatastreams(6)\",\n            \"@iot.id\": 6,\n            \"name\": \"Lora ST1_50 [2CF7F120252000DF]\",\n            \"description\": \"Streams Lora ST1_50\",\n            \"unitOfMeasurements\": [\n                {\n                    \"name\": \"soil moisture\",\n                    \"symbol\": \"%\",\n                    \"definition\": \"https://in-situ.theia-land.fr/skosmos/theia_ozcar_thesaurus/en/page/c_cd6670c7\"\n                },\n                {\n                    \"name\": \"soil temperature\",\n                    \"symbol\": \"€\",\n                    \"definition\": \"https://in-situ.theia-land.fr/skosmos/theia_ozcar_thesaurus/en/page/c_759e6eec\"\n                }\n            ],\n            \"observationType\": \"http://www.opengis.net/def/observation-type/ogc-om/2.0/om_complex-observation\",\n            \"multiObservationDataTypes\": [\n                \"Measurement\",\n                \"Measurement\"\n            ],\n            \"observedArea\": null,\n            \"phenomenonTime\": \"2024-06-03T04:45:01Z/2024-06-05T05:15:01Z\",\n            \"resultTime\": \"2024-06-03T04:45:01Z/2024-06-05T05:15:01Z\",\n            \"properties\": null,\n            \"Thing@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(6)/Thing\",\n            \"Sensor@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(6)/Sensor\",\n            \"Observations@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(6)/Observations\",\n            \"ObservedProperties@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(6)/ObservedProperties\",\n            \"Lora@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(6)/Lora\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(6)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/MultiDatastreams(7)\",\n            \"@iot.id\": 7,\n            \"name\": \"Lora ST3_75 [2CF7F1202520017E]\",\n            \"description\": \"Streams Lora ST3_75\",\n            \"unitOfMeasurements\": [\n                {\n                    \"name\": \"soil moisture\",\n                    \"symbol\": \"%\",\n                    \"definition\": \"https://in-situ.theia-land.fr/skosmos/theia_ozcar_thesaurus/en/page/c_760c9f6f\"\n                },\n                {\n                    \"name\": \"soil temperature\",\n                    \"symbol\": \"€\",\n                    \"definition\": \"https://in-situ.theia-land.fr/skosmos/theia_ozcar_thesaurus/en/page/c_c6abc183\"\n                }\n            ],\n            \"observationType\": \"http://www.opengis.net/def/observation-type/ogc-om/2.0/om_complex-observation\",\n            \"multiObservationDataTypes\": [\n                \"Measurement\",\n                \"Measurement\"\n            ],\n            \"observedArea\": null,\n            \"phenomenonTime\": \"2024-06-03T05:00:01Z/2024-06-05T06:15:01Z\",\n            \"resultTime\": \"2024-06-03T05:00:01Z/2024-06-05T06:15:01Z\",\n            \"properties\": null,\n            \"Thing@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(7)/Thing\",\n            \"Sensor@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(7)/Sensor\",\n            \"Observations@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(7)/Observations\",\n            \"ObservedProperties@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(7)/ObservedProperties\",\n            \"Lora@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(7)/Lora\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(7)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Informations",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get all informations of a MultiDatastreams. ",
+            "examples": {
+                "http": "v1.1/MultiDatastreams(1)?$expand=Thing/Locations/FeatureOfInterest,Sensor,ObservedProperties",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/MultiDatastreams(1)?$expand=Thing/Locations/FeatureOfInterest,Sensor,ObservedProperties",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/MultiDatastreams(1)\",\n    \"@iot.id\": 1,\n    \"name\": \"classic MultiDatastream\",\n    \"description\": \"Description of classic MultiDatastream\",\n    \"unitOfMeasurements\": [\n        {\n            \"name\": \"Unit one of classic\",\n            \"symbol\": \"%\",\n            \"definition\": \"https://in-situ.theia-land.fr/skosmos/theia_ozcar_thesaurus/en/page/c_cd6670c7\"\n        },\n        {\n            \"name\": \"Unit two of classic\",\n            \"symbol\": \"€\",\n            \"definition\": \"https://in-situ.theia-land.fr/skosmos/theia_ozcar_thesaurus/en/page/c_759e6eec\"\n        }\n    ],\n    \"observationType\": \"http://www.opengis.net/def/observation-type/ogc-om/2.0/om_complex-observation\",\n    \"multiObservationDataTypes\": [\n        \"Measurement\",\n        \"Measurement\"\n    ],\n    \"observedArea\": null,\n    \"phenomenonTime\": \"2023-03-01T04:30:01Z/2023-03-01T07:15:01Z\",\n    \"resultTime\": \"2023-03-01T04:30:01Z/2023-03-01T07:15:01Z\",\n    \"properties\": null,\n    \"Thing\": {\n        \"@iot.selfLink\": \"proxy/v1.1/Things(1)\",\n        \"@iot.id\": 1,\n        \"name\": \"classic Thing\",\n        \"description\": \"Description of classic Thing\",\n        \"properties\": null,\n        \"Locations\": [],\n        \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(1)/HistoricalLocations\",\n        \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(1)/Datastreams\",\n        \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(1)/MultiDatastreams\"\n    },\n    \"Sensor\": {\n        \"@iot.selfLink\": \"proxy/v1.1/Sensors(1)\",\n        \"@iot.id\": 1,\n        \"name\": \"classic Sensor\",\n        \"description\": \"Description of classic Sensor\",\n        \"encodingType\": \"text/html\",\n        \"metadata\": \"https://joy-it.net/en/products/link.html\",\n        \"properties\": null,\n        \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Sensors(1)/Datastreams\",\n        \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Sensors(1)/MultiDatastreams\"\n    },\n    \"Observations@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(1)/Observations\",\n    \"ObservedProperties\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/ObservedProperties(1)\",\n            \"@iot.id\": 1,\n            \"name\": \"classic Observed Property\",\n            \"description\": \"Description of classic Observed Property\",\n            \"definition\": \"https://w3id.org/ozcar-theia/c_650214c2\",\n            \"properties\": null,\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/ObservedProperties(1)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/ObservedProperties(1)/MultiDatastreams\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/ObservedProperties(2)\",\n            \"@iot.id\": 2,\n            \"name\": \"This is the stean's Observed Property\",\n            \"description\": \"Description of This is the stean's Observed Property\",\n            \"definition\": \"https://w3id.org/ozcar-theia/c_650214c2\",\n            \"properties\": null,\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/ObservedProperties(2)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/ObservedProperties(2)/MultiDatastreams\"\n        }\n    ],\n    \"Lora@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(1)/Lora\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(1)/FeatureOfInterest\"\n}"
+        },
+        {
+            "short": "From phenomenonTime search",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get Datastream(s) from phenomenonTime filter. ",
+            "examples": {
+                "http": "v1.1/MultiDatastreams?$filter=phenomenonTime eq 2023-03-01T16:30:01Z/2023-03-01T19:15:01Z",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/MultiDatastreams?$filter=phenomenonTime eq 2023-03-01T16:30:01Z/2023-03-01T19:15:01Z",
+            "success": "{\n    \"@iot.count\": 1,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/MultiDatastreams(3)\",\n            \"@iot.id\": 3,\n            \"name\": \"This is éléanor's MultiDatastream\",\n            \"description\": \"Description of This is éléanor's MultiDatastream\",\n            \"unitOfMeasurements\": [\n                {\n                    \"name\": \"Unit one of accent\",\n                    \"symbol\": \"%\",\n                    \"definition\": \"https://in-situ.theia-land.fr/skosmos/theia_ozcar_thesaurus/en/page/c_cd6670c7\"\n                },\n                {\n                    \"name\": \"Unit two of accent\",\n                    \"symbol\": \"€\",\n                    \"definition\": \"https://in-situ.theia-land.fr/skosmos/theia_ozcar_thesaurus/en/page/c_759e6eec\"\n                }\n            ],\n            \"observationType\": \"http://www.opengis.net/def/observation-type/ogc-om/2.0/om_complex-observation\",\n            \"multiObservationDataTypes\": [\n                \"Measurement\",\n                \"Measurement\"\n            ],\n            \"observedArea\": null,\n            \"phenomenonTime\": \"2023-03-01T16:30:01Z/2023-03-01T19:15:01Z\",\n            \"resultTime\": \"2023-03-01T16:30:01Z/2023-03-01T19:15:01Z\",\n            \"properties\": null,\n            \"Thing@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(3)/Thing\",\n            \"Sensor@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(3)/Sensor\",\n            \"Observations@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(3)/Observations\",\n            \"ObservedProperties@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(3)/ObservedProperties\",\n            \"Lora@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(3)/Lora\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(3)/FeatureOfInterest\"\n        }\n    ]\n}"
+        },
+        {
+            "short": "From phenomenonTime select & order",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get MultiDatastreams phenomenonTime order by phenomenonTime. ",
+            "examples": {
+                "http": "v1.1/MultiDatastreams?$select=phenomenonTime&$orderby=phenomenonTime%20desc",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/MultiDatastreams?$select=phenomenonTime&$orderby=phenomenonTime%20desc",
+            "success": "{\n    \"@iot.count\": 9,\n    \"value\": [\n        {\n            \"phenomenonTime\": \"2024-06-03T05:15:01Z/2024-06-05T04:15:01Z\"\n        },\n        {\n            \"phenomenonTime\": \"2024-06-03T05:00:01Z/2024-06-05T06:15:01Z\"\n        },\n        {\n            \"phenomenonTime\": \"2024-06-03T04:45:01Z/2024-06-05T05:15:01Z\"\n        },\n        {\n            \"phenomenonTime\": \"2023-03-02T04:30:01Z/2023-03-02T07:15:01Z\"\n        },\n        {\n            \"phenomenonTime\": \"2023-03-01T22:30:01Z/2023-03-02T01:15:01Z\"\n        },\n        {\n            \"phenomenonTime\": \"2023-03-01T16:30:01Z/2023-03-01T19:15:01Z\"\n        },\n        {\n            \"phenomenonTime\": \"2023-03-01T10:30:01Z/2023-03-01T13:15:01Z\"\n        },\n        {\n            \"phenomenonTime\": \"2023-03-01T04:30:01Z/2023-03-01T07:15:01Z\"\n        },\n        {\n            \"phenomenonTime\": \"/\"\n        }\n    ]\n}"
+        },
+        {
+            "short": "Post with existing Thing And Sensor",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "Post a new MultiDatastreams.<input id=\"showPostMultiDatastreams\" type=checkbox> <label for=\"showPostMultiDatastreams\">Click for Help</label> <span id=\"contentPostMultiDatastreams\"></br></br>To create an entity in a collection, the client SHALL send a HTTP POST request to that collection’s URL. The POST body SHALL contain a single valid entity representation.\n    </br></br>If the target URL for the collection is a navigationLink, the new entity is automatically linked to the entity containing the navigationLink.\n    </br></br>Upon successful completion, the response SHALL contain a HTTP location header that contains the selfLink of the created entity.\n    </br></br>Upon successful completion the service SHALL respond with either 201 Created, or 204 No Content.\n    </br></br>In addition, the link between entities SHALL be established upon creating an entity. Two use cases SHALL be considered: (1) link to existing entities when creating an entity, and (2) create related entities when creating an entity. The requests for these two use cases are described in the following subsection.\n    </br></br>When clients create resources in a SensorThings service, they SHALL follow the integrity constraints listed in Table 24. For example, a Datastream entity SHALL link to a Thing entity. When a client wants to create a Datastream entity, the client needs to either (1) create a linked Thing entity in the same request or (2) link to an already created Thing entity. The complete integrity constraints for creating resources are shown in the following table.\n    </br></br>Special case #1 - When creating an Observation entity that links to a FeatureOfInterest entity: Sometimes the FeatureOfInterest of an Observation is the Location of the Thing. For example, a wifi-connected thermostat’s temperature observation’s feature-of-interest can be the location of the smart thermostat, that is the room WHERE the smart thermostat is located in.\n    </br></br>In this case, when a client creates an Observation entity, the client SHOULD omit the link to a FeatureOfInterest entity in the POST body message and SHOULD not create a related FeatureOfInterest entity with deep insert. And if the service detects that there is no link to a FeatureOfInterest entity in the POST body message that creates an Observation entity, the service SHALL either (1) create a FeatureOfInterest entity by using the location property from the Location of the Thing entity when there is no FeatureOfInterest whose location property is from the Location of the Thing entity or (2) link to the FeatureOfInterest whose location property is from the Location of the Thing entity.\n    </br></br>Special case #2: In the context of IoT, many Observations’ resultTime and phenomenonTime cannot be distinguished or the resultTime is not available. In this case, when a client creates an Observation entity, the client MAY omit the resultTime and the service SHOULD assign a null value to the resultTime.\n    </br><table> <thead> <tr> <th style=\"width: 30%\">Scenario</th> <th style=\"width: 70%\">Integrity Constraints</th> </tr> </thead> <tbody> <tr> <td>Create a Thing entity</td> <td></td> </tr> <tr> <td>Create a Location entity</td> <td></td> </tr> <tr> <td>Create a Datastream entity</td> <td>SHALL link to a Thing entity</br>SHALL link to a Sensor entity.</br>SHALL link to an ObservedProperty entity.</td> </tr> <tr> <td>Create a Sensor entity</td> <td></td> </tr> <tr> <td>Create an ObservedProperty entity</td> <td></td> </tr> <tr> <td>Create an Observation entity</td> <td>SHALL link to a Datastream or MultiDatastream entity.</br>SHALL link to a FeatureOfInterest entity. If no link specified, the service SHALL create a FeatureOfInterest entity from the content of the Location entities.</td> </tr> <tr> <td>Create a FeatureOfInterest entity</td> <td></td> </tr> </tbody> </table></span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/MultiDatastreams",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "description": "Air quality readings",
+                "name": "Air quality readings MultiDatastreams 2",
+                "Thing": {
+                    "@iot.id": 2
+                },
+                "Sensor": {
+                    "@iot.id": 1
+                },
+                "multiObservationDataTypes": [
+                    "Measurement",
+                    "Measurement"
+                ],
+                "unitOfMeasurements": [
+                    {
+                        "symbol": "%",
+                        "name": "humidity 3",
+                        "definition": "http://unitsofmeasure.org/ucum.html"
+                    },
+                    {
+                        "name": "Temperature 4",
+                        "symbol": "°",
+                        "definition": "http://unitsofmeasure.org/blank.html"
+                    }
+                ],
+                "ObservedProperties": [
+                    {
+                        "name": "humidity 5",
+                        "definition": "humidity",
+                        "description": "valeur en pourcentage du taux d'humidity de l'air"
+                    },
+                    {
+                        "name": "Temperature 6",
+                        "definition": "Temperature",
+                        "description": "valeur en degré de la Temperature de l'air"
+                    }
+                ]
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/MultiDatastreams(10)\",\n    \"@iot.id\": 10,\n    \"name\": \"Air quality readings MultiDatastreams 2\",\n    \"description\": \"Air quality readings\",\n    \"unitOfMeasurements\": [\n        {\n            \"name\": \"humidity 3\",\n            \"symbol\": \"%\",\n            \"definition\": \"http://unitsofmeasure.org/ucum.html\"\n        },\n        {\n            \"name\": \"Temperature 4\",\n            \"symbol\": \"°\",\n            \"definition\": \"http://unitsofmeasure.org/blank.html\"\n        }\n    ],\n    \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n    \"multiObservationDataTypes\": [\n        \"Measurement\",\n        \"Measurement\"\n    ],\n    \"observedArea\": null,\n    \"phenomenonTime\": \"/\",\n    \"resultTime\": \"/\",\n    \"properties\": null,\n    \"Thing@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(10)/Thing\",\n    \"Sensor@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(10)/Sensor\",\n    \"Observations@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(10)/Observations\",\n    \"ObservedProperties@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(10)/ObservedProperties\",\n    \"Lora@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(10)/Lora\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(10)/FeatureOfInterest\"\n}",
+            "error": "{\n    \"code\": 400,\n    \"message\": \"Bad Request\"\n}"
+        },
+        {
+            "short": "Post With Thing and Sensor",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "Post a new Multi Datastream With New Thing and Sensor.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#create-related-entities\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/MultiDatastreams",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "description": "Air quality readings",
+                "name": "Air quality readings MultiDatastreams 7",
+                "Thing": {
+                    "description": "A New SensorWeb thing",
+                    "name": "SensorWebThing Thing 8",
+                    "properties": {
+                        "organization": "Mozilla",
+                        "owner": "Mozilla"
+                    }
+                },
+                "Sensor": {
+                    "name": "DHT72",
+                    "description": "DHT72 soil temperature 9",
+                    "encodingType": "application/pdf",
+                    "metadata": "https://cdn-shop.adafruit.com/datasheets/DHT72.pdf"
+                },
+                "multiObservationDataTypes": [
+                    "Measurement",
+                    "Measurement"
+                ],
+                "unitOfMeasurements": [
+                    {
+                        "symbol": "%",
+                        "name": "Soil soil humidity 10",
+                        "definition": "http://unitsofmeasure.org/ucum.html"
+                    },
+                    {
+                        "name": "Soil soil temperature 11",
+                        "symbol": "°",
+                        "definition": "http://unitsofmeasure.org/blank.html"
+                    }
+                ],
+                "ObservedProperties": [
+                    {
+                        "name": "humidity 12",
+                        "definition": "humidity",
+                        "description": "valeur en pourcentage du taux d'humidity de l'air"
+                    },
+                    {
+                        "name": "Temperature 13",
+                        "definition": "Temperature",
+                        "description": "valeur en degré de la Temperature de l'air"
+                    }
+                ]
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/MultiDatastreams(11)\",\n    \"@iot.id\": 11,\n    \"name\": \"Air quality readings MultiDatastreams 7\",\n    \"description\": \"Air quality readings\",\n    \"unitOfMeasurements\": [\n        {\n            \"name\": \"Soil soil humidity 10\",\n            \"symbol\": \"%\",\n            \"definition\": \"http://unitsofmeasure.org/ucum.html\"\n        },\n        {\n            \"name\": \"Soil soil temperature 11\",\n            \"symbol\": \"°\",\n            \"definition\": \"http://unitsofmeasure.org/blank.html\"\n        }\n    ],\n    \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n    \"multiObservationDataTypes\": [\n        \"Measurement\",\n        \"Measurement\"\n    ],\n    \"observedArea\": null,\n    \"phenomenonTime\": \"/\",\n    \"resultTime\": \"/\",\n    \"properties\": null,\n    \"Thing@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(11)/Thing\",\n    \"Sensor@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(11)/Sensor\",\n    \"Observations@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(11)/Observations\",\n    \"ObservedProperties@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(11)/ObservedProperties\",\n    \"Lora@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(11)/Lora\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(11)/FeatureOfInterest\"\n}",
+            "error": "{\n    \"@iot.selfLink\": \"proxy/v1.1/MultiDatastreams(11)\",\n    \"@iot.id\": 11,\n    \"name\": \"Air quality readings MultiDatastreams 7\",\n    \"description\": \"Air quality readings\",\n    \"unitOfMeasurements\": [\n        {\n            \"name\": \"Soil soil humidity 10\",\n            \"symbol\": \"%\",\n            \"definition\": \"http://unitsofmeasure.org/ucum.html\"\n        },\n        {\n            \"name\": \"Soil soil temperature 11\",\n            \"symbol\": \"°\",\n            \"definition\": \"http://unitsofmeasure.org/blank.html\"\n        }\n    ],\n    \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n    \"multiObservationDataTypes\": [\n        \"Measurement\",\n        \"Measurement\"\n    ],\n    \"observedArea\": null,\n    \"phenomenonTime\": \"/\",\n    \"resultTime\": \"/\",\n    \"properties\": null,\n    \"Thing@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(11)/Thing\",\n    \"Sensor@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(11)/Sensor\",\n    \"Observations@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(11)/Observations\",\n    \"ObservedProperties@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(11)/ObservedProperties\",\n    \"Lora@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(11)/Lora\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(11)/FeatureOfInterest\"\n}"
+        },
+        {
+            "short": "Post with default FOI",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "Post a new MultiDatastreams with default FOI ",
+            "examples": {
+                "http": "v1.1/MultiDatastreams",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "description": "Air quality readings",
+                "name": "Air quality readings MultiDatastreams 18",
+                "Thing": {
+                    "@iot.id": 2
+                },
+                "Sensor": {
+                    "@iot.id": 1
+                },
+                "multiObservationDataTypes": [
+                    "Measurement",
+                    "Measurement"
+                ],
+                "unitOfMeasurements": [
+                    {
+                        "symbol": "%",
+                        "name": "humidity 19",
+                        "definition": "http://unitsofmeasure.org/ucum.html"
+                    },
+                    {
+                        "name": "Temperature 20",
+                        "symbol": "°",
+                        "definition": "http://unitsofmeasure.org/blank.html"
+                    }
+                ],
+                "ObservedProperties": [
+                    {
+                        "name": "humidity 21",
+                        "definition": "humidity",
+                        "description": "valeur en pourcentage du taux d'humidity de l'air"
+                    },
+                    {
+                        "name": "Temperature 22",
+                        "definition": "Temperature",
+                        "description": "valeur en degré de la Temperature de l'air"
+                    }
+                ],
+                "FeaturesOfInterest": {
+                    "@iot.id": 2
+                }
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/MultiDatastreams(12)\",\n    \"@iot.id\": 12,\n    \"name\": \"Air quality readings MultiDatastreams 18\",\n    \"description\": \"Air quality readings\",\n    \"unitOfMeasurements\": [\n        {\n            \"name\": \"humidity 19\",\n            \"symbol\": \"%\",\n            \"definition\": \"http://unitsofmeasure.org/ucum.html\"\n        },\n        {\n            \"name\": \"Temperature 20\",\n            \"symbol\": \"°\",\n            \"definition\": \"http://unitsofmeasure.org/blank.html\"\n        }\n    ],\n    \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n    \"multiObservationDataTypes\": [\n        \"Measurement\",\n        \"Measurement\"\n    ],\n    \"observedArea\": null,\n    \"phenomenonTime\": \"/\",\n    \"resultTime\": \"/\",\n    \"properties\": null,\n    \"Thing@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(12)/Thing\",\n    \"Sensor@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(12)/Sensor\",\n    \"Observations@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(12)/Observations\",\n    \"ObservedProperties@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(12)/ObservedProperties\",\n    \"Lora@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(12)/Lora\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(12)/FeatureOfInterest\"\n}"
+        },
+        {
+            "short": "One",
+            "type": "patch",
+            "version": "1.1.0",
+            "description": "Patch a MultiDatastream.<input id=\"showPatchMultiDatastreams\" type=checkbox> <label for=\"showPatchMultiDatastreams\">Click for Help</label> <span id=\"contentPatchMultiDatastreams\"></br></br>In SensorThings PATCH is the preferred means of updating an entity. PATCH provides more resiliency between clients and services by directly modifying only those values specified by the client.\n    </br></br>The semantics of PATCH, as defined in [RFC5789], are to merge the content in the request payload with the entity’s current state, applying the update only to those components specified in the request body. The properties provided in the payload corresponding to updatable properties SHALL replace the value of the corresponding property in the entity. Missing properties of the containing entity or complex property SHALL NOT be directly altered.\n    </br></br>Services MAY additionally support PUT, but should be aware of the potential for data-loss in round-tripping properties that the client may not know about in advance, such as open or added properties, or properties not specified in metadata. Services that do not support PUT SHALL respond with an HTTP code 501 Not Implemented.\n    </br></br>Key and other non-updatable properties that are not tied to key properties of the principal entity, can be omitted from the request. If the request contains a value for one of these properties, the service SHALL ignore that value when applying the update.\n    </br></br>On success, the response SHALL be a valid success response.</span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_request_2\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/MultiDatastreams(12)",
+                "curl": "curl -X PATCH -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"PATCH\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.patch('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "description": "Modification of the description"
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/MultiDatastreams(12)\",\n    \"@iot.id\": 12,\n    \"name\": \"Air quality readings MultiDatastreams 18\",\n    \"description\": \"Modification of the description\",\n    \"unitOfMeasurements\": [\n        {\n            \"name\": \"humidity 19\",\n            \"symbol\": \"%\",\n            \"definition\": \"http://unitsofmeasure.org/ucum.html\"\n        },\n        {\n            \"name\": \"Temperature 20\",\n            \"symbol\": \"°\",\n            \"definition\": \"http://unitsofmeasure.org/blank.html\"\n        }\n    ],\n    \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n    \"multiObservationDataTypes\": [\n        \"Measurement\",\n        \"Measurement\"\n    ],\n    \"observedArea\": null,\n    \"phenomenonTime\": \"/\",\n    \"resultTime\": \"/\",\n    \"properties\": null,\n    \"Thing@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(12)/Thing\",\n    \"Sensor@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(12)/Sensor\",\n    \"Observations@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(12)/Observations\",\n    \"ObservedProperties@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(12)/ObservedProperties\",\n    \"Lora@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(12)/Lora\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/MultiDatastreams(12)/FeatureOfInterest\"\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"exist no multidatastream ID --> 9007199254740991\"\n}"
+        },
+        {
+            "short": "One",
+            "type": "delete",
+            "version": "1.1.0",
+            "description": "Delete a MultiDatastream.<input id=\"showDeleteMultiDatastreams\" type=checkbox> <label for=\"showDeleteMultiDatastreams\">Click for Help</label> <span id=\"contentDeleteMultiDatastreams\"></br> A successful DELETE request to an entity’s edit URL deletes the entity. The request body SHOULD be empty. Services SHALL implicitly remove relations to and from an entity when deleting it; clients need not delete the relations explicitly.\n    </br>Services MAY implicitly delete or modify related entities if required by integrity constraints.\n    <table> <thead> <tr> <th style=\"width: 30%\">Scenario</th> <th style=\"width: 70%\">Integrity Constraints</th> </tr> </thead> <tbody> <tr> <td>Delete a Thing entity</td> <td>Delete all the Datastream and HistoricalLocation entities linked to the Thing entity.</td> </tr> <tr> <td>Delete a Location entity</td> <td>Delete all the HistoricalLocation entities linked to the Location entity</td> </tr> <tr> <td>Delete a Datastream entity</td> <td>Delete all the Observation entities linked to the Datastream entity.</td> </tr> <tr> <td>Delete a Sensor entity</td> <td>Delete all the Datastream entities linked to the Sensor entity.</td> </tr> <tr> <td>Delete an ObservedProperty entity</td> <td>Delete all the Datastream entities linked to the ObservedProperty entity.</td> </tr> <tr> <td>Delete an Observation entity</td> <td></td> </tr> <tr> <td>Delete a FeatureOfInterest entity</td> <td>Delete all the Observation entities linked to the FeatureOfInterest entity.</td> </tr> <tr> <td>Delete a HistoricalLocation entity entity</td> <td></td> </tr> </tbody> </table></span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_request_3\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/MultiDatastreams(12)",
+                "curl": "curl -DELETE \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"DELETE\"\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.delete('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "",
+            "success": "{}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"No id found for : 9007199254740991\"\n}"
+        }
+    ],
+    "Sensors": [
+        {
+            "short": "Presentation",
+            "type": "infos",
+            "version": "1.1.0",
+            "description": "A Sensor is an instrument that observes a property or phenomenon with the goal of producing an estimate of the value of the property3.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#sensor\" target=\"_blank\">[OGC reference]</a>",
+            "request": ""
+        },
+        {
+            "short": "all",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Retrieve all Sensors.<input id=\"showGetSensors\" type=checkbox> <label for=\"showGetSensors\">Click for Help</label> <span id=\"contentGetSensors\">To address to an entity set, users can simply put the entity set name after the service root URI. The service returns a JSON object with a property of value. The value of the property SHALL be a list of the entities in the specified entity set.</span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-address-collection-entities\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Sensors",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "structure": {
+                "columns": {
+                    "id": {
+                        "description": "Is the system-generated identifier of an entity. id is unique among the entities of the same entity type in a SensorThings service.",
+                        "type": "number",
+                        "requis": false
+                    },
+                    "name": {
+                        "description": "A property provides a label for Sensor entity, commonly a descriptive name.",
+                        "type": "text",
+                        "requis": true
+                    },
+                    "description": {
+                        "description": "The description of the Sensor entity.",
+                        "type": "text",
+                        "requis": true
+                    },
+                    "encodingType": {
+                        "description": "The encoding type of the metadata property. Its value is one of the ValueCode enumeration (see Table 15 for the available ValueCode).",
+                        "type": "text",
+                        "requis": false
+                    },
+                    "metadata": {
+                        "description": "The detailed description of the Sensor or system. The metadata type is defined by encodingType.",
+                        "type": "text",
+                        "requis": false
+                    },
+                    "properties": {
+                        "description": "A JSON Object containing user-annotated properties as key-value pairs.",
+                        "type": "json",
+                        "requis": false
+                    }
+                },
+                "relations": {
+                    "Datastreams": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    },
+                    "MultiDatastreams": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    }
+                }
+            },
+            "request": "proxyv1.1/Sensors",
+            "success": "{\n    \"@iot.count\": 24,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Sensors(1)\",\n            \"@iot.id\": 1,\n            \"name\": \"classic Sensor\",\n            \"description\": \"Description of classic Sensor\",\n            \"encodingType\": \"text/html\",\n            \"metadata\": \"https://joy-it.net/en/products/link.html\",\n            \"properties\": null,\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Sensors(1)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Sensors(1)/MultiDatastreams\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Sensors(2)\",\n            \"@iot.id\": 2,\n            \"name\": \"This is the stean's Sensor\",\n            \"description\": \"Description of This is the stean's Sensor\",\n            \"encodingType\": \"text/html\",\n            \"metadata\": \"https://joy-it.net/en/products/link.html\",\n            \"properties\": null,\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Sensors(2)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Sensors(2)/MultiDatastreams\"\n        },\n        \"...\"\n    ]\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\"\n}"
+        },
+        {
+            "short": "one",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get a specific Sensor.Users can address to a specific entity in an entity set by place the unique identifier of the entity between brace symbol “()” and put after the entity set name. The service then returns the entity with all its properties.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Sensors(1)",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Sensors(1)",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Sensors(1)\",\n    \"@iot.id\": 1,\n    \"name\": \"classic Sensor\",\n    \"description\": \"Description of classic Sensor\",\n    \"encodingType\": \"text/html\",\n    \"metadata\": \"https://joy-it.net/en/products/link.html\",\n    \"properties\": null,\n    \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Sensors(1)/Datastreams\",\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Sensors(1)/MultiDatastreams\"\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"id : 1 not found\"\n}"
+        },
+        {
+            "short": "Expands",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get a specific Sensor and expand Datastreams. ",
+            "examples": {
+                "http": "v1.1/Sensors(1)?$expand=Datastreams",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Sensors(1)?$expand=Datastreams",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Sensors(1)\",\n    \"@iot.id\": 1,\n    \"name\": \"classic Sensor\",\n    \"description\": \"Description of classic Sensor\",\n    \"encodingType\": \"text/html\",\n    \"metadata\": \"https://joy-it.net/en/products/link.html\",\n    \"properties\": null,\n    \"Datastreams\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Datastreams(1)\",\n            \"@iot.id\": 1,\n            \"name\": \"classic Datastream\",\n            \"description\": \"Description of classic Datastream\",\n            \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n            \"unitOfMeasurement\": {\n                \"name\": \"classic unit of measurement\",\n                \"definition\": \"http://unitsofmeasure.org/ucum.html#para-30\",\n                \"description\": \"Description of classic unit of measurement\"\n            },\n            \"observedArea\": null,\n            \"phenomenonTime\": \"2023-03-01T01:30:01Z/2023-03-01T04:15:01Z\",\n            \"resultTime\": \"2023-03-01T01:30:01Z/2023-03-01T04:15:01Z\",\n            \"properties\": null,\n            \"Thing@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/Thing\",\n            \"Sensor@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/Sensor\",\n            \"ObservedProperty@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/ObservedProperty\",\n            \"Observations@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/Observations\",\n            \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/Lora\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Datastreams(17)\",\n            \"@iot.id\": 17,\n            \"name\": \"Datastream Air quality readings\",\n            \"description\": \"New Datastream Air quality readings for test\",\n            \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n            \"unitOfMeasurement\": {\n                \"name\": \"PM 2.5 Particulates (ug/m3)\",\n                \"symbol\": \"μg/m³\",\n                \"definition\": \"http://unitsofmeasure.org/ucum.html\"\n            },\n            \"observedArea\": null,\n            \"phenomenonTime\": \"/\",\n            \"resultTime\": \"/\",\n            \"properties\": null,\n            \"Thing@iot.navigationLink\": \"proxy/v1.1/Datastreams(17)/Thing\",\n            \"Sensor@iot.navigationLink\": \"proxy/v1.1/Datastreams(17)/Sensor\",\n            \"ObservedProperty@iot.navigationLink\": \"proxy/v1.1/Datastreams(17)/ObservedProperty\",\n            \"Observations@iot.navigationLink\": \"proxy/v1.1/Datastreams(17)/Observations\",\n            \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(17)/Lora\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(17)/FeatureOfInterest\"\n        },\n        \"...\"\n    ],\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Sensors(1)/MultiDatastreams\"\n}"
+        },
+        {
+            "short": "Select",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Retrieve specified properties for a specific Sensor. ",
+            "examples": {
+                "http": "v1.1/Sensors(1)?$select=description",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Sensors(1)?$select=description",
+            "success": "{\n    \"description\": \"Description of classic Sensor\"\n}"
+        },
+        {
+            "short": "Post basic",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "Post a new Sensors.<input id=\"showPostSensors\" type=checkbox> <label for=\"showPostSensors\">Click for Help</label> <span id=\"contentPostSensors\"></br></br>To create an entity in a collection, the client SHALL send a HTTP POST request to that collection’s URL. The POST body SHALL contain a single valid entity representation.\n    </br></br>If the target URL for the collection is a navigationLink, the new entity is automatically linked to the entity containing the navigationLink.\n    </br></br>Upon successful completion, the response SHALL contain a HTTP location header that contains the selfLink of the created entity.\n    </br></br>Upon successful completion the service SHALL respond with either 201 Created, or 204 No Content.\n    </br></br>In addition, the link between entities SHALL be established upon creating an entity. Two use cases SHALL be considered: (1) link to existing entities when creating an entity, and (2) create related entities when creating an entity. The requests for these two use cases are described in the following subsection.\n    </br></br>When clients create resources in a SensorThings service, they SHALL follow the integrity constraints listed in Table 24. For example, a Datastream entity SHALL link to a Thing entity. When a client wants to create a Datastream entity, the client needs to either (1) create a linked Thing entity in the same request or (2) link to an already created Thing entity. The complete integrity constraints for creating resources are shown in the following table.\n    </br></br>Special case #1 - When creating an Observation entity that links to a FeatureOfInterest entity: Sometimes the FeatureOfInterest of an Observation is the Location of the Thing. For example, a wifi-connected thermostat’s temperature observation’s feature-of-interest can be the location of the smart thermostat, that is the room WHERE the smart thermostat is located in.\n    </br></br>In this case, when a client creates an Observation entity, the client SHOULD omit the link to a FeatureOfInterest entity in the POST body message and SHOULD not create a related FeatureOfInterest entity with deep insert. And if the service detects that there is no link to a FeatureOfInterest entity in the POST body message that creates an Observation entity, the service SHALL either (1) create a FeatureOfInterest entity by using the location property from the Location of the Thing entity when there is no FeatureOfInterest whose location property is from the Location of the Thing entity or (2) link to the FeatureOfInterest whose location property is from the Location of the Thing entity.\n    </br></br>Special case #2: In the context of IoT, many Observations’ resultTime and phenomenonTime cannot be distinguished or the resultTime is not available. In this case, when a client creates an Observation entity, the client MAY omit the resultTime and the service SHOULD assign a null value to the resultTime.\n    </br><table> <thead> <tr> <th style=\"width: 30%\">Scenario</th> <th style=\"width: 70%\">Integrity Constraints</th> </tr> </thead> <tbody> <tr> <td>Create a Thing entity</td> <td></td> </tr> <tr> <td>Create a Location entity</td> <td></td> </tr> <tr> <td>Create a Datastream entity</td> <td>SHALL link to a Thing entity</br>SHALL link to a Sensor entity.</br>SHALL link to an ObservedProperty entity.</td> </tr> <tr> <td>Create a Sensor entity</td> <td></td> </tr> <tr> <td>Create an ObservedProperty entity</td> <td></td> </tr> <tr> <td>Create an Observation entity</td> <td>SHALL link to a Datastream or MultiDatastream entity.</br>SHALL link to a FeatureOfInterest entity. If no link specified, the service SHALL create a FeatureOfInterest entity from the content of the Location entities.</td> </tr> <tr> <td>Create a FeatureOfInterest entity</td> <td></td> </tr> </tbody> </table></span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_request\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Sensors",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "description": "PM 2.5 sensor",
+                "name": "PM25 Sensors 23",
+                "encodingType": "application/pdf",
+                "metadata": "http://particle-sensor.com/"
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Sensors(25)\",\n    \"@iot.id\": 25,\n    \"name\": \"PM25 Sensors 23\",\n    \"description\": \"PM 2.5 sensor\",\n    \"encodingType\": \"application/pdf\",\n    \"metadata\": \"http://particle-sensor.com/\",\n    \"properties\": null,\n    \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Sensors(25)/Datastreams\",\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Sensors(25)/MultiDatastreams\"\n}",
+            "error": "{\n    \"code\": 400,\n    \"message\": \"Bad Request\"\n}"
+        },
+        {
+            "short": "Patch one",
+            "type": "patch",
+            "version": "1.1.0",
+            "description": "Patch a sensor. ",
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Sensors(25)\",\n    \"@iot.id\": 25,\n    \"name\": \"PM25 Sensors 23\",\n    \"description\": \"This is a new PM 2.5 sensor\",\n    \"encodingType\": \"application/pdf\",\n    \"metadata\": \"http://particle-sensor.com/\",\n    \"properties\": null,\n    \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Sensors(25)/Datastreams\",\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Sensors(25)/MultiDatastreams\"\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"exist no sensor ID --> 9007199254740991\"\n}"
+        },
+        {
+            "short": "One",
+            "type": "delete",
+            "version": "1.1.0",
+            "description": "Delete a Sensor.<input id=\"showDeleteSensors\" type=checkbox> <label for=\"showDeleteSensors\">Click for Help</label> <span id=\"contentDeleteSensors\"></br> A successful DELETE request to an entity’s edit URL deletes the entity. The request body SHOULD be empty. Services SHALL implicitly remove relations to and from an entity when deleting it; clients need not delete the relations explicitly.\n    </br>Services MAY implicitly delete or modify related entities if required by integrity constraints.\n    <table> <thead> <tr> <th style=\"width: 30%\">Scenario</th> <th style=\"width: 70%\">Integrity Constraints</th> </tr> </thead> <tbody> <tr> <td>Delete a Thing entity</td> <td>Delete all the Datastream and HistoricalLocation entities linked to the Thing entity.</td> </tr> <tr> <td>Delete a Location entity</td> <td>Delete all the HistoricalLocation entities linked to the Location entity</td> </tr> <tr> <td>Delete a Datastream entity</td> <td>Delete all the Observation entities linked to the Datastream entity.</td> </tr> <tr> <td>Delete a Sensor entity</td> <td>Delete all the Datastream entities linked to the Sensor entity.</td> </tr> <tr> <td>Delete an ObservedProperty entity</td> <td>Delete all the Datastream entities linked to the ObservedProperty entity.</td> </tr> <tr> <td>Delete an Observation entity</td> <td></td> </tr> <tr> <td>Delete a FeatureOfInterest entity</td> <td>Delete all the Observation entities linked to the FeatureOfInterest entity.</td> </tr> <tr> <td>Delete a HistoricalLocation entity entity</td> <td></td> </tr> </tbody> </table></span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_request_3\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Sensors(25)",
+                "curl": "curl -DELETE \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"DELETE\"\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.delete('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "",
+            "success": "{}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"No id found for : 9007199254740991\"\n}"
+        }
+    ],
+    "ObservedProperties": [
+        {
+            "short": "Presentation",
+            "type": "infos",
+            "version": "1.1.0",
+            "description": "An ObservedProperty specifies the phenomenon of an Observation.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#observedproperty\" target=\"_blank\">[OGC reference]</a>",
+            "request": ""
+        },
+        {
+            "short": "all",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Retrieve all ObservedProperties.<input id=\"showGetObservedProperties\" type=checkbox> <label for=\"showGetObservedProperties\">Click for Help</label> <span id=\"contentGetObservedProperties\">To address to an entity set, users can simply put the entity set name after the service root URI. The service returns a JSON object with a property of value. The value of the property SHALL be a list of the entities in the specified entity set.</span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-address-collection-entities\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/ObservedProperties",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "structure": {
+                "columns": {
+                    "id": {
+                        "description": "Is the system-generated identifier of an entity. id is unique among the entities of the same entity type in a SensorThings service.",
+                        "type": "number",
+                        "requis": false
+                    },
+                    "name": {
+                        "description": "A property provides a label for ObservedProperty entity, commonly a descriptive name.",
+                        "type": "text",
+                        "requis": true
+                    },
+                    "definition": {
+                        "description": "The URI of the ObservedProperty. Dereferencing this URI SHOULD result in a representation of the definition of the ObservedProperty.",
+                        "type": "text",
+                        "requis": true
+                    },
+                    "description": {
+                        "description": "A description about the ObservedProperty.",
+                        "type": "text",
+                        "requis": true
+                    },
+                    "properties": {
+                        "description": "A JSON Object containing user-annotated properties as key-value pairs.",
+                        "type": "json",
+                        "requis": false
+                    }
+                },
+                "relations": {
+                    "Datastreams": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    },
+                    "MultiDatastreams": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    }
+                }
+            },
+            "request": "proxyv1.1/ObservedProperties",
+            "success": "{\n    \"@iot.count\": 30,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/ObservedProperties(1)\",\n            \"@iot.id\": 1,\n            \"name\": \"classic Observed Property\",\n            \"description\": \"Description of classic Observed Property\",\n            \"definition\": \"https://w3id.org/ozcar-theia/c_650214c2\",\n            \"properties\": null,\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/ObservedProperties(1)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/ObservedProperties(1)/MultiDatastreams\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/ObservedProperties(2)\",\n            \"@iot.id\": 2,\n            \"name\": \"This is the stean's Observed Property\",\n            \"description\": \"Description of This is the stean's Observed Property\",\n            \"definition\": \"https://w3id.org/ozcar-theia/c_650214c2\",\n            \"properties\": null,\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/ObservedProperties(2)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/ObservedProperties(2)/MultiDatastreams\"\n        },\n        \"...\"\n    ]\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\"\n}"
+        },
+        {
+            "short": "one",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get a specific ObservedProperty.Users can address to a specific entity in an entity set by place the unique identifier of the entity between brace symbol “()” and put after the entity set name. The service then returns the entity with all its properties.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/ObservedProperties(2)",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/ObservedProperties(2)",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/ObservedProperties(2)\",\n    \"@iot.id\": 2,\n    \"name\": \"This is the stean's Observed Property\",\n    \"description\": \"Description of This is the stean's Observed Property\",\n    \"definition\": \"https://w3id.org/ozcar-theia/c_650214c2\",\n    \"properties\": null,\n    \"Datastreams@iot.navigationLink\": \"proxy/v1.1/ObservedProperties(2)/Datastreams\",\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/ObservedProperties(2)/MultiDatastreams\"\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"id : 1 not found\"\n}"
+        },
+        {
+            "short": "from a specific Datastream",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get observed Property from Datastream ",
+            "examples": {
+                "http": "v1.1/Datastreams(9)/ObservedProperty",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Datastreams(9)/ObservedProperty",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/ObservedProperties(9)\",\n    \"@iot.id\": 9,\n    \"name\": \"stream level\",\n    \"description\": \"Mesure du niveau du cours d'eau\",\n    \"definition\": \"http://opendata.inrae.fr/thesaurusINRAE/c_16420\",\n    \"properties\": {\n        \"family\": \"hydrologie\"\n    },\n    \"Datastreams@iot.navigationLink\": \"proxy/v1.1/ObservedProperties(9)/Datastreams\",\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/ObservedProperties(9)/MultiDatastreams\"\n}"
+        },
+        {
+            "short": "Expand Datastreams",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "`Get a specific observed Property and expand Datastreams. ",
+            "examples": {
+                "http": "v1.1/ObservedProperties(1)?$expand=Datastreams",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/ObservedProperties(1)?$expand=Datastreams",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/ObservedProperties(1)\",\n    \"@iot.id\": 1,\n    \"name\": \"classic Observed Property\",\n    \"description\": \"Description of classic Observed Property\",\n    \"definition\": \"https://w3id.org/ozcar-theia/c_650214c2\",\n    \"properties\": null,\n    \"Datastreams\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Datastreams(1)\",\n            \"@iot.id\": 1,\n            \"name\": \"classic Datastream\",\n            \"description\": \"Description of classic Datastream\",\n            \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n            \"unitOfMeasurement\": {\n                \"name\": \"classic unit of measurement\",\n                \"definition\": \"http://unitsofmeasure.org/ucum.html#para-30\",\n                \"description\": \"Description of classic unit of measurement\"\n            },\n            \"observedArea\": null,\n            \"phenomenonTime\": \"2023-03-01T01:30:01Z/2023-03-01T04:15:01Z\",\n            \"resultTime\": \"2023-03-01T01:30:01Z/2023-03-01T04:15:01Z\",\n            \"properties\": null,\n            \"Thing@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/Thing\",\n            \"Sensor@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/Sensor\",\n            \"ObservedProperty@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/ObservedProperty\",\n            \"Observations@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/Observations\",\n            \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/Lora\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Datastreams(17)\",\n            \"@iot.id\": 17,\n            \"name\": \"Datastream Air quality readings\",\n            \"description\": \"New Datastream Air quality readings for test\",\n            \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n            \"unitOfMeasurement\": {\n                \"name\": \"PM 2.5 Particulates (ug/m3)\",\n                \"symbol\": \"μg/m³\",\n                \"definition\": \"http://unitsofmeasure.org/ucum.html\"\n            },\n            \"observedArea\": null,\n            \"phenomenonTime\": \"/\",\n            \"resultTime\": \"/\",\n            \"properties\": null,\n            \"Thing@iot.navigationLink\": \"proxy/v1.1/Datastreams(17)/Thing\",\n            \"Sensor@iot.navigationLink\": \"proxy/v1.1/Datastreams(17)/Sensor\",\n            \"ObservedProperty@iot.navigationLink\": \"proxy/v1.1/Datastreams(17)/ObservedProperty\",\n            \"Observations@iot.navigationLink\": \"proxy/v1.1/Datastreams(17)/Observations\",\n            \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(17)/Lora\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(17)/FeatureOfInterest\"\n        },\n        \"...\"\n    ],\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/ObservedProperties(1)/MultiDatastreams\"\n}"
+        },
+        {
+            "short": "from a Select",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Retrieve specified properties for a specific observed Property. ",
+            "examples": {
+                "http": "v1.1/ObservedProperties(1)?$select=description",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/ObservedProperties(1)?$select=description",
+            "success": "{\n    \"description\": \"Description of classic Observed Property\"\n}"
+        },
+        {
+            "short": "Post basic",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "Post a new ObservedProperties.<input id=\"showPostObservedProperties\" type=checkbox> <label for=\"showPostObservedProperties\">Click for Help</label> <span id=\"contentPostObservedProperties\"></br></br>To create an entity in a collection, the client SHALL send a HTTP POST request to that collection’s URL. The POST body SHALL contain a single valid entity representation.\n    </br></br>If the target URL for the collection is a navigationLink, the new entity is automatically linked to the entity containing the navigationLink.\n    </br></br>Upon successful completion, the response SHALL contain a HTTP location header that contains the selfLink of the created entity.\n    </br></br>Upon successful completion the service SHALL respond with either 201 Created, or 204 No Content.\n    </br></br>In addition, the link between entities SHALL be established upon creating an entity. Two use cases SHALL be considered: (1) link to existing entities when creating an entity, and (2) create related entities when creating an entity. The requests for these two use cases are described in the following subsection.\n    </br></br>When clients create resources in a SensorThings service, they SHALL follow the integrity constraints listed in Table 24. For example, a Datastream entity SHALL link to a Thing entity. When a client wants to create a Datastream entity, the client needs to either (1) create a linked Thing entity in the same request or (2) link to an already created Thing entity. The complete integrity constraints for creating resources are shown in the following table.\n    </br></br>Special case #1 - When creating an Observation entity that links to a FeatureOfInterest entity: Sometimes the FeatureOfInterest of an Observation is the Location of the Thing. For example, a wifi-connected thermostat’s temperature observation’s feature-of-interest can be the location of the smart thermostat, that is the room WHERE the smart thermostat is located in.\n    </br></br>In this case, when a client creates an Observation entity, the client SHOULD omit the link to a FeatureOfInterest entity in the POST body message and SHOULD not create a related FeatureOfInterest entity with deep insert. And if the service detects that there is no link to a FeatureOfInterest entity in the POST body message that creates an Observation entity, the service SHALL either (1) create a FeatureOfInterest entity by using the location property from the Location of the Thing entity when there is no FeatureOfInterest whose location property is from the Location of the Thing entity or (2) link to the FeatureOfInterest whose location property is from the Location of the Thing entity.\n    </br></br>Special case #2: In the context of IoT, many Observations’ resultTime and phenomenonTime cannot be distinguished or the resultTime is not available. In this case, when a client creates an Observation entity, the client MAY omit the resultTime and the service SHOULD assign a null value to the resultTime.\n    </br><table> <thead> <tr> <th style=\"width: 30%\">Scenario</th> <th style=\"width: 70%\">Integrity Constraints</th> </tr> </thead> <tbody> <tr> <td>Create a Thing entity</td> <td></td> </tr> <tr> <td>Create a Location entity</td> <td></td> </tr> <tr> <td>Create a Datastream entity</td> <td>SHALL link to a Thing entity</br>SHALL link to a Sensor entity.</br>SHALL link to an ObservedProperty entity.</td> </tr> <tr> <td>Create a Sensor entity</td> <td></td> </tr> <tr> <td>Create an ObservedProperty entity</td> <td></td> </tr> <tr> <td>Create an Observation entity</td> <td>SHALL link to a Datastream or MultiDatastream entity.</br>SHALL link to a FeatureOfInterest entity. If no link specified, the service SHALL create a FeatureOfInterest entity from the content of the Location entities.</td> </tr> <tr> <td>Create a FeatureOfInterest entity</td> <td></td> </tr> </tbody> </table></span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_request\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/ObservedProperties",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "name": "Area ObservedProperties 24",
+                "description": "The degree or intensity of heat present in the area",
+                "definition": "http://www.qudt.org/qudt/owl/1.0.0/quantity/Instances.html#AreaTemperature"
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/ObservedProperties(31)\",\n    \"@iot.id\": 31,\n    \"name\": \"Area ObservedProperties 24\",\n    \"description\": \"The degree or intensity of heat present in the area\",\n    \"definition\": \"http://www.qudt.org/qudt/owl/1.0.0/quantity/Instances.html#AreaTemperature\",\n    \"properties\": null,\n    \"Datastreams@iot.navigationLink\": \"proxy/v1.1/ObservedProperties(31)/Datastreams\",\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/ObservedProperties(31)/MultiDatastreams\"\n}",
+            "error": "{\n    \"code\": 400,\n    \"message\": \"Bad Request\"\n}"
+        },
+        {
+            "short": "One",
+            "type": "patch",
+            "version": "1.1.0",
+            "description": "Patch a ObservedProperty.<input id=\"showPatchObservedProperties\" type=checkbox> <label for=\"showPatchObservedProperties\">Click for Help</label> <span id=\"contentPatchObservedProperties\"></br></br>In SensorThings PATCH is the preferred means of updating an entity. PATCH provides more resiliency between clients and services by directly modifying only those values specified by the client.\n    </br></br>The semantics of PATCH, as defined in [RFC5789], are to merge the content in the request payload with the entity’s current state, applying the update only to those components specified in the request body. The properties provided in the payload corresponding to updatable properties SHALL replace the value of the corresponding property in the entity. Missing properties of the containing entity or complex property SHALL NOT be directly altered.\n    </br></br>Services MAY additionally support PUT, but should be aware of the potential for data-loss in round-tripping properties that the client may not know about in advance, such as open or added properties, or properties not specified in metadata. Services that do not support PUT SHALL respond with an HTTP code 501 Not Implemented.\n    </br></br>Key and other non-updatable properties that are not tied to key properties of the principal entity, can be omitted from the request. If the request contains a value for one of these properties, the service SHALL ignore that value when applying the update.\n    </br></br>On success, the response SHALL be a valid success response.</span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_request_2\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/ObservedProperties(31)",
+                "curl": "curl -X PATCH -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"PATCH\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.patch('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "name": "New PM 2.5 ObservedProperties 25"
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/ObservedProperties(31)\",\n    \"@iot.id\": 31,\n    \"name\": \"New PM 2.5 ObservedProperties 25\",\n    \"description\": \"The degree or intensity of heat present in the area\",\n    \"definition\": \"http://www.qudt.org/qudt/owl/1.0.0/quantity/Instances.html#AreaTemperature\",\n    \"properties\": null,\n    \"Datastreams@iot.navigationLink\": \"proxy/v1.1/ObservedProperties(31)/Datastreams\",\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/ObservedProperties(31)/MultiDatastreams\"\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"exist no observedproperty ID --> \"\n}"
+        },
+        {
+            "short": "One",
+            "type": "delete",
+            "version": "1.1.0",
+            "description": "Delete a ObservedProperty.<input id=\"showDeleteObservedProperties\" type=checkbox> <label for=\"showDeleteObservedProperties\">Click for Help</label> <span id=\"contentDeleteObservedProperties\"></br> A successful DELETE request to an entity’s edit URL deletes the entity. The request body SHOULD be empty. Services SHALL implicitly remove relations to and from an entity when deleting it; clients need not delete the relations explicitly.\n    </br>Services MAY implicitly delete or modify related entities if required by integrity constraints.\n    <table> <thead> <tr> <th style=\"width: 30%\">Scenario</th> <th style=\"width: 70%\">Integrity Constraints</th> </tr> </thead> <tbody> <tr> <td>Delete a Thing entity</td> <td>Delete all the Datastream and HistoricalLocation entities linked to the Thing entity.</td> </tr> <tr> <td>Delete a Location entity</td> <td>Delete all the HistoricalLocation entities linked to the Location entity</td> </tr> <tr> <td>Delete a Datastream entity</td> <td>Delete all the Observation entities linked to the Datastream entity.</td> </tr> <tr> <td>Delete a Sensor entity</td> <td>Delete all the Datastream entities linked to the Sensor entity.</td> </tr> <tr> <td>Delete an ObservedProperty entity</td> <td>Delete all the Datastream entities linked to the ObservedProperty entity.</td> </tr> <tr> <td>Delete an Observation entity</td> <td></td> </tr> <tr> <td>Delete a FeatureOfInterest entity</td> <td>Delete all the Observation entities linked to the FeatureOfInterest entity.</td> </tr> <tr> <td>Delete a HistoricalLocation entity entity</td> <td></td> </tr> </tbody> </table></span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_request_3\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/ObservedProperties(31)",
+                "curl": "curl -DELETE \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"DELETE\"\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.delete('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "",
+            "success": "{}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"No id found for : \"\n}"
+        }
+    ],
+    "Observations": [
+        {
+            "short": "Presentation",
+            "type": "infos",
+            "version": "1.1.0",
+            "description": "An Observation is the act of measuring or otherwise determining the value of a property.<br>An Observation in SensorThings represents a single Sensor reading of an ObservedProperty.<br>A physical device, a Sensor, sends Observations to a specified Datastream.<br>An Observation requires a FeatureOfInterest entity, if none is provided in the request, the Location of the Thing associated with the Datastream, will be assigned to the new Observation as the FeatureOfInterest  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#observation\" target=\"_blank\">[OGC reference]</a>",
+            "request": ""
+        },
+        {
+            "short": "all",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Retrieve all Observations.<input id=\"showGetObservations\" type=checkbox> <label for=\"showGetObservations\">Click for Help</label> <span id=\"contentGetObservations\">To address to an entity set, users can simply put the entity set name after the service root URI. The service returns a JSON object with a property of value. The value of the property SHALL be a list of the entities in the specified entity set.</span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-address-collection-entities\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "structure": {
+                "columns": {
+                    "id": {
+                        "description": "Is the system-generated identifier of an entity. id is unique among the entities of the same entity type in a SensorThings service.",
+                        "type": "number",
+                        "requis": false
+                    },
+                    "phenomenonTime": {
+                        "description": "The time instant or period of when the Observation happens.</br> Note: Many resource-constrained sensing devices do not have a clock. As a result, a client may omit phenonmenonTime when POST new Observations, even though phenonmenonTime is a mandatory property. When a SensorThings service receives a POST Observations without phenonmenonTime, the service SHALL assign the current server time to the value of the phenomenonTime.",
+                        "type": "date",
+                        "requis": true
+                    },
+                    "result": {
+                        "description": "The estimated value of an ObservedProperty from the Observation. Any (depends on the observationType defined in the associated Datastream or MultiDatastream)",
+                        "type": "result",
+                        "requis": false
+                    },
+                    "resultTime": {
+                        "description": "The time of the Observation’s result was generated.</br>Note: Many resource-constrained sensing devices do not have a clock. As a result, a client may omit resultTime when POST new Observations, even though resultTime is a mandatory property. When a SensorThings service receives a POST Observations without resultTime, the service SHALL assign a null value to the resultTime.",
+                        "type": "date",
+                        "requis": true
+                    },
+                    "resultQuality": {
+                        "description": "Describes the quality of the result.",
+                        "type": "json",
+                        "requis": false
+                    },
+                    "validTime": {
+                        "description": "The time period during which the result may be used.",
+                        "type": "date",
+                        "requis": true
+                    },
+                    "parameters": {
+                        "description": "Key-value pairs showing the environmental conditions during measurement.",
+                        "type": "json",
+                        "requis": false
+                    }
+                },
+                "relations": {
+                    "Datastream": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    },
+                    "MultiDatastream": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    },
+                    "FeatureOfInterest": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    }
+                }
+            },
+            "request": "proxyv1.1/Observations",
+            "success": "{\n    \"@iot.count\": 520,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(1)\",\n            \"@iot.id\": 1,\n            \"phenomenonTime\": \"2023-03-01T01:30:01+01:00\",\n            \"result\": 200,\n            \"resultTime\": \"2023-03-01T01:30:01+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:51.067377+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(1)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(1)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(1)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(2)\",\n            \"@iot.id\": 2,\n            \"phenomenonTime\": \"2023-03-01T01:45:01+01:00\",\n            \"result\": 210,\n            \"resultTime\": \"2023-03-01T01:45:01+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:51.067377+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(2)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(2)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(2)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\"\n}"
+        },
+        {
+            "short": "one",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get a specific Observation.Users can address to a specific entity in an entity set by place the unique identifier of the entity between brace symbol “()” and put after the entity set name. The service then returns the entity with all its properties.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations(1)",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations(1)",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Observations(1)\",\n    \"@iot.id\": 1,\n    \"phenomenonTime\": \"2023-03-01T01:30:01+01:00\",\n    \"result\": 200,\n    \"resultTime\": \"2023-03-01T01:30:01+01:00\",\n    \"resultQuality\": null,\n    \"validTime\": \"2025-05-23T16:57:51.067377+02:00\",\n    \"parameters\": null,\n    \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(1)/Datastream\",\n    \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(1)/MultiDatastream\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(1)/FeatureOfInterest\"\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"id : 1 not found\"\n}"
+        },
+        {
+            "short": "all from Datastream",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get Observations from Datastream. ",
+            "examples": {
+                "http": "v1.1/Datastreams(2)/Observations",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Datastreams(2)/Observations",
+            "success": "{\n    \"@iot.count\": 12,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(25)\",\n            \"@iot.id\": 25,\n            \"phenomenonTime\": \"2023-03-01T07:30:01+01:00\",\n            \"result\": 200,\n            \"resultTime\": \"2023-03-01T07:30:01+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:51.067377+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(25)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(25)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(25)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(26)\",\n            \"@iot.id\": 26,\n            \"phenomenonTime\": \"2023-03-01T07:45:01+01:00\",\n            \"result\": 210,\n            \"resultTime\": \"2023-03-01T07:45:01+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:51.067377+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(26)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(26)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(26)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Expands",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get a specific Observation and expand Datastream. ",
+            "examples": {
+                "http": "v1.1/Observations(1)?$expand=Datastream",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations(1)?$expand=Datastream",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Observations(1)\",\n    \"@iot.id\": 1,\n    \"phenomenonTime\": \"2023-03-01T01:30:01+01:00\",\n    \"result\": 200,\n    \"resultTime\": \"2023-03-01T01:30:01+01:00\",\n    \"resultQuality\": null,\n    \"validTime\": \"2025-05-23T16:57:51.067377+02:00\",\n    \"parameters\": null,\n    \"Datastream\": {\n        \"@iot.selfLink\": \"proxy/v1.1/Datastreams(1)\",\n        \"@iot.id\": 1,\n        \"name\": \"classic Datastream\",\n        \"description\": \"Description of classic Datastream\",\n        \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n        \"unitOfMeasurement\": {\n            \"name\": \"classic unit of measurement\",\n            \"definition\": \"http://unitsofmeasure.org/ucum.html#para-30\",\n            \"description\": \"Description of classic unit of measurement\"\n        },\n        \"observedArea\": null,\n        \"phenomenonTime\": \"2023-03-01T01:30:01Z/2023-03-01T04:15:01Z\",\n        \"resultTime\": \"2023-03-01T01:30:01Z/2023-03-01T04:15:01Z\",\n        \"properties\": null,\n        \"Thing@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/Thing\",\n        \"Sensor@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/Sensor\",\n        \"ObservedProperty@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/ObservedProperty\",\n        \"Observations@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/Observations\",\n        \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/Lora\",\n        \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/FeatureOfInterest\"\n    },\n    \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(1)/MultiDatastream\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(1)/FeatureOfInterest\"\n}"
+        },
+        {
+            "short": "with Multi Select",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Retrieve specified phenomenonTime, result for a specific Observations. ",
+            "examples": {
+                "http": "v1.1/Observations(1)?$select=phenomenonTime,result",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations(1)?$select=phenomenonTime,result",
+            "success": "{\n    \"phenomenonTime\": \"2023-03-01T01:30:01+01:00\",\n    \"result\": 200\n}"
+        },
+        {
+            "short": "Observations with Standard Results",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Retrieve observations with multi result. ",
+            "examples": {
+                "http": "v1.1/Observations(11)",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations(11)",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Observations(11)\",\n    \"@iot.id\": 11,\n    \"phenomenonTime\": \"2023-03-01T04:00:01+01:00\",\n    \"result\": 300,\n    \"resultTime\": \"2023-03-01T04:00:01+01:00\",\n    \"resultQuality\": null,\n    \"validTime\": \"2025-05-23T16:57:51.067377+02:00\",\n    \"parameters\": null,\n    \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(11)/Datastream\",\n    \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(11)/MultiDatastream\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(11)/FeatureOfInterest\"\n}"
+        },
+        {
+            "short": "Observations with Multi keyValue Results",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Retrieve observations with keyValue result. ",
+            "examples": {
+                "http": "v1.1/Observations(378)?$valuesKeys=true",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations(378)?$valuesKeys=true",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Observations(378)\",\n    \"@iot.id\": 378,\n    \"phenomenonTime\": \"2024-06-03T18:45:01+02:00\",\n    \"result\": {\n        \"soil moisture\": 32.75,\n        \"battery voltage\": null,\n        \"soil temperature\": 15.209\n    },\n    \"resultTime\": \"2024-06-03T18:45:01+02:00\",\n    \"resultQuality\": null,\n    \"validTime\": \"2025-05-23T16:57:51.067377+02:00\",\n    \"parameters\": null,\n    \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(378)/Datastream\",\n    \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(378)/MultiDatastream\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(378)/FeatureOfInterest\"\n}"
+        },
+        {
+            "short": "with Split Results",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Retrieve observations with splitted multi result. ",
+            "examples": {
+                "http": "v1.1/MultiDatastreams(1)/Observations?$splitResult=all",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/MultiDatastreams(1)/Observations?$splitResult=all",
+            "success": "{\n    \"@iot.count\": 12,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(13)\",\n            \"@iot.id\": 13,\n            \"phenomenonTime\": \"2023-03-01T04:30:01+01:00\",\n            \"resultTime\": \"2023-03-01T04:30:01+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:51.067377+02:00\",\n            \"parameters\": null,\n            \"Unit one of classic\": 20,\n            \"Unit two of classic\": 0,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(13)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(13)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(13)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(14)\",\n            \"@iot.id\": 14,\n            \"phenomenonTime\": \"2023-03-01T04:45:01+01:00\",\n            \"resultTime\": \"2023-03-01T04:45:01+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:51.067377+02:00\",\n            \"parameters\": null,\n            \"Unit one of classic\": 21,\n            \"Unit two of classic\": 1.01,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(14)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(14)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(14)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "with Split Result Property",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Retrieve observations with splitted Temperature result. ",
+            "examples": {
+                "http": "v1.1/MultiDatastreams(1)/Observations?$splitResult=\"Unit one of classic\"",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/MultiDatastreams(1)/Observations?$splitResult=\"Unit one of classic\"",
+            "success": "{\n    \"@iot.count\": 12,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(13)\",\n            \"@iot.id\": 13,\n            \"phenomenonTime\": \"2023-03-01T04:30:01+01:00\",\n            \"resultTime\": \"2023-03-01T04:30:01+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:51.067377+02:00\",\n            \"parameters\": null,\n            \"Unit one of classic\": 20,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(13)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(13)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(13)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(14)\",\n            \"@iot.id\": 14,\n            \"phenomenonTime\": \"2023-03-01T04:45:01+01:00\",\n            \"resultTime\": \"2023-03-01T04:45:01+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:51.067377+02:00\",\n            \"parameters\": null,\n            \"Unit one of classic\": 21,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(14)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(14)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(14)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Post with existing FOI",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "Post a new Observations.<input id=\"showPostObservations\" type=checkbox> <label for=\"showPostObservations\">Click for Help</label> <span id=\"contentPostObservations\"></br></br>To create an entity in a collection, the client SHALL send a HTTP POST request to that collection’s URL. The POST body SHALL contain a single valid entity representation.\n    </br></br>If the target URL for the collection is a navigationLink, the new entity is automatically linked to the entity containing the navigationLink.\n    </br></br>Upon successful completion, the response SHALL contain a HTTP location header that contains the selfLink of the created entity.\n    </br></br>Upon successful completion the service SHALL respond with either 201 Created, or 204 No Content.\n    </br></br>In addition, the link between entities SHALL be established upon creating an entity. Two use cases SHALL be considered: (1) link to existing entities when creating an entity, and (2) create related entities when creating an entity. The requests for these two use cases are described in the following subsection.\n    </br></br>When clients create resources in a SensorThings service, they SHALL follow the integrity constraints listed in Table 24. For example, a Datastream entity SHALL link to a Thing entity. When a client wants to create a Datastream entity, the client needs to either (1) create a linked Thing entity in the same request or (2) link to an already created Thing entity. The complete integrity constraints for creating resources are shown in the following table.\n    </br></br>Special case #1 - When creating an Observation entity that links to a FeatureOfInterest entity: Sometimes the FeatureOfInterest of an Observation is the Location of the Thing. For example, a wifi-connected thermostat’s temperature observation’s feature-of-interest can be the location of the smart thermostat, that is the room WHERE the smart thermostat is located in.\n    </br></br>In this case, when a client creates an Observation entity, the client SHOULD omit the link to a FeatureOfInterest entity in the POST body message and SHOULD not create a related FeatureOfInterest entity with deep insert. And if the service detects that there is no link to a FeatureOfInterest entity in the POST body message that creates an Observation entity, the service SHALL either (1) create a FeatureOfInterest entity by using the location property from the Location of the Thing entity when there is no FeatureOfInterest whose location property is from the Location of the Thing entity or (2) link to the FeatureOfInterest whose location property is from the Location of the Thing entity.\n    </br></br>Special case #2: In the context of IoT, many Observations’ resultTime and phenomenonTime cannot be distinguished or the resultTime is not available. In this case, when a client creates an Observation entity, the client MAY omit the resultTime and the service SHOULD assign a null value to the resultTime.\n    </br><table> <thead> <tr> <th style=\"width: 30%\">Scenario</th> <th style=\"width: 70%\">Integrity Constraints</th> </tr> </thead> <tbody> <tr> <td>Create a Thing entity</td> <td></td> </tr> <tr> <td>Create a Location entity</td> <td></td> </tr> <tr> <td>Create a Datastream entity</td> <td>SHALL link to a Thing entity</br>SHALL link to a Sensor entity.</br>SHALL link to an ObservedProperty entity.</td> </tr> <tr> <td>Create a Sensor entity</td> <td></td> </tr> <tr> <td>Create an ObservedProperty entity</td> <td></td> </tr> <tr> <td>Create an Observation entity</td> <td>SHALL link to a Datastream or MultiDatastream entity.</br>SHALL link to a FeatureOfInterest entity. If no link specified, the service SHALL create a FeatureOfInterest entity from the content of the Location entities.</td> </tr> <tr> <td>Create a FeatureOfInterest entity</td> <td></td> </tr> </tbody> </table></span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "phenomenonTime": "2017-02-07T18:02:00.000Z",
+                "resultTime": "2017-02-07T18:02:05.000Z",
+                "result": 21.6,
+                "Datastream": {
+                    "@iot.id": 2
+                }
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Observations(525)\",\n    \"@iot.id\": 525,\n    \"phenomenonTime\": \"2017-02-07T19:02:00+01:00\",\n    \"result\": 21.6,\n    \"resultTime\": \"2017-02-07T19:02:05+01:00\",\n    \"resultQuality\": null,\n    \"validTime\": \"2025-05-23T16:57:55.96259+02:00\",\n    \"parameters\": null,\n    \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(525)/Datastream\",\n    \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(525)/MultiDatastream\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(525)/FeatureOfInterest\"\n}",
+            "error": "{\n    \"code\": 400,\n    \"message\": \"Bad Request\"\n}"
+        },
+        {
+            "short": "Post with FOI",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "Post a new Observation.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#create-related-entities\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "phenomenonTime": "2017-02-07T18:02:00.000Z",
+                "resultTime": "2017-02-07T18:02:05.000Z",
+                "result": 21.6,
+                "FeatureOfInterest": {
+                    "name": ":From Saint-Malo (Created new location)",
+                    "description": "From Saint-Malo",
+                    "encodingType": "application/geo+json",
+                    "feature": {
+                        "coordinates": [
+                            -1.202481228298467,
+                            48.35475608212215
+                        ],
+                        "type": "Point"
+                    }
+                },
+                "Datastream": {
+                    "@iot.id": 6
+                }
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Observations(526)\",\n    \"@iot.id\": 526,\n    \"phenomenonTime\": \"2017-02-07T19:02:00+01:00\",\n    \"result\": 21.6,\n    \"resultTime\": \"2017-02-07T19:02:05+01:00\",\n    \"resultQuality\": null,\n    \"validTime\": \"2025-05-23T16:57:56.025629+02:00\",\n    \"parameters\": null,\n    \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(526)/Datastream\",\n    \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(526)/MultiDatastream\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(526)/FeatureOfInterest\"\n}"
+        },
+        {
+            "short": "Post from Datastream",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "POST Observation with existing Datastream.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Datastreams(10)/Observations",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "phenomenonTime": "2017-02-07T18:02:00.000Z",
+                "resultTime": "2017-02-07T18:02:05.000Z",
+                "result": 23
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Observations(527)\",\n    \"@iot.id\": 527,\n    \"phenomenonTime\": \"2017-02-07T19:02:00+01:00\",\n    \"result\": 23,\n    \"resultTime\": \"2017-02-07T19:02:05+01:00\",\n    \"resultQuality\": null,\n    \"validTime\": \"2025-05-23T16:57:56.075341+02:00\",\n    \"parameters\": null,\n    \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(527)/Datastream\",\n    \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(527)/MultiDatastream\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(527)/FeatureOfInterest\"\n}"
+        },
+        {
+            "short": "Post from Datastream and FOI",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "POST Observation with existing Datastream.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Datastreams(10)/Observations",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "phenomenonTime": "2017-02-07T18:02:00.000Z",
+                "resultTime": "2017-02-07T18:02:05.000Z",
+                "result": 21.6,
+                "FeatureOfInterest": {
+                    "name": "Au Comptoir Vénitien [7]",
+                    "description": "Au Comptoir Vénitien",
+                    "encodingType": "application/geo+json",
+                    "feature": {
+                        "coordinates": [
+                            -1.6567440482485551,
+                            48.11256463781973
+                        ],
+                        "type": "Point"
+                    }
+                }
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Observations(528)\",\n    \"@iot.id\": 528,\n    \"phenomenonTime\": \"2017-02-07T19:02:00+01:00\",\n    \"result\": 21.6,\n    \"resultTime\": \"2017-02-07T19:02:05+01:00\",\n    \"resultQuality\": null,\n    \"validTime\": \"2025-05-23T16:57:56.111545+02:00\",\n    \"parameters\": null,\n    \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(528)/Datastream\",\n    \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(528)/MultiDatastream\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(528)/FeatureOfInterest\"\n}"
+        },
+        {
+            "short": "Observations Patch Observations",
+            "type": "patch",
+            "version": "1.1.0",
+            "description": "Patch a Observation.<input id=\"showPatchObservations\" type=checkbox> <label for=\"showPatchObservations\">Click for Help</label> <span id=\"contentPatchObservations\"></br></br>In SensorThings PATCH is the preferred means of updating an entity. PATCH provides more resiliency between clients and services by directly modifying only those values specified by the client.\n    </br></br>The semantics of PATCH, as defined in [RFC5789], are to merge the content in the request payload with the entity’s current state, applying the update only to those components specified in the request body. The properties provided in the payload corresponding to updatable properties SHALL replace the value of the corresponding property in the entity. Missing properties of the containing entity or complex property SHALL NOT be directly altered.\n    </br></br>Services MAY additionally support PUT, but should be aware of the potential for data-loss in round-tripping properties that the client may not know about in advance, such as open or added properties, or properties not specified in metadata. Services that do not support PUT SHALL respond with an HTTP code 501 Not Implemented.\n    </br></br>Key and other non-updatable properties that are not tied to key properties of the principal entity, can be omitted from the request. If the request contains a value for one of these properties, the service SHALL ignore that value when applying the update.\n    </br></br>On success, the response SHALL be a valid success response.</span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_request_2\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations(529)",
+                "curl": "curl -X PATCH -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"PATCH\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.patch('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "phenomenonTime": "2016-11-18T11:04:15.790Z",
+                "resultTime": "2016-11-18T11:04:15.790Z"
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Observations(529)\",\n    \"@iot.id\": 529,\n    \"phenomenonTime\": \"2016-11-18T12:04:15.79+01:00\",\n    \"result\": [\n        10.1,\n        10.2\n    ],\n    \"resultTime\": \"2016-11-18T12:04:15.79+01:00\",\n    \"resultQuality\": null,\n    \"validTime\": \"2025-05-23T16:57:56.242+02:00\",\n    \"parameters\": null,\n    \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(529)/Datastream\",\n    \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(529)/MultiDatastream\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(529)/FeatureOfInterest\"\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"exist no observation ID --> 9007199254740991\"\n}"
+        },
+        {
+            "short": "Observations Patch with Datastream",
+            "type": "patch",
+            "version": "1.1.0",
+            "description": "Patch an Observation with Datastream.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_request_2\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations(529)",
+                "curl": "curl -X PATCH -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"PATCH\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.patch('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "phenomenonTime": "2016-11-18T11:04:15.790Z",
+                "resultTime": "2016-11-18T11:04:15.790Z",
+                "result": 20.4,
+                "Datastream": {
+                    "@iot.id": 6
+                }
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Observations(529)\",\n    \"@iot.id\": 529,\n    \"phenomenonTime\": \"2016-11-18T12:04:15.79+01:00\",\n    \"result\": 20.4,\n    \"resultTime\": \"2016-11-18T12:04:15.79+01:00\",\n    \"resultQuality\": null,\n    \"validTime\": \"2025-05-23T16:57:56.306+02:00\",\n    \"parameters\": null,\n    \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(529)/Datastream\",\n    \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(529)/MultiDatastream\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(529)/FeatureOfInterest\"\n}"
+        },
+        {
+            "short": "One",
+            "type": "delete",
+            "version": "1.1.0",
+            "description": "Delete a Observation.<input id=\"showDeleteObservations\" type=checkbox> <label for=\"showDeleteObservations\">Click for Help</label> <span id=\"contentDeleteObservations\"></br> A successful DELETE request to an entity’s edit URL deletes the entity. The request body SHOULD be empty. Services SHALL implicitly remove relations to and from an entity when deleting it; clients need not delete the relations explicitly.\n    </br>Services MAY implicitly delete or modify related entities if required by integrity constraints.\n    <table> <thead> <tr> <th style=\"width: 30%\">Scenario</th> <th style=\"width: 70%\">Integrity Constraints</th> </tr> </thead> <tbody> <tr> <td>Delete a Thing entity</td> <td>Delete all the Datastream and HistoricalLocation entities linked to the Thing entity.</td> </tr> <tr> <td>Delete a Location entity</td> <td>Delete all the HistoricalLocation entities linked to the Location entity</td> </tr> <tr> <td>Delete a Datastream entity</td> <td>Delete all the Observation entities linked to the Datastream entity.</td> </tr> <tr> <td>Delete a Sensor entity</td> <td>Delete all the Datastream entities linked to the Sensor entity.</td> </tr> <tr> <td>Delete an ObservedProperty entity</td> <td>Delete all the Datastream entities linked to the ObservedProperty entity.</td> </tr> <tr> <td>Delete an Observation entity</td> <td></td> </tr> <tr> <td>Delete a FeatureOfInterest entity</td> <td>Delete all the Observation entities linked to the FeatureOfInterest entity.</td> </tr> <tr> <td>Delete a HistoricalLocation entity entity</td> <td></td> </tr> </tbody> </table></span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_request_3\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations(529)",
+                "curl": "curl -DELETE \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"DELETE\"\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.delete('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "",
+            "success": "{}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"No id found for : 9007199254740991\"\n}"
+        }
+    ],
+    "FeaturesOfInterest": [
+        {
+            "short": "Presentation",
+            "type": "infos",
+            "version": "1.1.0",
+            "description": "An Observation results in a value being assigned to a phenomenon. The phenomenon is a property of a feature, the latter being the FeatureOfInterest of the Observation [OGC and ISO 19156:2011]. In the context of the Internet of Things, many Observations’ FeatureOfInterest can be the Location of the Thing. For example, the FeatureOfInterest of a wifi-connect thermostat can be the Location of the thermostat (i.e., the living room WHERE the thermostat is located in). In the case of remote sensing, the FeatureOfInterest can be the geographical area or volume that is being sensed.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#featureofinterest\" target=\"_blank\">[OGC reference]</a>",
+            "request": ""
+        },
+        {
+            "short": "all",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Retrieve all FeaturesOfInterest.<input id=\"showGetFeaturesOfInterest\" type=checkbox> <label for=\"showGetFeaturesOfInterest\">Click for Help</label> <span id=\"contentGetFeaturesOfInterest\">To address to an entity set, users can simply put the entity set name after the service root URI. The service returns a JSON object with a property of value. The value of the property SHALL be a list of the entities in the specified entity set.</span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-address-collection-entities\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/FeaturesOfInterest",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "structure": {
+                "columns": {
+                    "id": {
+                        "description": "Is the system-generated identifier of an entity. id is unique among the entities of the same entity type in a SensorThings service.",
+                        "type": "number",
+                        "requis": false
+                    },
+                    "name": {
+                        "description": "A property provides a label for FeatureOfInterest entity, commonly a descriptive name.",
+                        "type": "text",
+                        "requis": true
+                    },
+                    "description": {
+                        "description": "The description about the FeatureOfInterest.",
+                        "type": "text",
+                        "requis": true
+                    },
+                    "encodingType": {
+                        "description": "The encoding type of the feature property.</br>Its value is one of the ValueCode enumeration (see Table 7 for the available ValueCode).",
+                        "type": "text",
+                        "requis": false
+                    },
+                    "feature": {
+                        "description": "The detailed description of the feature. The data type is defined by encodingType. ",
+                        "type": "json",
+                        "requis": true
+                    },
+                    "properties": {
+                        "description": "A JSON Object containing user-annotated properties as key-value pairs.",
+                        "type": "json",
+                        "requis": false
+                    }
+                },
+                "relations": {
+                    "Observations": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    },
+                    "Datastreams": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    },
+                    "MultiDatastreams": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    }
+                }
+            },
+            "request": "proxyv1.1/FeaturesOfInterest",
+            "success": "{\n    \"@iot.count\": 14,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/FeaturesOfInterest(1)\",\n            \"@iot.id\": 1,\n            \"name\": \"Default Feature of Interest\",\n            \"description\": \"Default Feature of Interest\",\n            \"encodingType\": \"application/vnd.geo+json\",\n            \"feature\": {},\n            \"properties\": null,\n            \"Observations@iot.navigationLink\": \"proxy/v1.1/FeaturesOfInterest(1)/Observations\",\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/FeaturesOfInterest(1)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/FeaturesOfInterest(1)/MultiDatastreams\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/FeaturesOfInterest(2)\",\n            \"@iot.id\": 2,\n            \"name\": \"classic Features Of Interest\",\n            \"description\": \"Description of classic Features Of Interest\",\n            \"encodingType\": \"application/geo+json\",\n            \"feature\": {\n                \"type\": \"Point\",\n                \"coordinates\": [\n                    -0.5528847276950444,\n                    47.46996912080425\n                ]\n            },\n            \"properties\": null,\n            \"Observations@iot.navigationLink\": \"proxy/v1.1/FeaturesOfInterest(2)/Observations\",\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/FeaturesOfInterest(2)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/FeaturesOfInterest(2)/MultiDatastreams\"\n        },\n        \"...\"\n    ]\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\"\n}"
+        },
+        {
+            "short": "one",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get a specific Feature of interest.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/FeaturesOfInterest(1)"
+            },
+            "request": "proxyv1.1/FeaturesOfInterest(1)",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/FeaturesOfInterest(1)\",\n    \"@iot.id\": 1,\n    \"name\": \"Default Feature of Interest\",\n    \"description\": \"Default Feature of Interest\",\n    \"encodingType\": \"application/vnd.geo+json\",\n    \"feature\": {},\n    \"properties\": null,\n    \"Observations@iot.navigationLink\": \"proxy/v1.1/FeaturesOfInterest(1)/Observations\",\n    \"Datastreams@iot.navigationLink\": \"proxy/v1.1/FeaturesOfInterest(1)/Datastreams\",\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/FeaturesOfInterest(1)/MultiDatastreams\"\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"id : 1 not found\"\n}"
+        },
+        {
+            "short": "one and expand",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get a specific Feature of interest and expand Observations ",
+            "examples": {
+                "http": "v1.1/FeaturesOfInterest(1)?$expand=Observations"
+            },
+            "request": "proxyv1.1/FeaturesOfInterest(1)?$expand=Observations",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/FeaturesOfInterest(1)\",\n    \"@iot.id\": 1,\n    \"name\": \"Default Feature of Interest\",\n    \"description\": \"Default Feature of Interest\",\n    \"encodingType\": \"application/vnd.geo+json\",\n    \"feature\": {},\n    \"properties\": null,\n    \"Observations\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(525)\",\n            \"@iot.id\": 525,\n            \"phenomenonTime\": \"2017-02-07T19:02:00+01:00\",\n            \"result\": 21.6,\n            \"resultTime\": \"2017-02-07T19:02:05+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:55.96259+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(525)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(525)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(525)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(527)\",\n            \"@iot.id\": 527,\n            \"phenomenonTime\": \"2017-02-07T19:02:00+01:00\",\n            \"result\": 23,\n            \"resultTime\": \"2017-02-07T19:02:05+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.075341+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(527)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(527)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(527)/FeatureOfInterest\"\n        },\n        \"...\"\n    ],\n    \"Datastreams@iot.navigationLink\": \"proxy/v1.1/FeaturesOfInterest(1)/Datastreams\",\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/FeaturesOfInterest(1)/MultiDatastreams\"\n}"
+        },
+        {
+            "short": "Post basic",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "Post a new FeaturesOfInterest.<input id=\"showPostFeaturesOfInterest\" type=checkbox> <label for=\"showPostFeaturesOfInterest\">Click for Help</label> <span id=\"contentPostFeaturesOfInterest\"></br></br>To create an entity in a collection, the client SHALL send a HTTP POST request to that collection’s URL. The POST body SHALL contain a single valid entity representation.\n    </br></br>If the target URL for the collection is a navigationLink, the new entity is automatically linked to the entity containing the navigationLink.\n    </br></br>Upon successful completion, the response SHALL contain a HTTP location header that contains the selfLink of the created entity.\n    </br></br>Upon successful completion the service SHALL respond with either 201 Created, or 204 No Content.\n    </br></br>In addition, the link between entities SHALL be established upon creating an entity. Two use cases SHALL be considered: (1) link to existing entities when creating an entity, and (2) create related entities when creating an entity. The requests for these two use cases are described in the following subsection.\n    </br></br>When clients create resources in a SensorThings service, they SHALL follow the integrity constraints listed in Table 24. For example, a Datastream entity SHALL link to a Thing entity. When a client wants to create a Datastream entity, the client needs to either (1) create a linked Thing entity in the same request or (2) link to an already created Thing entity. The complete integrity constraints for creating resources are shown in the following table.\n    </br></br>Special case #1 - When creating an Observation entity that links to a FeatureOfInterest entity: Sometimes the FeatureOfInterest of an Observation is the Location of the Thing. For example, a wifi-connected thermostat’s temperature observation’s feature-of-interest can be the location of the smart thermostat, that is the room WHERE the smart thermostat is located in.\n    </br></br>In this case, when a client creates an Observation entity, the client SHOULD omit the link to a FeatureOfInterest entity in the POST body message and SHOULD not create a related FeatureOfInterest entity with deep insert. And if the service detects that there is no link to a FeatureOfInterest entity in the POST body message that creates an Observation entity, the service SHALL either (1) create a FeatureOfInterest entity by using the location property from the Location of the Thing entity when there is no FeatureOfInterest whose location property is from the Location of the Thing entity or (2) link to the FeatureOfInterest whose location property is from the Location of the Thing entity.\n    </br></br>Special case #2: In the context of IoT, many Observations’ resultTime and phenomenonTime cannot be distinguished or the resultTime is not available. In this case, when a client creates an Observation entity, the client MAY omit the resultTime and the service SHOULD assign a null value to the resultTime.\n    </br><table> <thead> <tr> <th style=\"width: 30%\">Scenario</th> <th style=\"width: 70%\">Integrity Constraints</th> </tr> </thead> <tbody> <tr> <td>Create a Thing entity</td> <td></td> </tr> <tr> <td>Create a Location entity</td> <td></td> </tr> <tr> <td>Create a Datastream entity</td> <td>SHALL link to a Thing entity</br>SHALL link to a Sensor entity.</br>SHALL link to an ObservedProperty entity.</td> </tr> <tr> <td>Create a Sensor entity</td> <td></td> </tr> <tr> <td>Create an ObservedProperty entity</td> <td></td> </tr> <tr> <td>Create an Observation entity</td> <td>SHALL link to a Datastream or MultiDatastream entity.</br>SHALL link to a FeatureOfInterest entity. If no link specified, the service SHALL create a FeatureOfInterest entity from the content of the Location entities.</td> </tr> <tr> <td>Create a FeatureOfInterest entity</td> <td></td> </tr> </tbody> </table></span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_request\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/FeaturesOfInterest",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "name": "Weather Station YYC.",
+                "description": "This is a weather station located at Au Comptoir Vénitien.",
+                "encodingType": "application/geo+json",
+                "feature": {
+                    "type": "Point",
+                    "feature": {
+                        "coordinates": [
+                            -1.6567440482485551,
+                            48.11256463781973
+                        ],
+                        "type": "Point"
+                    }
+                }
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/FeaturesOfInterest(15)\",\n    \"@iot.id\": 15,\n    \"name\": \"Weather Station YYC.\",\n    \"description\": \"This is a weather station located at Au Comptoir Vénitien.\",\n    \"encodingType\": \"application/geo+json\",\n    \"feature\": {\n        \"type\": \"Point\",\n        \"feature\": {\n            \"type\": \"Point\",\n            \"coordinates\": [\n                -1.6567440482485551,\n                48.11256463781973\n            ]\n        }\n    },\n    \"properties\": null,\n    \"Observations@iot.navigationLink\": \"proxy/v1.1/FeaturesOfInterest(15)/Observations\",\n    \"Datastreams@iot.navigationLink\": \"proxy/v1.1/FeaturesOfInterest(15)/Datastreams\",\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/FeaturesOfInterest(15)/MultiDatastreams\"\n}",
+            "error": "{\n    \"code\": 400,\n    \"message\": \"Bad Request\"\n}"
+        },
+        {
+            "short": "Patch one",
+            "type": "patch",
+            "version": "1.1.0",
+            "description": "Patch a sensor.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_request_2\" target=\"_blank\">[OGC reference]</a>",
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/FeaturesOfInterest(15)\",\n    \"@iot.id\": 15,\n    \"name\": \"My New Name\",\n    \"description\": \"This is a weather station located at Au Comptoir Vénitien.\",\n    \"encodingType\": \"application/geo+json\",\n    \"feature\": {\n        \"type\": \"Point\",\n        \"feature\": {\n            \"type\": \"Point\",\n            \"coordinates\": [\n                -1.6567440482485551,\n                48.11256463781973\n            ]\n        }\n    },\n    \"properties\": null,\n    \"Observations@iot.navigationLink\": \"proxy/v1.1/FeaturesOfInterest(15)/Observations\",\n    \"Datastreams@iot.navigationLink\": \"proxy/v1.1/FeaturesOfInterest(15)/Datastreams\",\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/FeaturesOfInterest(15)/MultiDatastreams\"\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"exist no featureofinterest ID --> 9007199254740991\"\n}"
+        },
+        {
+            "short": "One",
+            "type": "delete",
+            "version": "1.1.0",
+            "description": "Delete a FeatureOfInterest.<input id=\"showDeleteFeaturesOfInterest\" type=checkbox> <label for=\"showDeleteFeaturesOfInterest\">Click for Help</label> <span id=\"contentDeleteFeaturesOfInterest\"></br> A successful DELETE request to an entity’s edit URL deletes the entity. The request body SHOULD be empty. Services SHALL implicitly remove relations to and from an entity when deleting it; clients need not delete the relations explicitly.\n    </br>Services MAY implicitly delete or modify related entities if required by integrity constraints.\n    <table> <thead> <tr> <th style=\"width: 30%\">Scenario</th> <th style=\"width: 70%\">Integrity Constraints</th> </tr> </thead> <tbody> <tr> <td>Delete a Thing entity</td> <td>Delete all the Datastream and HistoricalLocation entities linked to the Thing entity.</td> </tr> <tr> <td>Delete a Location entity</td> <td>Delete all the HistoricalLocation entities linked to the Location entity</td> </tr> <tr> <td>Delete a Datastream entity</td> <td>Delete all the Observation entities linked to the Datastream entity.</td> </tr> <tr> <td>Delete a Sensor entity</td> <td>Delete all the Datastream entities linked to the Sensor entity.</td> </tr> <tr> <td>Delete an ObservedProperty entity</td> <td>Delete all the Datastream entities linked to the ObservedProperty entity.</td> </tr> <tr> <td>Delete an Observation entity</td> <td></td> </tr> <tr> <td>Delete a FeatureOfInterest entity</td> <td>Delete all the Observation entities linked to the FeatureOfInterest entity.</td> </tr> <tr> <td>Delete a HistoricalLocation entity entity</td> <td></td> </tr> </tbody> </table></span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_request_3\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/FeaturesOfInterest(15)",
+                "curl": "curl -DELETE \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"DELETE\"\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.delete('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "",
+            "success": "{}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"No id found for : 9007199254740991\"\n}"
+        }
+    ],
+    "CreateObservations": [
+        {
+            "short": "CreateObservations Infos.",
+            "type": "infos",
+            "version": "1.1.0",
+            "description": "Besides creating Observation entities one by one with multiple HTTP POST requests, there is a need to create multiple Observation entities with a lighter message body in a single HTTP request. In this case, a sensing system can buffer multiple Observations and send them to a SensorThings service in one HTTP request. Here we propose an Action operation CreateObservations.\n    </br>The message body aggregates Observations by Datastreams, which means all the Observations linked to one Datastream SHALL be aggregated in one JSON object. The parameters of each JSON object are shown in the following table.\n    </br></br>As an Observation links to one FeatureOfInterest, to establish the link between an Observation and a FeatureOfInterest, users should include the FeatureOfInterest ids in the dataArray. If no FeatureOfInterest id presented, the FeatureOfInterest will be created based on the Location entities of the linked Thing entity by default.\n    <table> <thead> <tr> <th style=\"width: 10%\">Name</th> <th style=\"width: 60%\">Definition</th> <th style=\"width: 15%\">Data type</th> <th style=\"width: 15%\">Multiplicity and use</th> </tr> </thead> <tbody> <tr> <td>Datastream or MultiDatastream</td> <td><p>The unique identifier of the Datastream or MultiDatastream linking to the group of Observation entities in the dataArray.</p></td> <td><p>The unique identifier of a Datastream or MultiDatastream</p></td> <td>One (mandatory)</td> </tr> <tr> <td>components</td> <td><p>An ordered array of Observation property names whose matched values are included in the dataArray. At least the phenomenonTime and result properties SHALL be included. To establish the link between an Observation and a FeatureOfInterest, the component name is \"FeatureOfInterest/id\" and the FeatureOfInterest ids should be included in the dataArray array. If no FeatureOfInterest id is presented, the FeatureOfInterest will be created based on the Location entities of the linked Thing entity by default.</p></td> <td><p>An ordered array of Observation property names</p></td> <td>One (mandatory)</td> </tr> <tr> <td>dataArray</td> <td><p>A JSON Array containing Observations. Each Observation is represented by the ordered property values. The ordered property values match with the ordered property names in components.</p></td> <td>JSON Array</td> <td>One (mandatory)</td> </tr> </tbody> </table>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#create-observation-dataarray\" target=\"_blank\">[OGC reference]</a>",
+            "request": ""
+        },
+        {
+            "short": "CreateObservations Add datastream",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "Create Observations with CreateObservations ",
+            "examples": {
+                "http": "v1.1/CreateObservations",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "Datastream": {
+                    "@iot.id": 1
+                },
+                "components": [
+                    "phenomenonTime",
+                    "result",
+                    "resultTime",
+                    "FeatureOfInterest/id"
+                ],
+                "dataArray@iot.count": 4,
+                "dataArray": [
+                    [
+                        "2017-01-13T10:20:00.000Z",
+                        90,
+                        "2017-01-13T10:20:00.000Z",
+                        1
+                    ],
+                    [
+                        "2017-01-13T10:21:00.000Z",
+                        91,
+                        "2017-01-13T10:21:00.000Z",
+                        1
+                    ],
+                    [
+                        "2017-02-13T10:22:00.000Z",
+                        92,
+                        "2017-02-13T10:22:00.000Z",
+                        1
+                    ],
+                    [
+                        "2017-02-13T10:23:00.000Z",
+                        93,
+                        "2017-02-13T10:23:00.000Z",
+                        1
+                    ]
+                ]
+            },
+            "request": "",
+            "success": "[\n    \"proxy/v1.1/Observations(530)\",\n    \"proxy/v1.1/Observations(531)\",\n    \"proxy/v1.1/Observations(532)\",\n    \"proxy/v1.1/Observations(533)\"\n]",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"No Datastream or MultiDatastream found\"\n}"
+        },
+        {
+            "short": "CreateObservations Add datastream duplicate.",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "Create Observations duplicate with CreateObservations ",
+            "examples": {
+                "http": "v1.1/CreateObservations",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "Datastream": {
+                    "@iot.id": 2
+                },
+                "components": [
+                    "phenomenonTime",
+                    "result",
+                    "resultTime",
+                    "FeatureOfInterest/id"
+                ],
+                "dataArray@iot.count": 4,
+                "dataArray": [
+                    [
+                        "2017-01-13T10:20:00.000Z",
+                        90,
+                        "2017-01-13T10:20:00.000Z",
+                        1
+                    ],
+                    [
+                        "2017-01-13T10:21:00.000Z",
+                        91,
+                        "2017-01-13T10:21:00.000Z",
+                        1
+                    ],
+                    [
+                        "2017-02-13T10:22:00.000Z",
+                        92,
+                        "2017-02-13T10:22:00.000Z",
+                        1
+                    ],
+                    [
+                        "2017-02-13T10:23:00.000Z",
+                        93,
+                        "2017-02-13T10:23:00.000Z",
+                        1
+                    ]
+                ]
+            },
+            "request": "",
+            "success": "[\n    \"Duplicate (2017-01-13T10:20:00.000Z,90,2017-01-13T10:20:00.000Z,1)\",\n    \"Duplicate (2017-01-13T10:21:00.000Z,91,2017-01-13T10:21:00.000Z,1)\",\n    \"Duplicate (2017-02-13T10:22:00.000Z,92,2017-02-13T10:22:00.000Z,1)\",\n    \"Duplicate (2017-02-13T10:23:00.000Z,93,2017-02-13T10:23:00.000Z,1)\"\n]"
+        },
+        {
+            "short": "CreateObservations Add datastream duplicate = delete.",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "Create Observations duplicate delete with CreateObservations ",
+            "examples": {
+                "http": "v1.1/CreateObservations",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "duplicate": "delete",
+                "Datastream": {
+                    "@iot.id": 2
+                },
+                "components": [
+                    "phenomenonTime",
+                    "result",
+                    "resultTime",
+                    "FeatureOfInterest/id"
+                ],
+                "dataArray@iot.count": 4,
+                "dataArray": [
+                    [
+                        "2017-01-13T10:20:00.000Z",
+                        90,
+                        "2017-01-13T10:20:00.000Z",
+                        1
+                    ],
+                    [
+                        "2017-01-13T10:21:00.000Z",
+                        91,
+                        "2017-01-13T10:21:00.000Z",
+                        1
+                    ],
+                    [
+                        "2017-02-13T10:22:00.000Z",
+                        92,
+                        "2017-02-13T10:22:00.000Z",
+                        1
+                    ],
+                    [
+                        "2017-02-13T10:23:00.000Z",
+                        93,
+                        "2017-02-13T10:23:00.000Z",
+                        1
+                    ]
+                ]
+            },
+            "request": "",
+            "success": "[\n    \"Duplicate (2017-01-13T10:20:00.000Z,90,2017-01-13T10:20:00.000Z,1)\",\n    \"delete id ==> 534\",\n    \"Duplicate (2017-01-13T10:21:00.000Z,91,2017-01-13T10:21:00.000Z,1)\",\n    \"delete id ==> 535\",\n    \"Duplicate (2017-02-13T10:22:00.000Z,92,2017-02-13T10:22:00.000Z,1)\",\n    \"delete id ==> 536\",\n    \"Duplicate (2017-02-13T10:23:00.000Z,93,2017-02-13T10:23:00.000Z,1)\",\n    \"delete id ==> 537\"\n]"
+        },
+        {
+            "short": "CreateObservations Add multiDatastream",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "Create Observations duplicate with CreateObservations ",
+            "examples": {
+                "http": "v1.1/CreateObservations",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "MultiDatastream": {
+                    "@iot.id": 2
+                },
+                "components": [
+                    "phenomenonTime",
+                    "result",
+                    "resultTime",
+                    "FeatureOfInterest/id"
+                ],
+                "dataArray@iot.count": 4,
+                "dataArray": [
+                    [
+                        "2017-01-13T10:20:00.000Z",
+                        [
+                            591,
+                            592,
+                            593
+                        ],
+                        "2017-01-13T10:20:00.000Z",
+                        1
+                    ],
+                    [
+                        "2017-01-13T10:21:00.000Z",
+                        [
+                            691,
+                            692,
+                            693
+                        ],
+                        "2017-01-13T10:21:00.000Z",
+                        1
+                    ],
+                    [
+                        "2017-02-13T10:22:00.000Z",
+                        [
+                            791,
+                            792,
+                            793
+                        ],
+                        "2017-02-13T10:22:00.000Z",
+                        1
+                    ],
+                    [
+                        "2017-02-13T10:23:00.000Z",
+                        [
+                            891,
+                            892,
+                            893
+                        ],
+                        "2017-02-13T10:23:00.000Z",
+                        1
+                    ]
+                ]
+            },
+            "request": "",
+            "success": "[\n    \"proxy/v1.1/Observations(546)\",\n    \"proxy/v1.1/Observations(547)\",\n    \"proxy/v1.1/Observations(548)\",\n    \"proxy/v1.1/Observations(549)\"\n]"
+        },
+        {
+            "short": "CreateObservations Add multiDatastream duplicate.",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "Create Observations duplicate with CreateObservations ",
+            "examples": {
+                "http": "v1.1/CreateObservations",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "MultiDatastream": {
+                    "@iot.id": 2
+                },
+                "components": [
+                    "phenomenonTime",
+                    "result",
+                    "resultTime",
+                    "FeatureOfInterest/id"
+                ],
+                "dataArray@iot.count": 4,
+                "dataArray": [
+                    [
+                        "2017-01-13T10:20:00.000Z",
+                        [
+                            591,
+                            592,
+                            593
+                        ],
+                        "2017-01-13T10:20:00.000Z",
+                        1
+                    ],
+                    [
+                        "2017-01-13T10:21:00.000Z",
+                        [
+                            691,
+                            692,
+                            693
+                        ],
+                        "2017-01-13T10:21:00.000Z",
+                        1
+                    ],
+                    [
+                        "2017-02-13T10:22:00.000Z",
+                        [
+                            791,
+                            792,
+                            793
+                        ],
+                        "2017-02-13T10:22:00.000Z",
+                        1
+                    ],
+                    [
+                        "2017-02-13T10:23:00.000Z",
+                        [
+                            891,
+                            892,
+                            893
+                        ],
+                        "2017-02-13T10:23:00.000Z",
+                        1
+                    ]
+                ]
+            },
+            "request": "",
+            "success": "[\n    \"Duplicate (2017-01-13T10:20:00.000Z,591,592,593,2017-01-13T10:20:00.000Z,1)\",\n    \"Duplicate (2017-01-13T10:21:00.000Z,691,692,693,2017-01-13T10:21:00.000Z,1)\",\n    \"Duplicate (2017-02-13T10:22:00.000Z,791,792,793,2017-02-13T10:22:00.000Z,1)\",\n    \"Duplicate (2017-02-13T10:23:00.000Z,891,892,893,2017-02-13T10:23:00.000Z,1)\"\n]"
+        },
+        {
+            "short": "CreateObservations Add multiDatastream duplicate = delete.",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "Create Observations duplicate delete with CreateObservations ",
+            "examples": {
+                "http": "v1.1/CreateObservations",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "duplicate": "delete",
+                "MultiDatastream": {
+                    "@iot.id": 2
+                },
+                "components": [
+                    "phenomenonTime",
+                    "result",
+                    "resultTime",
+                    "FeatureOfInterest/id"
+                ],
+                "dataArray@iot.count": 4,
+                "dataArray": [
+                    [
+                        "2017-01-13T10:20:00.000Z",
+                        [
+                            591,
+                            592,
+                            593
+                        ],
+                        "2017-01-13T10:20:00.000Z",
+                        1
+                    ],
+                    [
+                        "2017-01-13T10:21:00.000Z",
+                        [
+                            691,
+                            692,
+                            693
+                        ],
+                        "2017-01-13T10:21:00.000Z",
+                        1
+                    ],
+                    [
+                        "2017-02-13T10:22:00.000Z",
+                        [
+                            791,
+                            792,
+                            793
+                        ],
+                        "2017-02-13T10:22:00.000Z",
+                        1
+                    ],
+                    [
+                        "2017-02-13T10:23:00.000Z",
+                        [
+                            891,
+                            892,
+                            893
+                        ],
+                        "2017-02-13T10:23:00.000Z",
+                        1
+                    ]
+                ]
+            },
+            "request": "",
+            "success": "[\n    \"Duplicate (2017-01-13T10:20:00.000Z,591,592,593,2017-01-13T10:20:00.000Z,1)\",\n    \"delete id ==> 546\",\n    \"Duplicate (2017-01-13T10:21:00.000Z,691,692,693,2017-01-13T10:21:00.000Z,1)\",\n    \"delete id ==> 547\",\n    \"Duplicate (2017-02-13T10:22:00.000Z,791,792,793,2017-02-13T10:22:00.000Z,1)\",\n    \"delete id ==> 548\",\n    \"Duplicate (2017-02-13T10:23:00.000Z,891,892,893,2017-02-13T10:23:00.000Z,1)\",\n    \"delete id ==> 549\"\n]"
+        }
+    ],
+    "Loras": [
+        {
+            "short": "Loras Extension",
+            "type": "infos",
+            "version": "1.1.0",
+            "description": "Lora is an extension for adding observations in sensorThings from LORA sensors, the link with sensor is done by deveui (the unique ID of lora sensor) in things properties ",
+            "request": ""
+        },
+        {
+            "short": "all",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Retrieve all Loras.<input id=\"showGetLoras\" type=checkbox> <label for=\"showGetLoras\">Click for Help</label> <span id=\"contentGetLoras\">To address to an entity set, users can simply put the entity set name after the service root URI. The service returns a JSON object with a property of value. The value of the property SHALL be a list of the entities in the specified entity set.</span>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-address-collection-entities\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Loras",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "structure": {
+                "columns": {
+                    "id": {
+                        "description": "Is the system-generated identifier of an entity. id is unique among the entities of the same entity type in a SensorThings service.",
+                        "type": "number",
+                        "requis": false
+                    },
+                    "name": {
+                        "description": "A property provides a label for Lora sensor, commonly a descriptive name.",
+                        "type": "text",
+                        "requis": true
+                    },
+                    "description": {
+                        "description": "This is a short description of the corresponding Lora sensor.",
+                        "type": "text",
+                        "requis": true
+                    },
+                    "properties": {
+                        "description": "A JSON Object containing user-annotated properties as key-value pairs.",
+                        "type": "json",
+                        "requis": false
+                    },
+                    "deveui": {
+                        "description": "The DevEUI is a 64-bit globally-unique Extended Unique Identifier (EUI-64) assigned by the manufacturer, or the owner, of the end-device.",
+                        "type": "text",
+                        "requis": false
+                    }
+                },
+                "relations": {
+                    "Datastream": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    },
+                    "MultiDatastream": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    },
+                    "Decoder": {
+                        "description": "",
+                        "type": "relation",
+                        "requis": false
+                    }
+                }
+            },
+            "request": "proxyv1.1/Loras",
+            "success": "{\n    \"@iot.count\": 5,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Loras(1)\",\n            \"@iot.id\": 1,\n            \"name\": \"ST1_50\",\n            \"description\": \"Lora ST1_50\",\n            \"properties\": null,\n            \"deveui\": \"2CF7F120252000DF\",\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Loras(1)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Loras(1)/MultiDatastream\",\n            \"Decoder@iot.navigationLink\": \"proxy/v1.1/Loras(1)/Decoder\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Loras(2)\",\n            \"@iot.id\": 2,\n            \"name\": \"ST3_75\",\n            \"description\": \"Lora ST3_75\",\n            \"properties\": null,\n            \"deveui\": \"2CF7F1202520017E\",\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Loras(2)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Loras(2)/MultiDatastream\",\n            \"Decoder@iot.navigationLink\": \"proxy/v1.1/Loras(2)/Decoder\"\n        },\n        \"...\"\n    ]\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\"\n}"
+        },
+        {
+            "short": "one",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get a specific Lora.Users can address to a specific entity in an entity set by place the unique identifier of the entity between brace symbol “()” and put after the entity set name. The service then returns the entity with all its properties.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Loras(1)",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Loras(1)",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Loras(1)\",\n    \"@iot.id\": 1,\n    \"name\": \"ST1_50\",\n    \"description\": \"Lora ST1_50\",\n    \"properties\": null,\n    \"deveui\": \"2CF7F120252000DF\",\n    \"Datastream@iot.navigationLink\": \"proxy/v1.1/Loras(1)/Datastream\",\n    \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Loras(1)/MultiDatastream\",\n    \"Decoder@iot.navigationLink\": \"proxy/v1.1/Loras(1)/Decoder\"\n}"
+        },
+        {
+            "short": "one from deveui",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get a specific Lora from deveui  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Loras(2CF7F1202520017E)",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Loras(2CF7F1202520017E)",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Loras(2)\",\n    \"@iot.id\": 2,\n    \"name\": \"ST3_75\",\n    \"description\": \"Lora ST3_75\",\n    \"properties\": null,\n    \"deveui\": \"2CF7F1202520017E\",\n    \"Datastream@iot.navigationLink\": \"proxy/v1.1/Loras(2)/Datastream\",\n    \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Loras(2)/MultiDatastream\",\n    \"Decoder@iot.navigationLink\": \"proxy/v1.1/Loras(2)/Decoder\"\n}",
+            "error": "{\n    \"code\": 404,\n    \"message\": \"Not Found\",\n    \"detail\": \"id : 1 not found\"\n}"
+        },
+        {
+            "short": "Post MultiDatastream basic",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "Post a new Loras ",
+            "examples": {
+                "http": "v1.1/Loras",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "MultiDatastream": {
+                    "@iot.id": 2
+                },
+                "Decoder": {
+                    "@iot.id": 1
+                },
+                "name": "Another lora Name",
+                "description": "My new Lora Description",
+                "deveui": "8cf9574000009L8C"
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Loras(6)\",\n    \"@iot.id\": 6,\n    \"name\": \"Another lora Name\",\n    \"description\": \"My new Lora Description\",\n    \"properties\": null,\n    \"deveui\": \"8CF9574000009L8C\",\n    \"Datastream@iot.navigationLink\": \"proxy/v1.1/Loras(6)/Datastream\",\n    \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Loras(6)/MultiDatastream\",\n    \"Decoder@iot.navigationLink\": \"proxy/v1.1/Loras(6)/Decoder\"\n}"
+        },
+        {
+            "short": "Post Datastream basic",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "Post a new Loras ",
+            "examples": {
+                "http": "v1.1/Loras",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "Datastream": {
+                    "@iot.id": 14
+                },
+                "Decoder": {
+                    "@iot.id": 3
+                },
+                "name": "Lora for datastream",
+                "description": "My new Lora Description",
+                "deveui": "70b3d5e75e014f026"
+            },
+            "request": "",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Loras(7)\",\n    \"@iot.id\": 7,\n    \"name\": \"Lora for datastream\",\n    \"description\": \"My new Lora Description\",\n    \"properties\": null,\n    \"deveui\": \"70B3D5E75E014F026\",\n    \"Datastream@iot.navigationLink\": \"proxy/v1.1/Loras(7)/Datastream\",\n    \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Loras(7)/MultiDatastream\",\n    \"Decoder@iot.navigationLink\": \"proxy/v1.1/Loras(7)/Decoder\"\n}"
+        },
+        {
+            "short": "Post observation basic",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "Post a new Observation in a Lora Thing. ",
+            "examples": {
+                "http": "v1.1/Loras",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "deveui": "2CF7F1202520017E",
+                "timestamp": "2021-10-18T14:53:44+02:00",
+                "payload_ciphered": null,
+                "frame": "010610324200000107103E4900009808"
+            },
+            "request": "",
+            "success": "{\n    \"phenomenonTime\": \"\\\"2021-10-18T14:53:44+02:00\\\"\",\n    \"resultTime\": \"\\\"2021-10-18T14:53:44+02:00\\\"\",\n    \"result\": [\n        18.75,\n        16.946\n    ],\n    \"@iot.id\": 558,\n    \"@iot.selfLink\": \"proxy/v1.1/Observations(558)\",\n    \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(558)/Datastream\",\n    \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(558)/MultiDatastream\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(558)/FeatureOfInterest\"\n}",
+            "error": "{\n    \"code\": 400,\n    \"message\": \"Bad Request\"\n}"
+        },
+        {
+            "short": "Post Sort",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "Post a new Lora Observation Sorted. ",
+            "examples": {
+                "http": "v1.1/Loras",
+                "curl": "curl -X POST -H 'Content-Type: application/json' -d '@DATAS@}' proxyKEYHTTP",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"POST\",\r\n\theaders: {\r\n\t    \"Content-Type\": \"application/json\",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.post('proxyKEYHTTP', (headers = { \"Content-Type\": \"application/json\" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "params": {
+                "data": {
+                    "Temperature": 25,
+                    "moisture": 100
+                },
+                "deveui": "2CF7F1202520017E",
+                "sensor_id": "2CF7F1202520017E",
+                "timestamp": "2021-10-15T14:53:44+02:00",
+                "payload_ciphered": null
+            },
+            "request": "",
+            "success": "{\n    \"phenomenonTime\": \"\\\"2021-10-15T14:53:44+02:00\\\"\",\n    \"resultTime\": \"\\\"2021-10-15T14:53:44+02:00\\\"\",\n    \"result\": [\n        100,\n        25\n    ],\n    \"@iot.id\": 559,\n    \"@iot.selfLink\": \"proxy/v1.1/Observations(559)\",\n    \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(559)/Datastream\",\n    \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(559)/MultiDatastream\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(559)/FeatureOfInterest\"\n}"
+        }
+    ],
+    "Odata": [
+        {
+            "short": "FOdata Infos",
+            "type": "infos",
+            "version": "1.1.0",
+            "description": "The use of query options allows refining the requests to help get the required information about the SensorThings entities in an easy and efficient manner. Each of the listed query options are available for each SensorThings entity, however the options for each may differ.<br>\n        SensorThings query options can be categorized to two different groups.<br>\n          -  The first group specifies the properties to be returned by the request. $expand and $select are query options of this group.<br>\n          -  The second group is limiting, filtering, or re-ordering the request results. This group contains $orderby, $top, $skip, $count, and $filter  <a href=\"http://docs.opengeospatial.org/is/15-078r6/15-078r6.html#19\" target=\"_blank\">[reference]</a>",
+            "request": ""
+        },
+        {
+            "short": "Things(:id) Expand",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Use $expand query option to request inline information for related entities of the requested entity collection.The $expand system query option indicates the related entities to be represented inline. The value of the $expand query option SHALL be a comma separated list of navigation property names. Additionally, each navigation property can be followed by a forward slash and another navigation property to enable identifying a multi-level relationship.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#expand\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things(6)?$expand=Datastreams",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things(6)?$expand=Datastreams",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Things(6)\",\n    \"@iot.id\": 6,\n    \"name\": \"Climatic chamber\",\n    \"description\": \"Climate chamber for stean's tests\",\n    \"properties\": {\n        \"Creator\": \"The greek\",\n        \"Publisher\": \"Projet Zorba\",\n        \"Description\": \"@@@\"\n    },\n    \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(6)/Locations\",\n    \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(6)/HistoricalLocations\",\n    \"Datastreams\": [\n        [\n            null,\n            null,\n            \"...\"\n        ],\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Datastreams(7)\",\n            \"@iot.id\": 7,\n            \"name\": \"Humidité de la chambre climatique\",\n            \"description\": \"Humidité relative de l’air de la chambre climatique, observations toutes les 15 minutes\",\n            \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n            \"unitOfMeasurement\": {\n                \"name\": \"Pourcentage\",\n                \"symbol\": \"%\",\n                \"definition\": \"\"\n            },\n            \"observedArea\": null,\n            \"phenomenonTime\": \"2024-06-01T02:45:01Z/2024-06-03T04:15:01Z\",\n            \"resultTime\": \"2024-06-01T02:45:01Z/2024-06-03T04:15:01Z\",\n            \"properties\": null,\n            \"Thing@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/Thing\",\n            \"Sensor@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/Sensor\",\n            \"ObservedProperty@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/ObservedProperty\",\n            \"Observations@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/Observations\",\n            \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/Lora\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Datastreams(8)\",\n            \"@iot.id\": 8,\n            \"name\": \"Radioactivité de l'air, issue de la désintégration naturelle du radon\",\n            \"description\": \"Radioactivité de l'air, issue de la désintégration naturelle du radon dans les sous sools de Quimper\",\n            \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n            \"unitOfMeasurement\": {\n                \"name\": \"Becquerel par mètre cube\",\n                \"symbol\": \"Bq/m³\",\n                \"definition\": \"https://www.irsn.fr/savoir-comprendre/environnement/dou-vient-radon\"\n            },\n            \"observedArea\": null,\n            \"phenomenonTime\": \"2024-06-01T02:30:01Z/2024-06-03T04:00:01Z\",\n            \"resultTime\": \"2024-06-01T02:30:01Z/2024-06-03T04:00:01Z\",\n            \"properties\": null,\n            \"Thing@iot.navigationLink\": \"proxy/v1.1/Datastreams(8)/Thing\",\n            \"Sensor@iot.navigationLink\": \"proxy/v1.1/Datastreams(8)/Sensor\",\n            \"ObservedProperty@iot.navigationLink\": \"proxy/v1.1/Datastreams(8)/ObservedProperty\",\n            \"Observations@iot.navigationLink\": \"proxy/v1.1/Datastreams(8)/Observations\",\n            \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(8)/Lora\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(8)/FeatureOfInterest\"\n        }\n    ],\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(6)/MultiDatastreams\"\n}"
+        },
+        {
+            "short": "Things(:id) Expand sub Entity",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "$expand comma separated list of sub-entity names or sub-entity names separated by forward slash.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#expand\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things(6)?$expand=Datastreams/Sensor",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things(6)?$expand=Datastreams/Sensor",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Things(6)\",\n    \"@iot.id\": 6,\n    \"name\": \"Climatic chamber\",\n    \"description\": \"Climate chamber for stean's tests\",\n    \"properties\": {\n        \"Creator\": \"The greek\",\n        \"Publisher\": \"Projet Zorba\",\n        \"Description\": \"@@@\"\n    },\n    \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(6)/Locations\",\n    \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(6)/HistoricalLocations\",\n    \"Datastreams\": [\n        [\n            null,\n            null,\n            \"...\"\n        ],\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Datastreams(7)\",\n            \"@iot.id\": 7,\n            \"name\": \"Humidité de la chambre climatique\",\n            \"description\": \"Humidité relative de l’air de la chambre climatique, observations toutes les 15 minutes\",\n            \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n            \"unitOfMeasurement\": {\n                \"name\": \"Pourcentage\",\n                \"symbol\": \"%\",\n                \"definition\": \"\"\n            },\n            \"observedArea\": null,\n            \"phenomenonTime\": \"2024-06-01T02:45:01Z/2024-06-03T04:15:01Z\",\n            \"resultTime\": \"2024-06-01T02:45:01Z/2024-06-03T04:15:01Z\",\n            \"properties\": null,\n            \"Thing@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/Thing\",\n            \"Sensor\": {\n                \"@iot.selfLink\": \"proxy/v1.1/Sensors(6)\",\n                \"@iot.id\": 6,\n                \"name\": \"DHT22\",\n                \"description\": \"Capteur de mesure de température sur la plage -40 à 80 °C, et de l'humidité relative de 0 à 100 %\",\n                \"encodingType\": \"text/html\",\n                \"metadata\": \"https://joy-it.net/en/products/SEN-DHT22\",\n                \"properties\": null,\n                \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Sensors(6)/Datastreams\",\n                \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Sensors(6)/MultiDatastreams\"\n            },\n            \"ObservedProperty@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/ObservedProperty\",\n            \"Observations@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/Observations\",\n            \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/Lora\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(7)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Datastreams(8)\",\n            \"@iot.id\": 8,\n            \"name\": \"Radioactivité de l'air, issue de la désintégration naturelle du radon\",\n            \"description\": \"Radioactivité de l'air, issue de la désintégration naturelle du radon dans les sous sools de Quimper\",\n            \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n            \"unitOfMeasurement\": {\n                \"name\": \"Becquerel par mètre cube\",\n                \"symbol\": \"Bq/m³\",\n                \"definition\": \"https://www.irsn.fr/savoir-comprendre/environnement/dou-vient-radon\"\n            },\n            \"observedArea\": null,\n            \"phenomenonTime\": \"2024-06-01T02:30:01Z/2024-06-03T04:00:01Z\",\n            \"resultTime\": \"2024-06-01T02:30:01Z/2024-06-03T04:00:01Z\",\n            \"properties\": null,\n            \"Thing@iot.navigationLink\": \"proxy/v1.1/Datastreams(8)/Thing\",\n            \"Sensor\": {\n                \"@iot.selfLink\": \"proxy/v1.1/Sensors(7)\",\n                \"@iot.id\": 7,\n                \"name\": \"RDP200P2\",\n                \"description\": \"RadonEye Plus2, capteur (dosimètre) permettant le monitoring du radon par FTLAB\",\n                \"encodingType\": \"text/html\",\n                \"metadata\": \"http://radonftlab.com/radon-sensor-product/radon-detector/new-rd200p-radon-detector/\",\n                \"properties\": null,\n                \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Sensors(7)/Datastreams\",\n                \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Sensors(7)/MultiDatastreams\"\n            },\n            \"ObservedProperty@iot.navigationLink\": \"proxy/v1.1/Datastreams(8)/ObservedProperty\",\n            \"Observations@iot.navigationLink\": \"proxy/v1.1/Datastreams(8)/Observations\",\n            \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(8)/Lora\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(8)/FeatureOfInterest\"\n        }\n    ],\n    \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(6)/MultiDatastreams\"\n}"
+        },
+        {
+            "short": "things(:id) expand with empty result",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get list of locations and return list if is empty.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#expand\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things(6)?$expand=MultiDatastreams",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things(6)?$expand=MultiDatastreams",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Things(6)\",\n    \"@iot.id\": 6,\n    \"name\": \"Climatic chamber\",\n    \"description\": \"Climate chamber for stean's tests\",\n    \"properties\": {\n        \"Creator\": \"The greek\",\n        \"Publisher\": \"Projet Zorba\",\n        \"Description\": \"@@@\"\n    },\n    \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(6)/Locations\",\n    \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(6)/HistoricalLocations\",\n    \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(6)/Datastreams\",\n    \"MultiDatastreams\": []\n}"
+        },
+        {
+            "short": "things(:id) expand with inner filter",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get datastream and expand obvervations with filter.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#expand\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Datastreams(2)?$expand=Observations($filter=result eq 240)",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Datastreams(2)?$expand=Observations($filter=result eq 240)",
+            "success": "{\n    \"@iot.selfLink\": \"proxy/v1.1/Datastreams(2)\",\n    \"@iot.id\": 2,\n    \"name\": \"This is the stean's Datastream\",\n    \"description\": \"Description of This is the stean's Datastream\",\n    \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n    \"unitOfMeasurement\": {\n        \"name\": \"apostrophe unit of measurement\",\n        \"definition\": \"http://unitsofmeasure.org/ucum.html#para-30\",\n        \"description\": \"Description of This is the stean's unit of measurement\"\n    },\n    \"observedArea\": null,\n    \"phenomenonTime\": \"2017-02-07T19:02:00Z/2023-03-01T10:15:01Z\",\n    \"resultTime\": \"2017-02-07T19:02:05Z/2023-03-01T10:15:01Z\",\n    \"properties\": null,\n    \"Thing@iot.navigationLink\": \"proxy/v1.1/Datastreams(2)/Thing\",\n    \"Sensor@iot.navigationLink\": \"proxy/v1.1/Datastreams(2)/Sensor\",\n    \"ObservedProperty@iot.navigationLink\": \"proxy/v1.1/Datastreams(2)/ObservedProperty\",\n    \"Observations\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(29)\",\n            \"@iot.id\": 29,\n            \"phenomenonTime\": \"2023-03-01T08:30:01+01:00\",\n            \"result\": 240,\n            \"resultTime\": \"2023-03-01T08:30:01+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:51.067377+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(29)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(29)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(29)/FeatureOfInterest\"\n        }\n    ],\n    \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(2)/Lora\",\n    \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(2)/FeatureOfInterest\"\n}"
+        },
+        {
+            "short": "things(:id) expand with inner select",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Get datastream and expand obvervations with complex select.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#expand\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Datastreams?$expand=Observations($select=phenomenonTime,result;$orderby=phenomenonTime desc;$top=10)",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Datastreams?$expand=Observations($select=phenomenonTime,result;$orderby=phenomenonTime desc;$top=10)",
+            "success": "{\n    \"@iot.count\": 17,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Datastreams(1)\",\n            \"@iot.id\": 1,\n            \"name\": \"classic Datastream\",\n            \"description\": \"Description of classic Datastream\",\n            \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n            \"unitOfMeasurement\": {\n                \"name\": \"classic unit of measurement\",\n                \"definition\": \"http://unitsofmeasure.org/ucum.html#para-30\",\n                \"description\": \"Description of classic unit of measurement\"\n            },\n            \"observedArea\": null,\n            \"phenomenonTime\": \"2017-01-13T11:20:00Z/2023-03-01T04:15:01Z\",\n            \"resultTime\": \"2017-01-13T11:20:00Z/2023-03-01T04:15:01Z\",\n            \"properties\": null,\n            \"Thing@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/Thing\",\n            \"Sensor@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/Sensor\",\n            \"ObservedProperty@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/ObservedProperty\",\n            \"Observations\": [\n                {\n                    \"phenomenonTime\": \"2017-01-13T11:20:00+01:00\",\n                    \"result\": 90\n                },\n                {\n                    \"phenomenonTime\": \"2017-01-13T11:21:00+01:00\",\n                    \"result\": 91\n                },\n                {\n                    \"phenomenonTime\": \"2017-02-13T11:22:00+01:00\",\n                    \"result\": 92\n                },\n                {\n                    \"phenomenonTime\": \"2017-02-13T11:23:00+01:00\",\n                    \"result\": 93\n                },\n                {\n                    \"phenomenonTime\": \"2023-03-01T01:30:01+01:00\",\n                    \"result\": 200\n                },\n                {\n                    \"phenomenonTime\": \"2023-03-01T01:45:01+01:00\",\n                    \"result\": 210\n                },\n                {\n                    \"phenomenonTime\": \"2023-03-01T02:00:01+01:00\",\n                    \"result\": 220\n                },\n                {\n                    \"phenomenonTime\": \"2023-03-01T02:15:01+01:00\",\n                    \"result\": 230\n                },\n                {\n                    \"phenomenonTime\": \"2023-03-01T02:30:01+01:00\",\n                    \"result\": 240\n                },\n                {\n                    \"phenomenonTime\": \"2023-03-01T02:45:01+01:00\",\n                    \"result\": 250\n                }\n            ],\n            \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/Lora\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(1)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Datastreams(2)\",\n            \"@iot.id\": 2,\n            \"name\": \"This is the stean's Datastream\",\n            \"description\": \"Description of This is the stean's Datastream\",\n            \"observationType\": \"http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement\",\n            \"unitOfMeasurement\": {\n                \"name\": \"apostrophe unit of measurement\",\n                \"definition\": \"http://unitsofmeasure.org/ucum.html#para-30\",\n                \"description\": \"Description of This is the stean's unit of measurement\"\n            },\n            \"observedArea\": null,\n            \"phenomenonTime\": \"2017-02-07T19:02:00Z/2023-03-01T10:15:01Z\",\n            \"resultTime\": \"2017-02-07T19:02:05Z/2023-03-01T10:15:01Z\",\n            \"properties\": null,\n            \"Thing@iot.navigationLink\": \"proxy/v1.1/Datastreams(2)/Thing\",\n            \"Sensor@iot.navigationLink\": \"proxy/v1.1/Datastreams(2)/Sensor\",\n            \"ObservedProperty@iot.navigationLink\": \"proxy/v1.1/Datastreams(2)/ObservedProperty\",\n            \"Observations\": [\n                {\n                    \"phenomenonTime\": \"2017-02-07T19:02:00+01:00\",\n                    \"result\": 21.6\n                },\n                {\n                    \"phenomenonTime\": \"2023-03-01T07:30:01+01:00\",\n                    \"result\": 200\n                },\n                {\n                    \"phenomenonTime\": \"2023-03-01T07:45:01+01:00\",\n                    \"result\": 210\n                },\n                {\n                    \"phenomenonTime\": \"2023-03-01T08:00:01+01:00\",\n                    \"result\": 220\n                },\n                {\n                    \"phenomenonTime\": \"2023-03-01T08:15:01+01:00\",\n                    \"result\": 230\n                },\n                {\n                    \"phenomenonTime\": \"2023-03-01T08:30:01+01:00\",\n                    \"result\": 240\n                },\n                {\n                    \"phenomenonTime\": \"2023-03-01T08:45:01+01:00\",\n                    \"result\": 250\n                },\n                {\n                    \"phenomenonTime\": \"2023-03-01T09:00:01+01:00\",\n                    \"result\": 260\n                },\n                {\n                    \"phenomenonTime\": \"2023-03-01T09:15:01+01:00\",\n                    \"result\": 270\n                },\n                {\n                    \"phenomenonTime\": \"2023-03-01T09:30:01+01:00\",\n                    \"result\": 280\n                }\n            ],\n            \"Lora@iot.navigationLink\": \"proxy/v1.1/Datastreams(2)/Lora\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Datastreams(2)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Things(:id) Select",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Retrieve specified properties for a specific Things.The $select system query option requests the service to return only the properties explicitly requested by the client. The value of a $select query option SHALL be a comma-separated list of selection clauses. Each selection clause SHALL be a property name (including navigation property names). In the response, the service SHALL return the specified content, if available, along with any available expanded navigation properties.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#select4\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things(1)?$select=description",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things(1)?$select=description",
+            "success": "{\n    \"description\": \"Description of classic Thing\"\n}"
+        },
+        {
+            "short": "Things(:id) Select multi",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Retrieve name and description for Things.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#select4\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things?$select=name,description",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things?$select=name,description",
+            "success": "{\n    \"@iot.count\": 16,\n    \"value\": [\n        {\n            \"name\": \"classic Thing\",\n            \"description\": \"Description of classic Thing\"\n        },\n        {\n            \"name\": \"This is the stean's Thing\",\n            \"description\": \"Description of This is the stean's Thing\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Things OrderBy",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Use $orderby query option to sort the response based on properties of requested entity in ascending (asc) or descending (desc) order.The $orderby system query option specifies the order in which items are returned from the service. The value of the $orderby system query option SHALL contain a comma-separated list of expressions whose primitive result values are used to sort the items. A special case of such an expression is a property path terminating on a primitive property.\n    </br></br> The expression MAY include the suffix asc for ascending or desc for descending, separated from the property name by one or more spaces. If asc or desc is not specified, the service SHALL order by the specified property in ascending order.\n    </br></br> Null values SHALL come before non-null values when sorting in ascending order and after non-null values when sorting in descending order.\n    </br></br>Items SHALL be sorted by the result values of the first expression, and then items with the same value for the first expression SHALL be sorted by the result value of the second expression, and so on.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#orderby\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things?$orderby=name desc",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things?$orderby=name desc",
+            "success": "{\n    \"@iot.count\": 16,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Things(2)\",\n            \"@iot.id\": 2,\n            \"name\": \"This is the stean's Thing\",\n            \"description\": \"Description of This is the stean's Thing\",\n            \"properties\": {\n                \"owner\": \"Mozilla version one\",\n                \"organization\": \"Mozilla\"\n            },\n            \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(2)/Locations\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(2)/HistoricalLocations\",\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(2)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(2)/MultiDatastreams\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Things(3)\",\n            \"@iot.id\": 3,\n            \"name\": \"This is éléanor's Thing\",\n            \"description\": \"Description of This is éléanor's Thing\",\n            \"properties\": {\n                \"owner\": \"Mozilla version two\",\n                \"organization\": \"Mozilla\"\n            },\n            \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(3)/Locations\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(3)/HistoricalLocations\",\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(3)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(3)/MultiDatastreams\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Observations Top",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Use $top query option to limit the number of requested entities.The $top system query option specifies the limit on the number of items returned from a collection of entities. The value of the $top system query option SHALL be a non-negative integer n. The service SHALL return the number of available items up to but not greater than the specified value n.\n    </br></br>If no unique ordering is imposed through an $orderby query option, the service SHALL impose a stable ordering across requests that include $top.\n    </br></br>In addition, if the $top value exceeds the service-driven pagination limitation (i.e., the largest number of entities the service can return in a single response), the $top query option SHALL be discarded and the server-side pagination limitation SHALL be imposed.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#top\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$top=5",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$top=5",
+            "success": "{\n    \"@iot.count\": 5,\n    \"@iot.nextLink\": \"proxy/v1.1/Observations?$top=5&$skip=5\",\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(530)\",\n            \"@iot.id\": 530,\n            \"phenomenonTime\": \"2017-01-13T11:20:00+01:00\",\n            \"result\": 90,\n            \"resultTime\": \"2017-01-13T11:20:00+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.859471+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(530)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(530)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(530)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(531)\",\n            \"@iot.id\": 531,\n            \"phenomenonTime\": \"2017-01-13T11:21:00+01:00\",\n            \"result\": 91,\n            \"resultTime\": \"2017-01-13T11:21:00+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.86479+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(531)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(531)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(531)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Observations Skip",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Use $skip to specify the number of entities that should be skipped before returning the requested entities.The $skip system query option specifies the number for the items of the queried collection that SHALL be excluded from the result. The value of $skip system query option SHALL be a non-negative integer n. The service SHALL return items starting at position n+1.\n    </br></br>Where $top and $skip are used together, $skip SHALL be applied before $top, regardless of the order in which they appear in the request.\n    </br></br>If no unique ordering is imposed through an $orderby query option, the service SHALL impose a stable ordering across requests that include $skip.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#skip\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$skip=500",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$skip=500",
+            "success": "{\n    \"@iot.count\": 30,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(491)\",\n            \"@iot.id\": 491,\n            \"phenomenonTime\": \"2024-06-04T23:00:01+02:00\",\n            \"result\": [\n                30.35,\n                14.97,\n                null\n            ],\n            \"resultTime\": \"2024-06-04T23:00:01+02:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:51.067377+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(491)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(491)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(491)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(492)\",\n            \"@iot.id\": 492,\n            \"phenomenonTime\": \"2024-06-04T23:15:01+02:00\",\n            \"result\": 4.703629970550537,\n            \"resultTime\": \"2024-06-04T23:15:01+02:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:51.067377+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(492)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(492)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(492)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Observations count",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Use count.The $count system query option with a value of true specifies that the total count of items within a collection matching the request SHALL be returned along with the result. A $count query option with a value of false (or not specified) hints that the service SHALL not return a count.\n    </br></br>The service SHALL return an HTTP Status code of 400 Bad Request if a value other than true or false is specified.\n    </br></br>The $count system query option SHALL ignore any $top, $skip, or $expand query options, and SHALL return the total count of results across all pages including only those results matching any specified $filter. Clients should be aware that the count returned inline may not exactly equal the actual number of items returned, due to latency between calculating the count and enumerating the last value or due to inexact calculations on the service.  <a href=\"http://docs.opengeospatial.org/is/15-078r6/15-078r6.html#53\" target=\"_blank\">[reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$skip=3&$top=2&$count=true",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$skip=3&$top=2&$count=true",
+            "success": "{\n    \"@iot.count\": 530,\n    \"@iot.nextLink\": \"proxy/v1.1/Observations?$count=true&$top=2&$skip=5\",\n    \"@iot.prevLink\": \"proxy/v1.1/Observations?$count=true&$top=2&$skip=1\",\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(527)\",\n            \"@iot.id\": 527,\n            \"phenomenonTime\": \"2017-02-07T19:02:00+01:00\",\n            \"result\": 23,\n            \"resultTime\": \"2017-02-07T19:02:05+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.075341+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(527)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(527)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(527)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(526)\",\n            \"@iot.id\": 526,\n            \"phenomenonTime\": \"2017-02-07T19:02:00+01:00\",\n            \"result\": 21.6,\n            \"resultTime\": \"2017-02-07T19:02:05+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.025629+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(526)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(526)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(526)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Thing filter date greater than and less than",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Use filter gt with date  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#requirement-request-data-filter\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$filter=phenomenonTime gt '2021-01-01' and phenomenonTime lt '2021-10-16'",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$filter=phenomenonTime gt '2021-01-01' and phenomenonTime lt '2021-10-16'",
+            "success": "{\n    \"@iot.count\": 1,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(559)\",\n            \"@iot.id\": 559,\n            \"phenomenonTime\": \"2021-10-15T14:53:44+02:00\",\n            \"result\": [\n                100,\n                25\n            ],\n            \"resultTime\": \"2021-10-15T14:53:44+02:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:57.73804+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(559)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(559)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(559)/FeatureOfInterest\"\n        },\n        null,\n        \"...\"\n    ]\n}"
+        }
+    ],
+    "apiBuiltInOperators.js": [
+        {
+            "short": "BuiltInOperators Infos",
+            "type": "infos",
+            "version": "1.1.0",
+            "description": "The $filter system query option allows clients to filter a collection of entities that are addressed by a request URL. The expression specified with $filter is evaluated for each entity in the collection, and only items WHERE the expression evaluates to true SHALL be included in the response. Entities for which the expression evaluates to false or to null, or which reference properties that are unavailable due to permissions, SHALL be omitted from the response.</br><b>Comparison Operators</b></br><table> <thead> <tr> <th style=\"width: 10%\">Operator</th> <th style=\"width: 35%\">Description</th> <th style=\"width: 55%\">Example</thead> <tbody> <tr> <td>eq</td> <td>Equal</td> <td>/Datastreams?$filter=unitOfMeasurement/name eq 'degree Celsius'</td> </tr> <tr> <td>ne</td> <td>Not equal</td> <td>/Datastreams?$filter=unitOfMeasurement/name ne 'degree Celsius'</td> </tr> <tr> <td>gt</td> <td>Greater than</td> <td>/Observations?$filter=result gt 20.0</td> </tr> <tr> <td>ge</td> <td>Greater than or equal</td> <td>/Observations?$filter=result ge 20.0</td> </tr> <tr> <td>lt</td> <td> Less than</td> <td>/Observations?$filter=result lt 100</td> </tr> <tr> <td>le</td> <td>Less than or equal</td> <td>/Observations?$filter=result le 100</td> </tr> </tbody> </table>\n    <b>Logical Operators</b></br><table> <thead> <tr> <th style=\"width: 10%\">Operator</th> <th style=\"width: 35%\">Description</th> <th style=\"width: 55%\">Example </thead> <tbody> <tr> <td>and</td> <td>Logical and</td> <td>/Observations?$filter=result le 3.5 and FeatureOfInterest/id eq 1</td> </tr> <tr> <td>or</td> <td>Logical or</td> <td>/Observations?$filter=result gt 20 or result le 3.5</td> </tr> <tr> <td>not</td> <td>Logical negation</td> <td>/Things?$filter=not startswith(description,'test')</td> </tr> </tbody> </table>\n    <b>Arithmetic Operators</b></br> <table> <thead> <tr> <th style=\"width: 10%\">Operator</th> <th style=\"width: 35%\">Description</th> <th style=\"width: 55%\">Example </thead> <tbody> <tr> <td>add</td> <td>Addition</td> <td>/Observations?$filter=result add 5 gt 10</td> </tr> <tr> <td>sub</td> <td>Subtraction</td> <td>/Observations?$filter=result sub 5 gt 10</td> </tr> <tr> <td>mul</td> <td>Multiplication</td> <td>/Observations?$filter=result mul 2 gt 2000</td> </tr> <tr> <td>div</td> <td>Division</td> <td>/Observations?$filter=result div 2 gt 4</td> </tr> <tr> <td>mod</td> <td>Modulo</td> <td>/Observations?$filter=result mod 2 eq 0</td> </tr> </tbody> </table>    \n    <b>Grouping Operators</b></br> <table> <thead> <tr> <th style=\"width: 10%\">Operator</th> <th style=\"width: 35%\">Description</th> <th style=\"width: 55%\">Example </thead> <tbody> <tr> <td>()</td> <td>Precedence grouping</td> <td>/Observations?$filter=(result sub 5) gt 10</td> </tr> </tbody> </table>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#requirement-request-data-filter\" target=\"_blank\">[OGC reference]</a>",
+            "request": ""
+        },
+        {
+            "short": "Observations eq",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Use eq for equal to =  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_filter_operations\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$filter=result eq 310",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$filter=result eq 310",
+            "success": "{\n    \"@iot.count\": 5,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(12)\",\n            \"@iot.id\": 12,\n            \"phenomenonTime\": \"2023-03-01T04:15:01+01:00\",\n            \"result\": 310,\n            \"resultTime\": \"2023-03-01T04:15:01+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:51.067377+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(12)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(12)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(12)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(36)\",\n            \"@iot.id\": 36,\n            \"phenomenonTime\": \"2023-03-01T10:15:01+01:00\",\n            \"result\": 310,\n            \"resultTime\": \"2023-03-01T10:15:01+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:51.067377+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(36)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(36)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(36)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Observations ne",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Use ne for not equal to <>  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_filter_operations\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$filter=result ne 45",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$filter=result ne 45",
+            "success": "{\n    \"@iot.count\": 530,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(530)\",\n            \"@iot.id\": 530,\n            \"phenomenonTime\": \"2017-01-13T11:20:00+01:00\",\n            \"result\": 90,\n            \"resultTime\": \"2017-01-13T11:20:00+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.859471+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(530)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(530)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(530)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(531)\",\n            \"@iot.id\": 531,\n            \"phenomenonTime\": \"2017-01-13T11:21:00+01:00\",\n            \"result\": 91,\n            \"resultTime\": \"2017-01-13T11:21:00+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.86479+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(531)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(531)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(531)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Observations gt",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Use gt for greater than >  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_filter_operations\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$filter=result gt 90",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$filter=result gt 90",
+            "success": "{\n    \"@iot.count\": 119,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(531)\",\n            \"@iot.id\": 531,\n            \"phenomenonTime\": \"2017-01-13T11:21:00+01:00\",\n            \"result\": 91,\n            \"resultTime\": \"2017-01-13T11:21:00+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.86479+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(531)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(531)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(531)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(532)\",\n            \"@iot.id\": 532,\n            \"phenomenonTime\": \"2017-02-13T11:22:00+01:00\",\n            \"result\": 92,\n            \"resultTime\": \"2017-02-13T11:22:00+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.86938+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(532)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(532)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(532)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Observations ge",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Use gt for greater than or equal >=  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_filter_operations\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$filter=result ge 90",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$filter=result ge 90",
+            "success": "{\n    \"@iot.count\": 120,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(530)\",\n            \"@iot.id\": 530,\n            \"phenomenonTime\": \"2017-01-13T11:20:00+01:00\",\n            \"result\": 90,\n            \"resultTime\": \"2017-01-13T11:20:00+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.859471+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(530)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(530)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(530)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(531)\",\n            \"@iot.id\": 531,\n            \"phenomenonTime\": \"2017-01-13T11:21:00+01:00\",\n            \"result\": 91,\n            \"resultTime\": \"2017-01-13T11:21:00+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.86479+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(531)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(531)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(531)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Observations lt",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Use lt for smaller than <  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_filter_operations\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$filter=result lt 90",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$filter=result lt 90",
+            "success": "{\n    \"@iot.count\": 409,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(525)\",\n            \"@iot.id\": 525,\n            \"phenomenonTime\": \"2017-02-07T19:02:00+01:00\",\n            \"result\": 21.6,\n            \"resultTime\": \"2017-02-07T19:02:05+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:55.96259+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(525)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(525)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(525)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(528)\",\n            \"@iot.id\": 528,\n            \"phenomenonTime\": \"2017-02-07T19:02:00+01:00\",\n            \"result\": 21.6,\n            \"resultTime\": \"2017-02-07T19:02:05+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.111545+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(528)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(528)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(528)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Observations le",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Use lt for Less than or equal <=  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_filter_operations\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$filter=result le 90",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$filter=result le 90",
+            "success": "{\n    \"@iot.count\": 410,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(530)\",\n            \"@iot.id\": 530,\n            \"phenomenonTime\": \"2017-01-13T11:20:00+01:00\",\n            \"result\": 90,\n            \"resultTime\": \"2017-01-13T11:20:00+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.859471+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(530)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(530)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(530)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(525)\",\n            \"@iot.id\": 525,\n            \"phenomenonTime\": \"2017-02-07T19:02:00+01:00\",\n            \"result\": 21.6,\n            \"resultTime\": \"2017-02-07T19:02:05+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:55.96259+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(525)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(525)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(525)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Thing and",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Use filter with and  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_filter_operations\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things?$filter=name eq 'classic Thing' and description eq 'Description of classic Thing'",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things?$filter=name eq 'classic Thing' and description eq 'Description of classic Thing'",
+            "success": "{\n    \"@iot.count\": 1,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Things(1)\",\n            \"@iot.id\": 1,\n            \"name\": \"classic Thing\",\n            \"description\": \"Description of classic Thing\",\n            \"properties\": null,\n            \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(1)/Locations\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(1)/HistoricalLocations\",\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(1)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(1)/MultiDatastreams\"\n        },\n        null,\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Thing or",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Use filter with or  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_filter_operations\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things?$filter=name eq 'classic Thing' or description eq 'Description of Hack $debug=true Thing'",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things?$filter=name eq 'classic Thing' or description eq 'Description of Hack $debug=true Thing'",
+            "success": "{\n    \"@iot.count\": 1,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Things(1)\",\n            \"@iot.id\": 1,\n            \"name\": \"classic Thing\",\n            \"description\": \"Description of classic Thing\",\n            \"properties\": null,\n            \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(1)/Locations\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(1)/HistoricalLocations\",\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(1)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(1)/MultiDatastreams\"\n        },\n        null,\n        \"...\"\n    ]\n}"
+        }
+    ],
+    "BuiltInFunctions.": [
+        {
+            "short": "BuiltInFunctions Infos",
+            "type": "infos",
+            "version": "1.1.0",
+            "description": "The OGC SensorThings API supports a set of functions that can be used with the $filter or $orderby query operations. The following table lists the available functions and they follows the OData Canonical function definitions listed in Section 5.1.1.4 of the [OData Version 4.0 Part 2: URL Conventions] and the syntax rules for these functions are defined in [OData Version 4.0 ABNF].  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_filter_operations\" target=\"_blank\">[OGC reference]</a>",
+            "request": ""
+        },
+        {
+            "short": "Things(:id) substringof",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "This string function filters all the records that contain with string in property.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_filter_operations\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things?$filter=substringof('description', 'chamber') eq true",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things?$filter=substringof('description', 'chamber') eq true",
+            "success": "{\n    \"@iot.count\": 1,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Things(6)\",\n            \"@iot.id\": 6,\n            \"name\": \"Climatic chamber\",\n            \"description\": \"Climate chamber for stean's tests\",\n            \"properties\": {\n                \"Creator\": \"The greek\",\n                \"Publisher\": \"Projet Zorba\",\n                \"Description\": \"@@@\"\n            },\n            \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(6)/Locations\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(6)/HistoricalLocations\",\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(6)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(6)/MultiDatastreams\"\n        },\n        null,\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Things(:id) endwith",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "This string function filters all the records that column name ends with the string in the property.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_filter_operations\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things?$filter=endswith('name', 'Thing') eq true",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things?$filter=endswith('name', 'Thing') eq true",
+            "success": "{\n    \"@iot.count\": 6,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Things(1)\",\n            \"@iot.id\": 1,\n            \"name\": \"classic Thing\",\n            \"description\": \"Description of classic Thing\",\n            \"properties\": null,\n            \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(1)/Locations\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(1)/HistoricalLocations\",\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(1)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(1)/MultiDatastreams\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Things(2)\",\n            \"@iot.id\": 2,\n            \"name\": \"This is the stean's Thing\",\n            \"description\": \"Description of This is the stean's Thing\",\n            \"properties\": {\n                \"owner\": \"Mozilla version one\",\n                \"organization\": \"Mozilla\"\n            },\n            \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(2)/Locations\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(2)/HistoricalLocations\",\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(2)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(2)/MultiDatastreams\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Things(:id) startswith",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "This string function filters all the records that starts with the string in the property.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_filter_operations\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Sensors?$filter=startswith('name', 'Hack') eq true",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Sensors?$filter=startswith('name', 'Hack') eq true",
+            "success": "{\n    \"@iot.count\": 1,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Sensors(5)\",\n            \"@iot.id\": 5,\n            \"name\": \"Hack $debug=true Sensor\",\n            \"description\": \"Description of Hack $debug=true Sensor\",\n            \"encodingType\": \"text/html\",\n            \"metadata\": \"https://joy-it.net/en/products/link.html\",\n            \"properties\": null,\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Sensors(5)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Sensors(5)/MultiDatastreams\"\n        },\n        null,\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Things(:id) Length",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "This string function return the length of the parameters to be test in filter.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_filter_operations\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things?$filter=length(description) le 25",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things?$filter=length(description) le 25",
+            "success": "{\n    \"@iot.count\": 3,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Things(7)\",\n            \"@iot.id\": 7,\n            \"name\": \"Outlet E30\",\n            \"description\": \"Watershed outlet of Puits\",\n            \"properties\": null,\n            \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(7)/Locations\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(7)/HistoricalLocations\",\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(7)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(7)/MultiDatastreams\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Things(12)\",\n            \"@iot.id\": 12,\n            \"name\": \"Thing test\",\n            \"description\": \"Create Thing inside tests\",\n            \"properties\": {\n                \"owner\": \"Mozilla\",\n                \"organization\": \"Mozilla\"\n            },\n            \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(12)/Locations\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(12)/HistoricalLocations\",\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(12)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(12)/MultiDatastreams\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "indexof",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "This string function return the index of the parameters in the column.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_filter_operations\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things?$filter=indexof('name', 'Piezo') eq 1",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things?$filter=indexof('name', 'Piezo') eq 1",
+            "success": "{\n    \"@iot.count\": 2,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Things(9)\",\n            \"@iot.id\": 9,\n            \"name\": \"Piezo F5b\",\n            \"description\": \"Watershed F5b piezometer of Kerrien\",\n            \"properties\": null,\n            \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(9)/Locations\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(9)/HistoricalLocations\",\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(9)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(9)/MultiDatastreams\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Things(10)\",\n            \"@iot.id\": 10,\n            \"name\": \"Piezometer F4\",\n            \"description\": \"Watershed F4 piezometer of Kerrien\",\n            \"properties\": null,\n            \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(10)/Locations\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(10)/HistoricalLocations\",\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(10)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(10)/MultiDatastreams\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Things substring(str, nb)",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "This string function filters all the records that contain with part of the string extract all characters from a particular position of a column name .  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_filter_operations\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things?$filter=substring('name', 1) eq 'hing with new Location test'",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things?$filter=substring('name', 1) eq 'hing with new Location test'",
+            "success": "{\n    \"@iot.count\": 1,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Things(13)\",\n            \"@iot.id\": 13,\n            \"name\": \"Thing with new Location test\",\n            \"description\": \"Create Thing with new location inside tests\",\n            \"properties\": {\n                \"Case Used\": \"Radiation shield\",\n                \"Deployment Condition\": \"Deployed in a third floor balcony\"\n            },\n            \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(13)/Locations\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(13)/HistoricalLocations\",\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(13)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(13)/MultiDatastreams\"\n        },\n        null,\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Things substring(str, index, nb)",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "This string function filters all the records that contain with part of the string extract by specific number of characters from a particular position of a column name .  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_filter_operations\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things?$filter=substring('description', 10, 6) eq 'outlet'",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things?$filter=substring('description', 10, 6) eq 'outlet'",
+            "success": "{\n    \"@iot.count\": 2,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Things(7)\",\n            \"@iot.id\": 7,\n            \"name\": \"Outlet E30\",\n            \"description\": \"Watershed outlet of Puits\",\n            \"properties\": null,\n            \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(7)/Locations\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(7)/HistoricalLocations\",\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(7)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(7)/MultiDatastreams\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Things(8)\",\n            \"@iot.id\": 8,\n            \"name\": \"Outlet Exutoire\",\n            \"description\": \"Watershed outlet of Kervidy\",\n            \"properties\": null,\n            \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(8)/Locations\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(8)/HistoricalLocations\",\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(8)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(8)/MultiDatastreams\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Things toLower",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "This string function return string whose characters are going to be converted to lowercase.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_filter_operations\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things?$filter=tolower('name') eq 'piezo f5b'",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things?$filter=tolower('name') eq 'piezo f5b'",
+            "success": "{\n    \"@iot.count\": 1,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Things(9)\",\n            \"@iot.id\": 9,\n            \"name\": \"Piezo F5b\",\n            \"description\": \"Watershed F5b piezometer of Kerrien\",\n            \"properties\": null,\n            \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(9)/Locations\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(9)/HistoricalLocations\",\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(9)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(9)/MultiDatastreams\"\n        },\n        null,\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Things toUpper",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "This string function return string whose characters are going to be converted to uppercase.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_filter_operations\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things?$filter=toupper('name') eq 'PIEZOMETER F4'",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things?$filter=toupper('name') eq 'PIEZOMETER F4'",
+            "success": "{\n    \"@iot.count\": 1,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Things(10)\",\n            \"@iot.id\": 10,\n            \"name\": \"Piezometer F4\",\n            \"description\": \"Watershed F4 piezometer of Kerrien\",\n            \"properties\": null,\n            \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(10)/Locations\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(10)/HistoricalLocations\",\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(10)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(10)/MultiDatastreams\"\n        },\n        null,\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Things trim",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "This string function return string with removed spaces from both side from a string.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_filter_operations\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things?$filter=trim('name') eq 'Piezo F5b'",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things?$filter=trim('name') eq 'Piezo F5b'",
+            "success": "{\n    \"@iot.count\": 1,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Things(9)\",\n            \"@iot.id\": 9,\n            \"name\": \"Piezo F5b\",\n            \"description\": \"Watershed F5b piezometer of Kerrien\",\n            \"properties\": null,\n            \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(9)/Locations\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(9)/HistoricalLocations\",\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(9)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(9)/MultiDatastreams\"\n        },\n        null,\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Things concat",
+            "type": "get",
+            "version": "1.1.0",
+            "description": " \tThe concat function returns a string that appends the second input parameter string value to the first.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_filter_operations\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Things?$filter=concat('name', 'test') eq 'Piezometer F4test'",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Things?$filter=concat('name', 'test') eq 'Piezometer F4test'",
+            "success": "{\n    \"@iot.count\": 1,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Things(10)\",\n            \"@iot.id\": 10,\n            \"name\": \"Piezometer F4\",\n            \"description\": \"Watershed F4 piezometer of Kerrien\",\n            \"properties\": null,\n            \"Locations@iot.navigationLink\": \"proxy/v1.1/Things(10)/Locations\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Things(10)/HistoricalLocations\",\n            \"Datastreams@iot.navigationLink\": \"proxy/v1.1/Things(10)/Datastreams\",\n            \"MultiDatastreams@iot.navigationLink\": \"proxy/v1.1/Things(10)/MultiDatastreams\"\n        },\n        null,\n        \"...\"\n    ]\n}"
+        }
+    ],
+    "BuiltInDate": [
+        {
+            "short": "BuiltInDate Infos",
+            "type": "infos",
+            "version": "1.1.0",
+            "description": "The OGC SensorThings API supports a set of functions that can be used with the $filter or $orderby query operations. The following table lists the available functions and they follows the OData Canonical function definitions listed in Section 5.1.1.4 of the [OData Version 4.0 Part 2: URL Conventions] and the syntax rules for these functions are defined in [OData Version 4.0 ABNF].  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions\" target=\"_blank\">[OGC reference]</a>",
+            "request": ""
+        },
+        {
+            "short": "Observations Year",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Stean have a multitude date an  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$filter=resultTime eq 2017-01-13",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$filter=resultTime eq 2017-01-13",
+            "success": "{\n    \"@iot.count\": 2,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(530)\",\n            \"@iot.id\": 530,\n            \"phenomenonTime\": \"2017-01-13T11:20:00+01:00\",\n            \"result\": 90,\n            \"resultTime\": \"2017-01-13T11:20:00+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.859471+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(530)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(530)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(530)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(531)\",\n            \"@iot.id\": 531,\n            \"phenomenonTime\": \"2017-01-13T11:21:00+01:00\",\n            \"result\": 91,\n            \"resultTime\": \"2017-01-13T11:21:00+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.86479+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(531)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(531)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(531)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Observations Year",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "The year function returns the year component of the Date or DateTimeOffset parameter value, evaluated in the time zone of the DateTimeOffset parameter value.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$filter=year(resultTime) eq 2017",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$filter=year(resultTime) eq 2017",
+            "success": "{\n    \"@iot.count\": 8,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(530)\",\n            \"@iot.id\": 530,\n            \"phenomenonTime\": \"2017-01-13T11:20:00+01:00\",\n            \"result\": 90,\n            \"resultTime\": \"2017-01-13T11:20:00+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.859471+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(530)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(530)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(530)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(531)\",\n            \"@iot.id\": 531,\n            \"phenomenonTime\": \"2017-01-13T11:21:00+01:00\",\n            \"result\": 91,\n            \"resultTime\": \"2017-01-13T11:21:00+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.86479+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(531)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(531)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(531)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Observations Month",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "The month function returns the month component of the Date or DateTimeOffset parameter value, evaluated in the time zone of the DateTimeOffset parameter value.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$filter=month(resultTime) eq 2",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$filter=month(resultTime) eq 2",
+            "success": "{\n    \"@iot.count\": 6,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(525)\",\n            \"@iot.id\": 525,\n            \"phenomenonTime\": \"2017-02-07T19:02:00+01:00\",\n            \"result\": 21.6,\n            \"resultTime\": \"2017-02-07T19:02:05+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:55.96259+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(525)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(525)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(525)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(526)\",\n            \"@iot.id\": 526,\n            \"phenomenonTime\": \"2017-02-07T19:02:00+01:00\",\n            \"result\": 21.6,\n            \"resultTime\": \"2017-02-07T19:02:05+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.025629+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(526)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(526)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(526)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Observations Day",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "The day function returns the day component Date or DateTimeOffset parameter value, evaluated in the time zone of the DateTimeOffset parameter value.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$filter=day(resultTime) eq 5",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$filter=day(resultTime) eq 5",
+            "success": "{\n    \"@iot.count\": 26,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(495)\",\n            \"@iot.id\": 495,\n            \"phenomenonTime\": \"2024-06-05T00:00:01+02:00\",\n            \"result\": [\n                32.65,\n                15.149,\n                null\n            ],\n            \"resultTime\": \"2024-06-05T00:00:01+02:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:51.067377+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(495)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(495)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(495)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(496)\",\n            \"@iot.id\": 496,\n            \"phenomenonTime\": \"2024-06-05T00:15:01+02:00\",\n            \"result\": 4.6077656745910645,\n            \"resultTime\": \"2024-06-05T00:15:01+02:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:51.067377+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(496)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(496)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(496)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Observations Hour",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "The hour function returns the hour component of the DateTimeOffset or TimeOfDay parameter value, evaluated in the time zone of the DateTimeOffset parameter value.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$filter=hour(resultTime) eq 12",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$filter=hour(resultTime) eq 12",
+            "success": "{\n    \"@iot.count\": 20,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(43)\",\n            \"@iot.id\": 43,\n            \"phenomenonTime\": \"2023-03-01T12:00:01+01:00\",\n            \"result\": [\n                26,\n                6.06\n            ],\n            \"resultTime\": \"2023-03-01T12:00:01+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:51.067377+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(43)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(43)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(43)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(44)\",\n            \"@iot.id\": 44,\n            \"phenomenonTime\": \"2023-03-01T12:15:01+01:00\",\n            \"result\": [\n                27,\n                7.07\n            ],\n            \"resultTime\": \"2023-03-01T12:15:01+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:51.067377+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(44)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(44)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(44)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Observations minute",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "The minute function returns the minute component of the DateTimeOffset or TimeOfDay parameter value, evaluated in the time zone of the DateTimeOffset parameter value.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$filter=minute(resultTime) eq 45",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$filter=minute(resultTime) eq 45",
+            "success": "{\n    \"@iot.count\": 130,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(2)\",\n            \"@iot.id\": 2,\n            \"phenomenonTime\": \"2023-03-01T01:45:01+01:00\",\n            \"result\": 210,\n            \"resultTime\": \"2023-03-01T01:45:01+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:51.067377+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(2)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(2)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(2)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(6)\",\n            \"@iot.id\": 6,\n            \"phenomenonTime\": \"2023-03-01T02:45:01+01:00\",\n            \"result\": 250,\n            \"resultTime\": \"2023-03-01T02:45:01+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:51.067377+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(6)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(6)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(6)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Observations second",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "The second function returns the second component (without the fractional part) of the DateTimeOffset or TimeOfDay parameter value.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$filter=second(resultTime) ge 40",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$filter=second(resultTime) ge 40",
+            "success": "{\n    \"@iot.count\": 2,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(559)\",\n            \"@iot.id\": 559,\n            \"phenomenonTime\": \"2021-10-15T14:53:44+02:00\",\n            \"result\": [\n                100,\n                25\n            ],\n            \"resultTime\": \"2021-10-15T14:53:44+02:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:57.73804+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(559)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(559)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(559)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(558)\",\n            \"@iot.id\": 558,\n            \"phenomenonTime\": \"2021-10-18T14:53:44+02:00\",\n            \"result\": [\n                18.75,\n                16.946\n            ],\n            \"resultTime\": \"2021-10-18T14:53:44+02:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:57.625469+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(558)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(558)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(558)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Observations date",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "The date function returns the date part of the DateTimeOffset parameter value, evaluated in the time zone of the DateTimeOffset parameter value.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$filter=date(resultTime) eq date(phenomenonTime)",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$filter=date(resultTime) eq date(phenomenonTime)",
+            "success": "{\n    \"@iot.count\": 530,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(530)\",\n            \"@iot.id\": 530,\n            \"phenomenonTime\": \"2017-01-13T11:20:00+01:00\",\n            \"result\": 90,\n            \"resultTime\": \"2017-01-13T11:20:00+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.859471+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(530)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(530)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(530)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(531)\",\n            \"@iot.id\": 531,\n            \"phenomenonTime\": \"2017-01-13T11:21:00+01:00\",\n            \"result\": 91,\n            \"resultTime\": \"2017-01-13T11:21:00+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.86479+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(531)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(531)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(531)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Observations time",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "The time function returns the time part of the DateTimeOffset parameter value, evaluated in the time zone of the DateTimeOffset parameter value.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$filter=time(resultTime) ne time(phenomenonTime)",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$filter=time(resultTime) ne time(phenomenonTime)",
+            "success": "{\n    \"@iot.count\": 4,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(525)\",\n            \"@iot.id\": 525,\n            \"phenomenonTime\": \"2017-02-07T19:02:00+01:00\",\n            \"result\": 21.6,\n            \"resultTime\": \"2017-02-07T19:02:05+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:55.96259+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(525)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(525)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(525)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(526)\",\n            \"@iot.id\": 526,\n            \"phenomenonTime\": \"2017-02-07T19:02:00+01:00\",\n            \"result\": 21.6,\n            \"resultTime\": \"2017-02-07T19:02:05+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.025629+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(526)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(526)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(526)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Observations Now()",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "The now function returns the current point in time (date and time with time zone) as a DateTimeOffset value.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$filter=resultTime le now()",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$filter=resultTime le now()",
+            "success": "{\n    \"@iot.count\": 530,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(530)\",\n            \"@iot.id\": 530,\n            \"phenomenonTime\": \"2017-01-13T11:20:00+01:00\",\n            \"result\": 90,\n            \"resultTime\": \"2017-01-13T11:20:00+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.859471+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(530)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(530)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(530)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(531)\",\n            \"@iot.id\": 531,\n            \"phenomenonTime\": \"2017-01-13T11:21:00+01:00\",\n            \"result\": 91,\n            \"resultTime\": \"2017-01-13T11:21:00+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.86479+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(531)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(531)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(531)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        }
+    ],
+    "BuiltInMath": [
+        {
+            "short": "BuiltInMath Infos",
+            "type": "infos",
+            "version": "1.1.0",
+            "description": "The OGC SensorThings API supports a set of functions that can be used with the $filter or $orderby query operations. The following table lists the available functions and they follows the OData Canonical function definitions listed in Section 5.1.1.4 of the [OData Version 4.0 Part 2: URL Conventions] and the syntax rules for these functions are defined in [OData Version 4.0 ABNF].  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions\" target=\"_blank\">[OGC reference]</a>",
+            "request": ""
+        },
+        {
+            "short": "Observations Round",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "The round function rounds the input numeric parameter to the nearest numeric value with no decimal component. The mid-point between two integers is rounded away from zero, i.e. 0.5 is rounded to 1 and ‑0.5 is rounded to -1.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$filter=round(result) eq 63",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$filter=round(result) eq 63",
+            "success": "{\n    \"@iot.count\": 3,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(314)\",\n            \"@iot.id\": 314,\n            \"phenomenonTime\": \"2024-06-03T02:45:01+02:00\",\n            \"result\": 62.9,\n            \"resultTime\": \"2024-06-03T02:45:01+02:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:51.067377+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(314)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(314)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(314)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(317)\",\n            \"@iot.id\": 317,\n            \"phenomenonTime\": \"2024-06-03T03:30:01+02:00\",\n            \"result\": 63.15,\n            \"resultTime\": \"2024-06-03T03:30:01+02:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:51.067377+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(317)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(317)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(317)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Observations Floor",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "The floor function rounds the input numeric parameter down to the nearest numeric value with no decimal component. The floorMethodCallExpr syntax rule defines how the floor function is invoked.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$filter=floor(result) eq 63",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$filter=floor(result) eq 63",
+            "success": "{\n    \"@iot.count\": 1,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(317)\",\n            \"@iot.id\": 317,\n            \"phenomenonTime\": \"2024-06-03T03:30:01+02:00\",\n            \"result\": 63.15,\n            \"resultTime\": \"2024-06-03T03:30:01+02:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:51.067377+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(317)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(317)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(317)/FeatureOfInterest\"\n        },\n        null,\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Observations Ceiling",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "The ceiling function rounds the input numeric parameter up to the nearest numeric value with no decimal component. The ceilingMethodCallExpr syntax rule defines how the ceiling function is invoked.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions\" target=\"_blank\">[OGC reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$filter=ceiling(result) eq 63",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$filter=ceiling(result) eq 63",
+            "success": "{\n    \"@iot.count\": 3,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(257)\",\n            \"@iot.id\": 257,\n            \"phenomenonTime\": \"2024-06-02T12:30:01+02:00\",\n            \"result\": 62.4,\n            \"resultTime\": \"2024-06-02T12:30:01+02:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:51.067377+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(257)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(257)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(257)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(314)\",\n            \"@iot.id\": 314,\n            \"phenomenonTime\": \"2024-06-03T02:45:01+02:00\",\n            \"result\": 62.9,\n            \"resultTime\": \"2024-06-03T02:45:01+02:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:51.067377+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(314)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(314)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(314)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        }
+    ],
+    "BuiltInGeospatial": [
+        {
+            "short": "BuiltInGeospatial Infos",
+            "type": "infos",
+            "version": "1.1.0",
+            "description": " Geospatial functions work on all geospatial fields (Location/location and FeatureOfInterest/feature) and on geospatial constants. Geospatial constants can be specified by using WKT enclosed in geography'…', for example:.  <a href=\"https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions\" target=\"_blank\">[OGC reference]</a>",
+            "request": ""
+        },
+        {
+            "short": "Location Distance location",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "geo.distance(g1, g2) number : Returns the distance between g1 and g2 in the units of the server (generally degrees)  <a href=\"https://postgis.net/docs/ST_Distance.html\" target=\"_blank\">[reference]</a>",
+            "examples": {
+                "http": "v1.1/Locations?$filter=geo.distance(location, geography'POINT(-1.6567440482485551 48.11256463781973)') lt 0.11",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Locations?$filter=geo.distance(location, geography'POINT(-1.6567440482485551 48.11256463781973)') lt 0.11",
+            "success": "{\n    \"@iot.count\": 1,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Locations(7)\",\n            \"@iot.id\": 7,\n            \"name\": \"Institut Agro\",\n            \"description\": \"Institut Agro Rennes-Angers\",\n            \"encodingType\": \"application/geo+json\",\n            \"location\": {\n                \"type\": \"Point\",\n                \"coordinates\": [\n                    -1.6567440482485551,\n                    48.11256463781973\n                ]\n            },\n            \"properties\": null,\n            \"geom\": null,\n            \"Things@iot.navigationLink\": \"proxy/v1.1/Locations(7)/Things\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Locations(7)/HistoricalLocations\"\n        },\n        null,\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "FOI Distance Foi",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "geo.distance(g1, g2) number : Returns the distance between g1 and g2 in the units of the server (generally degrees)  <a href=\"https://postgis.net/docs/ST_Distance.html\" target=\"_blank\">[reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$filter=geo.distance(FeatureOfInterest/feature,geography'POINT(-4.108433416883344 47.99535576613954)') ge 1",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$filter=geo.distance(FeatureOfInterest/feature,geography'POINT(-4.108433416883344 47.99535576613954)') ge 1",
+            "success": "{\n    \"@iot.count\": 2,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(526)\",\n            \"@iot.id\": 526,\n            \"phenomenonTime\": \"2017-02-07T19:02:00+01:00\",\n            \"result\": 21.6,\n            \"resultTime\": \"2017-02-07T19:02:05+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.025629+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(526)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(526)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(526)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(528)\",\n            \"@iot.id\": 528,\n            \"phenomenonTime\": \"2017-02-07T19:02:00+01:00\",\n            \"result\": 21.6,\n            \"resultTime\": \"2017-02-07T19:02:05+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.111545+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(528)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(528)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(528)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Location Length location",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "geo.length(g1) number : geo.length(location) lt 2 matches all locations that are linestrings with a length less than 2 degrees  <a href=\"https://postgis.net/docs/ST_Length.html\" target=\"_blank\">[reference]</a>",
+            "examples": {
+                "http": "v1.1/Locations?$filter=geo.length(location,'POINT(-1.6571736839366906 48.112731020713284)') lt 1",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Locations?$filter=geo.length(location,'POINT(-1.6571736839366906 48.112731020713284)') lt 1",
+            "success": "{\n    \"@iot.count\": 4,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Locations(3)\",\n            \"@iot.id\": 3,\n            \"name\": \"This is the stean's Location\",\n            \"description\": \"Description of This is the stean's Location\",\n            \"encodingType\": \"application/geo+json\",\n            \"location\": {\n                \"type\": \"Point\",\n                \"coordinates\": [\n                    -1.54241217683861,\n                    47.223625061665274\n                ]\n            },\n            \"properties\": null,\n            \"geom\": null,\n            \"Things@iot.navigationLink\": \"proxy/v1.1/Locations(3)/Things\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Locations(3)/HistoricalLocations\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Locations(7)\",\n            \"@iot.id\": 7,\n            \"name\": \"Institut Agro\",\n            \"description\": \"Institut Agro Rennes-Angers\",\n            \"encodingType\": \"application/geo+json\",\n            \"location\": {\n                \"type\": \"Point\",\n                \"coordinates\": [\n                    -1.6567440482485551,\n                    48.11256463781973\n                ]\n            },\n            \"properties\": null,\n            \"geom\": null,\n            \"Things@iot.navigationLink\": \"proxy/v1.1/Locations(7)/Things\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Locations(7)/HistoricalLocations\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Location Length Foi",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "geo.length(g1) number : geo.length(location) lt 2 matches all locations that are linestrings with a length less than 2 degrees  <a href=\"https://postgis.net/docs/ST_Length.html\" target=\"_blank\">[reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$filter=geo.length(FeatureOfInterest/feature,'POINT(-1.6571736839366906 48.112731020713284)') lt 1",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$filter=geo.length(FeatureOfInterest/feature,'POINT(-1.6571736839366906 48.112731020713284)') lt 1",
+            "success": "{\n    \"@iot.count\": 2,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(526)\",\n            \"@iot.id\": 526,\n            \"phenomenonTime\": \"2017-02-07T19:02:00+01:00\",\n            \"result\": 21.6,\n            \"resultTime\": \"2017-02-07T19:02:05+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.025629+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(526)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(526)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(526)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(528)\",\n            \"@iot.id\": 528,\n            \"phenomenonTime\": \"2017-02-07T19:02:00+01:00\",\n            \"result\": 21.6,\n            \"resultTime\": \"2017-02-07T19:02:05+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.111545+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(528)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(528)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(528)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Location Intersects location",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "geo.intersects(g1, g2) bool : Returns true if g1 intersects g2 geo.intersects(location, geography'POLYGON ((30 10, 10 20, 20 40, 40 40, 30 10))')  <a href=\"https://postgis.net/docs/ST_Intersects.html\" target=\"_blank\">[reference]</a>",
+            "examples": {
+                "http": "v1.1/Locations?$filter=geo.intersects(location,'LINESTRING(-1.6567440482485551 48.11256463781973, -4.108433416883344 47.99535576613954)')",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Locations?$filter=geo.intersects(location,'LINESTRING(-1.6567440482485551 48.11256463781973, -4.108433416883344 47.99535576613954)')",
+            "success": "{\n    \"@iot.count\": 1,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Locations(1)\",\n            \"@iot.id\": 1,\n            \"name\": \"On the Moon\",\n            \"description\": \"Climatic chamber location\",\n            \"encodingType\": \"application/geo+json\",\n            \"location\": {\n                \"type\": \"Point\",\n                \"coordinates\": [\n                    -4.108433416883344,\n                    47.99535576613954\n                ]\n            },\n            \"properties\": null,\n            \"geom\": null,\n            \"Things@iot.navigationLink\": \"proxy/v1.1/Locations(1)/Things\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Locations(1)/HistoricalLocations\"\n        },\n        null,\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "FOI Intersects Foi",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "geo.intersects(g1, g2) bool : Returns true if g1 intersects g2 geo.intersects(location, geography'POLYGON ((30 10, 10 20, 20 40, 40 40, 30 10))')  <a href=\"https://postgis.net/docs/ST_Intersects.html\" target=\"_blank\">[reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$filter=geo.intersects(FeatureOfInterest/feature, 'LINESTRING(-1.202481228298467 48.35475608212215, -4.108433416883344 47.99535576613954)')",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$filter=geo.intersects(FeatureOfInterest/feature, 'LINESTRING(-1.202481228298467 48.35475608212215, -4.108433416883344 47.99535576613954)')",
+            "success": "{\n    \"@iot.count\": 1,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(526)\",\n            \"@iot.id\": 526,\n            \"phenomenonTime\": \"2017-02-07T19:02:00+01:00\",\n            \"result\": 21.6,\n            \"resultTime\": \"2017-02-07T19:02:05+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.025629+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(526)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(526)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(526)/FeatureOfInterest\"\n        },\n        null,\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Location Within location",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "geo.within(g1, g2) bool : Returns true if g1 is within g2 geo.within(location, geography'POLYGON ((30 10, 10 20, 20 40, 40 40, 30 10))')  <a href=\"https://postgis.net/docs/ST_Within.html\" target=\"_blank\">[reference]</a>",
+            "examples": {
+                "http": "v1.1/Locations?$filter=geo.within(location, geography'POINT(-4.108433416883344 47.99535576613954)')",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Locations?$filter=geo.within(location, geography'POINT(-4.108433416883344 47.99535576613954)')",
+            "success": "{\n    \"@iot.count\": 1,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Locations(1)\",\n            \"@iot.id\": 1,\n            \"name\": \"On the Moon\",\n            \"description\": \"Climatic chamber location\",\n            \"encodingType\": \"application/geo+json\",\n            \"location\": {\n                \"type\": \"Point\",\n                \"coordinates\": [\n                    -4.108433416883344,\n                    47.99535576613954\n                ]\n            },\n            \"properties\": null,\n            \"geom\": null,\n            \"Things@iot.navigationLink\": \"proxy/v1.1/Locations(1)/Things\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Locations(1)/HistoricalLocations\"\n        },\n        null,\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Location Within Foi",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "geo.within(g1, g2) bool : Returns true if g1 is within g2 geo.within(location, geography'POLYGON ((30 10, 10 20, 20 40, 40 40, 30 10))')  <a href=\"https://postgis.net/docs/ST_Within.html\" target=\"_blank\">[reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$filter=geo.within(FeatureOfInterest/feature, geography'POINT(-1.202481228298467 48.354756082122154)')",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$filter=geo.within(FeatureOfInterest/feature, geography'POINT(-1.202481228298467 48.354756082122154)')",
+            "success": "{\n    \"@iot.count\": 1,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(526)\",\n            \"@iot.id\": 526,\n            \"phenomenonTime\": \"2017-02-07T19:02:00+01:00\",\n            \"result\": 21.6,\n            \"resultTime\": \"2017-02-07T19:02:05+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.025629+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(526)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(526)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(526)/FeatureOfInterest\"\n        },\n        null,\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Location Disjoint location",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "geo.disjoint(g1, g2) bool : Returns true if g1 is separated from g2 geo.disjoint(location, geography'POLYGON ((30 10, 10 20, 20 40, 40 40, 30 10))')  <a href=\"https://postgis.net/docs/ST_Disjoint.html\" target=\"_blank\">[reference]</a>",
+            "examples": {
+                "http": "v1.1/Locations?$filter=geo.disjoint(location,'MULTIPOINT(-3.377509239138959 47.74736066059859, -1.6567440482485551 48.11256463781973, -4.108433416883344 47.99535576613954)')",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Locations?$filter=geo.disjoint(location,'MULTIPOINT(-3.377509239138959 47.74736066059859, -1.6567440482485551 48.11256463781973, -4.108433416883344 47.99535576613954)')",
+            "success": "{\n    \"@iot.count\": 14,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Locations(2)\",\n            \"@iot.id\": 2,\n            \"name\": \"classic Location\",\n            \"description\": \"Description of classic Location\",\n            \"encodingType\": \"application/geo+json\",\n            \"location\": {\n                \"type\": \"Point\",\n                \"coordinates\": [\n                    -0.5528847276950444,\n                    47.46996912080425\n                ]\n            },\n            \"properties\": null,\n            \"geom\": null,\n            \"Things@iot.navigationLink\": \"proxy/v1.1/Locations(2)/Things\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Locations(2)/HistoricalLocations\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Locations(3)\",\n            \"@iot.id\": 3,\n            \"name\": \"This is the stean's Location\",\n            \"description\": \"Description of This is the stean's Location\",\n            \"encodingType\": \"application/geo+json\",\n            \"location\": {\n                \"type\": \"Point\",\n                \"coordinates\": [\n                    -1.54241217683861,\n                    47.223625061665274\n                ]\n            },\n            \"properties\": null,\n            \"geom\": null,\n            \"Things@iot.navigationLink\": \"proxy/v1.1/Locations(3)/Things\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Locations(3)/HistoricalLocations\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Location Disjoint Observations",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "geo.disjoint(g1, g2) bool : Returns true if g1 is separated from g2 geo.disjoint(location, geography'POLYGON ((30 10, 10 20, 20 40, 40 40, 30 10))')  <a href=\"https://postgis.net/docs/ST_Disjoint.html\" target=\"_blank\">[reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$filter=geo.disjoint(FeatureOfInterest/feature,'MULTIPOINT(-3.377509239138959 47.74736066059859, -1.6567440482485551 48.11256463781973, -4.108433416883344 47.99535576613954)')",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$filter=geo.disjoint(FeatureOfInterest/feature,'MULTIPOINT(-3.377509239138959 47.74736066059859, -1.6567440482485551 48.11256463781973, -4.108433416883344 47.99535576613954)')",
+            "success": "{\n    \"@iot.count\": 2,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(526)\",\n            \"@iot.id\": 526,\n            \"phenomenonTime\": \"2017-02-07T19:02:00+01:00\",\n            \"result\": 21.6,\n            \"resultTime\": \"2017-02-07T19:02:05+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.025629+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(526)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(526)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(526)/FeatureOfInterest\"\n        },\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(528)\",\n            \"@iot.id\": 528,\n            \"phenomenonTime\": \"2017-02-07T19:02:00+01:00\",\n            \"result\": 21.6,\n            \"resultTime\": \"2017-02-07T19:02:05+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.111545+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(528)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(528)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(528)/FeatureOfInterest\"\n        },\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Location Equals location",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "geo.equals(g1, g2) bool : Returns true if g1 is the same as g2 geo.equals(location, geography'POINT (30 10)')  <a href=\"https://postgis.net/docs/ST_Equals.html\" target=\"_blank\">[reference]</a>",
+            "examples": {
+                "http": "v1.1/Locations?$filter=geo.equals(location,'POINT(-3.377509239138959 47.74736066059859)')",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Locations?$filter=geo.equals(location,'POINT(-3.377509239138959 47.74736066059859)')",
+            "success": "{\n    \"@iot.count\": 1,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Locations(5)\",\n            \"@iot.id\": 5,\n            \"name\": \"This is a speci@l ch@ract&r$ Location\",\n            \"description\": \"Description of This is a speci@l ch@ract&r$ Location\",\n            \"encodingType\": \"application/geo+json\",\n            \"location\": {\n                \"type\": \"Point\",\n                \"coordinates\": [\n                    -3.377509239138959,\n                    47.74736066059859\n                ]\n            },\n            \"properties\": null,\n            \"geom\": null,\n            \"Things@iot.navigationLink\": \"proxy/v1.1/Locations(5)/Things\",\n            \"HistoricalLocations@iot.navigationLink\": \"proxy/v1.1/Locations(5)/HistoricalLocations\"\n        },\n        null,\n        \"...\"\n    ]\n}"
+        },
+        {
+            "short": "Location Equals Foi",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "geo.equals(g1, g2) bool : Returns true if g1 is the same as g2 geo.equals(location, geography'POINT (30 10)')  <a href=\"https://postgis.net/docs/ST_Equals.html\" target=\"_blank\">[reference]</a>",
+            "examples": {
+                "http": "v1.1/Observations?$filter=geo.equals(FeatureOfInterest/feature,%27POINT(-1.202481228298467%2048.35475608212215)%27)",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Observations?$filter=geo.equals(FeatureOfInterest/feature,%27POINT(-1.202481228298467%2048.35475608212215)%27)",
+            "success": "{\n    \"@iot.count\": 1,\n    \"value\": [\n        {\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(526)\",\n            \"@iot.id\": 526,\n            \"phenomenonTime\": \"2017-02-07T19:02:00+01:00\",\n            \"result\": 21.6,\n            \"resultTime\": \"2017-02-07T19:02:05+01:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2025-05-23T16:57:56.025629+02:00\",\n            \"parameters\": null,\n            \"Datastream@iot.navigationLink\": \"proxy/v1.1/Observations(526)/Datastream\",\n            \"MultiDatastream@iot.navigationLink\": \"proxy/v1.1/Observations(526)/MultiDatastream\",\n            \"FeatureOfInterest@iot.navigationLink\": \"proxy/v1.1/Observations(526)/FeatureOfInterest\"\n        },\n        null,\n        \"...\"\n    ]\n}"
+        }
+    ],
+    "BuiltInMisc": [
+        {
+            "short": "BuiltInMisc Infos",
+            "type": "infos",
+            "version": "1.1.0",
+            "description": "Stean add some usefull function ",
+            "request": ""
+        },
+        {
+            "short": "Observations Interval",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "The interval keyword rounds the input postgresSql interval (see reference below) parameter to the nearest interval.  <a href=\"https://www.postgresql.org/docs/15/ecpg-pgtypes.html#ECPG-PGTYPES-INTERVAL\" target=\"_blank\">[reference]</a>",
+            "examples": {
+                "http": "v1.1/Datastreams(7)/Observations?$interval=1 hour",
+                "curl": "curl -GET \"proxyKEYHTTP\"",
+                "javascript": "const response = await fetch(\"proxyKEYHTTP\", {\r\n\tmethod: \"GET\",\r\n\theaders: {\r\n\t    \"Content-Type\": application/json,\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();",
+                "python": "import requests\r\nimport json\r\nresponse_API = requests.get('proxyKEYHTTP')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)"
+            },
+            "request": "proxyv1.1/Datastreams(7)/Observations?$interval=1 hour",
+            "success": "{\n    \"@iot.count\": 67,\n    \"value\": [\n        {\n            \"@iot.id\": 122,\n            \"phenomenonTime\": \"2024-06-01T03:00:00\",\n            \"result\": 55.95,\n            \"resultTime\": \"2024-06-01T03:00:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2024-06-01T03:00:00\",\n            \"parameters\": null,\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(122)\"\n        },\n        {\n            \"@iot.id\": 125,\n            \"phenomenonTime\": \"2024-06-01T04:00:00\",\n            \"result\": 56.15,\n            \"resultTime\": \"2024-06-01T04:00:00\",\n            \"resultQuality\": null,\n            \"validTime\": \"2024-06-01T04:00:00\",\n            \"parameters\": null,\n            \"@iot.selfLink\": \"proxy/v1.1/Observations(125)\"\n        },\n        \"...\"\n    ]\n}"
+        }
+    ],
+    "Import": [
+        {
+            "short": "Import Extension",
+            "type": "infos",
+            "version": "1.1.0",
+            "description": "<hr>\n    <div class=\"text\">\n      <p> You can import a csv file in observations. with one or multiple columns </p>\n    </div> ",
+            "request": ""
+        },
+        {
+            "short": "CreateObservations with simple csv attached file",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "Import simple csv file ",
+            "examples": {
+                "http": "v1.1/CreateObservations"
+            },
+            "params": {
+                "header": false,
+                "nan": true,
+                "columns": {
+                    "1": {
+                        "Datastream": 1,
+                        "FeaturesOfInterest": 1
+                    }
+                }
+            },
+            "request": "",
+            "success": "[\n    \"Add 12 on 12 lines from simple.csv\"\n]",
+            "error": "[\n    \"Add 0 on 12 lines from simple.csv\"\n]"
+        },
+        {
+            "short": "CreateObservations with multi csv attached file",
+            "type": "post",
+            "version": "1.1.0",
+            "description": "Import multi csv file ",
+            "examples": {
+                "http": "v1.1/CreateObservations"
+            },
+            "params": {
+                "header": true,
+                "nan": true,
+                "columns": {
+                    "1": {
+                        "Datastream": "1",
+                        "FeaturesOfInterest": "1"
+                    },
+                    "2": {
+                        "Datastream": "4",
+                        "FeaturesOfInterest": "2"
+                    }
+                }
+            },
+            "request": "",
+            "success": "[\n    \"Add 5 on 5 lines from multi.csv\"\n]",
+            "error": "[\n    \"Add 0 on 5 lines from multi.csv\"\n]"
+        }
+    ],
+    "Format": [
+        {
+            "short": "Format Extension",
+            "type": "infos",
+            "version": "1.1.0",
+            "description": "Format result json as default, dataArray, csv, txt,  graph or graphDatas, note that $value return result as text. ",
+            "request": ""
+        },
+        {
+            "short": "ResultFormat as csv",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Use $resultFormat=csv to get datas as csv format.<br><img class=\"tabLogo\" src=\"./assets/csv.jpg\" alt=\"csv result\"> ",
+            "examples": {
+                "http": "v1.1/Datastreams(1)/Observations?$top=20&$resultFormat=csv"
+            },
+            "request": "proxyv1.1/Datastreams(1)/Observations?$top=20&$resultFormat=csv",
+            "success": "@iot.id;phenomenonTime;result;resultTime;resultQuality;validTime;parameters\n560;1999-01-01 01:00:00+01;0;1999-01-01 01:00:00+01;\"{\"\"date\"\": \"\"23/05/2025 16:58:00\"\", \"\"import\"\": \"\"simple.csv\"\"}\";2025-05-23 16:58:00.417143+02;NULL\n561;1999-02-02 02:00:00+01;0.1;1999-02-02 02:00:00+01;\"{\"\"date\"\": \"\"23/05/2025 16:58:00\"\", \"\"import\"\": \"\"simple.csv\"\"}\";2025-05-23 16:58:00.417143+02;NULL\n562;1999-03-03 03:00:00+01;0.2;1999-03-03 03:00:00+01;\"{\"\"date\"\": \"\"23/05/2025 16:58:00\"\", \"\"import\"\": \"\"simple.csv\"\"}\";2025-05-23 16:58:00.417143+02;NULL\n563;1999-04-04 04:00:00+02;0.3;1999-04-04 04:00:00+02;\"{\"\"date\"\": \"\"23/05/2025 16:58:00\"\", \"\"import\"\": \"\"simple.csv\"\"}\";2025-05-23 16:58:00.417143+02;NULL\n564;1999-05-05 05:00:00+02;0.4;1999-05-05 05:00:00+02;\"{\"\"date\"\": \"\"23/05/2025 16:58:00\"\", \"\"import\"\": \"\"simple.csv\"\"}\";2025-05-23 16:58:00.417143+02;NULL\n565;1999-06-06 06:00:00+02;0.5;1999-06-06 06:00:00+02;\"{\"\"date\"\": \"\"23/05/2025 16:58:00\"\", \"\"import\"\": \"\"simple.csv\"\"}\";2025-05-23 16:58:00.417143+02;NULL\n566;1999-07-07 07:00:00+02;0.6;1999-07-07 07:00:00+02;\"{\"\"date\"\": \"\"23/05/2025 16:58:00\"\", \"\"import\"\": \"\"simple.csv\"\"}\";2025-05-23 16:58:00.417143+02;NULL\n567;1999-08-08 08:00:00+02;0.7;1999-08-08 08:00:00+02;\"{\"\"date\"\": \"\"23/05/2025 16:58:00\"\", \"\"import\"\": \"\"simple.csv\"\"}\";2025-05-23 16:58:00.417143+02;NULL\n568;1999-09-09 09:00:00+02;0.8;1999-09-09 09:00:00+02;\"{\"\"date\"\": \"\"23/05/2025 16:58:00\"\", \"\"import\"\": \"\"simple.csv\"\"}\";2025-05-23 16:58:00.417143+02;NULL\n569;1999-10-10 10:00:00+02;0.9;1999-10-10 10:00:00+02;\"{\"\"date\"\": \"\"23/05/2025 16:58:00\"\", \"\"import\"\": \"\"simple.csv\"\"}\";2025-05-23 16:58:00.417143+02;NULL\n570;1999-11-11 11:00:00+01;0.1;1999-11-11 11:00:00+01;\"{\"\"date\"\": \"\"23/05/2025 16:58:00\"\", \"\"import\"\": \"\"simple.csv\"\"}\";2025-05-23 16:58:00.417143+02;NULL\n571;1999-12-12 12:00:00+01;0.11;1999-12-12 12:00:00+01;\"{\"\"date\"\": \"\"23/05/2025 16:58:00\"\", \"\"import\"\": \"\"simple.csv\"\"}\";2025-05-23 16:58:00.417143+02;NULL\n584;2000-05-01 09:50:00+02;13.1;2000-05-01 09:50:00+02;\"{\"\"date\"\": \"\"23/05/2025 16:58:00\"\", \"\"import\"\": \"\"multi.csv\"\"}\";2025-05-23 16:58:00.532924+02;NULL\n585;2000-05-02 10:00:00+02;13.2;2000-05-02 10:00:00+02;\"{\"\"date\"\": \"\"23/05/2025 16:58:00\"\", \"\"import\"\": \"\"multi.csv\"\"}\";2025-05-23 16:58:00.532924+02;NULL\n586;2000-05-03 10:10:00+02;13.3;2000-05-03 10:10:00+02;\"{\"\"date\"\": \"\"23/05/2025 16:58:00\"\", \"\"import\"\": \"\"multi.csv\"\"}\";2025-05-23 16:58:00.532924+02;NULL\n587;2000-05-04 10:20:00+02;13.4;2000-05-04 10:20:00+02;\"{\"\"date\"\": \"\"23/05/2025 16:58:00\"\", \"\"import\"\": \"\"multi.csv\"\"}\";2025-05-23 16:58:00.532924+02;NULL\n588;2000-05-07 10:30:00+02;13.5;2000-05-07 10:30:00+02;\"{\"\"date\"\": \"\"23/05/2025 16:58:00\"\", \"\"import\"\": \"\"multi.csv\"\"}\";2025-05-23 16:58:00.532924+02;NULL\n530;2017-01-13 11:20:00+01;90;2017-01-13 11:20:00+01;NULL;2025-05-23 16:57:56.859471+02;NULL\n531;2017-01-13 11:21:00+01;91;2017-01-13 11:21:00+01;NULL;2025-05-23 16:57:56.86479+02;NULL\n532;2017-02-13 11:22:00+01;92;2017-02-13 11:22:00+01;NULL;2025-05-23 16:57:56.86938+02;NULL\n533;2017-02-13 11:23:00+01;93;2017-02-13 11:23:00+01;NULL;2025-05-23 16:57:56.872497+02;NULL\n1;2023-03-01 01:30:01+01;200;2023-03-01 01:30:01+01;NULL;2025-05-23 16:57:51.067377+02;NULL\n2;2023-03-01 01:45:01+01;210;2023-03-01 01:45:01+01;NULL;2025-05-23 16:57:51.067377+02;NULL\n3;2023-03-01 02:00:01+01;220;2023-03-01 02:00:01+01;NULL;2025-05-23 16:57:51.067377+02;NULL\n4;2023-03-01 02:15:01+01;230;2023-03-01 02:15:01+01;NULL;2025-05-23 16:57:51.067377+02;NULL\n5;2023-03-01 02:30:01+01;240;2023-03-01 02:30:01+01;NULL;2025-05-23 16:57:51.067377+02;NULL\n6;2023-03-01 02:45:01+01;250;2023-03-01 02:45:01+01;NULL;2025-05-23 16:57:51.067377+02;NULL\n7;2023-03-01 03:00:01+01;260;2023-03-01 03:00:01+01;NULL;2025-05-23 16:57:51.067377+02;NULL\n8;2023-03-01 03:15:01+01;270;2023-03-01 03:15:01+01;NULL;2025-05-23 16:57:51.067377+02;NULL\n9;2023-03-01 03:30:01+01;280;2023-03-01 03:30:01+01;NULL;2025-05-23 16:57:51.067377+02;NULL\n10;2023-03-01 03:45:01+01;290;2023-03-01 03:45:01+01;NULL;2025-05-23 16:57:51.067377+02;NULL\n11;2023-03-01 04:00:01+01;300;2023-03-01 04:00:01+01;NULL;2025-05-23 16:57:51.067377+02;NULL\n12;2023-03-01 04:15:01+01;310;2023-03-01 04:15:01+01;NULL;2025-05-23 16:57:51.067377+02;NULL\n"
+        },
+        {
+            "short": "Things as dataArray",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Use $resultFormat=dataArray to get datas as dataArray format. ",
+            "examples": {
+                "http": "v1.1/Things?$resultFormat=dataArray"
+            },
+            "request": "proxyv1.1/Things?$resultFormat=dataArray",
+            "success": "[\n    {\n        \"component\": [\n            \"@iot.id\",\n            \"name\",\n            \"description\",\n            \"properties\"\n        ],\n        \"dataArray@iot.count\": 16,\n        \"dataArray\": [\n            [\n                1,\n                \"classic Thing\",\n                \"Description of classic Thing\",\n                null\n            ],\n            [\n                2,\n                \"This is the stean's Thing\",\n                \"Description of This is the stean's Thing\",\n                {\n                    \"owner\": \"Mozilla version one\",\n                    \"organization\": \"Mozilla\"\n                }\n            ],\n            \" ... \"\n        ]\n    }\n]"
+        },
+        {
+            "short": "Observations as dataArray",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Use $resultFormat=dataArray to get datas as dataArray format. ",
+            "examples": {
+                "http": "v1.1/Datastreams(1)/Observations?$resultFormat=dataArray&$select=id,result"
+            },
+            "request": "proxyv1.1/Datastreams(1)/Observations?$resultFormat=dataArray&$select=id,result",
+            "success": "[\n    {\n        \"component\": [\n            \"@iot.id\",\n            \"result\"\n        ],\n        \"dataArray@iot.count\": 33,\n        \"dataArray\": [\n            [\n                560,\n                0\n            ],\n            [\n                561,\n                0.1\n            ],\n            \" ... \"\n        ]\n    }\n]"
+        },
+        {
+            "short": "ResultFormat as graph",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Use $resultFormat=graph to get datas into graphical representation.<br><img class=\"tabLogo\" src=\"./assets/graph.png\" alt=\"graph result\"> ",
+            "examples": {
+                "http": "v1.1/Datastreams(1)/Observations?$resultFormat=graph"
+            },
+            "request": "proxyv1.1/Datastreams(1)/Observations?$resultFormat=graph",
+            "success": "{}"
+        },
+        {
+            "short": "ResultFormat as graphDatas",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Use $resultFormat=graphDatas to get datas into echarts compatible format.  <a href=\"https://echarts.apache.org/en/index.html\" target=\"_blank\">[reference]</a>",
+            "examples": {
+                "http": "v1.1/Datastreams(1)/Observations?$resultFormat=graphDatas"
+            },
+            "request": "proxyv1.1/Datastreams(1)/Observations?$resultFormat=graphDatas",
+            "success": "[\n    {\n        \"infos\": \"Description of classic Datastream|classic unit of measurement|\",\n        \"datas\": \"[new Date(\\\"1999/01/01 01:00\\\"), 0],[new Date(\\\"1999/02/02 02:00\\\"), 0.1],[new Date(\\\"1999/03/03 03:00\\\"), 0.2],[new Date(\\\"1999/04/04 04:00\\\"), 0.3],[new Date(\\\"1999/05/05 05:00\\\"), 0.4],[new Date(\\\"1999/06/06 06:00\\\"), 0.5],[new Date(\\\"1999/07/07 07:00\\\"), 0.6],[new Date(\\\"1999/08/08 08:00\\\"), 0.7],[new Date(\\\"1999/09/09 09:00\\\"), 0.8],[new Date(\\\"1999/10/10 10:00\\\"), 0.9],[new Date(\\\"1999/11/11 11:00\\\"), 0.1],[new Date(\\\"1999/12/12 12:00\\\"), 0.11],[new Date(\\\"2000/05/01 09:50\\\"), 13.1],[new Date(\\\"2000/05/02 10:00\\\"), 13.2],[new Date(\\\"2000/05/03 10:10\\\"), 13.3],[new Date(\\\"2000/05/04 10:20\\\"), 13.4],[new Date(\\\"2000/05/07 10:30\\\"), 13.5],[new Date(\\\"2017/01/13 11:20\\\"), 90],[new Date(\\\"2017/01/13 11:21\\\"), 91],[new Date(\\\"2017/02/13 11:22\\\"), 92],[new Date(\\\"2017/02/13 11:23\\\"), 93],[new Date(\\\"2023/03/01 01:30\\\"), 200],[new Date(\\\"2023/03/01 01:45\\\"), 210],[new Date(\\\"2023/03/01 02:00\\\"), 220],[new Date(\\\"2023/03/01 02:15\\\"), 230],[new Date(\\\"2023/03/01 02:30\\\"), 240],[new Date(\\\"2023/03/01 02:45\\\"), 250],[new Date(\\\"2023/03/01 03:00\\\"), 260],[new Date(\\\"2023/03/01 03:15\\\"), 270],[new Date(\\\"2023/03/01 03:30\\\"), 280],[new Date(\\\"2023/03/01 03:45\\\"), 290],[new Date(\\\"2023/03/01 04:00\\\"), 300],[new Date(\\\"2023/03/01 04:15\\\"), 310]\"\n    }\n]"
+        },
+        {
+            "short": "ResultFormat as GeoJSON",
+            "type": "get",
+            "version": "1.1.0",
+            "description": "Use $resultFormat=GeoJSON to get datas into GeoJSON compatible format.  <a href=\"https://geojson.org/\" target=\"_blank\">[reference]</a>",
+            "examples": {
+                "http": "v1.1/Locations?$resultFormat=GeoJSON&$top=3"
+            },
+            "request": "proxyv1.1/Locations?$resultFormat=GeoJSON&$top=3",
+            "success": "{\n    \"type\": \"FeatureCollection\",\n    \"features\": [\n        {\n            \"geometry\": {\n                \"type\": \"Point\",\n                \"coordinates\": [\n                    -4.108433416883344,\n                    47.99535576613954\n                ]\n            }\n        },\n        {\n            \"geometry\": {\n                \"type\": \"Point\",\n                \"coordinates\": [\n                    -0.5528847276950444,\n                    47.46996912080425\n                ]\n            }\n        },\n        {\n            \"geometry\": {\n                \"type\": \"Point\",\n                \"coordinates\": [\n                    -1.54241217683861,\n                    47.223625061665274\n                ]\n            }\n        }\n    ]\n}"
+        }
+    ]
+}

@@ -56,6 +56,12 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
             ctx.body = bodyError.toString();
             return;
         // logs
+        case "HELP":
+        case "DOC":
+        case "DOCUMENTATION":
+            ctx.redirect(`${ctx.decodedUrl.origin}/documentation`);
+            return;
+        // logs
         case "LOGGING":
             ctx.redirect(`${ctx.decodedUrl.origin}/logging`);
             return;

@@ -21,10 +21,10 @@ const addToApiDoc = (input: IApiInput) => {
     docs.push(prepareToApiDoc(input, "BuiltInMisc"));
 };
 addToApiDoc({
-    api: `{infos} /BuiltInMisc Infos`,
-    apiName: "InfosBuiltInMisc",
-    apiDescription: `Stean add some usefull function`,
-    apiReference: "",
+    type: "infos",
+    short: "BuiltInMisc Infos",
+    description: `Stean add some usefull function`,
+    reference: "",
     result: ""
 });
 
@@ -38,11 +38,11 @@ describe("Odata BuiltInMisc", () => {
     });
     it("interval(1 hour)", (done) => {
         const infos = addTest({
-            api: "{get} Observations Interval",
-            apiName: "BuiltInMiscInterval",
-            apiDescription: "The interval keyword rounds the input postgresSql interval (see reference below) parameter to the nearest interval.",
-            apiReference: "https://www.postgresql.org/docs/15/ecpg-pgtypes.html#ECPG-PGTYPES-INTERVAL",
-            apiExample: {
+            type: "get",
+            short: "Observations Interval",
+            description: "The interval keyword rounds the input postgresSql interval (see reference below) parameter to the nearest interval.",
+            reference: "https://www.postgresql.org/docs/15/ecpg-pgtypes.html#ECPG-PGTYPES-INTERVAL",
+            examples: {
                 http: `${testVersion}/Datastreams(7)/Observations?$interval=1 hour`,
                 curl: defaultGet("curl", "KEYHTTP"),
                 javascript: defaultGet("javascript", "KEYHTTP"),
@@ -50,7 +50,7 @@ describe("Odata BuiltInMisc", () => {
             }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${infos.examples.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -66,16 +66,17 @@ describe("Odata BuiltInMisc", () => {
     });
     it("interval(15 min)", (done) => {
         const infos = addTest({
-            api: `{get} interval(15 min)`,
-            apiName: "",
-            apiDescription: "",
-            apiReference: "",
-            apiExample: {
+            type: "get",
+            short: "interval(15 min)",
+
+            description: "",
+            reference: "",
+            examples: {
                 http: `${testVersion}/Datastreams(7)/Observations?$interval=15 min`
             }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${infos.examples.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -90,16 +91,17 @@ describe("Odata BuiltInMisc", () => {
     });
     it("interval(1 min)", (done) => {
         const infos = addTest({
-            api: `{get} interval(1 min)`,
-            apiName: "",
-            apiDescription: "",
-            apiReference: "",
-            apiExample: {
+            type: "get",
+            short: "interval(1 min)",
+
+            description: "",
+            reference: "",
+            examples: {
                 http: `${testVersion}/Datastreams(7)/Observations?$interval=1 min`
             }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${infos.examples.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -114,16 +116,17 @@ describe("Odata BuiltInMisc", () => {
     });
     it("interval(1 day)", (done) => {
         const infos = addTest({
-            api: `{get} interval(1 day)`,
-            apiName: "",
-            apiDescription: "",
-            apiReference: "",
-            apiExample: {
+            type: "get",
+            short: "interval(1 day)",
+
+            description: "",
+            reference: "",
+            examples: {
                 http: `${testVersion}/Datastreams(7)/Observations?$interval=1 day`
             }
         });
         chai.request(server)
-            .get(`/test/${infos.apiExample.http}`)
+            .get(`/test/${infos.examples.http}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -139,7 +142,7 @@ describe("Odata BuiltInMisc", () => {
             });
     });
     it("Save and write apiDoc", (done) => {
-        generateApiDoc(docs, "apiDocBuiltInMisc.js");
+        generateApiDoc(docs, "BuiltInMisc");
         done();
     });
 });
