@@ -97,10 +97,6 @@ function showDoc(event) {
 	document.getElementById("content").innerHTML = content;
 	document.getElementById("two").style.overflow = 'auto';
 
-	// if (actual.params) {
-	// 	beautifyDatas(getElement("jsonDatas"), actual.params, "json");
-	// }
-
 	if (actual.params) {
 	  const jsonViewerParams = new JSONViewer();
 	  params.appendChild(jsonViewerParams.getContainer());  
@@ -113,9 +109,7 @@ function showDoc(event) {
 		try {
 			jsonViewerSuccess.showJSON(JSON.parse(actual.success));
 		} catch (error) {
-			console.log("--------getid-----");
-			console.log(error);
-			
+			console.log(error);			
 		}
 		
 	}
