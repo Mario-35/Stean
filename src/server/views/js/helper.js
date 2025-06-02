@@ -83,15 +83,17 @@ function beautifyDatas(element, source, lang) {
 	try {
 		switch (lang) {
 			case "sql":
+				source = Prism.highlight(source, Prism.languages.Sql, 'sql');
 				break;
 			case "js":
-				source = pretty.js(source);
+				source = Prism.highlight(source, Prism.languages.javascript, 'javascript');
+				// source = pretty.js(source);
 				break;
 			default:
-				source = pretty.json(source);
+				source = Prism.highlight(source, Prism.languages.json, 'json');
 				break;
 		}
-		if (element) highlightElement(element, source, lang);
+		if (element) element.innerHTML = source;
 	} catch (err) {
 		notifyError("Error", err);
 	}
@@ -111,3 +113,18 @@ async function executeSqlValues(e) {
 		wait(false);
 	}
 }
+
+// epdate json datas and test valid
+const setJSON = () => {
+	if (jsonDatas.value != "") {
+		jsonDatas.classList.remove("valid");
+		jsonDatas.classList.remove("notValid");
+		try {
+			jsonDatas.value = JSON.stringify(JSON.parse(jsonDatas.value), undefined, 4);
+			jsonDatas.classList.add("valid");
+
+		} catch (error) {
+			jsonDatas.classList.add("notValid");
+		}
+	}
+};

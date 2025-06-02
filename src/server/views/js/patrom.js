@@ -96,7 +96,16 @@ var themes = {
 		"json-code": "#8e08a0",
 		"json-url": "#DD2E2E",
 		"json-string": "#116408",
-		"json-date": "#CB7500"
+		"json-date": "#CB7500",		
+		"font-prism-comment": "#708090",
+		"font-prism-property": "#905",
+		"font-prism-punctuation": "#999",
+		"font-prism-selector": "#690",
+		"font-prism-operator": "#9a6e3a",
+		"font-prism-atrule": "#07a",
+		"font-prism-function": "#dd4a68",
+		"font-prism-regex": "#e90",
+		"font-prism-deleted": "#dd4a68",
 	},
 	"dark": {
 		"text-color": "#fff",
@@ -123,24 +132,18 @@ var themes = {
 		"json-code": "#de9ae7",
 		"json-url": "#F0A1A1",
 		"json-string": "#B7E4B2",
-		"json-date": "#CB7500"
-
+		"json-date": "#CB7500",
+		"font-prism-comment": "#998066",
+		"font-prism-property": "#d1949e",
+		"font-prism-punctuation": "#999999",
+		"font-prism-selector": "#bde052",
+		"font-prism-operator": "#bde052",
+		"font-prism-atrule": "#d1949e",
+		"font-prism-function": "#dd4a68",
+		"font-prism-regex": "#ee9900",
+		"font-prism-deleted": "#dd4a68",
 	}
 };
-
- function setTheme(themeName) {
-	localStorage.setItem('theme', themeName);
-	document.documentElement.className = themeName;
-}
-
-// function to toggle between light and dark theme
-function toggleTheme() {
-	if (localStorage.getItem('theme') === 'theme-dark') {
-		setTheme('theme-light');
-	} else {
-		setTheme('theme-dark');
-	}
-}
 
 if (document.getElementById('fileone')) fileone.addEventListener("change", function(e) {
 	var fileName = "";
@@ -161,19 +164,6 @@ if (document.getElementById('fileone')) fileone.addEventListener("change", funct
 		buttonGo();
 	}
 });
-
-// Immediately invoked function to set the theme on initial load
-(function () {
-	if (localStorage.getItem('theme') === 'theme-dark') {
-		setTheme('theme-dark');
-		const elem = document.getElementById('theme');
-		if (elem) elem.checked = false;
-	} else {
-		setTheme('theme-light');
-		const elem = document.getElementById('theme');
-		if (elem) elem.checked = false;
-	}
-})();
 
 class PatromMultiSelect {
 	constructor(select) {
@@ -327,46 +317,46 @@ class PatromMultiSelect {
 		this.log();
 	}
 	log() {
-      var self = this;
-      var logger = self.logger;
-      logger.innerHTML = '';
-  
-      var i, option = '',
-        selectedOptions = '',
-        selectedLabels, closeBtn;
-      var loop_length = this.select.children.length;
-  
-      for (i = 0; i < loop_length; i++) {
-        option = this.select.children[i];
-        if (!this.data[i]) {
-          continue;
-        }
-  
-        selectedLabels = document.createElement('label');
-        selectedLabels.className = 'selectedLabels';
-        selectedLabels.innerHTML = option.innerText;
-  
-        closeBtn = document.createElement('span');
-        closeBtn.className = 'closeBtn';
-        closeBtn.innerHTML = '&#10005;';
-        closeBtn.dataset.id = option.value;
-  
-        closeBtn.addEventListener('click', function(event) {
-          event.stopPropagation();
-          self.removeValue([event.target.dataset.id], true);
-        });
-  
-        selectedLabels.appendChild(closeBtn);
-        logger.appendChild(selectedLabels);
-  
-        selectedOptions += selectedOptions ? ',' + option.innerText : option.innerText;
-      }
-      this.logger.dataset.value = selectedOptions;
-    
+		var self = this;
+		var logger = self.logger;
+		logger.innerHTML = '';
+
+		var i, option = '',
+			selectedOptions = '',
+			selectedLabels, closeBtn;
+		var loop_length = this.select.children.length;
+
+		for (i = 0; i < loop_length; i++) {
+			option = this.select.children[i];
+			if (!this.data[i]) {
+				continue;
+			}
+
+			selectedLabels = document.createElement('label');
+			selectedLabels.className = 'selectedLabels';
+			selectedLabels.innerHTML = option.innerText;
+
+			closeBtn = document.createElement('span');
+			closeBtn.className = 'closeBtn';
+			closeBtn.innerHTML = '&#10005;';
+			closeBtn.dataset.id = option.value;
+
+			closeBtn.addEventListener('click', function(event) {
+				event.stopPropagation();
+				self.removeValue([event.target.dataset.id], true);
+			});
+
+			selectedLabels.appendChild(closeBtn);
+			logger.appendChild(selectedLabels);
+
+			selectedOptions += selectedOptions ? ',' + option.innerText : option.innerText;
+		}
+		this.logger.dataset.value = selectedOptions;
+
 	}
 	getData(def = []) {
 		var data = def;
-		var i, selectChildrenLen = this.select.children.length;		
+		var i, selectChildrenLen = this.select.children.length;
 		for (i = 0; i < selectChildrenLen; i++) {
 			if (!this.select.children[i].selected) {
 				continue;
@@ -376,14 +366,14 @@ class PatromMultiSelect {
 
 		return data;
 	}
-	selectedList(list = []) {		
+	selectedList(list = []) {
 		var data = [];
 		var i, selectedChildren, selectChildrenLen;
 		selectedChildren = this.list.querySelectorAll('label:not(.hidden) li:not(.ignore) input');
 		selectChildrenLen = selectedChildren.length;
-		
+
 		for (i = 0; i < selectChildrenLen; i++) {
-			if(list.includes(selectedChildren[i].value)) data.push(selectedChildren[i].value);
+			if (list.includes(selectedChildren[i].value)) data.push(selectedChildren[i].value);
 		}
 		this.setValue(data);
 		//callback
@@ -487,7 +477,7 @@ class PatromMultiSelect {
 
 		ul = document.createElement('UL');
 		ul.className = this.class.list;
-		ul.classList.add((this.settings.orderby === true)  ? "orderby" : "checked");
+		ul.classList.add((this.settings.orderby === true) ? "orderby" : "checked");
 		ul.style.width = this.settings.width;
 		ul.classList.add('hidden');
 
@@ -607,9 +597,10 @@ class PatromMultiSelect {
 }
 
 var multiSelects = {};
-	Array.prototype.forEach.call(document.getElementsByClassName("patrom-multiselect"), function(el) {
+Array.prototype.forEach.call(document.getElementsByClassName("patrom-multiselect"), function(el) {
 	multiSelects[el.id] = new PatromMultiSelect(el);
-});class JSONViewer  {
+});
+class JSONViewer {
 	constructor() {
 		this.Object_prototype_toString = ({}).toString;
 		this.DatePrototypeAsString = this.Object_prototype_toString.call(new Date);
@@ -626,15 +617,15 @@ var multiSelects = {};
 	 * @param {Number} [inputMaxLvl] Process only to max level, where 0..n, -1 unlimited
 	 * @param {Number} [inputColAt] Collapse at level, where 0..n, -1 unlimited
 	 */
-	setRoot( rootName) {
+	setRoot(rootName) {
 		this.rootName = rootName || "none";
 	}
-	showJSON(jsonValue,  inputMaxLvl, inputColAt) {
+	showJSON(jsonValue, inputMaxLvl, inputColAt) {
 		// Process only to maxLvl, where 0..n, -1 unlimited
 		var maxLvl = typeof inputMaxLvl === "number" ? inputMaxLvl : -1; // max level
 		// Collapse at level colAt, where 0..n, -1 unlimited
 		var colAt = typeof inputColAt === "number" ? inputColAt : -1; // collapse at
-		
+
 		this._dom_container.innerHTML = "";
 		this.walkJSONTree(this._dom_container, jsonValue, maxLvl, colAt, 0);
 	};
@@ -644,7 +635,7 @@ var multiSelects = {};
 	};
 
 	SimulateClickEventListener(event) {
-		
+
 	}
 
 	/**
@@ -662,7 +653,7 @@ var multiSelects = {};
 		if (typeof realValue === "object" && realValue !== null && !isDate) {
 			var isMaxLvl = maxLvl >= 0 && lvl >= maxLvl;
 			var isCollapse = colAt >= 0 && lvl >= colAt;
-			
+
 			var isArray = Array.isArray(realValue);
 			var items = isArray ? realValue : Object.keys(realValue);
 
@@ -687,8 +678,7 @@ var multiSelects = {};
 						rootLink.classList.add("collapsed");
 						rootCount.classList.remove("hide");
 					}
-				}
-				else {
+				} else {
 					rootLink.classList.add("empty");
 				}
 
@@ -720,8 +710,7 @@ var multiSelects = {};
 							// empty
 							if (!itemLen) {
 								li.appendChild(document.createTextNode(key + ": " + (itemIsArray ? "[]" : "{}")));
-							}
-							else {
+							} else {
 								// 1+ items
 								var itemTitle = (typeof key === "string" ? key + ": " : "") + (itemIsArray ? "[" : "{");
 								var itemLink = this._createLink(itemTitle);
@@ -730,15 +719,14 @@ var multiSelects = {};
 								// maxLvl - only text, no link
 								if (maxLvl >= 0 && lvl + 1 >= maxLvl) {
 									li.appendChild(document.createTextNode(itemTitle));
-								}
-								else {
+								} else {
 									itemLink.appendChild(itemsCount);
 									li.appendChild(itemLink);
 								}
 
 								this.walkJSONTree(li, item, maxLvl, colAt, lvl + 1);
 								li.appendChild(document.createTextNode(itemIsArray ? "]" : "}"));
-								
+
 								var list = li.querySelector("ul");
 								var itemLinkCb = function() {
 									itemLink.classList.toggle("collapsed");
@@ -776,8 +764,7 @@ var multiSelects = {};
 				}, this);
 
 				outputParent.appendChild(ulList); // output ulList
-			}
-			else if (items.length && isMaxLvl) {
+			} else if (items.length && isMaxLvl) {
 				var itemsCount = _createItemsCount(items.length);
 				itemsCount.classList.remove("hide");
 
@@ -803,23 +790,23 @@ var multiSelects = {};
 			}
 		} else {
 			// simple values
-			outputParent.appendChild(this.createSimpleViewOf(value, isDate) );
+			outputParent.appendChild(this.createSimpleViewOf(value, isDate));
 		}
 	};
 
 	isDate(str) {
 		str = str.slice(0, 10);
-		if (str.length !== 10 ) return false;
-		const regex = /^\d+$/.test(str[2]) 
-			? /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/		
-			: /^[0-9]{2}[\/][0-9]{2}[\/][0-9]{4}$/g;		
+		if (str.length !== 10) return false;
+		const regex = /^\d+$/.test(str[2]) ?
+			/^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/ :
+			/^[0-9]{2}[\/][0-9]{2}[\/][0-9]{4}$/g;
 		return regex.test(str);
-	  }
+	}
 
 	isUrl(string) {
 		const regexp = /^(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#:.?+=&%@!\-/]))?/;
 		return regexp.test(string);
-	  }
+	}
 
 	isExternal(string) {
 		return (string.toUpperCase().endsWith(".PDF") || string.toUpperCase().endsWith(".HTML"));
@@ -828,10 +815,10 @@ var multiSelects = {};
 	isCode(string) {
 		return string.startsWith("function decode(");
 	}
-	
+
 	isObject(string) {
 		try {
-			 JSON.parse(string);
+			JSON.parse(string);
 			return true;
 		} catch (error) {
 			return false;
@@ -852,13 +839,13 @@ var multiSelects = {};
 		if (type === "string") {
 			if (this.isUrl(value)) {
 				type = value.includes(this.rootName) ? "url-link" : this.isExternal(value) ? "url-external" : "url";
-			  } else if (this.isDate(value)) {
+			} else if (this.isDate(value)) {
 				type = "date";
-			  } else if (this.isCode(value)) {
+			} else if (this.isCode(value)) {
 				type = "code";
-			  } else if (this.isObject(value)) {
+			} else if (this.isObject(value)) {
 				type = "json";
-			  }
+			}
 			asText = '"' + value + '"';
 		} else if (value === null) {
 			type = "null";
@@ -866,7 +853,7 @@ var multiSelects = {};
 		} else if (isDate) {
 			type = "date";
 			asText = value.toLocaleString();
-		} 
+		}
 		spanEl.className = "type-" + type;
 		spanEl.textContent = asText;
 		return spanEl;
@@ -913,8 +900,9 @@ var multiSelects = {};
 		return (count + " " + itemsTxt);
 	};
 
-}class ContextMenu {
-	constructor (menu, options) {
+}
+class ContextMenu {
+	constructor(menu, options) {
 		var self = this;
 		var num = ContextMenu.count++;
 
@@ -933,13 +921,13 @@ var multiSelects = {};
 			options = {};
 		}
 
-		window.addEventListener("resize", function () {
+		window.addEventListener("resize", function() {
 			if (ContextUtil.getProperty(options, "close_on_resize", true)) {
 				self.hide();
 			}
 		});
 
-		this.setOptions = function (_options) {
+		this.setOptions = function(_options) {
 			if (typeof _options === "object") {
 				options = _options;
 			} else {
@@ -947,7 +935,7 @@ var multiSelects = {};
 			}
 		};
 
-		this.changeOption = function (option, value) {
+		this.changeOption = function(option, value) {
 			if (typeof option === "string") {
 				if (typeof value !== "undefined") {
 					options[option] = value;
@@ -959,11 +947,11 @@ var multiSelects = {};
 			}
 		};
 
-		this.getOptions = function () {
+		this.getOptions = function() {
 			return options;
 		};
 
-		this.reload = function () {
+		this.reload = function() {
 			if (document.getElementById('patrom-cm-' + num) == null) {
 				var cnt = document.createElement("div");
 				cnt.className = "patrom-cm-container";
@@ -981,7 +969,7 @@ var multiSelects = {};
 		function renderLevel(level) {
 			var ul_outer = document.createElement("ul");
 
-			level.forEach(function (item) {
+			level.forEach(function(item) {
 				var li = document.createElement("li");
 				li.menu = self;
 
@@ -1037,7 +1025,7 @@ var multiSelects = {};
 			return ul_outer;
 		}
 
-		this.display = function (e, target) {
+		this.display = function(e, target) {
 			if (typeof target !== "undefined") {
 				self.contextTarget = target;
 			} else {
@@ -1046,7 +1034,10 @@ var multiSelects = {};
 
 			var menu = document.getElementById('patrom-cm-' + num);
 
-			var clickCoords = { x: e.clientX, y: e.clientY };
+			var clickCoords = {
+				x: e.clientX,
+				y: e.clientY
+			};
 			var clickCoordsX = clickCoords.x;
 			var clickCoordsY = clickCoords.y;
 
@@ -1093,7 +1084,7 @@ var multiSelects = {};
 			e.preventDefault();
 		};
 
-		this.hide = function () {
+		this.hide = function() {
 			document.getElementById('patrom-cm-' + num).classList.remove("display");
 			window.removeEventListener("click", documentClick);
 		};
@@ -1110,28 +1101,28 @@ ContextMenu.count = 0;
 ContextMenu.DIVIDER = "patrom-cm-divider";
 
 const ContextUtil = {
-	getProperty: function(options, opt, def){
-		if(typeof options[opt] !== "undefined"){
+	getProperty: function(options, opt, def) {
+		if (typeof options[opt] !== "undefined") {
 			return options[opt];
-		}else{
+		} else {
 			return def;
 		}
 	},
 
-	getSizes: function(obj){
+	getSizes: function(obj) {
 		var lis = obj.getElementsByTagName('li');
 
 		var width_def = 0;
 		var height_def = 0;
 
-		for(var i = 0; i < lis.length; i++){
+		for (var i = 0; i < lis.length; i++) {
 			var li = lis[i];
 
-			if(li.offsetWidth > width_def){
+			if (li.offsetWidth > width_def) {
 				width_def = li.offsetWidth;
 			}
 
-			if(li.offsetHeight > height_def){
+			if (li.offsetHeight > height_def) {
 				height_def = li.offsetHeight;
 			}
 		}
@@ -1139,18 +1130,18 @@ const ContextUtil = {
 		var width = width_def;
 		var height = height_def;
 
-		for(var i = 0; i < lis.length; i++){
+		for (var i = 0; i < lis.length; i++) {
 			var li = lis[i];
 
 			var ul = li.getElementsByTagName('ul');
-			if(typeof ul[0] !== "undefined"){
+			if (typeof ul[0] !== "undefined") {
 				var ul_size = ContextUtil.getSizes(ul[0]);
 
-				if(width_def + ul_size.width > width){
+				if (width_def + ul_size.width > width) {
 					width = width_def + ul_size.width;
 				}
 
-				if(height_def + ul_size.height > height){
+				if (height_def + ul_size.height > height) {
 					height = height_def + ul_size.height;
 				}
 			}
@@ -1162,3 +1153,18 @@ const ContextUtil = {
 		};
 	}
 };
+
+function setTheme(themeName) {
+	localStorage.setItem('theme', themeName);
+	document.documentElement.className = themeName;
+}
+
+// Immediately invoked function to set the theme on initial load
+(function() {
+	if (localStorage.getItem('theme')) {
+		setTheme(localStorage.getItem('theme'))
+	} else {
+		setTheme('dark')
+	}
+
+})();

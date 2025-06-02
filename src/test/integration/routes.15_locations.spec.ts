@@ -24,7 +24,7 @@ const docs: IApiDoc[] = [];
 const entity: Ientity = _RAWDB.Locations;
 
 const addToApiDoc = (input: IApiInput) => {
-    docs.push(prepareToApiDoc(input, entity.name));
+    docs.push(prepareToApiDoc(input));
 };
 
 addToApiDoc({
@@ -35,7 +35,6 @@ addToApiDoc({
     result: ""
 });
 describe("endpoint : Locations [8.2.2]", () => {
-    const temp = listOfColumns(entity);
     let token = "";
     before((done) => {
         addStartNewTest(entity.name);
@@ -55,7 +54,7 @@ describe("endpoint : Locations [8.2.2]", () => {
         it(`Return all ${entity.name} ${nbColor}[9.2.2]`, (done) => {
             const infos = addTest({
                 type: "get",
-                short: "all",
+                short: "All",
 
                 description: `Retrieve all ${entity.name}.${showHide(`Get${entity.name}`, apiInfos["9.2.2"])}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-collection-entities",
@@ -64,9 +63,7 @@ describe("endpoint : Locations [8.2.2]", () => {
                     curl: defaultGet("curl", "KEYHTTP"),
                     javascript: defaultGet("javascript", "KEYHTTP"),
                     python: defaultGet("python", "KEYHTTP")
-                },
-                //                  structure: ["{number} id @iot.id", "{relation} selfLink @iot.selfLink", ...success]
-                structure: temp
+                }
             });
             chai.request(server)
                 .get(`/test/${infos.examples.http}`)
@@ -93,8 +90,7 @@ describe("endpoint : Locations [8.2.2]", () => {
         it(`Return ${entity.name} id: 1 ${nbColor}[9.2.3]`, (done) => {
             const infos = addTest({
                 type: "get",
-                short: "one",
-
+                short: "One",
                 description: `Get a specific ${entity.singular}.${apiInfos["9.2.3"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity",
                 examples: {
@@ -186,7 +182,7 @@ describe("endpoint : Locations [8.2.2]", () => {
         it(`Return all ${entity.name} of a specific Thing ${nbColor}[9.2.6]`, (done) => {
             const infos = addTest({
                 type: "get",
-                short: "from specific Thing",
+                short: "From specific Thing",
                 description: `Retrieve Locations of a specific Thing.${apiInfos["9.2.6"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-navigation-property",
                 examples: {
@@ -194,9 +190,7 @@ describe("endpoint : Locations [8.2.2]", () => {
                     curl: defaultGet("curl", "KEYHTTP"),
                     javascript: defaultGet("javascript", "KEYHTTP"),
                     python: defaultGet("python", "KEYHTTP")
-                },
-                // structure: ["{number} id @iot.id", "{relation} selfLink @iot.selfLink", ...success]
-                structure: temp
+                }
             });
             chai.request(server)
                 .get(`/test/${infos.examples.http}`)
@@ -273,7 +267,6 @@ describe("endpoint : Locations [8.2.2]", () => {
             const infos = addTest({
                 type: "get",
                 short: `Return error${entity.name} Expand ${name}`,
-
                 description: "",
                 reference: "",
                 examples: {
@@ -301,7 +294,6 @@ describe("endpoint : Locations [8.2.2]", () => {
             const infos = addTest({
                 type: "get",
                 short: `Return error${entity.name} Expand ${name}`,
-
                 description: "",
                 reference: "",
                 examples: {
@@ -324,7 +316,7 @@ describe("endpoint : Locations [8.2.2]", () => {
         it(`Return value of property location ${entity.name} id: 1 ${nbColor}[9.2.5]`, (done) => {
             const infos = addTest({
                 type: "get",
-                short: "only the value of a property",
+                short: "Only the value of a property",
                 description: `Get the value of the property of a specific Locanion.${apiInfos["9.2.5"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-value-of-property",
                 examples: {
@@ -366,7 +358,7 @@ describe("endpoint : Locations [8.2.2]", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "Post basic",
+                short: "Basic",
                 description: `Post a new Location.${showHide(`Post${entity.name}`, apiInfos["10.2"])}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#_request",
                 examples: {
@@ -375,7 +367,8 @@ describe("endpoint : Locations [8.2.2]", () => {
                     javascript: defaultPost("javascript", "KEYHTTP"),
                     python: defaultPost("python", "KEYHTTP")
                 },
-                params: datas
+                params: datas,
+                structure: listOfColumns(entity)
             });
             chai.request(server)
                 .post(`/test/${infos.examples.http}`)
@@ -397,7 +390,7 @@ describe("endpoint : Locations [8.2.2]", () => {
         it(`Return Error if the payload is malformed ${nbColor}[10.2.2]`, (done) => {
             const infos = addTest({
                 type: "post",
-                short: "return Error if the payload is malformed",
+                short: "Return Error if the payload is malformed",
                 description: "",
                 reference: "",
                 examples: {
@@ -425,7 +418,7 @@ describe("endpoint : Locations [8.2.2]", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "Post with existing Thing",
+                short: "With existing Thing",
                 description: `POST a new Location with existing Thing.${apiInfos["10.2.1.1"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating",
                 examples: {

@@ -17,7 +17,7 @@ const should = chai.should();
 const docs: IApiDoc[] = [];
 const entity: Ientity = _RAWDB.Services;
 const addToApiDoc = (input: IApiInput) => {
-    docs.push(prepareToApiDoc(input, entity.name));
+    docs.push(prepareToApiDoc(input));
 };
 
 const conf = {
@@ -59,7 +59,7 @@ const confPres = {
 };
 addToApiDoc({
     type: "infos",
-    short: `entity.name} Extension`,
+    short: "Presentation",
     description: infos[entity.name].definition,
     reference: infos[entity.name].reference,
     result: ""
@@ -112,7 +112,7 @@ describe("endpoint : Service", () => {
         it(`Return all ${entity.name}`, (done) => {
             const infos = addTest({
                 type: "get",
-                short: "all",
+                short: "All",
 
                 description: `Retrieve all ${entity.name}}`,
                 reference: "",
@@ -141,7 +141,7 @@ describe("endpoint : Service", () => {
         it(`Return ${entity.name} id: 1 `, (done) => {
             const infos = addTest({
                 type: "get",
-                short: "one",
+                short: "One",
                 description: `Get a specific ${entity.singular}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity",
                 examples: {
@@ -173,7 +173,7 @@ describe("endpoint : Service", () => {
         it(`Return added ${entity.name}`, (done) => {
             const infos = addTest({
                 type: "post",
-                short: "Post basic",
+                short: "Basic",
                 description: `Post a new service${blank(1)}${apiInfos["2"]}${blank(1)}${apiInfos["1"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#_request",
                 apiPermission: "admin:computer",

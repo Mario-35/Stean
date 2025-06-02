@@ -44,11 +44,11 @@ debug.onclick = () => {
 btnShowLinks.onclick = () => {
 	const temp = createUrl();
 	urlWindow(JSON.parse(` { "direct" : "${temp.direct}", "query" : "${temp.query}"}`));
-	
+
 };
 
 // geoJson datas
-btnShowGeo.onclick = () => {	
+btnShowGeo.onclick = () => {
 	if (valueGeo.startsWith("http://geojson")) window.location.href = valueGeo;
 };
 
@@ -56,28 +56,28 @@ btnShowGeo.onclick = () => {
 function essai(entity) {
 	let result = {};
 	if (_PARAMS._DATAS[entity])
-	Object.keys(_PARAMS._DATAS[entity].columns).forEach(e => {
-		if (_PARAMS._DATAS[entity].columns[e].dataType)
-			switch (_PARAMS._DATAS[entity].columns[e].dataType) {
-				case 16:
-					result[e] = {};
-					break;
-				// case 1:
-				// 	result[e.split("_id")[0]] = {
-				// 		"@iot.id": -1
-				// 	};
-				// 	break;
-				case 44:				
-					const name = getEntityName(e.split("_id")[0]);
-					result[e.split("_id")[0]] = essai(name);
-					break;
-				case 32:
-					result[e] = "";
-					break;
+		Object.keys(_PARAMS._DATAS[entity].columns).forEach(e => {
+			if (_PARAMS._DATAS[entity].columns[e].dataType)
+				switch (_PARAMS._DATAS[entity].columns[e].dataType) {
+					case 16:
+						result[e] = {};
+						break;
+						// case 1:
+						// 	result[e.split("_id")[0]] = {
+						// 		"@iot.id": -1
+						// 	};
+						// 	break;
+					case 44:
+						const name = getEntityName(e.split("_id")[0]);
+						result[e.split("_id")[0]] = essai(name);
+						break;
+					case 32:
+						result[e] = "";
+						break;
 
-				default:
-					break;
-			} else console.log(e);
+					default:
+						break;
+				} else console.log(e);
 		});
 	return result;
 }
@@ -96,7 +96,7 @@ btnPostTemplate.onclick = () => {
 		}
 	}) : {};
 	console.log(_PARAMS._DATAS[entityOption.value].relations);
-	
+
 	result = essai(entityOption.value, true);
 
 	beautifyDatas(getElement("jsonDatas"), result, "json");
@@ -139,7 +139,7 @@ go.onclick = async (e) => {
 				window.open(url);
 				wait(false);
 				return;
-			} 
+			}
 			const jsonObj = await getFetchDatas(url, resultFormatOption.value);
 			try {
 				if (resultFormatOption.value === "sql")
@@ -151,7 +151,7 @@ go.onclick = async (e) => {
 				else if (resultFormatOption.value === "GeoJSON") {
 					jsonWindow(jsonObj, `[${methodOption.value}]:${url}`);
 					show(btnShowGeo);
-					valueGeo = `http://geojson.io/#data=data:application/json,${encodeURIComponent(JSON.stringify(jsonObj))}`;					
+					valueGeo = `http://geojson.io/#data=data:application/json,${encodeURIComponent(JSON.stringify(jsonObj))}`;
 				} else jsonWindow(jsonObj, `[${methodOption.value}]:${url}`);
 			} catch (err) {
 				notifyError("Error", err);
@@ -289,7 +289,7 @@ function runForm() {
 	wait(true);
 	try {
 		const text = jsonDatas.innerText.replace(/[^\x00-\x7F]/g, '');
-		datas.innerText = text;
+		jsonDatas.innerText = text;
 		document.getElementById("actionForm").requestSubmit();
 	} catch (error) {
 		console.error(error);
@@ -303,3 +303,16 @@ function prepareForm() {
 		runForm();
 	}
 }
+
+// update datas after paste
+jsonDatas.onpaste = function() {
+	{
+		setTimeout(() => {
+			setJSON();
+		}, 100);
+	}
+};
+// update datas after key up
+jsonDatas.onkeyup = function() {
+	setJSON()
+};

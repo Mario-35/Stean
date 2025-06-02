@@ -1,120 +1,153 @@
- 
-  [class*=collapsible] {
-    box-sizing: border-box;
-    margin: 0 0 5px;
+[class*="collapsible"] {
+  box-sizing: border-box;
+  margin: 0 0 5px;
+  padding: 0;
+  position: relative;
+  width: 100%;
+}
+
+[class*="collapsible"]::after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+.collapsible-title {
+  background-color: var(--background-color);
+  cursor: pointer;
+  margin: 0;
+  padding: 5px;
+  width: 100%;
+}
+
+.collapsible-title.is-active,
+.collapsible-title:hover {
+  background: var(--background-highlight);
+}
+
+.collapsible-title.is-active + .collapsible-content {
+  display: block;
+}
+
+@media screen and (min-width: 960px) {
+  .collapsible-tabs-horizontal .collapsible-title,
+  .collapsible-tabs-vertical .collapsible-title {
+    height: 7px;
+    line-height: 7px;
+    padding: 0;
+    text-align: center;
+  }
+  .collapsible-tabs-horizontal .collapsible-title {
+    float: left;
+  }
+  .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(1),
+  .collapsible-tabs-horizontal
+    .collapsible-title:first-child:nth-last-child(1)
+    ~ .collapsible-title {
+    width: 200%;
+  }
+  .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(2),
+  .collapsible-tabs-horizontal
+    .collapsible-title:first-child:nth-last-child(2)
+    ~ .collapsible-title {
+    width: 100%;
+  }
+  .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(3),
+  .collapsible-tabs-horizontal
+    .collapsible-title:first-child:nth-last-child(3)
+    ~ .collapsible-title {
+    width: 66.6666666667%;
+  }
+  .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(4),
+  .collapsible-tabs-horizontal
+    .collapsible-title:first-child:nth-last-child(4)
+    ~ .collapsible-title {
+    width: 50%;
+  }
+  .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(5),
+  .collapsible-tabs-horizontal
+    .collapsible-title:first-child:nth-last-child(5)
+    ~ .collapsible-title {
+    width: 40%;
+  }
+  .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(6),
+  .collapsible-tabs-horizontal
+    .collapsible-title:first-child:nth-last-child(6)
+    ~ .collapsible-title {
+    width: 33.3333333333%;
+  }
+  .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(7),
+  .collapsible-tabs-horizontal
+    .collapsible-title:first-child:nth-last-child(7)
+    ~ .collapsible-title {
+    width: 28.5714285714%;
+  }
+  .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(8),
+  .collapsible-tabs-horizontal
+    .collapsible-title:first-child:nth-last-child(8)
+    ~ .collapsible-title {
+    width: 25%;
+  }
+  .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(9),
+  .collapsible-tabs-horizontal
+    .collapsible-title:first-child:nth-last-child(9)
+    ~ .collapsible-title {
+    width: 22.2222222222%;
+  }
+  .collapsible-tabs-horizontal
+    .collapsible-title:first-child:nth-last-child(10),
+  .collapsible-tabs-horizontal
+    .collapsible-title:first-child:nth-last-child(10)
+    ~ .collapsible-title {
+    width: 20%;
+  }
+  .collapsible-tabs-vertical .collapsible-title {
+    border: 0;
+    border-right: 1px solid #dce0e5;
+    width: 20%;
+  }
+  .no-js .collapsible-title {
+    cursor: auto;
+    height: auto;
+    line-height: 1.5em;
+    padding: 0;
+    text-align: left;
+    width: 100% !important;
+  }
+  .no-js .collapsible-title.is-active,
+  .no-js .collapsible-title:hover {
+    background: initial;
+  }
+}
+
+.collapsible-content {
+  background: var(--background-content);
+  display: none;
+  margin: 0;
+  padding: 5px;
+  width: 100%;
+}
+
+@media screen and (min-width: 960px) {
+  .collapsible-tabs-horizontal .collapsible-content {
+    float: right;
+    margin: 70px 0 0 -100%;
+  }
+  .collapsible-tabs-vertical .collapsible-content {
+    position: absolute;
+    top: 0;
+    left: 20%;
+    width: calc(100% - 20%);
+  }
+  .no-js .collapsible-content {
+    background: initial;
+    display: block;
+    float: none;
+    margin: 0;
     padding: 0;
     position: relative;
+    top: auto;
+    left: auto;
     width: 100%;
   }
-
-  [class*=collapsible]::after {
-    clear: both;
-    content: "";
-    display: table;
-  }
-  
-  .collapsible-title {
-    background-color: var(--background-color);
-    cursor: pointer;
-    margin: 0;
-    padding: 5px;
-    width: 100%;
-  }
-
-  .collapsible-title.is-active, .collapsible-title:hover {
-    background: var(--background-highlight);
-  }
-
-  .collapsible-title.is-active + .collapsible-content {
-    display: block;
-  }
-
-  @media screen and (min-width: 960px) {
-    .collapsible-tabs-horizontal .collapsible-title, .collapsible-tabs-vertical .collapsible-title {
-      height: 7px;
-      line-height: 7px;
-      padding: 0;
-      text-align: center;
-    }
-    .collapsible-tabs-horizontal .collapsible-title {
-      float: left;
-    }
-    .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(1), .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(1) ~ .collapsible-title {
-      width: 200%;
-    }
-    .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(2), .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(2) ~ .collapsible-title {
-      width: 100%;
-    }
-    .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(3), .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(3) ~ .collapsible-title {
-      width: 66.6666666667%;
-    }
-    .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(4), .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(4) ~ .collapsible-title {
-      width: 50%;
-    }
-    .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(5), .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(5) ~ .collapsible-title {
-      width: 40%;
-    }
-    .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(6), .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(6) ~ .collapsible-title {
-      width: 33.3333333333%;
-    }
-    .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(7), .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(7) ~ .collapsible-title {
-      width: 28.5714285714%;
-    }
-    .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(8), .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(8) ~ .collapsible-title {
-      width: 25%;
-    }
-    .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(9), .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(9) ~ .collapsible-title {
-      width: 22.2222222222%;
-    }
-    .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(10), .collapsible-tabs-horizontal .collapsible-title:first-child:nth-last-child(10) ~ .collapsible-title {
-      width: 20%;
-    }
-    .collapsible-tabs-vertical .collapsible-title {
-      border: 0;
-      border-right: 1px solid #dce0e5;
-      width: 20%;
-    }
-    .no-js .collapsible-title {
-      cursor: auto;
-      height: auto;
-      line-height: 1.5em;
-      padding: 0;
-      text-align: left;
-      width: 100% !important;
-    }
-    .no-js .collapsible-title.is-active, .no-js .collapsible-title:hover {
-      background: initial;
-    }
-  }
-  
-  .collapsible-content {
-    background: var(--background-content);
-    display: none;
-    margin: 0;
-    padding: 5px;
-    width: 100%;
-  }
-  
-  @media screen and (min-width: 960px) {
-    .collapsible-tabs-horizontal .collapsible-content {
-      float: right;
-      margin: 70px 0 0 -100%;
-    }
-    .collapsible-tabs-vertical .collapsible-content {
-      position: absolute;
-      top: 0;
-      left: 20%;
-      width: calc(100% - 20%);
-    }
-    .no-js .collapsible-content {
-      background: initial;
-      display: block;
-      float: none;
-      margin: 0;
-      padding: 0;
-      position: relative;
-      top: auto;
-      left: auto;
-      width: 100%;
-    }
-  }
+}

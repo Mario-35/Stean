@@ -3,7 +3,7 @@
   <head>
     <script src="constant.js"></script>
     <link rel="stylesheet" href="social.css">
-    <link rel="stylesheet" href="patrom.css">
+    <link rel="stylesheet" href="prism.css">
     <link rel="stylesheet" href="patrom.css">
     <link rel="stylesheet" href="query.css">
     <link rel="stylesheet" href="documentation.css">
@@ -11,12 +11,11 @@
     <link rel="stylesheet" href="modal.css">
     <link rel="stylesheet" href="splitter.css">
     <link rel="stylesheet" href="queryBuilder.css">
-    <link rel="stylesheet" href="highLight.css">
     <link rel="stylesheet" href="window.css">
     <script src="gui.js"></script>
     <script src="splitter.js"></script>
     <script src="docDatas.js"></script>
-    <script src="prettyJs.js"></script>
+    <script src="prism.js"></script>
     <script>
       (function(e, t, n) {
         var r = e.querySelectorAll("html")[0];
@@ -35,35 +34,57 @@
           <a id="popupClose" class='popup-close' href="#">X</a>
         </div>
         <div class="login-form">
-            <!-- START ACCORDION -->
-            <div class="patrom-accordions pro-form" id="menuTabs">
-            </div>
-            <!-- END ACCORDION -->
+          <!-- START ACCORDION -->
+          <div class="patrom-accordions pro-form" id="menuTabs"></div>
+          <!-- END ACCORDION -->
+        </div>
+        <!-- SOCIAL PANEL HTML --> @social@ @new@
       </div>
-      <!-- SOCIAL PANEL HTML -->
-      @social@
-      @new@
-    </div>
-    <div id="two">
-      <div id="wrapper" class="wrapper">
-        <div id="content">
+      <div id="two">
+        <div id="wrapper" class="wrapper">
+          <div id="content">
+            <div class="tab">
+              <div class="tab__body">
+                <ul class="tab__list">
+                  <li class="tab__item">
+                    <input class="tab__radio" type="radio" name="tab" id="tab_id_1" checked="checked" />
+                    <label class="tab__label" for="tab_id_1">tab's label 1</label>
+                    <div class="tab__content">
+                      <div class="view">
+                        <span class="txt"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illo nobis sint doloribus impedit repellat ipsam, quo veniam totam blanditiis, suscipit quae doloremque, quia assumenda! Voluptatum quisquam quia minus. At odit illo cupiditate nulla qui, vel labore nesciunt repudiandae accusamus sunt itaque exercitationem assumenda, nisi.</span>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="tab__item">
+                    <input class="tab__radio" type="radio" name="tab" id="tab_id_2" />
+                    <label class="tab__label" for="tab_id_2">tab's label 2</label>
+                    <div class="tab__content">
+                      <span class="txt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure ullam quo fugiat, voluptatum minima ea distinctio vitae repudiandae impedit sed, nulla consectetur fugit! Asperiores error repudiandae expedita alias labore laboriosam, ea officiis nihil porro odit reiciendis sunt repellendus numquam ut, maxime adipisci mollitia fugiat a velit! Deserunt obcaecati quaerat similique dolorum fugit blanditiis harum veniam consectetur enim, molestias velit vel ipsa dicta, atque ullam molestiae, repellat explicabo at libero ea provident qui. Iusto ad autem, placeat odio quos nesciunt modi dolor similique quo commodi nam vel, totam magnam!</span>
+                    </div>
+                  </li>
+                  <li class="tab__item">
+                    <input class="tab__radio" type="radio" name="tab" id="tab_id_3" />
+                    <label class="tab__label" for="tab_id_3">tab's label 3</label>
+                    <div class="tab__content">
+                      <span class="txt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur dolores similique consequatur, eveniet, aperiam deserunt.</span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-    <div id="modalOverlay"></div>
+      <div id="modalOverlay"></div>
     </div>
     <script src="patrom.js"></script>
     <script src="helper.js"></script>
     <script src="multiSelect.js"></script>
     <script src="graph.js"></script>
     <script src="modal.js"></script>
-    <script src="drop.js"></script>
-    <script src="highLightLangs.js"></script>
-    <script src="highlight.js"></script>
     <script src="window.js"></script>
     <script src="windowList.js"></script>
     <script src="social.js"></script>
     <script src="documentation.js"></script>
-
   </body>
 </html>

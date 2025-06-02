@@ -18,11 +18,11 @@ chai.use(chaiHttp);
 const should = chai.should();
 const docs: IApiDoc[] = [];
 const addToApiDoc = (input: IApiInput) => {
-    docs.push(prepareToApiDoc(input, "Format"));
+    docs.push(prepareToApiDoc(input));
 };
 addToApiDoc({
     type: "infos",
-    short: "Format Extension",
+    short: "Presentation Extension",
     description: `Format result json as default, dataArray, csv, txt,  graph or graphDatas, note that $value return result as text.`,
     result: ""
 });

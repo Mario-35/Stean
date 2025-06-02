@@ -18,11 +18,11 @@ chai.use(chaiHttp);
 const should = chai.should();
 const docs: IApiDoc[] = [];
 const addToApiDoc = (input: IApiInput) => {
-    docs.push(prepareToApiDoc(input, "BuiltInDate"));
+    docs.push(prepareToApiDoc(input));
 };
 addToApiDoc({
     type: "infos",
-    short: "BuiltInDate Infos",
+    short: "Presentation",
     description: `The OGC SensorThings API supports a set of functions that can be used with the $filter or $orderby query operations. The following table lists the available functions and they follows the OData Canonical function definitions listed in Section 5.1.1.4 of the [OData Version 4.0 Part 2: URL Conventions] and the syntax rules for these functions are defined in [OData Version 4.0 ABNF].`,
     reference: "https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions",
     result: ""
@@ -39,7 +39,7 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
     it("search by resultTime eq 2017-01-13", (done) => {
         const infos = addTest({
             type: "get",
-            short: "Observations Year",
+            short: "Observations Date",
             description: "Stean have a multitude date an",
             reference: "https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions",
             examples: {

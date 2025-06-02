@@ -15,7 +15,7 @@ chai.use(chaiHttp);
 const should = chai.should();
 const docs: IApiDoc[] = [];
 const addToApiDoc = (input: IApiInput) => {
-    docs.push(prepareToApiDoc(input, "Import"));
+    docs.push(prepareToApiDoc(input));
 };
 const simple = {
     "header": false,
@@ -43,7 +43,7 @@ const multi = {
 };
 addToApiDoc({
     type: "infos",
-    short: "Import Extension",
+    short: "Presentation Extension",
     description: `<hr>
     <div class="text">
       <p> You can import a csv file in observations. with one or multiple columns </p>

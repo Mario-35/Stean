@@ -31,6 +31,7 @@ async function deleteLog(id) {
 		wait(false);
 	}
 }
+
 async function replayLog(id) {
 	const url = `${optHost.value}/${optVersion.value}/Logs(${getId(id)})`;
 	const jsonObj = await getFetchDatas(url, "json");
@@ -49,6 +50,7 @@ async function replayLog(id) {
 		openLineTabLog(temp);
 	}
 }
+
 async function patchLog(id) {
 	const url = `${optHost.value}/${optVersion.value}/Logs(${getId(id)})`;
 	const jsonObj = await getFetchDatas(url, "json");

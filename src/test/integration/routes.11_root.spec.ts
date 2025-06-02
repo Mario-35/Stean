@@ -8,11 +8,11 @@ import { server } from "../../server/index";
 import { addStartNewTest, addTest, writeLog } from "./tests";
 const docs: IApiDoc[] = [];
 const addToApiDoc = (input: IApiInput) => {
-    docs.push(prepareToApiDoc(input, "SensorThings"));
+    docs.push(prepareToApiDoc(input));
 };
 addToApiDoc({
     type: "infos",
-    short: "SensorThings",
+    short: "Presentation",
     description: `<img src="./assets/logo.png" alt="Stean">${blank(1)}
     <span class="tabLogo">SensorThings Enhanced API Node</span>${blank(2)}
     <a class="tabLogo" href="https://github.com/Mario-35/Stean" target="_blank"><img src="./assets/github.png" alt="github"></a><span class="tabLink">https://github.com/Mario-35/Stean</span>${blank(2)}
@@ -46,7 +46,7 @@ describe("endpoint : index", () => {
         it("should inform on result", (done) => {
             addStartNewTest("Root");
             const infos = addTest({
-                type: "get",
+                type: "infos",
                 short: "Resource uri",
                 description: `<div class="text"><b><p>There are three major URI components : <br> - the service root URI<br> - the resource path<br> - the query options<br>In addition, the service root URI consists of two parts: The location of the SensorThings service and the version number. The version number follows the format indicated below :</b></p></div>
                     <br>"v"majorversionnumber + "." + minorversionnumber
@@ -79,7 +79,7 @@ describe("endpoint : index", () => {
                     res.body.value[8].url.should.contain("/Things");
                     res.body.value[9].url.should.contain("/Loras");
                     res.body.value[10].url.should.contain("/Decoders");
-                    docs.push(prepareToApiDoc({ ...infos, result: res }, "SensorThings"));
+                    docs.push(prepareToApiDoc({ ...infos, result: res }));
                     generateApiDoc(docs, "sensorThings");
                     done();
                 });
@@ -93,8 +93,8 @@ describe("endpoint : index", () => {
         it("should inform on result", (done) => {
             addStartNewTest("Root");
             const infos = addTest({
-                type: "get",
-                short: "Resource result",
+                type: "infos",
+                short: "Result",
                 description: `Stean use differents type of result : ${apiInfos["0"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#resource-path",
                 examples: { http: `${testVersion}/` }
@@ -129,7 +129,7 @@ describe("endpoint : index", () => {
                     res.body.value[8].url.should.contain("/Things");
                     res.body.value[9].url.should.contain("/Loras");
                     res.body.value[10].url.should.contain("/Decoders");
-                    docs.push(prepareToApiDoc({ ...infos, result: res }, "SensorThings"));
+                    docs.push(prepareToApiDoc({ ...infos, result: res }));
                     generateApiDoc(docs, "sensorThings");
                     done();
                 });

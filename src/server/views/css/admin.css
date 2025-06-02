@@ -7,14 +7,14 @@
   flex-wrap: wrap;
 }
 .row .card {
-  margin:10px 10px 10px 0;
+  margin: 10px 10px 10px 0;
   border: 1px solid black;
   box-shadow: 0 5px 10px 1px;
   border-radius: 8px;
   overflow: hidden;
   transition: 0.2s linear;
-	background-color: var(--background-color);
-	color: var(--text-color);
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 .row .card:hover {
   transform: translateY(-5px);
@@ -44,23 +44,23 @@
   background-color: var(--table-head-background);
   color: var(--btn-success-background);
   border-radius: 5px;
-	cursor: pointer;
-	font-size: 10px;
-	position: absolute;
-	top: 5px;
-	right: 5px;
+  cursor: pointer;
+  font-size: 10px;
+  position: absolute;
+  top: 5px;
+  right: 5px;
 }
 
-.row .card .title:hover +button.copy-btn {
+.row .card .title:hover + button.copy-btn {
   display: block;
-	outline: none;
+  outline: none;
 }
 
 .product {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 30px; 
+  height: 30px;
 }
 .product .service-name {
   padding-left: 5px;
@@ -79,7 +79,7 @@
 .card .description {
   display: flex;
   justify-content: space-between;
-  align-items: center; 
+  align-items: center;
 }
 .zobi {
   width: 60%;
@@ -139,7 +139,7 @@
 .card .footer {
   display: flex;
   justify-content: space-between;
-  align-items: center; 
+  align-items: center;
 }
 
 .card .footer div button {
@@ -155,8 +155,6 @@
 .card .footer div button:hover {
   box-shadow: 0 0 10px 1px black;
 }
-
-
 
 .card-list {
   list-style-type: none;
@@ -196,37 +194,35 @@
   text-decoration: line-through;
 }
 
-
-
 .show-list {
-	background: lightgreen;
-	width: 25%;
-	text-align: center;
-	padding: 6px;
-	border-radius: 6px;
-	box-shadow: 0px 3px 3px #ddd;
-	cursor: pointer;
+  background: lightgreen;
+  width: 25%;
+  text-align: center;
+  padding: 6px;
+  border-radius: 6px;
+  box-shadow: 0px 3px 3px #ddd;
+  cursor: pointer;
 }
 
 .show-list:hover {
-	color: white;
-	background: green;
+  color: white;
+  background: green;
 }
 
 /* CSS code stagger show the list items - if I can figure it out...*/
 
 .list {
-	background: slategray;
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	border-radius: 6px;
-	z-index: 100;
-	position: absolute;
-	top: 35px;
-	height: 0;
-	overflow: hidden;
-	transition: .6s;
+  background: slategray;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 6px;
+  z-index: 100;
+  position: absolute;
+  top: 35px;
+  height: 0;
+  overflow: hidden;
+  transition: 0.6s;
   visibility: hidden;
   list-style-type: none;
   padding: 0;
@@ -236,19 +232,17 @@
 }
 
 .list li {
-	/* background: white; */
-	list-style-type: none;
-	width: 80%;
-	text-align: left;
-	border-radius: 4px;
+  /* background: white; */
+  list-style-type: none;
+  width: 80%;
+  text-align: left;
+  border-radius: 4px;
 }
 
 .show {
-  visibility: visible ;
+  visibility: visible;
   height: 100px;
 }
-
-
 
 fieldset {
   border: none;
@@ -260,11 +254,10 @@ fieldset {
   overflow-y: scroll; /* enable vertical scrollbar */
 }
 
-
 /**
  * Tabs
  */
- .tabs {
+.tabs {
   display: flex;
   flex-wrap: wrap;
 }
@@ -288,15 +281,15 @@ fieldset {
   background: var(--btn-gray-border);
 }
 
-.tabs input[type=radio] {
+.tabs input[type="radio"] {
   display: none;
 }
 
-.tabs input[type=radio]:checked + label {
+.tabs input[type="radio"]:checked + label {
   background: var(--btn-gray-background);
 }
 
-.tabs input[type=radio]:checked + label + .tab {
+.tabs input[type="radio"]:checked + label + .tab {
   display: block;
 }
 .editList {

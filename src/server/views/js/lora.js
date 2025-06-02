@@ -1,5 +1,3 @@
-const pretty = new pp();
-
 /**
  * Show spinner for wating
  * @param {boolean} on 
@@ -65,7 +63,7 @@ function init() {
 	new SplitterBar(container, first, two);
 	wait(false);
 
-	if (_PARAMS.datas) datas.json_value = _PARAMS.datas;
+	if (_PARAMS.datas) jsonDatas.value = _PARAMS.datas;
 	queryOptions.value = _PARAMS.options;
 	jsonViewer = new JSONViewer();
 }

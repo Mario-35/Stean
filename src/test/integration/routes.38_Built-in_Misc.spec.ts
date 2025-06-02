@@ -18,11 +18,11 @@ chai.use(chaiHttp);
 const should = chai.should();
 const docs: IApiDoc[] = [];
 const addToApiDoc = (input: IApiInput) => {
-    docs.push(prepareToApiDoc(input, "BuiltInMisc"));
+    docs.push(prepareToApiDoc(input));
 };
 addToApiDoc({
     type: "infos",
-    short: "BuiltInMisc Infos",
+    short: "Presentation",
     description: `Stean add some usefull function`,
     reference: "",
     result: ""

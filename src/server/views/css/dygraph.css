@@ -2,11 +2,11 @@
  * Default styles for the dygraphs charting library.
  */
 
-.dygraph-legend {
+ .dygraph-legend {
   position: absolute;
   font-size: 14px;
   z-index: 10;
-  width: 250px;  /* labelsDivWidth */
+  width: 250px; /* labelsDivWidth */
   /*
   dygraphs determines these based on the presence of chart labels.
   It might make more sense to create a wrapper div around the chart proper.
@@ -27,7 +27,7 @@
 .dygraph-legend-line {
   display: inline-block;
   position: relative;
-  bottom: .5ex;
+  bottom: 0.5ex;
   padding-left: 1em;
   height: 1px;
   border-bottom-width: 2px;
@@ -39,7 +39,7 @@
 .dygraph-legend-dash {
   display: inline-block;
   position: relative;
-  bottom: .5ex;
+  bottom: 0.5ex;
   height: 1px;
   border-bottom-width: 2px;
   border-bottom-style: solid;
@@ -74,7 +74,7 @@
   z-index: 10;
   line-height: normal;
   overflow: hidden;
-  color: black;  /* replaces old axisLabelColor option */
+  color: black; /* replaces old axisLabelColor option */
 }
 
 .dygraph-axis-label-x {

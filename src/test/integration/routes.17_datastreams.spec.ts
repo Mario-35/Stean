@@ -21,7 +21,7 @@ const should = chai.should();
 const docs: IApiDoc[] = [];
 const entity: Ientity = _RAWDB.Datastreams;
 const addToApiDoc = (input: IApiInput) => {
-    docs.push(prepareToApiDoc(input, entity.name));
+    docs.push(prepareToApiDoc(input));
 };
 addToApiDoc({
     type: "infos",
@@ -31,7 +31,6 @@ addToApiDoc({
     result: ""
 });
 describe("endpoint : Datastream", () => {
-    const temp = listOfColumns(entity);
     let token = "";
     before((done) => {
         addStartNewTest(entity.name);
@@ -50,7 +49,7 @@ describe("endpoint : Datastream", () => {
         it(`Return all ${entity.name} ${nbColor}[9.2.2]`, (done) => {
             const infos = addTest({
                 type: "get",
-                short: "all",
+                short: "All",
 
                 description: `Retrieve all ${entity.name}.${showHide(`Get${entity.name}`, apiInfos["9.2.2"])}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-collection-entities",
@@ -59,9 +58,7 @@ describe("endpoint : Datastream", () => {
                     curl: defaultGet("curl", "KEYHTTP"),
                     javascript: defaultGet("javascript", "KEYHTTP"),
                     python: defaultGet("python", "KEYHTTP")
-                },
-                // structure: ["{number} id @iot.id", "{relation} selfLink @iot.selfLink", ...success]
-                structure: temp
+                }
             });
             chai.request(server)
                 .get(`/test/${infos.examples.http}`)
@@ -87,7 +84,7 @@ describe("endpoint : Datastream", () => {
         it(`Return ${entity.name} id: 1 ${nbColor}[9.2.3]`, (done) => {
             const infos = addTest({
                 type: "get",
-                short: "one",
+                short: "One",
 
                 description: `Get a specific ${entity.singular}.${apiInfos["9.2.3"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity",
@@ -164,7 +161,7 @@ describe("endpoint : Datastream", () => {
             const id = 6;
             const infos = addTest({
                 type: "get",
-                short: "from a specific Thing",
+                short: "From a specific Thing",
                 description: "Get Datastream(s) from Things.",
                 examples: {
                     http: `${testVersion}/Things(${id})/${entity.name}`,
@@ -576,7 +573,7 @@ describe("endpoint : Datastream", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "Post with existing Thing",
+                short: "With existing Thing",
                 description: `Post a new ${entity.name}.${showHide(`Post${entity.name}`, apiInfos["10.2"])}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating",
                 examples: {
@@ -585,7 +582,8 @@ describe("endpoint : Datastream", () => {
                     javascript: defaultPost("javascript", "KEYHTTP"),
                     python: defaultPost("python", "KEYHTTP")
                 },
-                params: datas
+                params: datas,
+                structure: listOfColumns(entity)
             });
             chai.request(server)
                 .post(`/test/${infos.examples.http}`)
@@ -628,7 +626,7 @@ describe("endpoint : Datastream", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "Post with default FOI",
+                short: "With default FOI",
                 description: `Post a new ${entity.name} with default FOI`,
                 reference: "",
                 examples: {
@@ -659,7 +657,7 @@ describe("endpoint : Datastream", () => {
         it(`Return Error if the payload is malformed ${nbColor}[10.2.2]`, (done) => {
             const infos = addTest({
                 type: "post",
-                short: "return Error if the payload is malformed",
+                short: "Return Error if the payload is malformed",
 
                 description: "",
                 reference: "",
@@ -702,7 +700,7 @@ describe("endpoint : Datastream", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "Post with a Thing",
+                short: "With a Thing",
                 description: "POST a new Datastream with existing Thing.",
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating",
                 examples: {
@@ -756,7 +754,7 @@ describe("endpoint : Datastream", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "return added from Thing",
+                short: "Return added from Thing",
                 description: "",
                 reference: "",
                 examples: {

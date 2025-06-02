@@ -21,11 +21,11 @@ chai.use(chaiHttp);
 const should = chai.should();
 const docs: IApiDoc[] = [];
 const addToApiDoc = (input: IApiInput) => {
-    docs.push(prepareToApiDoc(input, "Odata"));
+    docs.push(prepareToApiDoc(input));
 };
 addToApiDoc({
     type: "infos",
-    short: "FOdata Infos",
+    short: "Presentation",
     description: `The use of query options allows refining the requests to help get the required information about the SensorThings entities in an easy and efficient manner. Each of the listed query options are available for each SensorThings entity, however the options for each may differ.<br>
         SensorThings query options can be categorized to two different groups.<br>
           -  The first group specifies the properties to be returned by the request. $expand and $select are query options of this group.<br>

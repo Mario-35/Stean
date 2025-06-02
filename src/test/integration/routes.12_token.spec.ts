@@ -8,12 +8,12 @@ import { server } from "../../server/index";
 import { addStartNewTest, addTest, writeLog } from "./tests";
 const docs: IApiDoc[] = [];
 const addToApiDoc = (input: IApiInput) => {
-    docs.push(prepareToApiDoc(input, "Token"));
+    docs.push(prepareToApiDoc(input));
 };
 
 addToApiDoc({
     type: "infos",
-    short: "Identification Extension",
+    short: "Presentation",
     description: `<hr>
     <div class="text">
       <p>You have to be registered to be able to POST PUT OR DELETE datas.</p>
@@ -80,7 +80,7 @@ describe("Identification : Token", () => {
         it("should logout", (done) => {
             const infos = addTest({
                 type: "get",
-                short: "logout logout actual connection.",
+                short: "Logout actual connection.",
                 description: "Logout actual connection.",
                 examples: {
                     http: `${testVersion}/logout`,

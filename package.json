@@ -57,6 +57,7 @@
         "postgres": "^3.4.4"
     },
     "devDependencies": {
+        "@types/prismjs": "^1.26.5",
         "@node-minify/clean-css": "^6.2.0",
         "@node-minify/cli": "^8.0.6",
         "@node-minify/core": "^6.2.0",
@@ -96,6 +97,7 @@
         "mqtt": "^5.8.1",
         "nodemon": "^2.0.7",
         "prettier": "^2.5.1",
+        "prismjs": "^1.30.0",
         "rimraf": "^3.0.2",
         "ts-node": "^10.9.1",
         "ts-prune": "^0.10.3",

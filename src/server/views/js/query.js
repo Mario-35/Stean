@@ -1,4 +1,3 @@
-const pretty = new pp();
 const SubOrNot = () => subentityOption.value !== _NONE ? subentityOption.value : entityOption.value;
 const isObservation = () => entityOption.value == "Observations" || subentityOption.value == "Observations";
 const isLog = () => resultFormatOption.value === "logs";
@@ -63,14 +62,25 @@ function clear() {
 	methodOption.value = "GET";
 }
 
+function setTheme(themeName) {
+	localStorage.setItem('theme', themeName);
+	document.documentElement.className = themeName;
+}
+
+
 // Start
 (function init() {
 	header("==== Init ====");
-	hide(datas);
-	hide(btnShowGeo);
 	if (isDebug) console.log(_PARAMS);
+	if (localStorage.getItem('theme')) {
+		setTheme(localStorage.getItem('theme'))
+	} else {
+		setTheme('dark')
+	}
+	
+	hide(btnShowGeo);
 	new SplitterBar(container, first, two);
-	const tempEntity = _PARAMS.entity || "Things";	
+	const tempEntity = _PARAMS.entity || "Things";
 	populateSelect(entityOption, getEntityList(), tempEntity);
 	const subs = getRelationsList(tempEntity);
 	populateSelect(subentityOption, subs, subs.includes(_PARAMS.subentityOption) ? _PARAMS.subentityOption : _NONE, true);
@@ -85,12 +95,10 @@ function clear() {
 	refresh();
 	optVersion.value = `${_PARAMS.decodedUrl.version}`;
 	optHost.value = _PARAMS.decodedUrl.linkbase;
-	if (_PARAMS.datas) datas.json_value = _PARAMS.datas;
+	if (_PARAMS.datas) jsonDatas.value = _PARAMS.datas;
 	queryOptions.value = _PARAMS.options;
 	if (window.location.href.includes('Query?')) decodeUrl(window.location.href);
 	jsonViewer = new JSONViewer();
 	wait(false);
+
 })();
-
-
-

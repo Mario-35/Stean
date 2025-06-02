@@ -1,176 +1,115 @@
 /**
  * documentation css file
  */
- 
+
  :root {
-    --meth-get: #61affe;
-    --meth-put: #fca130;
-    --meth-patch: #fca130;
-    --meth-post: #49cc90;
-    --meth-delete: #f93e3e;
-    --meth-infos: gray;
-  }
-  
-  #content {
-    margin-top: 10px;
-    padding-left: 10px;
-  }
-  
-  p {
-    font-size: var(--font-size);
-    color: var(--content-color);
-  }
-  
-  section {
-    padding: 10px 0;
-  }
-  
-  article {
-    border-top: 1px solid var(--light-gray);
-    padding: 14px 0 30px 0;
-  }
-  
-  table {
-    border-collapse: collapse;
-    width: 100%;
-    margin: 0 0 20px 0;
-  }
-  
-  th {
-    background-color: var(--table-head-background);
-    color: var(--text-color);
-    text-align: left;
-    padding: 5px 8px;
-    border: 1px solid var(--table-hover-background);
-  }
-  
-  td {
-    padding: 5px;
-    border: 1px solid var(--window-border-head);
-  }
-  
-  .open-left {
-    right: 0;
-    left: auto;
-  }
-  
-  .invisible {
-    visibility: hidden;
-  }
-  
-  /* ------------------------------------------------------------------------------------------
+  --meth-get: #61affe;
+  --meth-put: #fca130;
+  --meth-patch: #fca130;
+  --meth-post: #49cc90;
+  --meth-delete: #f93e3e;
+  --meth-infos: gray;
+}
+
+#content {
+  margin-top: 10px;
+  padding-left: 10px;
+}
+
+p {
+  font-size: var(--font-size);
+  color: var(--content-color);
+}
+
+section {
+  padding: 10px 0;
+}
+
+article {
+  border-top: 1px solid var(--light-gray);
+  padding: 14px 0 30px 0;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0 0 20px 0;
+}
+
+th {
+  background-color: var(--table-head-background);
+  color: var(--text-color);
+  text-align: left;
+  padding: 5px 8px;
+  border: 1px solid var(--table-hover-background);
+}
+
+td {
+  padding: 5px;
+  border: 1px solid var(--window-border-head);
+}
+
+.open-left {
+  right: 0;
+  left: auto;
+}
+
+.invisible {
+  visibility: hidden;
+}
+
+/* ------------------------------------------------------------------------------------------
    * Request method (HTTP verb)
    * ------------------------------------------------------------------------------------------ */
-  .method {
-    font-weight: 600;
-    display: inline-block;
-    padding: 3px;
-    border-radius: 6px;
-    text-transform: uppercase;
-    color: var(--text-color);
-    width: 60px;
-    text-align: center;
-    font-size: var(--font-size-less-2);
-    margin-right: 5px;
-  }
-  
-  .meth-infos {
-    background-color: var(--meth-infos);
-  }
-
-  .meth-get {
-    background-color: var(--meth-get);
-  }
-  
-  .meth-put {
-    background-color: var(--meth-put);
-  }
-  
-  .meth-post {
-    background-color: var(--meth-post);
-  }
-
-  .meth-patch {
-    background-color: var(--meth-patch);
-  }
-  
-  .meth-delete {
-    background-color: var(--meth-delete);
-  }
-
-  
-  .search-reset {
-    position: absolute;
-    display: block;
-    cursor: pointer;
-    width: 20px;
-    height: 20px;
-    text-align: center;
-    right: 28px;
-    top: 17px;
-    background-color: #fff;
-  }
-
-
-.datasBox {
-    display: flex;
-    flex-direction: column;
-    height: 350px;
-    width: 95%;
-    border-radius: 20px;
-  }
-.successBox {
-    display: flex;
-    flex-direction: column;
-    height: 350px;
-    width: 95%;
-    border-radius: 20px;
-  }
-
-  .errorBox {
-    display: flex;
-    flex-direction: column;
-    height: 150px;
-    width: 95%;
-    border-radius: 20px;
-  }
-  
-  .title{
-    width: 25%;
-    padding: 5px 0;
-    font-size: 1.2em;
-    font-weight: lighter;
-    text-align: center;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    margin: 0 0 0 0;
-    
-    color: var(--white-smoke);
+.method {
+  font-weight: 600;
+  display: inline-block;
+  padding: 3px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  color: var(--text-color);
+  width: 60px;
+  text-align: center;
+  font-size: var(--font-size-less-2);
+  margin-right: 5px;
 }
 
-.successBox .title{
-  background: var(--btn-success-border);
+.meth-infos {
+  background-color: var(--meth-infos);
 }
 
-.errorBox .title{
-  background: var(--btn-danger-border);
+.meth-get {
+  background-color: var(--meth-get);
 }
 
-.datasBox .title{
-  background: var(--btn-info-border);
+.meth-put {
+  background-color: var(--meth-put);
 }
 
-
-.view{
-  overflow: auto;
-  background-color: var(--content-window-background);
-  width: 100%;
-  height: 100%;
-  padding: 0 0 0 5px;
-  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 20%);
+.meth-post {
+  background-color: var(--meth-post);
 }
 
-  
+.meth-patch {
+  background-color: var(--meth-patch);
+}
+
+.meth-delete {
+  background-color: var(--meth-delete);
+}
+
+.search-reset {
+  position: absolute;
+  display: block;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  right: 28px;
+  top: 17px;
+  background-color: #fff;
+}
+
 .menuItem {
   cursor: pointer;
   font-size: var(--font-size);
@@ -181,4 +120,91 @@
   color: var(--color-hover);
 }
 
+.tab {
+  position: relative;
+  margin: 0 auto;
+  height: 400px;
+  width: 95%;
+}
 
+.tab__body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  /* border: solid 1px #eee; */
+  background-color: transparent;
+  position: relative;
+  padding: 5px;
+}
+.tab__body:hover {
+  border-color: #fff;
+  box-shadow: 0px 0px 15px 3px rgba(120, 120, 120, 0.1),
+    0px 3px 3px 0px rgba(0, 0, 0, 0.1);
+}
+
+.tab__item {
+  display: inline-block;
+  margin-left: 3px;
+}
+.tab__item:first-child {
+  margin-left: 0;
+}
+
+.tab__label {
+  /* width: 25%;
+    padding: 5px 0;
+    font-size: 1.2em;
+    font-weight: lighter;
+    text-align: center;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    margin: 0 0 0 0; */
+  cursor: pointer;
+  font-size: 1.2em;
+  display: inline-block;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-color: var(--btn-gray-border);
+  text-align: center;
+  position: relative;
+  min-height: 40px;
+  width: 155px;
+  padding: 10px;
+}
+
+.tab__radio {
+  display: inline-block;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: -10;
+}
+
+.tab__radio:checked ~ .tab__label {
+  background: var(--background-highlight);
+  color: var(--content-color);
+}
+
+.tab__radio:checked ~ .tab__content {
+  display: block;
+}
+
+.tab__content {
+  background-color: var(--content-window-background);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: none;
+  top: 59px;
+  left: 0;
+}
+
+.view {
+  overflow: auto;
+  background-color: var(--content-window-background);
+  width: 100%;
+  height: 85%;
+  padding: 0 0 0 5px;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 20%);
+  border: 1px solid var(--window-border-head);
+}

@@ -19,7 +19,7 @@ function simpleClick(link) {
 }
 
 function openClick(link) {
-	if (link[link.length-1] === '"') link = link.slice(0, -1);
+	if (link[link.length - 1] === '"') link = link.slice(0, -1);
 	if (link[0] === '"') link = link.slice(1);
 	window.open(link.trim(), '_blank').focus();
 }
@@ -81,7 +81,8 @@ function sqlWindow(input) {
 		wins.Sql = temp;
 	}
 	wins.Sql.show();
-	wins.Sql.content.innerHTML = `<div contenteditable spellcheck="false" id="wins.Sql" class='shj-lang-sql'>${highlightText(input, "sql")}</div>`;
+	wins.Sql.content.innerText = input;
+	// wins.Sql.content.innerHTML =  Prism.highlight(input, Prism.languages.sql, 'sql');
 	const menuitems = [{
 			"text": "Execute script",
 			"events": { // Adds eventlisteners to the item (you can use any event there is)
@@ -190,71 +191,72 @@ function decoderWindow(input, serviceName) {
 		});
 		wins.Logs = temp;
 	}
-const lines = [
-`<div class="tabs">`,
-`<input type="hidden" id="optDecoderId" name="${serviceName}"/>`,
-`  <input type="radio" name="tabs" id="tabone" checked="checked">`,
-`  	<label for="tabone">Code Javascript</label>`,
-`  		<div class="tab">`,
-`			<div id="jsonDecoderCodeContainer">`,
-`			<div contenteditable spellcheck="false" id="jsonDecoderCode" class='blakkAll shj-lang-js'></div>`,
-`			</div>`,
-`		</div>`,
-``,
-`  <input type="radio" name="tabs" id="tabtwo">`,
-`  <label for="tabtwo">Nomenclature</label>`,
-`  		<div class="tab">`,
-`			<div id="jsonDecoderNomenclatureContainer">`,
-`			<div contenteditable spellcheck="false" id="jsonDecoderNomenclature" class='blakkAll shj-lang-js'></div>`,
-`		</div>`,
-`	</div>`,
-``,
-`  <input type="radio" name="tabs" id="tabthree">`,
-`  <label for="tabthree">Tests and ...</label>`,
-`  <div class="tab">`,
-`  		<div class="pro-form">`,
-`       	<div class="patrom-row">`,
-`               <div class="patrom-col col-span-2">`,
-`					<div class="field">`,
-`						<label for="optDecoderName">Name</label>`,
-`						<input id="optDecoderName" name="optDecoderName" type="text" class="patrom-text-input width100"_100-100>`,
-`						<input id="optDecoderId" name="optDecoderId" type="hidden" _100-100>`,
-`					</div>`,
-`               </div>`,
-`               <div class="patrom-col col-span-2">`,
-`               	<div class="field">`,
-`                        <label for="optPayload">Payload for testing</label>`,
-`                        <input id="optPayload" name="optPayload" type="text" class="patrom-text-input width100"_100-100>`,
-`                    </div>`,
-`                </div>`,
-`                <div class="patrom-col col-span-2">`,
-`                   <label for="testDecoder">Tests</label>`,
-`					<button id="testDecoder" onclick="testDecoder()"> test decoder </button>`,
-`				</div>`,
-`                <div class="patrom-col col-span-2">`,
-`                   <label for="testDecoder">Save</label>`,
-`					<button id="saveDecoder" onclick="saveDecoder()"> Save </button>`,
-`				</div>`,
-`                <div class="patrom-col col-span-2">`,
-`                   <label for="deleteDecoder">Delete</label>`,
-`					<button id="deleteDecoder" onclick="deleteDecoder()"> Delete </button>`,
-`				</div>`,
-`            </div>`,
-`          </div>`,
+	const lines = [
+		`<div class="tabs">`,
+		`<input type="hidden" id="optDecoderId" name="${serviceName}"/>`,
+		`  <input type="radio" name="tabs" id="tabone" checked="checked">`,
+		`  	<label for="tabone">Code Javascript</label>`,
+		`  		<div class="tab">`,
+		`			<div id="jsonDecoderCodeContainer">`,
+		`			<div contenteditable spellcheck="false" id="jsonDecoderCode" class='blakkAll shj-lang-js'></div>`,
+		`			</div>`,
+		`		</div>`,
+		``,
+		`  <input type="radio" name="tabs" id="tabtwo">`,
+		`  <label for="tabtwo">Nomenclature</label>`,
+		`  		<div class="tab">`,
+		`			<div id="jsonDecoderNomenclatureContainer">`,
+		`			<div contenteditable spellcheck="false" id="jsonDecoderNomenclature" class='blakkAll shj-lang-js'></div>`,
+		`		</div>`,
+		`	</div>`,
+		``,
+		`  <input type="radio" name="tabs" id="tabthree">`,
+		`  <label for="tabthree">Tests and ...</label>`,
+		`  <div class="tab">`,
+		`  		<div class="pro-form">`,
+		`       	<div class="patrom-row">`,
+		`               <div class="patrom-col col-span-2">`,
+		`					<div class="field">`,
+		`						<label for="optDecoderName">Name</label>`,
+		`						<input id="optDecoderName" name="optDecoderName" type="text" class="patrom-text-input width100"_100-100>`,
+		`						<input id="optDecoderId" name="optDecoderId" type="hidden" _100-100>`,
+		`					</div>`,
+		`               </div>`,
+		`               <div class="patrom-col col-span-2">`,
+		`               	<div class="field">`,
+		`                        <label for="optPayload">Payload for testing</label>`,
+		`                        <input id="optPayload" name="optPayload" type="text" class="patrom-text-input width100"_100-100>`,
+		`                    </div>`,
+		`                </div>`,
+		`                <div class="patrom-col col-span-2">`,
+		`                   <label for="testDecoder">Tests</label>`,
+		`					<button id="testDecoder" onclick="testDecoder()"> test decoder </button>`,
+		`				</div>`,
+		`                <div class="patrom-col col-span-2">`,
+		`                   <label for="testDecoder">Save</label>`,
+		`					<button id="saveDecoder" onclick="saveDecoder()"> Save </button>`,
+		`				</div>`,
+		`                <div class="patrom-col col-span-2">`,
+		`                   <label for="deleteDecoder">Delete</label>`,
+		`					<button id="deleteDecoder" onclick="deleteDecoder()"> Delete </button>`,
+		`				</div>`,
+		`            </div>`,
+		`          </div>`,
 
 
-`<div class="patrom-row">`,
-`<div class="patrom-col col-span-12">`,
-`  <div class="field">`,
-`	<label for="jsonDecoderResult">Result :</label>`,
-`		<div id="jsonDecoderResultContainer">`,
-`			<div contenteditable spellcheck="false" id="jsonDecoderResult" class='blakkAll shj-lang-js'></div>`,
-`		</div>`,
-`  </div>`,
-`</div>`,
-`</div>`,
+		`<div class="patrom-row">`,
+		`<div class="patrom-col col-span-12">`,
+		`  <div class="field">`,
+		`	<label for="jsonDecoderResult">Result :</label>`,
+		`		<div id="jsonDecoderResultContainer">`,
+		`			<div contenteditable spellcheck="false" id="jsonDecoderResult" class='blakkAll shj-lang-js'></div>`,
+		`		</div>`,
+		`  </div>`,
+		`</div>`,
+		`</div>`,
 
-`</div>`];
+		`</div>`
+	];
 	wins.Logs.content.innerHTML = lines.join("");
 	wins.Logs.name = serviceName;
 	wins.Logs.show();

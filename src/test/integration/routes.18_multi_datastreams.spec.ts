@@ -21,17 +21,16 @@ const should = chai.should();
 const docs: IApiDoc[] = [];
 const entity: Ientity = _RAWDB.MultiDatastreams;
 const addToApiDoc = (input: IApiInput) => {
-    docs.push(prepareToApiDoc(input, entity.name));
+    docs.push(prepareToApiDoc(input));
 };
 addToApiDoc({
     type: "infos",
-    short: `${entity.name} Extension`,
+    short: "Presentation extension",
     description: infos[entity.name].definition,
     reference: infos[entity.name].reference,
     result: ""
 });
 describe("endpoint : MultiDatastream", () => {
-    const temp = listOfColumns(entity);
     let token = "";
     before((done) => {
         addStartNewTest(entity.name);
@@ -50,7 +49,7 @@ describe("endpoint : MultiDatastream", () => {
         it(`Return all ${entity.name} ${nbColor}[9.2.2]`, (done) => {
             const infos = addTest({
                 type: "get",
-                short: "all",
+                short: "All",
 
                 description: `Retrieve all ${entity.name}.${showHide(`Get${entity.name}`, apiInfos["9.2.2"])}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-collection-entities",
@@ -59,9 +58,7 @@ describe("endpoint : MultiDatastream", () => {
                     curl: defaultGet("curl", "KEYHTTP"),
                     javascript: defaultGet("javascript", "KEYHTTP"),
                     python: defaultGet("python", "KEYHTTP")
-                },
-                // structure: ["{number} id @iot.id", "{relation} selfLink @iot.selfLink", ...success]
-                structure: temp
+                }
             });
             chai.request(server)
                 .get(`/test/${infos.examples.http}`)
@@ -87,7 +84,7 @@ describe("endpoint : MultiDatastream", () => {
         it(`Return ${entity.name} id: 1 ${nbColor}[9.2.3]`, (done) => {
             const infos = addTest({
                 type: "get",
-                short: "one",
+                short: "One",
 
                 description: `Get a specific ${entity.singular}.${apiInfos["9.2.3"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity",
@@ -162,7 +159,7 @@ describe("endpoint : MultiDatastream", () => {
 
             const infos = addTest({
                 type: "get",
-                short: "from specific Thing",
+                short: "From specific Thing",
                 description: "Get Multi Datastreams(s) from Thing.",
                 examples: {
                     http: `${testVersion}/Things(${id})/${entity.name}`,
@@ -549,7 +546,7 @@ describe("endpoint : MultiDatastream", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "Post with existing Thing And Sensor",
+                short: "With existing Thing And Sensor",
                 description: `Post a new ${entity.name}.${showHide(`Post${entity.name}`, apiInfos["10.2"])}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating",
                 examples: {
@@ -558,7 +555,8 @@ describe("endpoint : MultiDatastream", () => {
                     javascript: defaultPost("javascript", "KEYHTTP"),
                     python: defaultPost("python", "KEYHTTP")
                 },
-                params: datas
+                params: datas,
+                structure: listOfColumns(entity)
             });
             chai.request(server)
                 .post(`/test/${infos.examples.http}`)
@@ -578,7 +576,7 @@ describe("endpoint : MultiDatastream", () => {
         it(`Return Error if the payload is malformed ${nbColor}[10.2.2]`, (done) => {
             const infos = addTest({
                 type: "post",
-                short: "return Error if the payload is malformed",
+                short: "Return Error if the payload is malformed",
 
                 description: "",
                 reference: "",
@@ -705,7 +703,7 @@ describe("endpoint : MultiDatastream", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "return Error if ObservedProperties length not equal multiObservationDataTypes",
+                short: "Return Error if ObservedProperties length not equal multiObservationDataTypes",
                 description: "",
                 reference: "",
                 examples: {
@@ -757,7 +755,7 @@ describe("endpoint : MultiDatastream", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "return Error if unitOfMeasurements length not equal multiObservationDataTypes",
+                short: "Return Error if unitOfMeasurements length not equal multiObservationDataTypes",
                 description: "",
                 reference: "",
                 examples: {
@@ -815,7 +813,7 @@ describe("endpoint : MultiDatastream", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "Post with default FOI",
+                short: "With default FOI",
                 description: `Post a new ${entity.name} with default FOI`,
                 reference: "",
                 examples: {

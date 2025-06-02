@@ -1,16 +1,16 @@
 .alignRight {
-    float: left;
+	float: left;
 	background-color: var(--background-color);
 	color: var(--text-color);
 	border-radius: 50%;
 	border: none;
   }
-
-.fullWidth {
+  
+  .fullWidth {
 	width: 100%;
-}
-
-.version {
+  }
+  
+  .version {
 	padding: 1% 5%;
 	text-align: center;
 	background-color: var(--content-background);
@@ -21,14 +21,14 @@
 	font-weight: 500;
 	text-decoration: none;
   }
-
+  
   .blakkAll {
 	background-color: #000;
 	width: 100%;
 	overflow: auto;
-}
-
-.clear-input-button {
+  }
+  
+  .clear-input-button {
 	/* button position */
 	position: absolute;
 	right: 4px;
@@ -66,51 +66,43 @@
 	display: inline-block;
 	white-space: nowrap;
   }
-
+  
   .svg-icon {
-    fill: var(--content-color);
-}
-
-._100-100 {
-	width:  100%;
-}
-._95-100 {
-	width:  95%;
-}
-
-.debug,
-.debug:hover,
-.debug:focus {
-	background-color: rgb(233, 115, 115);
-}
-
-
-
-
-
-
-
-.buttonLink {
-	font-size: var(--font-size-add-2);
-	color:#989898;
+	fill: var(--content-color);
   }
-
-
-
-.clipboard {
-  border: 0;
-  padding: 5px;
-  border-radius: 3px;
-  background-image: linear-gradient(135deg, #fdeb71 10%, #f8d800 100%);
-  cursor: pointer;
-  color: #04048c;
-  font-size: var(--font-size-2);
-  position: relative;
-  top: 0;
-  transition: all 0.2s ease;
-}
-
-.loadInQuery {
+  
+  ._100-100 {
+	width: 100%;
+  }
+  ._95-100 {
+	width: 95%;
+  }
+  
+  .debug,
+  .debug:hover,
+  .debug:focus {
+	background-color: rgb(233, 115, 115);
+  }
+  
+  .buttonLink {
+	font-size: var(--font-size-add-2);
+	color: #989898;
+  }
+  
+  .clipboard {
+	border: 0;
+	padding: 5px;
+	border-radius: 3px;
+	background-image: linear-gradient(135deg, #fdeb71 10%, #f8d800 100%);
+	cursor: pointer;
+	color: #04048c;
+	font-size: var(--font-size-2);
+	position: relative;
+	top: 0;
+	transition: all 0.2s ease;
+  }
+  
+  .loadInQuery {
 	border: 0;
 	padding: 5px;
 	border-radius: 3px;
@@ -122,74 +114,62 @@
 	top: 0;
 	transition: all 0.2s ease;
   }
+  
+  .button-services {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 0.25em;
+  
+	border: 2px solid transparent;
+	background: green;
+	font-size: 1.4em;
+	color: white;
+  
+	border-radius: 50vh;
+  }
+  
+  .select-services {
+	position: absolute;
+	top: calc(100% + 0.25em);
+	left: 0;
+  
+	max-width: 300px;
+	cursor: pointer;
+  
+	border: 1px solid #ccc;
+	border-radius: 0.5em;
+	font-size: 1.1rem;
+	padding: 0.25em 0.35em 0.25em 0.25em;
+  
+	outline: 0;
+  
+	opacity: 0;
+	visibility: hidden;
+	transition: all 0.2s;
+  }
+  
+  .button-services :focus > select,
+  .button-services :active > select,
+  button:target > select {
+	opacity: 1;
+	visibility: visible;
+  }
+  
+  .select-services:focus {
+	border-color: green;
+  }
+  
+  #jsonDatas {
+	height: 300px;
+	width: 100%;
+	overflow: auto;
+	white-space: nowrap;
+	background-color: var(--content-window-background);
+	/* border: 3px solid red; */
+	color: var(--content-color);
+	caret-color: white;
+  }
+  
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.button-services {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 0.25em;
-    
-    border: 2px solid transparent;
-    background: green;
-    font-size: 1.4em;
-    color: white;
-    
-    border-radius: 50vh;   
-}
-
-.select-services {
-    position: absolute;
-    top: calc(100% + 0.25em);
-    left: 0;
-    
-    max-width: 300px;
-    cursor: pointer;
-
-    border: 1px solid #ccc;
-    border-radius: 0.5em;
-    font-size: 1.1rem;
-    padding: 0.25em 0.35em 0.25em 0.25em;
-
-    outline: 0;
-    
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.2s;
-}
-
-.button-services :focus > select,
-.button-services :active > select,
-button:target > select{
-    opacity: 1;
-    visibility: visible;
-}
-
-
-.select-services:focus {
-    border-color: green;
-}
-
-
-
-
-
-
-
-
-
+  

@@ -26,7 +26,7 @@ const docs: IApiDoc[] = [];
 const entity: Ientity = _RAWDB.Observations;
 
 const addToApiDoc = (input: IApiInput) => {
-    docs.push(prepareToApiDoc(input, entity.name));
+    docs.push(prepareToApiDoc(input));
 };
 addToApiDoc({
     type: "infos",
@@ -36,7 +36,6 @@ addToApiDoc({
     result: ""
 });
 describe("endpoint : Observations", () => {
-    const temp = listOfColumns(entity);
     let token = "";
     before((done) => {
         addStartNewTest(entity.name);
@@ -55,7 +54,7 @@ describe("endpoint : Observations", () => {
         it(`Return all ${entity.name} ${nbColor}[9.2.2]`, (done) => {
             const infos = addTest({
                 type: "get",
-                short: "all",
+                short: "All",
 
                 description: `Retrieve all ${entity.name}.${showHide(`Get${entity.name}`, apiInfos["9.2.2"])}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-collection-entities",
@@ -64,9 +63,7 @@ describe("endpoint : Observations", () => {
                     curl: defaultGet("curl", "KEYHTTP"),
                     javascript: defaultGet("javascript", "KEYHTTP"),
                     python: defaultGet("python", "KEYHTTP")
-                },
-                // structure: ["{number} id @iot.id", "{relation} selfLink @iot.selfLink", ...success]
-                structure: temp
+                }
             });
             chai.request(server)
                 .get(`/test/${infos.examples.http}`)
@@ -93,8 +90,7 @@ describe("endpoint : Observations", () => {
         it(`Return ${entity.name} id: 1 ${nbColor}[9.2.3]`, (done) => {
             const infos = addTest({
                 type: "get",
-                short: "one",
-
+                short: "One",
                 description: `Get a specific ${entity.singular}.${apiInfos["9.2.3"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity",
                 examples: {
@@ -164,7 +160,7 @@ describe("endpoint : Observations", () => {
         it(`Return all Observations in the Datastream that holds the id 2`, (done) => {
             const infos = addTest({
                 type: "get",
-                short: "all from Datastream",
+                short: "All from Datastream",
                 description: "Get Observations from Datastream.",
                 examples: {
                     http: `${testVersion}/Datastreams(2)/${entity.name}`,
@@ -241,7 +237,7 @@ describe("endpoint : Observations", () => {
         it("Return Observations with multiple SELECT odata", (done) => {
             const infos = addTest({
                 type: "get",
-                short: "with Multi Select",
+                short: "With Multi Select",
                 description: "Retrieve specified phenomenonTime, result for a specific Observations.",
                 examples: {
                     http: `${testVersion}/${entity.name}(1)?$select=phenomenonTime,result`,
@@ -267,7 +263,7 @@ describe("endpoint : Observations", () => {
         it("Return Observations with multiple Standard result from multiDatastreams", (done) => {
             const infos = addTest({
                 type: "get",
-                short: "Observations with Standard Results",
+                short: "With Standard Results",
                 description: "Retrieve observations with multi result.",
                 examples: {
                     http: `${testVersion}/${entity.name}(11)`,
@@ -290,7 +286,7 @@ describe("endpoint : Observations", () => {
         it("Return Observations with multiple result from multiDatastreams", (done) => {
             const infos = addTest({
                 type: "get",
-                short: "Observations with Multi keyValue Results",
+                short: "With Multi keyValue Results",
                 description: "Retrieve observations with keyValue result.",
                 examples: {
                     http: `${testVersion}/${entity.name}(378)?$valuesKeys=true`,
@@ -337,7 +333,7 @@ describe("endpoint : Observations", () => {
         it("Return Observations with multiple result and split results", (done) => {
             const infos = addTest({
                 type: "get",
-                short: "with Split Results",
+                short: "With Split Results",
                 description: "Retrieve observations with splitted multi result.",
                 examples: {
                     http: `${testVersion}/MultiDatastreams(1)/${entity.name}?$splitResult=all`,
@@ -363,7 +359,7 @@ describe("endpoint : Observations", () => {
         it("Return Observations with multiple result and split result soil temperature", (done) => {
             const infos = addTest({
                 type: "get",
-                short: "with Split Result Property",
+                short: "With Split Result Property",
                 description: "Retrieve observations with splitted Temperature result.",
                 examples: {
                     http: `${testVersion}/MultiDatastreams(1)/${entity.name}?$splitResult="${testDatas.MultiDatastreams[0].unitOfMeasurements[0].name}"`,
@@ -428,7 +424,7 @@ describe("endpoint : Observations", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "Post with existing FOI",
+                short: "With existing FOI",
                 description: `Post a new ${entity.name}.${showHide(`Post${entity.name}`, apiInfos["10.2"])}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating",
                 examples: {
@@ -437,7 +433,8 @@ describe("endpoint : Observations", () => {
                     javascript: defaultPost("javascript", "KEYHTTP"),
                     python: defaultPost("python", "KEYHTTP")
                 },
-                params: datas
+                params: datas,
+                structure: listOfColumns(entity)
             });
             chai.request(server)
                 .post(`/test/${infos.examples.http}`)
@@ -456,8 +453,7 @@ describe("endpoint : Observations", () => {
         it(`Return Error if the payload is malformed ${nbColor}[10.2.2]`, (done) => {
             const infos = addTest({
                 type: "post",
-                short: "return Error if the payload is malformed",
-
+                short: "Return Error if the payload is malformed",
                 description: "",
                 reference: "",
                 examples: {
@@ -491,7 +487,7 @@ describe("endpoint : Observations", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "Post with FOI",
+                short: "With FOI",
                 description: "Post a new Observation.",
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#create-related-entities",
                 examples: {
@@ -524,7 +520,7 @@ describe("endpoint : Observations", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "Post from Datastream",
+                short: "From Datastream",
                 description: "POST Observation with existing Datastream.",
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating",
                 examples: {
@@ -563,7 +559,7 @@ describe("endpoint : Observations", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "Post from Datastream and FOI",
+                short: "From Datastream and FOI",
                 description: "POST Observation with existing Datastream.",
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating",
                 examples: {
@@ -611,7 +607,7 @@ describe("endpoint : Observations", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "Post from MultiDatastream",
+                short: "From MultiDatastream",
                 description: "POST Observation with existing MultiDatastream.",
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating",
                 examples: {
@@ -657,7 +653,7 @@ describe("endpoint : Observations", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "return error if There is no Stream",
+                short: "Return error if There is no Stream",
                 description: "",
                 reference: "",
                 examples: {
@@ -695,7 +691,7 @@ describe("endpoint : Observations", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "Post from MultiDatastream",
+                short: "From MultiDatastream",
                 description: "POST Observation with existing MultiDatastream.",
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating",
                 examples: {
@@ -731,7 +727,7 @@ describe("endpoint : Observations", () => {
                 };
                 const infos = addTest({
                     type: "patch",
-                    short: `${entity.name} Patch ${entity.name}`,
+                    short: "phenomenonTime and resultTime",
                     description: `Patch a ${entity.singular}.${showHide(`Patch${entity.name}`, apiInfos["10.3"])}`,
                     reference: "https://docs.ogc.org/is/18-088/18-088.html#_request_2",
                     examples: {
@@ -798,7 +794,7 @@ describe("endpoint : Observations", () => {
                 };
                 const infos = addTest({
                     type: "patch",
-                    short: `${entity.name} Patch with Datastream`,
+                    short: "With Datastream",
                     description: "Patch an Observation with Datastream.",
                     reference: "https://docs.ogc.org/is/18-088/18-088.html#_request_2",
                     examples: {

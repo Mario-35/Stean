@@ -23,7 +23,7 @@ const docs: IApiDoc[] = [];
 const entity: Ientity = _RAWDB.ObservedProperties;
 
 const addToApiDoc = (input: IApiInput) => {
-    docs.push(prepareToApiDoc(input, entity.name));
+    docs.push(prepareToApiDoc(input));
 };
 addToApiDoc({
     type: "infos",
@@ -34,7 +34,6 @@ addToApiDoc({
 });
 describe("endpoint : ObservedProperties", () => {
     const myId = "";
-    const temp = listOfColumns(entity);
     let token = "";
 
     before((done) => {
@@ -54,7 +53,7 @@ describe("endpoint : ObservedProperties", () => {
         it(`Return all ${entity.name} ${nbColor}[9.2.2]`, (done) => {
             const infos = addTest({
                 type: "get",
-                short: "all",
+                short: "All",
 
                 description: `Retrieve all ${entity.name}.${showHide(`Get${entity.name}`, apiInfos["9.2.2"])}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-collection-entities",
@@ -63,9 +62,7 @@ describe("endpoint : ObservedProperties", () => {
                     curl: defaultGet("curl", "KEYHTTP"),
                     javascript: defaultGet("javascript", "KEYHTTP"),
                     python: defaultGet("python", "KEYHTTP")
-                },
-                // structure: ["{number} id @iot.id", "{relation} selfLink @iot.selfLink", ...success]
-                structure: temp
+                }
             });
             chai.request(server)
                 .get(`/test/${infos.examples.http}`)
@@ -92,7 +89,7 @@ describe("endpoint : ObservedProperties", () => {
         it(`Return observedProperty id: 2 ${nbColor}[9.2.3]`, (done) => {
             const infos = addTest({
                 type: "get",
-                short: "one",
+                short: "One",
 
                 description: `Get a specific ${entity.singular}.${apiInfos["9.2.3"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity",
@@ -166,7 +163,7 @@ describe("endpoint : ObservedProperties", () => {
         it("Return observedProperty of a specific Datastream", (done) => {
             const infos = addTest({
                 type: "get",
-                short: "from a specific Datastream",
+                short: "From a specific Datastream",
                 description: "Get observed Property from Datastream",
                 examples: {
                     http: `${testVersion}/Datastreams(9)/ObservedProperty`,
@@ -226,7 +223,7 @@ describe("endpoint : ObservedProperties", () => {
         it(`Retrieve specified properties for a specific ${entity.name}`, (done) => {
             const infos = addTest({
                 type: "get",
-                short: "from a Select",
+                short: "From a Select",
                 description: "Retrieve specified properties for a specific observed Property.",
                 examples: {
                     http: `${testVersion}/${entity.name}(1)?$select=description`,
@@ -375,7 +372,7 @@ describe("endpoint : ObservedProperties", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "Post basic",
+                short: "Basic",
                 description: `Post a new ${entity.name}.${showHide(`Post${entity.name}`, apiInfos["10.2"])}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#_request",
                 examples: {
@@ -384,7 +381,8 @@ describe("endpoint : ObservedProperties", () => {
                     javascript: defaultPost("javascript", "KEYHTTP"),
                     python: defaultPost("python", "KEYHTTP")
                 },
-                params: datas
+                params: datas,
+                structure: listOfColumns(entity)
             });
             chai.request(server)
                 .post(`/test/${infos.examples.http}`)
@@ -406,7 +404,7 @@ describe("endpoint : ObservedProperties", () => {
         it(`Return Error if the payload is malformed ${nbColor}[10.2.2]`, (done) => {
             const infos = addTest({
                 type: "post",
-                short: "return Error if the payload is malformed",
+                short: "Return Error if the payload is malformed",
 
                 description: "",
                 reference: "",

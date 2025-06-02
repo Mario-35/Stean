@@ -8,6 +8,7 @@
         "strict": true,
         "moduleResolution": "node",
         "noUnusedLocals": true,
+        "skipLibCheck": true,
         "noUnusedParameters": false,
         "strictPropertyInitialization": false,
         "preserveConstEnums": true,

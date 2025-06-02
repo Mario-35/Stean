@@ -29,9 +29,12 @@ export const nbColorTitle = "\x1b[35m";
 export const testLog = (input: any) => {
     process.stdout.write(util.inspect(input, { showHidden: false, depth: null, colors: false }));
 };
-export const proxy = (moi: boolean) => (moi !== true ? "http://localhost:8029/test" : `@PROXY@/`);
+export const proxy = (moi: boolean) => (moi !== true ? "http://localhost:8029/test" : `http://PROXY/`);
 import packageJson from "../../../package.json";
 import { EConstant, EEncodingType } from "../../server/enums";
+import { highlight, languages } from "prismjs";
+import "prismjs/components/prism-python";
+import "prismjs/components/prism-http";
 export const VERSION = packageJson.version;
 
 const documentation: { [key: string]: IApiDoc[] } = {};
@@ -57,16 +60,17 @@ export interface IApiInput {
     apiError?: string[];
     structure?: Istructure;
     params?: Record<string, any>;
+    datas?: string;
     result: any;
 }
 export const defaultPostPatch = (lang: string, method: string, request: string): string => {
     switch (lang.toUpperCase()) {
         case "CURL":
-            return `curl -X ${method.toUpperCase()} -H 'Content-Type: application/json' -d '@DATAS@}' proxy${request}`;
+            return highlight(`curl -X ${method.toUpperCase()} -H 'Content-Type: application/json' -d '@DATAS@}' proxy${request}`, languages.http, "http");
         case "JAVASCRIPT":
-            return `const response = await fetch("proxy${request}", {\r\n${EConstant.tab}method: "${method.toUpperCase()}",\r\n\theaders: {\r\n${EConstant.tab}    "Content-Type": "${EEncodingType.json}",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();`;
+            return highlight(`const response = await fetch("proxy${request}", {\r\n${EConstant.tab}method: "${method.toUpperCase()}",\r\n\theaders: {\r\n${EConstant.tab}    "Content-Type": "${EEncodingType.json}",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();`, languages.javascript, "javascript");
         case "PYTHON":
-            return `import requests\r\nimport json\r\nresponse_API = requests.${method}('proxy${request}', (headers = { "Content-Type": "${EEncodingType.json}" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)`;
+            return highlight(`import requests\r\nimport json\r\nresponse_API = requests.${method}('proxy${request}', (headers = { "Content-Type": "${EEncodingType.json}" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)`, languages.python, "python");
     }
     return "";
 };
@@ -81,9 +85,9 @@ export const defaultDelete = (lang: string, request: string): string => {
         case "CURL":
             return `curl -DELETE "proxy${request}"`;
         case "JAVASCRIPT":
-            return `const response = await fetch("proxy${request}", {\r\n\tmethod: "DELETE"\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();`;
+            return highlight(`const response = await fetch("proxy${request}", {\r\n\tmethod: "DELETE"\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();`, languages.javascript, "javascript");
         case "PYTHON":
-            return `import requests\r\nimport json\r\nresponse_API = requests.delete('proxy${request}')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)`;
+            return highlight(`import requests\r\nimport json\r\nresponse_API = requests.delete('proxy${request}')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)`, languages.python, "python");
     }
     return "";
 };
@@ -92,9 +96,9 @@ export const defaultGet = (lang: string, request: string): string => {
         case "CURL":
             return `curl -GET "proxy${request}"`;
         case "JAVASCRIPT":
-            return `const response = await fetch("proxy${request}", {\r\n\tmethod: "GET",\r\n\theaders: {\r\n\t    "Content-Type": ${EEncodingType.json},\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();`;
+            return highlight(`const response = await fetch("proxy${request}", {\r\n\tmethod: "GET",\r\n\theaders: {\r\n\t    "Content-Type": ${EEncodingType.json},\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();`, languages.javascript, "javascript");
         case "PYTHON":
-            return `import requests\r\nimport json\r\nresponse_API = requests.get('proxy${request}')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)`;
+            return highlight(`import requests\r\nimport json\r\nresponse_API = requests.get('proxy${request}')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)`, languages.python, "python");
     }
     return "";
 };
@@ -121,7 +125,7 @@ export const saveDoc = () => {
     });
 };
 
-export const prepareToApiDoc = (input: IApiInput, Entity: string): IApiDoc => {
+export const prepareToApiDoc = (input: IApiInput): IApiDoc => {
     return {
         short: input.short,
         type: input.type,
@@ -131,7 +135,7 @@ export const prepareToApiDoc = (input: IApiInput, Entity: string): IApiDoc => {
         examples: input.examples,
         apiError: input.apiError,
         structure: input.structure,
-        params: input.params ? input.params : undefined,
+        params: input.params,
         request: input.type == "get" && input.examples ? `proxy${input.examples.http}` : "",
         success: input.result.type === EEncodingType.txt || input.result.type === EEncodingType.csv ? input.result.text : input.result && input.result.body ? JSON.stringify(input.result.body, null, 4) : undefined
     };
@@ -466,30 +470,22 @@ export interface Istructure {
 }
 
 export const listOfColumns = (inputEntity: Ientity) => {
+    const infosEntity: Record<string, any> = infos[inputEntity.name];
     const structure: Istructure = {
         columns: {},
         relations: {}
     };
-    const success: string[] = [];
 
-    const params: string[] = [];
-    const infosEntity: Record<string, any> = infos[inputEntity.name];
-
-    Object.keys(infosEntity.columns).forEach((elem: string) => {
-        const optional = inputEntity.columns[elem] && inputEntity.columns[elem].create.includes("NOT NULL") ? elem : `[${elem}]`;
-        success.push(`{${getColumnType(inputEntity.columns[elem])}} ${elem} ${infosEntity["columns"][elem] || elem}`);
-        if (inputEntity.columns[elem] && !inputEntity.columns[elem].create.includes("GENERATED")) params.push(`{${getColumnType(inputEntity.columns[elem])}} ${optional} ${infosEntity["type"] && infosEntity["type"][elem] ? infosEntity["type"][elem] : ""}`);
-
-        structure["columns"][elem] = {
-            "description": infosEntity["columns"][elem],
-            "type": getColumnType(inputEntity.columns[elem]),
-            "requis": inputEntity.columns[elem].create.includes("NOT NULL") ? true : false
-        };
-    });
+    Object.keys(infosEntity.columns)
+        .filter((e) => e != "id")
+        .forEach((elem: string) => {
+            structure["columns"][elem] = {
+                "description": infosEntity["columns"][elem],
+                "type": getColumnType(inputEntity.columns[elem]),
+                "requis": inputEntity.columns[elem].create.includes("NOT NULL") ? true : false
+            };
+        });
     Object.keys(inputEntity.relations).forEach((elem: string) => {
-        const optional = inputEntity.columns[elem] && inputEntity.columns[elem].create.includes("NOT NULL") ? elem : `[${elem}]`;
-        success.push(`{relation} ${elem} ${infosEntity["relations"][elem] || ""}`);
-        params.push(`{relation} ${optional} ${infosEntity["type"] && infosEntity["type"][elem] ? infosEntity["type"][elem] : ""}`);
         structure["relations"][elem] = {
             "description": infosEntity["type"] && infosEntity["type"][elem] ? infosEntity["type"][elem] : "",
             "type": "relation",

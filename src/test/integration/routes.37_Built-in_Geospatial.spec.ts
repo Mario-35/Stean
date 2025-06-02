@@ -35,11 +35,11 @@ chai.use(chaiHttp);
 const should = chai.should();
 const docs: IApiDoc[] = [];
 const addToApiDoc = (input: IApiInput) => {
-    docs.push(prepareToApiDoc(input, "BuiltInGeospatial"));
+    docs.push(prepareToApiDoc(input));
 };
 addToApiDoc({
     type: "infos",
-    short: "BuiltInGeospatial Infos",
+    short: "Presentation",
     description: ` Geospatial functions work on all geospatial fields (Location/location and FeatureOfInterest/feature) and on geospatial constants. Geospatial constants can be specified by using WKT enclosed in geography'…', for example:.`,
     reference: "https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions",
     result: ""

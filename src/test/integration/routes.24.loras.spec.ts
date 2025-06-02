@@ -24,19 +24,18 @@ const should = chai.should();
 const docs: IApiDoc[] = [];
 const entity: Ientity = _RAWDB.Loras;
 const addToApiDoc = (input: IApiInput) => {
-    docs.push(prepareToApiDoc(input, entity.name));
+    docs.push(prepareToApiDoc(input));
 };
 
 addToApiDoc({
     type: "infos",
-    short: `${entity.name} Extension`,
+    short: "Presentation Extension",
     description: infos[entity.name].definition,
     reference: infos[entity.name].reference,
     result: ""
 });
 
 describe("endpoint : Lora", () => {
-    const temp = listOfColumns(entity);
     let token = "";
 
     before((done) => {
@@ -58,7 +57,7 @@ describe("endpoint : Lora", () => {
         it(`Return all ${entity.name} ${nbColor}[9.2.2]`, (done) => {
             const infos = addTest({
                 type: "get",
-                short: "all",
+                short: "All",
 
                 description: `Retrieve all ${entity.name}.${showHide(`Get${entity.name}`, apiInfos["9.2.2"])}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-collection-entities",
@@ -67,9 +66,7 @@ describe("endpoint : Lora", () => {
                     curl: defaultGet("curl", "KEYHTTP"),
                     javascript: defaultGet("javascript", "KEYHTTP"),
                     python: defaultGet("python", "KEYHTTP")
-                },
-                // structure: ["{number} id @iot.id", "{relation} selfLink @iot.selfLink", ...success]
-                structure: temp
+                }
             });
             chai.request(server)
                 .get(`/test/${infos.examples.http}`)
@@ -96,7 +93,7 @@ describe("endpoint : Lora", () => {
         it(`Return ${entity.name} id: 1 ${nbColor}[9.2.3]`, (done) => {
             const infos = addTest({
                 type: "get",
-                short: "one",
+                short: "One",
 
                 description: `Get a specific ${entity.singular}.${apiInfos["9.2.3"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity",
@@ -150,7 +147,7 @@ describe("endpoint : Lora", () => {
         it(`Return ${entity.name} deveui: 2CF7F1202520017E`, (done) => {
             const infos = addTest({
                 type: "get",
-                short: "one from deveui",
+                short: "One from deveui",
                 description: `Get a specific ${entity.singular} from deveui`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity",
                 examples: {
@@ -413,7 +410,8 @@ describe("endpoint : Lora", () => {
                     javascript: defaultPost("javascript", "KEYHTTP"),
                     python: defaultPost("python", "KEYHTTP")
                 },
-                params: datas
+                params: datas,
+                structure: listOfColumns(entity)
             });
             chai.request(server)
                 .post(`/test/${infos.examples.http}`)
@@ -482,7 +480,7 @@ describe("endpoint : Lora", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "return Error if the payload is malformed",
+                short: "Return Error if the payload is malformed",
 
                 description: "",
                 reference: "",
@@ -577,7 +575,7 @@ describe("endpoint : Lora", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "Post basic",
+                short: "Basic",
                 description: `Post a new Observation in a Lora Thing.`,
                 examples: {
                     http: `${testVersion}/${entity.name}`,
@@ -602,7 +600,7 @@ describe("endpoint : Lora", () => {
         it(`Return Error if the payload is malformed ${nbColor}[10.2.2]`, (done) => {
             const infos = addTest({
                 type: "post",
-                short: "return Error if the payload is malformed",
+                short: "Return Error if the payload is malformed",
 
                 description: "",
                 reference: "",

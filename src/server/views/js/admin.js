@@ -1,4 +1,3 @@
-const pretty = new pp();
 
 // DON'T REMOVE !!!!
 // @start@
@@ -47,7 +46,7 @@ btnService.onclick = async (e) => {
 		return;
 	} 
 	try {
-		datas.innerText = jsonDatas.innerText.replace(/[^\x00-\x7F]/g, '');
+		jsonDatas.innerText = jsonDatas.innerText.replace(/[^\x00-\x7F]/g, '');
 		getElement("actionForm").action = `${_PARAMS.addUrl.split("service")[0]}admin`;
 		getElement("_action").value = "addService";
 		document.getElementById("actionForm").requestSubmit();
@@ -165,7 +164,7 @@ async function selectChange(name ,elem) {
 		case "Loras":
 			const url = `${_PARAMS.services[name].linkBase}/${_PARAMS.services[name].version}/Decoders?$select=id,name`;		
 			const datas = await getDatas(url);
-			getElement("infos"+ name).innerHTML =  Object.values(datas.value).map(e => `<option value="${e.name}" onclick="showDecoderInfos('${name}','${e["@iot.id"]}')">${e.name}</option>`).join("\n");
+			getElement("infos"+ name).innerHTML =  Object.values(jsonDatas.value).map(e => `<option value="${e.name}" onclick="showDecoderInfos('${name}','${e["@iot.id"]}')">${e.name}</option>`).join("\n");
 			break;
 		case "Synonyms": 
 			if (_PARAMS.services[name].service)

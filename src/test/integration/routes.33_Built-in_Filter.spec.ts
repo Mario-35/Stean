@@ -17,11 +17,11 @@ chai.use(chaiHttp);
 const should = chai.should();
 const docs: IApiDoc[] = [];
 const addToApiDoc = (input: IApiInput) => {
-    docs.push(prepareToApiDoc(input, "BuiltInOperators"));
+    docs.push(prepareToApiDoc(input));
 };
 addToApiDoc({
     type: "infos",
-    short: "BuiltInOperators Infos",
+    short: "Presentation",
     description: `The $filter system query option allows clients to filter a collection of entities that are addressed by a request URL. The expression specified with $filter is evaluated for each entity in the collection, and only items WHERE the expression evaluates to true SHALL be included in the response. Entities for which the expression evaluates to false or to null, or which reference properties that are unavailable due to permissions, SHALL be omitted from the response.${apiInfos["9.3.3.5.1"]}`,
     reference: "https://docs.ogc.org/is/18-088/18-088.html#requirement-request-data-filter",
     result: ""
@@ -480,7 +480,7 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
     //         });
     // });
     it("Save and write apiDoc", (done) => {
-        generateApiDoc(docs, "apiBuiltInOperators.js");
+        generateApiDoc(docs, "BuiltInOperators");
         done();
     });
 });

@@ -20,11 +20,11 @@ const docs: IApiDoc[] = [];
 const entity: Ientity = _RAWDB.CreateObservations;
 
 const addToApiDoc = (input: IApiInput) => {
-    docs.push(prepareToApiDoc(input, "CreateObservations"));
+    docs.push(prepareToApiDoc(input));
 };
 addToApiDoc({
     type: "infos",
-    short: "CreateObservations Infos.",
+    short: "Presentation",
     description: `Besides creating Observation entities one by one with multiple HTTP POST requests, there is a need to create multiple Observation entities with a lighter message body in a single HTTP request. In this case, a sensing system can buffer multiple Observations and send them to a SensorThings service in one HTTP request. Here we propose an Action operation CreateObservations.
     ${blank(1)}The message body aggregates Observations by Datastreams, which means all the Observations linked to one Datastream SHALL be aggregated in one JSON object. The parameters of each JSON object are shown in the following table.
     ${blank(2)}As an Observation links to one FeatureOfInterest, to establish the link between an Observation and a FeatureOfInterest, users should include the FeatureOfInterest ids in the dataArray. If no FeatureOfInterest id presented, the FeatureOfInterest will be created based on the Location entities of the linked Thing entity by default.
@@ -76,7 +76,7 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
     it("should return 4 observations links added that was added", (done) => {
         const infos = addTest({
             type: "post",
-            short: "CreateObservations Add datastream",
+            short: "Add datastream",
             description: "Create Observations with CreateObservations",
             examples: {
                 http: `${testVersion}/CreateObservations`,
@@ -114,7 +114,7 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
         };
         const infos = addTest({
             type: "post",
-            short: "return Error if datastream does not exist",
+            short: "Return Error if datastream does not exist",
             description: "",
             reference: "",
             examples: {
@@ -136,7 +136,7 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
     it("should return 4 observations in datastream 2", (done) => {
         const infos = addTest({
             type: "post",
-            short: "return Error if datastream does not exist",
+            short: "Return Error if datastream does not exist",
             description: "",
             reference: "",
             examples: {
@@ -160,7 +160,7 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
     it("should return 4 observations duplicate", (done) => {
         const infos = addTest({
             type: "post",
-            short: "CreateObservations Add datastream duplicate.",
+            short: "Add datastream duplicate.",
             description: "Create Observations duplicate with CreateObservations",
             examples: {
                 http: `${testVersion}/${entity.name}`,
@@ -191,7 +191,7 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
         };
         const infos = addTest({
             type: "post",
-            short: "CreateObservations Add datastream duplicate = delete.",
+            short: "Add datastream duplicate = delete.",
             description: "Create Observations duplicate delete with CreateObservations",
             examples: {
                 http: `${testVersion}/${entity.name}`,
@@ -220,7 +220,7 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
         const datas = muliDatasObs(2);
         const infos = addTest({
             type: "post",
-            short: "CreateObservations Add multiDatastream",
+            short: "Add multiDatastream",
             description: "Create Observations duplicate with CreateObservations",
             examples: {
                 http: `${testVersion}/${entity.name}`,
@@ -248,7 +248,7 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
         const datas = muliDatasObs(2);
         const infos = addTest({
             type: "post",
-            short: "CreateObservations Add multiDatastream duplicate.",
+            short: "Add multiDatastream duplicate.",
             description: "Create Observations duplicate with CreateObservations",
             examples: {
                 http: `${testVersion}/${entity.name}`,
@@ -279,7 +279,7 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
         };
         const infos = addTest({
             type: "post",
-            short: "CreateObservations Add multiDatastream duplicate = delete.",
+            short: "Add multiDatastream duplicate = delete.",
             description: "Create Observations duplicate delete with CreateObservations",
             examples: {
                 http: `${testVersion}/${entity.name}`,

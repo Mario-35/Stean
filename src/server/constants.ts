@@ -19,6 +19,7 @@ export const timestampNow = (): string => new Date().toLocaleTimeString();
 export function setDebug(input: boolean) {
     _DEBUG = input;
 }
+
 export function setReady(input: boolean) {
     _READY = input;
 }

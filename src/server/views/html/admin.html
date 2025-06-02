@@ -23,7 +23,7 @@
       })(document, window, 0);
     </script>
   </head>
-  <body>
+  <body onload="document.documentElement.className = localStorage.getItem('theme');">
     <div id="spinner" class="loading">Loading&#8230;</div>
     <div id="container">
       <div id="first">
@@ -37,7 +37,7 @@
           <form id="actionForm" action="" method="post">
             <!-- START ACCORDION -->
             <div class="patrom-accordions pro-form">
-              <input type="hidden" id="_action" name="_action" value=""/>
+              <input type="hidden" id="_action" name="_action" value="" />
               <!-- New Service -->
               <div class="patrom-accordion">
                 <input class="patrom-accordion-check" type="checkbox" id="chck1" checked>
@@ -48,7 +48,7 @@
                     <div class="patrom-col col-span-6">
                       <div class="field">
                         <label for="optName">Name :</label>
-                        <input id="optName" name="optName" type="text" class="patrom-text-input width100"_100-100>
+                        <input id="optName" name="optName" type="text" class="patrom-text-input width100" _100-100>
                       </div>
                     </div>
                     <!-- Version -->
@@ -59,27 +59,27 @@
                         <select class="patrom-select width100" tabindex="1" name="optVersion" id="optVersion"></select>
                       </div>
                     </div>
-                  <!-- Page -->
-                  <div class="patrom-col col-span-2">
-                    <div class="field">
-                      <label for="pageOption">nb / page</label>
-                      <input id="pageOption" name="pageOption" maxlength="8" type="text" class="patrom-text-input width100" size="6">
+                    <!-- Page -->
+                    <div class="patrom-col col-span-2">
+                      <div class="field">
+                        <label for="pageOption">nb / page</label>
+                        <input id="pageOption" name="pageOption" maxlength="8" type="text" class="patrom-text-input width100" size="6">
+                      </div>
                     </div>
-                  </div>
                   </div>
                   <div class="patrom-row">
                     <!-- Password -->
                     <div class="patrom-col col-span-6">
                       <div class="field">
                         <label for="optPassword">Password :</label>
-                        <input id="optPassword" name="optPassword" type="text" class="patrom-text-input width100"_100-100>
+                        <input id="optPassword" name="optPassword" type="text" class="patrom-text-input width100" _100-100>
                       </div>
                     </div>
                     <!-- Repeat -->
                     <div class="patrom-col col-span-6">
                       <div class="field">
                         <label for="optRepeat">Repeat :</label>
-                        <input id="optRepeat" name="optRepeat" type="text" class="patrom-text-input width100"_100-100>
+                        <input id="optRepeat" name="optRepeat" type="text" class="patrom-text-input width100" _100-100>
                       </div>
                     </div>
                   </div>
@@ -93,7 +93,7 @@
                     </div>
                   </div>
                   <!-- Extensions -->
-                  <div class="patrom-row">                
+                  <div class="patrom-row">
                     <div class="patrom-col col-span-12">
                       <div class="field">
                         <label for="extensionsOption">Extensions :</label>
@@ -120,83 +120,63 @@
                   <div class="patrom-row">
                     <div class="patrom-button-bar__item">
                       <button class="patrom-button-bar__button" id="btnService"> Create service </button>
-
                     </div>
                   </div>
                 </div>
               </div>
-            <!-- Tools -->
-            <div class="patrom-accordion">
-              <input class="patrom-accordion-check" type="checkbox" name= "propertyTab" id="chck4">
-              <label class="patrom-accordion-label" for="chck4">Tools</label>
-              <div class="patrom-accordion-content">
-                <!-- Logs -->
-                <div class="patrom-col col-span-2">
-                  <div class="field">
-                    <label for="optLogs">Logs</label>
-                    <br>
-                    <select class="patrom-select width100" tabindex="1" name="optLogs" id="optLogs"></select>
+              <!-- Tools -->
+              <div class="patrom-accordion">
+                <input class="patrom-accordion-check" type="checkbox" name="propertyTab" id="chck4">
+                <label class="patrom-accordion-label" for="chck4">Tools</label>
+                <div class="patrom-accordion-content">
+                  <!-- Logs -->
+                  <div class="patrom-col col-span-2">
+                    <div class="field">
+                      <label for="optLogs">Logs</label>
+                      <br>
+                      <select class="patrom-select width100" tabindex="1" name="optLogs" id="optLogs"></select>
+                    </div>
                   </div>
-                </div>
-                <div class="patrom-col col-span-12">
-                  <div class="patrom-button-bar">
+                  <div class="patrom-col col-span-12">
+                    <div class="patrom-button-bar">
                       <div class="patrom-button-bar__item">
-                          <button class="patrom-button-bar__button" id="btnExport">Export</button>
-                        </div>
-                      &nbsp;
-                      <div class="patrom-button-bar__item">
-                          <button class="patrom-button-bar__button" id="btnClear">clear</button>
-                        </div>
-                      &nbsp;
-                      <div class="patrom-button-bar__item">
-                          <button class="patrom-button-bar__button" id="btnPostTemplate">Template</button>
-                      </div>
-                      &nbsp;
-                      <div class="patrom-button-bar__item">
+                        <button class="patrom-button-bar__button" id="btnExport">Export</button>
+                      </div> &nbsp; <div class="patrom-button-bar__item">
+                        <button class="patrom-button-bar__button" id="btnClear">clear</button>
+                      </div> &nbsp; <div class="patrom-button-bar__item">
+                        <button class="patrom-button-bar__button" id="btnPostTemplate">Template</button>
+                      </div> &nbsp; <div class="patrom-button-bar__item">
                         <button class="patrom-button-bar__button" id="btnShowLinks">urls</button>
-                      </div>
-                      &nbsp;
-                      <div class="patrom-button-bar__item">
+                      </div> &nbsp; <div class="patrom-button-bar__item">
                         <button class="patrom-button-bar__button" id="btnShowGeo">geos</button>
                       </div>
                     </div>
                   </div>
+                </div>
+              </div>
+              <!-- Infos -->
+              <div class="patrom-row">
+                <div class="patrom-col col-span-2">
+                  <label class="patrom-switch">
+                    <input id="theme" type="checkbox" class="patrom-switch__input" onchange="localStorage.setItem('theme', localStorage.getItem('theme') === 'dark' ? 'light' : 'dark'); document.documentElement.className = localStorage.getItem('theme');">
+                    <div class="patrom-switch__theme"></div>
+                  </label>
+                </div>
               </div>
             </div>
-
-          <!-- Infos -->
-          <div class="patrom-row">
-            <div class="patrom-col col-span-2">
-              <label class="patrom-switch">
-                <input id="theme" type="checkbox" class="patrom-switch__input" onchange="toggleTheme()">
-                <div class="patrom-switch__theme"></div>
-              </label>
-            </div>
-          </div>  
-
-            </div>
-            <!-- END ACCORDION -->
-            <!-- JSON DATAS -->
-              @connection@
-            <div id="jsonDatasContainer" onpaste="jsonDatasPasteEvent(event)" ondrop="jsonDatasPasteEvent(event)">
-              <div contenteditable spellcheck="false" id="jsonDatas" class='blakkAll shj-lang-json'></div>
-            </div>
-            <!-- DATAS HIDE  -->
-            <textarea spellcheck="false" class="blakkAll shj-lang-json" id="datas" name="datas"></textarea>
+            <!-- END ACCORDION --> @connection@
+            <!-- JSON DATAS --> @jsonDatas@
+            <!-- BUTTONS ICONS -->
           </form>
+        </div>
+        <!-- SOCIAL PANEL HTML --> @social@ @new@
       </div>
-      <!-- SOCIAL PANEL HTML -->
-      @social@
-      @new@
-    </div>
-    <div id="two">
-      <div id="wrapper" class="wrapper">
-        <div class="row">
-          @cards@
+      <div id="two">
+        <div id="wrapper" class="wrapper">
+          <div class="row"> @cards@ </div>
         </div>
       </div>
-    </div>
-    <div id="modalOverlay"></div>
+      <div id="modalOverlay"></div>
     </div>
     <script src="patrom.js"></script>
     <script src="helper.js"></script>
@@ -210,6 +190,5 @@
     <script src="window.js"></script>
     <script src="windowList.js"></script>
     <script src="social.js"></script>
-
   </body>
 </html>

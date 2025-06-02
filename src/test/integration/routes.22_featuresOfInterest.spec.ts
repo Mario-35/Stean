@@ -22,7 +22,7 @@ const should = chai.should();
 const docs: IApiDoc[] = [];
 const entity: Ientity = _RAWDB.FeaturesOfInterest;
 const addToApiDoc = (input: IApiInput) => {
-    docs.push(prepareToApiDoc(input, entity.name));
+    docs.push(prepareToApiDoc(input));
 };
 addToApiDoc({
     type: "infos",
@@ -32,7 +32,6 @@ addToApiDoc({
     result: ""
 });
 describe("endpoint : Features of Interest", () => {
-    const temp = listOfColumns(entity);
     let token = "";
     before((done) => {
         chai.request(server)
@@ -50,7 +49,7 @@ describe("endpoint : Features of Interest", () => {
         it(`Return all ${entity.name} ${nbColor}[9.2.2]`, (done) => {
             const infos = addTest({
                 type: "get",
-                short: "all",
+                short: "All",
 
                 description: `Retrieve all ${entity.name}.${showHide(`Get${entity.name}`, apiInfos["9.2.2"])}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-collection-entities",
@@ -59,9 +58,7 @@ describe("endpoint : Features of Interest", () => {
                     curl: defaultGet("curl", "KEYHTTP"),
                     javascript: defaultGet("javascript", "KEYHTTP"),
                     python: defaultGet("python", "KEYHTTP")
-                },
-                // structure: ["{number} id @iot.id", "{relation} selfLink @iot.selfLink", ...success]
-                structure: temp
+                }
             });
             executeQuery(count(entity.table)).then((result: Record<string, any>) => {
                 chai.request(server)
@@ -83,7 +80,7 @@ describe("endpoint : Features of Interest", () => {
         it(`Return Feature of interest ${nbColor}[9.2.3]`, (done) => {
             const infos = addTest({
                 type: "get",
-                short: "one",
+                short: "One",
 
                 description: "Get a specific Feature of interest.",
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity",
@@ -151,7 +148,7 @@ describe("endpoint : Features of Interest", () => {
         it(`Return all features of interests using $expand query option ${nbColor}[9.3.2.1]`, (done) => {
             const infos = addTest({
                 type: "get",
-                short: "one and expand",
+                short: "One and expand",
                 description: "Get a specific Feature of interest and expand Observations",
                 reference: "",
                 examples: {
@@ -243,7 +240,7 @@ describe("endpoint : Features of Interest", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "Post basic",
+                short: "Basic",
                 description: `Post a new ${entity.name}.${showHide(`Post${entity.name}`, apiInfos["10.2"])}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#_request",
                 examples: {
@@ -252,7 +249,8 @@ describe("endpoint : Features of Interest", () => {
                     javascript: defaultPost("javascript", "KEYHTTP"),
                     python: defaultPost("python", "KEYHTTP")
                 },
-                params: datas
+                params: datas,
+                structure: listOfColumns(entity)
             });
             chai.request(server)
                 .post(`/test/${infos.examples.http}`)
@@ -271,7 +269,7 @@ describe("endpoint : Features of Interest", () => {
         it(`Return Error if the payload is malformed ${nbColor}[10.2.2]`, (done) => {
             const infos = addTest({
                 type: "post",
-                short: "return Error if the payload is malformed",
+                short: "Return Error if the payload is malformed",
 
                 description: "",
                 reference: "",
@@ -332,7 +330,7 @@ describe("endpoint : Features of Interest", () => {
                         newItems.name.should.not.eql(result["name"]);
                         addToApiDoc({
                             type: "patch",
-                            short: "Patch one",
+                            short: "One",
                             reference: "https://docs.ogc.org/is/18-088/18-088.html#_request_2",
                             description: "Patch a sensor.",
                             result: res

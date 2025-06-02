@@ -332,20 +332,6 @@ class QueryBuilder {
 					}
 				});
 			}
-			// @ts-ignore
-			// const choices = new Choices(conditionSelect, {
-			//     choices: options,
-			//     allowHTML: true,
-			//     itemSelectText: '',
-			// });
-			// if (value !== null) {
-			//     if (!(value instanceof Array)) {
-			//         value = [value];
-			//     }
-			//     choices.setChoices(value);
-			//     choices.setChoiceByValue(value);
-			// }
-			// this.choiceElements[criteriumElement.id] = choices;
 		}
 	}
 

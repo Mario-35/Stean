@@ -27,7 +27,7 @@ buildTableWithCsv = (input, separator, container) => {
 	_table.setAttribute("id", "csv");
 	var _thead = document.createElement("thead");
 	var _tbody = document.createElement("tbody");
-	
+
 	for (var singleRow = 0; singleRow < allRows.length; singleRow++) {
 		var _tr = document.createElement("tr");
 		const rowCells = allRows[singleRow].split(separator);

@@ -25,7 +25,7 @@ const should = chai.should();
 const docs: IApiDoc[] = [];
 const entity: Ientity = _RAWDB.Things;
 const addToApiDoc = (input: IApiInput) => {
-    docs.push(prepareToApiDoc(input, entity.name));
+    docs.push(prepareToApiDoc(input));
 };
 addToApiDoc({
     type: "infos",
@@ -36,7 +36,6 @@ addToApiDoc({
 });
 describe("endpoint : Thing [8.2.1]", () => {
     const myId = 0;
-    const temp = listOfColumns(entity);
     let token = "";
     before((done) => {
         addStartNewTest(entity.name);
@@ -58,7 +57,7 @@ describe("endpoint : Thing [8.2.1]", () => {
         it(`Return all ${entity.name} ${nbColor}[9.2.2]`, (done) => {
             const infos = addTest({
                 type: "get",
-                short: "all",
+                short: "All",
                 description: `Retrieve all ${entity.name}.${showHide(`Get${entity.name}`, apiInfos["9.2.2"])}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-collection-entities",
                 examples: {
@@ -66,9 +65,7 @@ describe("endpoint : Thing [8.2.1]", () => {
                     curl: defaultGet("curl", "KEYHTTP"),
                     javascript: defaultGet("javascript", "KEYHTTP"),
                     python: defaultGet("python", "KEYHTTP")
-                },
-                // structure: ["{number} id @iot.id", "{relation} selfLink @iot.selfLink", ...success]
-                structure: temp
+                }
             });
             chai.request(server)
                 .get(`/test/${infos.examples.http}`)
@@ -94,7 +91,7 @@ describe("endpoint : Thing [8.2.1]", () => {
         it(`Return ${entity.name} id: 1 ${nbColor}[9.2.3]`, (done) => {
             const infos = addTest({
                 type: "get",
-                short: "one",
+                short: "One",
                 description: `Get a specific ${entity.singular}.${apiInfos["9.2.3"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity",
                 examples: {
@@ -167,7 +164,7 @@ describe("endpoint : Thing [8.2.1]", () => {
         it(`Return property name of Thing id: 1 ${nbColor}[9.2.4]`, (done) => {
             const infos = addTest({
                 type: "get",
-                short: "only a property",
+                short: "Only a property",
                 description: `Get the name of a specific Thing.${apiInfos["9.2.4"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-property-of-entity",
                 examples: {
@@ -221,7 +218,7 @@ describe("endpoint : Thing [8.2.1]", () => {
         it(`Return value of property name Thing id: 1 ${nbColor}[9.2.5]`, (done) => {
             const infos = addTest({
                 type: "get",
-                short: "only the value of a property",
+                short: "Only the value of a property",
                 description: `Get the value of the property of a specific Thing.${apiInfos["9.2.5"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-value-of-property",
                 examples: {
@@ -655,7 +652,7 @@ describe("endpoint : Thing [8.2.1]", () => {
         it(`Return ${entity.name} association link ${nbColor}[9.2.7]`, (done) => {
             const infos = addTest({
                 type: "get",
-                short: "only references",
+                short: "Only references",
                 description: `Get only references of all Things.${apiInfos["9.2.7"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-associationlink",
                 examples: {
@@ -872,7 +869,7 @@ describe("endpoint : Thing [8.2.1]", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "Post basic",
+                short: "Basic",
                 description: `Post a new ${entity.name}.${showHide(`Post${entity.name}`, apiInfos["10.2"])}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#_request",
                 apiPermission: "admin:computer",
@@ -896,7 +893,8 @@ describe("endpoint : Thing [8.2.1]", () => {
                     res.body.should.include.keys(testsKeys);
                     addToApiDoc({
                         ...infos,
-                        result: limitResult(res)
+                        result: limitResult(res),
+                        structure: listOfColumns(entity)
                     });
                     done();
                 });
@@ -942,7 +940,7 @@ describe("endpoint : Thing [8.2.1]", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "Post with new Location",
+                short: "With new Location",
                 description: `A Location entity can be linked to a Thing at its creation time. The Location provided will be a new Location in the system.${apiInfos["10.2.1.2"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#create-related-entities",
                 examples: {
@@ -1008,7 +1006,7 @@ describe("endpoint : Thing [8.2.1]", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "Post with existing Location",
+                short: "With existing Location",
                 description: `Create a Thing with existing location.${apiInfos["10.2.1.1"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating",
                 examples: {
@@ -1070,7 +1068,7 @@ describe("endpoint : Thing [8.2.1]", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "Post with existing Location that don't exist",
+                short: "With existing Location that don't exist",
                 description: "",
                 reference: "",
                 examples: {
@@ -1132,7 +1130,7 @@ describe("endpoint : Thing [8.2.1]", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "Post with Location and Datastream",
+                short: "With Location and Datastream",
                 description: "Create a Thing with new location & datastream.",
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#create-related-entities",
                 examples: {
@@ -1260,7 +1258,7 @@ describe("endpoint : Thing [8.2.1]", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "Post with Inner Posts",
+                short: "With Inner Posts",
                 description: "Create a Thing with with Inner Posts.",
                 reference: "",
                 examples: {
@@ -1302,7 +1300,7 @@ describe("endpoint : Thing [8.2.1]", () => {
                 };
                 const infos = addTest({
                     type: "patch",
-                    short: `${entity.name} Patch a Thing`,
+                    short: "Basic",
                     description: `Patch a ${entity.singular}.${showHide(`Patch${entity.name}`, apiInfos["10.3"])}`,
                     reference: "https://docs.ogc.org/is/18-088/18-088.html#_request_2",
                     examples: {
@@ -1344,7 +1342,7 @@ describe("endpoint : Thing [8.2.1]", () => {
             };
             const infos = addTest({
                 type: "patch",
-                short: "return Error not exist",
+                short: "Return Error not exist",
                 description: "",
                 reference: "",
                 examples: {
@@ -1380,7 +1378,7 @@ describe("endpoint : Thing [8.2.1]", () => {
             executeQuery(`SELECT * FROM "${entity.table}" ORDER BY id desc LIMIT 1`).then((things: Record<string, any>) => {
                 const infos = addTest({
                     type: "patch",
-                    short: `${entity.name} Patch with New location`,
+                    short: "With New location",
                     description: "Modify location of a Thing.",
                     reference: "https://docs.ogc.org/is/18-088/18-088.html#_request_2",
                     examples: {
@@ -1436,7 +1434,7 @@ describe("endpoint : Thing [8.2.1]", () => {
                 };
                 const infos = addTest({
                     type: "patch",
-                    short: `${entity.name} Patch with existing Location`,
+                    short: "With existing Location",
                     description: "Patch a Thing and only location change.",
                     reference: "https://docs.ogc.org/is/18-088/18-088.html#_request_2",
                     examples: {
