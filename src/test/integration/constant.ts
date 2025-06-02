@@ -35,6 +35,7 @@ import { EConstant, EEncodingType } from "../../server/enums";
 import { highlight, languages } from "prismjs";
 import "prismjs/components/prism-python";
 import "prismjs/components/prism-http";
+import "prismjs/components/prism-json";
 export const VERSION = packageJson.version;
 
 const documentation: { [key: string]: IApiDoc[] } = {};
@@ -110,7 +111,7 @@ export interface IApiDoc {
     apiError?: string[];
     structure?: Istructure;
     examples?: { [key: string]: string };
-    params?: Record<string, any>;
+    params?: string;
     success?: string;
     error?: string;
     apiUse?: string;
@@ -126,6 +127,13 @@ export const saveDoc = () => {
 };
 
 export const prepareToApiDoc = (input: IApiInput): IApiDoc => {
+    let tmp: string | undefined = undefined;
+    try {
+        tmp = JSON.stringify(input.params);
+    } catch (error) {
+        console.log(error);
+        tmp = String(input.params);
+    }
     return {
         short: input.short,
         type: input.type,
@@ -135,7 +143,7 @@ export const prepareToApiDoc = (input: IApiInput): IApiDoc => {
         examples: input.examples,
         apiError: input.apiError,
         structure: input.structure,
-        params: input.params,
+        params: tmp ? tmp : "",
         request: input.type == "get" && input.examples ? `proxy${input.examples.http}` : "",
         success: input.result.type === EEncodingType.txt || input.result.type === EEncodingType.csv ? input.result.text : input.result && input.result.body ? JSON.stringify(input.result.body, null, 4) : undefined
     };

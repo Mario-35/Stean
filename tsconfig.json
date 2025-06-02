@@ -32,8 +32,11 @@
     },
     "include": [
         "src/server/**/*.ts",
-        "env"
-, "src/server/db/helpers/getEntitesListts", "src/server/views/monitor/index.js", "src/server/views/class/tracests"    ],
+        "env", 
+        "src/server/db/helpers/getEntitesListts", 
+        "src/server/views/monitor/index.js", 
+        "src/server/views/class/tracests"
+    ],
     "exclude": [
         "node_modules",
         "migrations",

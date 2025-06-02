@@ -1,7 +1,7 @@
 /**
 * Patrom theme 
 * @copyright 2023-present Inrae
-* 27/05/2025 21:22:10
+* 02/06/2025 11:23:44
 * @author mario.adam@inrae.fr
 *
 */
@@ -11,6 +11,7 @@
     padding: 0;
     background: var(--background-body);
     font-size: var(--font-size);
+    color: var(--text-color);
   }
 
   *,
@@ -277,15 +278,14 @@
     --json-string: #B7E4B2;
     --json-date: #CB7500;
 
-    --font-prism-comment: hsl(30, 20%, 50%);
-    --font-prism-property: hsl(350, 40%, 70%);
-    --font-prism-punctuation: #999;
-    /* opacity: .7; */
-    --font-prism-selector: hsl(75, 70%, 60%);
-    --font-prism-operator: hsl(75, 70%, 60%);
-    --font-prism-atrule: hsl(350, 40%, 70%);
+    --font-prism-comment: #998066;
+    --font-prism-property: #D1949E;
+    --font-prism-punctuation: #999999;
+    --font-prism-selector: #bde052;
+    --font-prism-operator: #bde052;
+    --font-prism-atrule: #D1949E;
     --font-prism-function: #DD4A68;
-    --font-prism-regex: #e90;
+    --font-prism-regex: #EE9900;
     --font-prism-deleted: #DD4A68;
   }
 
@@ -299,11 +299,11 @@
   align-items: center;
 }
 .container h1 {
-  color: var(--font-color);
+  color: var(--text-color);
   font-family: sans-serif;
 }
 .container button {
-  color: var(--font-color);
+  color: var(--text-color);
   background: var(--color-primary);
   padding: 10px 20px;
   border: 0;
@@ -1236,13 +1236,11 @@ input:checked + .slider:before {
     transition: all 0.35s;
   }
   .patrom-accordion-content {
+    max-height: 0;
     color: var(--content-color);
     background-color: var(--background-content);
     border: solid 1px rgb(105, 105, 105);
     transition: all 0.35s;
-
-    /* body-background : #4b4d4e;
-    background-color : #444949; */
 
   }
   .patrom-accordion-close {
@@ -2617,7 +2615,7 @@ input[type="radio"]:disabled:active + .patrom-radio-button__checkmark:before {
 }
 
 .patrom-col {
-  flex: 1 1 auto;
+  flex: 1 1 8%;
   padding: 0.5px 3px;
   box-sizing: border-box;
 }

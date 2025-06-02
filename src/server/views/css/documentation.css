@@ -21,6 +21,10 @@ p {
   color: var(--content-color);
 }
 
+.txt {
+  color: var(--content-color);
+}
+
 section {
   padding: 10px 0;
 }

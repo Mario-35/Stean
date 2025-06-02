@@ -258,6 +258,7 @@ if (process.argv.includes("dev")) mode.push("dev");
 if (process.argv.includes("docker")) mode.push("docker");
 
 copyFolderRecursiveSync("./scripts", _DEST);
+copyFolderRecursiveSync("./src/server/public", _DEST);
 copyFolderRecursiveSync("./src/server/views", _DEST);
 copyFolderRecursiveSync("./src/server/views/js", _DEST + "views/");
 copyFolderRecursiveSync( "./src/server/views/css", _DEST + "views/" );

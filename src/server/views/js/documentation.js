@@ -97,20 +97,27 @@ function showDoc(event) {
 	document.getElementById("content").innerHTML = content;
 	document.getElementById("two").style.overflow = 'auto';
 
-	if (actual.params) {
-		beautifyDatas(getElement("jsonDatas"), actual.params, "json");
-	}
-
 	// if (actual.params) {
-	//   const jsonViewerParams = new JSONViewer();
-	//   params.appendChild(jsonViewerParams.getContainer());  
-	//   jsonViewerParams.showJSON(actual.params);
-	// }  
+	// 	beautifyDatas(getElement("jsonDatas"), actual.params, "json");
+	// }
+
+	if (actual.params) {
+	  const jsonViewerParams = new JSONViewer();
+	  params.appendChild(jsonViewerParams.getContainer());  
+	  jsonViewerParams.showJSON(JSON.parse(actual.params));
+	}  
 
 	if (actual.success) {
 		const jsonViewerSuccess = new JSONViewer();
 		success.appendChild(jsonViewerSuccess.getContainer());
-		jsonViewerSuccess.showJSON(JSON.parse(actual.success));
+		try {
+			jsonViewerSuccess.showJSON(JSON.parse(actual.success));
+		} catch (error) {
+			console.log("--------getid-----");
+			console.log(error);
+			
+		}
+		
 	}
 
 	if (actual.error) {
@@ -118,13 +125,6 @@ function showDoc(event) {
 		error.appendChild(jsonViewerError.getContainer());
 		jsonViewerError.showJSON(JSON.parse(actual.error));
 	}
-
-
-	// if (actual.examples) {
-	//   Object.keys(actual.examples).forEach((lang, i) => {    
-	//     beautifyDatas(getElement(`datas${i}`), actual.examples[lang].replace('@DATAS@', `\m${JSON.stringify(actual.params, 4, null)}\m`), "js");
-	//   });
-	// }
 }
 
 function filterDoc() {
@@ -164,8 +164,6 @@ function createSideBar() {
                       </label>
                     </div>
                     </div>
-
-
                   </div>  `];
 	Object.keys(doc).forEach((mainLabel, i) => {
 		lines.push(`<div class="patrom-accordion">

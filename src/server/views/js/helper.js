@@ -80,21 +80,26 @@ function LoadDatas(source, lang) {
 }
 
 function beautifyDatas(element, source, lang) {
+	console.log(`----------beautifyDatas-------${typeof source}------`);
+	// if( typeof source === 'object') source = `${source}`;
 	try {
 		switch (lang) {
 			case "sql":
-				source = Prism.highlight(source, Prism.languages.Sql, 'sql');
+				source = steanPrism.highlight(source, steanPrism.languages.Sql, 'sql');
 				break;
 			case "js":
-				source = Prism.highlight(source, Prism.languages.javascript, 'javascript');
+				source = steanPrism.highlight(source, steanPrism.languages.javascript, 'javascript');
 				// source = pretty.js(source);
 				break;
 			default:
-				source = Prism.highlight(source, Prism.languages.json, 'json');
+				source = steanPrism.highlight(source, steanPrism.languages.json, 'json');
 				break;
 		}
 		if (element) element.innerHTML = source;
 	} catch (err) {
+		console.log(source);
+		console.log(err);
+		
 		notifyError("Error", err);
 	}
 }
