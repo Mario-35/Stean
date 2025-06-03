@@ -58,7 +58,6 @@ function tabEnabledDisabled(objName, test) {
 
 function init() {
 	header("==== Init ====");
-	hide(datas);
 	if (isDebug) console.log(_PARAMS);
 	new SplitterBar(container, first, two);
 	wait(false);

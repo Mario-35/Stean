@@ -314,7 +314,6 @@ async function saveDecoder() {
 // Start
 (function init() {
 	wait(false);
-	hide(datas);
 	new SplitterBar(container, first, two);
 	populateSelect(optVersion, _PARAMS.versions, "v1.1");
 	populateSelect(optLogs, _PARAMS.logsFiles);
