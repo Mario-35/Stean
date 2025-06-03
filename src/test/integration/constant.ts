@@ -67,7 +67,7 @@ export interface IApiInput {
 export const defaultPostPatch = (lang: string, method: string, request: string): string => {
     switch (lang.toUpperCase()) {
         case "CURL":
-            return highlight(`curl -X ${method.toUpperCase()} -H 'Content-Type: application/json' -d '@DATAS@}' proxy${request}`, languages.http, "http");
+            return highlight(`curl -X ${method.toUpperCase()} -H 'Content-Type: application/json' -d '@DATAS@' proxy${request}`, languages.http, "http");
         case "JAVASCRIPT":
             return highlight(`const response = await fetch("proxy${request}", {\r\n${EConstant.tab}method: "${method.toUpperCase()}",\r\n\theaders: {\r\n${EConstant.tab}    "Content-Type": "${EEncodingType.json}",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();`, languages.javascript, "javascript");
         case "PYTHON":
@@ -121,7 +121,7 @@ export interface IApiDoc {
 }
 
 export const saveDoc = () => {
-    fs.writeFileSync(path.resolve(__dirname, "../../server/views/js/docDatas.js"), `const doc = \r\n ${JSON.stringify(documentation, null, 4)}`, {
+    fs.writeFileSync(path.resolve(__dirname, "../../server/views/js/docDatas.js"), `const docDatas = \r\n ${JSON.stringify(documentation, null, 4)}`, {
         encoding: "utf-8"
     });
 };

@@ -1,4 +1,5 @@
-function methodIcon(input) {
+// create http verb 'icon'
+function methodClass(input) {
 	return `<span class="method meth-${input}">${input}</span>`;
 }
 
@@ -17,7 +18,7 @@ function getExamples(input, datas) {
 			`<label for="tab${i}">${lang}</label>`,
 			`<div class="patrom-tab">`,
 			`<code class='language-${lang}'>`,
-			input[lang],
+			input[lang].replace('@DATAS@', datas),
 			`</code>`,
 			`</div>`);
 	});
@@ -91,7 +92,7 @@ function getStructure(input) {
 
 function showDoc(event) {
 	const main = getMenuMain(event.srcElement);
-	const actual = doc[main][event.srcElement.id];
+	const actual = docDatas[main][event.srcElement.id];
 	const content = getContent(actual);
 
 	document.getElementById("content").innerHTML = content;
@@ -125,14 +126,14 @@ function filterDoc() {
 	const filter = search.value;
 	console.log(`filter -> ${filter}`);
 
-	Object.keys(doc).forEach(main => {
+	Object.keys(docDatas).forEach(main => {
 		console.log(main);
 
 		let lessOne = false;
-		Object.keys(doc[main]).forEach((index) => {
+		Object.keys(docDatas[main]).forEach((index) => {
 			console.log(index);
 			let find = false;
-			if (doc[main][index].description.includes(filter)) {
+			if (docDatas[main][index].description.includes(filter)) {
 				find = true;
 				lessOne = true;
 			}
@@ -148,30 +149,29 @@ function filterDoc() {
 }
 
 function createSideBar() {
+	console.log(Object.keys(docDatas));
 	const lines = [`<div class="patrom-row">
-                    <div class="patrom-col col-span-12 fullWidth">
-                      <input type="text" id="search" class="patrom-text-input" value="" placeholder="filter">
-                      <button class="patrom-icon-button" onclick="filterDoc(event)"> 🔎 </button>
-                      <label class="patrom-switch">
-                        <input id="theme" type="checkbox" class="patrom-switch__input" onchange="localStorage.setItem('theme', localStorage.getItem('theme') === 'dark' ? 'light' : 'dark'); document.documentElement.className = localStorage.getItem('theme');">
-                        <div class="patrom-switch__theme"></div>
-                      </label>
-                    </div>
-                    </div>
-                  </div>  `];
-	Object.keys(doc).forEach((mainLabel, i) => {
+                    	<div class="patrom-col col-span-12 fullWidth">
+                      		<input type="text" id="search" class="patrom-text-input" value="" placeholder="filter">
+                      		<button class="patrom-icon-button" onclick="filterDoc(event)"> 🔎 </button>
+                      		<label class="patrom-switch">
+                        		<input id="theme" type="checkbox" class="patrom-switch__input" onchange="localStorage.setItem('theme', localStorage.getItem('theme') === 'dark' ? 'light' : 'dark'); document.documentElement.className = localStorage.getItem('theme');">
+                        		<div class="patrom-switch__theme"></div>
+                      		</label>
+                    	</div>
+                    </div>`];
+	Object.keys(docDatas).forEach((mainLabel, i) => {
 		lines.push(`<div class="patrom-accordion">
-  <input class="patrom-accordion-check" type="checkbox" id="chck${i}">
-  <label class="patrom-accordion-label" for="chck${i}" id="Labelchck${i}">${mainLabel}</label>
-  <div class="patrom-accordion-content">        
-  ${Object.keys(doc[mainLabel]).map((subLabel,j)=>`<div class="patrom-row"  id="${mainLabel}-${j}">
-  <div class="patrom-col col-span-12" fullWidth">
-  ${methodIcon(doc[mainLabel][subLabel]["type"])}
-  <label class="menuItem" onclick="showDoc(event)" id="${j}">${doc[mainLabel][subLabel]["short"]} </label>                      
-  </div>
-  </div>`).join("")}  
-  </div>
-  </div>`);
+						<input class="patrom-accordion-check" type="checkbox" id="chck${i}">
+						<label class="patrom-accordion-label" for="chck${i}" id="Labelchck${i}">${mainLabel}</label>
+						<div class="patrom-accordion-content">        
+							${Object.keys(docDatas[mainLabel]).map((subLabel,j)=>`<div class="patrom-row"  id="${mainLabel}-${j}">
+							<div class="patrom-col col-span-12" fullWidth">
+								${methodClass(docDatas[mainLabel][subLabel]["type"])}
+								<label class="menuItem" onclick="showDoc(event)" id="${j}">${docDatas[mainLabel][subLabel]["short"]} </label>                      
+							</div></div>`).join("")}  
+						</div>
+					</div>`);
 	});
 	return lines.join("");
 }
