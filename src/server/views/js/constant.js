@@ -7,7 +7,7 @@
  */
 
 // log debug test
-let isDebug = false;
+let isDebug = true;
 // store url for geoJson
 let valueGeo = "";
 
