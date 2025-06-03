@@ -68,6 +68,8 @@ export interface IApiInput {
 }
 export const defaultPostPatch = (lang: string, method: string, request: string): string => {
     switch (lang.toUpperCase()) {
+        case "HTTP":
+            return highlight(`${request}`, languages.javascript, "javascript");
         case "CURL":
             return highlight(`curl -X ${method.toUpperCase()} -H 'Content-Type: application/json' -d 'DATASSATAD' proxy${request}`, languages.http, "http");
         case "JAVASCRIPT":
@@ -85,6 +87,8 @@ export const defaultPatch = (lang: string, request: string): string => {
 };
 export const defaultDelete = (lang: string, request: string): string => {
     switch (lang.toUpperCase()) {
+        case "HTTP":
+            return highlight(`${request}`, languages.javascript, "javascript");
         case "CURL":
             return `curl -DELETE "proxy${request}"`;
         case "JAVASCRIPT":
@@ -96,6 +100,8 @@ export const defaultDelete = (lang: string, request: string): string => {
 };
 export const defaultGet = (lang: string, request: string): string => {
     switch (lang.toUpperCase()) {
+        case "HTTP":
+            return highlight(`${request}`, languages.javascript, "javascript");
         case "CURL":
             return `curl -GET "proxy${request}"`;
         case "JAVASCRIPT":
@@ -140,15 +146,15 @@ export const prepareToApiDoc = (input: IApiInput): IApiDoc => {
     switch (input.type) {
         case "get":
             input.examples = {
-                http: highlight(input.request || "pipo", languages.javascript, "javascript"),
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
+                http: defaultGet("http", `${input.request}`),
+                curl: defaultGet("curl", `${input.request}`),
+                javascript: defaultGet("javascript", `${input.request}`),
+                python: defaultGet("python", `${input.request}`)
             };
             break;
         case "post":
             input.examples = {
-                http: highlight(input.request || "pipo", languages.javascript, "javascript"),
+                http: defaultGet("http", `${input.request}`),
                 curl: defaultPost("curl", "KEYHTTP"),
                 javascript: defaultPost("javascript", "KEYHTTP"),
                 python: defaultPost("python", "KEYHTTP")
@@ -156,7 +162,7 @@ export const prepareToApiDoc = (input: IApiInput): IApiDoc => {
             break;
         case "patch":
             input.examples = {
-                http: highlight(input.request || "pipo", languages.javascript, "javascript"),
+                http: defaultGet("http", `${input.request}`),
                 curl: defaultPatch("curl", "KEYHTTP"),
                 javascript: defaultPatch("javascript", "KEYHTTP"),
                 python: defaultPatch("python", "KEYHTTP")
@@ -164,7 +170,7 @@ export const prepareToApiDoc = (input: IApiInput): IApiDoc => {
             break;
         case "delete":
             input.examples = {
-                http: highlight(input.request || "pipo", languages.javascript, "javascript"),
+                http: defaultGet("http", `${input.request}`),
                 curl: defaultDelete("curl", "KEYHTTP"),
                 javascript: defaultDelete("javascript", "KEYHTTP"),
                 python: defaultDelete("python", "KEYHTTP")
@@ -185,7 +191,6 @@ export const prepareToApiDoc = (input: IApiInput): IApiDoc => {
         apiError: input.apiError,
         structure: input.structure,
         params: tmp ? tmp : "",
-        // request: input.type == "get" && input.examples ? `proxy${input.examples.http}` : "",
         success: input.result.type === EEncodingType.txt || input.result.type === EEncodingType.csv ? input.result.text : input.result && input.result.body ? JSON.stringify(input.result.body, null, 4) : undefined
     };
 };
