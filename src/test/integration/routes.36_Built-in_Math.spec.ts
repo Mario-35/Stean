@@ -10,7 +10,7 @@
 process.env.NODE_ENV = "test";
 import chai from "chai";
 import chaiHttp from "chai-http";
-import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, defaultGet, limitResult, testVersion } from "./constant";
+import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, limitResult, testVersion } from "./constant";
 import { server } from "../../server/index";
 import { addStartNewTest, addTest, writeLog } from "./tests";
 
@@ -42,15 +42,10 @@ describe("Odata BuiltInMath [9.3.3.5.2]", () => {
             short: "Observations Round",
             description: "The round function rounds the input numeric parameter to the nearest numeric value with no decimal component. The mid-point between two integers is rounded away from zero, i.e. 0.5 is rounded to 1 and ‑0.5 is rounded to -1.",
             reference: "https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions",
-            examples: {
-                http: `${testVersion}/Observations?$filter=round(result) eq 63`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Observations?$filter=round(result) eq 63`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -66,15 +61,10 @@ describe("Odata BuiltInMath [9.3.3.5.2]", () => {
             short: "Observations Floor",
             description: "The floor function rounds the input numeric parameter down to the nearest numeric value with no decimal component. The floorMethodCallExpr syntax rule defines how the floor function is invoked.",
             reference: "https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions",
-            examples: {
-                http: `${testVersion}/Observations?$filter=floor(result) eq 63`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Observations?$filter=floor(result) eq 63`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -91,15 +81,10 @@ describe("Odata BuiltInMath [9.3.3.5.2]", () => {
             short: "Observations Ceiling",
             description: "The ceiling function rounds the input numeric parameter up to the nearest numeric value with no decimal component. The ceilingMethodCallExpr syntax rule defines how the ceiling function is invoked.",
             reference: "https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions",
-            examples: {
-                http: `${testVersion}/Observations?$filter=ceiling(result) eq 63`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Observations?$filter=ceiling(result) eq 63`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);

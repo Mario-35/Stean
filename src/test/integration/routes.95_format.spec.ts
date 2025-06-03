@@ -40,12 +40,10 @@ describe("Output formats", () => {
                 type: "get",
                 short: "ResultFormat as csv",
                 description: 'Use $resultFormat=csv to get datas as csv format.<br><img class="tabLogo" src="./assets/csv.jpg" alt="csv result">',
-                examples: {
-                    http: `${testVersion}/Datastreams(1)/Observations?$top=20&$resultFormat=csv`
-                }
+                request: `${testVersion}/Datastreams(1)/Observations?$top=20&$resultFormat=csv`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -62,12 +60,10 @@ describe("Output formats", () => {
                 type: "get",
                 short: "Things as dataArray",
                 description: "Use $resultFormat=dataArray to get datas as dataArray format.",
-                examples: {
-                    http: `${testVersion}/Things?$resultFormat=dataArray`
-                }
+                request: `${testVersion}/Things?$resultFormat=dataArray`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -86,12 +82,10 @@ describe("Output formats", () => {
                 type: "get",
                 short: "Observations as dataArray",
                 description: "Use $resultFormat=dataArray to get datas as dataArray format.",
-                examples: {
-                    http: `${testVersion}/Datastreams(1)/Observations?$resultFormat=dataArray&$select=id,result`
-                }
+                request: `${testVersion}/Datastreams(1)/Observations?$resultFormat=dataArray&$select=id,result`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -150,12 +144,10 @@ describe("Output formats", () => {
                 type: "get",
                 short: "ResultFormat as graph",
                 description: 'Use $resultFormat=graph to get datas into graphical representation.<br><img class="tabLogo" src="./assets/graph.png" alt="graph result">',
-                examples: {
-                    http: `${testVersion}/Datastreams(1)/Observations?$resultFormat=graph`
-                }
+                request: `${testVersion}/Datastreams(1)/Observations?$resultFormat=graph`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -173,12 +165,10 @@ describe("Output formats", () => {
                 short: "ResultFormat as graphDatas",
                 description: "Use $resultFormat=graphDatas to get datas into echarts compatible format.",
                 reference: "https://echarts.apache.org/en/index.html",
-                examples: {
-                    http: `${testVersion}/Datastreams(1)/Observations?$resultFormat=graphDatas`
-                }
+                request: `${testVersion}/Datastreams(1)/Observations?$resultFormat=graphDatas`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -195,12 +185,10 @@ describe("Output formats", () => {
                 short: "ResultFormat as GeoJSON",
                 description: "Use $resultFormat=GeoJSON to get datas into GeoJSON compatible format.",
                 reference: "https://geojson.org/",
-                examples: {
-                    http: `${testVersion}/Locations?$resultFormat=GeoJSON&$top=3`
-                }
+                request: `${testVersion}/Locations?$resultFormat=GeoJSON&$top=3`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);

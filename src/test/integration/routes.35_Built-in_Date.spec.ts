@@ -10,7 +10,7 @@
 process.env.NODE_ENV = "test";
 import chai from "chai";
 import chaiHttp from "chai-http";
-import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, defaultGet, limitResult, testVersion } from "./constant";
+import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, limitResult, testVersion } from "./constant";
 import { server } from "../../server/index";
 import { addStartNewTest, addTest, writeLog } from "./tests";
 
@@ -42,15 +42,10 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
             short: "Observations Date",
             description: "Stean have a multitude date an",
             reference: "https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions",
-            examples: {
-                http: `${testVersion}/Observations?$filter=resultTime eq 2017-01-13`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Observations?$filter=resultTime eq 2017-01-13`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -65,22 +60,18 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
         const infos = addTest({
             type: "get",
             short: "search by resultTime eq 01-13-2017",
-
             description: "",
             reference: "",
-            examples: {
-                http: `${testVersion}/Observations?$filter=resultTime eq '13-01-2017'`
-            }
+            request: `${testVersion}/Observations?$filter=resultTime eq '13-01-2017'`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
                 res.type.should.equal("application/json");
                 res.body.value.length.should.eql(2);
                 res.body["value"][0]["@iot.id"].should.eql(530);
-
                 done();
             });
     });
@@ -88,22 +79,18 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
         const infos = addTest({
             type: "get",
             short: "search by resultTime gt 13-01-2017",
-
             description: "",
             reference: "",
-            examples: {
-                http: `${testVersion}/Observations?$filter=resultTime gt '13-01-2017'`
-            }
+            request: `${testVersion}/Observations?$filter=resultTime gt '13-01-2017'`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
                 res.type.should.equal("application/json");
                 res.body.value.length.should.eql(528);
                 res.body["value"][0]["@iot.id"].should.eql(525);
-
                 done();
             });
     });
@@ -111,22 +98,18 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
         const infos = addTest({
             type: "get",
             short: "search by resultTime lt 15-10-2021",
-
             description: "",
             reference: "",
-            examples: {
-                http: `${testVersion}/Observations?$filter=resultTime lt '15-10-2021'`
-            }
+            request: `${testVersion}/Observations?$filter=resultTime lt '15-10-2021'`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
                 res.type.should.equal("application/json");
                 res.body.value.length.should.eql(8);
                 res.body["value"][0]["@iot.id"].should.eql(530);
-
                 done();
             });
     });
@@ -136,15 +119,10 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
             short: "Observations Year",
             description: "The year function returns the year component of the Date or DateTimeOffset parameter value, evaluated in the time zone of the DateTimeOffset parameter value.",
             reference: "https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions",
-            examples: {
-                http: `${testVersion}/Observations?$filter=year(resultTime) eq 2017`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Observations?$filter=year(resultTime) eq 2017`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -161,15 +139,10 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
             short: "Observations Month",
             description: "The month function returns the month component of the Date or DateTimeOffset parameter value, evaluated in the time zone of the DateTimeOffset parameter value.",
             reference: "https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions",
-            examples: {
-                http: `${testVersion}/Observations?$filter=month(resultTime) eq 2`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Observations?$filter=month(resultTime) eq 2`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -187,15 +160,10 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
             short: "Observations Day",
             description: "The day function returns the day component Date or DateTimeOffset parameter value, evaluated in the time zone of the DateTimeOffset parameter value.",
             reference: "https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions",
-            examples: {
-                http: `${testVersion}/Observations?$filter=day(resultTime) eq 5`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Observations?$filter=day(resultTime) eq 5`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -213,15 +181,10 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
             short: "Observations Hour",
             description: "The hour function returns the hour component of the DateTimeOffset or TimeOfDay parameter value, evaluated in the time zone of the DateTimeOffset parameter value.",
             reference: "https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions",
-            examples: {
-                http: `${testVersion}/Observations?$filter=hour(resultTime) eq 12`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Observations?$filter=hour(resultTime) eq 12`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -237,15 +200,10 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
             short: "Observations minute",
             description: "The minute function returns the minute component of the DateTimeOffset or TimeOfDay parameter value, evaluated in the time zone of the DateTimeOffset parameter value.",
             reference: "https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions",
-            examples: {
-                http: `${testVersion}/Observations?$filter=minute(resultTime) eq 45`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Observations?$filter=minute(resultTime) eq 45`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -262,15 +220,10 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
             short: "Observations second",
             description: "The second function returns the second component (without the fractional part) of the DateTimeOffset or TimeOfDay parameter value.",
             reference: "https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions",
-            examples: {
-                http: `${testVersion}/Observations?$filter=second(resultTime) ge 40`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Observations?$filter=second(resultTime) ge 40`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -287,15 +240,10 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
             short: "Observations date",
             description: "The date function returns the date part of the DateTimeOffset parameter value, evaluated in the time zone of the DateTimeOffset parameter value.",
             reference: "https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions",
-            examples: {
-                http: `${testVersion}/Observations?$filter=date(resultTime) eq date(phenomenonTime)`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Observations?$filter=date(resultTime) eq date(phenomenonTime)`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -312,15 +260,10 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
             short: "Observations time",
             description: "The time function returns the time part of the DateTimeOffset parameter value, evaluated in the time zone of the DateTimeOffset parameter value.",
             reference: "https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions",
-            examples: {
-                http: `${testVersion}/Observations?$filter=time(resultTime) ne time(phenomenonTime)`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Observations?$filter=time(resultTime) ne time(phenomenonTime)`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -345,7 +288,7 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
     //                     }
     //     };
     //     chai.request(server)
-    //         .get(`/test/${infos.examples.http}`)
+    //         .get(`/test/${infos.request}`)
     //         .end((err: Error, res: any) => {
     //             should.not.exist(err);
     //             res.status.should.equal(200);
@@ -363,15 +306,10 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
             short: "Observations Now()",
             description: "The now function returns the current point in time (date and time with time zone) as a DateTimeOffset value.",
             reference: "https://docs.ogc.org/is/18-088/18-088.html#_built_in_query_functions",
-            examples: {
-                http: `${testVersion}/Observations?$filter=resultTime le now()`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Observations?$filter=resultTime le now()`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -396,7 +334,7 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
     //                     }
     //     };
     //     chai.request(server)
-    //         .get(`/test/${infos.examples.http}`)
+    //         .get(`/test/${infos.request}`)
     //         .end((err: Error, res: any) => {
     //             should.not.exist(err);
     //             res.status.should.equal(200);
@@ -422,7 +360,7 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
     //                     }
     //     };
     //     chai.request(server)
-    //         .get(`/test/${infos.examples.http}`)
+    //         .get(`/test/${infos.request}`)
     //         .end((err: Error, res: any) => {
     //             should.not.exist(err);
     //             res.status.should.equal(200);

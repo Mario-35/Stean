@@ -10,7 +10,7 @@
 process.env.NODE_ENV = "test";
 import chai from "chai";
 import chaiHttp from "chai-http";
-import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, defaultPost, defaultPatch, defaultDelete, defaultGet, getNB, listOfColumns, limitResult, infos, apiInfos, showHide, nbColor, nbColorTitle, testVersion, _RAWDB } from "./constant";
+import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, getNB, listOfColumns, limitResult, infos, apiInfos, showHide, nbColor, nbColorTitle, testVersion, _RAWDB } from "./constant";
 import { server } from "../../server/index";
 import { Ientity } from "../../server/types";
 import { testsKeys as datastreams_testsKeys } from "./routes.17_datastreams.spec";
@@ -58,15 +58,10 @@ describe("endpoint : Sensors", () => {
 
                 description: `Retrieve all ${entity.name}.${showHide(`Get${entity.name}`, apiInfos["9.2.2"])}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-collection-entities",
-                examples: {
-                    http: `${testVersion}/${entity.name}`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -94,15 +89,10 @@ describe("endpoint : Sensors", () => {
 
                 description: `Get a specific ${entity.singular}.${apiInfos["9.2.3"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity",
-                examples: {
-                    http: `${testVersion}/${entity.name}(1)`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}(1)`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -126,12 +116,10 @@ describe("endpoint : Sensors", () => {
 
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`
-                }
+                request: `${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.status.should.equal(404);
@@ -148,12 +136,10 @@ describe("endpoint : Sensors", () => {
 
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.singular}`
-                }
+                request: `${testVersion}/${entity.singular}`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.status.should.equal(404);
@@ -167,15 +153,10 @@ describe("endpoint : Sensors", () => {
                 type: "get",
                 short: "Expands",
                 description: "Get a specific Sensor and expand Datastreams.",
-                examples: {
-                    http: `${testVersion}/${entity.name}(1)?$expand=${name}`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}(1)?$expand=${name}`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -197,15 +178,10 @@ describe("endpoint : Sensors", () => {
                 type: "get",
                 short: "Select",
                 description: "Retrieve specified properties for a specific Sensor.",
-                examples: {
-                    http: `${testVersion}/${entity.name}(1)?$select=description`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}(1)?$select=description`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -228,12 +204,10 @@ describe("endpoint : Sensors", () => {
 
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}(6)/${name}`
-                }
+                request: `${testVersion}/${entity.name}(6)/${name}`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -256,12 +230,10 @@ describe("endpoint : Sensors", () => {
 
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}(18)/${name}`
-                }
+                request: `${testVersion}/${entity.name}(18)/${name}`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -284,12 +256,10 @@ describe("endpoint : Sensors", () => {
 
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}(1)?$expand=${name}`
-                }
+                request: `${testVersion}/${entity.name}(1)?$expand=${name}`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -312,12 +282,10 @@ describe("endpoint : Sensors", () => {
 
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}(1)?$expand=${name}`
-                }
+                request: `${testVersion}/${entity.name}(1)?$expand=${name}`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -350,17 +318,12 @@ describe("endpoint : Sensors", () => {
                 short: "Basic",
                 description: `Post a new ${entity.name}.${showHide(`Post${entity.name}`, apiInfos["10.2"])}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#_request",
-                examples: {
-                    http: `${testVersion}/${entity.name}`,
-                    curl: defaultPost("curl", "KEYHTTP"),
-                    javascript: defaultPost("javascript", "KEYHTTP"),
-                    python: defaultPost("python", "KEYHTTP")
-                },
+                request: `${testVersion}/${entity.name}`,
                 params: datas,
                 structure: listOfColumns(entity)
             });
             chai.request(server)
-                .post(`/test/${infos.examples.http}`)
+                .post(`/test/${infos.request}`)
                 .send(infos.params)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
@@ -383,12 +346,10 @@ describe("endpoint : Sensors", () => {
 
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}`
-                }
+                request: `${testVersion}/${entity.name}`
             });
             chai.request(server)
-                .post(`/test/${infos.examples.http}`)
+                .post(`/test/${infos.request}`)
                 .send({})
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
@@ -414,16 +375,11 @@ describe("endpoint : Sensors", () => {
                     short: "One",
                     description: "Patch a Sensor.",
                     reference: "https://docs.ogc.org/is/18-088/18-088.html#_request_2",
-                    examples: {
-                        http: `${testVersion}/${entity.name}(${result["id"]})`,
-                        curl: defaultPatch("curl", "KEYHTTP"),
-                        javascript: defaultPatch("javascript", "KEYHTTP"),
-                        python: defaultPatch("python", "KEYHTTP")
-                    },
+                    request: `${testVersion}/${entity.name}(${result["id"]})`,
                     params: datas
                 });
                 chai.request(server)
-                    .patch(`/test/${infos.examples.http}`)
+                    .patch(`/test/${infos.request}`)
                     .send(infos.params)
                     .set("Cookie", `${keyTokenName}=${token}`)
                     .end((err: Error, res: any) => {
@@ -454,12 +410,10 @@ describe("endpoint : Sensors", () => {
 
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`
-                }
+                request: `${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`
             });
             chai.request(server)
-                .patch(`/test/${infos.examples.http}`)
+                .patch(`/test/${infos.request}`)
                 .send(datas)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
@@ -482,15 +436,10 @@ describe("endpoint : Sensors", () => {
                     short: "One",
                     description: `Delete a ${entity.singular}.${showHide(`Delete${entity.name}`, apiInfos["10.4"])}`,
                     reference: "https://docs.ogc.org/is/18-088/18-088.html#_request_3",
-                    examples: {
-                        http: `${testVersion}/${entity.name}(${beforeDelete["id"]})`,
-                        curl: defaultDelete("curl", "KEYHTTP"),
-                        javascript: defaultDelete("javascript", "KEYHTTP"),
-                        python: defaultDelete("python", "KEYHTTP")
-                    }
+                    request: `${testVersion}/${entity.name}(${beforeDelete["id"]})`
                 });
                 chai.request(server)
-                    .delete(`/test/${infos.examples.http}`)
+                    .delete(`/test/${infos.request}`)
                     .set("Cookie", `${keyTokenName}=${token}`)
                     .end((err: Error, res: any) => {
                         should.not.exist(err);
@@ -514,12 +463,10 @@ describe("endpoint : Sensors", () => {
 
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`
-                }
+                request: `${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`
             });
             chai.request(server)
-                .delete(`/test/${infos.examples.http}`)
+                .delete(`/test/${infos.request}`)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);

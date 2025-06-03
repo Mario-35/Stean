@@ -10,7 +10,7 @@
 process.env.NODE_ENV = "test";
 import chai from "chai";
 import chaiHttp from "chai-http";
-import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, defaultGet, limitResult, testVersion } from "./constant";
+import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, limitResult, testVersion } from "./constant";
 import { server } from "../../server/index";
 import { addStartNewTest, addTest, writeLog } from "./tests";
 const geoPos: { [key: string]: number[] } = {
@@ -59,15 +59,10 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
             short: "Location Distance location",
             description: "geo.distance(g1, g2) number : Returns the distance between g1 and g2 in the units of the server (generally degrees)",
             reference: "https://postgis.net/docs/ST_Distance.html",
-            examples: {
-                http: `${testVersion}/Locations?$filter=geo.distance(location, geography'POINT(-1.6567440482485551 48.11256463781973)') lt 0.11`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Locations?$filter=geo.distance(location, geography'POINT(-1.6567440482485551 48.11256463781973)') lt 0.11`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -84,15 +79,10 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
             short: "FOI Distance Foi",
             description: "geo.distance(g1, g2) number : Returns the distance between g1 and g2 in the units of the server (generally degrees)",
             reference: "https://postgis.net/docs/ST_Distance.html",
-            examples: {
-                http: `${testVersion}/Observations?$filter=geo.distance(FeatureOfInterest/feature,geography'POINT(-4.108433416883344 47.99535576613954)') ge 1`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Observations?$filter=geo.distance(FeatureOfInterest/feature,geography'POINT(-4.108433416883344 47.99535576613954)') ge 1`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -110,15 +100,10 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
             short: "Location Length location",
             description: "geo.length(g1) number : geo.length(location) lt 2 matches all locations that are linestrings with a length less than 2 degrees",
             reference: "https://postgis.net/docs/ST_Length.html",
-            examples: {
-                http: `${testVersion}/Locations?$filter=geo.length(location,'POINT(-1.6571736839366906 48.112731020713284)') lt 1`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Locations?$filter=geo.length(location,'POINT(-1.6571736839366906 48.112731020713284)') lt 1`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -136,15 +121,10 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
             short: "Location Length Foi",
             description: "geo.length(g1) number : geo.length(location) lt 2 matches all locations that are linestrings with a length less than 2 degrees",
             reference: "https://postgis.net/docs/ST_Length.html",
-            examples: {
-                http: `${testVersion}/Observations?$filter=geo.length(FeatureOfInterest/feature,'POINT(-1.6571736839366906 48.112731020713284)') lt 1`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Observations?$filter=geo.length(FeatureOfInterest/feature,'POINT(-1.6571736839366906 48.112731020713284)') lt 1`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -161,15 +141,10 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
             short: "Location Intersects location",
             description: "geo.intersects(g1, g2) bool : Returns true if g1 intersects g2 geo.intersects(location, geography'POLYGON ((30 10, 10 20, 20 40, 40 40, 30 10))')",
             reference: "https://postgis.net/docs/ST_Intersects.html",
-            examples: {
-                http: `${testVersion}/Locations?$filter=geo.intersects(location,'LINESTRING(-1.6567440482485551 48.11256463781973, -4.108433416883344 47.99535576613954)')`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Locations?$filter=geo.intersects(location,'LINESTRING(-1.6567440482485551 48.11256463781973, -4.108433416883344 47.99535576613954)')`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -186,15 +161,10 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
             short: "FOI Intersects Foi",
             description: "geo.intersects(g1, g2) bool : Returns true if g1 intersects g2 geo.intersects(location, geography'POLYGON ((30 10, 10 20, 20 40, 40 40, 30 10))')",
             reference: "https://postgis.net/docs/ST_Intersects.html",
-            examples: {
-                http: `${testVersion}/Observations?$filter=geo.intersects(FeatureOfInterest/feature, 'LINESTRING(-1.202481228298467 48.35475608212215, -4.108433416883344 47.99535576613954)')`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Observations?$filter=geo.intersects(FeatureOfInterest/feature, 'LINESTRING(-1.202481228298467 48.35475608212215, -4.108433416883344 47.99535576613954)')`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -211,15 +181,10 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
             short: "Location Within location",
             description: "geo.within(g1, g2) bool : Returns true if g1 is within g2 geo.within(location, geography'POLYGON ((30 10, 10 20, 20 40, 40 40, 30 10))')",
             reference: "https://postgis.net/docs/ST_Within.html",
-            examples: {
-                http: `${testVersion}/Locations?$filter=geo.within(location, geography'POINT(-4.108433416883344 47.99535576613954)')`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Locations?$filter=geo.within(location, geography'POINT(-4.108433416883344 47.99535576613954)')`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -238,15 +203,10 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
             short: "Location Within Foi",
             description: "geo.within(g1, g2) bool : Returns true if g1 is within g2 geo.within(location, geography'POLYGON ((30 10, 10 20, 20 40, 40 40, 30 10))')",
             reference: "https://postgis.net/docs/ST_Within.html",
-            examples: {
-                http: `${testVersion}/Observations?$filter=geo.within(FeatureOfInterest/feature, geography'POINT(-1.202481228298467 48.354756082122154)')`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Observations?$filter=geo.within(FeatureOfInterest/feature, geography'POINT(-1.202481228298467 48.354756082122154)')`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -264,15 +224,10 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
             short: "Location Disjoint location",
             description: "geo.disjoint(g1, g2) bool : Returns true if g1 is separated from g2 geo.disjoint(location, geography'POLYGON ((30 10, 10 20, 20 40, 40 40, 30 10))')",
             reference: "https://postgis.net/docs/ST_Disjoint.html",
-            examples: {
-                http: `${testVersion}/Locations?$filter=geo.disjoint(location,'MULTIPOINT(-3.377509239138959 47.74736066059859, -1.6567440482485551 48.11256463781973, -4.108433416883344 47.99535576613954)')`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Locations?$filter=geo.disjoint(location,'MULTIPOINT(-3.377509239138959 47.74736066059859, -1.6567440482485551 48.11256463781973, -4.108433416883344 47.99535576613954)')`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -290,15 +245,10 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
             short: "Location Disjoint Observations",
             description: "geo.disjoint(g1, g2) bool : Returns true if g1 is separated from g2 geo.disjoint(location, geography'POLYGON ((30 10, 10 20, 20 40, 40 40, 30 10))')",
             reference: "https://postgis.net/docs/ST_Disjoint.html",
-            examples: {
-                http: `${testVersion}/Observations?$filter=geo.disjoint(FeatureOfInterest/feature,'MULTIPOINT(-3.377509239138959 47.74736066059859, -1.6567440482485551 48.11256463781973, -4.108433416883344 47.99535576613954)')`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Observations?$filter=geo.disjoint(FeatureOfInterest/feature,'MULTIPOINT(-3.377509239138959 47.74736066059859, -1.6567440482485551 48.11256463781973, -4.108433416883344 47.99535576613954)')`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -315,15 +265,10 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
             short: "Location Equals location",
             description: "geo.equals(g1, g2) bool : Returns true if g1 is the same as g2 geo.equals(location, geography'POINT (30 10)')",
             reference: "https://postgis.net/docs/ST_Equals.html",
-            examples: {
-                http: `${testVersion}/Locations?$filter=geo.equals(location,'POINT(-3.377509239138959 47.74736066059859)')`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Locations?$filter=geo.equals(location,'POINT(-3.377509239138959 47.74736066059859)')`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -341,15 +286,10 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
             short: "Location Equals Foi",
             description: "geo.equals(g1, g2) bool : Returns true if g1 is the same as g2 geo.equals(location, geography'POINT (30 10)')",
             reference: "https://postgis.net/docs/ST_Equals.html",
-            examples: {
-                http: `${testVersion}/Observations?$filter=geo.equals(FeatureOfInterest/feature,%27POINT(-1.202481228298467%2048.35475608212215)%27)`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Observations?$filter=geo.equals(FeatureOfInterest/feature,%27POINT(-1.202481228298467%2048.35475608212215)%27)`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -374,7 +314,7 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
     //                     }
     //     });
     //     chai.request(server)
-    //         .get(`/test/${infos.examples.http}`)
+    //         .get(`/test/${infos.request}`)
     //         .end((err: Error, res: any) => {
     //             should.not.exist(err);
     //             res.status.should.equal(200);
@@ -400,7 +340,7 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
     //                     }
     //     });
     //     chai.request(server)
-    //         .get(`/test/${infos.examples.http}`)
+    //         .get(`/test/${infos.request}`)
     //         .end((err: Error, res: any) => {
     //             should.not.exist(err);
     //             res.status.should.equal(200);
@@ -425,9 +365,9 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
     //                     }
     //     };
     //     chai.request(server)
-    //         .get(`/test/${infos.examples.http}`)
+    //         .get(`/test/${infos.request}`)
     //         .end((err: Error, res: any) => {
-    //             console.log(infos.examples.http);
+    //             console.log(infos.request);
 
     //             should.not.exist(err);
     //             res.status.should.equal(200);
@@ -454,9 +394,9 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
     //                     }
     //     };
     //     chai.request(server)
-    //         .get(`/test/${infos.examples.http}`)
+    //         .get(`/test/${infos.request}`)
     //         .end((err: Error, res: any) => {
-    //             console.log(infos.examples.http);
+    //             console.log(infos.request);
     //             should.not.exist(err);
     //             res.status.should.equal(200);
     //             res.type.should.equal("application/json");
@@ -483,7 +423,7 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
     //                     }
     //     });
     //     chai.request(server)
-    //         .get(`/test/${infos.examples.http}`)
+    //         .get(`/test/${infos.request}`)
     //         .end((err: Error, res: any) => {
     //             should.not.exist(err);
     //             res.status.should.equal(200);
@@ -510,7 +450,7 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
     //                     }
     //     });
     //     chai.request(server)
-    //         .get(`/test/${infos.examples.http}`)
+    //         .get(`/test/${infos.request}`)
     //         .end((err: Error, res: any) => {
     //             should.not.exist(err);
     //             res.status.should.equal(200);

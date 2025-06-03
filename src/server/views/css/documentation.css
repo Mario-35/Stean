@@ -212,3 +212,12 @@ td {
   box-shadow: 0 1rem 2rem rgba(0, 0, 0, 20%);
   border: 1px solid var(--window-border-head);
 }
+
+.pull-left {
+  margin-right: 10px;
+}
+
+.pull-center {
+  text-align: center;
+  font-size: 150%;
+}

@@ -45,9 +45,9 @@ export function addSimpleTest(messsage: string) {
     _LOG.push(`   ${nbAdd()}. ${messsage} ✔️`);
 }
 export function addTest(infos: Iinfos): Iinfos {
-    _LOG.push(`   ${nbAdd()}. ${infos.short}\r [${infos.type ? infos.type.toUpperCase() : "GET"} ${infos.examples.http}](${proxy(true)}${encodeURI(infos.examples.http)}) ❌`);
+    _LOG.push(`   ${nbAdd()}. ${infos.short}\r [${infos.type ? infos.type.toUpperCase() : "GET"} ${infos.request}](${proxy(true)}${encodeURI(infos.request)}) ❌`);
     const tempDatas = infos.params ? ` <div class="datasBox space"> <h2 class="title">Datas</h2> <div class="view"> ${util.inspect(infos.params, { breakLength: Infinity, showHidden: true, depth: Infinity })}</div></div> </div>` : "";
-    const link = infos.type === "get" ? `<a class="tests" href="${proxy(true)}${encodeURI(infos.examples.http)}" target="_blank">${infos.examples.http}</a>` : `<div class="text"><p>${infos.examples.http}</p></div>`;
+    const link = infos.type === "get" ? `<a class="tests" href="${proxy(true)}${encodeURI(infos.request)}" target="_blank">${infos.request}</a>` : `<div class="text"><p>${infos.request}</p></div>`;
     _HTML.push(`<tr> <td><span class="method meth-${infos.type}">${infos.type}</span></td> <td><div class="text"><p>${infos.short}</p></div> ${link} ${tempDatas} </td><td>✔️</td></tr>`);
     _INDEX = _LOG.length - 1;
     if (infos.params) _LOG.push(postDatas(infos.params));
@@ -55,7 +55,7 @@ export function addTest(infos: Iinfos): Iinfos {
     return infos;
 }
 export function addPostFile(infos: Iinfos) {
-    _LOG.push(`  ${nbAdd()}. ${infos.short}\r [POST ${infos.examples.url}](${proxy(true)}${encodeURI(infos.examples.url)}) ✔️\r\n`);
+    _LOG.push(`  ${nbAdd()}. ${infos.short}\r [POST ${infos.request}](${proxy(true)}${encodeURI(infos.request)}) ✔️\r\n`);
 }
 export const postDatas = (input: any): string => `${_SEP}js\r\n${util.inspect(input, { breakLength: Infinity, showHidden: true, depth: Infinity })} \r\n${_SEP}\r\n`;
 export const addToTests = (options: { title: string; verb: string; link: string; datas: string | undefined; ok: boolean }): void => {

@@ -18,7 +18,7 @@ function getExamples(input, datas) {
 			`<label for="tab${i}">${lang}</label>`,
 			`<div class="patrom-tab">`,
 			`<code class='language-${lang}'>`,
-			input[lang].replace('@DATAS@', datas),
+			input[lang].replace('DATASSATAD', datas),
 			`</code>`,
 			`</div>`);
 	});
@@ -32,8 +32,12 @@ function getContent(input) {
       <h1>${input.short}</h1>
     </div>
     ${input.description ? `<section><p>${ input.description }</p></section>` : ''}
+	    <div class="pull-center">${input.examples.http}</div>
     ${getDatasTabs(input)}    
-    ${input.examples ? `<section>${ getExamples(input.examples, input.params) }</section>` : ''}
+    ${input.examples ? `    <div class="pull-left">
+      <h1>Examples</h1>
+    </div>
+	<section>${ getExamples(input.examples, input.params) }</section>` : ''}
   </article>`;
 }
 
@@ -124,14 +128,9 @@ function showDoc(event) {
 
 function filterDoc() {
 	const filter = search.value;
-	console.log(`filter -> ${filter}`);
-
 	Object.keys(docDatas).forEach(main => {
-		console.log(main);
-
 		let lessOne = false;
 		Object.keys(docDatas[main]).forEach((index) => {
-			console.log(index);
 			let find = false;
 			if (docDatas[main][index].description.includes(filter)) {
 				find = true;
@@ -149,7 +148,6 @@ function filterDoc() {
 }
 
 function createSideBar() {
-	console.log(Object.keys(docDatas));
 	const lines = [`<div class="patrom-row">
                     	<div class="patrom-col col-span-12 fullWidth">
                       		<input type="text" id="search" class="patrom-text-input" value="" placeholder="filter">

@@ -8,7 +8,7 @@
  *
  */
 process.env.NODE_ENV = "test";
-import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, defaultGet, defaultPost, identification, keyTokenName, defaultPatch, defaultDelete, listOfColumns, limitResult, infos, apiInfos, showHide, nbColor, nbColorTitle, testVersion, _RAWDB } from "./constant";
+import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, listOfColumns, limitResult, infos, apiInfos, showHide, nbColor, nbColorTitle, testVersion, _RAWDB } from "./constant";
 export const testsKeys = ["@iot.id", "@iot.selfLink", "description", "name", "properties", "Locations@iot.navigationLink", "HistoricalLocations@iot.navigationLink", "Datastreams@iot.navigationLink", "MultiDatastreams@iot.navigationLink"];
 import chai from "chai";
 import chaiHttp from "chai-http";
@@ -60,15 +60,10 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: "All",
                 description: `Retrieve all ${entity.name}.${showHide(`Get${entity.name}`, apiInfos["9.2.2"])}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-collection-entities",
-                examples: {
-                    http: `${testVersion}/${entity.name}`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -94,15 +89,10 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: "One",
                 description: `Get a specific ${entity.singular}.${apiInfos["9.2.3"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity",
-                examples: {
-                    http: `${testVersion}/${entity.name}(1)`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}(1)`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -128,12 +118,10 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: "Return error if not exist",
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`
-                }
+                request: `${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.status.should.equal(404);
@@ -148,12 +136,10 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: "Return error not found",
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.singular}`
-                }
+                request: `${testVersion}/${entity.singular}`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.status.should.equal(404);
@@ -167,15 +153,10 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: "Only a property",
                 description: `Get the name of a specific Thing.${apiInfos["9.2.4"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-property-of-entity",
-                examples: {
-                    http: `${testVersion}/${entity.name}(1)/name`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}(1)/name`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     // there should be no errors
                     should.not.exist(err);
@@ -201,12 +182,10 @@ describe("endpoint : Thing [8.2.1]", () => {
 
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}(1)/nameNot`
-                }
+                request: `${testVersion}/${entity.name}(1)/nameNot`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.status.should.equal(404);
@@ -221,15 +200,10 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: "Only the value of a property",
                 description: `Get the value of the property of a specific Thing.${apiInfos["9.2.5"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-value-of-property",
-                examples: {
-                    http: `${testVersion}/${entity.name}(1)/name/$value`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}(1)/name/$value`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     // there should be no errors
                     should.not.exist(err);
@@ -251,15 +225,10 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: "Select with @iot.id",
                 description: "Get with SELECT with @iot.id.",
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#expand",
-                examples: {
-                    http: `${testVersion}/${entity.name}?$select=name,description,@iot.id`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}?$select=name,description,@iot.id`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -280,12 +249,10 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: "Return Select id",
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}?$select=name,description,id`
-                }
+                request: `${testVersion}/${entity.name}?$select=name,description,id`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -302,15 +269,10 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: "Select with navigation link",
                 description: "Get SELECT with navigation link",
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#expand",
-                examples: {
-                    http: `${testVersion}/${entity.name}?$select=name,description,Datastreams`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}?$select=name,description,Datastreams`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -332,15 +294,10 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: `Subentity ${name}`,
                 description: `Get Subentity ${name} of a specific ${entity.name}.${apiInfos["9.2.6"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-navigation-property",
-                examples: {
-                    http: `${testVersion}/${entity.name}(6)/${name}`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}(6)/${name}`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -364,12 +321,10 @@ describe("endpoint : Thing [8.2.1]", () => {
 
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}(6)/${name}`
-                }
+                request: `${testVersion}/${entity.name}(6)/${name}`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -389,12 +344,10 @@ describe("endpoint : Thing [8.2.1]", () => {
 
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}(6)/${name}`
-                }
+                request: `${testVersion}/${entity.name}(6)/${name}`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -416,12 +369,10 @@ describe("endpoint : Thing [8.2.1]", () => {
 
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}(11)/${name}`
-                }
+                request: `${testVersion}/${entity.name}(11)/${name}`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -442,15 +393,10 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: `Expand ${name}`,
                 description: `Get Expand Locations of a specific Thing.${apiInfos["9.3.2.1"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#expand",
-                examples: {
-                    http: `${testVersion}/${entity.name}(6)?$expand=${name}`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}(6)?$expand=${name}`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -472,15 +418,10 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: "Expand with Select",
                 description: `Get Expand Locations of a specific Thing with a SELECT inside.${apiInfos["9.3.2.1"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#expand",
-                examples: {
-                    http: `${testVersion}/${entity.name}(6)?$expand=Locations($select=location)`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}(6)?$expand=Locations($select=location)`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -500,15 +441,10 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: "Expand coma separation",
                 description: `Get Expand Locations and Historical Location of a specific Thing..${apiInfos["9.3.2.1"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#expand",
-                examples: {
-                    http: `${testVersion}/${entity.name}(6)?$expand=Locations,HistoricalLocations`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}(6)?$expand=Locations,HistoricalLocations`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -530,15 +466,10 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: "Expand slash separation",
                 description: `Get Expand Locations and it's Historical Location of a specific Thing..${apiInfos["9.3.2.1"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#expand",
-                examples: {
-                    http: `${testVersion}/${entity.name}(6)?$expand=Locations/HistoricalLocations`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}(6)?$expand=Locations/HistoricalLocations`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -559,12 +490,10 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: `Return error${entity.name} Expand ${name}`,
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}(6)?$expand=${name}`
-                }
+                request: `${testVersion}/${entity.name}(6)?$expand=${name}`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -583,12 +512,10 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: `Return error${entity.name} Expand ${name}`,
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}(6)?$expand=${name}`
-                }
+                request: `${testVersion}/${entity.name}(6)?$expand=${name}`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -608,12 +535,10 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: `Return error${entity.name} Select with Expand Datastreams`,
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}?$select=name,description&$expand=Datastreams`
-                }
+                request: `${testVersion}/${entity.name}?$select=name,description&$expand=Datastreams`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -630,12 +555,10 @@ describe("endpoint : Thing [8.2.1]", () => {
 
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}(11)?$expand=${name}`
-                }
+                request: `${testVersion}/${entity.name}(11)?$expand=${name}`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -655,12 +578,7 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: "Only references",
                 description: `Get only references of all Things.${apiInfos["9.2.7"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-associationlink",
-                examples: {
-                    http: `${testVersion}/${entity.name}/$ref`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}/$ref`
             });
             chai.request(server)
                 .get(`/test/${testVersion}/${entity.name}/$ref`)
@@ -683,15 +601,10 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: "nested resource path",
                 description: `Get a specific datastream resource from o specific thing. ${apiInfos["9.2.8"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-nested-resource-path",
-                examples: {
-                    http: `${testVersion}/${entity.name}(6)/Datastreams(7)`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}(6)/Datastreams(7)`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -711,15 +624,10 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: "nested resource path property",
                 description: `Get name property of a specific datastream resource from o specific thing. ${apiInfos["9.2.8"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-nested-resource-path",
-                examples: {
-                    http: `${testVersion}/${entity.name}(6)/Datastreams(7)/name`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}(6)/Datastreams(7)/name`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -739,15 +647,10 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: "nested resource path entity",
                 description: `Get entity of a specific datastream resource from a specific thing. ${apiInfos["9.2.8"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-nested-resource-path",
-                examples: {
-                    http: `${testVersion}/${entity.name}(6)/Datastreams(7)/Thing`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}(6)/Datastreams(7)/Thing`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -768,15 +671,10 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: "nested resource path entity and sub entity",
                 description: `Get entity of a specific datastream resource from a specific nested thing. ${apiInfos["9.2.8"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-nested-resource-path",
-                examples: {
-                    http: `${testVersion}/${entity.name}(6)/Datastreams(7)/Thing/Datastreams`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}(6)/Datastreams(7)/Thing/Datastreams`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -798,15 +696,10 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: "filter nested resource path",
                 description: "Get Things that's have a datastream description equal to ...",
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-nested-resource-path",
-                examples: {
-                    http: `${testVersion}/${entity.name}?$filter=Datastreams/description eq 'Pressure sensor'`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}?$filter=Datastreams/description eq 'Pressure sensor'`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -828,15 +721,10 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: "complex filter nested resource path",
                 description: "Get Things that's have a datastream Wich have an observed property with description equal to ...",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}?$filter=Datastreams/ObservedProperty/description eq 'Mesure de la profondeur de la nappe'`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}?$filter=Datastreams/ObservedProperty/description eq 'Mesure de la profondeur de la nappe'`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -873,16 +761,11 @@ describe("endpoint : Thing [8.2.1]", () => {
                 description: `Post a new ${entity.name}.${showHide(`Post${entity.name}`, apiInfos["10.2"])}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#_request",
                 apiPermission: "admin:computer",
-                examples: {
-                    http: `${testVersion}/${entity.name}`,
-                    curl: defaultPost("curl", "KEYHTTP"),
-                    javascript: defaultPost("javascript", "KEYHTTP"),
-                    python: defaultPost("python", "KEYHTTP")
-                },
+                request: `${testVersion}/${entity.name}`,
                 params: datas
             });
             chai.request(server)
-                .post(`/test/${infos.examples.http}`)
+                .post(`/test/${infos.request}`)
                 .send(infos.params)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
@@ -906,12 +789,10 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: "Return Error if the payload is malformed",
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}`
-                }
+                request: `${testVersion}/${entity.name}`
             });
             chai.request(server)
-                .post(`/test/${infos.examples.http}`)
+                .post(`/test/${infos.request}`)
                 .send({})
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
@@ -943,16 +824,11 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: "With new Location",
                 description: `A Location entity can be linked to a Thing at its creation time. The Location provided will be a new Location in the system.${apiInfos["10.2.1.2"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#create-related-entities",
-                examples: {
-                    http: `${testVersion}/${entity.name}`,
-                    curl: defaultPost("curl", "KEYHTTP"),
-                    javascript: defaultPost("javascript", "KEYHTTP"),
-                    python: defaultPost("python", "KEYHTTP")
-                },
+                request: `${testVersion}/${entity.name}`,
                 params: datas
             });
             chai.request(server)
-                .post(`/test/${infos.examples.http}`)
+                .post(`/test/${infos.request}`)
                 .send(infos.params)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end(async (err: Error, res: any) => {
@@ -1009,16 +885,11 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: "With existing Location",
                 description: `Create a Thing with existing location.${apiInfos["10.2.1.1"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating",
-                examples: {
-                    http: `${testVersion}/${entity.name}`,
-                    curl: defaultPost("curl", "KEYHTTP"),
-                    javascript: defaultPost("javascript", "KEYHTTP"),
-                    python: defaultPost("python", "KEYHTTP")
-                },
+                request: `${testVersion}/${entity.name}`,
                 params: datas
             });
             chai.request(server)
-                .post(`/test/${infos.examples.http}`)
+                .post(`/test/${infos.request}`)
                 .send(infos.params)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
@@ -1071,12 +942,10 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: "With existing Location that don't exist",
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/Things`
-                }
+                request: `${testVersion}/Things`
             });
             chai.request(server)
-                .post(`/test/${infos.examples.http}`)
+                .post(`/test/${infos.request}`)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .send(datas)
                 .end((err: Error, res: any) => {
@@ -1133,16 +1002,11 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: "With Location and Datastream",
                 description: "Create a Thing with new location & datastream.",
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#create-related-entities",
-                examples: {
-                    http: `${testVersion}/${entity.name}`,
-                    curl: defaultPost("curl", "KEYHTTP"),
-                    javascript: defaultPost("javascript", "KEYHTTP"),
-                    python: defaultPost("python", "KEYHTTP")
-                },
+                request: `${testVersion}/${entity.name}`,
                 params: datas
             });
             chai.request(server)
-                .post(`/test/${infos.examples.http}`)
+                .post(`/test/${infos.request}`)
                 .send(infos.params)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
@@ -1261,16 +1125,11 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: "With Inner Posts",
                 description: "Create a Thing with with Inner Posts.",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}`,
-                    curl: defaultPost("curl", "KEYHTTP"),
-                    javascript: defaultPost("javascript", "KEYHTTP"),
-                    python: defaultPost("python", "KEYHTTP")
-                },
+                request: `${testVersion}/${entity.name}`,
                 params: datas
             });
             chai.request(server)
-                .post(`/test/${infos.examples.http}`)
+                .post(`/test/${infos.request}`)
                 .send(infos.params)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
@@ -1303,16 +1162,11 @@ describe("endpoint : Thing [8.2.1]", () => {
                     short: "Basic",
                     description: `Patch a ${entity.singular}.${showHide(`Patch${entity.name}`, apiInfos["10.3"])}`,
                     reference: "https://docs.ogc.org/is/18-088/18-088.html#_request_2",
-                    examples: {
-                        http: `${testVersion}/${entity.name}(${things["id"]})`,
-                        curl: defaultPatch("curl", "KEYHTTP"),
-                        javascript: defaultPatch("javascript", "KEYHTTP"),
-                        python: defaultPatch("python", "KEYHTTP")
-                    },
+                    request: `${testVersion}/${entity.name}(${things["id"]})`,
                     params: datas
                 });
                 chai.request(server)
-                    .patch(`/test/${infos.examples.http}`)
+                    .patch(`/test/${infos.request}`)
                     .send(infos.params)
                     .set("Cookie", `${keyTokenName}=${token}`)
                     .end((err: Error, res: any) => {
@@ -1345,12 +1199,10 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: "Return Error not exist",
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`
-                }
+                request: `${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`
             });
             chai.request(server)
-                .patch(`/test/${infos.examples.http}`)
+                .patch(`/test/${infos.request}`)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .send(datas)
                 .end((err: Error, res: any) => {
@@ -1381,16 +1233,11 @@ describe("endpoint : Thing [8.2.1]", () => {
                     short: "With New location",
                     description: "Modify location of a Thing.",
                     reference: "https://docs.ogc.org/is/18-088/18-088.html#_request_2",
-                    examples: {
-                        http: `${testVersion}/${entity.name}(${things["id"]})`,
-                        curl: defaultPatch("curl", "KEYHTTP"),
-                        javascript: defaultPatch("javascript", "KEYHTTP"),
-                        python: defaultPatch("python", "KEYHTTP")
-                    },
+                    request: `${testVersion}/${entity.name}(${things["id"]})`,
                     params: datas
                 });
                 chai.request(server)
-                    .patch(`/test/${infos.examples.http}`)
+                    .patch(`/test/${infos.request}`)
                     .send(infos.params)
                     .set("Cookie", `${keyTokenName}=${token}`)
                     .end((err: Error, res: any) => {
@@ -1437,16 +1284,11 @@ describe("endpoint : Thing [8.2.1]", () => {
                     short: "With existing Location",
                     description: "Patch a Thing and only location change.",
                     reference: "https://docs.ogc.org/is/18-088/18-088.html#_request_2",
-                    examples: {
-                        http: `${testVersion}/${entity.name}(${things["id"]})`,
-                        curl: defaultPatch("curl", "KEYHTTP"),
-                        javascript: defaultPatch("javascript", "KEYHTTP"),
-                        python: defaultPatch("python", "KEYHTTP")
-                    },
+                    request: `${testVersion}/${entity.name}(${things["id"]})`,
                     params: datas
                 });
                 chai.request(server)
-                    .patch(`/test/${infos.examples.http}`)
+                    .patch(`/test/${infos.request}`)
                     .send(infos.params)
                     .set("Cookie", `${keyTokenName}=${token}`)
                     .end((err: Error, res: any) => {
@@ -1492,15 +1334,10 @@ describe("endpoint : Thing [8.2.1]", () => {
                     short: "One",
                     description: `Delete a ${entity.singular}.${showHide(`Delete${entity.name}`, apiInfos["10.4"])}`,
                     reference: "https://docs.ogc.org/is/18-088/18-088.html#_request_3",
-                    examples: {
-                        http: `${testVersion}/${entity.name}(${beforeDelete["id" as keyof object]})`,
-                        curl: defaultDelete("curl", "KEYHTTP"),
-                        javascript: defaultDelete("javascript", "KEYHTTP"),
-                        python: defaultDelete("python", "KEYHTTP")
-                    }
+                    request: `${testVersion}/${entity.name}(${beforeDelete["id" as keyof object]})`
                 });
                 chai.request(server)
-                    .delete(`/test/${infos.examples.http}`)
+                    .delete(`/test/${infos.request}`)
                     .set("Cookie", `${keyTokenName}=${token}`)
                     .end((err: Error, res: any) => {
                         should.not.exist(err);
@@ -1525,12 +1362,10 @@ describe("endpoint : Thing [8.2.1]", () => {
                 short: "Return Error if not exist",
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`
-                }
+                request: `${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`
             });
             chai.request(server)
-                .delete(`/test/${infos.examples.http}`)
+                .delete(`/test/${infos.request}`)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);

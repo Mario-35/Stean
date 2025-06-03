@@ -8,7 +8,7 @@
 process.env.NODE_ENV = "test";
 import chai from "chai";
 import chaiHttp from "chai-http";
-import { IApiDoc, IApiInput, prepareToApiDoc, generateApiDoc, limitResult, testVersion, _RAWDB, defaultGet, defaultPost, keyTokenName, identification, apiInfos, blank, infos } from "./constant";
+import { IApiDoc, IApiInput, prepareToApiDoc, generateApiDoc, limitResult, testVersion, _RAWDB, keyTokenName, identification, apiInfos, blank, infos } from "./constant";
 import { server } from "../../server/index";
 import { addStartNewTest, addTest, writeLog } from "./tests";
 import { Ientity } from "../../server/types";
@@ -88,15 +88,10 @@ describe("endpoint : Service", () => {
                 short: "infos",
                 description: "Retrieve all services",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/infos`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/infos`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -116,15 +111,10 @@ describe("endpoint : Service", () => {
 
                 description: `Retrieve all ${entity.name}}`,
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err, res) => {
                     should.not.exist(err);
@@ -144,15 +134,10 @@ describe("endpoint : Service", () => {
                 short: "One",
                 description: `Get a specific ${entity.singular}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity",
-                examples: {
-                    http: `${testVersion}/${entity.name}(1)`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}(1)`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
@@ -177,16 +162,11 @@ describe("endpoint : Service", () => {
                 description: `Post a new service${blank(1)}${apiInfos["2"]}${blank(1)}${apiInfos["1"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#_request",
                 apiPermission: "admin:computer",
-                examples: {
-                    http: `${testVersion}/${entity.name}`,
-                    curl: defaultPost("curl", "KEYHTTP"),
-                    javascript: defaultPost("javascript", "KEYHTTP"),
-                    python: defaultPost("python", "KEYHTTP")
-                },
+                request: `${testVersion}/${entity.name}`,
                 params: confPres
             });
             chai.request(server)
-                .post(`/test/${infos.examples.http}`)
+                .post(`/test/${infos.request}`)
                 .send(conf)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {

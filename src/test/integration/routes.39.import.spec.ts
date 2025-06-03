@@ -72,13 +72,11 @@ describe("CSV Import", function () {
             short: "CreateObservations with simple csv attached file",
             description: "Import simple csv file",
             reference: "",
-            examples: {
-                http: `${testVersion}/CreateObservations`
-            },
+            request: `${testVersion}/CreateObservations`,
             params: simple
         });
         chai.request(server)
-            .post(`/test/${infos.examples.http}`)
+            .post(`/test/${infos.request}`)
             .field("Content-Type", "multipart/form-data")
             .field("datas", JSON.stringify(infos.params))
             .field("method", "POST")
@@ -100,13 +98,11 @@ describe("CSV Import", function () {
             short: "CreateObservations with simple csv attached file",
             description: "Import simple csv file",
             reference: "",
-            examples: {
-                http: `${testVersion}/CreateObservations`
-            },
+            request: `${testVersion}/CreateObservations`,
             params: simple
         });
         chai.request(server)
-            .post(`/test/${infos.examples.http}`)
+            .post(`/test/${infos.request}`)
             .field("Content-Type", "multipart/form-data")
             .field("datas", JSON.stringify(infos.params))
             .field("method", "POST")
@@ -131,13 +127,11 @@ describe("CSV Import", function () {
             short: "CreateObservations with multi csv attached file",
             description: "Import multi csv file",
             reference: "",
-            examples: {
-                http: `${testVersion}/CreateObservations`
-            },
+            request: `${testVersion}/CreateObservations`,
             params: multi
         });
         chai.request(server)
-            .post(`/test/${infos.examples.http}`)
+            .post(`/test/${infos.request}`)
             .field("Content-Type", "multipart/form-data")
             .field("datas", JSON.stringify(infos.params))
             .field("method", "POST")
@@ -162,13 +156,11 @@ describe("CSV Import", function () {
             short: "CreateObservations with multi csv attached file",
             description: "Import multi csv file",
             reference: "",
-            examples: {
-                http: `${testVersion}/CreateObservations`
-            },
+            request: `${testVersion}/CreateObservations`,
             params: multi
         });
         chai.request(server)
-            .post(`/test/${infos.examples.http}`)
+            .post(`/test/${infos.request}`)
             .field("Content-Type", "multipart/form-data")
             .field("datas", JSON.stringify(infos.params))
             .field("method", "POST")

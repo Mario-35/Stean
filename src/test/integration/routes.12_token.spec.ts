@@ -32,14 +32,12 @@ describe("Identification : Token", () => {
                 type: "post",
                 short: "login get a new token",
                 description: "Get a new token.",
-                examples: {
-                    http: `${testVersion}/login`,
-                    curl: `curl -X POST KEYHTTP/login -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' -d 'username=stean&password=stean'`
-                },
+                request: `${testVersion}/login`,
+                // curl: `curl -X POST KEYHTTP/login -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' -d 'username=stean&password=stean'`
                 params: { "username": identification.username, "password": identification.password }
             });
             chai.request(server)
-                .post(`/test/${infos.examples.http}`)
+                .post(`/test/${infos.request}`)
                 .type("form")
                 .send(identification)
                 .end((err: Error, res: any) => {
@@ -57,14 +55,12 @@ describe("Identification : Token", () => {
                 type: "post",
                 short: "login Post basic",
                 description: "Identification failed.",
-                examples: {
-                    http: `${testVersion}/login`,
-                    curl: `curl -X POST KEYHTTP/login -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' -d 'username=test&password=test'`
-                },
+                request: `${testVersion}/login`,
+                // curl: `curl -X POST KEYHTTP/login -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' -d 'username=test&password=test'`
                 params: { "username": identification.username, "password": "nowhere" }
             });
             chai.request(server)
-                .post(`/test/${infos.examples.http}`)
+                .post(`/test/${infos.request}`)
                 .type("form")
                 .send(infos.params)
                 .end((err: Error, res: any) => {
@@ -82,13 +78,11 @@ describe("Identification : Token", () => {
                 type: "get",
                 short: "Logout actual connection.",
                 description: "Logout actual connection.",
-                examples: {
-                    http: `${testVersion}/logout`,
-                    curl: `curl -X GET KEYHTTP/logout`
-                }
+                request: `${testVersion}/logout`
+                // curl: `curl -X GET KEYHTTP/logout`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.body.should.include.keys("message");

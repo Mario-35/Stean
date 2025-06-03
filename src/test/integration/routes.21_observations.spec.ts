@@ -10,7 +10,7 @@
 process.env.NODE_ENV = "test";
 import chai from "chai";
 import chaiHttp from "chai-http";
-import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, defaultDelete, defaultPatch, defaultPost, defaultGet, listOfColumns, limitResult, infos, apiInfos, showHide, nbColorTitle, nbColor, testVersion, _RAWDB } from "./constant";
+import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, listOfColumns, limitResult, infos, apiInfos, showHide, nbColorTitle, nbColor, testVersion, _RAWDB } from "./constant";
 import { server } from "../../server/index";
 import { Ientity } from "../../server/types";
 import { testsKeys as Datastreams_testsKeys } from "./routes.17_datastreams.spec";
@@ -58,15 +58,10 @@ describe("endpoint : Observations", () => {
 
                 description: `Retrieve all ${entity.name}.${showHide(`Get${entity.name}`, apiInfos["9.2.2"])}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-collection-entities",
-                examples: {
-                    http: `${testVersion}/${entity.name}`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -93,15 +88,10 @@ describe("endpoint : Observations", () => {
                 short: "One",
                 description: `Get a specific ${entity.singular}.${apiInfos["9.2.3"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity",
-                examples: {
-                    http: `${testVersion}/${entity.name}(1)`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}(1)`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -122,12 +112,10 @@ describe("endpoint : Observations", () => {
 
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`
-                }
+                request: `${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.status.should.equal(404);
@@ -144,12 +132,10 @@ describe("endpoint : Observations", () => {
 
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.singular}`
-                }
+                request: `${testVersion}/${entity.singular}`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.status.should.equal(404);
@@ -162,15 +148,10 @@ describe("endpoint : Observations", () => {
                 type: "get",
                 short: "All from Datastream",
                 description: "Get Observations from Datastream.",
-                examples: {
-                    http: `${testVersion}/Datastreams(2)/${entity.name}`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/Datastreams(2)/${entity.name}`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -194,7 +175,7 @@ describe("endpoint : Observations", () => {
         //         }
         //     };
         //     chai.request(server)
-        //         .get(`/test/${infos.examples.http}`)
+        //         .get(`/test/${infos.request}`)
         //         .end((err: Error, res: any) => {
         //             should.not.exist(err);
         //             res.status.should.equal(200);
@@ -213,15 +194,10 @@ describe("endpoint : Observations", () => {
                 type: "get",
                 short: "Expands",
                 description: "Get a specific Observation and expand Datastream.",
-                examples: {
-                    http: `${testVersion}/${entity.name}(1)?$expand=${name}`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}(1)?$expand=${name}`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -239,15 +215,10 @@ describe("endpoint : Observations", () => {
                 type: "get",
                 short: "With Multi Select",
                 description: "Retrieve specified phenomenonTime, result for a specific Observations.",
-                examples: {
-                    http: `${testVersion}/${entity.name}(1)?$select=phenomenonTime,result`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}(1)?$select=phenomenonTime,result`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -265,15 +236,10 @@ describe("endpoint : Observations", () => {
                 type: "get",
                 short: "With Standard Results",
                 description: "Retrieve observations with multi result.",
-                examples: {
-                    http: `${testVersion}/${entity.name}(11)`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}(11)`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -288,15 +254,10 @@ describe("endpoint : Observations", () => {
                 type: "get",
                 short: "With Multi keyValue Results",
                 description: "Retrieve observations with keyValue result.",
-                examples: {
-                    http: `${testVersion}/${entity.name}(378)?$valuesKeys=true`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}(378)?$valuesKeys=true`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -315,12 +276,10 @@ describe("endpoint : Observations", () => {
                 short: "Return error with spliResult on Observation entity Only",
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}?$splitResult=ALL`
-                }
+                request: `${testVersion}/${entity.name}?$splitResult=ALL`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     res.status.should.equal(400);
                     res.type.should.equal("application/json");
@@ -335,15 +294,10 @@ describe("endpoint : Observations", () => {
                 type: "get",
                 short: "With Split Results",
                 description: "Retrieve observations with splitted multi result.",
-                examples: {
-                    http: `${testVersion}/MultiDatastreams(1)/${entity.name}?$splitResult=all`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/MultiDatastreams(1)/${entity.name}?$splitResult=all`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -361,15 +315,10 @@ describe("endpoint : Observations", () => {
                 type: "get",
                 short: "With Split Result Property",
                 description: "Retrieve observations with splitted Temperature result.",
-                examples: {
-                    http: `${testVersion}/MultiDatastreams(1)/${entity.name}?$splitResult="${testDatas.MultiDatastreams[0].unitOfMeasurements[0].name}"`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/MultiDatastreams(1)/${entity.name}?$splitResult="${testDatas.MultiDatastreams[0].unitOfMeasurements[0].name}"`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -395,7 +344,7 @@ describe("endpoint : Observations", () => {
         //         }
         //     };
         //     chai.request(server)
-        //         .get(`/test/${infos.examples.http}`)
+        //         .get(`/test/${infos.request}`)
         //         .end((err: Error, res: any) => {
         //             console.log(res.body);
 
@@ -427,17 +376,12 @@ describe("endpoint : Observations", () => {
                 short: "With existing FOI",
                 description: `Post a new ${entity.name}.${showHide(`Post${entity.name}`, apiInfos["10.2"])}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating",
-                examples: {
-                    http: `${testVersion}/${entity.name}`,
-                    curl: defaultPost("curl", "KEYHTTP"),
-                    javascript: defaultPost("javascript", "KEYHTTP"),
-                    python: defaultPost("python", "KEYHTTP")
-                },
+                request: `${testVersion}/${entity.name}`,
                 params: datas,
                 structure: listOfColumns(entity)
             });
             chai.request(server)
-                .post(`/test/${infos.examples.http}`)
+                .post(`/test/${infos.request}`)
                 .send(infos.params)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
@@ -456,12 +400,10 @@ describe("endpoint : Observations", () => {
                 short: "Return Error if the payload is malformed",
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}`
-                }
+                request: `${testVersion}/${entity.name}`
             });
             chai.request(server)
-                .post(`/test/${infos.examples.http}`)
+                .post(`/test/${infos.request}`)
                 .send({})
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
@@ -490,16 +432,11 @@ describe("endpoint : Observations", () => {
                 short: "With FOI",
                 description: "Post a new Observation.",
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#create-related-entities",
-                examples: {
-                    http: `${testVersion}/${entity.name}`,
-                    curl: defaultPost("curl", "KEYHTTP"),
-                    javascript: defaultPost("javascript", "KEYHTTP"),
-                    python: defaultPost("python", "KEYHTTP")
-                },
+                request: `${testVersion}/${entity.name}`,
                 params: datas
             });
             chai.request(server)
-                .post(`/test/${infos.examples.http}`)
+                .post(`/test/${infos.request}`)
                 .send(infos.params)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
@@ -523,16 +460,11 @@ describe("endpoint : Observations", () => {
                 short: "From Datastream",
                 description: "POST Observation with existing Datastream.",
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating",
-                examples: {
-                    http: `${testVersion}/Datastreams(10)/${entity.name}`,
-                    curl: defaultPost("curl", "KEYHTTP"),
-                    javascript: defaultPost("javascript", "KEYHTTP"),
-                    python: defaultPost("python", "KEYHTTP")
-                },
+                request: `${testVersion}/Datastreams(10)/${entity.name}`,
                 params: datas
             });
             chai.request(server)
-                .post(`/test/${infos.examples.http}`)
+                .post(`/test/${infos.request}`)
                 .send(infos.params)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end(async (err: Error, res: any) => {
@@ -562,16 +494,11 @@ describe("endpoint : Observations", () => {
                 short: "From Datastream and FOI",
                 description: "POST Observation with existing Datastream.",
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating",
-                examples: {
-                    http: `${testVersion}/Datastreams(10)/${entity.name}`,
-                    curl: defaultPost("curl", "KEYHTTP"),
-                    javascript: defaultPost("javascript", "KEYHTTP"),
-                    python: defaultPost("python", "KEYHTTP")
-                },
+                request: `${testVersion}/Datastreams(10)/${entity.name}`,
                 params: datas
             });
             chai.request(server)
-                .post(`/test/${infos.examples.http}`)
+                .post(`/test/${infos.request}`)
                 .send(infos.params)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end(async (err: Error, res: any) => {
@@ -610,16 +537,11 @@ describe("endpoint : Observations", () => {
                 short: "From MultiDatastream",
                 description: "POST Observation with existing MultiDatastream.",
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating",
-                examples: {
-                    http: `${testVersion}/MultiDatastreams(2)/${entity.name}`,
-                    curl: defaultPost("curl", "KEYHTTP"),
-                    javascript: defaultPost("javascript", "KEYHTTP"),
-                    python: defaultPost("python", "KEYHTTP")
-                },
+                request: `${testVersion}/MultiDatastreams(2)/${entity.name}`,
                 params: datas
             });
             chai.request(server)
-                .post(`/test/${infos.examples.http}`)
+                .post(`/test/${infos.request}`)
                 .send(infos.params)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end(async (err: Error, res: any) => {
@@ -656,12 +578,10 @@ describe("endpoint : Observations", () => {
                 short: "Return error if There is no Stream",
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}`
-                }
+                request: `${testVersion}/${entity.name}`
             });
             chai.request(server)
-                .post(`/test/${infos.examples.http}`)
+                .post(`/test/${infos.request}`)
                 .send(datas)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end(async (err: any, res: any) => {
@@ -694,16 +614,11 @@ describe("endpoint : Observations", () => {
                 short: "From MultiDatastream",
                 description: "POST Observation with existing MultiDatastream.",
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating",
-                examples: {
-                    http: `${testVersion}/MultiDatastreams(2)/${entity.name}`,
-                    curl: defaultPost("curl", "KEYHTTP"),
-                    javascript: defaultPost("javascript", "KEYHTTP"),
-                    python: defaultPost("python", "KEYHTTP")
-                },
+                request: `${testVersion}/MultiDatastreams(2)/${entity.name}`,
                 params: datas
             });
             chai.request(server)
-                .post(`/test/${infos.examples.http}`)
+                .post(`/test/${infos.request}`)
                 .send(infos.params)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end(async (err: Error, res: any) => {
@@ -730,16 +645,11 @@ describe("endpoint : Observations", () => {
                     short: "phenomenonTime and resultTime",
                     description: `Patch a ${entity.singular}.${showHide(`Patch${entity.name}`, apiInfos["10.3"])}`,
                     reference: "https://docs.ogc.org/is/18-088/18-088.html#_request_2",
-                    examples: {
-                        http: `${testVersion}/${entity.name}(${result["id"]})`,
-                        curl: defaultPatch("curl", "KEYHTTP"),
-                        javascript: defaultPatch("javascript", "KEYHTTP"),
-                        python: defaultPatch("python", "KEYHTTP")
-                    },
+                    request: `${testVersion}/${entity.name}(${result["id"]})`,
                     params: datas
                 });
                 chai.request(server)
-                    .patch(`/test/${infos.examples.http}`)
+                    .patch(`/test/${infos.request}`)
                     .send(infos.params)
                     .set("Cookie", `${keyTokenName}=${token}`)
                     .end((err: Error, res: any) => {
@@ -768,12 +678,10 @@ describe("endpoint : Observations", () => {
 
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`
-                }
+                request: `${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`
             });
             chai.request(server)
-                .patch(`/test/${infos.examples.http}`)
+                .patch(`/test/${infos.request}`)
                 .send(datas)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
@@ -797,16 +705,11 @@ describe("endpoint : Observations", () => {
                     short: "With Datastream",
                     description: "Patch an Observation with Datastream.",
                     reference: "https://docs.ogc.org/is/18-088/18-088.html#_request_2",
-                    examples: {
-                        http: `${testVersion}/${entity.name}(${result["id"]})`,
-                        curl: defaultPatch("curl", "KEYHTTP"),
-                        javascript: defaultPatch("javascript", "KEYHTTP"),
-                        python: defaultPatch("python", "KEYHTTP")
-                    },
+                    request: `${testVersion}/${entity.name}(${result["id"]})`,
                     params: datas
                 });
                 chai.request(server)
-                    .patch(`/test/${infos.examples.http}`)
+                    .patch(`/test/${infos.request}`)
                     .send(infos.params)
                     .set("Cookie", `${keyTokenName}=${token}`)
                     .end((err: Error, res: any) => {
@@ -834,15 +737,10 @@ describe("endpoint : Observations", () => {
                     short: "One",
                     description: `Delete a ${entity.singular}.${showHide(`Delete${entity.name}`, apiInfos["10.4"])}`,
                     reference: "https://docs.ogc.org/is/18-088/18-088.html#_request_3",
-                    examples: {
-                        http: `${testVersion}/${entity.name}(${beforeDelete["id"]})`,
-                        curl: defaultDelete("curl", "KEYHTTP"),
-                        javascript: defaultDelete("javascript", "KEYHTTP"),
-                        python: defaultDelete("python", "KEYHTTP")
-                    }
+                    request: `${testVersion}/${entity.name}(${beforeDelete["id"]})`
                 });
                 chai.request(server)
-                    .delete(`/test/${infos.examples.http}`)
+                    .delete(`/test/${infos.request}`)
                     .set("Cookie", `${keyTokenName}=${token}`)
                     .end((err: Error, res: any) => {
                         should.not.exist(err);
@@ -866,12 +764,10 @@ describe("endpoint : Observations", () => {
 
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`
-                }
+                request: `${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`
             });
             chai.request(server)
-                .delete(`/test/${infos.examples.http}`)
+                .delete(`/test/${infos.request}`)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);

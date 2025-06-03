@@ -10,7 +10,7 @@
 process.env.NODE_ENV = "test";
 import chai from "chai";
 import chaiHttp from "chai-http";
-import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, defaultGet, limitResult, testVersion } from "./constant";
+import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, limitResult, testVersion } from "./constant";
 import { server } from "../../server/index";
 import { addStartNewTest, addTest, writeLog } from "./tests";
 
@@ -42,15 +42,10 @@ describe("Odata BuiltInMisc", () => {
             short: "Observations Interval",
             description: "The interval keyword rounds the input postgresSql interval (see reference below) parameter to the nearest interval.",
             reference: "https://www.postgresql.org/docs/15/ecpg-pgtypes.html#ECPG-PGTYPES-INTERVAL",
-            examples: {
-                http: `${testVersion}/Datastreams(7)/Observations?$interval=1 hour`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Datastreams(7)/Observations?$interval=1 hour`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -68,15 +63,12 @@ describe("Odata BuiltInMisc", () => {
         const infos = addTest({
             type: "get",
             short: "interval(15 min)",
-
             description: "",
             reference: "",
-            examples: {
-                http: `${testVersion}/Datastreams(7)/Observations?$interval=15 min`
-            }
+            request: `${testVersion}/Datastreams(7)/Observations?$interval=15 min`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -93,15 +85,12 @@ describe("Odata BuiltInMisc", () => {
         const infos = addTest({
             type: "get",
             short: "interval(1 min)",
-
             description: "",
             reference: "",
-            examples: {
-                http: `${testVersion}/Datastreams(7)/Observations?$interval=1 min`
-            }
+            request: `${testVersion}/Datastreams(7)/Observations?$interval=1 min`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -118,15 +107,12 @@ describe("Odata BuiltInMisc", () => {
         const infos = addTest({
             type: "get",
             short: "interval(1 day)",
-
             description: "",
             reference: "",
-            examples: {
-                http: `${testVersion}/Datastreams(7)/Observations?$interval=1 day`
-            }
+            request: `${testVersion}/Datastreams(7)/Observations?$interval=1 day`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);

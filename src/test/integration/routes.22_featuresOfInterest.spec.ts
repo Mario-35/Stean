@@ -8,7 +8,7 @@
 process.env.NODE_ENV = "test";
 import chai from "chai";
 import chaiHttp from "chai-http";
-import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, defaultGet, defaultPost, defaultPatch, defaultDelete, listOfColumns, limitResult, infos, apiInfos, showHide, nbColorTitle, nbColor, testVersion, _RAWDB } from "./constant";
+import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, listOfColumns, limitResult, infos, apiInfos, showHide, nbColorTitle, nbColor, testVersion, _RAWDB } from "./constant";
 import { server } from "../../server/index";
 import { Ientity } from "../../server/types";
 import { testsKeys as observations_testsKeys } from "./routes.21_observations.spec";
@@ -53,12 +53,7 @@ describe("endpoint : Features of Interest", () => {
 
                 description: `Retrieve all ${entity.name}.${showHide(`Get${entity.name}`, apiInfos["9.2.2"])}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-collection-entities",
-                examples: {
-                    http: `${testVersion}/${entity.name}`,
-                    curl: defaultGet("curl", "KEYHTTP"),
-                    javascript: defaultGet("javascript", "KEYHTTP"),
-                    python: defaultGet("python", "KEYHTTP")
-                }
+                request: `${testVersion}/${entity.name}`
             });
             executeQuery(count(entity.table)).then((result: Record<string, any>) => {
                 chai.request(server)
@@ -84,12 +79,10 @@ describe("endpoint : Features of Interest", () => {
 
                 description: "Get a specific Feature of interest.",
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity",
-                examples: {
-                    http: `${testVersion}/${entity.name}(1)`
-                }
+                request: `${testVersion}/${entity.name}(1)`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -110,12 +103,10 @@ describe("endpoint : Features of Interest", () => {
 
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`
-                }
+                request: `${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.status.should.equal(404);
@@ -132,12 +123,10 @@ describe("endpoint : Features of Interest", () => {
 
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.singular}`
-                }
+                request: `${testVersion}/${entity.singular}`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.status.should.equal(404);
@@ -151,12 +140,10 @@ describe("endpoint : Features of Interest", () => {
                 short: "One and expand",
                 description: "Get a specific Feature of interest and expand Observations",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}(1)?$expand=Observations`
-                }
+                request: `${testVersion}/${entity.name}(1)?$expand=Observations`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -177,12 +164,10 @@ describe("endpoint : Features of Interest", () => {
 
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}(12)/${name}`
-                }
+                request: `${testVersion}/${entity.name}(12)/${name}`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -204,12 +189,10 @@ describe("endpoint : Features of Interest", () => {
 
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}(12)?$expand=${name}`
-                }
+                request: `${testVersion}/${entity.name}(12)?$expand=${name}`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -243,17 +226,12 @@ describe("endpoint : Features of Interest", () => {
                 short: "Basic",
                 description: `Post a new ${entity.name}.${showHide(`Post${entity.name}`, apiInfos["10.2"])}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#_request",
-                examples: {
-                    http: `${testVersion}/${entity.name}`,
-                    curl: defaultPost("curl", "KEYHTTP"),
-                    javascript: defaultPost("javascript", "KEYHTTP"),
-                    python: defaultPost("python", "KEYHTTP")
-                },
+                request: `${testVersion}/${entity.name}`,
                 params: datas,
                 structure: listOfColumns(entity)
             });
             chai.request(server)
-                .post(`/test/${infos.examples.http}`)
+                .post(`/test/${infos.request}`)
                 .send(infos.params)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
@@ -273,12 +251,10 @@ describe("endpoint : Features of Interest", () => {
 
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}`
-                }
+                request: `${testVersion}/${entity.name}`
             });
             chai.request(server)
-                .post(`/test/${infos.examples.http}`)
+                .post(`/test/${infos.request}`)
                 .send({})
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
@@ -308,16 +284,11 @@ describe("endpoint : Features of Interest", () => {
                     short: "One",
                     description: `Patch a ${entity.singular}.${showHide(`Patch${entity.name}`, apiInfos["10.3"])}`,
                     reference: "https://docs.ogc.org/is/18-088/18-088.html#_request_2",
-                    examples: {
-                        http: `${testVersion}/${entity.name}(${result["id"]})`,
-                        curl: defaultPatch("curl", "KEYHTTP"),
-                        javascript: defaultPatch("javascript", "KEYHTTP"),
-                        python: defaultPatch("python", "KEYHTTP")
-                    },
+                    request: `${testVersion}/${entity.name}(${result["id"]})`,
                     params: datas
                 });
                 chai.request(server)
-                    .patch(`/test/${infos.examples.http}`)
+                    .patch(`/test/${infos.request}`)
                     .send(infos.params)
                     .set("Cookie", `${keyTokenName}=${token}`)
                     .end((err: Error, res: any) => {
@@ -353,12 +324,10 @@ describe("endpoint : Features of Interest", () => {
 
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`
-                }
+                request: `${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`
             });
             chai.request(server)
-                .patch(`/test/${infos.examples.http}`)
+                .patch(`/test/${infos.request}`)
                 .send(datas)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
@@ -381,15 +350,10 @@ describe("endpoint : Features of Interest", () => {
                     short: "One",
                     description: `Delete a ${entity.singular}.${showHide(`Delete${entity.name}`, apiInfos["10.4"])}`,
                     reference: "https://docs.ogc.org/is/18-088/18-088.html#_request_3",
-                    examples: {
-                        http: `${testVersion}/${entity.name}(${beforeDelete["id"]})`,
-                        curl: defaultDelete("curl", "KEYHTTP"),
-                        javascript: defaultDelete("javascript", "KEYHTTP"),
-                        python: defaultDelete("python", "KEYHTTP")
-                    }
+                    request: `${testVersion}/${entity.name}(${beforeDelete["id"]})`
                 });
                 chai.request(server)
-                    .delete(`/test/${infos.examples.http}`)
+                    .delete(`/test/${infos.request}`)
                     .set("Cookie", `${keyTokenName}=${token}`)
                     .end((err: Error, res: any) => {
                         should.not.exist(err);
@@ -413,12 +377,10 @@ describe("endpoint : Features of Interest", () => {
 
                 description: "",
                 reference: "",
-                examples: {
-                    http: `${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`
-                }
+                request: `${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`
             });
             chai.request(server)
-                .delete(`/test/${infos.examples.http}`)
+                .delete(`/test/${infos.request}`)
                 .set("Cookie", `${keyTokenName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);

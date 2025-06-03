@@ -56,9 +56,7 @@ describe("Various Get tests", () => {
                 short: `result => ${+tests[test]} : `,
                 description: "",
                 reference: "",
-                examples: {
-                    http: test
-                }
+                request: test
             });
             chai.request(server)
                 .get(test)

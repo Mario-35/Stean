@@ -46,9 +46,10 @@ export interface Iinfos {
     apiPermission?: string;
     description: string;
     reference?: string;
-    examples: { [key: string]: string };
+    request: string;
     structure?: Istructure;
     params?: Record<string, any>;
+    examples?: { [key: string]: string };
 }
 export const keyTokenName = "jwt-session";
 export interface IApiInput {
@@ -56,6 +57,7 @@ export interface IApiInput {
     type: string;
     description: string;
     reference?: string;
+    request?: string;
     apiPermission?: string;
     examples?: { [key: string]: string };
     apiError?: string[];
@@ -67,11 +69,11 @@ export interface IApiInput {
 export const defaultPostPatch = (lang: string, method: string, request: string): string => {
     switch (lang.toUpperCase()) {
         case "CURL":
-            return highlight(`curl -X ${method.toUpperCase()} -H 'Content-Type: application/json' -d '@DATAS@' proxy${request}`, languages.http, "http");
+            return highlight(`curl -X ${method.toUpperCase()} -H 'Content-Type: application/json' -d 'DATASSATAD' proxy${request}`, languages.http, "http");
         case "JAVASCRIPT":
-            return highlight(`const response = await fetch("proxy${request}", {\r\n${EConstant.tab}method: "${method.toUpperCase()}",\r\n\theaders: {\r\n${EConstant.tab}    "Content-Type": "${EEncodingType.json}",\r\n\t},\r\n\tbody:@DATAS@\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();`, languages.javascript, "javascript");
+            return highlight(`const response = await fetch("proxy${request}", {\r\n${EConstant.tab}method: "${method.toUpperCase()}",\r\n\theaders: {\r\n${EConstant.tab}    "Content-Type": "${EEncodingType.json}",\r\n\t},\r\n\tbody:DATASSATAD\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();`, languages.javascript, "javascript");
         case "PYTHON":
-            return highlight(`import requests\r\nimport json\r\nresponse_API = requests.${method}('proxy${request}', (headers = { "Content-Type": "${EEncodingType.json}" }), (data = json.dumps(@DATAS@)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)`, languages.python, "python");
+            return highlight(`import requests\r\nimport json\r\nresponse_API = requests.${method}('proxy${request}', (headers = { "Content-Type": "${EEncodingType.json}" }), (data = json.dumps(DATASSATAD)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)`, languages.python, "python");
     }
     return "";
 };
@@ -134,17 +136,56 @@ export const prepareToApiDoc = (input: IApiInput): IApiDoc => {
         console.log(error);
         tmp = String(input.params);
     }
+    // if (input.examples && input.examples.http) input.examples.mario = highlight(`proxy${input.examples.http}`, languages.javascipt, "javascipt tokens");
+    switch (input.type) {
+        case "get":
+            input.examples = {
+                http: highlight(input.request || "pipo", languages.javascript, "javascript"),
+                curl: defaultGet("curl", "KEYHTTP"),
+                javascript: defaultGet("javascript", "KEYHTTP"),
+                python: defaultGet("python", "KEYHTTP")
+            };
+            break;
+        case "post":
+            input.examples = {
+                http: highlight(input.request || "pipo", languages.javascript, "javascript"),
+                curl: defaultPost("curl", "KEYHTTP"),
+                javascript: defaultPost("javascript", "KEYHTTP"),
+                python: defaultPost("python", "KEYHTTP")
+            };
+            break;
+        case "patch":
+            input.examples = {
+                http: highlight(input.request || "pipo", languages.javascript, "javascript"),
+                curl: defaultPatch("curl", "KEYHTTP"),
+                javascript: defaultPatch("javascript", "KEYHTTP"),
+                python: defaultPatch("python", "KEYHTTP")
+            };
+            break;
+        case "delete":
+            input.examples = {
+                http: highlight(input.request || "pipo", languages.javascript, "javascript"),
+                curl: defaultDelete("curl", "KEYHTTP"),
+                javascript: defaultDelete("javascript", "KEYHTTP"),
+                python: defaultDelete("python", "KEYHTTP")
+            };
+            break;
+
+        default:
+            break;
+    }
     return {
         short: input.short,
         type: input.type,
         version: "1.1.0",
         apiPermission: input.apiPermission,
         description: `${input.description} ${input.reference ? ` <a href="${input.reference}" target="_blank">[${input.reference.includes("docs.ogc.org") ? "OGC " : ""}reference]</a>` : ""}`,
+        request: input.request,
         examples: input.examples,
         apiError: input.apiError,
         structure: input.structure,
         params: tmp ? tmp : "",
-        request: input.type == "get" && input.examples ? `proxy${input.examples.http}` : "",
+        // request: input.type == "get" && input.examples ? `proxy${input.examples.http}` : "",
         success: input.result.type === EEncodingType.txt || input.result.type === EEncodingType.csv ? input.result.text : input.result && input.result.body ? JSON.stringify(input.result.body, null, 4) : undefined
     };
 };

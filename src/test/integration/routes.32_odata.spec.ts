@@ -10,7 +10,7 @@
 process.env.NODE_ENV = "test";
 import chai from "chai";
 import chaiHttp from "chai-http";
-import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, defaultGet, limitResult, apiInfos, testVersion } from "./constant";
+import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, limitResult, apiInfos, testVersion } from "./constant";
 import { server } from "../../server/index";
 import { testsKeys as things_testsKeys } from "./routes.14_things.spec";
 import { testsKeys as datastreams_testsKeys } from "./routes.17_datastreams.spec";
@@ -49,15 +49,10 @@ describe("Odata", () => {
             short: "Things(:id) Expand",
             description: `Use $expand query option to request inline information for related entities of the requested entity collection.${apiInfos["9.3.2.1"]}`,
             reference: "https://docs.ogc.org/is/18-088/18-088.html#expand",
-            examples: {
-                http: `${testVersion}/Things(6)?$expand=Datastreams`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Things(6)?$expand=Datastreams`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -79,15 +74,10 @@ describe("Odata", () => {
             short: "Things(:id) Expand sub Entity",
             description: "$expand comma separated list of sub-entity names or sub-entity names separated by forward slash.",
             reference: "https://docs.ogc.org/is/18-088/18-088.html#expand",
-            examples: {
-                http: `${testVersion}/Things(6)?$expand=Datastreams/Sensor`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Things(6)?$expand=Datastreams/Sensor`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -112,15 +102,10 @@ describe("Odata", () => {
             short: "things(:id) expand with empty result",
             description: "Get list of locations and return list if is empty.",
             reference: "https://docs.ogc.org/is/18-088/18-088.html#expand",
-            examples: {
-                http: `${testVersion}/Things(6)?$expand=MultiDatastreams`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Things(6)?$expand=MultiDatastreams`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 // there should be no errors
                 should.not.exist(err);
@@ -141,15 +126,10 @@ describe("Odata", () => {
             short: "things(:id) expand with inner filter",
             description: "Get datastream and expand obvervations with filter.",
             reference: "https://docs.ogc.org/is/18-088/18-088.html#expand",
-            examples: {
-                http: `${testVersion}/Datastreams(2)?$expand=Observations($filter=result eq 240)`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Datastreams(2)?$expand=Observations($filter=result eq 240)`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 // there should be no errors
                 should.not.exist(err);
@@ -171,15 +151,10 @@ describe("Odata", () => {
             short: "things(:id) expand with inner select",
             description: "Get datastream and expand obvervations with complex select.",
             reference: "https://docs.ogc.org/is/18-088/18-088.html#expand",
-            examples: {
-                http: `${testVersion}/Datastreams?$expand=Observations($select=phenomenonTime,result;$orderby=phenomenonTime desc;$top=10)`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Datastreams?$expand=Observations($select=phenomenonTime,result;$orderby=phenomenonTime desc;$top=10)`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 // there should be no errors
                 should.not.exist(err);
@@ -201,15 +176,10 @@ describe("Odata", () => {
             short: "Things(:id) Select",
             description: `Retrieve specified properties for a specific Things.${apiInfos["9.3.2.2"]}`,
             reference: "https://docs.ogc.org/is/18-088/18-088.html#select4",
-            examples: {
-                http: `${testVersion}/Things(1)?$select=description`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Things(1)?$select=description`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -226,16 +196,11 @@ describe("Odata", () => {
             short: "Things(:id) Select multi",
             description: "Retrieve name and description for Things.",
             reference: "https://docs.ogc.org/is/18-088/18-088.html#select4",
-            examples: {
-                http: `${testVersion}/Things?$select=name,description`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Things?$select=name,description`
         });
         executeQuery(count("thing")).then((result: Record<string, any>) => {
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -255,16 +220,11 @@ describe("Odata", () => {
             short: "Things OrderBy",
             description: `Use $orderby query option to sort the response based on properties of requested entity in ascending (asc) or descending (desc) order.${apiInfos["9.3.3.1"]}`,
             reference: "https://docs.ogc.org/is/18-088/18-088.html#orderby",
-            examples: {
-                http: `${testVersion}/Things?$orderby=name desc`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Things?$orderby=name desc`
         });
         executeQuery(count("thing")).then((result: Record<string, any>) => {
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -284,15 +244,10 @@ describe("Odata", () => {
             short: "Observations Top",
             description: `Use $top query option to limit the number of requested entities.${apiInfos["9.3.3.2"]}`,
             reference: "https://docs.ogc.org/is/18-088/18-088.html#top",
-            examples: {
-                http: `${testVersion}/Observations?$top=5`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Observations?$top=5`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -310,16 +265,11 @@ describe("Odata", () => {
             short: "Observations Skip",
             description: `Use $skip to specify the number of entities that should be skipped before returning the requested entities.${apiInfos["9.3.3.3"]}`,
             reference: "https://docs.ogc.org/is/18-088/18-088.html#skip",
-            examples: {
-                http: `${testVersion}/Observations?$skip=500`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Observations?$skip=500`
         });
         executeQuery(count("observation")).then((result: Record<string, any>) => {
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -338,15 +288,10 @@ describe("Odata", () => {
             short: "Observations count",
             description: `Use count.${apiInfos["9.3.3.4"]}`,
             reference: "http://docs.opengeospatial.org/is/15-078r6/15-078r6.html#53",
-            examples: {
-                http: `${testVersion}/Observations?$skip=3&$top=2&$count=true`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Observations?$skip=3&$top=2&$count=true`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -366,12 +311,10 @@ describe("Odata", () => {
 
             description: "",
             reference: "",
-            examples: {
-                http: `${testVersion}/Datastreams?$filter=unitOfMeasurement/name eq 'Degrees Fahrenheit'`
-            }
+            request: `${testVersion}/Datastreams?$filter=unitOfMeasurement/name eq 'Degrees Fahrenheit'`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -390,12 +333,10 @@ describe("Odata", () => {
 
             description: "",
             reference: "",
-            examples: {
-                http: `${testVersion}/Things?$filter=name eq 'Climatic chamber' or description eq 'A New SensorWeb thing'`
-            }
+            request: `${testVersion}/Things?$filter=name eq 'Climatic chamber' or description eq 'A New SensorWeb thing'`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -413,12 +354,10 @@ describe("Odata", () => {
 
             description: "",
             reference: "",
-            examples: {
-                http: `${testVersion}/Things?$filter=name eq 'classic Thing' and description eq 'Description of classic Thing'`
-            }
+            request: `${testVersion}/Things?$filter=name eq 'classic Thing' and description eq 'Description of classic Thing'`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -436,12 +375,10 @@ describe("Odata", () => {
 
             description: "",
             reference: "",
-            examples: {
-                http: `${testVersion}/Things?$filter=startswith(description,'A New')`
-            }
+            request: `${testVersion}/Things?$filter=startswith(description,'A New')`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -459,12 +396,10 @@ describe("Odata", () => {
 
             description: "",
             reference: "",
-            examples: {
-                http: `${testVersion}/Things?$filter=contains(description,'chamber')`
-            }
+            request: `${testVersion}/Things?$filter=contains(description,'chamber')`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -482,19 +417,16 @@ describe("Odata", () => {
 
             description: "",
             reference: "",
-            examples: {
-                http: `${testVersion}/Observations?$filter=phenomenonTime gt '2024-06-04'`
-            }
+            request: `${testVersion}/Observations?$filter=phenomenonTime gt '2024-06-04'`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
                 res.type.should.equal("application/json");
                 res.body.value.length.should.eql(26);
                 res.body.should.include.keys("@iot.count", "value");
-
                 done();
             });
     });
@@ -505,12 +437,10 @@ describe("Odata", () => {
 
             description: "",
             reference: "",
-            examples: {
-                http: `${testVersion}/Observations?$filter=result eq '92' and resultTime eq '2017-02-13'`
-            }
+            request: `${testVersion}/Observations?$filter=result eq '92' and resultTime eq '2017-02-13'`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.equal(200);
@@ -519,7 +449,6 @@ describe("Odata", () => {
                 res.body.value[0]["@iot.id"].should.eql(532);
                 res.body.value[0]["result"].should.eql(92);
                 res.body.should.include.keys("@iot.count", "value");
-
                 done();
             });
     });
@@ -529,15 +458,10 @@ describe("Odata", () => {
             short: "Thing filter date greater than and less than",
             description: "Use filter gt with date",
             reference: "https://docs.ogc.org/is/18-088/18-088.html#requirement-request-data-filter",
-            examples: {
-                http: `${testVersion}/Observations?$filter=phenomenonTime gt '2021-01-01' and phenomenonTime lt '2021-10-16'`,
-                curl: defaultGet("curl", "KEYHTTP"),
-                javascript: defaultGet("javascript", "KEYHTTP"),
-                python: defaultGet("python", "KEYHTTP")
-            }
+            request: `${testVersion}/Observations?$filter=phenomenonTime gt '2021-01-01' and phenomenonTime lt '2021-10-16'`
         });
         chai.request(server)
-            .get(`/test/${infos.examples.http}`)
+            .get(`/test/${infos.request}`)
             .end((err, res) => {
                 should.not.exist(err);
                 res.status.should.equal(200);

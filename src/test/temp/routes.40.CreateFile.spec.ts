@@ -74,12 +74,11 @@ describe(`CSV ${entity.name}`, function () {
             type: "post",
             short: "with csv attached file`,
             description: "Import csv file",
-            examples: {
-                http: `/${testVersion}/${entity.name}(${thingId})`
+            request: `/${testVersion}/${entity.name}(${thingId})`
             }
         });
         chai.request(server)
-            .post(`/test/${infos.examples.http}`)
+            .post(`/test/${infos.request}`)
             .field("Content-Type", "multipart/form-data")
             .field("method", "POST")
             .field("nb", "1")
@@ -110,7 +109,7 @@ describe(`CSV ${entity.name}`, function () {
             examples: { http: `/${testVersion}/${entity.name}(${thingId})` }
         });
         chai.request(server)
-            .post(`/test${infos.examples.http}`)
+            .post(`/test${infos.request}`)
             .field("Content-Type", "multipart/form-data")
             .field("method", "POST")
             .field("nb", "22")

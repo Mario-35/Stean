@@ -60,10 +60,10 @@ describe("endpoint : index", () => {
                     protocol    host   service  version  pathname         search</pre>
                     <div class="text"><b><p>By attaching the resource path after the service root URI, clients can address to different types of resources such as an entity set, an entity, a property, or a navigation property. Finally, clients can apply query options after the resource path to further process the addressed resources, such as sorting by properties or filtering with criteria.</b></p></div>`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#uri-components",
-                examples: { http: `${testVersion}/` }
+                request: `${testVersion}/`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.status.should.eql(200);
@@ -97,23 +97,10 @@ describe("endpoint : index", () => {
                 short: "Result",
                 description: `Stean use differents type of result : ${apiInfos["0"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#resource-path",
-                examples: { http: `${testVersion}/` }
-                // structure: [
-                //     "{relation} Datastreams Get all datastreams.",
-                //     "{relation} MultiDatastreams Get all multidatastreams.",
-                //     "{relation} FeaturesOfInterest Get all features of interest.",
-                //     "{relation} HistoricalLocation Get all historical locations.",
-                //     "{relation} Locations Get all locations.",
-                //     "{relation} Observations Get all observations.",
-                //     "{relation} ObservedProperties Get all observed property.",
-                //     "{relation} Sensors Get all sensors.",
-                //     "{relation} Things Get all things.",
-                //     "{relation} Loras Get all loras.",
-                //     "{relation} Decoders Get all decoders."
-                // ]
+                request: `${testVersion}/`
             });
             chai.request(server)
-                .get(`/test/${infos.examples.http}`)
+                .get(`/test/${infos.request}`)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.status.should.eql(200);

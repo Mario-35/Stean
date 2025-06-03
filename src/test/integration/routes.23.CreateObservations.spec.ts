@@ -10,7 +10,7 @@
 process.env.NODE_ENV = "test";
 import chai from "chai";
 import chaiHttp from "chai-http";
-import { IApiDoc, IApiInput, prepareToApiDoc, generateApiDoc, identification, keyTokenName, defaultPost, limitResult, blank, testVersion, _RAWDB } from "./constant";
+import { IApiDoc, IApiInput, prepareToApiDoc, generateApiDoc, identification, keyTokenName, limitResult, blank, testVersion, _RAWDB } from "./constant";
 import { server } from "../../server/index";
 import { Ientity } from "../../server/types";
 import { addStartNewTest, addTest, writeLog } from "./tests";
@@ -78,16 +78,11 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
             type: "post",
             short: "Add datastream",
             description: "Create Observations with CreateObservations",
-            examples: {
-                http: `${testVersion}/CreateObservations`,
-                curl: defaultPost("curl", "KEYHTTP"),
-                javascript: defaultPost("javascript", "KEYHTTP"),
-                python: defaultPost("python", "KEYHTTP")
-            },
+            request: `${testVersion}/CreateObservations`,
             params: datasObs(1)
         });
         chai.request(server)
-            .post(`/test/${infos.examples.http}`)
+            .post(`/test/${infos.request}`)
             .send(infos.params)
             .set("Cookie", `${keyTokenName}=${token}`)
             .end((err: Error, res: any) => {
@@ -117,12 +112,10 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
             short: "Return Error if datastream does not exist",
             description: "",
             reference: "",
-            examples: {
-                http: `${testVersion}/${entity.name}`
-            }
+            request: `${testVersion}/${entity.name}`
         });
         chai.request(server)
-            .post(`/test/${infos.examples.http}`)
+            .post(`/test/${infos.request}`)
             .send(datas)
             .set("Cookie", `${keyTokenName}=${token}`)
             .end((err: Error, res: any) => {
@@ -139,12 +132,10 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
             short: "Return Error if datastream does not exist",
             description: "",
             reference: "",
-            examples: {
-                http: `${testVersion}/${entity.name}`
-            }
+            request: `${testVersion}/${entity.name}`
         });
         chai.request(server)
-            .post(`/test/${infos.examples.http}`)
+            .post(`/test/${infos.request}`)
             .send(datasObs(2))
             .set("Cookie", `${keyTokenName}=${token}`)
             .end((err: Error, res: any) => {
@@ -162,16 +153,11 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
             type: "post",
             short: "Add datastream duplicate.",
             description: "Create Observations duplicate with CreateObservations",
-            examples: {
-                http: `${testVersion}/${entity.name}`,
-                curl: defaultPost("curl", "KEYHTTP"),
-                javascript: defaultPost("javascript", "KEYHTTP"),
-                python: defaultPost("python", "KEYHTTP")
-            },
+            request: `${testVersion}/${entity.name}`,
             params: datasObs(2)
         });
         chai.request(server)
-            .post(`/test/${infos.examples.http}`)
+            .post(`/test/${infos.request}`)
             .send(datasObs(2))
             .set("Cookie", `${keyTokenName}=${token}`)
             .end((err: Error, res: any) => {
@@ -193,16 +179,11 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
             type: "post",
             short: "Add datastream duplicate = delete.",
             description: "Create Observations duplicate delete with CreateObservations",
-            examples: {
-                http: `${testVersion}/${entity.name}`,
-                curl: defaultPost("curl", "KEYHTTP"),
-                javascript: defaultPost("javascript", "KEYHTTP"),
-                python: defaultPost("python", "KEYHTTP")
-            },
+            request: `${testVersion}/${entity.name}`,
             params: datas
         });
         chai.request(server)
-            .post(`/test/${infos.examples.http}`)
+            .post(`/test/${infos.request}`)
             .send(datas)
             .set("Cookie", `${keyTokenName}=${token}`)
             .end((err: Error, res: any) => {
@@ -222,16 +203,11 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
             type: "post",
             short: "Add multiDatastream",
             description: "Create Observations duplicate with CreateObservations",
-            examples: {
-                http: `${testVersion}/${entity.name}`,
-                curl: defaultPost("curl", "KEYHTTP"),
-                javascript: defaultPost("javascript", "KEYHTTP"),
-                python: defaultPost("python", "KEYHTTP")
-            },
+            request: `${testVersion}/${entity.name}`,
             params: datas
         });
         chai.request(server)
-            .post(`/test/${infos.examples.http}`)
+            .post(`/test/${infos.request}`)
             .send(datas)
             .set("Cookie", `${keyTokenName}=${token}`)
             .end((err: Error, res: any) => {
@@ -250,16 +226,11 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
             type: "post",
             short: "Add multiDatastream duplicate.",
             description: "Create Observations duplicate with CreateObservations",
-            examples: {
-                http: `${testVersion}/${entity.name}`,
-                curl: defaultPost("curl", "KEYHTTP"),
-                javascript: defaultPost("javascript", "KEYHTTP"),
-                python: defaultPost("python", "KEYHTTP")
-            },
+            request: `${testVersion}/${entity.name}`,
             params: datas
         });
         chai.request(server)
-            .post(`/test/${infos.examples.http}`)
+            .post(`/test/${infos.request}`)
             .send(datas)
             .set("Cookie", `${keyTokenName}=${token}`)
             .end((err: Error, res: any) => {
@@ -281,16 +252,11 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
             type: "post",
             short: "Add multiDatastream duplicate = delete.",
             description: "Create Observations duplicate delete with CreateObservations",
-            examples: {
-                http: `${testVersion}/${entity.name}`,
-                curl: defaultPost("curl", "KEYHTTP"),
-                javascript: defaultPost("javascript", "KEYHTTP"),
-                python: defaultPost("python", "KEYHTTP")
-            },
+            request: `${testVersion}/${entity.name}`,
             params: datas
         });
         chai.request(server)
-            .post(`/test/${infos.examples.http}`)
+            .post(`/test/${infos.request}`)
             .send(datas)
             .set("Cookie", `${keyTokenName}=${token}`)
             .end((err: Error, res: any) => {

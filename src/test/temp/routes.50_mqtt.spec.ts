@@ -36,8 +36,7 @@ describe("suscribe : mqtt", () => {
                 short: "login get a new token`,
  `TokenLogin`,
                 description: "Get a new token.",
-                examples: {
-                    http: `${testVersion}/login`,
+                request : `${testVersion}/login`,
                     curl: `curl -X POST KEYHTTP/login -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' -d 'username=stean&password=stean'`
                 },
                 params: { "username": identification.username, "password": identification.password }
@@ -62,8 +61,7 @@ describe("suscribe : mqtt", () => {
                 short: "login Post basic`,
  `TokenError`,
                 description: "Identification failed.",
-                examples: {
-                    http: `${testVersion}/login`,
+                request : `${testVersion}/login`,
                     curl: `curl -X POST KEYHTTP/login -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' -d 'username=test&password=test'`
                 },
                 params: { "username": identification.username, "password": "nowhere" }
@@ -86,10 +84,8 @@ describe("suscribe : mqtt", () => {
             const infos = addTest({
                 short: "{get} logout logout actual connection.`,
                 description: "Logout actual connection.",
-                examples: {
-                    http: `${testVersion}/logout`,
+                request : `${testVersion}/logout`,
                     curl: `curl -X GET KEYHTTP/logout`
-                }
             });
             chai.request(server)
                 .get(`/test/${info.examples.http}`)
