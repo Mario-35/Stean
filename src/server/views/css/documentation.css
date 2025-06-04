@@ -117,6 +117,7 @@ td {
 .menuItem {
   cursor: pointer;
   font-size: var(--font-size);
+  caret-color: transparent;
 }
 .menuItem:hover {
   cursor: pointer;

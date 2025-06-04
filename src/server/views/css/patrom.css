@@ -1,7 +1,7 @@
 /**
 * Patrom theme 
 * @copyright 2023-present Inrae
-* 02/06/2025 11:23:44
+* 04/06/2025 16:15:14
 * @author mario.adam@inrae.fr
 *
 */
@@ -141,6 +141,8 @@
     --json-number: #073aff;
     --json-code: #8e08a0;
     --json-url: #DD2E2E;
+    --json-url-link: #ce8787;
+    --json-url-external: #68aed3;
     --json-string: #116408;
     --json-date: #CB7500;
 
@@ -275,6 +277,8 @@
     --json-number: #0cbde6;
     --json-code: #de9ae7;
     --json-url: #F0A1A1;
+    --json-url-link: #ce8787;
+    --json-url-external: #0091df;
     --json-string: #B7E4B2;
     --json-date: #CB7500;
 
@@ -522,7 +526,10 @@ input:checked + .slider:before {
   padding: 6px 8px;
   font-size: 1.4rem;
 }
-.gray {
+
+.fillCol {
+	width: 95%;
+  }.gray {
   color: var(--btn-gray-color);
   background-color: var(--btn-gray-background);
 }
@@ -1224,6 +1231,7 @@ input:checked + .slider:before {
     background-color: var(--background-color);
     font-weight: bold;
     cursor: pointer;
+    caret-color: transparent;
   }
   .patrom-accordion-label:hover {
     background: var(--background-highlight);

@@ -226,7 +226,7 @@ class PatromMultiSelect {
 		var addTarget = this._getTarget(this.settings.appendTo);
 		var div = document.createElement('DIV');
 		div.className = this.class.rootContainer;
-		div.classList.add("full");
+		div.classList.add("fillCol");
 		div.id = this.class.prefix + (document.querySelectorAll('.' + this.class.rootContainer).length + 1);
 		this._getThemeElements(div);
 		// Creating common elements for both themes here.
