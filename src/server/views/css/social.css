@@ -67,12 +67,18 @@
   }
   
   .social-panel h4 {
-	margin: 20px 0;
+	margin: 20px 0 0 0;
 	color: var(--json-url);
 	font-family: "Muli";
 	font-size: 14px;
 	line-height: 18px;
 	text-transform: uppercase;
+}
+.social-panel h5 {
+	  margin: 0 0 20px 0;
+	color: var(--json-string);
+	font-family: "Muli";
+	font-size: 10px;
   }
   
   .social-panel ul {

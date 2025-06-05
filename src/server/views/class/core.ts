@@ -166,7 +166,7 @@ export class CoreHtmlView {
   <div class="social-panel">
     <p>Created by <a target="_blank" href="https://linktr.ee/adammario">ADAM mario</a></p>
     <button class="close-btn"> ❌ </button>
-    <h4>Version : ${appVersion}</h4>
+    <h4>Version : ${appVersion.version}</h4><h5> [${appVersion.date}]</h5>
     <ul>
       <li>
         <button type="button" id="git" class="patrom-button-bar__button size-lg" title="Github">
