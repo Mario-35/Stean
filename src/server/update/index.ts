@@ -7,15 +7,15 @@
  */
 
 import path from "path";
-import fs from "fs";
 import { exec } from "child_process";
 import { appVersion, dateFile } from "../constants";
-import { httpsDownload } from "../helpers/";
+import { httpsDownload, httpsDownloadJSON } from "../helpers/";
 import { log } from "../log";
 import { config } from "../configuration";
 import { promiseBlindExecute, unzipDirectory, zipDirectory } from "../helpers";
 import { paths } from "../paths";
 import { EConstant } from "../enums";
+import { Iversion } from "../types";
 
 /**
  * AutoUpdate Class
@@ -33,11 +33,11 @@ class AutoUpdate {
      * @param remoteVersion - The version of the application in the git repository.
      * @returns An object with the results of the version comparison.
      */
-    async compareVersions(): Promise<{ upToDate: boolean; appVersion: string; remoteVersion: string | undefined }> {
-        const res = { upToDate: false, appVersion: "Error", remoteVersion: "Error" };
+    async compareVersions(): Promise<{ upToDate: boolean; appVersion: Iversion; remoteVersion: Iversion | undefined }> {
+        const res = { upToDate: false, appVersion: { version: "Error", date: "Error" }, remoteVersion: { version: "Error", date: "Error" } };
         try {
             const remoteVersion = await this.readRemoteVersion();
-            return remoteVersion ? { upToDate: appVersion == remoteVersion, appVersion: appVersion, remoteVersion: remoteVersion } : res;
+            return remoteVersion ? { upToDate: appVersion.version == remoteVersion.version && appVersion.date == remoteVersion.date, appVersion: appVersion, remoteVersion: remoteVersion } : res;
         } catch (err) {
             process.stdout.write(log.update(err + EConstant.return));
             return res;
@@ -128,10 +128,11 @@ class AutoUpdate {
     /**
      * Reads the applications version from the git repository.
      */
-    async readRemoteVersion(): Promise<string | undefined> {
+    async readRemoteVersion(): Promise<Iversion | undefined> {
         try {
-            await httpsDownload(AutoUpdate.repository.replace("github.com", "raw.githubusercontent.com") + `/refs/heads/${AutoUpdate.branch}/package.json`, "package.json");
-            return JSON.parse(fs.readFileSync(paths.packageFile(paths.upload()), "utf-8")).version;
+            const file = AutoUpdate.repository.replace("github.com", "raw.githubusercontent.com") + `/refs/heads/${AutoUpdate.branch}/builds/stean_latest.info`;
+            const version = await httpsDownloadJSON(file, "stean_latest.info");
+            return { version: version["version" as keyof object], date: version["date" as keyof object] };
         } catch (error) {
             console.log(error);
             return;

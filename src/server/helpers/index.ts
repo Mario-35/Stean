@@ -32,6 +32,7 @@ export { listFiles } from "./listFiles";
 export { promiseBlindExecute } from "./promiseBlindExecute";
 export { promiseHttpsRequest } from "./promiseHttpsRequest";
 export { httpsDownload } from "./httpsDownload";
+export { httpsDownloadJSON } from "./httpsDownloadJson";
 export { removeEmpty } from "./removeEmpty";
 export { upload } from "./upload";
 export { logToHtml } from "./logToHtml";

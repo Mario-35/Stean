@@ -158,7 +158,7 @@ export class CoreHtmlView {
     }
 
     newVersion() {
-        return config.upToDate() === true ? "" : `<div class="floating-text"> New version <a href="${this.ctx.header.origin}/update" target="_blank"> ${config.version()}</a> </div>`;
+        return config.upToDate() === true ? "" : `<div class="floating-text"> New version <a href="${this.ctx.header.origin}/update" target="_blank"> ${config.remoteVersion()}</a> </div>`;
     }
 
     social() {

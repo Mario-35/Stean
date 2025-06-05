@@ -8,7 +8,7 @@
 
 import { setReady, _DEBUG, timestampNow, logDbError, appVersion } from "../constants";
 import { asyncForEach, decrypt, encrypt, hidePassword, isProduction, isTest, logToHtml } from "../helpers";
-import { Iservice, IdbConnection, IserviceInfos, koaContext, keyobj } from "../types";
+import { Iservice, IdbConnection, IserviceInfos, koaContext, keyobj, Iversion } from "../types";
 import { errors, info, infos, msg } from "../messages";
 import { app } from "..";
 import { color, EChar, EColor, EConstant, EExtensions, EOptions } from "../enums";
@@ -36,8 +36,8 @@ class Configuration {
     static adminConnection: postgres.Sql<Record<string, unknown>>;
     static MqttServer: MqttServer;
     static listenPorts: number[] = [];
-    static appVersion: string = "";
-    static remoteVersion: string | undefined;
+    static appVersion: Iversion;
+    static remoteVersion: Iversion | undefined;
     static upToDate: boolean = true;
     trace: Trace;
 
@@ -62,11 +62,11 @@ class Configuration {
     }
 
     version(): string {
-        return Configuration.appVersion;
+        return `${Configuration.appVersion.version} [${Configuration.appVersion.date}]`;
     }
 
     remoteVersion(): string | undefined {
-        return Configuration.remoteVersion;
+        return Configuration.remoteVersion ? `${Configuration.remoteVersion.version} [${Configuration.remoteVersion.date}]` : undefined;
     }
 
     upToDate(): boolean {
@@ -167,7 +167,9 @@ class Configuration {
      * @returns true if it's done
      */
     private async readConfigFile(input?: string): Promise<boolean> {
-        this.writeLog(`${color(EColor.Red)}${"▬".repeat(24)} ${color(EColor.Cyan)} ${`START ${EConstant.appName} ${info.ver} : ${appVersion} [${process.env.NODE_ENV}]`} ${color(EColor.White)} ${new Date().toLocaleDateString()} : ${timestampNow()} ${color(EColor.Red)} ${"▬".repeat(24)}${color(EColor.Reset)}`);
+        console.log(appVersion);
+
+        this.writeLog(`${color(EColor.Red)}${"▬".repeat(24)} ${color(EColor.Cyan)} ${`START ${EConstant.appName} ${info.ver} : ${appVersion.version} du ${appVersion.date} [${process.env.NODE_ENV}]`} ${color(EColor.White)} ${new Date().toLocaleDateString()} : ${timestampNow()} ${color(EColor.Red)} ${"▬".repeat(24)}${color(EColor.Reset)}`);
         log.newLog(log.message("Root", paths.root));
         this.writeLog(log.message(infos(["read", "config"]), input ? "content" : paths.configFile.fileName));
         try {
@@ -583,7 +585,7 @@ class Configuration {
     async initialisation(input?: string): Promise<boolean> {
         const temp = await autoUpdate.compareVersions();
         Configuration.appVersion = temp.appVersion;
-        Configuration.remoteVersion = temp.remoteVersion || "";
+        Configuration.remoteVersion = temp.remoteVersion;
         Configuration.upToDate = temp.upToDate;
 
         if (this.configFileExist() === true || input) {
@@ -614,7 +616,7 @@ class Configuration {
             // }
 
             this.writeLog(log._head("Ready", EChar.ok));
-            this.writeLog(log.logo(appVersion));
+            this.writeLog(log.logo(appVersion.version));
             return status;
             // no configuration file so First install
         } else {
