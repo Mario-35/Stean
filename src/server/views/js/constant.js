@@ -15,8 +15,10 @@ const _NONE = "none";
 
 // load file json
 let importFile = false;
+
 // use for catch double click
 var canGo = false;
+
 // store windows flags
 const wins = {
 	SqlQuery: false,
@@ -30,6 +32,7 @@ const wins = {
 
 // store builder object
 let builder = undefined;
+
 // store jsonViewer object
 let jsonViewer = undefined;
 

@@ -34,7 +34,7 @@ const generateFields = (input: PgVisitor) => {
  * @param input PgVisitor
  * @returns sSQL Query for graph
  */
-const generateGrahSql = (input: PgVisitor) => {
+const generateGraphSql = (input: PgVisitor) => {
     input.intervalColumns = ["id", "step as date", "result"];
     if (isGraph(input)) input.intervalColumns.push("concat");
     const entity = input.parentEntity || input.entity;
@@ -84,7 +84,7 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
         type: EEncodingType.json,
         format: defaultFunction,
         generateSql(input: PgVisitor) {
-            return generateGrahSql(input);
+            return generateGraphSql(input);
         }
     },
 
@@ -96,6 +96,7 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
             const formatedDatas: string[] = [];
             const height = String(100 / Object.entries(input).length).split(".")[0];
             if (typeof input === "object") {
+                input = input["value" as keyof object];
                 if (input[0 as keyof object]["infos"] === null) return errors.noDatas;
                 Object.entries(input).forEach((element: Record<string, any>, index: number) => {
                     // if (input["infos" as keyof object] == null && input["datas" as keyof object] == null) return "";
@@ -117,7 +118,7 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
         </script>`;
         },
         generateSql(input: PgVisitor) {
-            return generateGrahSql(input);
+            return generateGraphSql(input);
         }
     },
 

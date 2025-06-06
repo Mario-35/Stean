@@ -1,4 +1,4 @@
-# <a id="start">TEST : 03/06/2025 : 15:36:10</a> version[1.0.0][Things](#Things),[Locations](#Locations),[HistoricalLocations](#HistoricalLocations),[Datastreams](#Datastreams),[MultiDatastreams](#MultiDatastreams),[Sensors](#Sensors),[ObservedProperties](#ObservedProperties),[Observations](#Observations),[CreateObservations](#CreateObservations),[Loras](#Loras),[literals](#literals),[Odatas](#Odatas),[BuiltInFunctions](#BuiltInFunctions),[BuiltInFilter](#BuiltInFilter),[BuiltinDates](#BuiltinDates),[BuiltinMaths](#BuiltinMaths),[BuiltinGeospatial](#BuiltinGeospatial),[BuiltinMisc](#BuiltinMisc),[Various](#Various)## <a id="Root">Root</a>           [🚧](#start)   1. Resource uri [INFOS v1.1/](http://PROXY/v1.1/) ✔️## <a id="Root">Root</a>           [🚧](#start)   2. Result [INFOS v1.1/](http://PROXY/v1.1/) ✔️## <a id="Token">Token</a>           [🚧](#start)   3. login get a new token [POST v1.1/login](http://PROXY/v1.1/login) ✔️```js
+# <a id="start">TEST : 06/06/2025 : 14:49:41</a> version[1.0.0][Things](#Things),[Locations](#Locations),[HistoricalLocations](#HistoricalLocations),[Datastreams](#Datastreams),[MultiDatastreams](#MultiDatastreams),[Sensors](#Sensors),[ObservedProperties](#ObservedProperties),[Observations](#Observations),[CreateObservations](#CreateObservations),[Loras](#Loras),[literals](#literals),[Odatas](#Odatas),[BuiltInFunctions](#BuiltInFunctions),[BuiltInFilter](#BuiltInFilter),[BuiltinDates](#BuiltinDates),[BuiltinMaths](#BuiltinMaths),[BuiltinGeospatial](#BuiltinGeospatial),[BuiltinMisc](#BuiltinMisc),[Various](#Various)## <a id="Root">Root</a>           [🚧](#start)   1. Resource uri [INFOS v1.1/](http://PROXY/v1.1/) ✔️## <a id="Root">Root</a>           [🚧](#start)   2. Result [INFOS v1.1/](http://PROXY/v1.1/) ✔️## <a id="Token">Token</a>           [🚧](#start)   3. login get a new token [POST v1.1/login](http://PROXY/v1.1/login) ✔️```js
 { username: 'stean', password: 'stean' } 
 ```
    4. login Post basic [POST v1.1/login](http://PROXY/v1.1/login) ✔️```js
@@ -165,19 +165,19 @@
 } 
 ```
    201. Return Error if not exist [PATCH v1.1/FeaturesOfInterest(9007199254740991)](http://PROXY/v1.1/FeaturesOfInterest(9007199254740991)) ✔️   202. One [DELETE v1.1/FeaturesOfInterest(15)](http://PROXY/v1.1/FeaturesOfInterest(15)) ✔️   203. Return Error if not exist [DELETE v1.1/FeaturesOfInterest(9007199254740991)](http://PROXY/v1.1/FeaturesOfInterest(9007199254740991)) ✔️## <a id="CreateObservations">CreateObservations</a>           [🚧](#start)   204. Add datastream [POST v1.1/CreateObservations](http://PROXY/v1.1/CreateObservations) ✔️```js
-{ Datastream: { '@iot.id': 1 }, components: [ 'phenomenonTime', 'result', 'resultTime', 'FeatureOfInterest/id', [length]: 4 ], 'dataArray@iot.count': 4, dataArray: [ [ '2017-01-13T10:20:00.000Z', 90, '2017-01-13T10:20:00.000Z', 1, [length]: 4 ], [ '2017-01-13T10:21:00.000Z', 91, '2017-01-13T10:21:00.000Z', 1, [length]: 4 ], [ '2017-02-13T10:22:00.000Z', 92, '2017-02-13T10:22:00.000Z', 1, [length]: 4 ], [ '2017-02-13T10:23:00.000Z', 93, '2017-02-13T10:23:00.000Z', 1, [length]: 4 ], [length]: 4 ] } 
+{ Datastream: { '@iot.id': 1 }, components: [ 'phenomenonTime', 'result', 'resultTime', 'FeatureOfInterest/id', [length]: 4 ], '@iot.count': 4, dataArray: [ [ '2017-01-13T10:20:00.000Z', 90, '2017-01-13T10:20:00.000Z', 1, [length]: 4 ], [ '2017-01-13T10:21:00.000Z', 91, '2017-01-13T10:21:00.000Z', 1, [length]: 4 ], [ '2017-02-13T10:22:00.000Z', 92, '2017-02-13T10:22:00.000Z', 1, [length]: 4 ], [ '2017-02-13T10:23:00.000Z', 93, '2017-02-13T10:23:00.000Z', 1, [length]: 4 ], [length]: 4 ] } 
 ```
    205. Return Error if datastream does not exist [POST v1.1/CreateObservations](http://PROXY/v1.1/CreateObservations) ✔️   206. Return Error if datastream does not exist [POST v1.1/CreateObservations](http://PROXY/v1.1/CreateObservations) ✔️   207. Add datastream duplicate. [POST v1.1/CreateObservations](http://PROXY/v1.1/CreateObservations) ✔️```js
-{ Datastream: { '@iot.id': 2 }, components: [ 'phenomenonTime', 'result', 'resultTime', 'FeatureOfInterest/id', [length]: 4 ], 'dataArray@iot.count': 4, dataArray: [ [ '2017-01-13T10:20:00.000Z', 90, '2017-01-13T10:20:00.000Z', 1, [length]: 4 ], [ '2017-01-13T10:21:00.000Z', 91, '2017-01-13T10:21:00.000Z', 1, [length]: 4 ], [ '2017-02-13T10:22:00.000Z', 92, '2017-02-13T10:22:00.000Z', 1, [length]: 4 ], [ '2017-02-13T10:23:00.000Z', 93, '2017-02-13T10:23:00.000Z', 1, [length]: 4 ], [length]: 4 ] } 
+{ Datastream: { '@iot.id': 2 }, components: [ 'phenomenonTime', 'result', 'resultTime', 'FeatureOfInterest/id', [length]: 4 ], '@iot.count': 4, dataArray: [ [ '2017-01-13T10:20:00.000Z', 90, '2017-01-13T10:20:00.000Z', 1, [length]: 4 ], [ '2017-01-13T10:21:00.000Z', 91, '2017-01-13T10:21:00.000Z', 1, [length]: 4 ], [ '2017-02-13T10:22:00.000Z', 92, '2017-02-13T10:22:00.000Z', 1, [length]: 4 ], [ '2017-02-13T10:23:00.000Z', 93, '2017-02-13T10:23:00.000Z', 1, [length]: 4 ], [length]: 4 ] } 
 ```
    208. Add datastream duplicate = delete. [POST v1.1/CreateObservations](http://PROXY/v1.1/CreateObservations) ✔️```js
-{ duplicate: 'delete', Datastream: { '@iot.id': 2 }, components: [ 'phenomenonTime', 'result', 'resultTime', 'FeatureOfInterest/id', [length]: 4 ], 'dataArray@iot.count': 4, dataArray: [ [ '2017-01-13T10:20:00.000Z', 90, '2017-01-13T10:20:00.000Z', 1, [length]: 4 ], [ '2017-01-13T10:21:00.000Z', 91, '2017-01-13T10:21:00.000Z', 1, [length]: 4 ], [ '2017-02-13T10:22:00.000Z', 92, '2017-02-13T10:22:00.000Z', 1, [length]: 4 ], [ '2017-02-13T10:23:00.000Z', 93, '2017-02-13T10:23:00.000Z', 1, [length]: 4 ], [length]: 4 ] } 
+{ duplicate: 'delete', Datastream: { '@iot.id': 2 }, components: [ 'phenomenonTime', 'result', 'resultTime', 'FeatureOfInterest/id', [length]: 4 ], '@iot.count': 4, dataArray: [ [ '2017-01-13T10:20:00.000Z', 90, '2017-01-13T10:20:00.000Z', 1, [length]: 4 ], [ '2017-01-13T10:21:00.000Z', 91, '2017-01-13T10:21:00.000Z', 1, [length]: 4 ], [ '2017-02-13T10:22:00.000Z', 92, '2017-02-13T10:22:00.000Z', 1, [length]: 4 ], [ '2017-02-13T10:23:00.000Z', 93, '2017-02-13T10:23:00.000Z', 1, [length]: 4 ], [length]: 4 ] } 
 ```
    209. Add multiDatastream [POST v1.1/CreateObservations](http://PROXY/v1.1/CreateObservations) ✔️```js
 {
   MultiDatastream: { '@iot.id': 2 },
   components: [ 'phenomenonTime', 'result', 'resultTime', 'FeatureOfInterest/id', [length]: 4 ],
-  'dataArray@iot.count': 4,
+  '@iot.count': 4,
   dataArray: [ [ '2017-01-13T10:20:00.000Z', [ 591, 592, 593, [length]: 3 ], '2017-01-13T10:20:00.000Z', 1, [length]: 4 ], [ '2017-01-13T10:21:00.000Z', [ 691, 692, 693, [length]: 3 ], '2017-01-13T10:21:00.000Z', 1, [length]: 4 ], [ '2017-02-13T10:22:00.000Z', [ 791, 792, 793, [length]: 3 ], '2017-02-13T10:22:00.000Z', 1, [length]: 4 ], [ '2017-02-13T10:23:00.000Z', [ 891, 892, 893, [length]: 3 ], '2017-02-13T10:23:00.000Z', 1, [length]: 4 ], [length]: 4 ]
 } 
 ```
@@ -185,7 +185,7 @@
 {
   MultiDatastream: { '@iot.id': 2 },
   components: [ 'phenomenonTime', 'result', 'resultTime', 'FeatureOfInterest/id', [length]: 4 ],
-  'dataArray@iot.count': 4,
+  '@iot.count': 4,
   dataArray: [ [ '2017-01-13T10:20:00.000Z', [ 591, 592, 593, [length]: 3 ], '2017-01-13T10:20:00.000Z', 1, [length]: 4 ], [ '2017-01-13T10:21:00.000Z', [ 691, 692, 693, [length]: 3 ], '2017-01-13T10:21:00.000Z', 1, [length]: 4 ], [ '2017-02-13T10:22:00.000Z', [ 791, 792, 793, [length]: 3 ], '2017-02-13T10:22:00.000Z', 1, [length]: 4 ], [ '2017-02-13T10:23:00.000Z', [ 891, 892, 893, [length]: 3 ], '2017-02-13T10:23:00.000Z', 1, [length]: 4 ], [length]: 4 ]
 } 
 ```
@@ -194,7 +194,7 @@
   duplicate: 'delete',
   MultiDatastream: { '@iot.id': 2 },
   components: [ 'phenomenonTime', 'result', 'resultTime', 'FeatureOfInterest/id', [length]: 4 ],
-  'dataArray@iot.count': 4,
+  '@iot.count': 4,
   dataArray: [ [ '2017-01-13T10:20:00.000Z', [ 591, 592, 593, [length]: 3 ], '2017-01-13T10:20:00.000Z', 1, [length]: 4 ], [ '2017-01-13T10:21:00.000Z', [ 691, 692, 693, [length]: 3 ], '2017-01-13T10:21:00.000Z', 1, [length]: 4 ], [ '2017-02-13T10:22:00.000Z', [ 791, 792, 793, [length]: 3 ], '2017-02-13T10:22:00.000Z', 1, [length]: 4 ], [ '2017-02-13T10:23:00.000Z', [ 891, 892, 893, [length]: 3 ], '2017-02-13T10:23:00.000Z', 1, [length]: 4 ], [length]: 4 ]
 } 
 ```

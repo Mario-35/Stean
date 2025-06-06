@@ -36,7 +36,7 @@ const datasObs = (datastream: number) => {
     return {
         "Datastream": { "@iot.id": datastream },
         "components": ["phenomenonTime", "result", "resultTime", "FeatureOfInterest/id"],
-        "dataArray@iot.count": 4,
+        "@iot.count": 4,
         "dataArray": [
             ["2017-01-13T10:20:00.000Z", 90, "2017-01-13T10:20:00.000Z", 1],
             ["2017-01-13T10:21:00.000Z", 91, "2017-01-13T10:21:00.000Z", 1],
@@ -49,7 +49,7 @@ const muliDatasObs = (multiDatastream: number) => {
     return {
         "MultiDatastream": { "@iot.id": multiDatastream },
         "components": ["phenomenonTime", "result", "resultTime", "FeatureOfInterest/id"],
-        "dataArray@iot.count": 4,
+        "@iot.count": 4,
         "dataArray": [
             ["2017-01-13T10:20:00.000Z", [591, 592, 593], "2017-01-13T10:20:00.000Z", 1],
             ["2017-01-13T10:21:00.000Z", [691, 692, 693], "2017-01-13T10:21:00.000Z", 1],
@@ -100,7 +100,7 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
         const datas = {
             "Datastream": { "@iot.id": `${BigInt(Number.MAX_SAFE_INTEGER)}` },
             "components": ["phenomenonTime", "result", "resultTime", "FeatureOfInterest/id"],
-            "dataArray@iot.count": 3,
+            "@iot.count": 3,
             "dataArray": [
                 ["2017-01-13T10:20:00.000Z", 90, "2017-01-13T10:20:00.000Z", 1],
                 ["2017-01-13T10:21:00.000Z", 91, "2017-01-13T10:21:00.000Z", 1],

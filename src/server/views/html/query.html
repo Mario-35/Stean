@@ -246,43 +246,33 @@
           <!-- END ACCORDION -->
           <!-- OPTIONS -->
           <div class="patrom-row">
-            <div class="patrom-col-span-12">
               <input id="queryOptions" type="text" class="patrom-text-input fillCol">
-            </div>
           </div>
-          <!-- DATAS HIDE  -->
-          <hr>
         </form>
         <!-- ICONS BUTTONS  -->
         <div class="patrom-row center">
           <div class="patrom-col-span-12">
-            <div class="patrom-button-bar">
-              <div class="patrom-button-bar__item">
-                <button class="patrom-button-bar__button" id="btnRoot">root</button>
-              </div> &nbsp; <div class="patrom-button-bar__item">
-                <button class="patrom-button-bar__button" id="btnClear">clear</button>
-              </div> &nbsp; <div class="patrom-button-bar__item">
+            <!-- <div class="patrom-button-bar"> -->
+              <!-- <div class="patrom-button-bar__item">
                 <button class="patrom-button-bar__button" id="btnPostTemplate">Template</button>
-              </div> &nbsp; <div class="patrom-button-bar__item">
-                <button class="patrom-button-bar__button" id="btnShowLinks">urls</button>
-              </div> &nbsp; <div class="patrom-button-bar__item">
+              </div> &nbsp; -->
+               <!-- <div class="patrom-button-bar__item">
                 <button class="patrom-button-bar__button" id="btnShowGeo">geos</button>
-              </div> &nbsp; <div class="patrom-button-bar__item">
-                <button class="patrom-button patrom-button--success" id="go">Query</button>
-                <button type="submit" class="patrom-button patrom-button--success" id="submit">Import file</button>
-              </div>
-            </div>
+              </div> &nbsp;  -->
+              <!-- <div class="patrom-button-bar__item"> -->
+                <!-- </div> -->
+            <!-- </div> -->
           </div>
         </div>
-        <!-- JSON DATAS --> 
-        @jsonDatas@
+
         <!-- BUTTONS ICONS -->
         <div class="patrom-row left">
           <div class="patrom-col-span-12">
             <div class="patrom-row left">
-              <button type="button" id="preview" class="patrom-button-bar__button size-lg" title="Preview">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                  <path class="svg-icon" d="M14.408 24h-13.408v-24h10.189c3.163 0 9.811 7.223 9.811 9.614v2.068c-.622-.296-1.293-.502-2-.603v-.623c0-4.106-6-2.456-6-2.456s1.518-6-2.638-6h-7.362v20h9.26c.566.81 1.299 1.49 2.148 2zm2.257-8.669c.402-.206.852-.331 1.335-.331 1.455 0 2.67 1.042 2.941 2.418l1.96-.398c-.456-2.291-2.475-4.02-4.901-4.02-.957 0-1.845.278-2.604.745l-1.396-1.745-1 5h5l-1.335-1.669zm5.335 8.669l-1.396-1.745c-.759.467-1.647.745-2.604.745-2.426 0-4.445-1.729-4.901-4.02l1.96-.398c.271 1.376 1.486 2.418 2.941 2.418.483 0 .933-.125 1.335-.331l-1.335-1.669h5l-1 5z" />
+              <button type="button" id="btnRoot" class="patrom-button-bar__button size-lg" title="Root">
+                <svg width="24" height="24" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none">
+                  <path class="svg-icon" fill-rule="evenodd" 
+                  d="M11.126 2.601a.75.75 0 00-1.025.273l-5.5 9.5a.75.75 0 001.298.752l5.5-9.5a.75.75 0 00-.273-1.025z" clip-rule="evenodd" />
                 </svg>
               </button>
               <button type="button" id="logout" class="patrom-button-bar__button size-lg" title="Logout">
@@ -295,21 +285,20 @@
                   <path class="svg-icon" d="M12 1c-6.338 0-12 4.226-12 10.007 0 2.05.739 4.063 2.047 5.625.055 1.83-1.023 4.456-1.993 6.368 2.602-.47 6.301-1.508 7.978-2.536 9.236 2.247 15.968-3.405 15.968-9.457 0-5.812-5.701-10.007-12-10.007zm1 15h-2v-6h2v6zm-1-7.75c-.69 0-1.25-.56-1.25-1.25s.56-1.25 1.25-1.25 1.25.56 1.25 1.25-.56 1.25-1.25 1.25z" />
                 </svg>
               </button>
-              <button type="button" id="doc" class="patrom-button-bar__button size-lg" title="Documentation">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                  <path class="svg-icon" d="M7 22v-16h14v7.543c0 4.107-6 2.457-6 2.457s1.518 6-2.638 6h-5.362zm16-7.614v-10.386h-18v20h8.189c3.163 0 9.811-7.223 9.811-9.614zm-10 1.614h-4v-1h4v1zm6-4h-10v1h10v-1zm0-3h-10v1h10v-1zm1-7h-17v19h-2v-21h19v2z" />
+              <button type="button" id="btnPostTemplate" class="patrom-button-bar__button size-lg" title="Template">
+                <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path class="svg-icon" d="M5,3H7V5H5v5a2,2,0,0,1-2,2,2,2,0,0,1,2,2v5H7v2H5c-1.07-.27-2-.9-2-2V15a2,2,0,0,0-2-2H0V11H1A2,2,0,0,0,3,9V5A2,2,0,0,1,5,3M19,3a2,2,0,0,1,2,2V9a2,2,0,0,0,2,2h1v2H23a2,2,0,0,0-2,2v4a2,2,0,0,1-2,2H17V19h2V14a2,2,0,0,1,2-2,2,2,0,0,1-2-2V5H17V3h2M12,15a1,1,0,1,1-1,1,1,1,0,0,1,1-1M8,15a1,1,0,1,1-1,1,1,1,0,0,1,1-1m8,0a1,1,0,1,1-1,1A1,1,0,0,1,16,15Z" />
                 </svg>
               </button>
-              <button type="button" id="git" class="patrom-button-bar__button size-lg" title="Github">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                  <path class="svg-icon" d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm2.218 18.616c-.354.069-.468-.149-.468-.336v-1.921c0-.653-.229-1.079-.481-1.296 1.56-.173 3.198-.765 3.198-3.454 0-.765-.273-1.389-.721-1.879.072-.177.312-.889-.069-1.853 0 0-.587-.188-1.923.717-.561-.154-1.159-.231-1.754-.234-.595.003-1.193.08-1.753.235-1.337-.905-1.925-.717-1.925-.717-.379.964-.14 1.676-.067 1.852-.448.49-.722 1.114-.722 1.879 0 2.682 1.634 3.282 3.189 3.459-.2.175-.381.483-.444.936-.4.179-1.413.488-2.037-.582 0 0-.37-.672-1.073-.722 0 0-.683-.009-.048.426 0 0 .46.215.777 1.024 0 0 .405 1.25 2.353.826v1.303c0 .185-.113.402-.462.337-2.782-.925-4.788-3.549-4.788-6.641 0-3.867 3.135-7 7-7s7 3.133 7 7c0 3.091-2.003 5.715-4.782 6.641z" />
+              <button type="button" id="btnShowLinks" class="patrom-button-bar__button size-lg" title="generate url">
+                <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24" height="24" viewBox="0 0 425.466 425.467" style="enable-background:new 0 0 425.466 425.467;" xml:space="preserve"><g>	<g>		<g>			
+                  <path class="svg-icon" d="M318.15,230.195l77.934-77.937c31.894-31.892,31.894-83.782-0.004-115.674l-12.66-12.66     c-31.893-31.896-83.78-31.896-115.674-0.004l-77.937,77.934c-17.588,17.588-25.457,41.264-23.646,64.311     c-23.045-1.813-46.722,6.056-64.308,23.647L23.92,267.748c-31.894,31.889-31.894,83.779,0,115.674l12.664,12.662     c31.893,31.893,83.783,31.893,115.674,0l77.935-77.936c17.592-17.59,25.459-41.266,23.647-64.309     C276.884,255.654,300.56,247.783,318.15,230.195z M202.653,290.605l-77.936,77.938c-16.705,16.703-43.889,16.703-60.59,0     l-12.666-12.666c-16.705-16.701-16.703-43.885,0-60.594l77.936-77.932c14.14-14.141,35.779-16.306,52.226-6.516l-32.302,32.307     c-7.606,7.604-7.606,19.938,0,27.541c7.605,7.607,19.937,7.607,27.541,0l32.306-32.303     C218.959,254.828,216.795,276.469,202.653,290.605z M238.382,209.169l32.299-32.306c7.608-7.602,7.608-19.935,0-27.538     c-7.604-7.61-19.936-7.61-27.541-0.004l-32.303,32.303c-9.791-16.446-7.627-38.087,6.514-52.226l77.935-77.935     c16.707-16.707,43.89-16.707,60.594,0l12.664,12.664c16.705,16.705,16.705,43.886,0,60.591l-77.936,77.937     C276.468,216.797,254.828,218.959,238.382,209.169z" />			
+                  <path class="svg-icon" d="M343.466,261.465c-45.287,0-82,36.713-82,82s36.713,82,82,82c45.286,0,82-36.713,82-82S388.753,261.465,343.466,261.465z      M372.505,333.564l-56.046,56.104c-0.239,0.238-0.536,0.41-0.862,0.496l-22.315,5.85c-0.649,0.168-1.347-0.02-1.822-0.494     c-0.477-0.479-0.666-1.172-0.496-1.824l5.826-22.318c0.084-0.326,0.256-0.627,0.494-0.863l56.047-56.104     c0.742-0.742,1.945-0.744,2.688-0.002l4.548,4.541c0.739,0.74,0.741,1.943,0,2.688l-37.433,37.471l4.709,4.703l37.435-37.471     c0.739-0.742,1.94-0.742,2.682-0.002l4.55,4.541C373.25,331.617,373.25,332.822,372.505,333.564z M395.472,310.574l-17,17.018     c-0.739,0.744-1.942,0.744-2.685,0.002l-16.489-16.475c-0.744-0.74-0.744-1.943-0.002-2.688l17-17.02     c0.741-0.74,1.944-0.74,2.688-0.002l16.487,16.477C396.216,308.629,396.216,309.832,395.472,310.574z" />		</g>	</g></g>
                 </svg>
               </button>
-              <button type="button" id="logs" class="patrom-button-bar__button size-lg" title="Logs">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                  <path class="svg-icon" d="M15.1,2.72H6.29A1.871,1.871,0,0,0,4.42,4.58V19.42a1.865,1.865,0,0,0,1.87,1.86H17.72a1.863,1.863,0,0,0,1.86-1.86V7.96Zm2.62,17.7H6.29a1,1,0,0,1-1.01-1V4.58a1,1,0,0,1,1.01-1H14.7l3.51,4.1,0,0h-2.7a1,1,0,0,1-1-1v-2.1h-.861v2.1a1.866,1.866,0,0,0,1.865,1.864h3.2V19.42A1,1,0,0,1,17.72,20.42Z" />
-                  <path class="svg-icon" d="M16.39,10.57H7.61a1.44,1.44,0,0,0-1.44,1.44v4.95a1.432,1.432,0,0,0,1.44,1.43h8.78a1.432,1.432,0,0,0,1.44-1.43V12.01A1.44,1.44,0,0,0,16.39,10.57ZM9.88,17.14H8V11.82h.78v4.63h1.1Zm2.95-1.01a1.08,1.08,0,0,1-1.18,1.11,1.083,1.083,0,0,1-1.19-1.11v-3.3a1.086,1.086,0,0,1,1.19-1.1,1.083,1.083,0,0,1,1.18,1.1ZM16,13.47h-.78v-.63a.383.383,0,0,0-.41-.41.41.41,0,0,0-.4.41v3.29a.42.42,0,0,0,.84,0V14.76h-.4v-.63H16v3.01h-.51v-.13a.986.986,0,0,1,.03-.24h-.16a.446.446,0,0,1-.14.26.881.881,0,0,1-.61.21.933.933,0,0,1-.97-1.02V12.83a1.078,1.078,0,0,1,1.18-1.1A1.078,1.078,0,0,1,16,12.83Z" />
-                  <path class="svg-icon" d="M11.65,12.43a.383.383,0,0,0-.41.41v3.29a.405.405,0,1,0,.81,0V12.84A.381.381,0,0,0,11.65,12.43Z" />
+              <button type="button" id="btnShowGeo" class="patrom-button-bar__button size-lg" title="GeoJson">
+                <svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path class="svg-icon" fill-rule="evenodd" clip-rule="evenodd" d="M23.4236 41.8172C23.424 41.8174 23.4243 41.8176 24 41L23.4236 41.8172ZM24.5764 41.8172L24.58 41.8146L24.5891 41.8082L24.6209 41.7854C24.6482 41.7658 24.6875 41.7374 24.7379 41.7004C24.8387 41.6263 24.9842 41.5178 25.1681 41.3765C25.5357 41.0938 26.0571 40.6794 26.6811 40.1459C27.9277 39.08 29.5908 37.5328 31.2565 35.6059C34.5639 31.7799 38 26.3195 38 20.0769C38 16.3454 36.5264 12.7655 33.9016 10.1251C31.2765 7.48454 27.7149 6 24 6C20.2851 6 16.7235 7.48454 14.0984 10.1251C11.4736 12.7655 10 16.3454 10 20.0769C10 26.3195 13.4361 31.7799 16.7435 35.6059C18.4092 37.5328 20.0723 39.08 21.3189 40.1459C21.9429 40.6794 22.4643 41.0938 22.8319 41.3765C23.0158 41.5178 23.1613 41.6263 23.2621 41.7004C23.3125 41.7374 23.3518 41.7658 23.3791 41.7854L23.4109 41.8082L23.42 41.8146L23.4236 41.8172C23.7689 42.0603 24.2311 42.0603 24.5764 41.8172ZM24 41L24.5764 41.8172C24.576 41.8174 24.5757 41.8176 24 41ZM29 20C29 22.7614 26.7614 25 24 25C21.2386 25 19 22.7614 19 20C19 17.2386 21.2386 15 24 15C26.7614 15 29 17.2386 29 20Z"/>
                 </svg>
               </button>
               <button type="button" id="debug" class="patrom-button-bar__button size-lg" title="Debug">
@@ -317,9 +306,14 @@
                   <path class="svg-icon" d="M10.94 13.5l-1.32 1.32a3.73 3.73 0 0 0-7.24 0L1.06 13.5 0 14.56l1.72 1.72-.22.22V18H0v1.5h1.5v.08c.077.489.214.966.41 1.42L0 22.94 1.06 24l1.65-1.65A4.308 4.308 0 0 0 6 24a4.31 4.31 0 0 0 3.29-1.65L10.94 24 12 22.94 10.09 21c.198-.464.336-.951.41-1.45v-.1H12V18h-1.5v-1.5l-.22-.22L12 14.56l-1.06-1.06zM6 13.5a2.25 2.25 0 0 1 2.25 2.25h-4.5A2.25 2.25 0 0 1 6 13.5zm3 6a3.33 3.33 0 0 1-3 3 3.33 3.33 0 0 1-3-3v-2.25h6v2.25zm14.76-9.9v1.26L13.5 17.37V15.6l8.5-5.37L9 2v9.46a5.07 5.07 0 0 0-1.5-.72V.63L8.64 0l15.12 9.6z" />
                 </svg>
               </button>
+              <button class="patrom-button patrom-button--success" id="go">Query</button>
+              <button type="submit" class="patrom-button patrom-button--success" id="submit">Import file</button>
+
             </div>
           </div>
         </div>
+                <!-- JSON DATAS --> 
+                @jsonDatas@
         <div class="patrom-row">
           <!-- Services -->
           <div class="patrom-col-span-8">
@@ -361,6 +355,6 @@
     <script src="windowList.js"></script>
     <script src="social.js"></script>
     <script src="steanPrism.js"></script>
-    <script src="event.js"></script>
+    <script src="queryEvent.js"></script>
   </body>
 </html>

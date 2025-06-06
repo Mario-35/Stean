@@ -164,7 +164,7 @@ async function selectChange(name ,elem) {
 		case "Loras":
 			const url = `${_PARAMS.services[name].linkBase}/${_PARAMS.services[name].version}/Decoders?$select=id,name`;		
 			const datas = await getDatas(url);
-			getElement("infos"+ name).innerHTML =  Object.values(jsonDatas.value).map(e => `<option value="${e.name}" onclick="showDecoderInfos('${name}','${e["@iot.id"]}')">${e.name}</option>`).join("\n");
+			getElement("infos"+ name).innerHTML =  Object.values(datas.value).map(e => `<option value="${e.name}" onclick="showDecoderInfos('${name}','${e["@iot.id"]}')">${e.name}</option>`).join("\n");
 			break;
 		case "Synonyms": 
 			if (_PARAMS.services[name].service)
@@ -288,7 +288,9 @@ function decodingPayload(payload) {
 		const F = new Function("input", "nomenclature", `${getElement("jsonDecoderCode").innerText}; return decode(input, nomenclature);`);
 		let nomenclature = JSON.parse(getElement("jsonDecoderNomenclature").innerText);
 		const result = F(payload, nomenclature);
-		beautifyDatas(getElement("jsonDecoderResult"), result, "json");		
+		console.log(result);
+		
+		beautifyDatas(getElement("jsonDecoderResult"), result.datas, "json");		
 	}
 	catch (error) {
 		notifyError("Error", error);

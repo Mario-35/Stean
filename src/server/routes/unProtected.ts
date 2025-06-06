@@ -189,20 +189,18 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
             const objectAccess = new apiAccess(ctx);
             if (objectAccess) {
                 // Get all
+                ctx.type = ctx.odata.returnFormat.type;
                 if (ctx.odata.entity && ctx.odata.single === false) {
                     const returnValue = await objectAccess.getAll();
                     if (returnValue) {
-                        const datas = ctx.odata.returnFormat === returnFormats.json ? ({ "@iot.count": returnValue.id, "@iot.nextLink": returnValue.nextLink, "@iot.prevLink": returnValue.prevLink, value: returnValue.body } as object) : returnValue.body;
-                        ctx.type = ctx.odata.returnFormat.type;
-                        ctx.body = ctx.odata.returnFormat.format(datas as object, ctx);
+                        ctx.body = ctx.odata.returnFormat.format(returnValue.body || (returnValue as object), ctx);
                         if (returnValue.selfLink) ctx.set("Location", returnValue.selfLink);
                     } else ctx.throw(EHttpCode.notFound);
                     // Get One
                 } else if (ctx.odata.single === true) {
-                    const returnValue: IreturnResult | undefined = await objectAccess.getSingle();
-                    if (returnValue && returnValue.body) {
-                        ctx.type = ctx.odata.returnFormat.type;
-                        ctx.body = ctx.odata.returnFormat.format(returnValue.body);
+                    const returnValue = await objectAccess.getSingle();
+                    if (returnValue) {
+                        ctx.body = returnValue;
                     } else ctx.throw(EHttpCode.notFound, { detail: `id : ${ctx.odata.id} not found` });
                 } else ctx.throw(EHttpCode.badRequest);
             }

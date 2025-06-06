@@ -12,7 +12,7 @@
  * @param {boolean} test  
  */
 function toggleShowHide(obj, test) {
-	obj.style.display = test === true ? "block" : _NONE;
+	obj.style.display = test === true ? "initial" : _NONE;
 }
 
 /**
@@ -28,7 +28,8 @@ function hide(obj) {
  * @param {any} obj // object to Show
  */
 function show(obj) {
-	obj.style.display = "table-cell";
+	// obj.style.display = "table-cell";
+	obj.style.display = "initial";
 }
 
 /**

@@ -75,6 +75,7 @@ export class Query {
     }
 
     private columnList(tableName: string, main: PgVisitor, element: PgVisitor): string[] | undefined {
+        // const state = () => { console.log(returnValue); };
         this.isFile = isFile(element.ctx.service);
         if (this.isFile === true && element.query.select.toString() === "*") return element.columnSpecials["result"];
         // get good entity name
@@ -91,18 +92,22 @@ export class Query {
         }
         if (isGeoJson(tempEntity, main)) {
             const col = tempEntity.name === "Locations" ? "location" : "feature";
+            console.log(main.query.where);
+            if (main.query.where.toString().trim() != "") main.query.where.add(" AND ");
             main.query.where.add(`"${col}"::text LIKE '%coordinates%'`);
+            console.log(main.query.where);
             return [`${col} AS "geometry"`];
         }
         // If array result add id
-        const returnValue: string[] = isDataArray(main) && !element.query.select.toString().includes(`"id"${EConstant.columnSeparator}`) ? ["id"] : [];
+        const returnValue: string[] = [];
+        // const returnValue: string[] = isDataArray(main) && !element.query.select.toString().includes(`"id"${EConstant.columnSeparator}`) && element.query.select.toString() !== "*" ? ["id"] : [];
         // create selfLink
         const selfLink = `CONCAT('${main.ctx.decodedUrl.root}/${tempEntity.name}(', "${tempEntity.table}"."id", ')') AS ${doubleQuotesString(EConstant.selfLink)}`;
         // if $ref return only selfLink
         if (element.onlyRef == true) return [selfLink];
         if (element.showRelations == true) returnValue.push(selfLink);
         // create list of columns
-        const columns: string[] =
+        let columns: string[] =
             element.query.select.toString() === "*" || element.query.select.toString() === ""
                 ? Object.keys(tempEntity.columns)
                       .filter((word) => !word.includes("_"))
@@ -114,10 +119,11 @@ export class Query {
                       .filter((word: string) => word.trim() != "")
                       .map((e) => removeFirstEndDoubleQuotes(e));
         // loop on columns
+        if (isDataArray(main)) columns = columns.sort();
         columns
             .map((column: string) => {
                 if (element.columnSpecials.hasOwnProperty(column)) return element.columnSpecials[column].join();
-                return this.formatedColumn(main.ctx.service, tempEntity, column, { valueskeys: element.valueskeys, quoted: true, table: true, alias: ["id", "result"].includes(column), as: isGraph(main) ? false : true }) || "";
+                return this.formatedColumn(main.ctx.service, tempEntity, column, { valueskeys: element.valueskeys, quoted: true, table: true, alias: isDataArray(main) ? false : ["id", "result"].includes(column), as: isGraph(main) ? false : true }) || "";
             })
             .filter((e) => e != "")
             .forEach((e: string) => {
@@ -200,7 +206,7 @@ export class Query {
                         skip: element.skip,
                         limit: element.limit,
                         keys: this.keyNames.toArray(),
-                        count: `SELECT COUNT (DISTINCT ${Object.keys(element.entity.columns)[0]}) FROM (SELECT ${Object.keys(element.entity.columns)[0]} FROM "${element.entity.table}"${element.query.where.notNull() === true ? ` WHERE ${element.query.where.toString()}` : ""}) AS c`
+                        count: `SELECT COUNT(DISTINCT ${Object.keys(element.entity.columns)[0]}) AS "${EConstant.count}" FROM (SELECT ${Object.keys(element.entity.columns)[0]} FROM "${element.entity.table}"${element.query.where.notNull() === true ? ` WHERE ${element.query.where.toString()}` : ""}) AS c`
                     };
                     if (main.subQuery.from.length > 0 && main.subQuery.from[1] != "") res.from.push(`( ${this.pgQueryToString(main.subQuery)}) AS src`);
                     return res;

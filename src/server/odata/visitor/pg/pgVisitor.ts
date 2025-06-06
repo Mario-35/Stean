@@ -245,7 +245,7 @@ export class PgVisitor extends Visitor {
 
     protected VisitResultFormat(node: Token, context: IodataContext) {
         if (node.value.format) this.returnFormat = returnFormats[node.value.format as keyof object];
-        if ([returnFormats.dataArray, returnFormats.graph, returnFormats.graphDatas, returnFormats.csv].includes(this.returnFormat)) this.noLimit();
+        if ([returnFormats.graph, returnFormats.graphDatas, returnFormats.csv].includes(this.returnFormat)) this.noLimit();
         this.showRelations = false;
         if (isGraph(this)) {
             this.showRelations = false;

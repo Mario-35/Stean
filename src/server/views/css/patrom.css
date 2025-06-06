@@ -431,19 +431,6 @@ input:checked + .slider:before {
   scrollbar-width: none;  
 }
 
-
-@font-face {
-  font-family: 'icomoon';
-  src:  url('./icon/icomoon.eot?wqupk0');
-  src:  url('./icon/icomoon.eot?wqupk0#iefix') format('embedded-opentype'),
-    url('./icon/icomoon.ttf?wqupk0') format('truetype'),
-    url('./icon/icomoon.woff?wqupk0') format('woff'),
-    url('./icon/icomoon.svg?wqupk0#icomoon') format('svg');
-  font-weight: normal;
-  font-style: normal;
-  font-display: block;
-}
-
 :focus {
   outline-color: transparent;
   outline-style: none;

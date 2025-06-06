@@ -13,6 +13,7 @@ export const EConstant = Object.freeze({
     navLink: "@iot.navigationLink",
     selfLink: "@iot.selfLink",
     encoding: "encodingType",
+    count: "@iot.count",
     columnSeparator: "@|@",
     admin: "admin",
     test: "test",
