@@ -32,7 +32,7 @@ function getContent(input) {
       <h1>${input.short}</h1>
     </div>
     ${input.description ? `<section><p>${ input.description }</p></section>` : ''}
-	    <div class="pull-center">${input.examples.http}</div>
+	${input.examples ? `<div class="pull-center">${input.examples.http}</div>` : ''}
     ${getDatasTabs(input)}    
     ${input.examples ? `    <div class="pull-left">
       <h1>Examples</h1>
