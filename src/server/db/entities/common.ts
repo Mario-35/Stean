@@ -7,7 +7,7 @@
  *
  */
 
-import { doubleQuotesString, removeFirstEndDoubleQuotes, returnFormats } from "../../helpers/index";
+import { doubleQuotesString, returnFormats } from "../../helpers/index";
 import { IreturnResult, keyobj, koaContext } from "../../types";
 import { removeKeyFromUrl } from "../helpers";
 import { getErrorCode, info } from "../../messages";
@@ -77,7 +77,7 @@ export class Common {
         console.log(log.whereIam());
         return {
             ...{
-                id: undefined,
+                // id: undefined,
                 selfLink: args.body && typeof args.body === "object" ? args.body["@iot.selfLink" as keyof object] : undefined,
                 nextLink: args.nextLink ? (args.nextLink as string) : undefined,
                 prevLink: args.prevLink ? (args.prevLink as string) : undefined,
@@ -132,25 +132,20 @@ export class Common {
                     sql = asCsv(sql, this.ctx.service.csvDelimiter);
                     config.writeLog(log.query(sql));
                     this.ctx.attachment(`${this.ctx.odata.entity?.name || "export"}.csv`);
-
                     return this.formatReturnResult({ body: await config.connection(this.ctx.service.name).unsafe(sql).readable() });
-                // DataArray values
-                case returnFormats.dataArray:
-                    return await config
-                        .executeSql(this.ctx.service, sql)
-                        .then(async (res: Record<string, any>) => {
-                            // Inner count sql not get at fi
-                            res[0][EConstant.count] = +Object.entries(res[0]["value"][0]["dataArray"]).length;
-                            return res[0];
-                        })
-                        .catch((err: Error) => this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: err.message }));
-                // JSON values
                 default:
                     return await config
-                        .executeSql(this.ctx.service, sql)
+                        .executeSqlValues(this.ctx.service, sql)
                         .then(async (res: Record<string, any>) => {
-                            res[0][EConstant.count] = +res[0][EConstant.count];
-                            return res[0];
+                            if (this.ctx.odata.returnFormat === returnFormats.dataArray) res[0] = +Object.entries(res[1][0]["dataArray"]).length;
+                            return res[0] > 0
+                                ? this.formatReturnResult({
+                                      "@iot.count": this.ctx.odata.returnFormat === returnFormats.dataArray ? +Object.entries(res[1][0]["dataArray"]).length : +res[0],
+                                      "@iot.nextLink": this.nextLink(res[0]),
+                                      "@iot.prevLink": this.prevLink(res[0]),
+                                      value: res[1]
+                                  })
+                                : this.formatReturnResult({ body: res[0] == 0 ? [] : res[0] });
                         })
                         .catch((err: Error) => this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: err.message }));
             }
@@ -171,33 +166,28 @@ export class Common {
             switch (this.ctx.odata.returnFormat) {
                 // return only postgres sql query as a string
                 case returnFormats.sql:
-                    return this.formatReturnResult({ query: sql });
+                    return this.formatReturnResult({ body: sql });
                 // return only GeoJSON values
                 case returnFormats.GeoJSON:
                     return await config.executeSqlValues(this.ctx.service, sql).then((res: Record<string, any>) => {
-                        return res[0];
+                        return this.formatReturnResult({ body: res[0] });
                     });
                 // json values
                 default:
                     return await config
-                        .executeSql(this.ctx.service, sql)
+                        .executeSqlValues(this.ctx.service, sql)
                         .then((res: Record<string, any>) => {
                             if (this.ctx.odata.query.select && this.ctx.odata.onlyValue === true) {
-                                const key = this.ctx.odata.query.select
-                                    .toString()
-                                    .split(EConstant.columnSeparator)
-                                    .filter((word: string) => word.trim() != "")
-                                    .map((e) => removeFirstEndDoubleQuotes(e));
-                                return res[0][key[0] as keyobj];
-
-                                // const temp = res[0][this.ctx.odata.query.select[0 as keyobj] == "id" ? EConstant.id : 0];
-                                // console.log(temp);
-                                // if (typeof temp === "object") {
-                                //     this.ctx.odata.returnFormat = returnFormats.json;
-                                //     return this.formatReturnResult({ body: temp });
-                                // } else return this.formatReturnResult({ body: String(temp) });
+                                this.ctx.odata.returnFormat = typeof res[0] === "object" ? returnFormats.json : returnFormats.txt;
+                                return res[0];
                             }
-                            return res[0].value[0];
+                            return isNaN(res[0]) || +res[0] === 0
+                                ? undefined
+                                : this.formatReturnResult({
+                                      nextLink: this.nextLink(res[0]),
+                                      prevLink: this.prevLink(res[0]),
+                                      body: this.ctx.odata.single === true ? res[1][0] : { value: res[1] }
+                                  });
                         })
                         .catch((err: Error) => this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: err }));
             }
@@ -260,6 +250,7 @@ export class Common {
                 // return only postgres sql query as a string
                 case returnFormats.sql:
                     return this.formatReturnResult({ body: sql });
+
                 // JSON values
                 default:
                     return await config
@@ -372,9 +363,9 @@ export class Common {
             // JSON values
             default:
                 return this.formatReturnResult({
-                    id: await config
+                    body: await config
                         .executeSqlValues(this.ctx.service, sql)
-                        .then((res) => res[0 as keyobj])
+                        .then((res) => res)
                         .catch(() => BigInt(0))
                 });
         }

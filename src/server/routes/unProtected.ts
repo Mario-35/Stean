@@ -22,13 +22,12 @@ import { testRoute } from "./helper";
 import { createService } from "../db/helpers";
 import { HtmlError, Login, Status, Query } from "../views/";
 import { createQueryParams } from "../views/helpers";
-import { EOptions, EHttpCode, EConstant, EEncodingType } from "../enums";
+import { EOptions, EHttpCode, EConstant } from "../enums";
 import { getMetrics } from "../db/monitoring";
 import { log } from "../log";
 
 export const unProtectedRoutes = new Router<DefaultState, Context>();
 // ALL others
-// API GET REQUEST
 unProtectedRoutes.get("/(.*)", async (ctx) => {
     switch (ctx.decodedUrl.path.toUpperCase()) {
         // Root path
@@ -56,12 +55,6 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
             ctx.body = bodyError.toString();
             return;
         // logs
-        case "HELP":
-        case "DOC":
-        case "DOCUMENTATION":
-            ctx.redirect(`${ctx.decodedUrl.origin}/documentation`);
-            return;
-        // logs
         case "LOGGING":
             ctx.redirect(`${ctx.decodedUrl.origin}/logging`);
             return;
@@ -70,11 +63,10 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
             ctx.type = returnFormats.json.type;
             ctx.body = await exportService(ctx);
             return;
-        // Admin page login
+        // User login
         case "ADMIN":
             ctx.redirect(`${ctx.decodedUrl.origin}/admin`);
             return;
-        // User login
         case "LOGIN":
             if (userAuthenticated(ctx)) ctx.redirect(`${ctx.decodedUrl.root}/status`);
             else {
@@ -106,7 +98,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
         // Logout user
         case "LOGOUT":
             ctx.cookies.set("jwt-session");
-            if (ctx.request.header.accept && ctx.request.header.accept.includes(EEncodingType.html)) ctx.redirect(`${ctx.decodedUrl.root}/login`);
+            if (ctx.request.header.accept && ctx.request.header.accept.includes("text/html")) ctx.redirect(`${ctx.decodedUrl.root}/login`);
             else ctx.status = EHttpCode.ok;
             ctx.body = {
                 message: info.logoutOk
@@ -172,7 +164,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
             }
             return;
     } // END Switch
-
+    // API GET REQUEST
     if (ctx.decodedUrl.path.includes(ctx.service.apiVersion) || ctx.decodedUrl.version) {
         console.log(log.debug_head(`unProtected GET ${ctx.service.apiVersion}`));
         // decode odata url infos
@@ -189,18 +181,21 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
             const objectAccess = new apiAccess(ctx);
             if (objectAccess) {
                 // Get all
-                ctx.type = ctx.odata.returnFormat.type;
                 if (ctx.odata.entity && ctx.odata.single === false) {
                     const returnValue = await objectAccess.getAll();
                     if (returnValue) {
+                        ctx.type = ctx.odata.returnFormat.type;
+                        // ctx.body = returnValue.body || returnValue;
                         ctx.body = ctx.odata.returnFormat.format(returnValue.body || (returnValue as object), ctx);
                         if (returnValue.selfLink) ctx.set("Location", returnValue.selfLink);
                     } else ctx.throw(EHttpCode.notFound);
                     // Get One
                 } else if (ctx.odata.single === true) {
-                    const returnValue = await objectAccess.getSingle();
+                    const returnValue: IreturnResult | undefined = await objectAccess.getSingle();
                     if (returnValue) {
-                        ctx.body = returnValue;
+                        ctx.type = ctx.odata.returnFormat.type;
+                        ctx.body = ctx.odata.returnFormat.format(returnValue.body || returnValue);
+                        if (returnValue.selfLink) ctx.set("Location", returnValue.selfLink);
                     } else ctx.throw(EHttpCode.notFound, { detail: `id : ${ctx.odata.id} not found` });
                 } else ctx.throw(EHttpCode.badRequest);
             }
@@ -208,42 +203,30 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
     }
 });
 
-// API PUT REQUEST only for add decoder from admin
+// Put only for add decoder from admin
 unProtectedRoutes.put("/(.*)", async (ctx) => {
-    const action = ctx.request.url.split("/").reverse()[0];
-    switch (action.toUpperCase()) {
-        case "DECODERS":
-            if (ctx.request.type.startsWith(EEncodingType.json) && Object.keys(ctx.body).length > 0) {
-                const odataVisitor = await createOdata(ctx);
-                if (odataVisitor) ctx.odata = odataVisitor;
-                if (ctx.odata) {
-                    const objectAccess = new apiAccess(ctx);
-                    const returnValue: IreturnResult | undefined | void = await objectAccess.put();
-                    if (returnValue) {
-                        returnFormats.json.type;
-                        if (returnValue.selfLink) ctx.set("Location", returnValue.selfLink);
-                        ctx.status = EHttpCode.created;
-                        ctx.body = returnValue.body;
-                    }
-                } else ctx.throw(EHttpCode.badRequest);
-            }
-            break;
-        case "SYNONYMS":
-        case "OPTIONS":
-            if (ctx.request.type.startsWith(EEncodingType.json) && Object.keys(ctx.body).length > 0) {
-                ctx.service[action as keyof object] = ctx.body as never;
-                ctx.body = await config.updateConfig(ctx.service);
-            }
-            break;
-        case "NB_PAGE":
-        case "CSVDELIMITER":
-            if (ctx.request.type.startsWith(EEncodingType.json) && Object.keys(ctx.body).length > 0) {
-                ctx.service[action as keyof object] = ctx.body[action] as never;
-                ctx.body = await config.updateConfig(ctx.service);
-            }
-            break;
-        default:
-            ctx.throw(EHttpCode.badRequest);
-            break;
+    if (ctx.request.url.includes("/Decoders")) {
+        if (ctx.request.type.startsWith("application/json") && Object.keys(ctx.body).length > 0) {
+            const odataVisitor = await createOdata(ctx);
+            if (odataVisitor) ctx.odata = odataVisitor;
+            if (ctx.odata) {
+                const objectAccess = new apiAccess(ctx);
+                const returnValue: IreturnResult | undefined | void = await objectAccess.put();
+                if (returnValue) {
+                    returnFormats.json.type;
+                    if (returnValue.selfLink) ctx.set("Location", returnValue.selfLink);
+                    ctx.status = EHttpCode.created;
+                    ctx.body = returnValue.body;
+                }
+            } else ctx.throw(EHttpCode.badRequest);
+        }
+    }
+
+    if (ctx.request.url.includes("/synonyms")) {
+        if (ctx.request.type.startsWith("application/json") && Object.keys(ctx.body).length > 0) {
+            console.log(ctx.body);
+            ctx.service.synonyms = ctx.body;
+            ctx.body = await config.updateConfig(ctx.service);
+        }
     }
 });

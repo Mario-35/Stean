@@ -96,7 +96,7 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
             const formatedDatas: string[] = [];
             const height = String(100 / Object.entries(input).length).split(".")[0];
             if (typeof input === "object") {
-                input = input["value" as keyof object];
+                // input = input["value" as keyof object];
                 if (input[0 as keyof object]["infos"] === null) return errors.noDatas;
                 Object.entries(input).forEach((element: Record<string, any>, index: number) => {
                     // if (input["infos" as keyof object] == null && input["datas" as keyof object] == null) return "";
