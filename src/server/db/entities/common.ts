@@ -77,10 +77,10 @@ export class Common {
         console.log(log.whereIam());
         return {
             ...{
-                // id: undefined,
-                selfLink: args.body && typeof args.body === "object" ? args.body["@iot.selfLink" as keyof object] : undefined,
-                nextLink: args.nextLink ? (args.nextLink as string) : undefined,
-                prevLink: args.prevLink ? (args.prevLink as string) : undefined,
+                location: args[EConstant.selfLink] ? String(args[EConstant.selfLink]) : args.body && typeof args.body === "object" ? args.body[EConstant.selfLink] : undefined,
+                [EConstant.count]: args[EConstant.count] ? +args[EConstant.count] : undefined,
+                [EConstant.nextLink]: args[EConstant.nextLink] ? String(args[EConstant.nextLink]) : undefined,
+                [EConstant.prevLink]: args[EConstant.selfLink] ? String(args[EConstant.selfLink]) : undefined,
                 body: undefined,
                 total: undefined
             },
@@ -140,9 +140,9 @@ export class Common {
                             if (this.ctx.odata.returnFormat === returnFormats.dataArray) res[0] = +Object.entries(res[1][0]["dataArray"]).length;
                             return res[0] > 0
                                 ? this.formatReturnResult({
-                                      "@iot.count": this.ctx.odata.returnFormat === returnFormats.dataArray ? +Object.entries(res[1][0]["dataArray"]).length : +res[0],
-                                      "@iot.nextLink": this.nextLink(res[0]),
-                                      "@iot.prevLink": this.prevLink(res[0]),
+                                      [EConstant.count]: this.ctx.odata.returnFormat === returnFormats.dataArray ? +Object.entries(res[1][0]["dataArray"]).length : +res[0],
+                                      [EConstant.nextLink]: this.nextLink(res[0]),
+                                      [EConstant.prevLink]: this.prevLink(res[0]),
                                       value: res[1]
                                   })
                                 : this.formatReturnResult({ body: res[0] == 0 ? [] : res[0] });
@@ -184,8 +184,6 @@ export class Common {
                             return isNaN(res[0]) || +res[0] === 0
                                 ? undefined
                                 : this.formatReturnResult({
-                                      nextLink: this.nextLink(res[0]),
-                                      prevLink: this.prevLink(res[0]),
                                       body: this.ctx.odata.single === true ? res[1][0] : { value: res[1] }
                                   });
                         })

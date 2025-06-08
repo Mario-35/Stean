@@ -8,9 +8,10 @@
 
 // return format api
 export interface IreturnResult {
-    selfLink: string | undefined; // pagination next link
-    nextLink: string | undefined; // pagination next link
-    prevLink: string | undefined; // pagination prev link
+    location: string | undefined; // api location return
+    "@iot.count": number | undefined; // count
+    "@iot.nextLink": string | undefined; // pagination next link
+    "@iot.prevLink": string | undefined; // pagination prev link
     body: JSON | string | undefined; // body result
     total: bigint | undefined; // total items
 }

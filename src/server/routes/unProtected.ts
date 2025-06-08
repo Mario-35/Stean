@@ -164,6 +164,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
             }
             return;
     } // END Switch
+
     // API GET REQUEST
     if (ctx.decodedUrl.path.includes(ctx.service.apiVersion) || ctx.decodedUrl.version) {
         console.log(log.debug_head(`unProtected GET ${ctx.service.apiVersion}`));
@@ -180,23 +181,13 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
             // Create api object
             const objectAccess = new apiAccess(ctx);
             if (objectAccess) {
-                // Get all
-                if (ctx.odata.entity && ctx.odata.single === false) {
-                    const returnValue = await objectAccess.getAll();
+                if (ctx.odata.entity) {
+                    const returnValue = ctx.odata.single === true ? await objectAccess.getSingle() : await objectAccess.getAll();
                     if (returnValue) {
                         ctx.type = ctx.odata.returnFormat.type;
-                        // ctx.body = returnValue.body || returnValue;
-                        ctx.body = ctx.odata.returnFormat.format(returnValue.body || (returnValue as object), ctx);
-                        if (returnValue.selfLink) ctx.set("Location", returnValue.selfLink);
-                    } else ctx.throw(EHttpCode.notFound);
-                    // Get One
-                } else if (ctx.odata.single === true) {
-                    const returnValue: IreturnResult | undefined = await objectAccess.getSingle();
-                    if (returnValue) {
-                        ctx.type = ctx.odata.returnFormat.type;
-                        ctx.body = ctx.odata.returnFormat.format(returnValue.body || returnValue);
-                        if (returnValue.selfLink) ctx.set("Location", returnValue.selfLink);
-                    } else ctx.throw(EHttpCode.notFound, { detail: `id : ${ctx.odata.id} not found` });
+                        ctx.body = ctx.odata.returnFormat.format(returnValue.body || returnValue, ctx);
+                        if (returnValue.location) ctx.set("Location", returnValue.location);
+                    } else ctx.odata.single === true ? ctx.throw(EHttpCode.notFound, { detail: `id : ${ctx.odata.id} not found` }) : ctx.throw(EHttpCode.notFound);
                 } else ctx.throw(EHttpCode.badRequest);
             }
         }
@@ -214,7 +205,7 @@ unProtectedRoutes.put("/(.*)", async (ctx) => {
                 const returnValue: IreturnResult | undefined | void = await objectAccess.put();
                 if (returnValue) {
                     returnFormats.json.type;
-                    if (returnValue.selfLink) ctx.set("Location", returnValue.selfLink);
+                    if (returnValue.location) ctx.set("Location", returnValue.location);
                     ctx.status = EHttpCode.created;
                     ctx.body = returnValue.body;
                 }

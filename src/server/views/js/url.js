@@ -29,7 +29,7 @@
   		if (input.includes('?')) {
   			const splitStr = input.split('?');
   			myRoot = splitStr[0];
-  			myOptions = splitStr[1];
+  			myOptions = "&" + splitStr[1];
   		}
   		const version = getVersion(input);
   		// get version
@@ -53,8 +53,7 @@
   					else if (_PARAMS._DATAS[getEntityName(element)]) populateSelect(subentityOption, Object.keys(_PARAMS._DATAS[entityOption.value].relations), element, true);
   				}
   			});
-
-  		myOptions.split('&$').filter(e => e.trim() !== "").forEach((element) => {
+  		myOptions.replace('amp;','').split('&$').filter(e => e.trim() !== "").forEach((element) => {
   			const temp = element.split('=');
   			switch (temp[0]) {
   				case "resultFormat":

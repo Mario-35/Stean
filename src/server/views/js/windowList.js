@@ -130,7 +130,7 @@ function jsonWindow(input, title) {
 				if (Array.from(event.target.classList).includes('type-url-link')) {
 					singleClickTimer = setTimeout(function() {
 						clickCount = 0;
-						simpleClick(event.target.innerHTML);
+						simpleClick(event.target.innerText);
 					}, 400);
 				} else {
 					singleClickTimer = setTimeout(function() {

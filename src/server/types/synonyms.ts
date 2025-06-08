@@ -7,7 +7,7 @@
  */
 
 export interface Isynonyms {
-    "frame": string[];
-    "deveui": string[];
-    "timestamp": string[];
+    frame: string[];
+    deveui: string[];
+    timestamp: string[];
 }

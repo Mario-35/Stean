@@ -102,7 +102,7 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
                 const returnValue: IreturnResult | undefined | void = await objectAccess.post();
                 if (returnValue) {
                     returnFormats.json.type;
-                    if (returnValue.selfLink) ctx.set("Location", returnValue.selfLink);
+                    if (returnValue.location) ctx.set("Location", returnValue.location);
                     ctx.status = EHttpCode.created;
                     ctx.body = returnValue.body;
                 }
@@ -146,13 +146,13 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
                             ctx.set("script-src", "self");
                             ctx.set("Content-Security-Policy", "self");
                             ctx.type = returnFormats.html.type;
-                            if (returnValue.selfLink) ctx.set("Location ", returnValue.selfLink);
+                            if (returnValue.location) ctx.set("Location ", returnValue.location);
                             ctx.body = bodyQuery.toString();
                         }
                     } else {
                         returnFormats.json.type;
                         ctx.status = EHttpCode.created;
-                        if (returnValue.selfLink) ctx.set("Location ", returnValue.selfLink);
+                        if (returnValue.location) ctx.set("Location ", returnValue.location);
                         ctx.body = returnValue.body;
                     }
                 } else {
@@ -179,7 +179,7 @@ protectedRoutes.patch("/(.*)", async (ctx) => {
                     returnFormats.json.type;
                     ctx.status = EHttpCode.created;
                     ctx.body = returnValue.body;
-                    if (returnValue.selfLink) ctx.set("Location", returnValue.selfLink);
+                    if (returnValue.location) ctx.set("Location", returnValue.location);
                 }
             } else {
                 ctx.throw(EHttpCode.badRequest, { detail: errors.idRequired });
