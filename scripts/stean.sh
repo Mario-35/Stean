@@ -254,7 +254,7 @@ stop_stean() {
 run_stean() {
     echo "API starting ..."
     NODE_ENV=production
-    pm2 start ./stean/start.js
+    pm2 start ./stean/index.js
 }
 
 check_gnupg;

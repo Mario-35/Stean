@@ -7,7 +7,7 @@
  */
 
 import { setReady, _DEBUG, timestampNow, logDbError, appVersion } from "../constants";
-import { asyncForEach, decrypt, encrypt, hidePassword, isProduction, isTest, logToHtml } from "../helpers";
+import { asyncForEach, compareVersions, decrypt, encrypt, hidePassword, isProduction, isTest, logToHtml } from "../helpers";
 import { Iservice, IdbConnection, IserviceInfos, koaContext, keyobj, Iversion } from "../types";
 import { errors, info, infos, msg } from "../messages";
 import { app } from "..";
@@ -22,7 +22,6 @@ import { formatServiceFile, validJSONService } from "./helpers";
 import { MqttServer } from "../mqtt";
 import { createService, updateIndexes } from "../db/helpers";
 import { models } from "../models";
-import { autoUpdate } from "../update";
 import { paths } from "../paths";
 import { Trace } from "../log/trace";
 import { FORMAT_JSONB } from "../db/constants";
@@ -583,7 +582,7 @@ class Configuration {
      * @returns true if it's done
      */
     async initialisation(input?: string): Promise<boolean> {
-        const temp = await autoUpdate.compareVersions();
+        const temp = await compareVersions();
         Configuration.appVersion = temp.appVersion;
         Configuration.remoteVersion = temp.remoteVersion;
         Configuration.upToDate = temp.upToDate;

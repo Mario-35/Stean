@@ -7,7 +7,6 @@
  */
 
 export { Admin } from "./class/admin";
-export { Update } from "./class/update";
 export { Login } from "./class/login";
 export { HtmlError } from "./class/error";
 export { Status } from "./class/status";

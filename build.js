@@ -270,15 +270,13 @@ const packageJson = require("./package.json");
 delete packageJson.scripts;
 delete packageJson.devDependencies;
 packageJson["scripts"] = {
-  "start": "pm2 start stean.js --watch"
+  "start": "pm2 start index.js --watch"
 }
   
 fs.writeFile(FINAL + "package.json", JSON.stringify(packageJson, null, 2), { encoding: "utf-8" },function (err) {
   if (err) console.log(err);
   messageWrite("package.json", "user mode");
   if (!mode.includes("dev")) {
-    const start = fs.readFileSync(_DEST + "start.js", "utf-8");
-    writeFile(FINAL + "stean.js", start.replace('require(".");', 'require("./server/index");'), "create start file");
     ugly("./build/", {
       compressor: cleanCSS ,
       output: "build/",
