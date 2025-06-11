@@ -18,6 +18,7 @@ export const EConstant = Object.freeze({
     count: "@iot.count",
     nextLink: "@iot.nextLink",
     prevLink: "@iot.prevLink",
+    rePlay: "@iot.rePlay",
     columnSeparator: "@|@",
     admin: "admin",
     test: "test",

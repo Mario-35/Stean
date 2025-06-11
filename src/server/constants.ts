@@ -24,6 +24,10 @@ export const ESCAPE_ARRAY_JSON = (input: string) => (input ? input.replace("[", 
 export const ESCAPE_SIMPLE_QUOTE = (input: string) => input.replace(/[']+/g, "''");
 export const timestampNow = (): string => new Date().toLocaleTimeString();
 
+export function setReplay(input: string | undefined) {
+    _REPLAY = input;
+}
+
 export function setDebug(input: boolean) {
     _DEBUG = input;
 }
@@ -35,6 +39,7 @@ export function setReady(input: boolean) {
 export let _TRACE = true;
 export let _DEBUG = false;
 export let _READY = false;
+export let _REPLAY: string | undefined = undefined;
 
 // function to be used in catch
 export function logDbError(err: any) {

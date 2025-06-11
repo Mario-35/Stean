@@ -55,6 +55,16 @@ class Log {
 
     /**
      *
+     * @param cle key message
+     * @param infos  message
+     * @returns formated string
+     */
+    public systeme<T>(cle: string, infos: T) {
+        return `${color(EColor.White)}${cle} ${EChar.arrowright} ${color(EColor.Yellow)} ${this.showAll(infos)}${color(EColor.Reset)}`;
+    }
+
+    /**
+     *
      * @param sql sql query
      * @returns formated string
      */

@@ -34,6 +34,7 @@ export { httpsDownload } from "./httpsDownload";
 export { httpsDownloadJSON } from "./httpsDownloadJson";
 export { removeEmpty } from "./removeEmpty";
 export { upload } from "./upload";
+export { connectWeb } from "./connectWeb";
 export { logToHtml } from "./logToHtml";
 export { Csv } from "./csv";
 export const removeFirstAndEnd = (input: string, char: string) => (input[0] === char && input[input.length - 1] === char[0] ? input.slice(0, -1).slice(1).trim() : input);

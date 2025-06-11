@@ -6,13 +6,13 @@
  *
  */
 
-import { _DEBUG } from "../constants";
+import { _DEBUG, _REPLAY } from "../constants";
 import { isTest, logToHtml, notNull } from "../helpers";
 import { koaContext } from "../types";
 import postgres from "postgres";
 import { log } from ".";
 import { paths } from "../paths";
-import { EConstant } from "../enums";
+import { EConstant, EEncodingType } from "../enums";
 import { FORMAT_JSONB } from "../db/constants";
 
 /**
@@ -26,6 +26,10 @@ export class Trace {
         Trace.adminConnection = adminConnection;
     }
 
+    private queryReplay(ctx: koaContext, error: any[]) {
+        return `INSERT INTO public.log ( method, url ${notNull(error) ? ", error" : ""}) VALUES( 'REPLAY', '${ctx.decodedUrl.root}/Logs(${_REPLAY})' ${notNull(error) ? `,${FORMAT_JSONB(error)}` : ""}) RETURNING id;`;
+    }
+
     private query(ctx: koaContext, error?: any[]) {
         return ctx.traceId && error ? `UPDATE public.log SET error = ${FORMAT_JSONB(error)} WHERE id = ${ctx.traceId}` : `INSERT INTO public.log (method, url${notNull(ctx.body) ? ", datas" : ""}${notNull(error) ? ", error" : ""}) VALUES('${ctx.method}', '${ctx.request.url}'${notNull(ctx.body) ? `,${FORMAT_JSONB(ctx.body)}` : ""}${notNull(error) ? `,${FORMAT_JSONB(error)}` : ""}) RETURNING id;`;
     }
@@ -36,6 +40,8 @@ export class Trace {
      * @param ctx koa context
      */
     async write(ctx: koaContext) {
+        console.log(log.whereIam());
+        if (ctx.request.url.includes("Replays(") || ctx.request.url.includes("$replay=") || _REPLAY) return;
         if (ctx.method !== "GET") {
             const datas = this.query(ctx);
             await Trace.adminConnection
@@ -59,16 +65,35 @@ export class Trace {
      * @param ctx koa context
      */
     async error(ctx: koaContext, error: any) {
+        console.log(log.whereIam());
+        if (ctx.request.url.includes("Replays(")) return;
         try {
-            await Trace.adminConnection.unsafe(this.query(ctx, error));
+            await Trace.adminConnection.unsafe(_REPLAY ? this.queryReplay(ctx, error) : this.query(ctx, error));
         } catch (err) {
-            console.log("---- [Error]-------------");
+            console.log("---- [Error Log Error]-------------");
             console.log(err);
-            console.log(this.query(ctx, error));
         }
     }
 
     async get(query: string): Promise<object> {
+        return new Promise(async function (resolve, reject) {
+            await Trace.adminConnection
+                .unsafe(query)
+                .then((res: Record<string, any>) => {
+                    resolve(res[0]);
+                })
+                .catch((err: Error) => {
+                    if (!isTest() && +err["code" as keyof object] === 23505) {
+                        const input = log.queryError(query, err);
+                        process.stdout.write(input + EConstant.return);
+                        paths.logFile.writeStream(logToHtml(input));
+                    }
+                    reject(err);
+                });
+        });
+    }
+
+    async getValues(query: string): Promise<object> {
         return new Promise(async function (resolve, reject) {
             await Trace.adminConnection
                 .unsafe(query)
@@ -85,5 +110,28 @@ export class Trace {
                     reject(err);
                 });
         });
+    }
+
+    async rePlay(ctx: koaContext): Promise<boolean> {
+        console.log(log.whereIam());
+        await this.get(`SELECT * FROM log WHERE id=${ctx.decodedUrl.id}`).then(async (input: Record<string, any>) => {
+            if (["POST", "PUT", "PATCH"].includes(input.method)) {
+                // const id = getBigIntFromString(input.url );
+                try {
+                    await fetch(ctx.decodedUrl.origin + input.url + "?$replay=" + ctx.decodedUrl.id, {
+                        method: input.method,
+                        headers: {
+                            "Content-Type": EEncodingType.json
+                        },
+                        body: JSON.stringify(input.datas)
+                    });
+                    return true;
+                } catch (error) {
+                    console.log(error);
+                    return false;
+                }
+            }
+        });
+        return false;
     }
 }

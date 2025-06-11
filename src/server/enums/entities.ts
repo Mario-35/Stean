@@ -21,7 +21,8 @@ enum EnumBaseEntities {
     ThingsLocations = "ThingsLocations",
     CreateObservations = "CreateObservations",
     Services = "Services",
-    Logs = "Logs"
+    Logs = "Logs",
+    Replays = "Replays"
 }
 enum EnumMultiDatastreamEntities {
     MultiDatastreams = "MultiDatastreams",
@@ -35,7 +36,8 @@ enum EnumLoraEntities {
     Loras = "Loras"
 }
 enum EnumLogEntities {
-    Logs = "Logs"
+    Logs = "Logs",
+    Replays = "Replays"
 }
 enum EnumFileEntities {
     Files = "Files",

@@ -8,14 +8,20 @@
 
 import https from "https";
 
-export function httpsDownloadJSON(url: string, filename?: string): Promise<JSON> {
+export function httpsDownloadJSON(url: string, filename?: string): Promise<JSON | Error> {
     return new Promise((resolve, reject) => {
         let data = "";
-        https.get(url, { headers: { "User-Agent": "javascript" } }, (response) => {
-            response
-                .on("data", (append) => (data += append))
-                .on("error", (e) => reject(e))
-                .on("end", () => resolve(JSON.parse(data)));
-        });
+        try {
+            https.get(url, { headers: { "User-Agent": "javascript" } }, (response) => {
+                response
+                    .on("data", (append) => (data += append))
+                    .on("error", (e) => {
+                        reject(e);
+                    })
+                    .on("end", () => resolve(JSON.parse(data)));
+            });
+        } catch (error) {
+            reject(undefined);
+        }
     });
 }

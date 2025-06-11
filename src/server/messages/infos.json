@@ -4,6 +4,7 @@
 	"csvFile": "csv file",
     "classConstructor" : "class $1 override $2",
     "config" : "configuration",
+    "conWeb" : "Connected to internet",
     "key" : "key",
 	"conn": "Connection",
 	"connectName": "connection name",

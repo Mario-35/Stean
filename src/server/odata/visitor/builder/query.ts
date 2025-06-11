@@ -11,12 +11,12 @@ import { asJson } from "../../../db/queries";
 import { Iservice, Ientity, IpgQuery } from "../../../types";
 import { PgVisitor, RootPgVisitor } from "..";
 import { models } from "../../../models";
-import { EConstant, EDataType, EOptions } from "../../../enums";
+import { EConstant, EDataType, EOptions, EUserRights } from "../../../enums";
 import { GroupBy, Key, OrderBy, Select, Where, Join } from ".";
 import { errors } from "../../../messages";
 import { log } from "../../../log";
 import { expand } from "../../../models/helpers";
-import { _isObservation, isFile } from "../../../helpers/tests";
+import { isAllowedTo, isFile, isTestEntity } from "../../../helpers/tests";
 export class Query {
     from: string;
     where: Where;
@@ -106,6 +106,10 @@ export class Query {
         // if $ref return only selfLink
         if (element.onlyRef == true) return [selfLink];
         if (element.showRelations == true) returnValue.push(selfLink);
+        if (element.entity && isTestEntity(element.entity, "Logs") && isAllowedTo(main.ctx, EUserRights.Post) === true) {
+            const replay = `CONCAT('${main.ctx.decodedUrl.root}/Replays(', "${tempEntity.table}"."id", ')') AS ${doubleQuotesString(EConstant.rePlay)}`;
+            returnValue.push(replay);
+        }
         // create list of columns
         let columns: string[] =
             element.query.select.toString() === "*" || element.query.select.toString() === ""
@@ -141,7 +145,7 @@ export class Query {
         // add interval if requested
         if (main.interval) main.addToIntervalColumns(`CONCAT('${main.ctx.decodedUrl.root}/${tempEntity.name}(', COALESCE("${EConstant.id}", '0')::text, ')') AS ${doubleQuotesString(EConstant.selfLink)}`);
         // If observation entity
-        if (_isObservation(tempEntity) === true && element.onlyRef === false) {
+        if (isTestEntity(tempEntity, "Observations") === true && element.onlyRef === false) {
             if (main.interval && !isGraph(main)) returnValue.push(`timestamp_ceil("resultTime", interval '${main.interval}') AS srcdate`);
             if (element.splitResult && main.parentEntity && main.parentEntity.name === "MultiDatastreams")
                 element.splitResult.forEach((elem: string) => {

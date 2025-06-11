@@ -17,7 +17,7 @@ export async function readRemoteVersion(): Promise<Iversion | undefined> {
     try {
         const file = EConstant.repository.replace("github.com", "raw.githubusercontent.com") + `/refs/heads/${EConstant.branch}/builds/stean_latest.info`;
         const version = await httpsDownloadJSON(file, "stean_latest.info");
-        return { version: version["version" as keyof object], date: version["date" as keyof object] };
+        return version ? { version: version["version" as keyof object], date: version["date" as keyof object] } : undefined;
     } catch (error) {
         console.log(error);
         return;

@@ -127,7 +127,6 @@ class Configuration {
                     return true;
                 } else {
                     console.log(error);
-                    console.log(datas);
                     process.stdout.write(error + EConstant.return);
                     return false;
                 }
@@ -166,8 +165,6 @@ class Configuration {
      * @returns true if it's done
      */
     private async readConfigFile(input?: string): Promise<boolean> {
-        console.log(appVersion);
-
         this.writeLog(`${color(EColor.Red)}${"▬".repeat(24)} ${color(EColor.Cyan)} ${`START ${EConstant.appName} ${info.ver} : ${appVersion.version} du ${appVersion.date} [${process.env.NODE_ENV}]`} ${color(EColor.White)} ${new Date().toLocaleDateString()} : ${timestampNow()} ${color(EColor.Red)} ${"▬".repeat(24)}${color(EColor.Reset)}`);
         log.newLog(log.message("Root", paths.root));
         this.writeLog(log.message(infos(["read", "config"]), input ? "content" : paths.configFile.fileName));
@@ -582,10 +579,13 @@ class Configuration {
      * @returns true if it's done
      */
     async initialisation(input?: string): Promise<boolean> {
-        const temp = await compareVersions();
-        Configuration.appVersion = temp.appVersion;
-        Configuration.remoteVersion = temp.remoteVersion;
-        Configuration.upToDate = temp.upToDate;
+        compareVersions().then((temp) => {
+            if (temp) {
+                Configuration.appVersion = temp.appVersion;
+                Configuration.remoteVersion = temp.remoteVersion;
+                Configuration.upToDate = temp.upToDate;
+            }
+        });
 
         if (this.configFileExist() === true || input) {
             await this.readConfigFile(input);

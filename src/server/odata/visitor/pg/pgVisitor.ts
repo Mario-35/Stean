@@ -21,7 +21,7 @@ import { _DEBUG } from "../../../constants";
 import { Visitor } from "./visitor";
 import { Query } from "../builder";
 import { relationInfos } from "../../../models/helpers";
-import { _isObservation, isFile } from "../../../helpers/tests";
+import { isFile, isTestEntity } from "../../../helpers/tests";
 import { DATASTREAM } from "../../../models/entities";
 export class PgVisitor extends Visitor {
     entity: Ientity | undefined = undefined;
@@ -168,7 +168,7 @@ export class PgVisitor extends Visitor {
                     });
             } else this.ctx.throw(EHttpCode.badRequest, { detail: msg(errors.invalid, "entity") + elems[0] });
         });
-        if (this.entity && _isObservation(this.entity) === true && this.splitResult !== undefined && Number(this.parentId) == 0) {
+        if (this.entity && isTestEntity(this.entity, "Observations") === true && this.splitResult !== undefined && Number(this.parentId) == 0) {
             this.ctx.throw(EHttpCode.badRequest, { detail: errors.splitNotAllowed });
         }
         if (this.returnFormat === returnFormats.dataArray && BigInt(this.id) > 0 && !this.parentEntity) {

@@ -23,17 +23,17 @@ export class Logs extends Common {
     async getAll(): Promise<IreturnResult | undefined> {
         console.log(log.whereIam());
         // create query
-        this.ctx.odata.query.where.add(`"url" LIKE '/%${this.ctx.service.name}%/'`);
+        this.ctx.odata.query.where.add(`"url" LIKE '%${this.ctx.service.name}%'`);
         let sql = this.ctx.odata.getSql();
         // Return results
         if (sql)
-            return await config.trace.get(sql).then(async (res: Record<string, any>) => {
+            return await config.trace.getValues(sql).then(async (res: Record<string, any>) => {
                 return res[0] > 0
                     ? this.formatReturnResult({
-                          id: isNaN(res[0][0]) ? undefined : +res[0],
-                          nextLink: this.nextLink(res[0]),
-                          prevLink: this.prevLink(res[0]),
-                          body: res[1]
+                          [EConstant.count]: this.ctx.odata.returnFormat === returnFormats.dataArray ? +Object.entries(res[1][0]["dataArray"]).length : +res[0],
+                          [EConstant.nextLink]: this.nextLink(res[0]),
+                          [EConstant.prevLink]: this.prevLink(res[0]),
+                          value: res[1]
                       })
                     : this.formatReturnResult({ body: res[0] == 0 ? [] : res[0] });
             });
@@ -43,12 +43,12 @@ export class Logs extends Common {
     async getSingle(): Promise<IreturnResult | undefined> {
         console.log(log.whereIam());
         // create query
-        this.ctx.odata.query.where.add(` AND url LIKE '/%${this.ctx.service.name}%/'`);
+        this.ctx.odata.query.where.add(` AND url LIKE '%${this.ctx.service.name}%'`);
         const sql = this.ctx.odata.getSql();
         // Return results
         if (sql)
             return await config.trace
-                .get(sql)
+                .getValues(sql)
                 .then((res: Record<string, any>) => {
                     if (this.ctx.odata.query.select && this.ctx.odata.onlyValue === true) {
                         const temp = res[this.ctx.odata.query.select[0 as keyobj] == "id" ? EConstant.id : 0];
@@ -58,9 +58,6 @@ export class Logs extends Common {
                         } else return this.formatReturnResult({ body: String(temp) });
                     }
                     return this.formatReturnResult({
-                        id: isNaN(res[0]) ? undefined : +res[0],
-                        nextLink: this.nextLink(res[0]),
-                        prevLink: this.prevLink(res[0]),
                         body: this.ctx.odata.single === true ? res[1][0] : { value: res[1] }
                     });
                 })

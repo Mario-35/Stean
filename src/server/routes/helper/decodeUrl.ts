@@ -8,9 +8,9 @@
  */
 
 import { config } from "../../configuration";
-import { setDebug } from "../../constants";
+import { setDebug, setReplay } from "../../constants";
 import { EConstant, EFrom } from "../../enums";
-import { cleanUrl, removeFromUrl } from "../../helpers";
+import { cleanUrl, getUrlKey, removeFromUrl } from "../../helpers";
 import { log } from "../../log";
 import { errors } from "../../messages";
 import { IdecodedUrl, koaContext } from "../../types";
@@ -34,10 +34,11 @@ export const decodeUrl = (ctx: koaContext, input?: string): IdecodedUrl | undefi
     input = input || ctx.href;
     // debug mode
     setDebug(input.includes("?$debug=true") || input.includes("&$debug=true"));
+    setReplay(input.includes("?$replay=") || input.includes("&$replay=") ? getUrlKey(input, "replay") : undefined);
     // decode url
     const url = new URL(
         cleanUrl(
-            removeFromUrl(input, "debug=true")
+            removeFromUrl(input, ["debug=true"])
                 .normalize("NFD")
                 .replace(/[\u0300-\u036f]/g, "")
         )

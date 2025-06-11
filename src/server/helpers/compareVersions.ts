@@ -20,13 +20,12 @@ import { Iversion } from "../types";
  * @param remoteVersion - The version of the application in the git repository.
  * @returns An object with the results of the version comparison.
  */
-export async function compareVersions(): Promise<{ upToDate: boolean; appVersion: Iversion; remoteVersion: Iversion | undefined }> {
-    const res = { upToDate: false, appVersion: { version: "Error", date: "Error" }, remoteVersion: { version: "Error", date: "Error" } };
+export async function compareVersions(): Promise<{ upToDate: boolean; appVersion: Iversion; remoteVersion: Iversion | undefined } | undefined> {
     try {
         const remoteVersion = await readRemoteVersion();
-        return remoteVersion ? { upToDate: appVersion.version == remoteVersion.version && appVersion.date == remoteVersion.date, appVersion: appVersion, remoteVersion: remoteVersion } : res;
+        return remoteVersion ? { upToDate: appVersion.version == remoteVersion.version && appVersion.date == remoteVersion.date, appVersion: appVersion, remoteVersion: remoteVersion } : undefined;
     } catch (err) {
         process.stdout.write(log.update(err + EConstant.return));
-        return res;
+        return undefined;
     }
 }

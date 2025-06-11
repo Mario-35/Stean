@@ -34,6 +34,7 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     const decodedUrl = decodeUrl(ctx);
     // if logs show log file
     if (!decodedUrl && ctx.path.includes("logs-")) return logsRoute(ctx, paths.root + "logs\\" + ctx.path);
+
     // Specials routes
     switch (ctx.path.split("/").reverse()[0].toLocaleUpperCase()) {
         // admin page
@@ -55,6 +56,10 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     }
     // copy decodedUrl context
     ctx.decodedUrl = decodedUrl;
+
+    if (ctx.path.split("/").reverse()[0].toLocaleUpperCase().startsWith("REPLAYS(")) {
+        await config.trace.rePlay(ctx);
+    }
 
     if (_DEBUG) console.log(log.object("decodedUrl", decodedUrl));
     // if service is not identified get out
