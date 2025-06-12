@@ -2177,6 +2177,7 @@ input[type="radio"]:disabled:active + .patrom-radio-button__checkmark:before {
   vertical-align: top;
   box-sizing: border-box;
   background-clip: padding-box;
+  font-size: var(--font-size-less-2);
 }
 
 .switch__input,
