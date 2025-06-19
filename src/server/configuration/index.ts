@@ -73,27 +73,30 @@ class Configuration {
     }
 
     private async updateService(input: Iservice, fromInside?: boolean): Promise<boolean> {
-        if (input.name !== EConstant.admin)
-            return this.connection(input.name)
-                .unsafe(models.getStats(input))
-                .then(async (res) => {
-                    const datas = `UPDATE public.services SET stats = ${FORMAT_JSONB(res[0].results[0])} WHERE name = '${input.name}'`;
-                    Configuration.services[input.name]._stats = res[0].results[0];
-                    return await this.adminConnection()
-                        .unsafe(datas)
-                        .then((e) => true)
-                        .catch((err) => {
-                            return logDbError(err);
-                        });
-                })
-                .catch(async (err) => {
-                    if (!fromInside && isTest() === false && input.name === EConstant.test && err.code == "3D000") {
-                        await createService(input, testDatas);
-                        return this.updateService(input, true);
-                    }
-                    console.log(err);
-                    return false;
-                });
+        if (input.name !== EConstant.admin) {
+            const service = models.getStats(input);
+            if (service)
+                return this.connection(input.name)
+                    .unsafe(service)
+                    .then(async (res) => {
+                        const datas = `UPDATE public.services SET stats = ${FORMAT_JSONB(res[0].results[0])} WHERE name = '${input.name}'`;
+                        Configuration.services[input.name]._stats = res[0].results[0];
+                        return await this.adminConnection()
+                            .unsafe(datas)
+                            .then((e) => true)
+                            .catch((err) => {
+                                return logDbError(err);
+                            });
+                    })
+                    .catch(async (err) => {
+                        if (!fromInside && isTest() === false && input.name === EConstant.test && err.code == "3D000") {
+                            await createService(input, testDatas);
+                            return this.updateService(input, true);
+                        }
+                        console.log(err);
+                        return false;
+                    });
+        }
         return false;
     }
 

@@ -21,7 +21,7 @@ import { Iservice, typeExtensions, typeOptions } from "../../types";
 export function formatServiceFile(name: string, input: Record<string, any>): Iservice {
     const options: typeof typeOptions = input["options"] ? (unique([...String(input["options"]).split(",")]) as typeof typeOptions) : [];
     const extensions: typeof typeExtensions = input["extensions"] ? (unique([...String(input["extensions"]).split(",")]) as typeof typeExtensions) : ["base"];
-    const version = name === EConstant.admin ? "v1.1" : String(input["apiVersion"]).trim();
+    const version = name === EConstant.admin ? "v1.1" : String(input["version"] || input["apiVersion"]).trim();
 
     // if (input["extensions"]["users"]) extensions.includes("users");
 

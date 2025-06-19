@@ -18,7 +18,7 @@ export async function postgresAdmin(ctx: koaContext): Promise<string | undefined
     if (ctx.request.body && ctx.request.body["_connection" as keyof object]) {
         // Adding service
         if (ctx.request.body && ctx.request.body["_action" as keyof object] && ctx.request.body["_action" as keyof object] === "addService") {
-            const src = JSON.parse(JSON.stringify(ctx.request.body["datas" as keyof object], null, 2));
+            const src = JSON.parse(JSON.stringify(ctx.request.body["jsonDatas" as keyof object], null, 2));
             await config.addConfig(JSON.parse(src));
         } else return ctx.request.body["_connection" as keyof object];
     }
@@ -31,8 +31,8 @@ export async function postgresAdmin(ctx: koaContext): Promise<string | undefined
         });
         return Object.keys(mess).length > 0 ? mess : undefined;
     }
-    if (!missingItems(src, ["optName", "optVersion", "optPassword", "optRepeat", "datas"])) {
-        if (await config.addConfig(JSON.parse(src["datas"]))) ctx.redirect(`${ctx.request.origin}/admin`);
+    if (!missingItems(src, ["optName", "optVersion", "optPassword", "optRepeat", "jsonDatas"])) {
+        if (await config.addConfig(JSON.parse(src["jsonDatas"]))) ctx.redirect(`${ctx.request.origin}/admin`);
     }
     if (missingItems(src, ["host", "adminname", "port", "adminpassword"])) return;
     return await postgres(`postgres://${src["adminname"]}:${src["adminpassword"]}@${src["host"]}:${src["port"]}/postgres`, {})`select 1+1 AS result`

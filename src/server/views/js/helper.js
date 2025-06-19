@@ -115,12 +115,13 @@ async function executeSqlValues(e) {
 }
 
 // epdate json datas and test valid
-const setJSON = () => {
-	if (jsonDatas.value != "") {
+const setJSON = (input) => {
+	if (jsonDatas.value != "" || input) {
+		jsonDatas.value = JSON.stringify(input || jsonDatas.value , undefined, 4);
 		jsonDatas.classList.remove("valid");
 		jsonDatas.classList.remove("notValid");
 		try {
-			jsonDatas.value = JSON.stringify(JSON.parse(jsonDatas.value), undefined, 4);
+			jsonDatas.value = JSON.parse(jsonDatas.value);
 			jsonDatas.classList.add("valid");
 
 		} catch (error) {

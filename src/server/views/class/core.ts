@@ -239,7 +239,7 @@ export class CoreHtmlView {
     toString() {
         this.replacer("@social@", this.social());
         this.replacer("@new@", this.newVersion());
-        this.replacer("@jsonDatas@", '<textarea spellcheck="false" id="jsonDatas" placeholder="Input datas..." rows="6"></textarea>');
+        this.replacer("@jsonDatas@", '<textarea spellcheck="false" name="jsonDatas" id="jsonDatas" placeholder="Input datas..." rows="6"></textarea>');
         this.replacer("@connection@", this.datas.connection ? this.hidden("_connection", this.datas.connection) : "");
         return this._HTMLResult.filter((e) => e !== "").join("");
     }

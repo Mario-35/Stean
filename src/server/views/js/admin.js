@@ -12,7 +12,7 @@ function updateDataService()  {
             "port": 5432,
             "user": optName.value,
             "password": optPassword.value,
-            "database": optRepeat.value,
+            "database": optName.value,
             "retry": 2
         },
 		"version": optVersion.value || "v1.1",
@@ -22,10 +22,28 @@ function updateDataService()  {
         "options": multiSelects["optionsOption"].getData(),
         "csvDelimiter": csvOption.value || ";"
 	}
-	beautifyDatas(getElement("jsonDatas"), obj, "json");	
+	setJSON(JSON.stringify(obj, null, 4));
+};
+
+// update datas after paste
+jsonDatas.onpaste = function() {
+	{
+		setTimeout(() => {
+			setJSON();
+		}, 100);
+	}
+};
+// update datas after key up
+jsonDatas.onkeyup = function() {
+	setJSON();
 };
 
 // catch click on service block
+btnPipo.onclick = async (e) => {	
+	e.preventDefault();
+	updateDataService();
+}
+
 btnService.onclick = async (e) => {	
 	e.preventDefault();
 	updateDataService();
@@ -328,3 +346,4 @@ async function saveDecoder() {
 	if (_PARAMS.mussage) notifyConfirm("Confirmation", _PARAMS.mussage);
 }
 )();
+
