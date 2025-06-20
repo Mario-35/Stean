@@ -95,8 +95,8 @@ function getStructure(input) {
 }
 
 function showDoc(event) {
-	const main = getMenuMain(event.srcElement);
-	const actual = docDatas[main][event.srcElement.id];
+	const main = event ? getMenuMain(event.srcElement) : 'sensorThings';
+	const actual = docDatas[main][event ? event.srcElement.id : 0];
 	const content = getContent(actual);
 
 	document.getElementById("content").innerHTML = content;
@@ -179,5 +179,6 @@ function createSideBar() {
 	new SplitterBar(container, first, two);
 	document.getElementById("menuTabs").innerHTML = createSideBar();
 	jsonViewer = new JSONViewer(); // TODO patrom start
+	showDoc();
 	wait(false);
 })();
