@@ -18,7 +18,7 @@ import { config } from "../configuration";
 import { createDatabase, testDatas } from "../db/createDb";
 import { disconnectDb, exportService } from "../db/helpers";
 import { models } from "../models";
-import { docRoute, testRoute } from "./helper";
+import { testRoute } from "./helper";
 import { createService } from "../db/helpers";
 import { HtmlError, Login, Status, Query } from "../views/";
 import { createQueryParams } from "../views/helpers";
@@ -39,7 +39,8 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
         case "HELP":
         case "DOCUMENTATION":
         case "DOC":
-            return await docRoute(ctx);
+            ctx.redirect(`${ctx.decodedUrl.origin}/documentation`);
+            return;
         // tests only for testing wip features
         case "TEST":
             if (!isAdmin(ctx.service)) {
