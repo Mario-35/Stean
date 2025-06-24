@@ -145,7 +145,7 @@ export class Common {
                                       [EConstant.prevLink]: this.prevLink(res[0]),
                                       value: res[1]
                                   })
-                                : this.formatReturnResult({ body: res[0] == 0 ? [] : res[0] });
+                                : this.formatReturnResult({ body: res[0] == 0 ? { "value": [] } : res[0] });
                         })
                         .catch((err: Error) => this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: err.message }));
             }
