@@ -10,7 +10,23 @@
 process.env.NODE_ENV = "test";
 import chai from "chai";
 import chaiHttp from "chai-http";
-import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, listOfColumns, limitResult, infos, apiInfos, showHide, nbColorTitle, nbColor, testVersion, _RAWDB } from "./constant";
+import {
+    IApiDoc,
+    generateApiDoc,
+    IApiInput,
+    prepareToApiDoc,
+    identification,
+    keyTokenName,
+    listOfColumns,
+    limitResult,
+    infos,
+    apiInfos,
+    showHide,
+    nbColorTitle,
+    nbColor,
+    testVersion,
+    _RAWDB
+} from "./constant";
 import { server } from "../../server/index";
 import { Ientity } from "../../server/types";
 import { testsKeys as Datastreams_testsKeys } from "./routes.17_datastreams.spec";
@@ -19,7 +35,19 @@ import { testDatas } from "../../server/db/createDb";
 import { addStartNewTest, addTest, writeLog } from "./tests";
 import geo from "./files/geo.json";
 
-export const testsKeys = ["@iot.id", "@iot.selfLink", "Datastream@iot.navigationLink", "FeatureOfInterest@iot.navigationLink", "MultiDatastream@iot.navigationLink", "result", "phenomenonTime", "resultTime", "resultQuality", "validTime", "parameters"];
+export const testsKeys = [
+    "@iot.id",
+    "@iot.selfLink",
+    "Datastream@iot.navigationLink",
+    "FeatureOfInterest@iot.navigationLink",
+    "MultiDatastream@iot.navigationLink",
+    "result",
+    "phenomenonTime",
+    "resultTime",
+    "resultQuality",
+    "validTime",
+    "parameters"
+];
 chai.use(chaiHttp);
 const should = chai.should();
 const docs: IApiDoc[] = [];
@@ -328,6 +356,49 @@ describe("endpoint : Observations", () => {
                     res.body.value[0].should.include.keys(testDatas.MultiDatastreams[0].unitOfMeasurements[0].name);
                     addToApiDoc({ ...infos, result: limitResult(res) });
 
+                    done();
+                });
+        });
+
+        it("Return Observations with select result only", (done) => {
+            const infos = addTest({
+                type: "get",
+                short: "With select Result only",
+                description: "Retrieve observations with select result only.",
+                request: `${testVersion}/${entity.name}?$select=result&$filter=result gt 290`
+            });
+            chai.request(server)
+                .get(`/test/${infos.request}`)
+                .end((err: Error, res: any) => {
+                    should.not.exist(err);
+                    res.status.should.equal(200);
+                    res.type.should.equal("application/json");
+                    const id = res.body["@iot.count"];
+                    Object.keys(res.body.value).length.should.eql(id);
+                    res.body.value[0].should.include.keys("result");
+                    Object.keys(res.body.value[0]).length.should.eql(1);
+                    addToApiDoc({ ...infos, result: limitResult(res) });
+
+                    done();
+                });
+        });
+
+        it("Return Observations with filter result negative", (done) => {
+            const infos = addTest({
+                type: "get",
+                short: "With filter result negative",
+                description: "Retrieve observations with filter result negative.",
+                request: `${testVersion}/${entity.name}?$filter=result lt -10`
+            });
+            chai.request(server)
+                .get(`/test/${infos.request}`)
+                .end((err: Error, res: any) => {
+                    should.not.exist(err);
+                    res.status.should.equal(200);
+                    res.type.should.equal("application/json");
+                    const id = res.body["@iot.count"];
+                    Object.keys(res.body.value).length.should.eql(id);
+                    addToApiDoc({ ...infos, result: limitResult(res) });
                     done();
                 });
         });

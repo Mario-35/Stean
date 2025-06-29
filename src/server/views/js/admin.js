@@ -194,14 +194,24 @@ async function selectChange(name ,elem) {
 					var index = _PARAMS.services[name].service.options.indexOf(elem.textContent);
 					_PARAMS.services[name].service.options.splice(index, 1);
 				} else _PARAMS.services[name].service.options.push(elem.textContent);
-
-				await fetch(`${_PARAMS.services[name].linkBase}/${_PARAMS.services[name].version}/options`, {
-					method: "PUT",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(_PARAMS.services[name].service.options)
-				});
+				try {					
+					await fetch(`${_PARAMS.services[name].linkBase}/${_PARAMS.services[name].version}/options`, {
+						method: "PUT",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify(_PARAMS.services[name].service.options)
+					});
+				} catch (error) {
+					console.log(error);
+					await fetch(`${_PARAMS.services[name].linkBase.replace('https', 'http')}/${_PARAMS.services[name].version}/options`, {
+						method: "PUT",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify(_PARAMS.services[name].service.options)
+					});
+				}
 			}
 			showInfos(name);
 			break;						

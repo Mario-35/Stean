@@ -3,7 +3,7 @@ import chai from "chai";
 import chaiHttp from "chai-http";
 chai.use(chaiHttp);
 import { server } from "../../server/index";
-import { testVersion, VERSION, _RAWDB } from "./constant";
+import { testVersion, VERSION, _RAWDB, testLog } from "./constant";
 import { AddToTestFile } from "./tests";
 const should = chai.should();
 const n = [_RAWDB.Things.name, _RAWDB.Locations.name, _RAWDB.HistoricalLocations.name, _RAWDB.Datastreams.name, _RAWDB.MultiDatastreams.name, _RAWDB.Sensors.name, _RAWDB.ObservedProperties.name, _RAWDB.Observations.name, _RAWDB.CreateObservations.name, _RAWDB.Loras.name, "literals", "Odatas", "BuiltInFunctions", "BuiltInFilter", "BuiltinDates", "BuiltinMaths", "BuiltinGeospatial", "BuiltinMisc", "Various"];
@@ -16,7 +16,7 @@ describe("Create Test Database.", function () {
             .get(`/test/${testVersion}/CREATE`)
             .end((err: Error, res: any) => {
                 if (err) {
-                    console.log(res.body);
+                    testLog(res.body);
                     console.error(err);
                 }
                 should.not.exist(err);

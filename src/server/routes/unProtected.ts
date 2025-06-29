@@ -189,8 +189,6 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
             if (objectAccess) {
                 if (ctx.odata.entity) {
                     const returnValue = ctx.odata.single === true ? await objectAccess.getSingle() : await objectAccess.getAll();
-                    console.log(returnValue);
-
                     if (returnValue) {
                         ctx.type = ctx.odata.returnFormat.type;
                         ctx.body = ctx.odata.returnFormat.format(returnValue.body || returnValue, ctx);

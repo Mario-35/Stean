@@ -7,16 +7,18 @@
  */
 
 import { EColumnType } from "../enums";
-export interface IodataContext { //odata context pass to token
-    key:            string | undefined;
-    entity:         string | undefined;
-    table:          string | undefined;
-    target:         string | undefined;
-    identifier:     string | undefined;
+export interface IodataContext {
+    //odata context pass to token
+    key: string | undefined;
+    entity: string | undefined;
+    table: string | undefined;
+    target: string | undefined;
+    identifier: string | undefined;
     identifierType: EColumnType | undefined;
-    relation:       string | undefined;
-    literal:        string | undefined;
-    sign:           string | undefined;
-    sql:            string | undefined;    
-    in:             boolean | undefined;
+    relation: string | undefined;
+    literal: string | undefined;
+    sign: string | undefined;
+    sql: string | undefined;
+    in: boolean | undefined;
+    operation: "ROUND" | "FLOOR" | "CEILING" | undefined;
 }

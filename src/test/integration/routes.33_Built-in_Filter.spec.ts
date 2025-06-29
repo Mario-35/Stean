@@ -105,7 +105,7 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
                 should.not.exist(err);
                 res.status.should.equal(200);
                 res.type.should.equal("application/json");
-                res.body.value.length.should.eql(119);
+                res.body.value.length.should.eql(120);
                 res.body.should.include.keys("@iot.count", "value");
                 addToApiDoc({ ...infos, result: limitResult(res) });
                 done();
@@ -125,7 +125,7 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
                 should.not.exist(err);
                 res.status.should.equal(200);
                 res.type.should.equal("application/json");
-                res.body.value.length.should.eql(3);
+                res.body.value.length.should.eql(176);
                 res.body.should.include.keys("@iot.count", "value");
                 done();
             });
@@ -145,7 +145,7 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
                 should.not.exist(err);
                 res.status.should.equal(200);
                 res.type.should.equal("application/json");
-                res.body.value.length.should.eql(120);
+                res.body.value.length.should.eql(121);
                 res.body.should.include.keys("@iot.count", "value");
                 addToApiDoc({ ...infos, result: limitResult(res) });
 
@@ -166,7 +166,7 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
                 should.not.exist(err);
                 res.status.should.equal(200);
                 res.type.should.equal("application/json");
-                res.body.value.length.should.eql(409);
+                res.body.value.length.should.eql(410);
                 res.body.should.include.keys("@iot.count", "value");
                 addToApiDoc({ ...infos, result: limitResult(res) });
                 done();
@@ -186,7 +186,7 @@ describe("Odata Built In Operators [9.3.3.5.1]", () => {
                 should.not.exist(err);
                 res.status.should.equal(200);
                 res.type.should.equal("application/json");
-                res.body.value.length.should.eql(410);
+                res.body.value.length.should.eql(411);
                 res.body.should.include.keys("@iot.count", "value");
                 addToApiDoc({ ...infos, result: limitResult(res) });
                 done();

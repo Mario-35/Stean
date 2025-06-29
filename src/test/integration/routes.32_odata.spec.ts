@@ -437,7 +437,7 @@ describe("Odata", () => {
 
             description: "",
             reference: "",
-            request: `${testVersion}/Observations?$filter=result eq '92' and resultTime eq '2017-02-13'`
+            request: `${testVersion}/Observations?$filter=result eq 92 and resultTime eq '2017-02-13'`
         });
         chai.request(server)
             .get(`/test/${infos.request}`)

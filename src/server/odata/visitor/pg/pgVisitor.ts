@@ -73,12 +73,7 @@ export class PgVisitor extends Visitor {
         this.parentId = this.id;
         this.id = id ? id : BigInt(0);
     }
-    testo(input: string) {
-        console.log(`******************* ${input} ********************`);
-        console.log(`entity  =====> ${this.entity}  id : [${this.id}]`);
-        console.log(`parent  =====> ${this.parentEntity}  id : [${this.parentId}]`);
-        console.log("***************************************");
-    }
+
     addToIntervalColumns(input: string) {
         // TODO test with create
         if (input.endsWith('Time"')) input = `step AS ${input}`;
@@ -90,7 +85,12 @@ export class PgVisitor extends Visitor {
     }
     protected getColumn(input: string, operation: string, context: IodataContext) {
         console.log(log.whereIam(input));
-        const tempEntity = context.target === EQuery.Where && context.identifier ? models.getEntity(this.ctx.service, context.identifier.split(".")[0]) : this.isSelect(context) ? models.getEntity(this.ctx.service, this.entity || this.parentEntity || this.navigationProperty) : undefined;
+        const tempEntity =
+            context.target === EQuery.Where && context.identifier
+                ? models.getEntity(this.ctx.service, this.cleanColumn(context.identifier))
+                : this.isSelect(context)
+                ? models.getEntity(this.ctx.service, this.entity || this.parentEntity || this.navigationProperty)
+                : undefined;
 
         if (input.startsWith("result/")) {
             this.columnSpecials["result"] = input
@@ -101,10 +101,17 @@ export class PgVisitor extends Visitor {
         }
         const columnName = input === "result" ? this.formatColumnResult(context, operation) : tempEntity ? this.getColumnNameOrAlias(tempEntity, input, this.createDefaultOptions()) : undefined;
         if (columnName) return columnName;
+
         if (this.isSelect(context) && tempEntity && tempEntity.relations[input]) {
             const entityName = models.getEntityName(this.ctx.service, input);
-            return tempEntity && entityName ? `CONCAT('${this.ctx.decodedUrl.root}/${tempEntity.name}(', "${tempEntity.table}"."id", ')/${entityName}') AS "${entityName}${EConstant.navLink}"` : undefined;
+            return tempEntity && entityName
+                ? `CONCAT('${this.ctx.decodedUrl.root}/${tempEntity.name}(', "${tempEntity.table}"."id", ')/${entityName}') AS "${entityName}${EConstant.navLink}"`
+                : undefined;
         }
+    }
+
+    cleanColumn(input: string) {
+        return removeAllQuotes(input).split(".")[0];
     }
 
     // ***********************************************************************************************************************************************************************
@@ -116,9 +123,21 @@ export class PgVisitor extends Visitor {
                 const nbs = Array.from({ length: this.parentEntity?.name === DATASTREAM.name ? 1 : 5 }, (v, k) => k + 1);
                 const translate = `TRANSLATE (SUBSTRING ("result"->>'value' FROM '(([0-9]+.*)*[0-9]+)'), '[]','')`;
                 const isOperation = operation.trim() != "";
-                return ForceString || isFile(this.ctx.service)
-                    ? `@EXPRESSIONSTRING@ ALL (ARRAY_REMOVE( ARRAY[${EConstant.return}${nbs.map((e) => `${isOperation ? `${operation} (` : ""} SPLIT_PART ( ${translate}, ',', ${e}))`).join(`,${EConstant.return}`)}], null))`
-                    : `@EXPRESSION@ ALL (ARRAY_REMOVE( ARRAY[${EConstant.return}${nbs.map((e) => `${isOperation ? `${operation} (` : ""}NULLIF (SPLIT_PART ( ${translate}, ',', ${e}),'')::numeric${isOperation ? `)` : ""}`).join(`,${EConstant.return}`)}], null))`;
+                const test = ForceString || isFile(this.ctx.service);
+                if (!test && !context.operation && context.sign && context.sign === "=") context.sign = "==";
+                return test
+                    ? // operation on string
+                      `@EXPRESSIONSTRING@ ALL (ARRAY_REMOVE( ARRAY[${EConstant.return}${nbs
+                          .map((e) => `${isOperation ? `${operation} (` : ""} SPLIT_PART ( ${translate}, ',', ${e}))`)
+                          .join(`,${EConstant.return}`)}], null))`
+                    : context.operation
+                    ? // OPERATION ROUND FLOOR CEILING (jsonpath can't process it)
+                      `@EXPRESSION@ ALL (ARRAY_REMOVE( ARRAY[${EConstant.return}${nbs
+                          .map((e) => `${isOperation ? `${operation} (` : ""}NULLIF (SPLIT_PART ( ${translate}, ',', ${e}),'')::numeric${isOperation ? `)` : ""}`)
+                          .join(`,${EConstant.return}`)}], null))`
+                    : // jsonpath postgres operation
+                      `result @? '$.value ? (@EXPRESSION@ @)'`;
+
             default:
                 return `CASE 
           WHEN JSONB_TYPEOF( "result"->'value') = 'number' THEN ("result"->${this.numeric == true ? ">" : ""}'value')::jsonb
@@ -178,7 +197,20 @@ export class PgVisitor extends Visitor {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Visit(node: Token, context?: IodataContext) {
         this.ast = this.ast || node;
-        context = context || { target: EQuery.Where, key: undefined, entity: undefined, table: undefined, identifier: undefined, identifierType: undefined, relation: undefined, literal: undefined, sign: undefined, sql: undefined, in: undefined };
+        context = context || {
+            target: EQuery.Where,
+            key: undefined,
+            entity: undefined,
+            table: undefined,
+            identifier: undefined,
+            identifierType: undefined,
+            relation: undefined,
+            literal: undefined,
+            sign: undefined,
+            sql: undefined,
+            operation: undefined,
+            in: undefined
+        };
         if (node) {
             const visitor: IvisitRessource = this[`Visit${node.type}` as keyof object];
             if (visitor) {
@@ -340,7 +372,12 @@ export class PgVisitor extends Visitor {
     protected VisitPropertyPathExpression(node: Token, context: IodataContext) {
         if (node.value.current && node.value.next) {
             // deterwine if its column AND JSON
-            if (this.entity && models.getRelationColumnTable(this.ctx.service, this.entity, node.value.current.raw) === EColumnType.Column && models.isColumnType(this.ctx.service, this.entity, node.value.current.raw, "json") && node.value.next.raw[0] == "/") {
+            if (
+                this.entity &&
+                models.getRelationColumnTable(this.ctx.service, this.entity, node.value.current.raw) === EColumnType.Column &&
+                models.isColumnType(this.ctx.service, this.entity, node.value.current.raw, "json") &&
+                node.value.next.raw[0] == "/"
+            ) {
                 this.addToWhere(`${doubleQuotesString(node.value.current.raw)}->>${simpleQuotesString(node.value.next.raw.slice(1))}`, context);
             } else if (node.value.next.raw[0] == "/") {
                 this.Visit(node.value.current, context);
@@ -376,9 +413,19 @@ export class PgVisitor extends Visitor {
         }
     }
     protected VisitDateType(node: Token, context: IodataContext): boolean {
-        if (this.entity && context.sign && models.getRelationColumnTable(this.ctx.service, this.entity, node.value.left.raw) === EColumnType.Column && models.isColumnType(this.ctx.service, this.entity, node.value.left.raw, "date")) {
+        if (
+            this.entity &&
+            context.sign &&
+            models.getRelationColumnTable(this.ctx.service, this.entity, node.value.left.raw) === EColumnType.Column &&
+            models.isColumnType(this.ctx.service, this.entity, node.value.left.raw, "date")
+        ) {
             const testIsDate = oDataDateFormat(node, context.sign);
-            const columnName = this.getColumnNameOrAlias(this.ctx.model[context.identifier || this.entity.name], node.value.left.raw, { table: true, as: true, cast: false, ...this.createDefaultOptions() });
+            const columnName = this.getColumnNameOrAlias(this.ctx.model[context.identifier || this.entity.name], node.value.left.raw, {
+                table: true,
+                as: true,
+                cast: false,
+                ...this.createDefaultOptions()
+            });
             if (testIsDate) {
                 this.addToWhere(`${columnName ? columnName : `${doubleQuotesString(node.value.left.raw)}`}${testIsDate}`, context);
                 return true;
@@ -441,7 +488,10 @@ export class PgVisitor extends Visitor {
             if (tempEntity) {
                 const relation = relationInfos(this.ctx.service, entity, node.value.name);
                 if (context.relation) {
-                    context.sql = `${formatPgTableColumn(this.ctx.model[entity].table, relation.column)} IN (SELECT ${formatPgTableColumn(tempEntity.table, relation.rightKey)} FROM ${formatPgTableColumn(tempEntity.table)}`;
+                    context.sql = `${formatPgTableColumn(this.ctx.model[entity].table, relation.column)} IN (SELECT ${formatPgTableColumn(
+                        tempEntity.table,
+                        relation.rightKey
+                    )} FROM ${formatPgTableColumn(tempEntity.table)}`;
                 } else {
                     context.relation = node.value.name;
                     context.table = tempEntity.table;
@@ -457,10 +507,10 @@ export class PgVisitor extends Visitor {
     protected VisitODataIdentifier(node: Token, context: IodataContext) {
         const alias = this.getColumn(node.value.name, "", context);
         node.value.name = alias ? alias : node.value.name;
-        if (context.relation && context.identifier && models.isColumnType(this.ctx.service, this.ctx.model[context.relation], removeAllQuotes(context.identifier).split(".")[0], "json")) {
-            context.identifier = `${doubleQuotesString(context.identifier.split(".")[0])}->>${simpleQuotesString(node.raw)}`;
+        if (context.relation && context.identifier && models.isColumnType(this.ctx.service, this.ctx.model[context.relation], this.cleanColumn(context.identifier), "json")) {
+            context.identifier = `${doubleQuotesString(this.cleanColumn(context.identifier))}->>${simpleQuotesString(node.raw)}`;
         } else {
-            if (context.target === EQuery.Where && this.entity) this.createComplexWhere(context.identifier ? context.identifier.split(".")[0] : this.entity.name, node, context);
+            if (context.target === EQuery.Where && this.entity) this.createComplexWhere(context.identifier ? this.cleanColumn(context.identifier) : this.entity.name, node, context);
             if (!context.relation && !context.identifier && alias && context.target) {
                 // @ts-ignore
                 this.query[context.target].add(alias);
@@ -470,7 +520,15 @@ export class PgVisitor extends Visitor {
                     let alias = this.getColumnNameOrAlias(this.entity, node.value.name, this.createDefaultOptions());
                     alias = context.target === EQuery.Where ? alias?.split(" AS ")[0] : EQuery.OrderBy ? doubleQuotesString(node.value.name) : alias;
                     // @ts-ignore
-                    this.query[context.target].add(node.value.name.includes("->>") || node.value.name.includes("->") || node.value.name.includes("::") ? node.value.name : this.entity && this.ctx.model[this.entity.name] ? (alias ? alias : "") : doubleQuotesString(node.value.name));
+                    this.query[context.target].add(
+                        node.value.name.includes("->>") || node.value.name.includes("->") || node.value.name.includes("::")
+                            ? node.value.name
+                            : this.entity && this.ctx.model[this.entity.name]
+                            ? alias
+                                ? alias
+                                : node.value.name
+                            : doubleQuotesString(node.value.name)
+                    );
                 }
             }
         }
@@ -503,19 +561,35 @@ export class PgVisitor extends Visitor {
             context.sign = temp.pop();
             this.query.where.init(temp.join(" "));
             const relation = relationInfos(this.ctx.service, this.entity.name, context.relation);
-            this.addToWhere(` ${context.in && context.in === true ? "" : " IN @START@"}(SELECT ${this.entity.relations[context.relation] ? doubleQuotesString(relation.rightKey) : `${doubleQuotesString(context.table)}."id"`} FROM ${doubleQuotesString(context.table)} WHERE `, context);
+            this.addToWhere(
+                ` ${context.in && context.in === true ? "" : " IN @START@"}(SELECT ${
+                    this.entity.relations[context.relation] ? doubleQuotesString(relation.rightKey) : `${doubleQuotesString(context.table)}."id"`
+                } FROM ${doubleQuotesString(context.table)} WHERE `,
+                context
+            );
             context.in = true;
             if (context.identifier) {
-                if (context.identifier.startsWith("CASE") || context.identifier.startsWith("(")) this.addToWhere(`${context.identifier} ${context.sign} ${SQLLiteral.convert(node.value, node.raw)})`, context);
+                if (context.identifier.startsWith("CASE") || context.identifier.startsWith("("))
+                    this.addToWhere(`${context.identifier} ${context.sign} ${SQLLiteral.convert(node.value, node.raw)})`, context);
                 else if (context.identifier.includes("@EXPRESSION@")) {
                     const tempEntity = models.getEntity(this.ctx.service, context.relation);
                     const alias = tempEntity ? this.getColumnNameOrAlias(tempEntity, context.identifier, this.createDefaultOptions()) : undefined;
-                    this.addToWhere(context.sql ? `${context.sql} ${context.target} ${doubleQuotesString(context.identifier)}))@END@` : `${alias ? alias : `${context.identifier.replace("@EXPRESSION@", ` ${SQLLiteral.convert(node.value, node.raw)} ${this.inverseSign(context.sign)}`)}`})`, context);
+                    this.addToWhere(
+                        context.sql
+                            ? `${context.sql} ${context.target} ${doubleQuotesString(context.identifier)}))@END@`
+                            : `${alias ? alias : `${context.identifier.replace("@EXPRESSION@", ` ${SQLLiteral.convert(node.value, node.raw)} ${this.inverseSign(context.sign)}`)}`})`,
+                        context
+                    );
                 } else {
                     const tempEntity = models.getEntity(this.ctx.service, context.relation);
                     const quotes = context.identifier[0] === '"' ? "" : '"';
                     const alias = tempEntity ? this.getColumnNameOrAlias(tempEntity, context.identifier, this.createDefaultOptions()) : undefined;
-                    this.addToWhere(context.sql ? `${context.sql} ${context.target} ${doubleQuotesString(context.identifier)} ${context.sign} ${SQLLiteral.convert(node.value, node.raw)}))@END@` : `${alias ? "" : `${context.table}.`}${alias ? alias : `${quotes}${context.identifier}${quotes}`} ${context.sign} ${SQLLiteral.convert(node.value, node.raw)})`, context);
+                    this.addToWhere(
+                        context.sql
+                            ? `${context.sql} ${context.target} ${doubleQuotesString(context.identifier)} ${context.sign} ${SQLLiteral.convert(node.value, node.raw)}))@END@`
+                            : `${alias ? "" : `${context.table}.`}${alias ? alias : `${quotes}${context.identifier}${quotes}`} ${context.sign} ${SQLLiteral.convert(node.value, node.raw)})`,
+                        context
+                    );
                 }
             }
         } else {
@@ -573,9 +647,10 @@ export class PgVisitor extends Visitor {
             const temp = decodeURIComponent(Literal.convert(params[index].value, params[index].raw)).replace("geography", "");
             return this.entity && this.entity.columns[temp] ? temp : `${srid === true ? "SRID=4326;" : ""}${removeAllQuotes(temp)}`;
         };
-        const cleanData = (index: number): string => (params[index].value == "Edm.String" ? removeAllQuotes(Literal.convert(params[index].value, params[index].raw)) : Literal.convert(params[index].value, params[index].raw));
+        const cleanData = (index: number): string =>
+            params[index].value == "Edm.String" ? removeAllQuotes(Literal.convert(params[index].value, params[index].raw)) : Literal.convert(params[index].value, params[index].raw);
         const order = params.length === 2 ? (isColumn(0) ? [0, 1] : [1, 0]) : [0];
-        switch (String(method.split(".")[0])) {
+        switch (String(this.cleanColumn(method))) {
             case "contains":
                 this.Visit(params[0], context);
                 this.addToWhere(` ~* '${SQLLiteral.convert(params[1].value, params[1].raw).slice(1, -1)}'`, context);
@@ -592,7 +667,10 @@ export class PgVisitor extends Visitor {
                 this.addToWhere(`${columnOrData(0, "", true)} ILIKE '${cleanData(1)}%'`, context);
                 break;
             case "substring":
-                this.addToWhere(params.length == 3 ? ` SUBSTR(${columnOrData(0, "", true)}, ${cleanData(1)} + 1, ${cleanData(2)})` : ` SUBSTR(${columnOrData(0, "", true)}, ${cleanData(1)} + 1)`, context);
+                this.addToWhere(
+                    params.length == 3 ? ` SUBSTR(${columnOrData(0, "", true)}, ${cleanData(1)} + 1, ${cleanData(2)})` : ` SUBSTR(${columnOrData(0, "", true)}, ${cleanData(1)} + 1)`,
+                    context
+                );
                 break;
             case "substringof":
                 this.addToWhere(`${columnOrData(0, "", true)} ILIKE '%${cleanData(1)}%'`, context);
@@ -605,7 +683,12 @@ export class PgVisitor extends Visitor {
                 break;
             case "length":
                 // possibilty calc length string of each result or result
-                this.addToWhere(decodeURIComponent(Literal.convert(params[0].value, params[0].raw)) === "result" ? `${columnOrData(0, "CHAR_LENGTH", true)}` : `CHAR_LENGTH(${columnOrData(0, "CHAR_LENGTH", true)})`, context);
+                this.addToWhere(
+                    decodeURIComponent(Literal.convert(params[0].value, params[0].raw)) === "result"
+                        ? `${columnOrData(0, "CHAR_LENGTH", true)}`
+                        : `CHAR_LENGTH(${columnOrData(0, "CHAR_LENGTH", true)})`,
+                    context
+                );
                 break;
             case "tolower":
                 this.addToWhere(`LOWER(${columnOrData(0, "", true)})`, context);
@@ -624,6 +707,7 @@ export class PgVisitor extends Visitor {
             case "round":
             case "floor":
             case "ceiling":
+                context.operation = method.toUpperCase();
                 this.addToWhere(columnOrData(0, method.toUpperCase(), false), context);
                 break;
             case "now":
