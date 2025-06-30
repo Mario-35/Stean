@@ -124,13 +124,15 @@ export class PgVisitor extends Visitor {
                 const translate = `TRANSLATE (SUBSTRING ("result"->>'value' FROM '(([0-9]+.*)*[0-9]+)'), '[]','')`;
                 const isOperation = operation.trim() != "";
                 const test = ForceString || isFile(this.ctx.service);
-                if (!test && !context.operation && context.sign && context.sign === "=") context.sign = "==";
+                if (!test && !context.onEachResult && context.sign && context.sign === "=") context.sign = "==";
                 return test
                     ? // operation on string
-                      `@EXPRESSIONSTRING@ ALL (ARRAY_REMOVE( ARRAY[${EConstant.return}${nbs
-                          .map((e) => `${isOperation ? `${operation} (` : ""} SPLIT_PART ( ${translate}, ',', ${e}))`)
-                          .join(`,${EConstant.return}`)}], null))`
-                    : context.operation
+                      context.onEachResult
+                        ? `@EXPRESSIONSTRING@ ALL (ARRAY_REMOVE( ARRAY[${EConstant.return}${nbs
+                              .map((e) => `${isOperation ? `${operation} (` : ""} SPLIT_PART ( ${translate}, ',', ${e}))`)
+                              .join(`,${EConstant.return}`)}], null))`
+                        : `"result"->>'value'`
+                    : context.onEachResult
                     ? // OPERATION ROUND FLOOR CEILING (jsonpath can't process it)
                       `@EXPRESSION@ ALL (ARRAY_REMOVE( ARRAY[${EConstant.return}${nbs
                           .map((e) => `${isOperation ? `${operation} (` : ""}NULLIF (SPLIT_PART ( ${translate}, ',', ${e}),'')::numeric${isOperation ? `)` : ""}`)
@@ -203,12 +205,11 @@ export class PgVisitor extends Visitor {
             entity: undefined,
             table: undefined,
             identifier: undefined,
-            identifierType: undefined,
             relation: undefined,
             literal: undefined,
             sign: undefined,
             sql: undefined,
-            operation: undefined,
+            onEachResult: undefined,
             in: undefined
         };
         if (node) {
@@ -664,6 +665,8 @@ export class PgVisitor extends Visitor {
                 this.addToWhere(`${columnOrData(0, "", true)}  ILIKE '%${cleanData(1)}'`, context);
                 break;
             case "startswith":
+                console.log("----------------------------------------------");
+                console.log(context);
                 this.addToWhere(`${columnOrData(0, "", true)} ILIKE '${cleanData(1)}%'`, context);
                 break;
             case "substring":
@@ -683,6 +686,7 @@ export class PgVisitor extends Visitor {
                 break;
             case "length":
                 // possibilty calc length string of each result or result
+                context.onEachResult = true;
                 this.addToWhere(
                     decodeURIComponent(Literal.convert(params[0].value, params[0].raw)) === "result"
                         ? `${columnOrData(0, "CHAR_LENGTH", true)}`
@@ -707,7 +711,7 @@ export class PgVisitor extends Visitor {
             case "round":
             case "floor":
             case "ceiling":
-                context.operation = method.toUpperCase();
+                context.onEachResult = true;
                 this.addToWhere(columnOrData(0, method.toUpperCase(), false), context);
                 break;
             case "now":
