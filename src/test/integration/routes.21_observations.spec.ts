@@ -402,6 +402,24 @@ describe("endpoint : Observations", () => {
                     done();
                 });
         });
+        it("Return Observations with boundaries dates", (done) => {
+            const infos = addTest({
+                type: "get",
+                short: "With boundaries dates",
+                description: "Retrieve observations with boundaries dates.",
+                request: `${testVersion}/Datastreams(1)/${entity.name}?$filter=resultTime le 2021-10-15T08:00:00Z and resultTime ge 2017-01-13T03:00:00Z`
+            });
+            chai.request(server)
+                .get(`/test/${infos.request}`)
+                .end((err: Error, res: any) => {
+                    should.not.exist(err);
+                    res.status.should.equal(200);
+                    res.type.should.equal("application/json");
+                    Object.keys(res.body.value).length.should.eql(4);
+                    addToApiDoc({ ...infos, result: limitResult(res) });
+                    done();
+                });
+        });
 
         // it("Return Observations with time intevval", (done) => {
         //     const infos = addTest({

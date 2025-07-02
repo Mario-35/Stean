@@ -17,7 +17,13 @@ import { IrelationInfos, Ientity, Iservice } from "../../types";
 const _KeyLink = (entity: Ientity, column: string) => Object.keys(entity.columns).filter((e) => e !== column)[0];
 
 const _Key = (entity: Ientity, search: Ientity) => {
-    return Object.keys(entity.columns).includes(`${search.table}_id`) ? `${search.table}_id` : Object.keys(entity.columns).includes(`${search.singular.toLocaleLowerCase()}_id`) ? `${search.singular.toLocaleLowerCase()}_id` : Object.keys(entity.columns).includes(`_default_${search.singular.toLocaleLowerCase()}`) ? `_default_${search.singular.toLocaleLowerCase()}` : "id";
+    return Object.keys(entity.columns).includes(`${search.table}_id`)
+        ? `${search.table}_id`
+        : Object.keys(entity.columns).includes(`${search.singular.toLocaleLowerCase()}_id`)
+        ? `${search.singular.toLocaleLowerCase()}_id`
+        : Object.keys(entity.columns).includes(`_default_${search.singular.toLocaleLowerCase()}`)
+        ? `_default_${search.singular.toLocaleLowerCase()}`
+        : "id";
 };
 
 const extractEntityNames = (input: string, search: string | string[]): string[] => {
@@ -42,11 +48,17 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                 return { type: "ERROR", rightKey: "", leftKey: "", entity: undefined, column: "cardinality ERROR", expand: "", link: "" };
             };
             const fnHasMany = () => {
-                const complexEntity = models.getEntity(service, `${leftEntity.name}${rightEntity.name}`) || models.getEntity(service, `${rightEntity.name}${leftEntity.name}`) || models.getEntity(service, `${leftEntity.singular}${rightEntity.singular}`) || models.getEntity(service, `${rightEntity.singular}${leftEntity.singular}`);
+                const complexEntity =
+                    models.getEntity(service, `${leftEntity.name}${rightEntity.name}`) ||
+                    models.getEntity(service, `${rightEntity.name}${leftEntity.name}`) ||
+                    models.getEntity(service, `${leftEntity.singular}${rightEntity.singular}`) ||
+                    models.getEntity(service, `${rightEntity.singular}${leftEntity.singular}`);
                 if (complexEntity && rightRelation) {
                     leftKey = _Key(complexEntity, leftEntity);
                     rightKey = _Key(complexEntity, rightEntity);
-                    const temp = `${formatPgTableColumn(rightEntity.table, "id")} IN (SELECT ${formatPgTableColumn(complexEntity.table, rightKey)} FROM ${formatPgTableColumn(complexEntity.table)} WHERE ${formatPgTableColumn(complexEntity.table, leftKey)} =$ID)`;
+                    const temp = `${formatPgTableColumn(rightEntity.table, "id")} IN (SELECT ${formatPgTableColumn(complexEntity.table, rightKey)} FROM ${formatPgTableColumn(
+                        complexEntity.table
+                    )} WHERE ${formatPgTableColumn(complexEntity.table, leftKey)} =$ID)`;
                     return {
                         type: `${leftRelation.type}.${rightRelation.type}`,
                         leftKey: leftKey,
@@ -75,8 +87,14 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                     rightKey: rightKey,
                                     entity: leftEntity,
                                     column: idColumnName(leftEntity, rightEntity) || "id",
-                                    link: `${formatPgTableColumn(rightEntity.table, rightKey)} IN (SELECT ${formatPgTableColumn(rightEntity.table, rightKey)} FROM ${formatPgTableColumn(rightEntity.table)} WHERE ${formatPgTableColumn(rightEntity.table, rightKey)} =(SELECT ${formatPgTableColumn(leftEntity.table, leftKey)} FROM ${formatPgTableColumn(leftEntity.table)} WHERE id = $ID))`,
-                                    expand: `${formatPgTableColumn(rightEntity.table, rightKey)} IN (SELECT ${formatPgTableColumn(rightEntity.table, rightKey)} FROM ${formatPgTableColumn(rightEntity.table)} WHERE ${formatPgTableColumn(rightEntity.table, rightKey)} =${formatPgTableColumn(leftEntity.table, leftKey)})`
+                                    link: `${formatPgTableColumn(rightEntity.table, rightKey)} IN (SELECT ${formatPgTableColumn(rightEntity.table, rightKey)} FROM ${formatPgTableColumn(
+                                        rightEntity.table
+                                    )} WHERE ${formatPgTableColumn(rightEntity.table, rightKey)} =(SELECT ${formatPgTableColumn(leftEntity.table, leftKey)} FROM ${formatPgTableColumn(
+                                        leftEntity.table
+                                    )} WHERE id = $ID))`,
+                                    expand: `${formatPgTableColumn(rightEntity.table, rightKey)} IN (SELECT ${formatPgTableColumn(rightEntity.table, rightKey)} FROM ${formatPgTableColumn(
+                                        rightEntity.table
+                                    )} WHERE ${formatPgTableColumn(rightEntity.table, rightKey)} =${formatPgTableColumn(leftEntity.table, leftKey)})`
                                 };
                         }
                     }
@@ -94,7 +112,9 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                     rightKey: rightKey,
                                     entity: leftEntity,
                                     column: idColumnName(leftEntity, rightEntity) || "id",
-                                    link: `${formatPgTableColumn(rightEntity.table, rightKey)} = (SELECT ${formatPgTableColumn(leftEntity.table, leftKey)} FROM ${formatPgTableColumn(leftEntity.table)} WHERE ${formatPgTableColumn(leftEntity.table, "id")} =$ID)`,
+                                    link: `${formatPgTableColumn(rightEntity.table, rightKey)} = (SELECT ${formatPgTableColumn(leftEntity.table, leftKey)} FROM ${formatPgTableColumn(
+                                        leftEntity.table
+                                    )} WHERE ${formatPgTableColumn(leftEntity.table, "id")} =$ID)`,
                                     expand: `${formatPgTableColumn(rightEntity.table, rightKey)} = ${formatPgTableColumn(leftEntity.table, leftKey)}`
                                 };
                             // ===> 2.3
@@ -104,7 +124,9 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                     if (leftRelation && tempEntity && tempEntity.type === ETable.link && !loop) {
                                         leftKey = _Key(tempEntity, rightEntity);
                                         rightKey = _KeyLink(tempEntity, leftKey);
-                                        const temp = `${formatPgTableColumn(rightEntity.table, "id")} IN (SELECT ${formatPgTableColumn(tempEntity.table, leftKey)} FROM ${formatPgTableColumn(tempEntity.table)} WHERE ${formatPgTableColumn(tempEntity.table, rightKey)} =$ID)`;
+                                        const temp = `${formatPgTableColumn(rightEntity.table, "id")} IN (SELECT ${formatPgTableColumn(tempEntity.table, leftKey)} FROM ${formatPgTableColumn(
+                                            tempEntity.table
+                                        )} WHERE ${formatPgTableColumn(tempEntity.table, rightKey)} =$ID)`;
                                         return {
                                             type: `${leftRelation.type}.${rightRelation.type}.1`,
                                             leftKey: leftKey,
@@ -127,8 +149,16 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                             rightKey: rightKey,
                                             entity: leftEntity,
                                             column: idColumnName(leftEntity, rightEntity) || "id",
-                                            expand: `${formatPgTableColumn(rightEntity.table, "id")} IN (SELECT ${formatPgTableColumn(rightEntity.table, "id")} FROM ${formatPgTableColumn(rightEntity.table)} WHERE ${formatPgTableColumn(rightEntity.table, "id")} IN (SELECT ${formatPgTableColumn(complexEntity.table, rightKey)} FROM ${complexEntity.table} WHERE ${formatPgTableColumn(complexEntity.table, leftKey)} = ${formatPgTableColumn(leftEntity.table, leftKey)}))`,
-                                            link: `${formatPgTableColumn(rightEntity.table, "id")} IN (SELECT ${formatPgTableColumn(rightEntity.table, "id")} FROM ${formatPgTableColumn(rightEntity.table)} WHERE ${formatPgTableColumn(rightEntity.table, "id")} IN (SELECT ${formatPgTableColumn(complexEntity.table, rightKey)} FROM ${complexEntity.table} WHERE ${formatPgTableColumn(complexEntity.table, leftKey)} IN (SELECT ${formatPgTableColumn(leftEntity.table, leftKey)} FROM ${
+                                            expand: `${formatPgTableColumn(rightEntity.table, "id")} IN (SELECT ${formatPgTableColumn(rightEntity.table, "id")} FROM ${formatPgTableColumn(
+                                                rightEntity.table
+                                            )} WHERE ${formatPgTableColumn(rightEntity.table, "id")} IN (SELECT ${formatPgTableColumn(complexEntity.table, rightKey)} FROM ${
+                                                complexEntity.table
+                                            } WHERE ${formatPgTableColumn(complexEntity.table, leftKey)} = ${formatPgTableColumn(leftEntity.table, leftKey)}))`,
+                                            link: `${formatPgTableColumn(rightEntity.table, "id")} IN (SELECT ${formatPgTableColumn(rightEntity.table, "id")} FROM ${formatPgTableColumn(
+                                                rightEntity.table
+                                            )} WHERE ${formatPgTableColumn(rightEntity.table, "id")} IN (SELECT ${formatPgTableColumn(complexEntity.table, rightKey)} FROM ${
+                                                complexEntity.table
+                                            } WHERE ${formatPgTableColumn(complexEntity.table, leftKey)} IN (SELECT ${formatPgTableColumn(leftEntity.table, leftKey)} FROM ${
                                                 leftEntity.table
                                             } WHERE ${formatPgTableColumn(leftEntity.table, "id")} =$ID)))`
                                         };
@@ -142,7 +172,9 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                     rightKey: rightKey,
                                     entity: leftEntity,
                                     column: idColumnName(leftEntity, rightEntity) || "id",
-                                    link: `${formatPgTableColumn(rightEntity.table, rightKey)} = (SELECT ${formatPgTableColumn(leftEntity.table, leftKey)} FROM ${formatPgTableColumn(leftEntity.table)} WHERE ${formatPgTableColumn(leftEntity.table, rightKey)} =$ID)`,
+                                    link: `${formatPgTableColumn(rightEntity.table, rightKey)} = (SELECT ${formatPgTableColumn(leftEntity.table, leftKey)} FROM ${formatPgTableColumn(
+                                        leftEntity.table
+                                    )} WHERE ${formatPgTableColumn(leftEntity.table, rightKey)} =$ID)`,
                                     expand: `${formatPgTableColumn(rightEntity.table, rightKey)} = ${formatPgTableColumn(leftEntity.table, leftKey)}`
                                 };
                         }
@@ -155,7 +187,11 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                         switch (rightRelation.type) {
                             // ===> 3.2
                             case ERelations.belongsTo:
-                                const complexEntity2 = models.getEntity(service, `${leftEntity.name}${rightEntity.name}`) || models.getEntity(service, `${rightEntity.name}${leftEntity.name}`) || models.getEntity(service, `${leftEntity.singular}${rightEntity.singular}`) || models.getEntity(service, `${rightEntity.singular}${leftEntity.singular}`);
+                                const complexEntity2 =
+                                    models.getEntity(service, `${leftEntity.name}${rightEntity.name}`) ||
+                                    models.getEntity(service, `${rightEntity.name}${leftEntity.name}`) ||
+                                    models.getEntity(service, `${leftEntity.singular}${rightEntity.singular}`) ||
+                                    models.getEntity(service, `${rightEntity.singular}${leftEntity.singular}`);
                                 // ===> 3.2.1
                                 if (rightRelation.entityRelation) {
                                     const tmp = extractEntityNames(rightRelation.entityRelation, [leftEntity.name, rightEntity.name]);
@@ -165,10 +201,12 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                         if (complexEntity2 && tempCardinality.entity && complexEntity2.type !== ETable.link) {
                                             leftKey = _Key(complexEntity2, rightEntity);
                                             rightKey = _Key(complexEntity2, leftEntity);
-                                            const temp = `${formatPgTableColumn(rightEntity.table, "id")} IN (SELECT ${formatPgTableColumn(rightEntity.table, "id")} FROM ${formatPgTableColumn(rightEntity.table)} WHERE ${formatPgTableColumn(rightEntity.table, tempCardinality.rightKey)} IN (SELECT ${formatPgTableColumn(tempCardinality.entity.table, tempCardinality.rightKey)} FROM ${formatPgTableColumn(tempCardinality.entity.table)} WHERE ${formatPgTableColumn(
+                                            const temp = `${formatPgTableColumn(rightEntity.table, "id")} IN (SELECT ${formatPgTableColumn(rightEntity.table, "id")} FROM ${formatPgTableColumn(
+                                                rightEntity.table
+                                            )} WHERE ${formatPgTableColumn(rightEntity.table, tempCardinality.rightKey)} IN (SELECT ${formatPgTableColumn(
                                                 tempCardinality.entity.table,
-                                                tempCardinality.leftKey
-                                            )} =$ID))`;
+                                                tempCardinality.rightKey
+                                            )} FROM ${formatPgTableColumn(tempCardinality.entity.table)} WHERE ${formatPgTableColumn(tempCardinality.entity.table, tempCardinality.leftKey)} =$ID))`;
                                             return {
                                                 type: `${leftRelation.type}.${rightRelation.type}.1`,
                                                 leftKey: leftKey,
@@ -191,7 +229,10 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                 else if (complexEntity2) {
                                     leftKey = _Key(complexEntity2, rightEntity);
                                     rightKey = _Key(complexEntity2, leftEntity);
-                                    const temp = `${formatPgTableColumn(rightEntity.table, rightKey)} IN (SELECT ${formatPgTableColumn(complexEntity2.table, idColumnName(complexEntity2, rightEntity) || "id")} FROM ${formatPgTableColumn(complexEntity2.table)} WHERE ${formatPgTableColumn(complexEntity2.table, idColumnName(complexEntity2, leftEntity) || "id")} =$ID)`;
+                                    const temp = `${formatPgTableColumn(rightEntity.table, rightKey)} IN (SELECT ${formatPgTableColumn(
+                                        complexEntity2.table,
+                                        idColumnName(complexEntity2, rightEntity) || "id"
+                                    )} FROM ${formatPgTableColumn(complexEntity2.table)} WHERE ${formatPgTableColumn(complexEntity2.table, idColumnName(complexEntity2, leftEntity) || "id")} =$ID)`;
                                     return {
                                         type: `${leftRelation.type}.${rightRelation.type}.2`,
                                         leftKey: leftKey,
@@ -215,7 +256,9 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                         switch (rightRelation.type) {
                             // ===> 4.1
                             case ERelations.defaultUnique:
-                                const temp1 = `${formatPgTableColumn(rightEntity.table, leftKey)} IN (SELECT ${formatPgTableColumn(rightEntity.table, leftKey)} FROM ${formatPgTableColumn(rightEntity.table)} WHERE ${formatPgTableColumn(rightEntity.table, rightKey)} =$ID)`;
+                                const temp1 = `${formatPgTableColumn(rightEntity.table, leftKey)} IN (SELECT ${formatPgTableColumn(rightEntity.table, leftKey)} FROM ${formatPgTableColumn(
+                                    rightEntity.table
+                                )} WHERE ${formatPgTableColumn(rightEntity.table, rightKey)} =$ID)`;
                                 return {
                                     type: `${leftRelation.type}.${rightRelation.type}`,
                                     leftKey: leftKey,
@@ -227,7 +270,8 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                 };
                             // ===> 4.2
                             case ERelations.belongsTo:
-                                const temp2 = `${formatPgTableColumn(rightEntity.table, "id")} IN (SELECT ${formatPgTableColumn(rightEntity.table, "id")} FROM ${formatPgTableColumn(rightEntity.table)} WHERE ${formatPgTableColumn(rightEntity.table, rightKey)} =$ID)`;
+                                // const temp2 = `${formatPgTableColumn(rightEntity.table, "id")} IN (SELECT ${formatPgTableColumn(rightEntity.table, "id")} FROM ${formatPgTableColumn(rightEntity.table)} WHERE ${formatPgTableColumn(rightEntity.table, rightKey)} =$ID)`;
+                                const temp2 = `${formatPgTableColumn(rightEntity.table, rightKey)} =$ID`;
                                 return {
                                     type: `${leftRelation.type}.${rightRelation.type}`,
                                     rightKey: rightKey,
@@ -257,7 +301,9 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                     rightKey: rightKey,
                                     entity: leftEntity,
                                     column: idColumnName(leftEntity, rightEntity) || "id",
-                                    link: `${formatPgTableColumn(rightEntity.table, rightKey)} = (SELECT ${formatPgTableColumn(leftEntity.table, leftKey)} FROM ${formatPgTableColumn(leftEntity.table)} WHERE ${formatPgTableColumn(leftEntity.table, leftKey)} =$ID)`,
+                                    link: `${formatPgTableColumn(rightEntity.table, rightKey)} = (SELECT ${formatPgTableColumn(leftEntity.table, leftKey)} FROM ${formatPgTableColumn(
+                                        leftEntity.table
+                                    )} WHERE ${formatPgTableColumn(leftEntity.table, leftKey)} =$ID)`,
                                     expand: `${formatPgTableColumn(rightEntity.table, rightKey)} = ${formatPgTableColumn(leftEntity.table, leftKey)}`
                                 };
                         }

@@ -89,7 +89,6 @@ export class CreateObservations extends Common {
             } else this.ctx.throw(EHttpCode.notFound, msg(errors.noValidStream, util.inspect(datasJson["columns"][key], { showHidden: false, depth: null, colors: false })));
         });
         // Create paramsFile
-        console.log(streamInfos);
         const paramsFile: IcsvFile = {
             tempTable: `temp${Date.now().toString()}`,
             filename: this.ctx.datas["file"],

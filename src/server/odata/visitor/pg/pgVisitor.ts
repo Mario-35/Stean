@@ -443,6 +443,8 @@ export class PgVisitor extends Visitor {
             }
     }
     addToWhere(value: string, context: IodataContext) {
+        console.log(log.debug_head("addToWhere"));
+
         if (context.target === EQuery.Geo) this.subQuery.where ? (this.subQuery.where += value) : (this.subQuery.where = value);
         else this.query.where.add(value);
     }
@@ -476,6 +478,8 @@ export class PgVisitor extends Visitor {
         };
     }
     public createComplexWhere(entity: string, node: Token, context: IodataContext) {
+        console.log(log.debug_head("createComplexWhere"));
+
         if (context.target) {
             if (!models.getEntity(this.ctx.service, entity)) return;
             const tempEntity = models.getEntity(this.ctx.service, node.value.name);
@@ -499,6 +503,7 @@ export class PgVisitor extends Visitor {
             }
         }
     }
+
     protected VisitODataIdentifier(node: Token, context: IodataContext) {
         const alias = this.getColumn(node.value.name, "", context);
         node.value.name = alias ? alias : node.value.name;
