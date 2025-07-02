@@ -23,6 +23,7 @@ import { Query } from "../builder";
 import { relationInfos } from "../../../models/helpers";
 import { isFile, isTestEntity } from "../../../helpers/tests";
 import { DATASTREAM } from "../../../models/entities";
+import { formatResultColuwn } from "../../../models/types";
 export class PgVisitor extends Visitor {
     entity: Ientity | undefined = undefined;
     columnSpecials: { [key: string]: string[] } = {};
@@ -67,6 +68,7 @@ export class PgVisitor extends Visitor {
         this.limit = 0;
         this.skip = 0;
     }
+
     swapEntity(newEntity: Ientity, id?: bigint | string) {
         this.parentEntity = this.entity;
         this.entity = newEntity;
@@ -83,6 +85,7 @@ export class PgVisitor extends Visitor {
         if (this.intervalColumns) this.intervalColumns.push(input);
         else this.intervalColumns = [input];
     }
+
     protected getColumn(input: string, operation: string, context: IodataContext) {
         console.log(log.whereIam(input));
         const tempEntity =
@@ -92,13 +95,6 @@ export class PgVisitor extends Visitor {
                 ? models.getEntity(this.ctx.service, this.entity || this.parentEntity || this.navigationProperty)
                 : undefined;
 
-        if (input.startsWith("result/")) {
-            this.columnSpecials["result"] = input
-                .split("result/")[1]
-                .split("/")
-                .map((e) => `"result"->'value'->'${e}' AS "${e}"`);
-            return "result";
-        }
         const columnName = input === "result" ? this.formatColumnResult(context, operation) : tempEntity ? this.getColumnNameOrAlias(tempEntity, input, this.createDefaultOptions()) : undefined;
         if (columnName) return columnName;
 
@@ -124,6 +120,7 @@ export class PgVisitor extends Visitor {
                 const translate = `TRANSLATE (SUBSTRING ("result"->>'value' FROM '(([0-9]+.*)*[0-9]+)'), '[]','')`;
                 const isOperation = operation.trim() != "";
                 const test = ForceString || isFile(this.ctx.service);
+                // json path = had to be ==
                 if (!test && !context.onEachResult && context.sign && context.sign === "=") context.sign = "==";
                 return test
                     ? // operation on string
@@ -141,11 +138,7 @@ export class PgVisitor extends Visitor {
                       `result @? '$.value ? (@EXPRESSION@ @)'`;
 
             default:
-                return `CASE 
-          WHEN JSONB_TYPEOF( "result"->'value') = 'number' THEN ("result"->${this.numeric == true ? ">" : ""}'value')::jsonb
-          WHEN JSONB_TYPEOF( "result"->'value') = 'array'  THEN ("result"->'${this.valueskeys == true ? "valueskeys" : "value"}')::jsonb
-          ELSE ("result"->'${this.valueskeys == true ? "valueskeys" : "value"}')::jsonb
-      END${this.isSelect(context) === true ? ' AS "result"' : ""}`;
+                return formatResultColuwn({ numeric: this.numeric, valueskeys: this.valueskeys, as: this.isSelect(context) });
         }
     }
 
@@ -495,6 +488,7 @@ export class PgVisitor extends Visitor {
                     )} FROM ${formatPgTableColumn(tempEntity.table)}`;
                 } else {
                     context.relation = node.value.name;
+                    context.entity = tempEntity.name;
                     context.table = tempEntity.table;
                 }
                 if (!context.key && context.relation) {
@@ -665,8 +659,6 @@ export class PgVisitor extends Visitor {
                 this.addToWhere(`${columnOrData(0, "", true)}  ILIKE '%${cleanData(1)}'`, context);
                 break;
             case "startswith":
-                console.log("----------------------------------------------");
-                console.log(context);
                 this.addToWhere(`${columnOrData(0, "", true)} ILIKE '${cleanData(1)}%'`, context);
                 break;
             case "substring":

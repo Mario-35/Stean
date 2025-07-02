@@ -75,18 +75,19 @@ function createTemplateDatas(entity) {
 
 // templane generator
 btnPostTemplate.onclick = () => {
-	// let result = (importFile == true) ? JSON.stringify({
-	// 	"header": true,
-	// 	"nan": true,
-	// 	"duplicates": true,
-	// 	"columns": {
-	// 		"1": {
-	// 			"datastream": "1",
-	// 			"featureOfInterest": "1"
-	// 		}
-	// 	}
-	// }) : {};
-	jsonDatas.value = createTemplateDatas(entityOption.value);
+	let result = (importFile == true) ? JSON.stringify({
+		"header": true,
+		"nan": true,
+		"duplicates": true,
+		"columns": {
+			"1": {
+				"datastream": "1",
+				"featureOfInterest": "1"
+			}
+		}
+	}) : {};
+	// jsonDatas.value = createTemplateDatas(entityOption.value);
+	jsonDatas.value = result;
 	setJSON();
 	buttonGo();
 };
@@ -268,9 +269,9 @@ function addToResultList(key, value, plus) {
 
 function runForm() {
 	wait(true);
-	try {
-		const text = jsonDatas.innerText.replace(/[^\x00-\x7F]/g, '');
-		jsonDatas.innerText = text;
+	try {		
+		const text = jsonDatas.value.replace(/[^\x00-\x7F]/g, '');
+		jsonDatas.value = text;
 		document.getElementById("actionForm").requestSubmit();
 	} catch (error) {
 		console.error(error);

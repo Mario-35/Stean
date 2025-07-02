@@ -51,3 +51,4 @@ export const doubleQuotesString = (input: string): string => `"${escapeDoubleQuo
 export const simpleQuotesString = (input: string): string => `'${escapeSimpleQuotes(trimSimpleQuotes(input))}'`;
 export const formatPgTableColumn = (table: string, column?: string) => `\"${table}\"${column ? `.\"${column}\"` : ""}`;
 export const formatPgSelectTableColumn = (table: string, column?: string) => `SELECT ${column === "*" ? "*" : formatPgTableColumn(table, column)} FROM \"${table}\"`;
+export const splitLast = (input: string, separateur: string) => input.split(separateur).reverse()[0];

@@ -33,8 +33,7 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     // decode url
     const decodedUrl = decodeUrl(ctx);
     // if logs show log file
-    if (!decodedUrl && ctx.path.includes("logs-")) return logsRoute(ctx, paths.root + "logs\\" + ctx.path);
-
+    if (ctx.path.includes("logs-")) return logsRoute(ctx, paths.root + "logs\\" + `${decodedUrl ? decodedUrl.path : ctx.path}`);
     // Specials routes
     switch (ctx.path.split("/").reverse()[0].toLocaleUpperCase()) {
         // admin page
@@ -69,7 +68,8 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     else return;
     // forcing post loras with different version IT'S POSSIBLE BECAUSE COLUMN ARE THE SAME FOR ALL VERSION
     if (decodedUrl.version != ctx.service.apiVersion) {
-        if (!(ctx.request.method === "POST" && ctx.originalUrl.includes(`${decodedUrl.version}/Loras`))) ctx.redirect(ctx.request.method === "GET" ? ctx.originalUrl.replace(String(decodedUrl.version), ctx.service.apiVersion) : `${ctx.decodedUrl.linkbase}/${ctx.service.apiVersion}/`);
+        if (!(ctx.request.method === "POST" && ctx.originalUrl.includes(`${decodedUrl.version}/Loras`)))
+            ctx.redirect(ctx.request.method === "GET" ? ctx.originalUrl.replace(String(decodedUrl.version), ctx.service.apiVersion) : `${ctx.decodedUrl.linkbase}/${ctx.service.apiVersion}/`);
     }
     // Clean query string
     ctx.querystring = ctx.request.method === "POST" && ctx.originalUrl.includes(`${decodedUrl.version}/Loras`) ? "" : decodeURIComponent(querystring.unescape(ctx.querystring));
@@ -82,8 +82,10 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
         ctx.user = decodeToken(ctx);
         await next().then(async () => {});
     } catch (error: any) {
-        console.log("-------------------- route error----------------------------");
+        // In prod console is romoved
+        console.log("\x1b[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ route error ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\x1b[0m");
         console.log(error);
+        console.log("\x1b[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\x1b[0m");
         const tempError = {
             code: error.statusCode || null,
             message: error.message || null,

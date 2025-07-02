@@ -1,3 +1,4 @@
+import { formatResultColuwn } from ".";
 import { EDataType } from "../../enums";
 import { IentityColumn, Iservice } from "../../types";
 import { Core } from "./core";
@@ -12,14 +13,7 @@ export class Result extends Core {
         return {
             create: "JSONB NULL",
             alias: function functionResult(service: Iservice, test: Record<string, boolean> | undefined) {
-                if (!test) return "result";
-                if (test["valueskeys"] && test["valueskeys"] === true) return `COALESCE("result"-> 'valueskeys', "result"-> 'value')${test && test["as"] === true ? ` AS "result"` : ""}`;
-                if (test["numeric"] && test["numeric"] === true)
-                    return `CASE 
-                WHEN jsonb_typeof("result"-> 'value') = 'number' THEN ("result"->>'value')::numeric 
-                WHEN jsonb_typeof("result"-> 'value') = 'array' THEN ("result"->>'value')[0]::numeric 
-                END${test && test["as"] === true ? ` AS "result"` : ""}`;
-                return `COALESCE("result"->'quality', "result"->'value')${test && test["as"] === true ? ` AS "result"` : ""}`;
+                return test ? formatResultColuwn({ numeric: test["numeric"], valueskeys: test["valueskeys"], as: test["as"] }) : "result";
             },
             dataType: EDataType.result
         };

@@ -40,7 +40,21 @@ export class CreateObservations extends Common {
                     elem = "featureofinterest_id";
                     break;
             }
-            res.push(isNaN(+elem) ? (Array.isArray(elem) ? `'{"value": [${elem}]}'` : typeof elem === "string" ? (elem.endsWith("Z") ? `TO_TIMESTAMP('${dateToDateWithTimeZone(elem)}', '${EDatesType.dateImport}')::TIMESTAMP` : `${separateur}${elem}${separateur}`) : `${separateur}{${elem}}${separateur}`) : index === this.indexResult && type === "VALUES" ? (this.ctx.service.extensions.includes(EExtensions.resultNumeric) ? elem : `'{"value": ${elem}}'`) : elem);
+            res.push(
+                isNaN(+elem)
+                    ? Array.isArray(elem)
+                        ? `'{"value": [${elem}]}'`
+                        : typeof elem === "string"
+                        ? elem.endsWith("Z")
+                            ? `TO_TIMESTAMP('${dateToDateWithTimeZone(elem)}', '${EDatesType.dateImport}')::TIMESTAMP`
+                            : `${separateur}${elem}${separateur}`
+                        : `${separateur}{${elem}}${separateur}`
+                    : index === this.indexResult && type === "VALUES"
+                    ? this.ctx.service.extensions.includes(EExtensions.resultNumeric)
+                        ? elem
+                        : `'{"value": ${elem}}'`
+                    : elem
+            );
         });
         return res;
     }
@@ -59,8 +73,7 @@ export class CreateObservations extends Common {
     async postForm(): Promise<IreturnResult | undefined> {
         console.log(log.whereIam());
         // verify is there FORM data
-        // const datasJson = JSON.parse(this.ctx.datas["datas"]);
-        const datasJson = JSON.parse(this.ctx.datas["datas"] || this.ctx.datas["json"]);
+        const datasJson = JSON.parse(this.ctx.datas["jsonDatas"] || this.ctx.datas["datas"] || this.ctx.datas["json"]);
         if (!datasJson["columns"]) this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: errors.noColumn });
         const myColumns: IcsvColumn[] = [];
         const streamInfos: IstreamInfos[] = [];
@@ -76,6 +89,7 @@ export class CreateObservations extends Common {
             } else this.ctx.throw(EHttpCode.notFound, msg(errors.noValidStream, util.inspect(datasJson["columns"][key], { showHidden: false, depth: null, colors: false })));
         });
         // Create paramsFile
+        console.log(streamInfos);
         const paramsFile: IcsvFile = {
             tempTable: `temp${Date.now().toString()}`,
             filename: this.ctx.datas["file"],
@@ -90,7 +104,10 @@ export class CreateObservations extends Common {
             const sqls = sqlInsert.query.map((e: string, index: number) => `${index === 0 ? "WITH " : ", "}updated${index + 1} as (${e})${EConstant.return}`);
             // Remove logs and triggers for speed insert
             await config.executeSql(this.ctx.service, `SET session_replication_role = replica;`);
-            const resultSql: Record<string, any> = await config.executeSql(this.ctx.service, `${sqls.join("")}SELECT (SELECT count(*) FROM ${paramsFile.tempTable}) AS total, (SELECT count(*) FROM updated1) AS inserted`);
+            const resultSql: Record<string, any> = await config.executeSql(
+                this.ctx.service,
+                `${sqls.join("")}SELECT (SELECT count(*) FROM ${paramsFile.tempTable}) AS total, (SELECT count(*) FROM updated1) AS inserted`
+            );
             // Restore logs and triggers
             await config.executeSql(this.ctx.service, `SET session_replication_role = DEFAULT;`);
             return this.formatReturnResult({
@@ -123,7 +140,10 @@ export class CreateObservations extends Common {
                             returnValue.push(`Duplicate (${elem})`);
                             if (dataInput["duplicate"] && dataInput["duplicate"].toUpperCase() === "DELETE") {
                                 await config
-                                    .executeSqlValues(this.ctx.service, `DELETE FROM ${doubleQuotesString(OBSERVATION.table)} WHERE 1=1 ` + keys.map((e, i) => `AND ${e} = ${values[i]}`).join(" ") + ` RETURNING id`)
+                                    .executeSqlValues(
+                                        this.ctx.service,
+                                        `DELETE FROM ${doubleQuotesString(OBSERVATION.table)} WHERE 1=1 ` + keys.map((e, i) => `AND ${e} = ${values[i]}`).join(" ") + ` RETURNING id`
+                                    )
                                     .then((res: Record<string, any>) => {
                                         returnValue.push(`delete id ==> ${res[0]}`);
                                         total += 1;

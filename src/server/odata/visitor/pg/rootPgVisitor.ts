@@ -21,15 +21,18 @@ import { doubleQuotesString } from "../../../helpers";
 export class RootPgVisitor extends PgVisitor {
     static root = true;
     special: string[] = [];
+
     constructor(ctx: koaContext, options = <SqlOptions>{}, node: Token, special?: string[]) {
         console.log(log.whereIam());
         super(ctx, options);
         if (special) this.special = special;
         if (node) this.StartVisitRessources(node);
     }
+
     protected verifyRessources = (): void => {
         console.log(log.debug_head("verifyRessources"));
     };
+
     protected VisitRessources(node: Token, context?: IodataContext) {
         const ressource: IvisitRessource = this[`VisitRessources${node.type}` as keyof object];
         if (ressource) {
@@ -37,31 +40,12 @@ export class RootPgVisitor extends PgVisitor {
             if (this.debugOdata) {
                 console.log(log.debug_infos("VisitRessources", `VisitRessources${node.type}`));
                 console.log(log.debug_infos("node.raw", node.raw));
-                console.log(log._result("this.query.where", this.query.where.toString()));
             }
         } else {
             log.error(`Ressource Not Found ============> VisitRessources${node.type}`);
             throw new Error(`Unhandled node type: ${node.type}`);
         }
         return this;
-    }
-    protected VisitRessourcesResourcePatheTik(nodeName: string, id: string | undefined) {
-        if (this.entity && this.entity.relations[nodeName]) {
-            const where = this.parentEntity ? `(SELECT ID FROM (${this.query.toWhere(this)}) as nop)${id ? `and id = ${id}` : ""}` : this.id;
-            const whereSql = link(this.ctx.service, this.entity.name, nodeName)
-                .split("$ID")
-                .join(<string>where);
-
-            this.query.where.init(whereSql);
-            const tempEntity = models.getEntity(this.ctx.service, nodeName);
-            if (tempEntity) {
-                this.swapEntity(tempEntity);
-                this.single = tempEntity.singular === nodeName || BigInt(this.id) > 0 ? true : false;
-            }
-        } else if (this.entity && this.entity.columns[nodeName]) {
-            this.query.select.add(`${doubleQuotesString(nodeName)}${EConstant.columnSeparator}`);
-            this.showRelations = false;
-        }
     }
 
     protected VisitRessourcesResourcePath(node: Token, context?: IodataContext) {
@@ -71,7 +55,22 @@ export class RootPgVisitor extends PgVisitor {
             this.special.forEach((element: string) => {
                 const nodeName = element.includes("(") ? element.split("(")[0] : element;
                 const id = element.includes("(") ? String(element.split("(")[1].split(")")[0]) : undefined;
-                this.VisitRessourcesResourcePatheTik(nodeName, id);
+                if (this.entity && this.entity.relations[nodeName]) {
+                    const where = this.parentEntity ? `(SELECT id FROM (${this.query.toWhere(this)}) as nop)${id ? `and id = ${id}` : ""}` : this.id;
+                    const whereSql = link(this.ctx.service, this.entity.name, nodeName)
+                        .split("$ID")
+                        .join(<string>where);
+
+                    this.query.where.init(whereSql);
+                    const tempEntity = models.getEntity(this.ctx.service, nodeName);
+                    if (tempEntity) {
+                        this.swapEntity(tempEntity);
+                        this.single = tempEntity.singular === nodeName || BigInt(this.id) > 0 ? true : false;
+                    }
+                } else if (this.entity && this.entity.columns[nodeName]) {
+                    this.query.select.add(`${doubleQuotesString(nodeName)}${EConstant.columnSeparator}`);
+                    this.showRelations = false;
+                }
             });
         }
     }
@@ -112,9 +111,11 @@ export class RootPgVisitor extends PgVisitor {
         if (this.query.where.notNull() === true) this.query.where.add(` AND ${condition}`);
         else this.query.where.init(condition);
     }
+
     protected VisitRessourcesSingleNavigation(node: Token, context: IodataContext) {
         if (node.value.path && node.value.path.type === "PropertyPath") this.VisitRessources(node.value.path, context);
     }
+
     protected VisitRessourcesEntityCollectionNavigationProperty(node: Token, context: any) {
         if (node.value.name.includes("/")) {
             node.value.name.split("/").forEach((element: string) => {
@@ -122,7 +123,7 @@ export class RootPgVisitor extends PgVisitor {
                 this.VisitRessourcesEntityCollectionNavigationProperty(node, context);
             });
         } else if (this.entity && this.entity.relations[node.value.name]) {
-            const where = this.parentEntity ? `(SELECT ID FROM (${this.query.toWhere(this)}) as nop)` : this.id;
+            const where = this.parentEntity ? `(SELECT ID FROM (${this.query.toWhere(this)}) AS nop)` : this.id;
             const whereSql = link(this.ctx.service, this.entity.name, node.value.name)
                 .split("$ID")
                 .join(<string>where);
@@ -143,10 +144,12 @@ export class RootPgVisitor extends PgVisitor {
         if (node.value.path) this.VisitRessources(node.value.path, context);
         if (node.value.navigation) this.VisitRessources(node.value.navigation, context);
     }
+
     protected VisitRessourcesODataUri(node: Token, context: IodataContext) {
         this.VisitRessources(node.value.resource, context);
         this.VisitRessources(node.value.query, context);
     }
+
     StartVisitRessources(node: Token) {
         console.log(log.debug_head("INIT PgVisitor"));
         this.limit = this.ctx.service.nb_page || 200;
@@ -155,6 +158,7 @@ export class RootPgVisitor extends PgVisitor {
         this.verifyRessources();
         return temp;
     }
+
     getSql() {
         if (this.includes)
             this.includes.forEach((include) => {
@@ -175,6 +179,7 @@ export class RootPgVisitor extends PgVisitor {
             });
         return this.onlyValue ? this.toString() : this.returnFormat.generateSql(this);
     }
+
     patchSql(datas: object): string | undefined {
         try {
             return postSqlFromPgVisitor(datas, this);
@@ -182,6 +187,7 @@ export class RootPgVisitor extends PgVisitor {
             return undefined;
         }
     }
+
     postSql(datas: object): string | undefined {
         try {
             return postSqlFromPgVisitor(datas, this);

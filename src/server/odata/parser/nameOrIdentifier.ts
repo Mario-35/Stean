@@ -95,9 +95,7 @@ namespace NameOrIdentifier {
         if (namespaceNext === index || value[namespaceNext] !== 0x2e) return;
         let schema;
         if (typeof metadataContext === "object") {
-            schema = NameOrIdentifier.getMetadataRoot(metadataContext).schemas.filter(
-                (it: any) => it.namespace === Utils.stringify(value, start, namespaceNext)
-            )[0];
+            schema = NameOrIdentifier.getMetadataRoot(metadataContext).schemas.filter((it: any) => it.namespace === Utils.stringify(value, start, namespaceNext))[0];
         }
         const name = NameOrIdentifier.entityTypeName(value, namespaceNext + 1, schema);
         if (!name) return;
@@ -110,9 +108,7 @@ namespace NameOrIdentifier {
         if (namespaceNext === index || value[namespaceNext] !== 0x2e) return;
         let schema;
         if (typeof metadataContext === "object") {
-            schema = NameOrIdentifier.getMetadataRoot(metadataContext).schemas.filter(
-                (it: any) => it.namespace === Utils.stringify(value, start, namespaceNext)
-            )[0];
+            schema = NameOrIdentifier.getMetadataRoot(metadataContext).schemas.filter((it: any) => it.namespace === Utils.stringify(value, start, namespaceNext))[0];
         }
         const name = NameOrIdentifier.complexTypeName(value, namespaceNext + 1, schema);
         if (!name) return;
@@ -155,8 +151,7 @@ namespace NameOrIdentifier {
                 index++;
             }
         }
-        if (index > start)
-            return Lexer.tokenize(value, start, index, { name: Utils.stringify(value, start, index) }, tokenType || Lexer.TokenType.ODataIdentifier);
+        if (index > start) return Lexer.tokenize(value, start, index, { name: Utils.stringify(value, start, index) }, tokenType || Lexer.TokenType.ODataIdentifier);
     }
     export function namespacePart(value: Utils.SourceArray, index: number): Lexer.Token | undefined {
         return NameOrIdentifier.odataIdentifier(value, index, Lexer.TokenType.NamespacePart);
@@ -442,10 +437,7 @@ namespace NameOrIdentifier {
         return token;
     }
     export function navigationProperty(value: Utils.SourceArray, index: number, metadataContext?: any): Lexer.Token | undefined {
-        return (
-            NameOrIdentifier.entityNavigationProperty(value, index, metadataContext) ||
-            NameOrIdentifier.entityColNavigationProperty(value, index, metadataContext)
-        );
+        return NameOrIdentifier.entityNavigationProperty(value, index, metadataContext) || NameOrIdentifier.entityColNavigationProperty(value, index, metadataContext);
     }
     export function entityNavigationProperty(value: Utils.SourceArray, index: number, metadataContext?: any): Lexer.Token | undefined {
         const token = NameOrIdentifier.odataIdentifier(value, index, Lexer.TokenType.EntityNavigationProperty);
@@ -453,11 +445,7 @@ namespace NameOrIdentifier {
         if (typeof metadataContext === "object") {
             for (let i = 0; i < metadataContext.navigationProperties.length; i++) {
                 const prop = metadataContext.navigationProperties[i];
-                if (
-                    prop.name === token.raw &&
-                    prop.type.indexOf("Collection") === -1 &&
-                    !NameOrIdentifier.isPrimitiveTypeName(prop.type.slice(11, -1), metadataContext)
-                ) {
+                if (prop.name === token.raw && prop.type.indexOf("Collection") === -1 && !NameOrIdentifier.isPrimitiveTypeName(prop.type.slice(11, -1), metadataContext)) {
                     const root = NameOrIdentifier.getMetadataRoot(metadataContext);
                     const schema = root.schemas.filter((it: any) => prop.type.indexOf(it.namespace + ".") === 0)[0];
                     if (!schema) return;
@@ -476,11 +464,7 @@ namespace NameOrIdentifier {
         if (typeof metadataContext === "object") {
             for (let i = 0; i < metadataContext.navigationProperties.length; i++) {
                 const prop = metadataContext.navigationProperties[i];
-                if (
-                    prop.name === token.raw &&
-                    prop.type.indexOf("Collection") === 0 &&
-                    !NameOrIdentifier.isPrimitiveTypeName(prop.type.slice(11, -1), metadataContext)
-                ) {
+                if (prop.name === token.raw && prop.type.indexOf("Collection") === 0 && !NameOrIdentifier.isPrimitiveTypeName(prop.type.slice(11, -1), metadataContext)) {
                     const root = NameOrIdentifier.getMetadataRoot(metadataContext);
                     const schema = root.schemas.filter((it: any) => prop.type.slice(11, -1).indexOf(it.namespace + ".") === 0)[0];
                     if (!schema) return;
@@ -521,15 +505,7 @@ namespace NameOrIdentifier {
             NameOrIdentifier.primitiveColFunction(value, index)
         );
     }
-    export function getEOperation(
-        operation: string,
-        metadataContext: any,
-        token: Lexer.Token,
-        isBoundCollection: boolean,
-        isCollection: boolean,
-        isPrimitive: boolean,
-        types?: string
-    ) {
+    export function getEOperation(operation: string, metadataContext: any, token: Lexer.Token, isBoundCollection: boolean, isCollection: boolean, isPrimitive: boolean, types?: string) {
         let bindingParameterType = metadataContext.parent.namespace + "." + metadataContext.name;
         if (isBoundCollection) bindingParameterType = "Collection(" + bindingParameterType + ")";
         let fnDef;
@@ -635,14 +611,7 @@ namespace NameOrIdentifier {
         }
         return token;
     }
-    export function getOperationImportType(
-        operation: string,
-        metadataContext: any,
-        token: Lexer.Token,
-        isCollection?: boolean,
-        isPrimitive?: boolean,
-        types?: string
-    ) {
+    export function getOperationImportType(operation: string, metadataContext: any, token: Lexer.Token, isCollection?: boolean, isPrimitive?: boolean, types?: string) {
         let fnImport;
         for (let i = 0; i < metadataContext.dataServices.schemas.length; i++) {
             const schema = metadataContext.dataServices.schemas[i];
