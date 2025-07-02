@@ -54,9 +54,10 @@ export const createOdata = async (ctx: koaContext): Promise<RootPgVisitor | unde
                     options.onlyValue = true;
                     removeElement(`/$${element}`);
                     break;
+                case "ref?":
                 case "ref":
                     options.onlyRef = true;
-                    removeElement(`/$${element}`);
+                    // removeElement(`/$${element}`);
                     break;
                 case "valuesKeys=true":
                     options.valueskeys = true;
