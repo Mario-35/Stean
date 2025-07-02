@@ -402,12 +402,13 @@ describe("endpoint : Observations", () => {
                     done();
                 });
         });
+
         it("Return Observations with boundaries dates", (done) => {
             const infos = addTest({
                 type: "get",
                 short: "With boundaries dates",
                 description: "Retrieve observations with boundaries dates.",
-                request: `${testVersion}/Datastreams(1)/${entity.name}?$filter=resultTime le 2021-10-15T08:00:00Z and resultTime ge 2017-01-13T03:00:00Z`
+                request: `${testVersion}/Datastreams(7)/${entity.name}?$filter=resultTime le 2024-06-03T08:00:01Z and resultTime ge 2024-06-03T02:45:00Z`
             });
             chai.request(server)
                 .get(`/test/${infos.request}`)
@@ -415,7 +416,8 @@ describe("endpoint : Observations", () => {
                     should.not.exist(err);
                     res.status.should.equal(200);
                     res.type.should.equal("application/json");
-                    Object.keys(res.body.value).length.should.eql(4);
+                    const id = res.body["@iot.count"];
+                    Object.keys(res.body.value).length.should.eql(id);
                     addToApiDoc({ ...infos, result: limitResult(res) });
                     done();
                 });

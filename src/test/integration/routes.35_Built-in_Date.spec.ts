@@ -274,6 +274,25 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
                 done();
             });
     });
+    it("ge(resultTime) and le(phenomenonTime)", (done) => {
+        const infos = addTest({
+            type: "get",
+            short: "Observations boundaries",
+            description: "The ge and le time functions is use as boundaries date.",
+            request: `${testVersion}/Observations?$filter=resultTime%20ge%202024-06-04%20and%20resultTime%20le%202024-06-05`
+        });
+        chai.request(server)
+            .get(`/test/${infos.request}`)
+            .end((err: Error, res: any) => {
+                should.not.exist(err);
+                res.status.should.equal(200);
+                res.type.should.equal("application/json");
+                res.body.value.length.should.eql(122);
+                addToApiDoc({ ...infos, result: limitResult(res) });
+
+                done();
+            });
+    });
     // it("totaloffsetminutes(resultTime) eq 330", (done) => {
     //     const infos = addTest({
     //         type: 'get',
