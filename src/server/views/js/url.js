@@ -124,6 +124,11 @@
   		}
   	}
 
+	if (getElement("refOption").checked === true) {
+		directLink = directLink + "/$ref";
+		queryLink = queryLink + `&refOption=true`;
+	}
+	
   	if (propertyOption.value != "none" && idOption.value != "") {
   		directLink = directLink + "/" + propertyOption.value;
   		queryLink = queryLink + `&property=${propertyOption.value}`;
@@ -132,6 +137,7 @@
   			directLink = directLink + "/$value";
   			queryLink = queryLink + `&onlyValueOption=true`;
   		}
+
 
   		return {
   			"direct": directLink,
