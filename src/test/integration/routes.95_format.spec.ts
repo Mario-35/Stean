@@ -69,7 +69,7 @@ describe("Output formats", () => {
                     res.status.should.equal(200);
                     res.type.should.equal("application/json");
                     res.body["@iot.count"].should.eql(16);
-                    res.body.value[0].component.length.should.eql(4);
+                    res.body.value[0].components.length.should.eql(4);
                     res.body.value[0].dataArray.length.should.eql(16);
                     res.body.value[0].dataArray = [res.body.value[0].dataArray[0], res.body.value[0].dataArray[1], " ... "];
                     addToApiDoc({ ...infos, result: res });
@@ -90,7 +90,7 @@ describe("Output formats", () => {
                     should.not.exist(err);
                     res.status.should.equal(200);
                     res.type.should.equal("application/json");
-                    res.body.value[0].component.length.should.eql(2);
+                    res.body.value[0].components.length.should.eql(2);
                     res.body["@iot.count"].should.eql(33);
                     res.body.value[0].dataArray.length.should.eql(33);
                     res.body.value[0].dataArray = [res.body.value[0].dataArray[0], res.body.value[0].dataArray[1], " ... "];
@@ -105,7 +105,7 @@ describe("Output formats", () => {
                     should.not.exist(err);
                     res.status.should.equal(200);
                     res.type.should.equal("application/json");
-                    res.body.value[0]["component"].should.includes("Datastream");
+                    res.body.value[0].components.should.includes("Datastream");
                     res.body["@iot.count"].should.eql(552);
                     done();
                 });
@@ -117,7 +117,7 @@ describe("Output formats", () => {
                     should.not.exist(err);
                     res.status.should.equal(200);
                     res.type.should.equal("application/json");
-                    res.body.value[0]["component"].should.includes("Datastream");
+                    res.body.value[0].components.should.includes("Datastream");
                     res.body["@iot.count"].should.eql(552);
                     res.body.value[0]["dataArray"][0][2]["@iot.id"].should.equal(1);
                     done();
@@ -130,7 +130,7 @@ describe("Output formats", () => {
                     should.not.exist(err);
                     res.status.should.equal(200);
                     res.type.should.equal("application/json");
-                    res.body.value[0]["component"].should.includes("Datastream");
+                    res.body.value[0].components.should.includes("Datastream");
                     Object.keys(res.body.value[0]["dataArray"][0][2]).should.include("@iot.id");
                     Object.keys(res.body.value[0]["dataArray"][0][2]).should.include("name");
                     res.body["@iot.count"].should.eql(552);
