@@ -7,6 +7,8 @@
 
 You must have curl installed on your server.
 
+This script will install NodeJS, PostgresSql17 with PostGis, create default user and params for postgesSql, pm2 and create run.sh script
+
 <details>
     <summary>If you need help</summary>
 
