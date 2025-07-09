@@ -15,7 +15,7 @@ import { PgVisitor } from "../../odata/visitor";
 
 export const asDataArray = (input: PgVisitor): string => {
     // create names
-    const names: string[] = input.toPgQuery()?.keys.map((e: string) => formatPgString(e)) || [];
+    const names: string[] = input.onlyRef === true ? ["@iot.selfLink"] : input.toPgQuery()?.keys.map((e: string) => formatPgString(e)) || [];
     // loop subQuery
     if (input.includes)
         input.includes.forEach((include: PgVisitor) => {
