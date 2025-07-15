@@ -240,6 +240,14 @@ export class Models {
             return;
         }
     }
+    public getClean(service: Iservice | string): string[] | undefined {
+        const mods = Models.models[this.get(service).apiVersion];
+        const temp: string[] = [];
+        Object.keys(mods).forEach((entity) => {
+            if (mods[entity].clean) temp.push(`UPDATE "${mods[entity].table}" SET ${mods[entity].clean}`);
+        });
+        return temp;
+    }
 
     public DBFullCreate(service: Iservice | string): Ientities {
         service = this.get(service);

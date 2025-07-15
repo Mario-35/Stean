@@ -21,7 +21,11 @@ import { IentityColumn } from "../../types";
 
 export function formatColumnValue(columnName: string, value: any, column: IentityColumn): string | undefined {
     const idLink = (value: any) => {
-        return value.hasOwnProperty(EConstant.name) ? `(SELECT "id" FROM "${columnName.split("_")[0]}" WHERE "name" = '${ESCAPE_SIMPLE_QUOTE(value[EConstant.name])}')` : value.hasOwnProperty(EConstant.id) ? value[EConstant.id] : removeFirstAndEnd(value, "@");
+        return value.hasOwnProperty(EConstant.name)
+            ? `(SELECT "id" FROM "${columnName.split("_")[0]}" WHERE "name" = '${ESCAPE_SIMPLE_QUOTE(value[EConstant.name])}')`
+            : value.hasOwnProperty(EConstant.id)
+            ? value[EConstant.id]
+            : removeFirstAndEnd(value, "@");
     };
     console.log(log.debug_head(`${columnName} [${column.dataType}] ==> ${value}`));
     if (value)

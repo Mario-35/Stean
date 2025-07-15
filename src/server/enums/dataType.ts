@@ -53,5 +53,5 @@ export enum EDataType {
     geometry, // geojson
     link, // link
     result, // result
-    period // result
+    period // period
 }

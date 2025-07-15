@@ -68,6 +68,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
         case "EXPORT":
             ctx.type = returnFormats.json.type;
             ctx.body = await exportService(ctx);
+            // ctx.body = { "pipo": "le maka" };
             return;
         // User login
         case "ADMIN":

@@ -27,9 +27,10 @@ export class Entity extends EntityPass {
     relations: { [key: string]: IentityRelation };
     constraints: Record<string, string>;
     indexes: Record<string, string>;
-    update?: string[];
+    // update?: string[];
     after?: string;
     trigger: string[];
+    clean?: string[];
 
     constructor(name: string, datas: IentityCore) {
         super();
@@ -63,7 +64,9 @@ export class Entity extends EntityPass {
     }
 
     insertStr(table: string, column: string, relTable: string, coalesce?: string) {
-        const datas = `IF ( NEW."${column}" < "DS_ROW"."_${column}Start" OR "DS_ROW"."_${column}Start" IS NULL ) ${this.querySet(column, "Start")}${EConstant.return} IF (${coalesce ? ` COALESCE( NEW."${column}", NEW."${coalesce}") ` : `NEW."${column}"`} > "DS_ROW"."_${column}End" OR "DS_ROW"."_${column}End" IS NULL ) ${this.querySet(column, "End")}`;
+        const datas = `IF ( NEW."${column}" < "DS_ROW"."_${column}Start" OR "DS_ROW"."_${column}Start" IS NULL ) ${this.querySet(column, "Start")}${EConstant.return} IF (${
+            coalesce ? ` COALESCE( NEW."${column}", NEW."${coalesce}") ` : `NEW."${column}"`
+        } > "DS_ROW"."_${column}End" OR "DS_ROW"."_${column}End" IS NULL ) ${this.querySet(column, "End")}`;
         Entity.trigger[table].insert = Entity.trigger[table].hasOwnProperty("insert")
             ? Entity.trigger[table].insert.replace("@DATAS@", `${EConstant.return}${datas}@DATAS@`)
             : `CREATE OR REPLACE FUNCTION ${table}s_update_insert() RETURNS TRIGGER LANGUAGE PLPGSQL AS $$ DECLARE "DS_ROW" RECORD; queryset TEXT := ''; delimitr char(1) := ' '; BEGIN IF (NEW."${table}_id" is not null) THEN SELECT "id", "_${column}Start", "_${column}End", "_resultTimeStart", "_resultTimeEnd" INTO "DS_ROW" FROM "${table}" WHERE "${table}"."id" = NEW."${table}_id"; ${datas} @DATAS@ IF (delimitr = ',') THEN EXECUTE 'update "${table}" SET ' || queryset || ' where "${table}"."id"=$1."${table}_id"' using NEW; END IF; RETURN new; END IF; RETURN new; END; $$`;
@@ -71,7 +74,9 @@ export class Entity extends EntityPass {
     }
 
     updateStr(table: string, column: string, relTable: string, coalesce?: string) {
-        const datas = `IF (NEW."${column}" != OLD."${column}") THEN for "DS_ROW" IN SELECT * FROM "${table}" WHERE "id"=NEW."${table}_id" LOOP IF (${coalesce ? ` COALESCE( NEW."${column}", NEW."${coalesce}") ` : `NEW."${column}"`} < "DS_ROW"."_${column}Start") ${this.querySet(column, "End")} END LOOP; END IF;`;
+        const datas = `IF (NEW."${column}" != OLD."${column}") THEN for "DS_ROW" IN SELECT * FROM "${table}" WHERE "id"=NEW."${table}_id" LOOP IF (${
+            coalesce ? ` COALESCE( NEW."${column}", NEW."${coalesce}") ` : `NEW."${column}"`
+        } < "DS_ROW"."_${column}Start") ${this.querySet(column, "End")} END LOOP; END IF;`;
         Entity.trigger[table].update = Entity.trigger[table].hasOwnProperty("update")
             ? Entity.trigger[table].update.replace("@DATAS@", `${EConstant.return}${datas}@DATAS@`)
             : `CREATE OR REPLACE FUNCTION ${table}s_update_update() RETURNS TRIGGER LANGUAGE PLPGSQL AS $$ DECLARE "DS_ROW" "${table}"%rowtype; queryset TEXT := ''; delimitr char(1) := ' '; BEGIN IF (NEW."${table}_id" is not null) THEN ${datas} @DATAS@ IF (delimitr = ',') THEN EXECUTE 'update "${table}" SET ' || queryset ||  ' where "${table}"."id"=$1."${table}_id"' using NEW; END IF; END IF; RETURN NEW; END; $$`;
@@ -84,6 +89,11 @@ export class Entity extends EntityPass {
             ? Entity.trigger[table].delete.replace("@DATAS@", `${EConstant.return}${datas}@DATAS@`)
             : `CREATE OR REPLACE FUNCTION ${table}s_update_delete() RETURNS TRIGGER LANGUAGE PLPGSQL AS $$ DECLARE "DS_ROW" "${table}"%rowtype; queryset TEXT := ''; delimitr char(1) := ' '; BEGIN IF (OLD."${table}_id" is not null) THEN SELECT * INTO "DS_ROW" FROM "${table}" WHERE "${table}"."id"=OLD."${table}_id"; ${datas} @DATAS@ IF (delimitr = ',') THEN EXECUTE 'update "${table}" SET ' || queryset ||  ' where "${table}"."id"=$1."${table}_id"' using OLD; END IF; END IF; RETURN NULL; END; $$`;
         Entity.trigger[table].doDelete = this.addTrigger("delete", table, relTable);
+    }
+
+    private addToClean(input: string) {
+        if (this.clean) this.clean.push(input);
+        else this.clean = [input];
     }
 
     private prepareColums() {
@@ -119,6 +129,8 @@ export class Entity extends EntityPass {
                     this.insertStr(this.table, e, entityRelation, coalesce);
                     this.updateStr(this.table, e, entityRelation, coalesce);
                     this.deleteStr(this.table, e, entityRelation);
+                    this.addToClean(`"_${e}Start" = (SELECT min("${entityRelation}"."${e}") from "${entityRelation}" where "${entityRelation}"."${this.table}_id" = ${this.table}.id)`);
+                    this.addToClean(`"_${e}End" = (SELECT max("${entityRelation}"."${e}") from "${entityRelation}" where "${entityRelation}"."${this.table}_id" = ${this.table}.id)`);
                 }
                 this.columns[e].create = "";
             }
@@ -175,7 +187,10 @@ export class Entity extends EntityPass {
                     this.addToIndexes(`${this.table}_${elem.toLowerCase()}_id`, `ON public."${this.table}" USING btree ("${elem.toLowerCase()}_id")`);
                     break;
                 case ERelations.defaultUnique:
-                    this.addToConstraints(`${this.table}_${elem.toLowerCase()}_id_fkey`, `FOREIGN KEY ("_default_${elem.toLowerCase()}") REFERENCES "${elem.toLowerCase()}"("id") ON UPDATE CASCADE ON DELETE CASCADE`);
+                    this.addToConstraints(
+                        `${this.table}_${elem.toLowerCase()}_id_fkey`,
+                        `FOREIGN KEY ("_default_${elem.toLowerCase()}") REFERENCES "${elem.toLowerCase()}"("id") ON UPDATE CASCADE ON DELETE CASCADE`
+                    );
                     break;
                 case ERelations.belongsToMany:
                     if (this.relations[elem].entityRelation) this.addToPass(this.relations[elem].entityRelation);

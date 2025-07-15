@@ -11,7 +11,7 @@ import { asyncForEach, compareVersions, decrypt, encrypt, hidePassword, isProduc
 import { Iservice, IdbConnection, IserviceInfos, koaContext, keyobj, Iversion } from "../types";
 import { errors, info, infos, msg } from "../messages";
 import { app } from "..";
-import { color, EChar, EColor, EConstant, EExtensions, EOptions } from "../enums";
+import { color, EChar, EColor, EConstant, EOptions } from "../enums";
 import path from "path";
 import fs from "fs";
 import postgres from "postgres";
@@ -20,7 +20,7 @@ import { createDatabase, pgFunctions, testDatas } from "../db/createDb";
 import { userAccess } from "../db/dataAccess";
 import { formatServiceFile, validJSONService } from "./helpers";
 import { MqttServer } from "../mqtt";
-import { createService, updateIndexes } from "../db/helpers";
+import { createService } from "../db/helpers";
 import { models } from "../models";
 import { paths } from "../paths";
 import { Trace } from "../log/trace";
@@ -168,7 +168,11 @@ class Configuration {
      * @returns true if it's done
      */
     private async readConfigFile(input?: string): Promise<boolean> {
-        this.writeLog(`${color(EColor.Red)}${"▬".repeat(24)} ${color(EColor.Cyan)} ${`START ${EConstant.appName} ${info.ver} : ${appVersion.version} du ${appVersion.date} [${process.env.NODE_ENV}]`} ${color(EColor.White)} ${new Date().toLocaleDateString()} : ${timestampNow()} ${color(EColor.Red)} ${"▬".repeat(24)}${color(EColor.Reset)}`);
+        this.writeLog(
+            `${color(EColor.Red)}${"▬".repeat(24)} ${color(EColor.Cyan)} ${`START ${EConstant.appName} ${info.ver} : ${appVersion.version} du ${appVersion.date} [${process.env.NODE_ENV}]`} ${color(
+                EColor.White
+            )} ${new Date().toLocaleDateString()} : ${timestampNow()} ${color(EColor.Red)} ${"▬".repeat(24)}${color(EColor.Reset)}`
+        );
         log.newLog(log.message("Root", paths.root));
         this.writeLog(log.message(infos(["read", "config"]), input ? "content" : paths.configFile.fileName));
         try {
@@ -280,10 +284,18 @@ class Configuration {
      * @returns infos as IserviceInfos
      */
     getInfos = (ctx: koaContext, name: string): IserviceInfos => {
-        const protocol: string = ctx.request.headers["x-forwarded-proto"] ? ctx.request.headers["x-forwarded-proto"].toString() : Configuration.services[name].options.includes(EOptions.forceHttps) ? "https" : ctx.protocol;
+        const protocol: string = ctx.request.headers["x-forwarded-proto"]
+            ? ctx.request.headers["x-forwarded-proto"].toString()
+            : Configuration.services[name].options.includes(EOptions.forceHttps)
+            ? "https"
+            : ctx.protocol;
 
         // make linkbase
-        let linkBase = ctx.request.headers["x-forwarded-host"] ? `${protocol}://${ctx.request.headers["x-forwarded-host"].toString()}` : ctx.request.header.host ? `${protocol}://${ctx.request.header.host}` : "";
+        let linkBase = ctx.request.headers["x-forwarded-host"]
+            ? `${protocol}://${ctx.request.headers["x-forwarded-host"].toString()}`
+            : ctx.request.header.host
+            ? `${protocol}://${ctx.request.header.host}`
+            : "";
 
         // make rootName
         if (!linkBase.includes(name)) linkBase += "/" + name;
@@ -541,6 +553,26 @@ class Configuration {
     /**
      *
      * @param connection name
+     * @returns nothing
+     */
+    private clean(connection: string): void {
+        if (![EConstant.admin as String, EConstant.test as String].includes(connection)) {
+            const queries = models.getClean(connection);
+            if (queries)
+                queries.forEach((query) => {
+                    config
+                        .connection(connection)
+                        .unsafe(query)
+                        .catch((error: Error) => {
+                            console.log(error);
+                        });
+                });
+        }
+    }
+
+    /**
+     *
+     * @param connection name
      * @returns true if it's done
      */
     private async reCreatePgFunctions(connection: string): Promise<boolean> {
@@ -720,8 +752,6 @@ class Configuration {
                         superAdmin: false,
                         admin: false
                     });
-                    if (![EConstant.admin as String, EConstant.test as String].includes(key)) updateIndexes(key);
-                    if (!Configuration.services[key].extensions.includes(EExtensions.file) && ![EConstant.admin as String, EConstant.test as String].includes(key)) updateIndexes(key);
                     this.messageListen(key, res ? EChar.web : EChar.notOk, true);
                     this.addListening(this.defaultHttp(), key);
                 }
@@ -799,6 +829,7 @@ class Configuration {
                         )
                     );
                 await this.reCreatePgFunctions(serviceName);
+                this.clean(serviceName);
                 return true;
             })
             .catch(async (error: Error) => {
