@@ -8,7 +8,7 @@
 
 import { config } from "../../configuration";
 import { EConstant } from "../../enums";
-import { doubleQuotesString, asyncForEach, getUrlKey, hidePassword } from "../../helpers";
+import { doubleQuotes, asyncForEach, getUrlKey, hidePassword } from "../../helpers";
 import { THINGLOCATION } from "../../models/entities";
 import { koaContext } from "../../types";
 // import { asCsv } from "../queries";
@@ -40,15 +40,8 @@ export const exportToJson = async (ctx: koaContext) => {
                             `CASE WHEN "${e}" ISNULL THEN NULL ELSE JSON_BUILD_OBJECT('@iot.name', (SELECT REPLACE (name, '''', '''''') FROM "${table}" WHERE "${table}"."id" = ${e} LIMIT 1)) END AS "${e}"`
                         );
                     });
-                const columnListWithQuotes = columnList.map((e) => doubleQuotesString(e)).join();
+                const columnListWithQuotes = columnList.map((e) => doubleQuotes(e)).join();
                 if (columnListWithQuotes.length <= 1) rels.shift();
-                console.log(`----------------------------${entity}------------------------------------------`);
-                console.log(
-                    `select ${columnListWithQuotes}${rels.length > 1 ? rels.join() : ""}${EConstant.return} FROM "${ctx.model[entity].table}" LIMIT ${
-                        getUrlKey(ctx.request.url, "limit") || ctx.service.nb_page
-                    }`
-                );
-                console.log("----------------------------------------------------------------------");
                 // Execute query
                 const tempResult = await config
                     .connection(ctx.service.name)
@@ -58,7 +51,7 @@ export const exportToJson = async (ctx: koaContext) => {
                         }`
                     );
                 // remove null and store datas result
-                result[entity] = tempResult; // result[entity] = removeEmpty(tempResult);
+                result[entity] = tempResult;
             }
         }
     );

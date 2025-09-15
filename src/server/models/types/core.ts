@@ -1,86 +1,58 @@
 import { EDataType } from "../../enums";
-import { IentityColumn, Iservice } from "../../types";
+import { doubleQuotes } from "../../helpers";
+import { IentityColumn, IentityColumnAliasOptions } from "../../types";
 
 export class Core {
-    _override: IentityColumn | undefined;
-    _dataType: EDataType;
-    _orderBy: string | undefined;
-    _cast: string;
-    _create: string;
-    _coalesce: string;
-    _entityRelation: string | undefined = undefined;
-    _verify: {
-        list: string[] | undefined;
-        default: string | undefined;
-    } = {
-        list: undefined,
-        default: undefined
-    };
-
-    constructor(dataType: EDataType, cast: string, entityRelation?: string) {
-        this._dataType = dataType;
-        this._cast = cast;
-        this._create = `@CAST@@NULL@@UNIQUE@@DEFAULT@`;
-        this._entityRelation = entityRelation;
+    _: IentityColumn;
+    cast: string | undefined;
+    constructor(dataType: EDataType, cast?: string) {
+        this._ = {
+            dataType: dataType,
+            create: `${EDataType[dataType.toString() as keyof typeof EDataType]}@NULL@@UNIQUE@@DEFAULT@`.toUpperCase(),
+            alias(options: IentityColumnAliasOptions) {
+                return doubleQuotes(options.columnName);
+            }
+        };
+        this.cast = cast;
     }
 
     coalesce(input: string) {
-        this._coalesce = input;
-        return this;
-    }
-    defaultOrder(input: "asc" | "desc") {
-        this._orderBy = input;
+        this._.coalesce = input;
         return this;
     }
 
-    type(): IentityColumn {
-        if (this._override) return this._override;
-        const res: IentityColumn = {
-            dataType: this._dataType,
-            create: this._create.replace("@CAST@", this._cast).replace("@DEFAULT@", "").replace("@NULL@", "").replace("@UNIQUE@", ""),
-            alias() {}
-        };
-        if (this._orderBy) res.orderBy = this._orderBy;
-        if (this._entityRelation) res.entityRelation = this._entityRelation;
-        if (this._coalesce) res.coalesce = this._coalesce;
-        if (this._verify.default && this._verify.list)
-            res.verify = {
-                list: this._verify.list,
-                default: this._verify.default
-            };
-        return res;
+    defaultOrder(input: "asc" | "desc") {
+        this._.orderBy = input;
+        return this;
+    }
+
+    column(): IentityColumn {
+        this._.create = this._.create.replace("@DEFAULT@", "").replace("@NULL@", "").replace("@UNIQUE@", "");
+        return this._;
     }
 
     notNull(): this {
-        this._create = this._create.replace("@NULL@", " NOT NULL");
+        this._.create = this._.create.replace("@NULL@", " NOT NULL");
         return this;
     }
 
     unique(): this {
-        this._create = this._create.replace("@UNIQUE@", " UNIQUE");
+        this._.create = this._.create.replace("@UNIQUE@", " UNIQUE");
         return this;
     }
 
     default(input: string | number): this {
         if (typeof input === "number") input = String(input);
-        this._create = this._create.replace("@DEFAULT@", input.trim() !== "" ? ` DEFAULT '${input.trim()}'::${this._cast}` : "");
-        this._verify.default = input.trim();
+        this._.create = this._.create.replace("@DEFAULT@", input.trim() !== "" ? ` DEFAULT '${input.trim()}'${this.cast ? `::${this.cast}` : ""}` : "");
+        this._.verify = {
+            list: [],
+            default: input.trim()
+        };
         return this;
     }
 
     relation(input: string): this {
-        this._entityRelation = input.trim();
-        return this;
-    }
-
-    alias(alias: string, create: string, dataType: EDataType) {
-        this._override = {
-            create: "JSONB NULL",
-            alias(service: Iservice, test: Record<string, boolean> | undefined) {
-                return `"result"->'line'${test && test["as"] === true ? ` AS "result"` : ""}`;
-            },
-            dataType: dataType
-        };
+        this._.entityRelation = input.trim();
         return this;
     }
 }

@@ -7,18 +7,18 @@
  */
 
 import { Entity } from "../entity";
-import { ERelations, ETable } from "../../enums";
+import { ERelations, EentityType } from "../../enums";
 import { Ientity } from "../../types";
 import { Bigint, Jsonb, Text } from "../types";
 export const THING: Ientity = new Entity("Things", {
     createOrder: 1,
-    type: ETable.table,
+    type: EentityType.table,
     order: 10,
     columns: {
-        id: new Bigint().generated("id").type(),
-        name: new Text().notNull().type(),
-        description: new Text().notNull().type(),
-        properties: new Jsonb().type()
+        id: new Bigint().generated().column(),
+        name: new Text().notNull().column(),
+        description: new Text().notNull().column(),
+        properties: new Jsonb().column()
     },
     relations: {
         Locations: {

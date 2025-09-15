@@ -6,9 +6,9 @@
  *
  */
 
-import { doubleQuotesString, getBigIntFromString } from "../../../helpers";
+import { doubleQuotes, getBigIntFromString } from "../../../helpers";
 import { Ientity, IqueryMaker } from "../../../types";
-import { EConstant, EOperation, EOptions, ETable } from "../../../enums";
+import { EConstant, EOperation, EOptions, EentityType } from "../../../enums";
 import { asJson } from "../../../db/queries";
 import { models } from "../../../models";
 import { log } from "../../../log";
@@ -95,9 +95,25 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
                 returnValue.push(`, ${element} AS (`);
                 if (src.id) {
                     if (queryMaker[element].type == EOperation.Association) {
-                        returnValue.push(`INSERT INTO "${queryMaker[element].entity.table}" ${createInsertValues(src.ctx.service, formatInsertEntityData(queryMaker[element].entity.table, queryMaker[element].datas, src))}${onConflict(element)} WHERE "${queryMaker[element].entity.table}"."${queryMaker[element].keyId}" = ${BigInt(src.id).toString()}`);
-                    } else returnValue.push(`UPDATE "${queryMaker[element].entity.table}" SET ${createUpdateValues(queryMaker[element].entity, queryMaker[element].datas)} WHERE "${queryMaker[element].entity.table}"."${queryMaker[element].keyId}" = (select verifyId('${queryMaker[element].entity.table}', ${src.id}) as id)`);
-                } else returnValue.push(`INSERT INTO "${queryMaker[element].entity.table}" ${createInsertValues(src.ctx.service, formatInsertEntityData(queryMaker[element].entity.table, queryMaker[element].datas, src))}${queryMaker[element].entity.type === ETable.link ? onConflict(element) : ""}`);
+                        returnValue.push(
+                            `INSERT INTO "${queryMaker[element].entity.table}" ${createInsertValues(
+                                src.ctx.service,
+                                formatInsertEntityData(queryMaker[element].entity.table, queryMaker[element].datas, src)
+                            )}${onConflict(element)} WHERE "${queryMaker[element].entity.table}"."${queryMaker[element].keyId}" = ${BigInt(src.id).toString()}`
+                        );
+                    } else
+                        returnValue.push(
+                            `UPDATE "${queryMaker[element].entity.table}" SET ${createUpdateValues(queryMaker[element].entity, queryMaker[element].datas)} WHERE "${
+                                queryMaker[element].entity.table
+                            }"."${queryMaker[element].keyId}" = (select verifyId('${queryMaker[element].entity.table}', ${src.id}) as id)`
+                        );
+                } else
+                    returnValue.push(
+                        `INSERT INTO "${queryMaker[element].entity.table}" ${createInsertValues(
+                            src.ctx.service,
+                            formatInsertEntityData(queryMaker[element].entity.table, queryMaker[element].datas, src)
+                        )}${queryMaker[element].entity.type === EentityType.link ? onConflict(element) : ""}`
+                    );
 
                 returnValue.push(`RETURNING ${postEntity.table == queryMaker[element].entity.table ? allFields : queryMaker[element].keyId})`);
             }
@@ -299,14 +315,22 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
     if ((names[postEntity.table] && queryMaker[postEntity.table] && queryMaker[postEntity.table].datas) || root === undefined) {
         queryMaker[postEntity.table].datas = Object.assign(root as object, queryMaker[postEntity.table].datas);
         queryMaker[postEntity.table].keyId = src.id ? "id" : "*";
-        sqlResult = queryMakerToString(`WITH "log_request" AS (${EConstant.return}${EConstant.tab}SELECT srid FROM ${doubleQuotesString(EConstant.voidtable)} LIMIT 1${EConstant.return})`);
+        sqlResult = queryMakerToString(`WITH "log_request" AS (${EConstant.return}${EConstant.tab}SELECT srid FROM ${doubleQuotes(EConstant.voidtable)} LIMIT 1${EConstant.return})`);
     } else {
         sqlResult = queryMakerToString(
             src.id
                 ? root && Object.entries(root).length > 0
-                    ? `WITH ${postEntity.table} AS (${EConstant.return}${EConstant.tab}UPDATE ${doubleQuotesString(postEntity.table)}${EConstant.return}${EConstant.tab}SET ${createUpdateValues(postEntity, root)} WHERE "id" = (${EConstant.return}${EConstant.tab}select verifyId('${postEntity.table}', ${src.id}) as id) RETURNING ${allFields})`
-                    : `WITH ${postEntity.table} AS (${EConstant.return}${EConstant.tab}SELECT * FROM ${doubleQuotesString(postEntity.table)}${EConstant.return}${EConstant.tab}WHERE "id" = ${src.id.toString()})`
-                : `WITH ${postEntity.table} AS (${EConstant.return}${EConstant.tab}INSERT INTO ${doubleQuotesString(postEntity.table)} ${createInsertValues(src.ctx.service, formatInsertEntityData(postEntity.name, root, src))} RETURNING ${allFields})`
+                    ? `WITH ${postEntity.table} AS (${EConstant.return}${EConstant.tab}UPDATE ${doubleQuotes(postEntity.table)}${EConstant.return}${EConstant.tab}SET ${createUpdateValues(
+                          postEntity,
+                          root
+                      )} WHERE "id" = (${EConstant.return}${EConstant.tab}select verifyId('${postEntity.table}', ${src.id}) as id) RETURNING ${allFields})`
+                    : `WITH ${postEntity.table} AS (${EConstant.return}${EConstant.tab}SELECT * FROM ${doubleQuotes(postEntity.table)}${EConstant.return}${
+                          EConstant.tab
+                      }WHERE "id" = ${src.id.toString()})`
+                : `WITH ${postEntity.table} AS (${EConstant.return}${EConstant.tab}INSERT INTO ${doubleQuotes(postEntity.table)} ${createInsertValues(
+                      src.ctx.service,
+                      formatInsertEntityData(postEntity.name, root, src)
+                  )} RETURNING ${allFields})`
         );
     }
     const temp = src.toPgQuery();

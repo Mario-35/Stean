@@ -8,12 +8,27 @@
 import { koaContext } from "../types";
 export const getUserId = (ctx: koaContext): number => (ctx.state.user && ctx.state.user.id ? ctx.state.user.id : -1);
 export const unikeList = (input: string[]) => [...new Set(input)];
-export { isTest, isProduction, isDataArray, isCsv, isGraph, isObservation, isGeoJson, isAdmin, isAllowedTo, isString, isBoolean, isNumber, isIntegerNumber, isObject, isArray } from "./tests";
+export {
+    isTest,
+    isProduction,
+    isReturnDataArray,
+    isReturnCsv,
+    isReturnGraph,
+    isObservation,
+    isReturnGeoJson,
+    isAdmin,
+    isAllowedTo,
+    isString,
+    isBoolean,
+    isNumber,
+    isIntegerNumber,
+    isObject,
+    isArray
+} from "./tests";
 export { asyncForEach } from "./asyncForEach";
 export { cleanStringComma } from "./cleanStringComma";
 export { cleanUrl } from "./cleanUrl";
 export { removeFromUrl } from "./removeFromUrl";
-export { containsAll } from "./containsAll";
 export { createBearerToken } from "./createBearerToken";
 export { deepClone } from "./deepClone";
 export { encrypt, decrypt } from "./crypto";
@@ -32,7 +47,6 @@ export { compareVersions } from "./compareVersions";
 export { promiseHttpsRequest } from "./promiseHttpsRequest";
 export { httpsDownload } from "./httpsDownload";
 export { httpsDownloadJSON } from "./httpsDownloadJson";
-export { removeEmpty } from "./removeEmpty";
 export { upload } from "./upload";
 export { connectWeb } from "./connectWeb";
 export { logToHtml } from "./logToHtml";
@@ -47,7 +61,7 @@ export const removeFirstEndDoubleQuotes = (input: string) => removeFirstAndEnd(i
 export const removeFirstEndSimpleQuotes = (input: string) => removeFirstAndEnd(input, "'");
 export const trimAllQuotes = (input: string) => trimDoubleQuotes(trimSimpleQuotes(input));
 export const formatPgString = (input: string): string => escapeSimpleQuotes(trimAllQuotes(input));
-export const doubleQuotesString = (input: string): string => `"${escapeDoubleQuotes(trimDoubleQuotes(input))}"`;
+export const doubleQuotes = (input: string): string => `"${escapeDoubleQuotes(trimDoubleQuotes(input))}"`;
 export const simpleQuotesString = (input: string): string => `'${escapeSimpleQuotes(trimSimpleQuotes(input))}'`;
 export const formatPgTableColumn = (table: string, column?: string) => `\"${table}\"${column ? `.\"${column}\"` : ""}`;
 export const formatPgSelectTableColumn = (table: string, column?: string) => `SELECT ${column === "*" ? "*" : formatPgTableColumn(table, column)} FROM \"${table}\"`;

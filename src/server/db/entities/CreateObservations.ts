@@ -9,7 +9,7 @@
 import { Common } from "./common";
 import { IcsvColumn, IcsvFile, IreturnResult, IstreamInfos, koaContext } from "../../types";
 import { queryInsertFromCsv, dateToDateWithTimeZone } from "../helpers";
-import { doubleQuotesString, asyncForEach } from "../../helpers";
+import { doubleQuotes, asyncForEach, splitLast } from "../../helpers";
 import { errors, msg } from "../../messages/";
 import { EChar, EConstant, EDatesType, EExtensions, EHttpCode } from "../../enums";
 import util from "util";
@@ -111,7 +111,7 @@ export class CreateObservations extends Common {
             await config.executeSql(this.ctx.service, `SET session_replication_role = DEFAULT;`);
             return this.formatReturnResult({
                 total: sqlInsert.count,
-                body: [`Add ${resultSql[0]["inserted"]} on ${resultSql[0]["total"]} lines from ${paramsFile.filename.split("/").reverse()[0]}`]
+                body: [`Add ${resultSql[0]["inserted"]} on ${resultSql[0]["total"]} lines from ${splitLast(paramsFile.filename, "/")}`]
             });
         }
         return undefined;
@@ -129,7 +129,7 @@ export class CreateObservations extends Common {
                 const keys = [`"${dataStreamId.type?.toLowerCase()}_id"`].concat(this.createListColumnsValues("COLUMNS", dataInput["components"]));
                 const values = this.createListColumnsValues("VALUES", [String(dataStreamId.id), ...elem]);
                 await config
-                    .executeSqlValues(this.ctx.service, `INSERT INTO ${doubleQuotesString(OBSERVATION.table)} (${keys}) VALUES (${values}) RETURNING id`)
+                    .executeSqlValues(this.ctx.service, `INSERT INTO ${doubleQuotes(OBSERVATION.table)} (${keys}) VALUES (${values}) RETURNING id`)
                     .then((res: Record<string, any>) => {
                         returnValue.push(this.linkBase.replace("Create", "") + "(" + res[0] + ")");
                         total += 1;
@@ -141,7 +141,7 @@ export class CreateObservations extends Common {
                                 await config
                                     .executeSqlValues(
                                         this.ctx.service,
-                                        `DELETE FROM ${doubleQuotesString(OBSERVATION.table)} WHERE 1=1 ` + keys.map((e, i) => `AND ${e} = ${values[i]}`).join(" ") + ` RETURNING id`
+                                        `DELETE FROM ${doubleQuotes(OBSERVATION.table)} WHERE 1=1 ` + keys.map((e, i) => `AND ${e} = ${values[i]}`).join(" ") + ` RETURNING id`
                                     )
                                     .then((res: Record<string, any>) => {
                                         returnValue.push(`delete id ==> ${res[0]}`);

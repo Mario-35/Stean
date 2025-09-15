@@ -16,7 +16,7 @@ import { PgVisitor } from "../.";
 import { models } from "../../../models";
 import { errors } from "../../../messages";
 import { link } from "../../../models/helpers";
-import { doubleQuotesString } from "../../../helpers";
+import { doubleQuotes } from "../../../helpers";
 
 export class RootPgVisitor extends PgVisitor {
     static root = true;
@@ -68,7 +68,7 @@ export class RootPgVisitor extends PgVisitor {
                         this.single = tempEntity.singular === nodeName || BigInt(this.id) > 0 ? true : false;
                     }
                 } else if (this.entity && this.entity.columns[nodeName]) {
-                    this.query.select.add(`${doubleQuotesString(nodeName)}${EConstant.columnSeparator}`);
+                    this.query.select.add(`${doubleQuotes(nodeName)}${EConstant.columnSeparator}`);
                     this.showRelations = false;
                 }
             });
@@ -135,7 +135,7 @@ export class RootPgVisitor extends PgVisitor {
                 this.single = tempEntity.singular === node.value.name || BigInt(this.id) > 0 ? true : false;
             }
         } else if (this.entity && this.entity.columns[node.value.name]) {
-            this.query.select.add(`${doubleQuotesString(node.value.name)}${EConstant.columnSeparator}`);
+            this.query.select.add(`${doubleQuotes(node.value.name)}${EConstant.columnSeparator}`);
             this.showRelations = false;
         } else this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: errors.notValid });
     }

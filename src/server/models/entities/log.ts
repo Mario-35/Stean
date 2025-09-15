@@ -8,20 +8,20 @@
 
 import { Entity } from "../entity";
 import { Ientity } from "../../types";
-import { ETable } from "../../enums";
+import { EentityType } from "../../enums";
 import { Bigint, Jsonb, Text, Timestamp } from "../types";
 
 export const LOG: Ientity = new Entity("Logs", {
     createOrder: 99,
-    type: ETable.blank,
+    type: EentityType.blank,
     order: 0,
     columns: {
-        id: new Bigint().generated("id").type(),
-        date: new Timestamp("tz").notNull().defaultCurrent().defaultOrder("desc").type(),
-        method: new Text().type(),
-        url: new Text().type(),
-        datas: new Jsonb().type(),
-        error: new Jsonb().type()
+        id: new Bigint().generated().column(),
+        date: new Timestamp("tz").notNull().defaultCurrent().defaultOrder("desc").column(),
+        method: new Text().column(),
+        url: new Text().column(),
+        datas: new Jsonb().column(),
+        error: new Jsonb().column()
     },
     relations: {}
 });

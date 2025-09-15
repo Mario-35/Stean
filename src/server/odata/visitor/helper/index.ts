@@ -11,4 +11,6 @@ export { oDataDateFormat } from "./oDataDateFormat";
 export { blankRootPgVisitor } from "./blankRootPgVisitor";
 export { doSomeWorkAfterCreateAst } from "./doSomeWorkAfterCreateAst";
 export { escapesOdata } from "./escapesOdata";
+export { createIentityColumnAliasOptions } from "./createIentityColumnAliasOptions";
+export { createDefaultContext } from "./createDefaultContext";
 export { OdataGeoColumn } from "./odataGeoColumn";

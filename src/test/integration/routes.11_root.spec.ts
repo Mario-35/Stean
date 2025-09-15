@@ -15,7 +15,9 @@ addToApiDoc({
     short: "Presentation",
     description: `<img src="./assets/logo.png" alt="Stean">${blank(1)}
     <span class="tabLogo">SensorThings Enhanced API Node</span>${blank(2)}
-    <a class="tabLogo" href="https://github.com/Mario-35/Stean" target="_blank"><img src="./assets/github.png" alt="github"></a><span class="tabLink">https://github.com/Mario-35/Stean</span>${blank(2)}
+    <a class="tabLogo" href="https://github.com/Mario-35/Stean" target="_blank"><img src="./assets/github.png" alt="github"></a><span class="tabLink">https://github.com/Mario-35/Stean</span>${blank(
+        2
+    )}
     <a class="tabLogo" href="mailto: sensorThings@inrae.fr"><img src="./assets/mail.png" alt="mail"></a><span class="tabLink">sensorThings@inrae.fr</span>${blank(2)}
     <a class="tabLogo" href="https://sensorthings.wiki.inrae.fr" target="_blank"><img src="./assets/wiki.png" alt="wiki"></a><span class="tabLink">https://sensorthings.wiki.inrae.fr</span>${blank(2)}
     <a class="tabLogo" href="./assets/tests.html" target="_blank"><img src="./assets/tests.png" alt="wiki"></a><span class="tabLink">All Tests</span>${blank(2)}

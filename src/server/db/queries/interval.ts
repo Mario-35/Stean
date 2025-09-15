@@ -32,7 +32,7 @@ time_range AS (
         range_values
 ) 
 SELECT 
-    ${input.intervalColumns ? input.intervalColumns.join(", ") : ""} 
+    ${input.intervalColumns ? input.intervalColumns.filter((e) => e != "").join(", ") : ""} 
 FROM 
     src RIGHT JOIN time_range on srcdate = step`
         : input.toString();

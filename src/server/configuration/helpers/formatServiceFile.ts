@@ -9,7 +9,7 @@ import util from "util";
 import { EConstant } from "../../enums";
 import { unikeList, unique } from "../../helpers";
 import { errors } from "../../messages";
-import { Iservice, typeExtensions, typeOptions } from "../../types";
+import { Iservice, typeExtensions } from "../../types";
 
 /**
  *
@@ -19,13 +19,12 @@ import { Iservice, typeExtensions, typeOptions } from "../../types";
  */
 
 export function formatServiceFile(name: string, input: Record<string, any>): Iservice {
-    const options: typeof typeOptions = input["options"] ? (unique([...String(input["options"]).split(",")]) as typeof typeOptions) : [];
+    const options = input["options"] ? unique([...String(input["options"]).split(",")]) : [];
     const extensions: typeof typeExtensions = input["extensions"] ? (unique([...String(input["extensions"]).split(",")]) as typeof typeExtensions) : ["base"];
     const version = name === EConstant.admin ? "v1.1" : String(input["version"] || input["apiVersion"]).trim();
 
-    // if (input["extensions"]["users"]) extensions.includes("users");
-
     const returnValue: Iservice = {
+        date: new Date().toLocaleString(),
         name: name,
         ports:
             name === EConstant.admin
@@ -53,7 +52,7 @@ export function formatServiceFile(name: string, input: Record<string, any>): Ise
         csvDelimiter: input["csvDelimiter"] ? input["csvDelimiter"] : ";",
         synonyms: input["synonyms"] ? input["synonyms"] : undefined,
         _connection: undefined,
-        _stats: undefined
+        users: undefined
     };
 
     if (Object.values(returnValue).includes("ERROR"))

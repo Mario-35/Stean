@@ -11,6 +11,7 @@ import { columnsNameFromHydrasCsv, streamCsvFile } from ".";
 import { log } from "../../log";
 import { EChar } from "../../enums";
 import { OBSERVATION } from "../../models/entities";
+import { splitLast } from "../../helpers";
 
 export async function queryInsertFromCsv(service: Iservice, paramsFile: IcsvFile): Promise<{ count: number; query: string[] } | undefined> {
     console.log(log.whereIam());
@@ -19,7 +20,7 @@ export async function queryInsertFromCsv(service: Iservice, paramsFile: IcsvFile
         const stream = await streamCsvFile(service, paramsFile, sqlRequest);
         console.log(log.debug_infos(`COPY TO ${paramsFile.tempTable}`, stream > 0 ? EChar.ok : EChar.notOk));
         if (stream > 0) {
-            const fileImport = paramsFile.filename.split("/").reverse()[0];
+            const fileImport = splitLast(paramsFile.filename, "/");
             const dateImport = new Date().toLocaleString();
             // stream finshed so COPY
             const scriptSql: string[] = [];

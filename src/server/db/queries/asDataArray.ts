@@ -10,7 +10,7 @@
 import { asJson } from ".";
 import { ESCAPE_SIMPLE_QUOTE } from "../../constants";
 import { EConstant } from "../../enums";
-import { doubleQuotesString, simpleQuotesString, formatPgString } from "../../helpers";
+import { doubleQuotes, simpleQuotesString, formatPgString } from "../../helpers";
 import { PgVisitor } from "../../odata/visitor";
 
 export const asDataArray = (input: PgVisitor): string => {
@@ -26,7 +26,7 @@ export const asDataArray = (input: PgVisitor): string => {
         query: `SELECT (ARRAY[${EConstant.newline}\t${names
             .map((e: string) => simpleQuotesString(ESCAPE_SIMPLE_QUOTE(e)))
             .join(`,${EConstant.newline}\t`)}]) AS "components", JSONB_AGG(allkeys) AS "dataArray" FROM (SELECT JSON_BUILD_ARRAY(${EConstant.newline}\t${names
-            .map((e: string) => doubleQuotesString(e))
+            .map((e: string) => doubleQuotes(e))
             .join(`,${EConstant.newline}\t`)}) AS allkeys ${EConstant.return}${EConstant.tab}FROM (${input.toString()}) AS p) AS l`,
         singular: false,
         strip: false,

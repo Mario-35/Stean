@@ -8,8 +8,34 @@
  *
  */
 process.env.NODE_ENV = "test";
-import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, listOfColumns, limitResult, infos, apiInfos, showHide, nbColor, nbColorTitle, testVersion, _RAWDB } from "./constant";
-export const testsKeys = ["@iot.id", "@iot.selfLink", "description", "name", "properties", "Locations@iot.navigationLink", "HistoricalLocations@iot.navigationLink", "Datastreams@iot.navigationLink", "MultiDatastreams@iot.navigationLink"];
+import {
+    IApiDoc,
+    generateApiDoc,
+    IApiInput,
+    prepareToApiDoc,
+    identification,
+    keyTokenName,
+    listOfColumns,
+    limitResult,
+    infos,
+    apiInfos,
+    showHide,
+    nbColor,
+    nbColorTitle,
+    testVersion,
+    _RAWDB
+} from "./constant";
+export const testsKeys = [
+    "@iot.id",
+    "@iot.selfLink",
+    "description",
+    "name",
+    "properties",
+    "Locations@iot.navigationLink",
+    "HistoricalLocations@iot.navigationLink",
+    "Datastreams@iot.navigationLink",
+    "MultiDatastreams@iot.navigationLink"
+];
 import chai from "chai";
 import chaiHttp from "chai-http";
 import { server } from "../../server/index";

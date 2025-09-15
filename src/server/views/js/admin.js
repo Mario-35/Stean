@@ -172,11 +172,9 @@ async function editCsv(name ,elem) {
 // change card selector
 async function selectChange(name ,elem) {
 	switch (elem.value) {
-		case "Statistiques":
-			getElement("infos"+ name).innerHTML = Object.keys(_PARAMS.services[name].stats).filter(e =>  e !== "Users").map(e => `<option>${e} : ${_PARAMS.services[name].stats[e]}</option>`).join("\n");
-			showInfos(name);
-			break;
-		case "Users":			
+		case "Users":	
+		console.log(_PARAMS.services[name]);
+				
 			getElement("infos"+ name).innerHTML = _PARAMS.services[name].stats["Users"].map(e => `<option value="${e["username"]}" onclick="showUserInfos('${name}', '${e["username"]}')">${e["username"]}</option>`).join("\n");
 			break;
 		case "Loras":
@@ -189,7 +187,7 @@ async function selectChange(name ,elem) {
 				getElement("infos"+ name).innerHTML = Object.keys(_PARAMS.services[name].service.synonyms).map(e => `<option value="${e["username"]}" onclick="editList('${name}','${e}')">${e}</option>`).join("\n");
 			break;	
 		case 0: 		
-			if (["canDrop", "forceHttps", "stripNull","unique"].includes(elem.textContent)) {
+			if (["canDrop", "forceHttps", "stripNull","speedCount","unique"].includes(elem.textContent)) {
 				if (_PARAMS.services[name].service.options.includes(elem.textContent)) {
 					var index = _PARAMS.services[name].service.options.indexOf(elem.textContent);
 					_PARAMS.services[name].service.options.splice(index, 1);
@@ -261,7 +259,7 @@ async function showDecoderInfos(name, decoder) {
 function showInfos(service) {
 	const li = (operation) => `<li class="card-list-item canPoint icon-${_PARAMS.services[service].service.options.includes(operation) ? "yes" : "no" }"  onclick="selectChange('${service}', this)">${operation}</li>`;
 	const ul = ['<legend>Options</legend>','<ul class="card-list">'];
-	["canDrop","forceHttps","stripNull","unique"].forEach( e => ul.push(li(e)));
+	["canDrop","forceHttps","stripNull","speedCount","unique"].forEach( e => ul.push(li(e)));
 	ul.push("</ul>");	
 	getElement("options"+ service).innerHTML = ul.join("");
 }

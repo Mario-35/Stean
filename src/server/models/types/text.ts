@@ -3,14 +3,14 @@ import { Core } from "./core";
 
 export class Text extends Core {
     constructor() {
-        super(EDataType.text, "TEXT");
+        super(EDataType.text);
     }
 
-    verify(input: string[]): this  {
-        this._verify.list = input;
+    verify(input: string[]): this {
+        this._.verify = {
+            list: input,
+            default: ""
+        };
         return this;
     }
 }
-
-
-

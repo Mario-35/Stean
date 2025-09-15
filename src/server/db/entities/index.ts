@@ -17,7 +17,6 @@ export { Locations } from "./Locations";
 export { MultiDatastreams } from "./MultiDatastreams";
 export { MultiObservedProperties } from "./MultiObservedProperties";
 export { CreateObservations } from "./CreateObservations";
-export { CreateFile } from "./CreateFile";
 export { Observations } from "./Observations";
 export { ObservedProperties } from "./ObservedProperties";
 export { Sensors } from "./Sensors";

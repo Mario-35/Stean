@@ -20,7 +20,6 @@ const _appVersion = (): Iversion => {
     };
 };
 export const appVersion: Iversion = _appVersion();
-export const ESCAPE_ARRAY_JSON = (input: string) => (input ? input.replace("[", "{").replace("]", "}") : undefined);
 export const ESCAPE_SIMPLE_QUOTE = (input: string) => input.replace(/[']+/g, "''");
 export const timestampNow = (): string => new Date().toLocaleTimeString();
 
@@ -36,7 +35,6 @@ export function setReady(input: boolean) {
     _READY = input;
 }
 
-export let _TRACE = true;
 export let _DEBUG = false;
 export let _READY = false;
 export let _REPLAY: string | undefined = undefined;
@@ -46,9 +44,3 @@ export function logDbError(err: any) {
     console.log(err);
     return false;
 }
-
-export const dateFile = () =>
-    new Date()
-        .toISOString()
-        .slice(0, 19)
-        .replace(/[^0-9]/g, "");

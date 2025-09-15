@@ -8,7 +8,7 @@
 
 import { ESCAPE_SIMPLE_QUOTE } from "../../constants";
 import { EConstant, EDataType } from "../../enums";
-import { doubleQuotesString, simpleQuotesString, removeFirstEndSimpleQuotes, removeFirstAndEnd, isString } from "../../helpers";
+import { doubleQuotes, simpleQuotesString, removeFirstEndSimpleQuotes, removeFirstAndEnd, isString } from "../../helpers";
 import { log } from "../../log";
 import { IentityColumn } from "../../types";
 /**
@@ -40,15 +40,15 @@ export function formatColumnValue(columnName: string, value: any, column: Ientit
                 switch (column.dataType) {
                     case EDataType.bigint:
                         return isNaN(value) ? idLink(value) : value;
-                    case EDataType.boolean:
+                    case EDataType.bool:
                         if (value === "false") value = 0;
                         return `'${value ? 1 : 0}'`;
                     case EDataType.json:
                     case EDataType.jsonb:
                         return simpleQuotesString(ESCAPE_SIMPLE_QUOTE(JSON.stringify(value)));
                     case EDataType._text:
-                        return isString(value) ? simpleQuotesString(value) : simpleQuotesString(`{${value.map((e: string) => doubleQuotesString(removeFirstEndSimpleQuotes(e))).join(",")}}`);
-                    case EDataType.result:
+                        return isString(value) ? simpleQuotesString(value) : simpleQuotesString(`{${value.map((e: string) => doubleQuotes(removeFirstEndSimpleQuotes(e))).join(",")}}`);
+                    case EDataType.any:
                         return simpleQuotesString(ESCAPE_SIMPLE_QUOTE(JSON.stringify(value)));
                     case EDataType.date:
                     case EDataType.time:

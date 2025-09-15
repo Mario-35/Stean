@@ -8,7 +8,7 @@
 
 import { createDatabase, disconnectDb } from ".";
 import { config } from "../../configuration";
-import { doubleQuotesString, asyncForEach } from "../../helpers";
+import { doubleQuotes, asyncForEach } from "../../helpers";
 import { models } from "../../models";
 import { createInsertValues } from "../../models/helpers";
 import { keyobj, Iservice } from "../../types";
@@ -69,7 +69,9 @@ export const createService = async (service: Iservice, dataInput: Record<string,
                 const goodEntity = models.getEntity(newService, entityName);
                 if (goodEntity) {
                     try {
-                        const sqls: string[] = dataInput[entityName].map((element: any) => `INSERT INTO ${doubleQuotesString(goodEntity.table)} ${createInsertValues(service, prepareDatas(element, goodEntity.name), goodEntity.name)}`);
+                        const sqls: string[] = dataInput[entityName].map(
+                            (element: any) => `INSERT INTO ${doubleQuotes(goodEntity.table)} ${createInsertValues(service, prepareDatas(element, goodEntity.name), goodEntity.name)}`
+                        );
                         await config
                             .executeSqlValues(config.getService(newServiceName), sqls.join(";"))
                             .then((res: Record<string, any>) => {

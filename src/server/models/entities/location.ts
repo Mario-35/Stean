@@ -7,19 +7,19 @@
  */
 
 import { Entity } from "../entity";
-import { ERelations, ETable } from "../../enums";
+import { ERelations, EentityType } from "../../enums";
 import { Ientity } from "../../types";
 import { Bigint, Jsonb, Text } from "../types";
 export const LOCATION: Ientity = new Entity("Locations", {
     createOrder: 2,
-    type: ETable.table,
+    type: EentityType.table,
     order: 6,
     columns: {
-        id: new Bigint().generated("id").type(),
-        name: new Text().notNull().type(),
-        description: new Text().notNull().type(),
-        encodingType: new Text().notNull().default("application/vnd.geo+json").type(),
-        location: new Jsonb().notNull().type()
+        id: new Bigint().generated().column(),
+        name: new Text().notNull().column(),
+        description: new Text().notNull().column(),
+        encodingType: new Text().notNull().default("application/vnd.geo+json").column(),
+        location: new Jsonb().notNull().column()
     },
     relations: {
         Things: {

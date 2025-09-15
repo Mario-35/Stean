@@ -7,7 +7,7 @@
  *
  */
 
-import { doubleQuotesString, returnFormats } from "../../helpers/index";
+import { doubleQuotes, returnFormats } from "../../helpers/index";
 import { IreturnResult, keyobj, koaContext } from "../../types";
 import { removeKeyFromUrl } from "../helpers";
 import { getErrorCode, info } from "../../messages";
@@ -109,7 +109,8 @@ export class Common {
     public prevLink = (resLength: number): string | undefined => {
         if (this.ctx.odata.limit < 1) return;
         const prev = this.ctx.odata.skip - this.ctx.odata.limit;
-        if (((this.ctx.service.nb_page && resLength >= this.ctx.service.nb_page) || this.ctx.odata.limit) && prev >= 0) return `${encodeURI(this.nextLinkBase)}${this.nextLinkBase.includes("?") ? "&" : "?"}$top=${this.ctx.odata.limit}&$skip=${prev}`;
+        if (((this.ctx.service.nb_page && resLength >= this.ctx.service.nb_page) || this.ctx.odata.limit) && prev >= 0)
+            return `${encodeURI(this.nextLinkBase)}${this.nextLinkBase.includes("?") ? "&" : "?"}$top=${this.ctx.odata.limit}&$skip=${prev}`;
     };
 
     /**
@@ -352,7 +353,7 @@ export class Common {
     async delete(idInput: bigint | string): Promise<IreturnResult | undefined> {
         console.log(log.whereIam());
         // create Query
-        const sql = `DELETE FROM ${doubleQuotesString(this.ctx.model[this.constructor.name].table)} WHERE "id" = ${idInput} RETURNING id`;
+        const sql = `DELETE FROM ${doubleQuotes(this.ctx.model[this.constructor.name].table)} WHERE "id" = ${idInput} RETURNING id`;
         // Return results
         switch (this.ctx.odata.returnFormat) {
             // return only postgres sql query as a string

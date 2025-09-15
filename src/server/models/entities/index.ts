@@ -13,7 +13,6 @@ import { createBlankEntity } from "../helpers";
 
 export const SERVICE: Ientity = createBlankEntity("Services");
 export const CREATEOBSERVATION: Ientity = createBlankEntity("CreateObservations");
-export const CREATEFILE: Ientity = createBlankEntity("CreateFile");
 export { DATASTREAM } from "./datastream";
 export { DECODER } from "./decoder";
 export { FEATUREOFINTEREST } from "./featureOfInterest";
@@ -29,6 +28,4 @@ export { SENSOR } from "./sensor";
 export { THING } from "./thing";
 export { THINGLOCATION } from "./thingLocation";
 export { USER } from "./user";
-export { FILE } from "./file";
-export { LINE } from "./line";
 export { LOG } from "./log";

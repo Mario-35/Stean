@@ -20,11 +20,11 @@ import { createDatabase, pgFunctions, testDatas } from "../db/createDb";
 import { userAccess } from "../db/dataAccess";
 import { formatServiceFile, validJSONService } from "./helpers";
 import { MqttServer } from "../mqtt";
-import { createService } from "../db/helpers";
 import { models } from "../models";
 import { paths } from "../paths";
 import { Trace } from "../log/trace";
 import { FORMAT_JSONB } from "../db/constants";
+import { createTableCount, createTableService, drop } from "../db/queries";
 
 /**
  * Class to create configs environements
@@ -39,11 +39,15 @@ class Configuration {
     static remoteVersion: Iversion | undefined;
     static upToDate: boolean = true;
     trace: Trace;
+    static afterInit: Record<string, string[] | undefined> = {};
 
     constructor() {
         // override console log for TDD important in production build will remove all console.log
         if (isTest()) {
             console.log = (data: any) => {};
+            // console.log = (data: any) => {
+            //     if (data) this.writeLog(data);
+            // };
             this.readConfigFile();
         } else
             console.log = (data: any) => {
@@ -51,66 +55,66 @@ class Configuration {
             };
     }
 
-    createServiceTable() {
-        return `CREATE TABLE public.services (
-      "name" text NOT NULL,
-      "datas" jsonb NULL,
-      "stats" jsonb NULL,
-      CONSTRAINT services_unik_name UNIQUE (name)
-    ); CREATE INDEX services_name ON public.services USING btree (name);`;
-    }
-
+    // stean version
     version(): string {
         return `${Configuration.appVersion.version} [${Configuration.appVersion.date}]`;
     }
 
+    // stean repository version
     remoteVersion(): string | undefined {
         return Configuration.remoteVersion ? `${Configuration.remoteVersion.version} [${Configuration.remoteVersion.date}]` : undefined;
     }
 
+    // is update
     upToDate(): boolean {
         return Configuration.upToDate;
     }
 
-    private async updateService(input: Iservice, fromInside?: boolean): Promise<boolean> {
-        if (input.name !== EConstant.admin) {
-            const service = models.getStats(input);
-            if (service)
-                return this.connection(input.name)
-                    .unsafe(service)
-                    .then(async (res) => {
-                        const datas = `UPDATE public.services SET stats = ${FORMAT_JSONB(res[0].results[0])} WHERE name = '${input.name}'`;
-                        Configuration.services[input.name]._stats = res[0].results[0];
-                        return await this.adminConnection()
-                            .unsafe(datas)
-                            .then((e) => true)
-                            .catch((err) => {
-                                return logDbError(err);
-                            });
-                    })
-                    .catch(async (err) => {
-                        if (!fromInside && isTest() === false && input.name === EConstant.test && err.code == "3D000") {
-                            await createService(input, testDatas);
-                            return this.updateService(input, true);
-                        }
-                        console.log(err);
-                        return false;
-                    });
+    // update count
+    private updateCount(connectionName: string): void {
+        const query = models.upSertCountSql(connectionName);
+        if (query) config.connection(connectionName).begin((sql) => query.map((e: string) => sql.unsafe(e)));
+    }
+
+    // update options
+    private async createUpdateOptions(connectionName: string): Promise<void> {
+        if (this.getService(connectionName).options.includes(EOptions.speedCount)) {
+            await this.connection(connectionName)
+                .unsafe(createTableCount)
+                .then(async () => {
+                    this.updateCount(connectionName);
+                    await this.executeMultiSql(this.getService(connectionName), models.addTriggersOnTables(connectionName, "row_counts"));
+                })
+                .catch(() => this.updateCount(connectionName));
+        } else {
+            this.connection(connectionName)
+                .unsafe(drop("row_counts"))
+                .then(() => {
+                    this.executeMultiSql(this.getService(connectionName), models.removeTriggersOnTables(connectionName, "row_counts"));
+                })
+                .catch((e) => e);
         }
+    }
+
+    // function to show error
+    logError(error: any, message?: string): boolean {
+        console.log(error);
+        if (message) log.error(message, error);
+        else process.stdout.write(error + EConstant.return);
         return false;
     }
 
+    // create a new instance in DB
     private async addService(input: Iservice): Promise<boolean> {
         if (input && input.name === EConstant.admin) return false;
-        const datas = `INSERT INTO public.services ("name", "datas") VALUES('${input.name}', ${FORMAT_JSONB(input)}) ON CONFLICT DO NOTHING;`;
+        const datas = `INSERT INTO public.services ("name", "datas") VALUES('${input.name}', ${FORMAT_JSONB(input)}) ON CONFLICT (name) DO UPDATE SET datas = ${FORMAT_JSONB(input)};`;
         return await this.adminConnection()
             .unsafe(datas)
             .then((e) => true)
             .catch(async (error) => {
-                console.log(error);
                 if (error.code === "42P01") {
                     return await this.adminConnection()
-                        .unsafe(this.createServiceTable())
+                        .unsafe(createTableService)
                         .then(async (e) => {
                             return await this.adminConnection()
                                 .unsafe(datas)
@@ -128,11 +132,7 @@ class Configuration {
                         });
                 } else if (error.code === "23505") {
                     return true;
-                } else {
-                    console.log(error);
-                    process.stdout.write(error + EConstant.return);
-                    return false;
-                }
+                } else return this.logError(error);
             });
     }
 
@@ -203,13 +203,12 @@ class Configuration {
                             });
                         });
             } catch (error: any) {
-                console.log(error);
-
+                this.logError(error);
                 if (error.code === "42P01")
                     await this.adminConnection()
-                        .unsafe(this.createServiceTable())
+                        .unsafe(createTableService)
                         .catch((e) => {
-                            console.log(this.createServiceTable());
+                            console.log(createTableService);
                             log.error(errors.serviceCreateError);
                             process.exit(112);
                         });
@@ -223,19 +222,16 @@ class Configuration {
                     Object.keys(Configuration.services).forEach(async (element: string) => {
                         Configuration.services[element] = this.formatConfig(element);
                         await this.addService(Configuration.services[element]);
-                        await this.updateService(Configuration.services[element]);
                     });
                 }
             } else {
-                log.error(errors.configFileError);
+                this.logError("Unknown error", errors.configFileError);
                 process.exit(112);
             }
             // rewrite file (to update config modification except in test mode)
             if (!isTest() && config.configFileExist() === false) this.writeConfig();
         } catch (error: any) {
-            console.log(error);
-
-            log.error(errors.configFileError, error["message"]);
+            this.logError(error, errors.configFileError);
             process.exit(111);
         }
 
@@ -315,8 +311,7 @@ class Configuration {
                 synonyms: Configuration.services[name].synonyms,
                 csvDelimiter: Configuration.services[name].csvDelimiter
             },
-            stats: Configuration.services[name]._stats || JSON.parse("{}"),
-            users: JSON.parse("{}")
+            users: Configuration.services[name].users || JSON.parse("{}")
         };
     };
 
@@ -409,7 +404,13 @@ class Configuration {
         return new Promise(async function (resolve, reject) {
             await config
                 .connection(service.name)
-                .begin((sql) => query.map((e: string) => sql.unsafe(e)))
+                .begin((sql) =>
+                    query.map(async (e: string) => {
+                        await sql.unsafe(e).catch((err: Error) => {
+                            if (err["severity" as keyof object] !== "NOTICE") console.log(err);
+                        });
+                    })
+                )
                 .then((res: object) => {
                     resolve(res);
                 })
@@ -553,43 +554,21 @@ class Configuration {
     /**
      *
      * @param connection name
-     * @returns nothing
-     */
-    private clean(connection: string): void {
-        if (![EConstant.admin as String, EConstant.test as String].includes(connection)) {
-            const queries = models.getClean(connection);
-            if (queries)
-                queries.forEach((query) => {
-                    config
-                        .connection(connection)
-                        .unsafe(query)
-                        .catch((error: Error) => {
-                            console.log(error);
-                        });
-                });
-        }
-    }
-
-    /**
-     *
-     * @param connection name
      * @returns true if it's done
      */
-    private async reCreatePgFunctions(connection: string): Promise<boolean> {
+    private async reCreatePgFunctions(connectionName: string): Promise<boolean> {
         await asyncForEach(pgFunctions(), async (query: string) => {
             const name = query.split(" */")[0].split("/*")[1].trim();
             await config
-                .connection(connection)
+                .connection(connectionName)
                 .unsafe(query)
                 .then(() => {
-                    log.create(`[${connection}] ${name}`, EChar.ok);
+                    log.create(`[${connectionName}] ${name}`, EChar.ok);
                 })
-                .catch((error: Error) => {
-                    console.log(error);
-                    return false;
-                });
+                .catch((error: Error) => this.logError(error));
         });
-        this.writeLog(log.message(info.createFunc, connection));
+        this.writeLog(log.message(info.createFunc, connectionName));
+        await this.createUpdateOptions(connectionName);
         return true;
     }
 
@@ -633,22 +612,13 @@ class Configuration {
                     try {
                         await this.addToServer(key);
                     } catch (error) {
-                        console.log(error);
-                        status = false;
+                        status = this.logError(error);
                     }
                 }
             );
             this.writeLog(log._head("mqtt"));
             this.initMqtt();
             setReady(status);
-            // note that is executed without async to not block start processus
-            // if (!isTest()) {
-            //     if (await testDbExists(Configuration.services[EConstant.admin].pg, EConstant.test)) {
-            //         Configuration.services[EConstant.test] = this.formatConfig(testDatas["create"]);
-            //     } else await createService(ctx, testDatas);
-            //     this.messageListen(EConstant.test, String(this.defaultHttp()), true);
-            // }
-
             this.writeLog(log._head("Ready", EChar.ok));
             this.writeLog(log.logo(appVersion.version));
             return status;
@@ -658,6 +628,22 @@ class Configuration {
             this.addListening(this.defaultHttp(), "First launch");
             return true;
         }
+    }
+
+    async afterInitialisation(): Promise<boolean> {
+        await asyncForEach(Object.keys(Configuration.afterInit), async (service: string) => {
+            if (Configuration.afterInit[service]) await this.executeMultiSql(this.getService(service), Configuration.afterInit[service]);
+            if (this.getService(service).options.includes(EOptions.speedCount)) {
+                await this.connection(service)
+                    .unsafe(createTableCount)
+                    .then(async () => {
+                        const queries = models.upSertCountSql(service);
+                        if (queries) this.executeMultiSql(this.getService(service), queries);
+                    })
+                    .catch((err) => logDbError(err));
+            }
+        });
+        return true;
     }
 
     /**
@@ -702,6 +688,7 @@ class Configuration {
             input = Configuration.services[input];
         }
         const goodDbName = name ? name : input["pg" as keyobj] && input["pg" as keyobj]["database"] ? input["pg" as keyobj]["database"] : `ERROR`;
+
         return formatServiceFile(goodDbName, input);
     }
 
@@ -759,7 +746,7 @@ class Configuration {
             })
             .catch((error: Error) => {
                 log.error(errors.unableFindCreate, Configuration.services[key].pg.database);
-                console.log(error);
+                this.logError(error);
                 process.exit(111);
             });
     }
@@ -797,8 +784,7 @@ class Configuration {
                 return true;
             })
             .catch((err: Error) => {
-                log.error(msg(info.create, info.db), err.message);
-                return false;
+                return this.logError(err.message, msg(info.create, info.db));
             });
     }
 
@@ -821,7 +807,7 @@ class Configuration {
                             await this.connection(serviceName)
                                 .begin((sql) => {
                                     tables.forEach(async (table: string) => {
-                                        await sql.unsafe(`DROP TABLE ${table}`);
+                                        await sql.unsafe(drop(table));
                                     });
                                 })
                                 .then(() => EChar.ok)
@@ -829,27 +815,29 @@ class Configuration {
                         )
                     );
                 await this.reCreatePgFunctions(serviceName);
-                this.clean(serviceName);
+                if (![EConstant.admin as String, EConstant.test as String].includes(serviceName)) {
+                    Configuration.afterInit[serviceName] = models.getClean(serviceName);
+                }
                 return true;
             })
             .catch(async (error: Error) => {
                 // Password authentication failed
                 if (error["code" as keyobj] === "ECONNREFUSED") {
-                    log.error(error);
+                    this.logError(error);
                 } else if (error["code" as keyobj] === "28P01") {
                     if (!isTest()) return await this.createDB(serviceName);
                     // Database does not exist
                 } else if (error["code" as keyobj] === "3D000" && create == true) {
                     console.log(log._infos(msg(info.tryCreate, info.db), Configuration.services[serviceName].pg.database));
                     if (serviceName !== EConstant.test) return await this.createDB(serviceName);
-                } else console.log(error);
+                } else return this.logError(error);
                 return false;
             });
     }
 
     /**
      *
-     * @param path ath with filename
+     * @param path path with filename
      * @param content content to write
      * @returns true when its done
      */
@@ -860,10 +848,7 @@ class Configuration {
             path,
             content,
             (error) => {
-                if (error) {
-                    console.log(error);
-                    return false;
-                }
+                if (error) return this.logError(error);
             }
         );
         return true;
@@ -892,12 +877,9 @@ class Configuration {
             const datas = `UPDATE public.services SET "datas" = ${FORMAT_JSONB(input)} WHERE "name" = '${input.name}'`;
             return await this.adminConnection()
                 .unsafe(datas)
-                .then((e) => true)
-                .catch((err) => {
-                    return logDbError(err);
-                });
+                .then(async () => await this.reCreatePgFunctions(input.name))
+                .catch((err) => logDbError(err));
         }
-
         return false;
     }
 }

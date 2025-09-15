@@ -227,4 +227,9 @@ unProtectedRoutes.put("/(.*)", async (ctx) => {
             ctx.body = await config.updateConfig(ctx.service);
         }
     }
+
+    if (ctx.request.url.includes("/options")) {
+        ctx.service.options = ctx.body;
+        config.updateConfig(ctx.service);
+    }
 });

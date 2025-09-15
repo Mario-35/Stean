@@ -12,7 +12,7 @@ import { addCssFile } from "../views/css";
 import { addJsFile } from "../views/js";
 import util from "util";
 import { EConstant, EEncodingType, EOptions, EReturnFormats } from "../enums";
-import { isGraph } from ".";
+import { isReturnGraph } from ".";
 import { PgVisitor } from "../odata/visitor";
 import { errors } from "../messages";
 import { DATASTREAM } from "../models/entities";
@@ -24,7 +24,7 @@ const defaultFunction = (input: string | object) => input;
 const defaultForwat = (input: PgVisitor): string => input.toString();
 
 const generateFields = (input: PgVisitor) => {
-    if (isGraph(input)) {
+    if (isReturnGraph(input)) {
         const entity = input.parentEntity || input.entity;
         return entity ? [`(SELECT ${entity.table}."description" FROM ${entity.table} WHERE ${entity.table}."id" = ${input.parentId ? input.parentId : input.id}) AS title, `] : undefined;
     }
@@ -36,7 +36,7 @@ const generateFields = (input: PgVisitor) => {
  */
 const generateGraphSql = (input: PgVisitor) => {
     input.intervalColumns = ["id", "step as date", "result"];
-    if (isGraph(input)) input.intervalColumns.push("concat");
+    if (isReturnGraph(input)) input.intervalColumns.push("concat");
     const entity = input.parentEntity || input.entity;
     if (entity) {
         const id = input.parentId ? input.parentId : input.id;
@@ -102,7 +102,9 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
                     // if (input["infos" as keyof object] == null && input["datas" as keyof object] == null) return "";
                     graphNames.push(`<button type="button" id="btngraph${index}" onclick="graph${index}.remove(); btngraph${index}.remove();">X</button>
            <div id="graph${index}" style="width:95%; height:${height}%;"></div>`);
-                    const infos = element[1]["description"] ? `${[element[1]["description"], element[1]["name"], element[1]["symbol"]].join('","')}` : `${element[1]["infos"].split("|").join(EConstant.doubleQuotedComa)}`;
+                    const infos = element[1]["description"]
+                        ? `${[element[1]["description"], element[1]["name"], element[1]["symbol"]].join('","')}`
+                        : `${element[1]["infos"].split("|").join(EConstant.doubleQuotedComa)}`;
                     const formatedData = `const value${index} = [${element[1]["datas"]}]; 
           const infos${index} = ["${infos}"];`;
                     formatedDatas.push(` ${formatedData} showGraph("graph${index}", infos${index}, value${index})`);

@@ -1,11 +1,11 @@
 import { config } from "../configuration";
 import { log } from "../log";
 import { _STREAM } from "../db/constants";
-import { asJson } from "../db/queries";
-import { EColumnType, EConstant, EExtensions, EOptions, ETable, filterEntities } from "../enums";
-import { doubleQuotesString, deepClone, isTest, formatPgTableColumn, isString } from "../helpers";
+import { asJson, createTrigger, dropTrigger } from "../db/queries";
+import { EColumnType, EConstant, EDataType, EExtensions, EOptions, EentityType, filterEntities } from "../enums";
+import { doubleQuotes, deepClone, isTest, formatPgTableColumn, isString } from "../helpers";
 import { errors, info } from "../messages";
-import { Iservice, Ientities, Ientity, IstreamInfos, koaContext, IentityRelation, getColumnType } from "../types";
+import { Iservice, Ientities, Ientity, IstreamInfos, koaContext, IentityRelation, getColumnType, IentityColumn } from "../types";
 import path from "path";
 import fs from "fs";
 import {
@@ -14,7 +14,6 @@ import {
     LOCATION,
     SERVICE,
     CREATEOBSERVATION,
-    CREATEFILE,
     DATASTREAM,
     DECODER,
     HISTORICALLOCATION,
@@ -27,8 +26,6 @@ import {
     LOCATIONHISTORICALLOCATION,
     OBSERVEDPROPERTY,
     THINGLOCATION,
-    FILE,
-    LINE,
     LOG
 } from "./entities";
 import { Geometry, Jsonb, Text } from "./types";
@@ -111,6 +108,22 @@ export class Models {
                 };
             });
         });
+        if (ctx.service.options.includes(EOptions.speedCount)) {
+            await config.executeSql(ctx.service, `SELECT * from row_counts`).then((res) => {
+                const count: { [key: string]: Number } = {};
+                Object.values(res).forEach((e) => {
+                    count[e.name] = +e.nb;
+                });
+                result["count"] = count;
+            });
+        } else {
+            const a = models.getStats(ctx.service);
+            if (a)
+                await config.executeSql(ctx.service, a).then((res) => {
+                    result["count"] = res[0 as keyof object]["results"][0 as keyof object];
+                });
+        }
+
         return result;
     }
 
@@ -125,9 +138,7 @@ export class Models {
         const searchKey = input[models.DBFull(service)[streamEntity].name] || input[models.DBFull(service)[streamEntity].singular];
         const streamId: string | undefined = isNaN(searchKey) ? searchKey[EConstant.id] : searchKey;
         if (streamId) {
-            const query = `SELECT "id", "observationType", "_default_featureofinterest" FROM ${doubleQuotesString(models.DBFull(service)[streamEntity].table)} WHERE "id" = ${BigInt(
-                streamId
-            )} LIMIT 1`;
+            const query = `SELECT "id", "observationType", "_default_featureofinterest" FROM ${doubleQuotes(models.DBFull(service)[streamEntity].table)} WHERE "id" = ${BigInt(streamId)} LIMIT 1`;
             return config
                 .executeSqlValues(service, asJson({ query: query, singular: true, strip: false, count: false }))
                 .then((res: object) => {
@@ -145,14 +156,6 @@ export class Models {
                     return undefined;
                 });
         }
-    }
-
-    private version0_9(): Ientities {
-        return {
-            Files: FILE,
-            Lines: LINE,
-            CreateFile: CREATEFILE
-        };
     }
 
     private version1_0(): Ientities {
@@ -181,18 +184,16 @@ export class Models {
     private version1_1(input: Ientities): Ientities {
         // add properties to entities
         ["Locations", "FeaturesOfInterest", "ObservedProperties", "Sensors", "Datastreams", "MultiDatastreams"].forEach((entityName: string) => {
-            input[entityName].columns["properties"] = new Jsonb().type();
+            input[entityName].columns["properties"] = new Jsonb().column();
         });
         // add geom to Location
-        input.Locations.columns["geom"] = new Geometry().type();
+        input.Locations.columns["geom"] = new Geometry().column();
         return input;
     }
 
     private createVersion(verStr: string): boolean {
         console.log(log.whereIam(verStr));
         switch (verStr) {
-            case "v0.9":
-                Models.models["v0.9"] = this.version0_9();
             case "v1.1":
                 this.createVersion("v1.0");
                 Models.models["v1.1"] = this.version1_1(deepClone(Models.models["v1.0"]));
@@ -203,16 +204,20 @@ export class Models {
     }
 
     public listVersion() {
-        return ["v0.9", "v1.0", "v1.1"];
+        return ["v1.0", "v1.1"];
     }
 
-    private filtering(service: Iservice) {
-        return Object.fromEntries(Object.entries(Models.models[service.apiVersion]).filter(([, v]) => Object.keys(filterEntities(service.extensions)).includes(v.name))) as Ientities;
+    private filtering(service: Iservice, filter?: EentityType) {
+        return filter
+            ? (Object.fromEntries(
+                  Object.entries(Models.models[service.apiVersion]).filter(([, v]) => Object.keys(filterEntities(service.extensions)).includes(v.name) && v.type === filter)
+              ) as Ientities)
+            : (Object.fromEntries(Object.entries(Models.models[service.apiVersion]).filter(([, v]) => Object.keys(filterEntities(service.extensions)).includes(v.name))) as Ientities);
     }
 
-    public filtered(service: Iservice): Ientities {
+    public filtered(service: Iservice, filter?: EentityType): Ientities {
         if (this.testVersion(service.apiVersion) === false) this.createVersion(service.apiVersion);
-        return service.name === EConstant.admin ? this.DBAdmin(service) : this.filtering(service);
+        return service.name === EConstant.admin ? this.DBAdmin(service) : this.filtering(service, filter);
     }
 
     public get(service: Iservice | string): Iservice {
@@ -227,24 +232,51 @@ export class Models {
 
     public getStats(service: Iservice | string): string | undefined {
         try {
-            const a = this.filtered(this.get(service));
-            const b = Object.keys(a)
-                .filter((e) => a[e].type === ETable.table)
-                .map((e) =>
-                    a[e].name === "Users"
-                        ? `(SELECT JSON_AGG(u) AS mario FROM ( select username, "canPost", "canDelete", "canCreateUser", "canCreateDb", "admin", "superAdmin" FROM public.user WHERE username <> 'postgres' ORDER By username ) as u) AS "Users"`
-                        : `(SELECT COUNT('${a[e].orderBy.split(" ")[0]}') FROM "${a[e].table}") AS "${a[e].name}"${EConstant.return}`
-                );
+            const a = this.filtered(this.get(service), EentityType.table);
+            const b = Object.keys(a).map((e) => `(SELECT COUNT('${a[e].orderBy.split(" ")[0]}') FROM "${a[e].table}") AS "${a[e].name}"${EConstant.return}`);
             return ` SELECT JSON_AGG(t) AS results FROM ( SELECT ${b.join()}) AS t`;
         } catch (error) {
             return;
         }
     }
+
+    public upSertCountSql(service: Iservice | string): string[] | undefined {
+        try {
+            const a = this.filtered(this.get(service), EentityType.table);
+            return Object.keys(this.filtered(this.get(service), EentityType.table)).map(
+                (e) => `INSERT INTO row_counts (name, nb) VALUES ('${a[e].table}', (SELECT COUNT('${a[e].orderBy.split(" ")[0]}') FROM "${a[e].table}"))
+                ON CONFLICT (name) DO UPDATE SET nb = (SELECT COUNT('${a[e].orderBy.split(" ")[0]}') FROM "${a[e].table}");`
+            );
+        } catch (error) {
+            return;
+        }
+    }
+
+    public listTables(service: Iservice | string): string[] {
+        return Object.values(this.filtered(this.get(service), EentityType.table))
+            .map((e) => e.table)
+            .filter((e) => e.trim() !== "");
+    }
+
+    public addTriggersOnTables(service: Iservice | string, triggerName: string): string[] {
+        return this.listTables(service).map((table) => createTrigger(table, triggerName));
+    }
+    public removeTriggersOnTables(service: Iservice | string, triggerName: string): string[] {
+        return this.listTables(service).map((table) => dropTrigger(table, triggerName));
+    }
+
     public getClean(service: Iservice | string): string[] | undefined {
         const mods = Models.models[this.get(service).apiVersion];
         const temp: string[] = [];
         Object.keys(mods).forEach((entity) => {
-            if (mods[entity].clean) temp.push(`UPDATE "${mods[entity].table}" SET ${mods[entity].clean}`);
+            // if (mods[entity].clean) temp.push(`UPDATE "${mods[entity].table}" SET ${mods[entity].clean}`);
+            if (mods[entity].clean) {
+                mods[entity].clean.forEach((e) => {
+                    if (e.includes("@UPDATE@")) temp.push(e.replace("@UPDATE@", `UPDATE "${mods[entity].table}" SET`));
+                    if (e.includes("@DROPCOLUMN@")) temp.push(e.replace("@DROPCOLUMN@", `ALTER TABLE "${mods[entity].table}" DROP COLUMN IF EXISTS`));
+                    if (e.includes("@ADDCOLUMN@")) temp.push(e.replace("@ADDCOLUMN@", `ALTER TABLE "${mods[entity].table}" ADD COLUMN IF NOT EXISTS`));
+                });
+            }
         });
         return temp;
     }
@@ -252,9 +284,9 @@ export class Models {
     public DBFullCreate(service: Iservice | string): Ientities {
         service = this.get(service);
 
-        const name = service.options.includes(EOptions.unique) ? new Text().notNull().default(info.noName).unique().type() : new Text().notNull().type();
+        const name = service.options.includes(EOptions.unique) ? new Text().notNull().default(info.noName).unique().column() : new Text().notNull().column();
 
-        const description = service.options.includes(EOptions.unique) ? new Text().notNull().default(info.noName).unique().type() : new Text().notNull().type();
+        const description = service.options.includes(EOptions.unique) ? new Text().notNull().default(info.noName).unique().column() : new Text().notNull().column();
 
         const s = Models.models[service.apiVersion];
         Object.keys(s).forEach((k: string) => {
@@ -312,6 +344,26 @@ export class Models {
         }
     };
 
+    public getColumn = (service: Iservice, entity: Ientity | string, columnName: string): IentityColumn | undefined => {
+        if (config && entity) {
+            if (isString(entity)) {
+                const entityName = this.getEntityName(service, entity.trim());
+                if (!entityName) return;
+                entity = entityName;
+            }
+
+            return isString(entity) ? Models.models[service.apiVersion][entity].columns[columnName] : Models.models[service.apiVersion][entity.name].columns[columnName];
+        }
+    };
+
+    public getColumnType = (service: Iservice, entity: Ientity | string, columnName: string): EDataType => {
+        if (config && entity) {
+            const column = this.getColumn(service, entity, columnName);
+            if (column) return column.dataType;
+        }
+        return EDataType.none;
+    };
+
     public getRelationName = (entity: Ientity, searchs: string[]): string | undefined => {
         let res: string | undefined = undefined;
         searchs.forEach((e) => {
@@ -341,7 +393,7 @@ export class Models {
         return tempEntity
             ? Object.keys(tempEntity.columns)
                   .filter((word) => !word.includes("_") && !exclus.includes(word))
-                  .map((e: string) => (complete ? formatPgTableColumn(tempEntity.table, e) : doubleQuotesString(e)))
+                  .map((e: string) => (complete ? formatPgTableColumn(tempEntity.table, e) : doubleQuotes(e)))
             : [];
     }
 
@@ -367,7 +419,6 @@ export class Models {
             });
 
         switch (ctx.service.apiVersion) {
-            case "v0.9":
             case "v1.0":
                 return {
                     value: expectedResponse.filter((elem) => Object.keys(elem).length)

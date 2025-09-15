@@ -3,9 +3,6 @@ import { Core } from "./core";
 
 export class Bool extends Core {
     constructor() {
-        super(EDataType.boolean, "BOOL");
+        super(EDataType.bool);
     }
 }
-
-
-

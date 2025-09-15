@@ -7,7 +7,7 @@
  */
 
 import { EConstant, EQuery } from "../../../enums";
-import { doubleQuotesString, removeAllQuotes } from "../../../helpers";
+import { doubleQuotes, removeAllQuotes } from "../../../helpers";
 import { log } from "../../../log";
 import { models } from "../../../models";
 import { relationInfos, expand } from "../../../models/helpers";
@@ -38,7 +38,9 @@ export class OdataGeoColumn {
                 const tm = models.getEntity(this.src.ctx.service, temp[0]);
                 if (tm && tm.columns.hasOwnProperty(temp[1])) {
                     this.src.subQuery.select = `"featureofinterest"."id"`;
-                    this.src.subQuery.where = `CASE WHEN "${EConstant.encoding}" LIKE '%geo+json' THEN ST_GeomFromEWKT(ST_GeomFromGeoJSON(coalesce(${doubleQuotesString(temp[1])}->'geometry',${doubleQuotesString(temp[1])}))) ELSE ST_GeomFromEWKT(${doubleQuotesString(temp[1])}::text) END`;
+                    this.src.subQuery.where = `CASE WHEN "${EConstant.encoding}" LIKE '%geo+json' THEN ST_GeomFromEWKT(ST_GeomFromGeoJSON(coalesce(${doubleQuotes(temp[1])}->'geometry',${doubleQuotes(
+                        temp[1]
+                    )}))) ELSE ST_GeomFromEWKT(${doubleQuotes(temp[1])}::text) END`;
                     this.key = `"${temp[1]}"->>'type'`;
                     return undefined;
                 }
@@ -47,32 +49,46 @@ export class OdataGeoColumn {
                 if (tempEntity.relations.hasOwnProperty(temp[0])) {
                     const relation = relationInfos(this.src.ctx.service, tempEntity.name, temp[0]);
                     if (relation.entity) {
-                        this.column = `(SELECT ${doubleQuotesString(temp[1])} FROM ${doubleQuotesString(relation.entity.table)} WHERE ${expand(this.src.ctx.service, tempEntity.name, temp[0])} AND length(${doubleQuotesString(temp[1])}::text) > 2)`;
-                        if (tempEntity.columns.hasOwnProperty(EConstant.encoding)) test = `(SELECT ${doubleQuotesString(EConstant.encoding)} FROM ${doubleQuotesString(relation.entity.table)} WHERE ${expand(this.src.ctx.service, tempEntity.name, temp[0])})`;
+                        this.column = `(SELECT ${doubleQuotes(temp[1])} FROM ${doubleQuotes(relation.entity.table)} WHERE ${expand(
+                            this.src.ctx.service,
+                            tempEntity.name,
+                            temp[0]
+                        )} AND length(${doubleQuotes(temp[1])}::text) > 2)`;
+                        if (tempEntity.columns.hasOwnProperty(EConstant.encoding))
+                            test = `(SELECT ${doubleQuotes(EConstant.encoding)} FROM ${doubleQuotes(relation.entity.table)} WHERE ${expand(this.src.ctx.service, tempEntity.name, temp[0])})`;
                     } else throw new Error(`Invalid this.column ${this.column}`);
                 }
             } else if (!tempEntity.columns.hasOwnProperty(this.column)) {
                 if (tempEntity.relations.hasOwnProperty(this.column)) {
                     const relation = relationInfos(this.src.ctx.service, tempEntity.name, this.column);
                     if (relation.entity) {
-                        this.column = `(SELECT ${doubleQuotesString(relation.column)} FROM ${doubleQuotesString(relation.entity.table)} WHERE ${expand(this.src.ctx.service, tempEntity.name, this.column)} AND length(${doubleQuotesString(relation.column)}::text) > 2)`;
+                        this.column = `(SELECT ${doubleQuotes(relation.column)} FROM ${doubleQuotes(relation.entity.table)} WHERE ${expand(
+                            this.src.ctx.service,
+                            tempEntity.name,
+                            this.column
+                        )} AND length(${doubleQuotes(relation.column)}::text) > 2)`;
                         if (tempEntity.columns.hasOwnProperty(EConstant.encoding)) test = EConstant.encoding;
                     } else throw new Error(`Invalid this.column ${this.column}`);
                 } else if (this.src.ctx.model[this.src.parentEntity as keyof object].columns.hasOwnProperty(this.column)) {
                     const relation = relationInfos(this.src.ctx.service, tempEntity.name, this.column);
                     if (relation.entity) {
-                        this.column = `(SELECT ${doubleQuotesString(relation.column)} FROM ${doubleQuotesString(relation.entity.table)} WHERE ${expand(this.src.ctx.service, tempEntity.name, this.column)} AND length(${doubleQuotesString(relation.column)}::text) > 2)`;
+                        this.column = `(SELECT ${doubleQuotes(relation.column)} FROM ${doubleQuotes(relation.entity.table)} WHERE ${expand(
+                            this.src.ctx.service,
+                            tempEntity.name,
+                            this.column
+                        )} AND length(${doubleQuotes(relation.column)}::text) > 2)`;
                         if (tempEntity.columns.hasOwnProperty(EConstant.encoding)) test = EConstant.encoding;
                     } else throw new Error(`Invalid this.column ${this.column}`);
                 } else throw new Error(`Invalid this.column ${this.column}`);
             } else {
                 // TODO ADD doubleQuotes
                 const temp = tempEntity.columns.hasOwnProperty(EConstant.encoding);
-                if (temp) test = doubleQuotesString(EConstant.encoding);
-                this.column = doubleQuotesString(this.column);
+                if (temp) test = doubleQuotes(EConstant.encoding);
+                this.column = doubleQuotes(this.column);
             }
         }
-        if (test) return `CASE WHEN "${EConstant.encoding}" LIKE '%geo+json' THEN ST_GeomFromEWKT(ST_GeomFromGeoJSON(coalesce(${this.column}->'geometry',${this.column}))) ELSE ST_GeomFromEWKT(${this.column}::text) END`;
+        if (test)
+            return `CASE WHEN "${EConstant.encoding}" LIKE '%geo+json' THEN ST_GeomFromEWKT(ST_GeomFromGeoJSON(coalesce(${this.column}->'geometry',${this.column}))) ELSE ST_GeomFromEWKT(${this.column}::text) END`;
     }
     toString() {
         return this.test ? this.test : this.src.subQuery.where ? this.src.subQuery.where : "";

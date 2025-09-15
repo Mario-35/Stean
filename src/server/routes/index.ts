@@ -10,7 +10,7 @@ import { decodeToken } from "../authentication";
 import { _DEBUG } from "../constants";
 import { log } from "../log";
 import { EHttpCode } from "../enums";
-import { createBearerToken, returnFormats } from "../helpers";
+import { createBearerToken, returnFormats, splitLast } from "../helpers";
 import { adminRoute, decodeUrl, logsRoute, exportRoute, docRoute } from "./helper";
 import { errors } from "../messages";
 import { config } from "../configuration";
@@ -35,7 +35,7 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     // if logs show log file
     if (ctx.path.includes("logs-")) return logsRoute(ctx, paths.root + "logs\\" + `${decodedUrl ? decodedUrl.path : ctx.path}`);
     // Specials routes
-    switch (ctx.path.split("/").reverse()[0].toLocaleUpperCase()) {
+    switch (splitLast(ctx.path, "/").toLocaleUpperCase()) {
         // admin page
         case "ADMIN":
             return await adminRoute(ctx);
@@ -56,7 +56,7 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     // copy decodedUrl context
     ctx.decodedUrl = decodedUrl;
 
-    if (ctx.path.split("/").reverse()[0].toLocaleUpperCase().startsWith("REPLAYS(")) {
+    if (splitLast(ctx.path, "/").toLocaleUpperCase().startsWith("REPLAYS(")) {
         await config.trace.rePlay(ctx);
     }
 

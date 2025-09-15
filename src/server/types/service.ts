@@ -10,6 +10,7 @@ import postgres from "postgres";
 import { Isynonyms, typeExtensions, typeOptions } from ".";
 import { IdbConnection } from "./dbConnection";
 export interface Iservice {
+    date: string; // date write
     name: string; // name of the config file
     key?: string; // key for crypto
     ports?: {
@@ -28,5 +29,5 @@ export interface Iservice {
     synonyms: Isynonyms | undefined;
     csvDelimiter: ";" | ","; // csv format delimiter
     _connection: postgres.Sql<Record<string, unknown>> | undefined; // not in file only when running to store connection
-    _stats: JSON | undefined; // not in file only for stats
+    users: JSON | undefined; // users list
 }

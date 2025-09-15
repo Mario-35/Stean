@@ -69,7 +69,10 @@ class Log {
      * @returns formated string
      */
     public query(sql: unknown) {
-        if (_DEBUG) return `${color(EColor.Code)}${"=".repeat(5)}[ Query Start ]${"=".repeat(5)}${EConstant.return}${color(EColor.Sql)} ${this.showAll(sql)}${EConstant.return}${color(EColor.Sql)}${color(EColor.Code)}${color(EColor.Reset)}`;
+        if (_DEBUG)
+            return `${color(EColor.Code)}${"=".repeat(5)}[ Query Start ]${"=".repeat(5)}${EConstant.return}${color(EColor.Sql)} ${this.showAll(sql)}${EConstant.return}${color(EColor.Sql)}${color(
+                EColor.Code
+            )}${color(EColor.Reset)}`;
     }
 
     /**
@@ -94,7 +97,9 @@ class Log {
     oData(infos: Lexer.Token | undefined) {
         if (infos && _DEBUG) {
             const tmp = `${color(EColor.White)} ${infos} ${color(EColor.Reset)}`;
-            return `${color(EColor.Red)} ${"=".repeat(8)} ${color(EColor.Cyan)} ${new Error().stack?.split(EConstant.return)[2].trim().split("(")[0].split("at ")[1].trim()} ${tmp}${color(EColor.Red)} ${"=".repeat(8)}${color(EColor.Reset)}`;
+            return `${color(EColor.Red)} ${"=".repeat(8)} ${color(EColor.Cyan)} ${new Error().stack?.split(EConstant.return)[2].trim().split("(")[0].split("at ")[1].trim()} ${tmp}${color(
+                EColor.Red
+            )} ${"=".repeat(8)}${color(EColor.Reset)}`;
         }
     }
 
@@ -119,7 +124,11 @@ class Log {
         return `${EChar.web} ${color(EColor.Default)} : ${color(EColor.Cyan)} ${link}${color(EColor.Reset)}`;
     }
     _head<T>(cle: string, infos?: T) {
-        return infos ? `${color(EColor.Green)}${this.line(12)} ${color(EColor.Cyan)} ${cle} ${color(EColor.White)} ${this.logAll(infos, this.debugFile)} ${color(EColor.Green)} ${this.line(12)}${color(EColor.Reset)}` : this.separator(cle, 12);
+        return infos
+            ? `${color(EColor.Green)}${this.line(12)} ${color(EColor.Cyan)} ${cle} ${color(EColor.White)} ${this.logAll(infos, this.debugFile)} ${color(EColor.Green)} ${this.line(12)}${color(
+                  EColor.Reset
+              )}`
+            : this.separator(cle, 12);
     }
     debug_head<T>(cle: string, infos?: T) {
         if (_DEBUG) return this._head(cle, infos);
@@ -140,14 +149,20 @@ class Log {
     whereIam(infos?: unknown) {
         if (_DEBUG) {
             const tmp = infos ? `${color(EColor.Default)} ${infos} ${color(EColor.Reset)}` : "";
-            return `${color(EColor.Red)}${this.line(4)} ${color(EColor.Cyan)} ${new Error().stack?.split(EConstant.return)[2].trim().split("(")[0].split("at ")[1].trim()} ${tmp}${color(EColor.Red)} ${this.line(4)}${color(EColor.Reset)}`;
+            return `${color(EColor.Red)}${this.line(4)} ${color(EColor.Cyan)} ${new Error().stack?.split(EConstant.return)[2].trim().split("(")[0].split("at ")[1].trim()} ${tmp}${color(
+                EColor.Red
+            )} ${this.line(4)}${color(EColor.Reset)}`;
         }
     }
 
     logo(ver: string) {
-        return `${color(EColor.Code)}${color(EColor.Sql)}${EConstant.return} ____ __________    _     _   _ ${EConstant.return}/ ___|_ __  ____|  / \\   | \\ | |${EConstant.return}\\___ \\| | |  _|   / _ \\  |  \\| |${EConstant.return} ___) | | | |___ / ___ \\ | |\\  |${EConstant.return}|____/|_| |_____|_/   \\_\\|_| \\_|  ${color(EColor.Blue)}run API ----> ${color(EColor.Green)}${ver}${color(EColor.Sql)}${color(EColor.Code)}${EConstant.return}${EChar.web} ${color(
-            EColor.White
-        )}https://github.com/Mario-35/Stean/ ${EChar.mail} ${color(EColor.Yellow)} mario.adam@inrae.fr${color(EColor.Reset)}`;
+        return `${color(EColor.Code)}${color(EColor.Sql)}${EConstant.return} ____ __________    _     _   _ ${EConstant.return}/ ___|_ __  ____|  / \\   | \\ | |${
+            EConstant.return
+        }\\___ \\| | |  _|   / _ \\  |  \\| |${EConstant.return} ___) | | | |___ / ___ \\ | |\\  |${EConstant.return}|____/|_| |_____|_/   \\_\\|_| \\_|  ${color(EColor.Blue)}run API ----> ${color(
+            EColor.Green
+        )}${ver}${color(EColor.Sql)}${color(EColor.Code)}${EConstant.return}${EChar.web} ${color(EColor.White)}https://github.com/Mario-35/Stean/ ${EChar.mail} ${color(
+            EColor.Yellow
+        )} mario.adam@inrae.fr${color(EColor.Reset)}`;
     }
 
     update<T>(value: T) {
@@ -155,7 +170,11 @@ class Log {
     }
 
     error<T>(cle: unknown, infos?: T) {
-        process.stdout.write(infos ? `${color(EColor.Red)} ${cle} ${color(EColor.Blue)} : ${color(EColor.Yellow)} ${this.logAll(infos, this.debugFile)}${color(EColor.Reset)}` : `${color(EColor.Red)} Error ${color(EColor.Blue)} : ${color(EColor.Yellow)} ${this.logAll(cle)}${color(EColor.Reset)}` + EConstant.return);
+        process.stdout.write(
+            infos
+                ? `${color(EColor.Red)} ${cle} ${color(EColor.Blue)} : ${color(EColor.Yellow)} ${this.logAll(infos, this.debugFile)}${color(EColor.Reset)}`
+                : `${color(EColor.Red)} Error ${color(EColor.Blue)} : ${color(EColor.Yellow)} ${this.logAll(cle)}${color(EColor.Reset)}` + EConstant.return
+        );
     }
 
     newLog(input: any) {

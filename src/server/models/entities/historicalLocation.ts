@@ -7,26 +7,26 @@
  */
 
 import { Entity } from "../entity";
-import { ERelations, ETable } from "../../enums";
+import { ERelations, EentityType } from "../../enums";
 import { Ientity } from "../../types";
 import { Bigint, Timestamp } from "../types";
 
-export const HISTORICALLOCATION:Ientity  = new Entity("HistoricalLocations", {
-  createOrder: -1,
-  order: 5,
-  type: ETable.table,
-  columns: {
-    id: new Bigint().generated("id").type(),
-    time: new Timestamp("tz").type(),
-    thing_id: new Bigint().notNull().type(),
-  },
-  relations: {
-    Thing: {
-      type: ERelations.belongsTo
+export const HISTORICALLOCATION: Ientity = new Entity("HistoricalLocations", {
+    createOrder: -1,
+    order: 5,
+    type: EentityType.table,
+    columns: {
+        id: new Bigint().generated().column(),
+        time: new Timestamp("tz").column(),
+        thing_id: new Bigint().notNull().column()
     },
-    Locations: {
-      type: ERelations.belongsTo,
-      entityRelation: "LocationsHistoricalLocations"
-    },
-  },
+    relations: {
+        Thing: {
+            type: ERelations.belongsTo
+        },
+        Locations: {
+            type: ERelations.belongsTo,
+            entityRelation: "LocationsHistoricalLocations"
+        }
+    }
 });

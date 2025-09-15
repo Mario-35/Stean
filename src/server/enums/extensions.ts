@@ -9,7 +9,6 @@
 
 export enum EExtensions {
     base = "base",
-    file = "file",
     users = "users",
     lora = "lora",
     tasking = "tasking",

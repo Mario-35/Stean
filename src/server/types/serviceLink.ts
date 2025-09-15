@@ -23,6 +23,5 @@ export interface IserviceInfos {
         synonyms: Isynonyms | undefined;
         csvDelimiter: string;
     };
-    stats: JSON;
     users?: JSON;
 }

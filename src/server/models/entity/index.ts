@@ -1,12 +1,12 @@
-import { EConstant, EDataType, ERelations, ETable, allEntities } from "../../enums";
+import { EConstant, EDataType, ERelations, EentityType, allEntities } from "../../enums";
 import { msg, errors } from "../../messages";
 import { IentityColumn, IentityCore, IentityRelation } from "../../types";
 import { singular } from "../helpers";
-import { Time, Timestamp } from "../types";
 
 class EntityPass {
-    // static period: Record<string, string> = {};
+    // global trigger
     static trigger: { [key: string]: Record<string, string> } = {};
+    // global constraints and indexes
     static pass: {
         [key: string]: {
             constraints: Record<string, string>;
@@ -20,14 +20,13 @@ export class Entity extends EntityPass {
     singular: string;
     table: string;
     createOrder: number;
-    type: ETable;
+    type: EentityType;
     order: number;
     orderBy: string;
     columns: { [key: string]: IentityColumn };
     relations: { [key: string]: IentityRelation };
     constraints: Record<string, string>;
     indexes: Record<string, string>;
-    // update?: string[];
     after?: string;
     trigger: string[];
     clean?: string[];
@@ -59,35 +58,64 @@ export class Entity extends EntityPass {
   end $$;`;
     }
 
-    querySet(column: string, imp: "Start" | "End") {
-        return `THEN queryset := queryset || delimitr || '"_${column}${imp}" = $1."${column}"'; delimitr := ','; END IF;`;
-    }
+    dataStr(table: string, column: string, tim: string, coalesce?: string) {
+        return `IF (NEW."${column}" IS NOT NULL) THEN
+       MIN := NULL;
+       MAX := NULL; 
+      IF (NEW."${column}" < lower(SOURCE."${column}") OR lower(SOURCE."${column}") IS NULL )
+        THEN MIN := NEW."${column}"::${tim};
+        ELSE MIN := lower(SOURCE."${column}")::${tim};
+        MAX := upper(SOURCE."${column}")::${tim};
+      END IF;
 
-    insertStr(table: string, column: string, relTable: string, coalesce?: string) {
-        const datas = `IF ( NEW."${column}" < "DS_ROW"."_${column}Start" OR "DS_ROW"."_${column}Start" IS NULL ) ${this.querySet(column, "Start")}${EConstant.return} IF (${
-            coalesce ? ` COALESCE( NEW."${column}", NEW."${coalesce}") ` : `NEW."${column}"`
-        } > "DS_ROW"."_${column}End" OR "DS_ROW"."_${column}End" IS NULL ) ${this.querySet(column, "End")}`;
+      IF (NEW."${column}" > upper(SOURCE."${column}") OR upper(SOURCE."${column}") IS NULL )
+        THEN MAX := NEW."${column}"::${tim};
+        ELSE MAX := upper(SOURCE."${column}")::${tim};
+        IF (MIN IS NULL) THEN 
+          MIN := lower(SOURCE."${column}")::${tim};
+        END IF;
+      END IF;
+
+      IF (MIN IS NOT NULL AND MAX IS NOT NULL) THEN 
+		    EXECUTE 'UPDATE "${table}" SET "${column}" = ''[' || MIN || ',' || MAX || ']'' WHERE "${table}"."id"=' || NEW."${table}_id" using NEW;
+      END IF;
+  	END IF;
+`;
+    }
+    insertStr(table: string, column: string, relTable: string, timeType: string, coalesce?: string) {
+        // Ajoute une fonction en vue d'un trigger
+        const datas = this.dataStr(table, column, timeType);
+
         Entity.trigger[table].insert = Entity.trigger[table].hasOwnProperty("insert")
-            ? Entity.trigger[table].insert.replace("@DATAS@", `${EConstant.return}${datas}@DATAS@`)
-            : `CREATE OR REPLACE FUNCTION ${table}s_update_insert() RETURNS TRIGGER LANGUAGE PLPGSQL AS $$ DECLARE "DS_ROW" RECORD; queryset TEXT := ''; delimitr char(1) := ' '; BEGIN IF (NEW."${table}_id" is not null) THEN SELECT "id", "_${column}Start", "_${column}End", "_resultTimeStart", "_resultTimeEnd" INTO "DS_ROW" FROM "${table}" WHERE "${table}"."id" = NEW."${table}_id"; ${datas} @DATAS@ IF (delimitr = ',') THEN EXECUTE 'update "${table}" SET ' || queryset || ' where "${table}"."id"=$1."${table}_id"' using NEW; END IF; RETURN new; END IF; RETURN new; END; $$`;
+            ? Entity.trigger[table].insert.replace("@DATAS@", `${EConstant.return}${datas}@DATAS@`).replace("@COLUMN@", `,"${column}"@COLUMN@`)
+            : `CREATE OR REPLACE FUNCTION ${table}s_update_insert()  RETURNS TRIGGER LANGUAGE PLPGSQL AS $$ DECLARE SOURCE RECORD; MIN ${timeType} := NULL; MAX ${timeType} := NULL; BEGIN IF (NEW."${table}_id" is not null) THEN SELECT "id","${column}"@COLUMN@ INTO SOURCE FROM "${table}" WHERE "${table}"."id" = NEW."${table}_id"; ${datas}@DATAS@ END IF; RETURN NEW; END; $$`;
+
+        // Ajoute la fonction precedement créer
         Entity.trigger[table].doInsert = this.addTrigger("insert", table, relTable);
     }
 
-    updateStr(table: string, column: string, relTable: string, coalesce?: string) {
-        const datas = `IF (NEW."${column}" != OLD."${column}") THEN for "DS_ROW" IN SELECT * FROM "${table}" WHERE "id"=NEW."${table}_id" LOOP IF (${
-            coalesce ? ` COALESCE( NEW."${column}", NEW."${coalesce}") ` : `NEW."${column}"`
-        } < "DS_ROW"."_${column}Start") ${this.querySet(column, "End")} END LOOP; END IF;`;
+    updateStr(table: string, column: string, relTable: string, timeType: string, coalesce?: string) {
+        // Ajoute une fonction en vue d'un trigger
+        const datas = this.dataStr(table, column, timeType);
+
         Entity.trigger[table].update = Entity.trigger[table].hasOwnProperty("update")
-            ? Entity.trigger[table].update.replace("@DATAS@", `${EConstant.return}${datas}@DATAS@`)
-            : `CREATE OR REPLACE FUNCTION ${table}s_update_update() RETURNS TRIGGER LANGUAGE PLPGSQL AS $$ DECLARE "DS_ROW" "${table}"%rowtype; queryset TEXT := ''; delimitr char(1) := ' '; BEGIN IF (NEW."${table}_id" is not null) THEN ${datas} @DATAS@ IF (delimitr = ',') THEN EXECUTE 'update "${table}" SET ' || queryset ||  ' where "${table}"."id"=$1."${table}_id"' using NEW; END IF; END IF; RETURN NEW; END; $$`;
+            ? Entity.trigger[table].update.replace("@DATAS@", `${EConstant.return}${datas}@DATAS@`).replace("@COLUMN@", `,"${column}"@COLUMN@`)
+            : `CREATE OR REPLACE FUNCTION ${table}s_update_update()  RETURNS TRIGGER LANGUAGE PLPGSQL AS $$ DECLARE SOURCE RECORD; MIN ${timeType} := NULL; MAX ${timeType} := NULL; BEGIN IF (NEW."${table}_id" is not null) THEN SELECT "id","${column}"@COLUMN@ INTO SOURCE FROM "${table}" WHERE "${table}"."id" = NEW."${table}_id"; ${datas}@DATAS@ END IF; RETURN NEW; END; $$`;
         Entity.trigger[table].doUpdate = this.addTrigger("update", table, relTable);
     }
 
-    deleteStr(table: string, column: string, relTable: string) {
-        const datas = `IF (OLD."${column}" = "DS_ROW"."_${column}Start" OR OLD."${column}" = "DS_ROW"."_${column}End") THEN queryset := queryset || delimitr || '"_${column}Start" = (select min("${column}") from "${relTable}" where "${relTable}"."${table}_id" = $1."${table}_id")'; delimitr := ','; queryset := queryset || delimitr || '"_${column}End" = (select max(coalesce("${column}", "resultTime")) from "${relTable}" where "${relTable}"."${table}_id" = $1."${table}_id")'; END IF;`;
+    deleteStr(table: string, column: string, relTable: string, timeType: string, coalesce?: string) {
+        const datas = `IF (OLD."${column}" IS NOT NULL) THEN
+      IF (OLD."${column}" = lower(SOURCE."${column}") OR OLD."${column}" = upper(SOURCE."${column}")) THEN 
+		    EXECUTE 'UPDATE "${table}" SET "${column}" = tstzrange((SELECT MIN("${column}") FROM "${relTable}" WHERE "${relTable}"."${this.table}_id" = ${this.table}.id), (SELECT MAX("${column}") FROM "${relTable}" WHERE "${relTable}"."${this.table}_id" = ${this.table}.id)) WHERE "${table}"."id"=' || OLD."${table}_id" using OLD;
+
+      END IF;
+  	END IF;
+`;
+
         Entity.trigger[table].delete = Entity.trigger[table].hasOwnProperty("delete")
-            ? Entity.trigger[table].delete.replace("@DATAS@", `${EConstant.return}${datas}@DATAS@`)
-            : `CREATE OR REPLACE FUNCTION ${table}s_update_delete() RETURNS TRIGGER LANGUAGE PLPGSQL AS $$ DECLARE "DS_ROW" "${table}"%rowtype; queryset TEXT := ''; delimitr char(1) := ' '; BEGIN IF (OLD."${table}_id" is not null) THEN SELECT * INTO "DS_ROW" FROM "${table}" WHERE "${table}"."id"=OLD."${table}_id"; ${datas} @DATAS@ IF (delimitr = ',') THEN EXECUTE 'update "${table}" SET ' || queryset ||  ' where "${table}"."id"=$1."${table}_id"' using OLD; END IF; END IF; RETURN NULL; END; $$`;
+            ? Entity.trigger[table].delete.replace("@DATAS@", `${EConstant.return}${datas}@DATAS@`).replace("@COLUMN@", `,"${column}"@COLUMN@`)
+            : `CREATE OR REPLACE FUNCTION ${table}s_update_delete()  RETURNS TRIGGER LANGUAGE PLPGSQL AS $$ DECLARE SOURCE RECORD; BEGIN IF (OLD."${table}_id" is not null) THEN SELECT "id","${column}"@COLUMN@ INTO SOURCE FROM "${table}" WHERE "${table}"."id" = OLD."${table}_id"; ${datas}@DATAS@ END IF; RETURN OLD; END; $$`;
         Entity.trigger[table].doDelete = this.addTrigger("delete", table, relTable);
     }
 
@@ -98,51 +126,29 @@ export class Entity extends EntityPass {
 
     private prepareColums() {
         Object.keys(this.columns).forEach((e) => {
-            if (this.columns[e].dataType === EDataType.period) {
+            if (this.columns[e].dataType === EDataType.tstzrange || this.columns[e].dataType === EDataType.tsrange) {
                 const entityRelation = this.columns[e].entityRelation;
                 const coalesce = this.columns[e].coalesce;
-                switch (this.columns[e].create.split(" ")[0]) {
-                    case "TIME":
-                        this.columns[e] = new Time().alias(e).type();
-                        this.columns[`_${e}Start`] = new Time().type();
-                        this.columns[`_${e}End`] = new Time().type();
-                        break;
-                    case "TIMETZ":
-                        this.columns[e] = new Time("tz").alias(e).type();
-                        this.columns[`_${e}Start`] = new Time("tz").type();
-                        this.columns[`_${e}End`] = new Time("tz").type();
-                        break;
-                    case "TIMESTAMP":
-                        this.columns[e] = new Timestamp().alias(e).type();
-                        this.columns[`_${e}Start`] = new Timestamp().type();
-                        this.columns[`_${e}End`] = new Timestamp().type();
-                        break;
-                    case "TIMESTAMPTZ":
-                        this.columns[e] = new Timestamp("tz").alias(e).type();
-                        this.columns[`_${e}Start`] = new Timestamp("tz").type();
-                        this.columns[`_${e}End`] = new Timestamp("tz").type();
-                        break;
-                }
-
+                const cast = EDataType.tstzrange ? "TIMESTAMPTZ" : "TIMESTAMP";
                 if (entityRelation) {
                     if (!Entity.trigger[this.table]) Entity.trigger[this.table] = {};
-                    this.insertStr(this.table, e, entityRelation, coalesce);
-                    this.updateStr(this.table, e, entityRelation, coalesce);
-                    this.deleteStr(this.table, e, entityRelation);
-                    this.addToClean(`"_${e}Start" = (SELECT min("${entityRelation}"."${e}") from "${entityRelation}" where "${entityRelation}"."${this.table}_id" = ${this.table}.id)`);
-                    this.addToClean(`"_${e}End" = (SELECT max("${entityRelation}"."${e}") from "${entityRelation}" where "${entityRelation}"."${this.table}_id" = ${this.table}.id)`);
-                }
-                this.columns[e].create = "";
+                    this.insertStr(this.table, e, singular(allEntities[entityRelation as keyof object]).toLowerCase(), cast, coalesce);
+                    this.updateStr(this.table, e, singular(allEntities[entityRelation as keyof object]).toLowerCase(), cast, coalesce);
+                    this.deleteStr(this.table, e, singular(allEntities[entityRelation as keyof object]).toLowerCase(), cast, coalesce);
+                    this.addToClean(`@DROPCOLUMN@ "_${e}Start";`);
+                    this.addToClean(`@DROPCOLUMN@ "_${e}End";`);
+                    // this.addToClean(
+                    //     `@UPDATE@ "${e}" = tstzrange((SELECT MIN("${e}") FROM "${entityRelation}" WHERE "${entityRelation}"."${this.table}_id" = ${this.table}.id), (SELECT MAX("${e}") FROM "${entityRelation}" WHERE "${entityRelation}"."${this.table}_id" = ${this.table}.id)) WHERE lower("${e}") IS NULL`
+                    // );
+                } // else this.addToClean(`@DROPCOLUMN@ "${e}"`);
+                // this.addToClean(`@ADDCOLUMN@ "${e}" tstzrange NULL;`);
             }
         });
     }
 
     private createTriggers() {
         if (Entity.trigger[this.table]) {
-            this.trigger = [];
-            Object.keys(Entity.trigger[this.table]).forEach((elem: string) => {
-                this.trigger.push(Entity.trigger[this.table][elem].replace("@DATAS@", ""));
-            });
+            this.trigger = Object.keys(Entity.trigger[this.table]).map((elem: string) => Entity.trigger[this.table][elem].replace("@DATAS@", "").replace("@COLUMN@", ""));
         }
     }
 
@@ -201,7 +207,7 @@ export class Entity extends EntityPass {
             }
         });
 
-        if (this.type === ETable.link && Object.keys(this.columns).length === 2) {
+        if (this.type === EentityType.link && Object.keys(this.columns).length === 2) {
             this.addToConstraints(`${this.table}_pkey`, `PRIMARY KEY (${Object.keys(this.columns).map((e) => `"${e}"`)})`);
             Object.keys(this.columns).forEach((elem) => {
                 this.addToIndexes(`${this.table}_${elem}`, `ON public."${this.table}" USING btree ("${elem}")`);

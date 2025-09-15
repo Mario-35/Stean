@@ -10,12 +10,41 @@
 process.env.NODE_ENV = "test";
 import chai from "chai";
 import chaiHttp from "chai-http";
-import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, getNB, listOfColumns, limitResult, infos, apiInfos, showHide, nbColorTitle, nbColor, testVersion, _RAWDB } from "./constant";
+import {
+    IApiDoc,
+    generateApiDoc,
+    IApiInput,
+    prepareToApiDoc,
+    identification,
+    keyTokenName,
+    getNB,
+    listOfColumns,
+    limitResult,
+    infos,
+    apiInfos,
+    showHide,
+    nbColorTitle,
+    nbColor,
+    testVersion,
+    _RAWDB
+} from "./constant";
 import { server } from "../../server/index";
 import { Ientity } from "../../server/types";
 import { executeQuery, last } from "./executeQuery";
 import { addStartNewTest, addTest, writeLog } from "./tests";
-export const testsKeys = ["@iot.id", "name", "description", "@iot.selfLink", "Thing@iot.navigationLink", "Sensor@iot.navigationLink", "ObservedProperties@iot.navigationLink", "Observations@iot.navigationLink", "unitOfMeasurements", "observationType", "multiObservationDataTypes"];
+export const testsKeys = [
+    "@iot.id",
+    "name",
+    "description",
+    "@iot.selfLink",
+    "Thing@iot.navigationLink",
+    "Sensor@iot.navigationLink",
+    "ObservedProperties@iot.navigationLink",
+    "Observations@iot.navigationLink",
+    "unitOfMeasurements",
+    "observationType",
+    "multiObservationDataTypes"
+];
 chai.use(chaiHttp);
 const should = chai.should();
 const docs: IApiDoc[] = [];
@@ -447,7 +476,8 @@ describe("endpoint : MultiDatastream", () => {
                     res.status.should.equal(200);
                     res.type.should.equal("application/json");
                     res.body["@iot.count"].should.eql(9);
-                    res.body.value[0]["phenomenonTime"].should.eql("2024-06-03T05:15:01Z/2024-06-05T04:15:01Z");
+                    res.body.value[1]["phenomenonTime"].should.eql("2024-06-03T05:15:01Z/2024-06-05T04:15:01Z");
+                    addToApiDoc({ ...infos, result: res });
                     addToApiDoc({ ...infos, result: res });
 
                     done();

@@ -7,20 +7,20 @@
  */
 
 import { Entity } from "../entity";
-import { ERelations, ETable } from "../../enums";
+import { ERelations, EentityType } from "../../enums";
 import { Ientity } from "../../types";
 import { Bigint, Jsonb, Text } from "../types";
 
 export const FEATUREOFINTEREST: Ientity = new Entity("FeaturesOfInterest", {
     createOrder: 4,
-    type: ETable.table,
+    type: EentityType.table,
     order: 4,
     columns: {
-        id: new Bigint().generated("id").type(),
-        name: new Text().notNull().type(),
-        description: new Text().notNull().type(),
-        encodingType: new Text().type(),
-        feature: new Jsonb().notNull().type()
+        id: new Bigint().generated().column(),
+        name: new Text().notNull().column(),
+        description: new Text().notNull().column(),
+        encodingType: new Text().column(),
+        feature: new Jsonb().notNull().column()
     },
     relations: {
         Observations: {

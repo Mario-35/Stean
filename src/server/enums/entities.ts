@@ -49,7 +49,6 @@ export const filterEntities = (exts: string[], name?: string) => {
     let res = exts.includes(EExtensions.base) ? EnumBaseEntities : {};
     if (exts.includes(EExtensions.multiDatastream)) res = { ...res, ...EnumMultiDatastreamEntities };
     if (exts.includes(EExtensions.lora)) res = { ...res, ...EnumLoraEntities };
-    if (exts.includes(EExtensions.file)) res = { ...res, ...EnumFileEntities };
     if (exts.includes(EExtensions.users)) res = { ...res, ...EnumUsersEntities };
     return res;
 };

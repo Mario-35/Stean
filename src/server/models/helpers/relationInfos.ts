@@ -8,7 +8,7 @@
 
 import { idColumnName } from ".";
 import { models } from "..";
-import { ERelations, ETable } from "../../enums";
+import { ERelations, EentityType } from "../../enums";
 import { formatPgTableColumn } from "../../helpers";
 import { log } from "../../log";
 import { errorMessage } from "../../messages";
@@ -121,7 +121,7 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                             case ERelations.belongsToMany:
                                 if (leftRelation.entityRelation) {
                                     const tempEntity = models.getEntity(service, leftRelation.entityRelation);
-                                    if (leftRelation && tempEntity && tempEntity.type === ETable.link && !loop) {
+                                    if (leftRelation && tempEntity && tempEntity.type === EentityType.link && !loop) {
                                         leftKey = _Key(tempEntity, rightEntity);
                                         rightKey = _KeyLink(tempEntity, leftKey);
                                         const temp = `${formatPgTableColumn(rightEntity.table, "id")} IN (SELECT ${formatPgTableColumn(tempEntity.table, leftKey)} FROM ${formatPgTableColumn(
@@ -137,7 +137,7 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                             expand: temp.replace("$ID", formatPgTableColumn(leftEntity.table, "id"))
                                         };
                                     }
-                                } else if (rightRelationName && !loop && leftEntity.type !== ETable.link) {
+                                } else if (rightRelationName && !loop && leftEntity.type !== EentityType.link) {
                                     const entityName = relationInfos(service, rightRelationName, rightEntity.name, true);
                                     const complexEntity = models.getEntity(service, `${rightRelationName}${rightEntity.name}`) || models.getEntity(service, `${rightEntity.name}${rightRelationName}`);
                                     if (complexEntity && entityName.external) {
@@ -198,7 +198,7 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                     const tempEntity = models.getEntity(service, tmp[0]);
                                     if (tempEntity && !loop) {
                                         const tempCardinality = relationInfos(service, leftEntity.name, tempEntity.name, true);
-                                        if (complexEntity2 && tempCardinality.entity && complexEntity2.type !== ETable.link) {
+                                        if (complexEntity2 && tempCardinality.entity && complexEntity2.type !== EentityType.link) {
                                             leftKey = _Key(complexEntity2, rightEntity);
                                             rightKey = _Key(complexEntity2, leftEntity);
                                             const temp = `${formatPgTableColumn(rightEntity.table, "id")} IN (SELECT ${formatPgTableColumn(rightEntity.table, "id")} FROM ${formatPgTableColumn(

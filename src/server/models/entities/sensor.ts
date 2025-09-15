@@ -7,20 +7,20 @@
  */
 
 import { Entity } from "../entity";
-import { ERelations, ETable } from "../../enums";
+import { ERelations, EentityType } from "../../enums";
 import { Ientity } from "../../types";
 import { Bigint, Text } from "../types";
 
 export const SENSOR: Ientity = new Entity("Sensors", {
     createOrder: 6,
-    type: ETable.table,
+    type: EentityType.table,
     order: 9,
     columns: {
-        id: new Bigint().generated("id").type(),
-        name: new Text().notNull().type(),
-        description: new Text().notNull().type(),
-        encodingType: new Text().default("application/pdf").type(),
-        metadata: new Text().default("none.pdf").type()
+        id: new Bigint().generated().column(),
+        name: new Text().notNull().column(),
+        description: new Text().notNull().column(),
+        encodingType: new Text().default("application/pdf").column(),
+        metadata: new Text().default("none.pdf").column()
     },
     relations: {
         Datastreams: {

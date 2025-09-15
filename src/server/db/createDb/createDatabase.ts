@@ -8,7 +8,7 @@
 
 import { createTable, createUser } from "../helpers";
 import { config } from "../../configuration";
-import { doubleQuotesString, simpleQuotesString, asyncForEach } from "../../helpers";
+import { doubleQuotes, simpleQuotesString, asyncForEach } from "../../helpers";
 import { EChar, EConstant, EExtensions } from "../../enums";
 import { models } from "../../models";
 import { log } from "../../log";
@@ -106,20 +106,18 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
         .catch((err: Error) => err.message);
 
     // loop to create each services
-    if (!config.getService(serviceName).extensions.includes(EExtensions.file)) {
-        await asyncForEach(pgFunctions(), async (query: string) => {
-            const name = query.split(" */")[0].split("/*")[1].trim();
-            await dbConnection
-                .unsafe(query)
-                .then(() => {
-                    log.create(name, EChar.ok);
-                })
-                .catch((error: Error) => {
-                    console.log(error);
-                    process.exit(111);
-                });
-        });
-    }
+    await asyncForEach(pgFunctions(), async (query: string) => {
+        const name = query.split(" */")[0].split("/*")[1].trim();
+        await dbConnection
+            .unsafe(query)
+            .then(() => {
+                log.create(name, EChar.ok);
+            })
+            .catch((error: Error) => {
+                console.log(error);
+                process.exit(111);
+            });
+    });
 
     // loop to create each triggers
     await asyncForEach(
@@ -144,11 +142,11 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
 
     // If only numeric extension
     if (config.getService(serviceName).extensions.includes(EExtensions.highPrecision)) {
-        await dbConnection.unsafe(`ALTER TABLE ${doubleQuotesString(DB.Observations.table)} ALTER COLUMN 'result' TYPE float4 USING null;`).catch((error: Error) => {
+        await dbConnection.unsafe(`ALTER TABLE ${doubleQuotes(DB.Observations.table)} ALTER COLUMN 'result' TYPE float4 USING null;`).catch((error: Error) => {
             console.log(error);
             return error;
         });
-        await dbConnection.unsafe(`ALTER TABLE ${doubleQuotesString(DB.HistoricalLocations.table)} ALTER COLUMN '_result' TYPE float4 USING null;`).catch((error) => {
+        await dbConnection.unsafe(`ALTER TABLE ${doubleQuotes(DB.HistoricalLocations.table)} ALTER COLUMN '_result' TYPE float4 USING null;`).catch((error) => {
             console.log(error);
             return error;
         });

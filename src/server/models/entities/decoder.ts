@@ -7,21 +7,21 @@
  */
 
 import { Entity } from "../entity";
-import { ERelations, ETable } from "../../enums";
+import { ERelations, EentityType } from "../../enums";
 import { Ientity } from "../../types";
 import { Bigint, Text } from "../types";
 
 export const DECODER: Ientity = new Entity("Decoders", {
     createOrder: 10,
-    type: ETable.table,
+    type: EentityType.table,
     order: 12,
     columns: {
-        id: new Bigint().generated("id").type(),
-        name: new Text().notNull().type(),
-        hash: new Text().type(),
-        code: new Text().notNull().default("const decoded = null; return decoded;").type(),
-        nomenclature: new Text().notNull().default("{}").type(),
-        synonym: new Text().type()
+        id: new Bigint().generated().column(),
+        name: new Text().notNull().column(),
+        hash: new Text().column(),
+        code: new Text().notNull().default("const decoded = null; return decoded;").column(),
+        nomenclature: new Text().notNull().default("{}").column(),
+        synonym: new Text().column()
     },
     relations: {
         Loras: {

@@ -80,4 +80,5 @@ export const server = isTest()
           console.log(log.message(`${EConstant.appName} version : ${appVersion}`, "ready " + EChar.ok));
       })
     : // Production or dev init
-      config.initialisation();
+      //   config.initialisation();
+      config.initialisation().then(async () => await config.afterInitialisation().then((e) => console.log(log._head("Clean", e === true ? EChar.ok : EChar.notOk))));

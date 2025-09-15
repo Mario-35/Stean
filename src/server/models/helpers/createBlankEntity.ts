@@ -7,7 +7,7 @@
  */
 
 import { singular } from ".";
-import { allEntities, ETable } from "../../enums";
+import { allEntities, EentityType } from "../../enums";
 import { msg, errors } from "../../messages";
 import { Ientity } from "../../types";
 
@@ -15,7 +15,7 @@ export const createBlankEntity = (name: string, table?: string): Ientity => {
     const entity = allEntities[name];
     if (entity) {
         return {
-            type: ETable.blank,
+            type: EentityType.blank,
             name: name,
             singular: singular(entity),
             table: table || "",

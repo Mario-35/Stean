@@ -115,6 +115,7 @@ export class Admin extends CoreHtmlView {
                             <li class="card-list-item canPoint icon-${services[e].service.options.includes(EOptions.canDrop) ? "yes" : "no"}" onclick="selectChange('${e}', this)">canDrop</li>
                             <li class="card-list-item canPoint icon-${services[e].service.options.includes(EOptions.forceHttps) ? "yes" : "no"}" onclick="selectChange('${e}', this)">forceHttps</li>
                             <li class="card-list-item canPoint icon-${services[e].service.options.includes(EOptions.stripNull) ? "yes" : "no"}" onclick="selectChange('${e}', this)">stripNull</li>
+                            <li class="card-list-item canPoint icon-${services[e].service.options.includes(EOptions.speedCount) ? "yes" : "no"}" onclick="selectChange('${e}', this)">speedCount</li>
                             <li class="card-list-item canPoint icon-${services[e].service.options.includes(EOptions.unique) ? "yes" : "no"}" onclick="selectChange('${e}', this)">unique</li>
                         </ul>
                     </fieldset>
@@ -124,11 +125,6 @@ export class Admin extends CoreHtmlView {
                     </select>
     
                 </div>
-                <ul class="list" id="list${e}">
-                ${Object.keys(services[e].stats)
-                    .map((k) => `<li>${k} : ${services[e].stats[k as keyof object]}</li>`)
-                    .join("")}
-                </ul>
                 <div class="description">
                     <span class="page canPoint" onclick="editPage('${e}', this)">${services[e].service.nb_page}</span>
                     <span class="csv canPoint" onclick="editCsv('${e}', this)">${services[e].service.csvDelimiter}</span>

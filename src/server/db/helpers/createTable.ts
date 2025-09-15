@@ -8,7 +8,7 @@
 
 import { config } from "../../configuration";
 import { log } from "../../log";
-import { doubleQuotesString } from "../../helpers";
+import { doubleQuotes } from "../../helpers";
 import { Ientity } from "../../types";
 import { EChar } from "../../enums";
 
@@ -35,24 +35,26 @@ export const createTable = async (serviceName: string, tableEntity: Ientity, doA
     }
 
     Object.keys(tableEntity.columns).forEach((column) => {
-        if (tableEntity.columns[column].create.trim() != "") tabIeInsert.push(`${doubleQuotesString(column)} ${tableEntity.columns[column].create}`);
+        if (tableEntity.columns[column].create.trim() != "") tabIeInsert.push(`${doubleQuotes(column)} ${tableEntity.columns[column].create}`);
+        else console.log(tableEntity.columns[column]);
     });
     insertion = tabIeInsert.join(", ");
 
     Object.keys(tableEntity.constraints).forEach((constraint) => {
-        tableConstraints.push(`ALTER TABLE ONLY ${doubleQuotesString(tableEntity.table)} ADD CONSTRAINT ${doubleQuotesString(constraint)} ${tableEntity.constraints[constraint]}`);
+        tableConstraints.push(`ALTER TABLE ONLY ${doubleQuotes(tableEntity.table)} ADD CONSTRAINT ${doubleQuotes(constraint)} ${tableEntity.constraints[constraint]}`);
     });
 
-    let sql = `CREATE TABLE ${doubleQuotesString(tableEntity.table)} (${insertion});`;
+    let sql = `CREATE TABLE ${doubleQuotes(tableEntity.table)} (${insertion});`;
     console.log(log.query(sql));
     if (tableEntity.table.trim() != "")
-        returnValue[String(`Create table ${doubleQuotesString(tableEntity.table)}`)] = await config
+        returnValue[String(`Create table ${doubleQuotes(tableEntity.table)}`)] = await config
             .connection(serviceName)
             .unsafe(sql)
             .then(() => EChar.ok)
             .catch((error: Error) => error.message);
     const indexes = tableEntity.indexes;
     const tabTemp: string[] = [];
+
     // CREATE INDEXES
     if (indexes)
         Object.keys(indexes).forEach((index) => {
@@ -67,8 +69,8 @@ export const createTable = async (serviceName: string, tableEntity: Ientity, doA
             .then(() => EChar.ok)
             .catch((error: Error) => error.message);
     }
-    // CREATE CONSTRAINTS
 
+    // CREATE CONSTRAINTS
     if (tableConstraints.length > 0) {
         sql = tabTemp.join(";");
         console.log(log.query(sql));
@@ -92,6 +94,7 @@ export const createTable = async (serviceName: string, tableEntity: Ientity, doA
                     return error.message;
                 });
     }
+
     // CREATE SOMETHING AFTER (migration)
     if (doAfter) {
         log.query(doAfter);

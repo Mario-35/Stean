@@ -7,25 +7,24 @@
  */
 
 import { IentityColumn, IentityRelation } from ".";
-import { ETable } from "../enums";
+import { EentityType } from "../enums";
 
 export interface IentityCore {
-    createOrder: number;
-    type: ETable;
-    order: number;
-    columns: { [key: string]: IentityColumn };
-    relations: { [key: string]: IentityRelation };
-    after?: string;
+    createOrder: number; // create order to respect constraint
+    type: EentityType; // Entity type
+    order: number; // order eault show
+    columns: { [key: string]: IentityColumn }; // columns table
+    relations: { [key: string]: IentityRelation }; // relations table
+    after?: string; // execute after create (default ata for example)
     trigger?: string[];
 }
 
 export interface Ientity extends IentityCore {
     name: string; // Entity Name
-    singular: string;
-    table: string;
-    constraints: { [key: string]: string };
-    indexes: { [key: string]: string };
-    // update?: string[];
-    clean?: string[];
-    orderBy: string;
+    singular: string; // Singlar entity Name
+    table: string; // table name
+    constraints: { [key: string]: string }; // constraints table
+    indexes: { [key: string]: string }; // indexes table
+    orderBy: string; // default orderBy
+    clean?: string[]; // Clean to execute at start service (recalc date or flush)
 }

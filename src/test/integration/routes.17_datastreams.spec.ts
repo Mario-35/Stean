@@ -10,12 +10,40 @@
 process.env.NODE_ENV = "test";
 import chai from "chai";
 import chaiHttp from "chai-http";
-import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, listOfColumns, limitResult, infos, apiInfos, showHide, nbColor, nbColorTitle, testVersion, _RAWDB } from "./constant";
+import {
+    IApiDoc,
+    generateApiDoc,
+    IApiInput,
+    prepareToApiDoc,
+    identification,
+    keyTokenName,
+    listOfColumns,
+    limitResult,
+    infos,
+    apiInfos,
+    showHide,
+    nbColor,
+    nbColorTitle,
+    testVersion,
+    _RAWDB
+} from "./constant";
 import { server } from "../../server/index";
 import { Ientity } from "../../server/types";
 import { executeQuery, last } from "./executeQuery";
 import { addStartNewTest, addTest, writeLog } from "./tests";
-export const testsKeys = ["@iot.id", "name", "description", "observationType", "@iot.selfLink", "Thing@iot.navigationLink", "Sensor@iot.navigationLink", "ObservedProperty@iot.navigationLink", "Observations@iot.navigationLink", "unitOfMeasurement", "observedArea"];
+export const testsKeys = [
+    "@iot.id",
+    "name",
+    "description",
+    "observationType",
+    "@iot.selfLink",
+    "Thing@iot.navigationLink",
+    "Sensor@iot.navigationLink",
+    "ObservedProperty@iot.navigationLink",
+    "Observations@iot.navigationLink",
+    "unitOfMeasurement",
+    "observedArea"
+];
 chai.use(chaiHttp);
 const should = chai.should();
 const docs: IApiDoc[] = [];

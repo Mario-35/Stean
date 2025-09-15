@@ -7,26 +7,26 @@
  */
 
 import { Entity } from "../entity";
-import { EObservationType, ERelations, ETable } from "../../enums";
+import { EObservationType, ERelations, EentityType } from "../../enums";
 import { Ientity } from "../../types";
-import { Bigint, Geometry, Jsonb, Relation, Text, Texts, Tmperiod } from "../types";
+import { Bigint, Geometry, Jsonb, Period, Relation, Text, Texts } from "../types";
 export const MULTIDATASTREAM: Ientity = new Entity("MultiDatastreams", {
     createOrder: 8,
-    type: ETable.table,
+    type: EentityType.table,
     order: 2,
     columns: {
-        id: new Bigint().generated("id").type(),
-        name: new Text().notNull().type(),
-        description: new Text().notNull().type(),
-        unitOfMeasurements: new Jsonb().notNull().type(),
-        observationType: new Text().notNull().default("http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement").verify(Object.keys(EObservationType)).type(),
-        multiObservationDataTypes: new Texts().type(),
-        observedArea: new Geometry().type(),
-        phenomenonTime: new Tmperiod("timestamp").source("Observations").coalesce("resultTime").type(),
-        resultTime: new Tmperiod("timestamp").source("Observations").type(),
-        thing_id: new Relation().relation("Things").type(),
-        sensor_id: new Relation().relation("Sensors").type(),
-        _default_featureofinterest: new Relation().relation("FeaturesOfInterest").default(1).type()
+        id: new Bigint().generated().column(),
+        name: new Text().notNull().column(),
+        description: new Text().notNull().column(),
+        unitOfMeasurements: new Jsonb().notNull().column(),
+        observationType: new Text().notNull().default("http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement").verify(Object.keys(EObservationType)).column(),
+        multiObservationDataTypes: new Texts().column(),
+        observedArea: new Geometry().column(),
+        phenomenonTime: new Period("tz").relation("Observations").column(),
+        resultTime: new Period("tz").relation("Observations").column(),
+        thing_id: new Relation("Things").column(),
+        sensor_id: new Relation("Sensors").column(),
+        _default_featureofinterest: new Relation("FeaturesOfInterest").default(1).column()
     },
     relations: {
         Thing: {

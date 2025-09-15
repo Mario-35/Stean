@@ -11,7 +11,7 @@ export enum EDataType {
     bigint, // int8 signed eight-byte integer
     bigserial, // serial8 autoincrementing eight-byte integer
     bit, // [ (n) ] fixed-length bit string
-    boolean, // bool logical Boolean (true/false)
+    bool, // bool logical Boolean (true/false)
     box, // rectangular box on a plane
     bytea, // binary data (“byte array”)
     character, // [ (n) ] char [ (n) ] fixed-length character string
@@ -52,6 +52,8 @@ export enum EDataType {
     xml, // XML data
     geometry, // geojson
     link, // link
-    result, // result
-    period // period
+    any, // result
+    period, // period
+    tsrange, // period TIMESTAMP WITHOUT TIME ZONE
+    tstzrange // period TIMESTAMP WITH TIME ZONE
 }
