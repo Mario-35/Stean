@@ -132,13 +132,14 @@ export class Entity extends EntityPass {
                 const cast = EDataType.tstzrange ? "TIMESTAMPTZ" : "TIMESTAMP";
                 if (entityRelation) {
                     if (!Entity.trigger[this.table]) Entity.trigger[this.table] = {};
+                    const relationTable = singular(entityRelation).toLowerCase();
                     this.insertStr(this.table, e, singular(allEntities[entityRelation as keyof object]).toLowerCase(), cast, coalesce);
                     this.updateStr(this.table, e, singular(allEntities[entityRelation as keyof object]).toLowerCase(), cast, coalesce);
                     this.deleteStr(this.table, e, singular(allEntities[entityRelation as keyof object]).toLowerCase(), cast, coalesce);
                     // this.addToClean(`@DROPCOLUMN@ "_${e}Start";`);
                     // this.addToClean(`@DROPCOLUMN@ "_${e}End";`);
                     this.addToClean(
-                        `@UPDATE@ "${e}" = tstzrange((SELECT MIN("${e}") FROM "${entityRelation}" WHERE "${entityRelation}"."${this.table}_id" = ${this.table}.id), (SELECT MAX("${e}") FROM "${entityRelation}" WHERE "${entityRelation}"."${this.table}_id" = ${this.table}.id)) WHERE lower("${e}") IS NULL`
+                        `@UPDATE@ "${e}" = tstzrange((SELECT MIN("${e}") FROM "${relationTable}" WHERE "${relationTable}"."${this.table}_id" = ${this.table}.id), (SELECT MAX("${e}") FROM "${relationTable}" WHERE "${relationTable}"."${this.table}_id" = ${this.table}.id)) WHERE lower("${e}") IS NULL`
                     );
                 } // else this.addToClean(`@DROPCOLUMN@ "${e}"`);
                 // this.addToClean(`@ADDCOLUMN@ "${e}" tstzrange NULL;`);
