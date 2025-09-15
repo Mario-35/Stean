@@ -137,9 +137,9 @@ export class Entity extends EntityPass {
                     this.deleteStr(this.table, e, singular(allEntities[entityRelation as keyof object]).toLowerCase(), cast, coalesce);
                     // this.addToClean(`@DROPCOLUMN@ "_${e}Start";`);
                     // this.addToClean(`@DROPCOLUMN@ "_${e}End";`);
-                    // this.addToClean(
-                    //     `@UPDATE@ "${e}" = tstzrange((SELECT MIN("${e}") FROM "${entityRelation}" WHERE "${entityRelation}"."${this.table}_id" = ${this.table}.id), (SELECT MAX("${e}") FROM "${entityRelation}" WHERE "${entityRelation}"."${this.table}_id" = ${this.table}.id)) WHERE lower("${e}") IS NULL`
-                    // );
+                    this.addToClean(
+                        `@UPDATE@ "${e}" = tstzrange((SELECT MIN("${e}") FROM "${entityRelation}" WHERE "${entityRelation}"."${this.table}_id" = ${this.table}.id), (SELECT MAX("${e}") FROM "${entityRelation}" WHERE "${entityRelation}"."${this.table}_id" = ${this.table}.id)) WHERE lower("${e}") IS NULL`
+                    );
                 } // else this.addToClean(`@DROPCOLUMN@ "${e}"`);
                 // this.addToClean(`@ADDCOLUMN@ "${e}" tstzrange NULL;`);
             }
