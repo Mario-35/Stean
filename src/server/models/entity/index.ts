@@ -132,10 +132,10 @@ export class Entity extends EntityPass {
                 const cast = EDataType.tstzrange ? "TIMESTAMPTZ" : "TIMESTAMP";
                 if (entityRelation) {
                     if (!Entity.trigger[this.table]) Entity.trigger[this.table] = {};
-                    const relationTable = singular(entityRelation).toLowerCase();
-                    this.insertStr(this.table, e, singular(allEntities[entityRelation as keyof object]).toLowerCase(), cast, coalesce);
-                    this.updateStr(this.table, e, singular(allEntities[entityRelation as keyof object]).toLowerCase(), cast, coalesce);
-                    this.deleteStr(this.table, e, singular(allEntities[entityRelation as keyof object]).toLowerCase(), cast, coalesce);
+                    const relationTable = singular(allEntities[entityRelation as keyof object]).toLowerCase();
+                    this.insertStr(this.table, e, relationTable, cast, coalesce);
+                    this.updateStr(this.table, e, relationTable, cast, coalesce);
+                    this.deleteStr(this.table, e, relationTable, cast, coalesce);
                     // this.addToClean(`@DROPCOLUMN@ "_${e}Start";`);
                     // this.addToClean(`@DROPCOLUMN@ "_${e}End";`);
                     this.addToClean(
