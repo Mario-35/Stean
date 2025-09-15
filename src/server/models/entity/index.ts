@@ -89,7 +89,7 @@ export class Entity extends EntityPass {
         Entity.trigger[table].insert = Entity.trigger[table].hasOwnProperty("insert")
             ? Entity.trigger[table].insert.replace("@DATAS@", `${EConstant.return}${datas}@DATAS@`).replace("@COLUMN@", `,"${column}"@COLUMN@`)
             : `CREATE OR REPLACE FUNCTION ${table}s_update_insert()  RETURNS TRIGGER LANGUAGE PLPGSQL AS $$ DECLARE SOURCE RECORD; MIN ${timeType} := NULL; MAX ${timeType} := NULL; BEGIN IF (NEW."${table}_id" is not null) THEN SELECT "id","${column}"@COLUMN@ INTO SOURCE FROM "${table}" WHERE "${table}"."id" = NEW."${table}_id"; ${datas}@DATAS@ END IF; RETURN NEW; END; $$`;
-
+        this.addToClean(Entity.trigger[table].insert);
         // Ajoute la fonction precedement créer
         Entity.trigger[table].doInsert = this.addTrigger("insert", table, relTable);
     }
@@ -119,10 +119,10 @@ export class Entity extends EntityPass {
         Entity.trigger[table].doDelete = this.addTrigger("delete", table, relTable);
     }
 
-    // private addToClean(input: string) {
-    //     if (this.clean) this.clean.push(input);
-    //     else this.clean = [input];
-    // }
+    private addToClean(input: string) {
+        if (this.clean) this.clean.push(input);
+        else this.clean = [input];
+    }
 
     private prepareColums() {
         Object.keys(this.columns).forEach((e) => {

@@ -269,7 +269,7 @@ export class Models {
         const mods = Models.models[this.get(service).apiVersion];
         const temp: string[] = [];
         Object.keys(mods).forEach((entity) => {
-            // if (mods[entity].clean) temp.push(`UPDATE "${mods[entity].table}" SET ${mods[entity].clean}`);
+            mods[entity].trigger?.forEach((e: string) => temp.push(e));
             if (mods[entity].clean) {
                 mods[entity].clean.forEach((e) => {
                     if (e.includes("@UPDATE@")) temp.push(e.replace("@UPDATE@", `UPDATE "${mods[entity].table}" SET`));
