@@ -7,7 +7,7 @@
  */
 
 import postgres from "postgres";
-import { Isynonyms, typeExtensions, typeOptions } from ".";
+import { Isynonyms, typeExtensions } from ".";
 import { IdbConnection } from "./dbConnection";
 export interface Iservice {
     date: string; // date write
@@ -23,7 +23,7 @@ export interface Iservice {
     apiVersion: string; // api version / model
     date_format: string; // formating date
     nb_page: number; // number of items by page
-    options: typeof typeOptions; // Options see Enum EOptions
+    options: string[]; // Options see Enum EOptions
     extensions: typeof typeExtensions; // extensions see Enum EExtensions
     alias: string[]; // alias name of the service
     synonyms: Isynonyms | undefined;

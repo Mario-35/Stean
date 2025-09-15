@@ -7,7 +7,7 @@
  */
 
 import Koa from "koa";
-import { allEntitiesType, EDataType, EExtensions } from "../enums";
+import { allEntitiesType, EDataType, EExtensions, EOptions } from "../enums";
 import { Ientity } from "./entity";
 import { IentityColumn } from "./entityColumn";
 export { IentityColumnAliasOptions } from "./entityColumnAliasOptions";
@@ -40,6 +40,7 @@ export { IforwardConnection } from "./forwardConnection";
 export { IvisitRessource } from "./visitRessource";
 export type Ientities = { [key in allEntitiesType as string]: Ientity };
 export type koaContext = Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>;
+export const typeOptions = Object.keys(EOptions) as Array<keyof typeof EOptions>;
 export const typeExtensions = Object.keys(EExtensions) as Array<keyof typeof EExtensions>;
 export type keyobj = keyof object;
 

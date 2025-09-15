@@ -119,10 +119,10 @@ export class Entity extends EntityPass {
         Entity.trigger[table].doDelete = this.addTrigger("delete", table, relTable);
     }
 
-    private addToClean(input: string) {
-        if (this.clean) this.clean.push(input);
-        else this.clean = [input];
-    }
+    // private addToClean(input: string) {
+    //     if (this.clean) this.clean.push(input);
+    //     else this.clean = [input];
+    // }
 
     private prepareColums() {
         Object.keys(this.columns).forEach((e) => {
@@ -135,8 +135,8 @@ export class Entity extends EntityPass {
                     this.insertStr(this.table, e, singular(allEntities[entityRelation as keyof object]).toLowerCase(), cast, coalesce);
                     this.updateStr(this.table, e, singular(allEntities[entityRelation as keyof object]).toLowerCase(), cast, coalesce);
                     this.deleteStr(this.table, e, singular(allEntities[entityRelation as keyof object]).toLowerCase(), cast, coalesce);
-                    this.addToClean(`@DROPCOLUMN@ "_${e}Start";`);
-                    this.addToClean(`@DROPCOLUMN@ "_${e}End";`);
+                    // this.addToClean(`@DROPCOLUMN@ "_${e}Start";`);
+                    // this.addToClean(`@DROPCOLUMN@ "_${e}End";`);
                     // this.addToClean(
                     //     `@UPDATE@ "${e}" = tstzrange((SELECT MIN("${e}") FROM "${entityRelation}" WHERE "${entityRelation}"."${this.table}_id" = ${this.table}.id), (SELECT MAX("${e}") FROM "${entityRelation}" WHERE "${entityRelation}"."${this.table}_id" = ${this.table}.id)) WHERE lower("${e}") IS NULL`
                     // );

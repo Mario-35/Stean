@@ -6,7 +6,7 @@
  *
  */
 import util from "util";
-import { EConstant } from "../../enums";
+import { EConstant, EOptions } from "../../enums";
 import { unikeList, unique } from "../../helpers";
 import { errors } from "../../messages";
 import { Iservice, typeExtensions } from "../../types";
@@ -19,7 +19,7 @@ import { Iservice, typeExtensions } from "../../types";
  */
 
 export function formatServiceFile(name: string, input: Record<string, any>): Iservice {
-    const options = input["options"] ? unique([...String(input["options"]).split(",")]) : [];
+    const options = input["options"] ? unique([...String(input["options"]).split(",")]) : [EOptions.canDrop];
     const extensions: typeof typeExtensions = input["extensions"] ? (unique([...String(input["extensions"]).split(",")]) as typeof typeExtensions) : ["base"];
     const version = name === EConstant.admin ? "v1.1" : String(input["version"] || input["apiVersion"]).trim();
 
