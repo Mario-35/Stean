@@ -82,6 +82,7 @@ export class Entity extends EntityPass {
   	END IF;
 `;
     }
+
     insertStr(table: string, column: string, relTable: string, timeType: string, coalesce?: string) {
         // Ajoute une fonction en vue d'un trigger
         const datas = this.dataStr(table, column, timeType);
@@ -136,13 +137,10 @@ export class Entity extends EntityPass {
                     this.insertStr(this.table, e, relationTable, cast, coalesce);
                     this.updateStr(this.table, e, relationTable, cast, coalesce);
                     this.deleteStr(this.table, e, relationTable, cast, coalesce);
-                    // this.addToClean(`@DROPCOLUMN@ "_${e}Start";`);
-                    // this.addToClean(`@DROPCOLUMN@ "_${e}End";`);
                     this.addToClean(
                         `@UPDATE@ "${e}" = tstzrange((SELECT MIN("${e}") FROM "${relationTable}" WHERE "${relationTable}"."${this.table}_id" = ${this.table}.id), (SELECT MAX("${e}") FROM "${relationTable}" WHERE "${relationTable}"."${this.table}_id" = ${this.table}.id)) WHERE lower("${e}") IS NULL`
                     );
-                } // else this.addToClean(`@DROPCOLUMN@ "${e}"`);
-                // this.addToClean(`@ADDCOLUMN@ "${e}" tstzrange NULL;`);
+                }
             }
         });
     }

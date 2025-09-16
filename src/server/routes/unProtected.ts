@@ -194,7 +194,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
                         ctx.type = ctx.odata.returnFormat.type;
                         ctx.body = ctx.odata.returnFormat.format(returnValue.body || returnValue, ctx);
                         if (returnValue.location) ctx.set("Location", returnValue.location);
-                    } else ctx.odata.single === true ? ctx.throw(EHttpCode.notFound, { detail: `id : ${ctx.odata.id} not found` }) : ctx.throw(EHttpCode.notFound);
+                    } else ctx.throw(EHttpCode.notFound);
                 } else ctx.throw(EHttpCode.badRequest);
             }
         }
