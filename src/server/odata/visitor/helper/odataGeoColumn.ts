@@ -8,7 +8,7 @@
 
 import { EConstant, EQuery } from "../../../enums";
 import { doubleQuotes, removeAllQuotes } from "../../../helpers";
-import { log } from "../../../log";
+import { logging } from "../../../log";
 import { models } from "../../../models";
 import { relationInfos, expand } from "../../../models/helpers";
 import { IodataContext } from "../../../types";
@@ -28,7 +28,7 @@ export class OdataGeoColumn {
         this.test = this.init();
     }
     init(): string | undefined {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         this.column = removeAllQuotes(this.column);
         let test: string | undefined = undefined;
         const tempEntity = this.src.entity;

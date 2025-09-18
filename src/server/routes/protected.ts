@@ -20,7 +20,7 @@ import { config } from "../configuration";
 import { checkPassword, emailIsValid } from "./helper";
 import { Login, Query } from "../views";
 import { createQueryParams } from "../views/helpers";
-import { log } from "../log";
+import { logging } from "../log";
 import { USER } from "../models/entities";
 export const protectedRoutes = new Router<DefaultState, Context>();
 
@@ -93,7 +93,12 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
     }
     // Add new lora observation this is a special route without ahtorisatiaon to post (deveui and correct payload limit risks)
     console.log(ctx.request.headers["authorization"]);
-    if ((ctx.user && ctx.user.id > 0) || !ctx.service.extensions.includes(EExtensions.users) || ctx.request.url.includes("/Lora") || (ctx.request.headers["authorization"] && ctx.request.headers["authorization"] === config.getBrokerId())) {
+    if (
+        (ctx.user && ctx.user.id > 0) ||
+        !ctx.service.extensions.includes(EExtensions.users) ||
+        ctx.request.url.includes("/Lora") ||
+        (ctx.request.headers["authorization"] && ctx.request.headers["authorization"] === config.getBrokerId())
+    ) {
         if (ctx.request.type.startsWith("application/json") && Object.keys(ctx.body).length > 0) {
             const odataVisitor = await createOdata(ctx);
             if (odataVisitor) ctx.odata = odataVisitor;
@@ -110,7 +115,7 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
         } else if (ctx.request.type.startsWith("multipart/")) {
             // If upload datas
             const getDatas = async (): Promise<object> => {
-                console.log(log.debug_head("getDatas ..."));
+                console.log(logging.head("getDatas ...").toString());
                 return new Promise(async (resolve, reject) => {
                     await upload(ctx)
                         .then((data) => {
@@ -125,7 +130,7 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
             const odataVisitor = await createOdata(ctx);
             if (odataVisitor) ctx.odata = odataVisitor;
             if (ctx.odata) {
-                console.log(log.debug_head("POST FORM"));
+                console.log(logging.head("POST FORM").toString());
                 const objectAccess = new apiAccess(ctx);
                 const returnValue = await objectAccess.post();
                 if (ctx.datas) fs.unlinkSync(ctx.datas["file" as keyof object]);
@@ -171,7 +176,7 @@ protectedRoutes.patch("/(.*)", async (ctx) => {
         const odataVisitor = await createOdata(ctx);
         if (odataVisitor) ctx.odata = odataVisitor;
         if (ctx.odata) {
-            console.log(log.debug_head("PATCH"));
+            console.log(logging.head("PATCH").toString());
             const objectAccess = new apiAccess(ctx);
             if (ctx.odata.id) {
                 const returnValue: IreturnResult | undefined | void = await objectAccess.update();
@@ -197,7 +202,7 @@ protectedRoutes.delete("/(.*)", async (ctx) => {
         const odataVisitor = await createOdata(ctx);
         if (odataVisitor) ctx.odata = odataVisitor;
         if (ctx.odata) {
-            console.log(log.debug_head("DELETE"));
+            console.log(logging.head("DELETE").toString());
             const objectAccess = new apiAccess(ctx);
             if (!ctx.odata.id) ctx.throw(EHttpCode.badRequest, { detail: errors.idRequired });
             const returnValue = await objectAccess.delete(ctx.odata.id);

@@ -11,7 +11,7 @@ import { models } from "..";
 import { ESCAPE_SIMPLE_QUOTE } from "../../constants";
 import { EConstant } from "../../enums";
 import { doubleQuotes, simpleQuotesString, removeFirstEndDoubleQuotes } from "../../helpers";
-import { log } from "../../log";
+import { logging } from "../../log";
 import { Iservice } from "../../types";
 /**
  *
@@ -21,7 +21,7 @@ import { Iservice } from "../../types";
  * @returns string
  */
 export function createInsertValues(ctxService: Iservice | undefined, input: Record<string, any>, entityName?: string): string {
-    console.log(log.whereIam());
+    console.log(logging.whereIam(new Error().stack).toString());
     if (input) {
         const keys: string[] = [];
         const values: string[] = [];

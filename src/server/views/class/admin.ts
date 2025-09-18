@@ -9,7 +9,7 @@
 import { config } from "../../configuration";
 import { EConstant, EExtensions, enumKeys, EOptions } from "../../enums";
 import { removeAllQuotes } from "../../helpers";
-import { log } from "../../log";
+import { logging } from "../../log";
 import { models } from "../../models";
 import { paths } from "../../paths";
 import { Idatas, koaContext } from "../../types";
@@ -25,7 +25,7 @@ import path from "path";
 
 export class Admin extends CoreHtmlView {
     constructor(ctx: koaContext, datas: Idatas) {
-        console.log(log.whereIam("View"));
+        console.log(logging.whereIam(new Error().stack, "View").toString());
         super(ctx, datas);
         this.init();
     }

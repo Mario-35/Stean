@@ -14,7 +14,7 @@ import { errors, msg } from "../../messages/";
 import { EChar, EConstant, EDatesType, EExtensions, EHttpCode } from "../../enums";
 import util from "util";
 import { models } from "../../models";
-import { log } from "../../log";
+import { logging } from "../../log";
 import { OBSERVATION } from "../../models/entities";
 import { config } from "../../configuration";
 
@@ -25,7 +25,7 @@ import { config } from "../../configuration";
 export class CreateObservations extends Common {
     public indexResult = -1;
     constructor(ctx: koaContext) {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         super(ctx);
     }
     createListColumnsValues(type: "COLUMNS" | "VALUES", input: string[]): string[] {
@@ -60,18 +60,18 @@ export class CreateObservations extends Common {
     }
     // Override get all to return error Bad request
     async getAll(): Promise<IreturnResult | undefined> {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest });
     }
 
     // Override get one to return error Bad request
     async getSingle(): Promise<IreturnResult | undefined> {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest });
     }
     // Override post to posted file as createObservations
     async postForm(): Promise<IreturnResult | undefined> {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         // verify is there FORM data
         const datasJson = JSON.parse(this.ctx.datas["jsonDatas"] || this.ctx.datas["datas"] || this.ctx.datas["json"]);
         if (!datasJson["columns"]) this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: errors.noColumn });
@@ -98,7 +98,7 @@ export class CreateObservations extends Common {
         };
         // stream file in temp table and get query to insert
         const sqlInsert = await queryInsertFromCsv(this.ctx.service, paramsFile);
-        console.log(log.debug_infos(`Stream csv file ${paramsFile.filename} in PostgreSql`, sqlInsert ? EChar.ok : EChar.notOk));
+        console.log(logging.message(`Stream csv file ${paramsFile.filename} in PostgreSql`, sqlInsert ? EChar.ok : EChar.notOk).toString());
         if (sqlInsert) {
             const sqls = sqlInsert.query.map((e: string, index: number) => `${index === 0 ? "WITH " : ", "}updated${index + 1} as (${e})${EConstant.return}`);
             // Remove logs and triggers for speed insert
@@ -118,7 +118,7 @@ export class CreateObservations extends Common {
     }
     // Override post xson file as createObservations
     async postJson(dataInput: Record<string, any>): Promise<IreturnResult | undefined> {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         const returnValue: string[] = [];
         let total = 0;
         /// classic Create
@@ -164,17 +164,17 @@ export class CreateObservations extends Common {
     }
     // Override post caller
     async post(dataInput: JSON): Promise<IreturnResult | undefined> {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         return this.ctx.datas ? await this.postForm() : await this.postJson(dataInput);
     }
     // Override update to return error Bad request
     async update(dataInput: Record<string, any> | undefined): Promise<IreturnResult | undefined> {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest });
     }
     // Override delete to return error Bad request
     async delete(idInput: bigint | string): Promise<IreturnResult | undefined> {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest });
     }
 }

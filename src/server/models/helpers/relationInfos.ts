@@ -10,7 +10,7 @@ import { idColumnName } from ".";
 import { models } from "..";
 import { ERelations, EentityType } from "../../enums";
 import { formatPgTableColumn } from "../../helpers";
-import { log } from "../../log";
+import { logging } from "../../log";
 import { errorMessage } from "../../messages";
 import { IrelationInfos, Ientity, Iservice } from "../../types";
 
@@ -32,11 +32,11 @@ const extractEntityNames = (input: string, search: string | string[]): string[] 
 };
 
 export const relationInfos = (service: Iservice, entityName: string, relationName: string, loop?: boolean): IrelationInfos => {
-    console.log(log.whereIam());
+    console.log(logging.whereIam(new Error().stack).toString());
     const leftEntity = models.getEntity(service, entityName);
     const rightEntity = models.getEntity(service, relationName);
     if (entityName !== relationName && leftEntity && rightEntity) {
-        console.log(log.debug_head("Entity", `====> ${leftEntity.name} : ${rightEntity.name}`));
+        console.log(logging.head(`Entity ====> ${leftEntity.name} : ${rightEntity.name}`).toString());
         const leftRelation = models.getRelation(service, leftEntity, rightEntity);
         const rightRelationName = models.getRelationName(rightEntity, [entityName, leftEntity.name, leftEntity.singular, entityName.replace(relationName, ""), relationName.replace(entityName, "")]);
         const rightRelation = rightRelationName ? rightEntity.relations[rightRelationName] : undefined;
@@ -71,12 +71,12 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                 }
                 return fnError();
             };
-            console.log(log.debug_infos("leftRelation ; rightRelation", `${leftRelation.type} : ${rightRelation ? rightRelation.type : "undefined"}`));
+            console.log(logging.message("leftRelation ; rightRelation", `${leftRelation.type} : ${rightRelation ? rightRelation.type : "undefined"}`).toString());
 
             switch (leftRelation.type) {
                 // === : 1
                 case ERelations.defaultUnique:
-                    console.log(log.debug_infos("leftRelation Type", `====> defaultUnique : ${ERelations.defaultUnique}`));
+                    console.log(logging.message("leftRelation Type", `====> defaultUnique : ${ERelations.defaultUnique}`).toString());
                     if (rightRelation && rightRelation.type) {
                         switch (rightRelation.type) {
                             // ===> 1.4

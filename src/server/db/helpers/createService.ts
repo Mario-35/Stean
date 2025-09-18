@@ -12,7 +12,7 @@ import { doubleQuotes, asyncForEach } from "../../helpers";
 import { models } from "../../models";
 import { createInsertValues } from "../../models/helpers";
 import { keyobj, Iservice } from "../../types";
-import { log } from "../../log";
+import { logging } from "../../log";
 import { EChar } from "../../enums";
 
 /**
@@ -23,7 +23,7 @@ import { EChar } from "../../enums";
  */
 
 export const createService = async (service: Iservice, dataInput: Record<string, any>): Promise<Record<string, any>> => {
-    console.log(log.whereIam());
+    console.log(logging.whereIam(new Error().stack).toString());
 
     const prepareDatas = (dataInput: Record<string, string>, entity: string): object => {
         if (entity === "Observations") {

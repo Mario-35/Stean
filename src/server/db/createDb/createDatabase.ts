@@ -11,7 +11,7 @@ import { config } from "../../configuration";
 import { doubleQuotes, simpleQuotesString, asyncForEach } from "../../helpers";
 import { EChar, EConstant, EExtensions } from "../../enums";
 import { models } from "../../models";
-import { log } from "../../log";
+import { logging } from "../../log";
 import { createRole } from "../helpers/createRole";
 import { createExtension } from "../queries";
 import { pgFunctions } from ".";
@@ -23,7 +23,7 @@ import { pgFunctions } from ".";
  */
 
 export const createDatabase = async (serviceName: string): Promise<Record<string, string>> => {
-    console.log(log.debug_head("createDatabase", serviceName));
+    console.log(logging.head(`createDatabase [${serviceName}]`).toString());
 
     // init result
     const servicePg = config.getService(serviceName).pg;
@@ -91,7 +91,7 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
         Object.keys(DB).filter((e) => e.trim() !== ""),
         async (keyName: string) => {
             const res = await createTable(serviceName, DB[keyName], undefined);
-            Object.keys(res).forEach((e: string) => log.create(e, res[e]));
+            Object.keys(res).forEach((e: string) => logging.message(e, res[e]));
         }
     );
 
@@ -111,7 +111,7 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
         await dbConnection
             .unsafe(query)
             .then(() => {
-                log.create(name, EChar.ok);
+                logging.message(name, EChar.ok);
             })
             .catch((error: Error) => {
                 console.log(error);

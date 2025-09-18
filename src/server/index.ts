@@ -15,7 +15,6 @@ import json from "koa-json";
 import cors from "@koa/cors";
 import serve from "koa-static";
 import favicon from "koa-favicon";
-import { log } from "./log";
 import { config } from "./configuration";
 import { models } from "./models";
 import { isTest, logToHtml } from "./helpers";
@@ -26,6 +25,7 @@ import { Iservice, IdecodedUrl, Ientities, IuserToken } from "./types";
 import { appVersion } from "./constants";
 import { paths } from "./paths";
 import { disconnectDb } from "./db/helpers";
+import { logging } from "./log";
 
 // Extend koa context
 declare module "koa" {
@@ -40,7 +40,6 @@ declare module "koa" {
         body: any;
     }
 }
-
 // Initialisation of models
 models.initialisation();
 // new koa server https://koajs.com/
@@ -77,8 +76,12 @@ export const server = isTest()
     ? // Test-driven development init
       app.listen(config.getService(EConstant.admin).ports?.http || 8029, async () => {
           await disconnectDb(EConstant.test, true);
-          console.log(log.message(`${EConstant.appName} version : ${appVersion}`, "ready " + EChar.ok));
+          console.log(logging.message(`${EConstant.appName} version : ${appVersion}`, "ready " + EChar.ok).write(true));
       })
     : // Production or dev init
-      //   config.initialisation();
-      config.initialisation().then(async () => await config.afterInitialisation().then((e) => console.log(log._head("Clean", e === true ? EChar.ok : EChar.notOk))));
+      config
+          .initialisation()
+          .then(async () => await config.afterInitialisation().then((e) => logging.status("Clean", undefined, e).write(true)))
+          .catch((err) => {
+              console.log(err);
+          });

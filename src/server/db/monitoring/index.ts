@@ -9,10 +9,10 @@
 import { config } from "../../configuration";
 import { EConstant } from "../../enums";
 import { asyncForEach } from "../../helpers";
-import { log } from "../../log";
+import { logging } from "../../log";
 import { Iservice } from "../../types";
 export const getMetrics = async (service: Iservice): Promise<string[] | { [key: string]: any }> => {
-    console.log(log.whereIam());
+    console.log(logging.whereIam(new Error().stack).toString());
     const username = "postgres";
     const type = "all";
     const lto = 3 * 1000;

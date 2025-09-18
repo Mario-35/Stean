@@ -7,7 +7,7 @@
  */
 
 import { EHttpCode } from "../../enums";
-import { log } from "../../log";
+import { logging } from "../../log";
 import { errors } from "../../messages";
 import { DATASTREAM } from "../../models/entities";
 import { koaContext } from "../../types";
@@ -19,12 +19,12 @@ import { Common } from "./common";
 
 export class Datastreams extends Common {
     constructor(ctx: koaContext) {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         super(ctx);
     }
 
     formatDataInput(input: Record<string, any> | undefined): Record<string, any> | undefined {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         if (input) {
             const colName = "observationType";
             if (input[colName]) {

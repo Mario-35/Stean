@@ -16,7 +16,7 @@ import { createDefaultContext, createIentityColumnAliasOptions, oDataDateFormat,
 import { errors, msg } from "../../../messages";
 import { EColumnType, EConstant, EDataType, EHttpCode, EQuery } from "../../../enums";
 import { models } from "../../../models";
-import { log } from "../../../log";
+import { logging } from "../../../log";
 import { _DEBUG } from "../../../constants";
 import { Visitor } from "./visitor";
 import { Query } from "../builder";
@@ -55,7 +55,7 @@ export class PgVisitor extends Visitor {
     debugOdata = isTest() ? false : _DEBUG;
     single: boolean = false;
     constructor(ctx: koaContext, options = <SqlOptions>{}) {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         super(ctx, options);
     }
 
@@ -89,7 +89,7 @@ export class PgVisitor extends Visitor {
     }
 
     protected getColumn(input: string, operation: string, context: IodataContext) {
-        console.log(log.whereIam(input));
+        console.log(logging.whereIam(new Error().stack, input).toString());
 
         const tempEntity =
             models.getEntity(this.ctx.service, context.identifier || "".split(".")[0]) || models.getEntity(this.ctx.service, this.entity || this.parentEntity || this.navigationProperty);
@@ -130,7 +130,7 @@ export class PgVisitor extends Visitor {
         return input;
     }
     start(node: Token) {
-        console.log(log.debug_head("Start PgVisitor"));
+        console.log(logging.head("Start PgVisitor").toString());
         const temp = this.Visit(node);
         this.verifyQuery();
         // Logs.infos("PgVisitor", temp);
@@ -138,7 +138,7 @@ export class PgVisitor extends Visitor {
         return temp;
     }
     verifyQuery = (): void => {
-        console.log(log.debug_head("verifyQuery"));
+        console.log(logging.head("verifyQuery").toString());
         const expands: string[] = [];
         if (this.includes)
             this.includes.forEach((element: PgVisitor) => {
@@ -170,14 +170,14 @@ export class PgVisitor extends Visitor {
             if (visitor) {
                 visitor.call(this, node, context);
                 if (this.debugOdata) {
-                    console.log(log._infos("Visit", `Visit${node.type}`));
-                    console.log(log._result("node.raw", node.raw));
-                    console.log(log._result("this.query.where", this.query.where.toString()));
-                    console.log(log._infos("context", context));
+                    console.log(logging.message("Visit", `Visit${node.type}`).toString());
+                    console.log(logging.message("node.raw", node.raw).toString());
+                    console.log(logging.message("this.query.where", this.query.where.toString()).toString());
+                    console.log(logging.message("context", context).toString());
                 }
             } else {
-                log.error(`Node error =================> Visit${node.type}`);
-                log.error(node);
+                logging.error(`Node error =================> Visit${node.type}`);
+                logging.error(node);
                 throw new Error(`Unhandled node type: ${node.type}`);
             }
         }
@@ -428,7 +428,7 @@ export class PgVisitor extends Visitor {
             }
     }
     addToWhere(value: string, context: IodataContext) {
-        console.log(log.debug_head("addToWhere"));
+        console.log(logging.head("addToWhere").toString());
         if (context.target === EQuery.Geo) this.subQuery.where ? (this.subQuery.where += value) : (this.subQuery.where = value);
         else this.query.where.add(value);
     }
@@ -462,7 +462,7 @@ export class PgVisitor extends Visitor {
         };
     }
     public createComplexWhere(entity: string, node: Token, context: IodataContext) {
-        console.log(log.debug_head("createComplexWhere"));
+        console.log(logging.head("createComplexWhere").toString());
 
         if (context.target) {
             if (!models.getEntity(this.ctx.service, entity)) return;

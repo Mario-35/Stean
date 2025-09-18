@@ -6,12 +6,12 @@
  *
  */
 
-import { log } from "../../log";
+import { logging } from "../../log";
 import { koaContext } from "../../types";
 import { Common } from "./common";
 export class MultiObservedProperties extends Common {
     constructor(ctx: koaContext) {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         super(ctx);
     }
 }

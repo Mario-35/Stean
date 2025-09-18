@@ -8,7 +8,7 @@
 
 import { config } from "../../configuration";
 import { EChar, EExtensions } from "../../enums";
-import { log } from "../../log";
+import { logging } from "../../log";
 import { Idatas, Iuser, koaContext } from "../../types";
 import { CoreHtmlView } from "./core";
 
@@ -18,7 +18,7 @@ import { CoreHtmlView } from "./core";
 
 export class Status extends CoreHtmlView {
     constructor(ctx: koaContext, datas: Idatas) {
-        console.log(log.whereIam("View"));
+        console.log(logging.whereIam(new Error().stack, "View").toString());
         super(ctx, datas);
         if (datas.user) this.status(ctx, datas.user);
     }

@@ -10,7 +10,7 @@ import { IreturnResult, koaContext } from "../../types";
 import { Common } from "./common";
 import { asyncForEach } from "../../helpers";
 import { decodingPayload } from "../../lora";
-import { log } from "../../log";
+import { logging } from "../../log";
 import { DECODER } from "../../models/entities";
 import { config } from "../../configuration";
 
@@ -20,12 +20,12 @@ import { config } from "../../configuration";
 
 export class Decoders extends Common {
     constructor(ctx: koaContext) {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         super(ctx);
     }
     // Override get all decoders to be able to search by deveui instead of id only
     async getAll(): Promise<IreturnResult | undefined> {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         if (this.ctx.odata.payload) {
             const result: Record<string, any> = {};
             const decoders = await config.executeSql(this.ctx.service, `SELECT "id", "name", "code", "nomenclature", "synonym" FROM "${DECODER.table}"`);
@@ -44,9 +44,12 @@ export class Decoders extends Common {
     }
     // Override get one decoders to be able to search by deveui instead of id only
     async getSingle(): Promise<IreturnResult | undefined> {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         if (this.ctx.odata.payload) {
-            const decoder: Record<string, any> = await config.executeSql(this.ctx.service, `SELECT "id", "name", "code", "nomenclature", "synonym" FROM "${DECODER.table}" WHERE id = ${this.ctx.odata.id}`);
+            const decoder: Record<string, any> = await config.executeSql(
+                this.ctx.service,
+                `SELECT "id", "name", "code", "nomenclature", "synonym" FROM "${DECODER.table}" WHERE id = ${this.ctx.odata.id}`
+            );
             return decoder[0]
                 ? this.formatReturnResult({
                       body: decodingPayload({ name: decoder[0]["name"], code: String(decoder[0]["code"]), nomenclature: decoder[0]["nomenclature"] }, this.ctx.odata.payload)

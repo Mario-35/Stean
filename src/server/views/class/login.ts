@@ -6,7 +6,7 @@
  *
  */
 
-import { log } from "../../log";
+import { logging } from "../../log";
 import { info } from "../../messages";
 import { Idatas, koaContext } from "../../types";
 import { CoreHtmlView } from "./core";
@@ -17,7 +17,7 @@ import { CoreHtmlView } from "./core";
 
 export class Login extends CoreHtmlView {
     constructor(ctx: koaContext, datas: Idatas) {
-        console.log(log.whereIam("View"));
+        console.log(logging.whereIam(new Error().stack, "View").toString());
         super(ctx, datas);
         this.login(datas);
     }
@@ -56,8 +56,21 @@ export class Login extends CoreHtmlView {
             
                       <form action="${url}/register" method="post">
                         <div class="sign-up-htm">
-                          ${this.textInput({ name: "username", label: info.user, value: datas.body && datas.body.username ? datas.body.username : "", alert: alert("username"), toolType: `Name ${info.least5Tool}` })}
-                          ${this.textInput({ name: "pass", label: info.pass, password: true, value: datas.body && datas.body.password ? datas.body.password : "", alert: alert("password"), toolType: info.passTool })}
+                          ${this.textInput({
+                              name: "username",
+                              label: info.user,
+                              value: datas.body && datas.body.username ? datas.body.username : "",
+                              alert: alert("username"),
+                              toolType: `Name ${info.least5Tool}`
+                          })}
+                          ${this.textInput({
+                              name: "pass",
+                              label: info.pass,
+                              password: true,
+                              value: datas.body && datas.body.password ? datas.body.password : "",
+                              alert: alert("password"),
+                              toolType: info.passTool
+                          })}
                           ${this.textInput({ name: "repeat", label: info.rep, password: true, value: "", alert: alert("repeat"), toolType: info.repTool })}
                           ${this.textInput({ name: "mail", label: "Email address", value: datas.body && datas.body.email ? datas.body.email : "", alert: alert("email"), toolType: info.mailTool })}
                           ${this.submitButton("Sign UP")}

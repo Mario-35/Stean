@@ -22,4 +22,5 @@ export { getColumnsNamesFromCsvFile } from "./getColumnsNamesFromCsvFile";
 export { streamCsvFile } from "./streamCsvFile";
 export { disconnectDb } from "./disconnectDb";
 export { columnsNameFromHydrasCsv } from "./columnsNameFromHydrasCsv";
+export { executeSql } from "./executeSql";
 export const exportService = async (ctx: koaContext) => exportToJson(ctx);

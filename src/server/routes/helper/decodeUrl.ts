@@ -11,7 +11,7 @@ import { config } from "../../configuration";
 import { setDebug, setReplay } from "../../constants";
 import { EConstant, EFrom } from "../../enums";
 import { cleanUrl, getUrlKey, removeFromUrl } from "../../helpers";
-import { log } from "../../log";
+import { logging } from "../../log";
 import { errors } from "../../messages";
 import { IdecodedUrl, koaContext } from "../../types";
 //   service root URI                   resource path     query options
@@ -29,12 +29,12 @@ import { IdecodedUrl, koaContext } from "../../types";
  * @returns IdecodedUrl
  */
 export const decodeUrl = (ctx: koaContext, input?: string): IdecodedUrl | undefined => {
-    console.log(log.whereIam());
     // get input
     input = input || ctx.href;
     // debug mode
     setDebug(input.includes("?$debug=true") || input.includes("&$debug=true"));
     setReplay(input.includes("?$replay=") || input.includes("&$replay=") ? getUrlKey(input, "replay") : undefined);
+    console.log(logging.whereIam(new Error().stack).toString());
     // decode url
     const url = new URL(
         cleanUrl(

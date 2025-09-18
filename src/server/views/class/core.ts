@@ -10,7 +10,7 @@ import { config } from "../../configuration";
 import { appVersion } from "../../constants";
 import { EConstant } from "../../enums";
 import { decrypt } from "../../helpers";
-import { log } from "../../log";
+import { logging } from "../../log";
 import { info } from "../../messages";
 import { Idatas, koaContext } from "../../types";
 import { addCssFile } from "../css";
@@ -27,7 +27,7 @@ export class CoreHtmlView {
     adminConnection: boolean = false;
 
     constructor(ctx: koaContext, datas: Idatas) {
-        console.log(log.whereIam("View"));
+        console.log(logging.whereIam(new Error().stack, "View").toString());
         this.ctx = ctx;
         this.datas = datas;
         this.message = datas.message;
@@ -150,7 +150,9 @@ export class CoreHtmlView {
     }
 
     hidden(name: string, datas: string | any) {
-        return typeof datas === "string" ? `<input type="hidden" id="${name}" name="${name}" value="${datas}" />` : `<input type="hidden" id="${name}" name="${name}" value="${datas.body[name] || ""}" />`;
+        return typeof datas === "string"
+            ? `<input type="hidden" id="${name}" name="${name}" value="${datas}" />`
+            : `<input type="hidden" id="${name}" name="${name}" value="${datas.body[name] || ""}" />`;
     }
 
     multiJs() {

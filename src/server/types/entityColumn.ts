@@ -20,4 +20,5 @@ export interface IentityColumn {
         list: string[];
         default: string;
     };
+    indexes?: string[];
 }

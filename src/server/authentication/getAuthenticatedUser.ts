@@ -10,7 +10,7 @@ import { decodeToken } from ".";
 import { userAccess } from "../db/dataAccess";
 import { EExtensions } from "../enums";
 import { decrypt } from "../helpers";
-import { log } from "../log";
+import { logging } from "../log";
 import { Iuser, koaContext } from "../types";
 import { blankUser } from "../views/helpers/";
 
@@ -21,7 +21,7 @@ import { blankUser } from "../views/helpers/";
  */
 
 export const getAuthenticatedUser = async (ctx: koaContext): Promise<Iuser | undefined> => {
-    console.log(log.whereIam());
+    console.log(logging.whereIam(new Error().stack).toString());
     if (!ctx.service.extensions.includes(EExtensions.users)) return blankUser(ctx.service);
     const token = decodeToken(ctx);
     if (token && token.id > 0) {

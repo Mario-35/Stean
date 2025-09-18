@@ -11,10 +11,11 @@ import { doubleQuotes, returnFormats } from "../../helpers/index";
 import { IreturnResult, keyobj, koaContext } from "../../types";
 import { removeKeyFromUrl } from "../helpers";
 import { getErrorCode, info } from "../../messages";
-import { log } from "../../log";
+import { logging } from "../../log";
 import { config } from "../../configuration";
 import { EConstant, EHttpCode } from "../../enums";
 import { asCsv } from "../queries";
+import { _DEBUG } from "../../constants";
 
 /**
  * Common Class for all entities
@@ -26,7 +27,7 @@ export class Common {
     public linkBase: string;
 
     constructor(ctx: koaContext) {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         this.ctx = ctx;
         this.nextLinkBase = removeKeyFromUrl(`${this.ctx.decodedUrl.root}/${this.ctx.href.split(`${ctx.service.apiVersion}/`)[1]}`, ["top", "skip"]);
         this.linkBase = `${this.ctx.decodedUrl.root}/${this.constructor.name}`;
@@ -74,7 +75,7 @@ export class Common {
      * @returns IreturnResult
      */
     public formatReturnResult(args: Record<string, any>): IreturnResult {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         return {
             ...{
                 location: args[EConstant.selfLink] ? String(args[EConstant.selfLink]) : args.body && typeof args.body === "object" ? args.body[EConstant.selfLink] : undefined,
@@ -119,7 +120,7 @@ export class Common {
      * @returns IreturnResult | undefined
      */
     async getAll(): Promise<IreturnResult | undefined> {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         // create query
         let sql = this.ctx.odata.getSql();
         // Return results
@@ -131,7 +132,6 @@ export class Common {
                 // create csv format values
                 case returnFormats.csv:
                     sql = asCsv(sql, this.ctx.service.csvDelimiter);
-                    config.writeLog(log.query(sql));
                     this.ctx.attachment(`${this.ctx.odata.entity?.name || "export"}.csv`);
                     return this.formatReturnResult({ body: await config.connection(this.ctx.service.name).unsafe(sql).readable() });
                 default:
@@ -159,7 +159,7 @@ export class Common {
      * @returns IreturnResult | undefined
      */
     async getSingle(): Promise<IreturnResult | undefined> {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         // create query
         const sql = this.ctx.odata.getSql();
         // Return results
@@ -199,7 +199,7 @@ export class Common {
      * @returns IreturnResult
      */
     async addMultiLines(dataInput: Record<string, any> | undefined): Promise<IreturnResult | undefined> {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         // TODO
         // stop save to log cause if datainput too big
         if (this.ctx.log) this.ctx.log.datas = { datas: info.MultilinesNotSaved };
@@ -234,7 +234,7 @@ export class Common {
      * @returns IreturnResult
      */
     async post(dataInput: Record<string, any> | undefined): Promise<IreturnResult | undefined> {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
 
         // Format datas
         dataInput = this.formatDataInput(dataInput);
@@ -282,7 +282,7 @@ export class Common {
      * @returns IreturnResult
      */
     async put(dataInput: Record<string, any> | undefined): Promise<IreturnResult | undefined> {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         if (dataInput && this.ctx.odata.entity) {
             // Format datas
             dataInput = this.formatDataInput(dataInput);
@@ -310,7 +310,7 @@ export class Common {
      * @returns IreturnResult
      */
     async update(dataInput: Record<string, any> | undefined): Promise<IreturnResult | undefined> {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
 
         // Format datas
         dataInput = this.formatDataInput(dataInput);
@@ -351,7 +351,7 @@ export class Common {
      * @returns IreturnResult
      */
     async delete(idInput: bigint | string): Promise<IreturnResult | undefined> {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         // create Query
         const sql = `DELETE FROM ${doubleQuotes(this.ctx.model[this.constructor.name].table)} WHERE "id" = ${idInput} RETURNING id`;
         // Return results

@@ -120,13 +120,23 @@ export class Entity extends EntityPass {
         Entity.trigger[table].doDelete = this.addTrigger("delete", table, relTable);
     }
 
+    private cleanString(input: string) {
+        return input.replace("@DATAS@", "").replace("@COLUMN@", "");
+    }
     private addToClean(input: string) {
+        input = this.cleanString(input);
         if (this.clean) this.clean.push(input);
         else this.clean = [input];
     }
 
     private prepareColums() {
         Object.keys(this.columns).forEach((e) => {
+            if (this.columns[e].indexes) {
+                this.columns[e].indexes.forEach((name) => {
+                    this.addToClean(` CREATE INDEX IF NOT EXISTS "${this.table}_${e}_${name}" ON "${this.table}" ("${e}", "${name}");`);
+                    this.addToIndexes(`${this.table}_${e}_${name}`, `ON public."${this.table}" ("${e}", "${name}")`);
+                });
+            }
             if (this.columns[e].dataType === EDataType.tstzrange || this.columns[e].dataType === EDataType.tsrange) {
                 const entityRelation = this.columns[e].entityRelation;
                 const coalesce = this.columns[e].coalesce;
@@ -147,7 +157,7 @@ export class Entity extends EntityPass {
 
     private createTriggers() {
         if (Entity.trigger[this.table]) {
-            this.trigger = Object.keys(Entity.trigger[this.table]).map((elem: string) => Entity.trigger[this.table][elem].replace("@DATAS@", "").replace("@COLUMN@", ""));
+            this.trigger = Object.keys(Entity.trigger[this.table]).map((elem: string) => this.cleanString(Entity.trigger[this.table][elem]));
         }
     }
 

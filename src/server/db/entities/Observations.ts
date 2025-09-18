@@ -12,18 +12,18 @@ import { getBigIntFromString } from "../../helpers";
 import { errors, msg } from "../../messages";
 import { multiDatastreamsUnitsKeys } from "../queries";
 import { EConstant, EExtensions, EHttpCode } from "../../enums";
-import { log } from "../../log";
+import { logging } from "../../log";
 import { config } from "../../configuration";
 
 export class Observations extends Common {
     constructor(ctx: koaContext) {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         super(ctx);
     }
 
     // Prepare odservations
     async prepareInputResult(dataInput: Record<string, any>): Promise<object> {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         // IF MultiDatastream
         if ((dataInput["MultiDatastream"] && dataInput["MultiDatastream"] != null) || (this.ctx.odata.parentEntity && this.ctx.odata.parentEntity.name.startsWith("MultiDatastream"))) {
             // get MultiDatastream search ID
@@ -36,7 +36,7 @@ export class Observations extends Common {
 
             const multiDatastream: Record<string, any> = tempSql[0 as keyobj];
             if (dataInput["result"] && typeof dataInput["result"] == "object") {
-                console.log(log.debug_infos("result : keys", `${Object.keys(dataInput["result"]).length} : ${multiDatastream.length}`));
+                console.log(logging.message("result : keys", `${Object.keys(dataInput["result"]).length} : ${multiDatastream.length}`).toString());
                 if (Object.keys(dataInput["result"]).length != multiDatastream.length) {
                     this.ctx.throw(EHttpCode.badRequest, {
                         code: EHttpCode.badRequest,
@@ -57,14 +57,14 @@ export class Observations extends Common {
     }
 
     formatDataInput(input: Record<string, any> | undefined): Record<string, any> | undefined {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         if (input) if (!input["resultTime"] && input["phenomenonTime"]) input["resultTime"] = input["phenomenonTime"];
         return input;
     }
 
     // Override post to prepare datas before use super class
     async post(dataInput: Record<string, any>): Promise<IreturnResult | undefined> {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         if (dataInput) dataInput = await this.prepareInputResult(dataInput);
         if (dataInput["import"]) {
         } else return await super.post(dataInput);
@@ -72,7 +72,7 @@ export class Observations extends Common {
 
     // Override update to prepare datas before use super class
     async update(dataInput: Record<string, any> | undefined): Promise<IreturnResult | undefined> {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         if (dataInput) dataInput = await this.prepareInputResult(dataInput);
         if (dataInput && dataInput["resultQuality"] && dataInput["resultQuality"]["nameOfMeasure"]) {
             dataInput["result"] = { quality: dataInput["result"] };

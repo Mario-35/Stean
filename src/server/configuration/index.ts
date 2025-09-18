@@ -15,7 +15,6 @@ import { color, EChar, EColor, EConstant, EOptions } from "../enums";
 import path from "path";
 import fs from "fs";
 import postgres from "postgres";
-import { log } from "../log";
 import { createDatabase, pgFunctions, testDatas } from "../db/createDb";
 import { userAccess } from "../db/dataAccess";
 import { formatServiceFile, validJSONService } from "./helpers";
@@ -25,6 +24,8 @@ import { paths } from "../paths";
 import { Trace } from "../log/trace";
 import { FORMAT_JSONB } from "../db/constants";
 import { createTableCount, createTableService, drop } from "../db/queries";
+import { logging } from "../log";
+import { executeSql } from "../db/helpers";
 
 /**
  * Class to create configs environements
@@ -45,13 +46,14 @@ class Configuration {
         // override console log for TDD important in production build will remove all console.log
         if (isTest()) {
             console.log = (data: any) => {};
-            // console.log = (data: any) => {
-            //     if (data) this.writeLog(data);
-            // };
             this.readConfigFile();
         } else
             console.log = (data: any) => {
-                if (data) this.writeLog(data);
+                if (data) {
+                    process.stdout.write(data + EConstant.return);
+                    // write in stream file
+                    paths.logFile.writeStream(logToHtml(data));
+                }
             };
     }
 
@@ -83,25 +85,17 @@ class Configuration {
                 .unsafe(createTableCount)
                 .then(async () => {
                     this.updateCount(connectionName);
-                    await this.executeMultiSql(this.getService(connectionName), models.addTriggersOnTables(connectionName, "row_counts"));
+                    await executeSql(this.getService(connectionName), models.addTriggersOnTables(connectionName, "row_counts"));
                 })
                 .catch(() => this.updateCount(connectionName));
         } else {
             this.connection(connectionName)
                 .unsafe(drop("row_counts"))
                 .then(() => {
-                    this.executeMultiSql(this.getService(connectionName), models.removeTriggersOnTables(connectionName, "row_counts"));
+                    executeSql(this.getService(connectionName), models.removeTriggersOnTables(connectionName, "row_counts"));
                 })
                 .catch((e) => e);
         }
-    }
-
-    // function to show error
-    logError(error: any, message?: string): boolean {
-        console.log(error);
-        if (message) log.error(message, error);
-        else process.stdout.write(error + EConstant.return);
-        return false;
     }
 
     // create a new instance in DB
@@ -132,7 +126,7 @@ class Configuration {
                         });
                 } else if (error.code === "23505") {
                     return true;
-                } else return this.logError(error);
+                } else return logging.error(error).write(true).result(false);
             });
     }
 
@@ -145,20 +139,8 @@ class Configuration {
      */
 
     messageListen(what: string, port: string, db?: boolean) {
-        if (db) this.writeLog(log.booting(`${color(EColor.Magenta)}${info.db} => ${color(EColor.Yellow)}${what}${color(EColor.Default)} ${info.onLine}`, port));
-        else this.writeLog(log.booting(`${color(EColor.Yellow)}${what}${color(EColor.Yellow)} ${color(EColor.Green)}${info.listenPort}`, port));
-    }
-
-    /**
-     * Override console log
-     *
-     * @param input
-     */
-    writeLog(input: any) {
-        if (input) {
-            process.stdout.write(input + EConstant.return);
-            paths.logFile.writeStream(logToHtml(input));
-        }
+        if (db) logging.init(info.db, EColor.Magenta).sep("=>", EColor.Yellow).text(what, EColor.Default).space(info.onLine).text(EChar.arrowright).space().text(port).write(true);
+        else logging.init(what, EColor.Yellow).sep().text(info.listenPort, EColor.Green).space(EChar.arrowright).text(port).write(true);
     }
 
     /**
@@ -168,18 +150,20 @@ class Configuration {
      * @returns true if it's done
      */
     private async readConfigFile(input?: string): Promise<boolean> {
-        this.writeLog(
-            `${color(EColor.Red)}${"▬".repeat(24)} ${color(EColor.Cyan)} ${`START ${EConstant.appName} ${info.ver} : ${appVersion.version} du ${appVersion.date} [${process.env.NODE_ENV}]`} ${color(
-                EColor.White
-            )} ${new Date().toLocaleDateString()} : ${timestampNow()} ${color(EColor.Red)} ${"▬".repeat(24)}${color(EColor.Reset)}`
-        );
-        log.newLog(log.message("Root", paths.root));
-        this.writeLog(log.message(infos(["read", "config"]), input ? "content" : paths.configFile.fileName));
+        logging
+            .separator(
+                `${color(EColor.Cyan)} START ${EConstant.appName} ${info.ver} : ${appVersion.version} du ${appVersion.date} [${process.env.NODE_ENV}] ${color(
+                    EColor.White
+                )} ${new Date().toLocaleDateString()} : ${timestampNow()}`
+            )
+            .write(true);
+        logging.message("Root", paths.root).write(true);
+        logging.message(infos(["read", "config"]), input ? "content" : paths.configFile.fileName).write(true);
         try {
             // load File
             const fileContent = input || fs.readFileSync(paths.configFile.fileName, "utf8");
             if (fileContent.trim() === "") {
-                log.error(msg(errors.fileEmpty, paths.configFile.fileName), paths.configFile.fileName);
+                logging.error(msg(errors.fileEmpty, paths.configFile.fileName), paths.configFile.fileName).write(true);
                 process.exit(111);
             }
             // decrypt file
@@ -203,13 +187,13 @@ class Configuration {
                             });
                         });
             } catch (error: any) {
-                this.logError(error);
+                logging.error(error).write(true);
                 if (error.code === "42P01")
                     await this.adminConnection()
                         .unsafe(createTableService)
                         .catch((e) => {
                             console.log(createTableService);
-                            log.error(errors.serviceCreateError);
+                            logging.error(errors.serviceCreateError).write(true);
                             process.exit(112);
                         });
             }
@@ -225,13 +209,13 @@ class Configuration {
                     });
                 }
             } else {
-                this.logError("Unknown error", errors.configFileError);
+                logging.error("Unknown error", errors.configFileError).write(true);
                 process.exit(112);
             }
             // rewrite file (to update config modification except in test mode)
             if (!isTest() && config.configFileExist() === false) this.writeConfig();
         } catch (error: any) {
-            this.logError(error, errors.configFileError);
+            logging.error(error, errors.configFileError).write(true);
             process.exit(111);
         }
 
@@ -354,7 +338,7 @@ class Configuration {
      * @returns true if it's done
      */
     async initConfig(input: string): Promise<boolean> {
-        this.writeLog(log.message(infos(["read", "config"]), paths.configFile.fileName));
+        logging.message(infos(["read", "config"]), paths.configFile.fileName).write(true);
         return await this.readConfigFile(input);
     }
 
@@ -364,61 +348,9 @@ class Configuration {
      * @returns true if it's done
      */
     private writeConfig(input?: JSON): boolean {
-        this.writeLog(log.message(infos(["write", "config"]), paths.configFile.fileName));
+        logging.message(infos(["write", "config"]), paths.configFile.fileName).write(true);
         const datas: string = input ? JSON.stringify(input, null, 4) : JSON.stringify({ admin: Configuration.services[EConstant.admin] }, null, 4);
         return this.writeFile(paths.configFile.fileName, isProduction() === true ? encrypt(datas) : datas);
-    }
-
-    /**
-     * Execute one query
-     *
-     * @param service service
-     * @param query query
-     * @returns result postgres.js object
-     */
-    private async executeOneSql(service: Iservice, query: string): Promise<object> {
-        this.writeLog(log.query(query));
-        return new Promise(async function (resolve, reject) {
-            await config
-                .connection(service.name)
-                .unsafe(query)
-                .then((res: object) => {
-                    resolve(res);
-                })
-                .catch((err: Error) => {
-                    if (!isTest() && +err["code" as keyobj] === 23505) config.writeLog(log.queryError(query, err));
-                    reject(err);
-                });
-        });
-    }
-
-    /**
-     * Execute multiple queries
-     *
-     * @param service service
-     * @param query query
-     * @returns result postgres.js object
-     */
-    private async executeMultiSql(service: Iservice, query: string[]): Promise<object> {
-        this.writeLog(log.query(query));
-        return new Promise(async function (resolve, reject) {
-            await config
-                .connection(service.name)
-                .begin((sql) =>
-                    query.map(async (e: string) => {
-                        await sql.unsafe(e).catch((err: Error) => {
-                            if (err["severity" as keyof object] !== "NOTICE") console.log(err);
-                        });
-                    })
-                )
-                .then((res: object) => {
-                    resolve(res);
-                })
-                .catch((err: Error) => {
-                    if (!isTest() && +err["code" as keyobj] === 23505) config.writeLog(log.queryError(query, err));
-                    reject(err);
-                });
-        });
     }
 
     /**
@@ -429,7 +361,7 @@ class Configuration {
      */
     async executeSql(service: Iservice | string, query: string | string[]): Promise<object> {
         service = typeof service === "string" ? Configuration.services[service as keyof object] : service;
-        return typeof query === "string" ? this.executeOneSql(service, query) : this.executeMultiSql(service, query);
+        return typeof query === "string" ? executeSql(service, query) : executeSql(service, query);
     }
 
     /**
@@ -438,7 +370,7 @@ class Configuration {
      * @returns result postgres.js object
      */
     async executeAdmin(query: string): Promise<object> {
-        this.writeLog(log.query(query));
+        logging.query("executeAdmin", query).write(true);
         return new Promise(async function (resolve, reject) {
             await config
                 .adminConnection()
@@ -459,7 +391,7 @@ class Configuration {
      * @returns result postgres.js object values
      */
     async executeSqlValues(service: Iservice | string, query: string | string[]): Promise<object> {
-        this.writeLog(log.query(query));
+        logging.query("executeSqlValues", query).write(_DEBUG);
         if (typeof query === "string") {
             return new Promise(async function (resolve, reject) {
                 await config
@@ -470,7 +402,7 @@ class Configuration {
                         resolve(res[0]);
                     })
                     .catch((err: Error) => {
-                        if (!isTest() && +err["code" as keyof object] === 23505) config.writeLog(log.queryError(query, err));
+                        if (!isTest() && +err["code" as keyof object] === 23505) logging.queryError(query, err).write(true);
                         reject(err);
                     });
             });
@@ -486,7 +418,7 @@ class Configuration {
                             result = { ...result, ...res[0] };
                         })
                         .catch((err: Error) => {
-                            if (!isTest() && +err["code" as keyof object] === 23505) config.writeLog(log.queryError(query, err));
+                            if (!isTest() && +err["code" as keyof object] === 23505) logging.queryError(query, err).write(true);
                             reject(err);
                         });
                 });
@@ -563,11 +495,11 @@ class Configuration {
                 .connection(connectionName)
                 .unsafe(query)
                 .then(() => {
-                    log.create(`[${connectionName}] ${name}`, EChar.ok);
+                    logging.status(name, undefined, true).write(true);
                 })
-                .catch((error: Error) => this.logError(error));
+                .catch((error: Error) => logging.error(error).write(true).result(false));
         });
-        this.writeLog(log.message(info.createFunc, connectionName));
+        logging.message(info.createFunc, connectionName).write(true);
         await this.createUpdateOptions(connectionName);
         return true;
     }
@@ -593,17 +525,16 @@ class Configuration {
      * @returns true if it's done
      */
     async initialisation(input?: string): Promise<boolean> {
-        compareVersions().then((temp) => {
-            if (temp) {
-                Configuration.appVersion = temp.appVersion;
-                Configuration.remoteVersion = temp.remoteVersion;
-                Configuration.upToDate = temp.upToDate;
+        compareVersions().then((result) => {
+            if (result) {
+                Configuration.appVersion = result.appVersion;
+                Configuration.remoteVersion = result.remoteVersion;
+                Configuration.upToDate = result.upToDate;
             }
         });
 
         if (this.configFileExist() === true || input) {
             await this.readConfigFile(input);
-            console.log(log.message(info.config, info.loaded + " " + EChar.ok));
             let status = true;
             await asyncForEach(
                 // Start connection ALL entries in config file
@@ -612,33 +543,41 @@ class Configuration {
                     try {
                         await this.addToServer(key);
                     } catch (error) {
-                        status = this.logError(error);
+                        status = logging.error(error).write(true).result(false);
                     }
                 }
             );
-            this.writeLog(log._head("mqtt"));
             this.initMqtt();
-            setReady(status);
-            this.writeLog(log._head("Ready", EChar.ok));
-            this.writeLog(log.logo(appVersion.version));
-            return status;
+            logging.logo(`${appVersion.version} du ${appVersion.date}`).write(true);
+            return setReady(status);
             // no configuration file so First install
         } else {
-            console.log(log.message("file", paths.configFile.fileName + " " + EChar.notOk));
+            logging.message("file", paths.configFile.fileName + " " + EChar.notOk).write(true);
             this.addListening(this.defaultHttp(), "First launch");
             return true;
         }
     }
 
+    /**
+     * Some sql run to clean services ...
+     *
+     * @returns boolean when it's done
+     */
+
     async afterInitialisation(): Promise<boolean> {
         await asyncForEach(Object.keys(Configuration.afterInit), async (service: string) => {
-            if (Configuration.afterInit[service]) await this.executeMultiSql(this.getService(service), Configuration.afterInit[service]);
+            if (Configuration.afterInit[service])
+                executeSql(this.getService(service), Configuration.afterInit[service])
+                    .then(() => {
+                        logging.status(service, "afterInitialisation", true).write(true);
+                    })
+                    .catch((err) => logDbError(err));
             if (this.getService(service).options.includes(EOptions.speedCount)) {
                 await this.connection(service)
                     .unsafe(createTableCount)
                     .then(async () => {
                         const queries = models.upSertCountSql(service);
-                        if (queries) this.executeMultiSql(this.getService(service), queries);
+                        if (queries) executeSql(this.getService(service), queries);
                     })
                     .catch((err) => logDbError(err));
             }
@@ -723,7 +662,7 @@ class Configuration {
      * @returns true if it's ok
      */
     private async addToServer(key: string): Promise<boolean> {
-        this.writeLog(log._head(key));
+        logging.head(key).write(true);
         return await this.isServiceExist(key, true)
             .then(async (res: boolean) => {
                 if (res === true) {
@@ -745,8 +684,8 @@ class Configuration {
                 return res;
             })
             .catch((error: Error) => {
-                log.error(errors.unableFindCreate, Configuration.services[key].pg.database);
-                this.logError(error);
+                logging.error(errors.unableFindCreate, Configuration.services[key].pg.database).write(true);
+                logging.error(error).write(true).result(false);
                 process.exit(111);
             });
     }
@@ -776,15 +715,14 @@ class Configuration {
      * @returns true if it's done
      */
     private async createDB(connectName: string): Promise<boolean> {
-        this.writeLog(log.booting(info.try, Configuration.services[connectName].pg.database));
+        logging.message(info.try, Configuration.services[connectName].pg.database).write(true);
         return await createDatabase(connectName)
             .then(async () => {
-                this.writeLog(log.booting(`${info.db} ${info.create} [${Configuration.services[connectName].pg.database}]`, EChar.ok));
                 this.createDbConnectionFromConfigName(connectName);
-                return true;
+                return logging.message(`${info.db} ${info.create} [${Configuration.services[connectName].pg.database}]`, EChar.ok).write(true).result(true);
             })
             .catch((err: Error) => {
-                return this.logError(err.message, msg(info.create, info.db));
+                return logging.error(err.message, msg(info.create, info.db)).write(true).result(false);
             });
     }
 
@@ -795,14 +733,14 @@ class Configuration {
      * @returns true if it's done
      */
     private async isServiceExist(serviceName: string, create: boolean): Promise<boolean> {
-        this.writeLog(log.booting(info.dbExist, Configuration.services[serviceName].pg.database));
+        logging.message(info.dbExist, Configuration.services[serviceName].pg.database).write(true);
         return await this.connection(serviceName)`select 1+1 AS result`
             .then(async () => {
                 const listTempTables = await this.connection(serviceName)`SELECT array_agg(table_name) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE 'temp%';`;
                 const tables = listTempTables[0]["array_agg"];
                 if (tables != null)
-                    this.writeLog(
-                        log.booting(
+                    logging
+                        .message(
                             `DELETE temp table(s) ==> \x1b[33m${serviceName}\x1b[32m`,
                             await this.connection(serviceName)
                                 .begin((sql) => {
@@ -813,7 +751,7 @@ class Configuration {
                                 .then(() => EChar.ok)
                                 .catch((err: Error) => err.message)
                         )
-                    );
+                        .write(true);
                 await this.reCreatePgFunctions(serviceName);
                 if (![EConstant.admin as String, EConstant.test as String].includes(serviceName)) {
                     Configuration.afterInit[serviceName] = models.getClean(serviceName);
@@ -823,14 +761,14 @@ class Configuration {
             .catch(async (error: Error) => {
                 // Password authentication failed
                 if (error["code" as keyobj] === "ECONNREFUSED") {
-                    this.logError(error);
+                    logging.error(error).write(true);
                 } else if (error["code" as keyobj] === "28P01") {
                     if (!isTest()) return await this.createDB(serviceName);
                     // Database does not exist
                 } else if (error["code" as keyobj] === "3D000" && create == true) {
-                    console.log(log._infos(msg(info.tryCreate, info.db), Configuration.services[serviceName].pg.database));
+                    logging.message(msg(info.tryCreate, info.db), Configuration.services[serviceName].pg.database).write(true);
                     if (serviceName !== EConstant.test) return await this.createDB(serviceName);
-                } else return this.logError(error);
+                } else return logging.error(error).write(true).result(false);
                 return false;
             });
     }
@@ -848,7 +786,7 @@ class Configuration {
             path,
             content,
             (error) => {
-                if (error) return this.logError(error);
+                if (error) return logging.error(error).write(true).result(false);
             }
         );
         return true;
@@ -860,7 +798,7 @@ class Configuration {
      * @returns true if it's done
      */
     public saveConfig(myPath: string): boolean {
-        this.writeLog(log.message(infos(["write", "config"]), `in ${myPath}`));
+        logging.message(infos(["write", "config"]), `in ${myPath}`).write(true);
         const datas: string = JSON.stringify({ admin: Configuration.services[EConstant.admin] }, null, 4);
         if (this.writeFile(path.join(myPath, "configuration.json"), isProduction() === true ? encrypt(datas) : datas) === false) return false;
         if (this.writeFile(path.join(myPath, ".key"), paths.key) === false) return false;

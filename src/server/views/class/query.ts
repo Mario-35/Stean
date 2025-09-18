@@ -8,7 +8,7 @@
 
 import { EConstant } from "../../enums";
 import { removeAllQuotes } from "../../helpers";
-import { log } from "../../log";
+import { logging } from "../../log";
 import { Idatas, IqueryOptions, koaContext } from "../../types";
 import { addCssFile, listaddCssFiles } from "../css";
 import { addJsFile, listaddJsFiles } from "../js";
@@ -28,7 +28,7 @@ export class Query extends CoreHtmlView {
         this.createQueryHtmlString();
     }
     createQueryHtmlString() {
-        console.log(log.debug_head("commonHtml"));
+        console.log(logging.head("commonHtml").toString());
         // if js or css .min
         const fileWithOutMin = (input: string): string => input.replace(".min", "");
         // Split files for better search and replace

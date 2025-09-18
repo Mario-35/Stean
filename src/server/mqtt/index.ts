@@ -8,11 +8,12 @@
 
 import Aedes, { AedesPublishPacket, Client, PublishPacket, Subscription } from "aedes";
 import { config } from "../configuration";
-import { log } from "../log";
+import { logging } from "../log";
 import { color, EColor, EEncodingType } from "../enums";
 import { errors, infos } from "../messages";
 import { loginUser } from "../authentication";
 import { createServer } from "aedes-server-factory";
+import { _DEBUG } from "../constants";
 
 export class MqttServer {
     broker: Aedes;
@@ -42,7 +43,7 @@ export class MqttServer {
         });
     }
     apiCaller(packet: PublishPacket, client: Client) {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         return new Promise(async (resolve, reject) => {
             try {
                 const api = await fetch(`http://localhost:8029${packet.topic}`, {
@@ -55,7 +56,7 @@ export class MqttServer {
                     body: packet.payload.toString()
                 });
                 if (api) {
-                    config.writeLog(log.debug_infos(`[MESSAGE_PUBLISHED] Client ${client ? client.id : "BROKER_" + this.broker.id} has published message on ${packet.topic} to broker`, this.broker.id));
+                    logging.message(`[MESSAGE_PUBLISHED] Client ${client ? client.id : "BROKER_" + this.broker.id} has published message on ${packet.topic} to broker`, this.broker.id).write(_DEBUG);
                     api.json().then((e: any) => {
                         client.emit("message", e);
                         resolve(e);
@@ -69,7 +70,7 @@ export class MqttServer {
     init() {
         // authenticate the connecting client
         this.broker.authenticate = async (client: Client | null, username: any, password: any, callback: any) => {
-            console.log(log.whereIam());
+            console.log(logging.whereIam(new Error().stack).toString());
             if (client && client.req && client.req.url) {
                 const url = client.req.url
                     .trim()
@@ -78,11 +79,13 @@ export class MqttServer {
                 if (url[url.length - 1] === "login") {
                     return await loginUser(undefined, { configName: url[0], username: String(username), password: Buffer.from(password, "base64").toString() })
                         .then((user) => {
-                            config.writeLog(log.debug_infos(`${color(user ? EColor.Green : EColor.Red)}${color(EColor.Cyan)}${user ? infos(["auth", "success"]) : errors.authFailed} to broker`, this.broker.id));
+                            logging
+                                .message(`${color(user ? EColor.Green : EColor.Red)}${color(EColor.Cyan)}${user ? infos(["auth", "success"]) : errors.authFailed} to broker`, this.broker.id)
+                                .write(_DEBUG);
                             return callback(user ? null : new Error(errors.authFailed), user ? true : false);
                         })
                         .catch((error: Error) => {
-                            log.error(errors.authFailed, error);
+                            logging.error(errors.authFailed, error);
                             return callback(error, false);
                         });
                 }
@@ -90,13 +93,19 @@ export class MqttServer {
                 if (client && client["_parser" as keyof object]) {
                     const paket = client["_parser" as keyof object]["settings"];
                     if (paket["cmd" as keyof object] === "connect") {
-                        return await loginUser(undefined, { configName: String(paket["clientId" as keyof object]).split("_")[0], username: String(paket["username" as keyof object]), password: Buffer.from(paket["password" as keyof object], "base64").toString() })
+                        return await loginUser(undefined, {
+                            configName: String(paket["clientId" as keyof object]).split("_")[0],
+                            username: String(paket["username" as keyof object]),
+                            password: Buffer.from(paket["password" as keyof object], "base64").toString()
+                        })
                             .then((user) => {
-                                config.writeLog(log.debug_infos(`${color(user ? EColor.Green : EColor.Red)}${color(EColor.Cyan)}${user ? infos(["auth", "success"]) : errors.authFailed} to broker`, this.broker.id));
+                                logging
+                                    .message(`${color(user ? EColor.Green : EColor.Red)}${color(EColor.Cyan)}${user ? infos(["auth", "success"]) : errors.authFailed} to broker`, this.broker.id)
+                                    .write(_DEBUG);
                                 return callback(user ? null : new Error(errors.authFailed), user ? true : false);
                             })
                             .catch((error: Error) => {
-                                log.error(errors.authFailed, error);
+                                logging.error(errors.authFailed, error);
                                 return callback(error, false);
                             });
                     }
@@ -107,51 +116,65 @@ export class MqttServer {
 
         // authorizing client to publish on a message topic
         this.broker.authorizePublish = (client: Client | null, packet: PublishPacket, callback: any) => {
-            console.log(log.whereIam("authorizePublish"));
+            console.log(logging.whereIam("authorizePublish").toString());
             return callback(client && packet.topic.trim() !== "" ? null : new Error("You are not authorized to publish on this message topic."));
         };
         this.broker.published = (packet: AedesPublishPacket, client: Client | null, callback: any) => {
             if (client) {
-                console.log(log.whereIam("published"));
-                if (client) config.writeLog(log.debug_infos(`${color(EColor.Green)}[PUBLISHED] ${color(EColor.Cyan)}${client ? client.id : client}`, packet.payload.toString()));
+                console.log(logging.whereIam("published").toString());
+                if (client) logging.message(`${color(EColor.Green)}[PUBLISHED] ${color(EColor.Cyan)}${client ? client.id : client}`, packet.payload.toString()).write(_DEBUG);
             }
         };
         // emitted when a client connects to the broker
         this.broker.on("client", (client: Client | null) => {
             if (client) {
-                console.log(log.whereIam(`client : ${client ? client.id : client}`));
-                config.writeLog(log.debug_infos(`${color(EColor.Green)}[CLIENT_CONNECTED] ${color(EColor.Cyan)}${client ? client.id : client} connected to broker`, this.broker.id));
+                console.log(logging.whereIam(`client : ${client ? client.id : client}`).toString());
+                logging.message(`${color(EColor.Green)}[CLIENT_CONNECTED] ${color(EColor.Cyan)}${client ? client.id : client} connected to broker`, this.broker.id).write(_DEBUG);
             }
         });
 
         // emitted when a client disconnects from the broker
         this.broker.on("clientDisconnect", (client: Client | null) => {
             if (client) {
-                console.log(log.whereIam("clientDisconnect"));
-                config.writeLog(log.debug_infos(`${color(EColor.Red)}[CLIENT_DISCONNECTED] ${color(EColor.Cyan)}${client ? client.id : client} disconnected from the broker`, this.broker.id));
+                console.log(logging.whereIam(new Error().stack, "clientDisconnect").toString());
+                logging.message(`${color(EColor.Red)}[CLIENT_DISCONNECTED] ${color(EColor.Cyan)}${client ? client.id : client} disconnected from the broker`, this.broker.id).write(_DEBUG);
             }
         });
 
         // emitted when a client subscribes to a message topic
         this.broker.on("subscribe", (subscriptions: Subscription[], client: Client | null) => {
             if (client) {
-                console.log(log.whereIam("subscribe"));
-                config.writeLog(log.debug_infos(`${color(EColor.Yellow)}[TOPIC_SUBSCRIBED] ${color(EColor.Green)}${client ? client.id : client} subscribed to topics: ${subscriptions.map((s: any) => s.topic).join(",")} on broker`, this.broker.id));
+                console.log(logging.whereIam(new Error().stack, "subscribe").toString());
+                logging
+                    .message(
+                        `${color(EColor.Yellow)}[TOPIC_SUBSCRIBED] ${color(EColor.Green)}${client ? client.id : client} subscribed to topics: ${subscriptions
+                            .map((s: any) => s.topic)
+                            .join(",")} on broker`,
+                        this.broker.id
+                    )
+                    .write(_DEBUG);
             }
         });
 
         // emitted when a client unsubscribes from a message topic
         this.broker.on("unsubscribe", (subscriptions: any, client: Client | null) => {
             if (client) {
-                console.log(log.whereIam("unsubscribe"));
-                config.writeLog(log.debug_infos(`${color(EColor.Yellow)}[TOPIC_UNSUBSCRIBED] ${color(EColor.Red)}${client ? client.id : client} unsubscribed to topics: ${subscriptions.map((s: any) => s.topic).join(",")} from broker`, this.broker.id));
+                console.log(logging.whereIam("unsubscribe"));
+                logging
+                    .message(
+                        `${color(EColor.Yellow)}[TOPIC_UNSUBSCRIBED] ${color(EColor.Red)}${client ? client.id : client} unsubscribed to topics: ${subscriptions
+                            .map((s: any) => s.topic)
+                            .join(",")} from broker`,
+                        this.broker.id
+                    )
+                    .write(_DEBUG);
             }
         });
 
         // emitted when a client publishes a message packet on the topic
         this.broker.on("publish", (packet: PublishPacket, client: Client | null) => {
             if (client && !packet.topic.includes("$SYS")) {
-                console.log(log.whereIam("publish"));
+                console.log(logging.whereIam("publish"));
                 this.apiCaller(packet, client)
                     .then((res) => {
                         res = { mqtt: res as JSON };

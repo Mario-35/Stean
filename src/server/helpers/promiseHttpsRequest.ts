@@ -7,7 +7,7 @@
  */
 
 import https from "https";
-import { log } from "../log";
+import { logging } from "../log";
 import { EConstant } from "../enums";
 
 /**
@@ -26,12 +26,12 @@ export function promiseHttpsRequest(url: string, options: https.RequestOptions) 
             });
             res.on("end", function () {
                 if (res && res.statusCode && res.statusCode === 200) return resolve(body);
-                process.stdout.write(log.update("Bad Response " + res.statusCode + EConstant.return));
+                logging.message("update", "Bad Response " + res.statusCode + EConstant.return).write(true);
                 reject(res.statusCode);
             });
         });
-        process.stdout.write(log.update("Sending request to " + url + EConstant.return));
-        process.stdout.write(log.update("Options: " + JSON.stringify(options) + EConstant.return));
+        logging.message("update", "Sending request to " + url + EConstant.return).write(true);
+        logging.message("update", "Options: " + JSON.stringify(options) + EConstant.return).write(true);
         req.on("error", reject);
         req.end();
     });

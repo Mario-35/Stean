@@ -1,5 +1,4 @@
 import { config } from "../configuration";
-import { log } from "../log";
 import { _STREAM } from "../db/constants";
 import { asJson, createTrigger, dropTrigger } from "../db/queries";
 import { EColumnType, EConstant, EDataType, EExtensions, EOptions, EentityType, filterEntities } from "../enums";
@@ -29,6 +28,7 @@ import {
     LOG
 } from "./entities";
 import { Geometry, Jsonb, Text } from "./types";
+import { logging } from "../log";
 
 export class Models {
     static models: {
@@ -129,7 +129,7 @@ export class Models {
 
     // Get multiDatastream or Datastreams infos
     public async getStreamInfos(service: Iservice, input: Record<string, any>): Promise<IstreamInfos | undefined> {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         const stream: _STREAM = input["Datastream"] ? "Datastream" : input["MultiDatastream"] ? "MultiDatastream" : undefined;
         if (!stream) return undefined;
         const streamEntity = models.getEntityName(service, stream);
@@ -192,7 +192,7 @@ export class Models {
     }
 
     private createVersion(verStr: string): boolean {
-        console.log(log.whereIam(verStr));
+        console.log(logging.whereIam(new Error().stack, verStr).toString());
         switch (verStr) {
             case "v1.1":
                 this.createVersion("v1.0");
@@ -273,8 +273,9 @@ export class Models {
             if (mods[entity].clean) {
                 mods[entity].clean.forEach((e) => {
                     if (e.includes("@UPDATE@")) temp.push(e.replace("@UPDATE@", `UPDATE "${mods[entity].table}" SET`));
-                    if (e.includes("@DROPCOLUMN@")) temp.push(e.replace("@DROPCOLUMN@", `ALTER TABLE "${mods[entity].table}" DROP COLUMN IF EXISTS`));
-                    if (e.includes("@ADDCOLUMN@")) temp.push(e.replace("@ADDCOLUMN@", `ALTER TABLE "${mods[entity].table}" ADD COLUMN IF NOT EXISTS`));
+                    else if (e.includes("@DROPCOLUMN@")) temp.push(e.replace("@DROPCOLUMN@", `ALTER TABLE "${mods[entity].table}" DROP COLUMN IF EXISTS`));
+                    else if (e.includes("@ADDCOLUMN@")) temp.push(e.replace("@ADDCOLUMN@", `ALTER TABLE "${mods[entity].table}" ADD COLUMN IF NOT EXISTS`));
+                    else temp.push(e);
                 });
             }
         });
@@ -406,7 +407,7 @@ export class Models {
     }
 
     public getRoot(ctx: koaContext) {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         let expectedResponse: object[] = [];
         Object.keys(ctx.model)
             .filter((elem: string) => ctx.model[elem].order > 0)

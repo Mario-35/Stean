@@ -7,11 +7,10 @@
  */
 
 import { _DEBUG, _REPLAY } from "../constants";
-import { isTest, logToHtml, notNull } from "../helpers";
+import { isTest, notNull } from "../helpers";
 import { koaContext } from "../types";
 import postgres from "postgres";
-import { log } from ".";
-import { paths } from "../paths";
+import { logging } from ".";
 import { EConstant, EEncodingType } from "../enums";
 import { FORMAT_JSONB } from "../db/constants";
 
@@ -27,11 +26,17 @@ export class Trace {
     }
 
     private queryReplay(ctx: koaContext, error: any[]) {
-        return `INSERT INTO public.log ( method, url ${notNull(error) ? ", error" : ""}) VALUES( 'REPLAY', '${ctx.decodedUrl.root}/Logs(${_REPLAY})' ${notNull(error) ? `,${FORMAT_JSONB(error)}` : ""}) RETURNING id;`;
+        return `INSERT INTO public.log ( method, url ${notNull(error) ? ", error" : ""}) VALUES( 'REPLAY', '${ctx.decodedUrl.root}/Logs(${_REPLAY})' ${
+            notNull(error) ? `,${FORMAT_JSONB(error)}` : ""
+        }) RETURNING id;`;
     }
 
     private query(ctx: koaContext, error?: any[]) {
-        return ctx.traceId && error ? `UPDATE public.log SET error = ${FORMAT_JSONB(error)} WHERE id = ${ctx.traceId}` : `INSERT INTO public.log (method, url${notNull(ctx.body) ? ", datas" : ""}${notNull(error) ? ", error" : ""}) VALUES('${ctx.method}', '${ctx.request.url}'${notNull(ctx.body) ? `,${FORMAT_JSONB(ctx.body)}` : ""}${notNull(error) ? `,${FORMAT_JSONB(error)}` : ""}) RETURNING id;`;
+        return ctx.traceId && error
+            ? `UPDATE public.log SET error = ${FORMAT_JSONB(error)} WHERE id = ${ctx.traceId}`
+            : `INSERT INTO public.log (method, url${notNull(ctx.body) ? ", datas" : ""}${notNull(error) ? ", error" : ""}) VALUES('${ctx.method}', '${ctx.request.url}'${
+                  notNull(ctx.body) ? `,${FORMAT_JSONB(ctx.body)}` : ""
+              }${notNull(error) ? `,${FORMAT_JSONB(error)}` : ""}) RETURNING id;`;
     }
 
     /**
@@ -40,7 +45,7 @@ export class Trace {
      * @param ctx koa context
      */
     async write(ctx: koaContext) {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         if (ctx.request.url.includes("Replays(") || ctx.request.url.includes("$replay=") || _REPLAY) return;
         if (ctx.method !== "GET") {
             const datas = this.query(ctx);
@@ -52,7 +57,11 @@ export class Trace {
                 .catch(async (error) => {
                     console.log(error);
                     if (error.code === "42P01") {
-                        await Trace.adminConnection.unsafe(`CREATE TABLE public.log ( id int8 GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1 NO CYCLE ) NOT NULL, "date" timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL, "method" text NULL, url text NULL, datas jsonb NULL, CONSTRAINT log_pkey PRIMARY KEY (id) ); CREATE INDEX log_id ON public.log USING btree (id); `).catch((err) => process.stdout.write(err + EConstant.return));
+                        await Trace.adminConnection
+                            .unsafe(
+                                `CREATE TABLE public.log ( id int8 GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1 NO CYCLE ) NOT NULL, "date" timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL, "method" text NULL, url text NULL, datas jsonb NULL, CONSTRAINT log_pkey PRIMARY KEY (id) ); CREATE INDEX log_id ON public.log USING btree (id); `
+                            )
+                            .catch((err) => process.stdout.write(err + EConstant.return));
                         Trace.adminConnection.unsafe(datas);
                     } else process.stdout.write(error + EConstant.return);
                 });
@@ -65,7 +74,7 @@ export class Trace {
      * @param ctx koa context
      */
     async error(ctx: koaContext, error: any) {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         if (ctx.request.url.includes("Replays(")) return;
         try {
             await Trace.adminConnection.unsafe(_REPLAY ? this.queryReplay(ctx, error) : this.query(ctx, error));
@@ -84,9 +93,7 @@ export class Trace {
                 })
                 .catch((err: Error) => {
                     if (!isTest() && +err["code" as keyof object] === 23505) {
-                        const input = log.queryError(query, err);
-                        process.stdout.write(input + EConstant.return);
-                        paths.logFile.writeStream(logToHtml(input));
+                        logging.queryError(query, err).write(true);
                     }
                     reject(err);
                 });
@@ -103,9 +110,7 @@ export class Trace {
                 })
                 .catch((err: Error) => {
                     if (!isTest() && +err["code" as keyof object] === 23505) {
-                        const input = log.queryError(query, err);
-                        process.stdout.write(input + EConstant.return);
-                        paths.logFile.writeStream(logToHtml(input));
+                        logging.queryError(query, err).write(true);
                     }
                     reject(err);
                 });
@@ -113,7 +118,7 @@ export class Trace {
     }
 
     async rePlay(ctx: koaContext): Promise<boolean> {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         await this.get(`SELECT * FROM log WHERE id=${ctx.decodedUrl.id}`).then(async (input: Record<string, any>) => {
             if (["POST", "PUT", "PATCH"].includes(input.method)) {
                 // const id = getBigIntFromString(input.url );

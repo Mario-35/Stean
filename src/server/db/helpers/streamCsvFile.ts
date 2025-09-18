@@ -10,10 +10,10 @@ import { IcsvFile, IcsvImport, Iservice } from "../../types";
 import { createReadStream } from "fs";
 import { addAbortSignal } from "stream";
 import { config } from "../../configuration";
-import { log } from "../../log";
+import { logging } from "../../log";
 
 export async function streamCsvFile(service: Iservice, paramsFile: IcsvFile, sqlRequest: IcsvImport): Promise<number> {
-    console.log(log.whereIam());
+    console.log(logging.whereIam(new Error().stack).toString());
     const cols: string[] = [];
     const controller = new AbortController();
     const readable = createReadStream(paramsFile.filename);

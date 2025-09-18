@@ -9,7 +9,7 @@
 import { ESCAPE_SIMPLE_QUOTE } from "../../constants";
 import { EConstant, EDataType } from "../../enums";
 import { doubleQuotes, simpleQuotesString, removeFirstEndSimpleQuotes, removeFirstAndEnd, isString } from "../../helpers";
-import { log } from "../../log";
+import { logging } from "../../log";
 import { IentityColumn } from "../../types";
 /**
  *
@@ -27,7 +27,7 @@ export function formatColumnValue(columnName: string, value: any, column: Ientit
             ? value[EConstant.id]
             : removeFirstAndEnd(value, "@");
     };
-    console.log(log.debug_head(`${columnName} [${column.dataType}] ==> ${value}`));
+    console.log(logging.head(`${columnName} [${column.dataType}] ==> ${value}`).toString());
     if (value)
         switch (value) {
             case void 0:

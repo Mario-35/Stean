@@ -7,12 +7,13 @@
  */
 
 import { config } from "../../configuration";
-import { log } from "../../log";
+import { logging } from "../../log";
 import { isTest } from "../../helpers";
 import { Iservice, keyobj } from "../../types";
+import { _DEBUG } from "../../constants";
 
 const executeSqlOne = async (service: Iservice, query: string): Promise<object> => {
-    config.writeLog(log.query(query));
+    logging.query("executeSqlOne", query).write(_DEBUG);
     return new Promise(async function (resolve, reject) {
         await config
             .connection(service.name)
@@ -21,14 +22,14 @@ const executeSqlOne = async (service: Iservice, query: string): Promise<object> 
                 resolve(res);
             })
             .catch((err: Error) => {
-                if (!isTest() && +err["code" as keyobj] === 23505) config.writeLog(log.queryError(query, err));
+                if (!isTest() && +err["code" as keyobj] === 23505) logging.queryError(query, err).write(true);
                 reject(err);
             });
     });
 };
 
 const executeSqlMulti = async (service: Iservice, query: string[]): Promise<object> => {
-    config.writeLog(log.query(query));
+    logging.query("executeSqlMulti", query).write(_DEBUG);
     return new Promise(async function (resolve, reject) {
         await config
             .connection(service.name)
@@ -37,7 +38,7 @@ const executeSqlMulti = async (service: Iservice, query: string[]): Promise<obje
                 resolve(res);
             })
             .catch((err: Error) => {
-                if (!isTest() && +err["code" as keyobj] === 23505) config.writeLog(log.queryError(query, err));
+                if (!isTest() && +err["code" as keyobj] === 23505) logging.queryError(query, err).write(true);
                 reject(err);
             });
     });

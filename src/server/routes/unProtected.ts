@@ -7,7 +7,7 @@
  */
 import Router from "koa-router";
 import { userAuthenticated, getAuthenticatedUser } from "../authentication";
-import { _READY } from "../constants";
+import { _DEBUG, _READY } from "../constants";
 import { getUrlKey, isAdmin, returnFormats } from "../helpers";
 import { apiAccess } from "../db/dataAccess";
 import { IreturnResult } from "../types";
@@ -24,12 +24,18 @@ import { HtmlError, Login, Status, Query } from "../views/";
 import { createQueryParams } from "../views/helpers";
 import { EOptions, EHttpCode, EConstant } from "../enums";
 import { getMetrics } from "../db/monitoring";
-import { log } from "../log";
+import { logging } from "../log";
 
 export const unProtectedRoutes = new Router<DefaultState, Context>();
 // ALL others
 unProtectedRoutes.get("/(.*)", async (ctx) => {
     switch (ctx.decodedUrl.path.toUpperCase()) {
+        // login html page or connection login
+        case "RESTART":
+            if (ctx.request["token" as keyof object]) {
+                process.exit(100);
+            }
+            return;
         // Root path
         case `/`:
             ctx.body = models.getRoot(ctx);
@@ -70,10 +76,11 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
             ctx.body = await exportService(ctx);
             // ctx.body = { "pipo": "le maka" };
             return;
-        // User login
+        // Admin login
         case "ADMIN":
             ctx.redirect(`${ctx.decodedUrl.origin}/admin`);
             return;
+        // User login
         case "LOGIN":
             if (userAuthenticated(ctx)) ctx.redirect(`${ctx.decodedUrl.root}/status`);
             else {
@@ -82,7 +89,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
                 ctx.body = bodyLogin.toString();
             }
             return;
-        // Status user
+        // User Status
         case "STATUS":
             if (userAuthenticated(ctx)) {
                 const user = await getAuthenticatedUser(ctx);
@@ -134,7 +141,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
         // Create DB test
         case "CREATE":
             if (ctx.decodedUrl.service === EConstant.test) {
-                console.log(log.debug_head("Create service"));
+                console.log(logging.head("Create service").toString());
                 try {
                     (ctx.body = await createService(ctx.service, testDatas)), (ctx.status = EHttpCode.created);
                 } catch (error) {
@@ -146,8 +153,8 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
             ctx.throw(EHttpCode.notFound);
         // Drop DB
         case "DROP":
-            console.log(log.debug_head("drop database"));
-            if (ctx.service.options.includes(EOptions.canDrop)) {
+            console.log(logging.head("drop database"));
+            if (ctx.service.options.includes(EOptions.canDrop).toString()) {
                 await disconnectDb(ctx.service.pg.database, true);
                 try {
                     ctx.status = EHttpCode.created;
@@ -174,7 +181,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
 
     // API GET REQUEST
     if (ctx.decodedUrl.path.includes(ctx.service.apiVersion) || ctx.decodedUrl.version) {
-        console.log(log.debug_head(`unProtected GET ${ctx.service.apiVersion}`));
+        console.log(logging.head(`unProtected GET ${ctx.service.apiVersion}`).toString());
         // decode odata url infos
         const odataVisitor = await createOdata(ctx);
 
@@ -184,7 +191,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
                 ctx.body = { values: [] };
                 return;
             }
-            console.log(log.debug_head(`GET ${ctx.service.apiVersion}`));
+            console.log(logging.head(`GET ${ctx.service.apiVersion}`).toString());
             // Create api object
             const objectAccess = new apiAccess(ctx);
             if (objectAccess) {

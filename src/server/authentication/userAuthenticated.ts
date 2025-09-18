@@ -8,7 +8,7 @@
 
 import { decodeToken } from ".";
 import { EExtensions } from "../enums";
-import { log } from "../log";
+import { logging } from "../log";
 import { koaContext } from "../types";
 
 /**
@@ -18,7 +18,7 @@ import { koaContext } from "../types";
  */
 
 export const userAuthenticated = (ctx: koaContext): boolean => {
-    console.log(log.whereIam());
+    console.log(logging.whereIam(new Error().stack).toString());
     if (ctx.service && ctx.service.extensions.includes(EExtensions.users)) {
         const token = decodeToken(ctx);
         return token && +token.id > 0;

@@ -8,17 +8,17 @@
 
 import { IcsvColumn, IcsvFile, Iservice } from "../../types";
 import { columnsNameFromHydrasCsv, streamCsvFile } from ".";
-import { log } from "../../log";
+import { logging } from "../../log";
 import { EChar } from "../../enums";
 import { OBSERVATION } from "../../models/entities";
 import { splitLast } from "../../helpers";
 
 export async function queryInsertFromCsv(service: Iservice, paramsFile: IcsvFile): Promise<{ count: number; query: string[] } | undefined> {
-    console.log(log.whereIam());
+    console.log(logging.whereIam(new Error().stack).toString());
     const sqlRequest = await columnsNameFromHydrasCsv(paramsFile);
     if (sqlRequest) {
         const stream = await streamCsvFile(service, paramsFile, sqlRequest);
-        console.log(log.debug_infos(`COPY TO ${paramsFile.tempTable}`, stream > 0 ? EChar.ok : EChar.notOk));
+        console.log(logging.message(`COPY TO ${paramsFile.tempTable}`, stream > 0 ? EChar.ok : EChar.notOk).toString());
         if (stream > 0) {
             const fileImport = splitLast(paramsFile.filename, "/");
             const dateImport = new Date().toLocaleString();

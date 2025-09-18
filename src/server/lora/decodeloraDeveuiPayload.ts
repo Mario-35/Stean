@@ -8,13 +8,13 @@
 
 import { decodingPayload } from ".";
 import { config } from "../configuration";
-import { log } from "../log";
+import { logging } from "../log";
 import { errors } from "../messages";
 import { DECODER, LORA } from "../models/entities";
 import { ILoraDecodingResult, Iservice } from "../types";
 
 export const decodeloraDeveuiPayload = async (service: Iservice, loraDeveui: string, payload: string): Promise<ILoraDecodingResult | undefined> => {
-    console.log(log.debug_infos(`decodeLoraPayload deveui : [${loraDeveui}]`, payload));
+    console.log(logging.message(`decodeLoraPayload deveui : [${loraDeveui}]`, payload).toString());
     return await config
         .executeSql(service, `SELECT "name", "code", "nomenclature", "synonym" FROM "${DECODER.table}" WHERE id = (SELECT "decoder_id" FROM "${LORA.table}" WHERE "deveui" = '${loraDeveui}') LIMIT 1`)
         .then((res: Record<string, any>) => {

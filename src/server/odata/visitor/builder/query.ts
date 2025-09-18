@@ -14,7 +14,7 @@ import { models } from "../../../models";
 import { EConstant, EDataType, EOptions, EQuery, EUserRights } from "../../../enums";
 import { GroupBy, Key, OrderBy, Select, Where, Join } from ".";
 import { errors } from "../../../messages";
-import { log } from "../../../log";
+import { logging } from "../../../log";
 import { expand } from "../../../models/helpers";
 import { isAllowedTo, isTestEntity } from "../../../helpers/tests";
 import { createDefaultContext, createIentityColumnAliasOptions } from "../helper";
@@ -29,7 +29,7 @@ export class Query {
     _pgQuery: IpgQuery | undefined = undefined;
 
     constructor() {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         this.where = new Where();
         this.select = new Select();
         this.orderBy = new OrderBy();
@@ -42,7 +42,7 @@ export class Query {
         // get good entity name
         const tempEntity = models.getEntity(main.ctx.service, tableName);
         if (!tempEntity) {
-            log.error("no entity For", tableName);
+            logging.error("no entity For", tableName);
             return;
         }
         // Add ceil and return if graph
@@ -118,7 +118,7 @@ export class Query {
     // Create SQL Query
     private create(main: RootPgVisitor | PgVisitor, toWhere: boolean, _element?: PgVisitor): IpgQuery | undefined {
         const element = _element ? _element : main;
-        console.log(log.whereIam(element.entity || "blank"));
+        console.log(logging.whereIam(new Error().stack, "blank").toString());
         if (element.entity) {
             // get columns
             const select = toWhere === true ? ["id"] : this.columnList(element.entity.name, main, element);
@@ -193,7 +193,7 @@ export class Query {
     }
 
     toWhere(main: RootPgVisitor | PgVisitor, _element?: PgVisitor): string {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         this._pgQuery = this.create(main, true, _element);
         if (this._pgQuery) {
             const query = `SELECT ${this._pgQuery.select}${EConstant.return} FROM ${this._pgQuery.from}${EConstant.return} ${
@@ -208,7 +208,7 @@ export class Query {
     }
 
     toString(main: RootPgVisitor | PgVisitor, _element?: PgVisitor): string {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         if (!this._pgQuery) this._pgQuery = this.create(main, false, _element);
         const query = this.pgQueryToString(this._pgQuery);
         if (query) return query;
@@ -216,7 +216,7 @@ export class Query {
     }
 
     toPgQuery(main: RootPgVisitor | PgVisitor, _element?: PgVisitor): IpgQuery | undefined {
-        console.log(log.whereIam());
+        console.log(logging.whereIam(new Error().stack).toString());
         if (!this._pgQuery) this._pgQuery = this.create(main, false, _element);
         return this._pgQuery;
     }

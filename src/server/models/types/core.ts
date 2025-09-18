@@ -41,6 +41,11 @@ export class Core {
         return this;
     }
 
+    addIndexes(input: string | string[]) {
+        this._.indexes = typeof input === "string" ? [input] : input;
+        return this;
+    }
+
     default(input: string | number): this {
         if (typeof input === "number") input = String(input);
         this._.create = this._.create.replace("@DEFAULT@", input.trim() !== "" ? ` DEFAULT '${input.trim()}'${this.cast ? `::${this.cast}` : ""}` : "");
