@@ -35,7 +35,6 @@ export function setDebug(input: boolean) {
 
 export function setReady(input: boolean) {
     _READY = input;
-    logging.status("Ready", undefined, input).write(true);
     return input;
 }
 

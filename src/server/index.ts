@@ -81,7 +81,7 @@ export const server = isTest()
     : // Production or dev init
       config
           .initialisation()
-          .then(async () => await config.afterInitialisation().then((e) => logging.status("Clean", undefined, e).write(true)))
+          .then(async () => await config.afterInitialisation().then((e) => logging.logo(`${appVersion.version} du ${appVersion.date}`).write(true)))
           .catch((err) => {
               console.log(err);
           });

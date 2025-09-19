@@ -96,6 +96,7 @@ class Configuration {
                 })
                 .catch((e) => e);
         }
+        logging.status(true, info.UpdateCount).write(true);
     }
 
     // create a new instance in DB
@@ -139,8 +140,8 @@ class Configuration {
      */
 
     messageListen(what: string, port: string, db?: boolean) {
-        if (db) logging.init(info.db, EColor.Magenta).sep("=>", EColor.Yellow).text(what, EColor.Default).space(info.onLine).text(EChar.arrowright).space().text(port).write(true);
-        else logging.init(what, EColor.Yellow).sep().text(info.listenPort, EColor.Green).space(EChar.arrowright).text(port).write(true);
+        if (db) logging.status(true, msg(info.dbReady, what)).write(true);
+        else logging.status(true, `${what} ${info.listenPort} ${port}`).write(true);
     }
 
     /**
@@ -483,6 +484,12 @@ class Configuration {
         return temp;
     }
 
+    private async refresh(connectionName: string): Promise<boolean> {
+        await this.reCreatePgFunctions(connectionName);
+        await this.createUpdateOptions(connectionName);
+        return true;
+    }
+
     /**
      *
      * @param connection name
@@ -490,17 +497,12 @@ class Configuration {
      */
     private async reCreatePgFunctions(connectionName: string): Promise<boolean> {
         await asyncForEach(pgFunctions(), async (query: string) => {
-            const name = query.split(" */")[0].split("/*")[1].trim();
             await config
                 .connection(connectionName)
                 .unsafe(query)
-                .then(() => {
-                    logging.status(name, undefined, true).write(true);
-                })
                 .catch((error: Error) => logging.error(error).write(true).result(false));
         });
-        logging.message(info.createFunc, connectionName).write(true);
-        await this.createUpdateOptions(connectionName);
+        logging.status(true, info.createFunc).write(true);
         return true;
     }
 
@@ -548,7 +550,6 @@ class Configuration {
                 }
             );
             this.initMqtt();
-            logging.logo(`${appVersion.version} du ${appVersion.date}`).write(true);
             return setReady(status);
             // no configuration file so First install
         } else {
@@ -569,7 +570,7 @@ class Configuration {
             if (Configuration.afterInit[service])
                 executeSql(this.getService(service), Configuration.afterInit[service])
                     .then(() => {
-                        logging.status(service, "afterInitialisation", true).write(true);
+                        logging.init(info.dbWorks, EColor.Magenta).status(true, service).write(true);
                     })
                     .catch((err) => logDbError(err));
             if (this.getService(service).options.includes(EOptions.speedCount)) {
@@ -752,7 +753,7 @@ class Configuration {
                                 .catch((err: Error) => err.message)
                         )
                         .write(true);
-                await this.reCreatePgFunctions(serviceName);
+                await this.refresh(serviceName);
                 if (![EConstant.admin as String, EConstant.test as String].includes(serviceName)) {
                     Configuration.afterInit[serviceName] = models.getClean(serviceName);
                 }
@@ -815,7 +816,7 @@ class Configuration {
             const datas = `UPDATE public.services SET "datas" = ${FORMAT_JSONB(input)} WHERE "name" = '${input.name}'`;
             return await this.adminConnection()
                 .unsafe(datas)
-                .then(async () => await this.reCreatePgFunctions(input.name))
+                .then(async () => await this.refresh(input.name))
                 .catch((err) => logDbError(err));
         }
         return false;

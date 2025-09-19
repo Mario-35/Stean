@@ -181,17 +181,12 @@ class Logging {
         return this;
     }
 
-    status(cle: string, infos: string | undefined, test: boolean) {
-        if (infos) {
-            this.text(cle, EColor.Magenta).sep().color(EColor.White);
-            Logging._s += this.objet(infos);
-        } else {
-            Logging._s = "    ";
-            this.color(EColor.Sql);
-            this.space(EChar.arrowright);
-            this.color(EColor.Default);
-            this.space(cle);
-        }
+    status(test: boolean, cle: string) {
+        Logging._s += "    ";
+        this.color(EColor.Sql);
+        this.space(EChar.arrowright);
+        this.color(EColor.Default);
+        this.space(cle);
         this.space(test ? EChar.ok : EChar.notOk);
         return this;
     }
