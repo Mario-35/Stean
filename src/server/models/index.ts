@@ -269,10 +269,7 @@ export class Models {
         const mods = Models.models[this.get(service).apiVersion];
         const temp: string[] = ["SET client_min_messages TO WARNING;"];
         Object.keys(mods).forEach((entity) => {
-            Object.keys(mods[entity].indexes).forEach((e: string) => {
-                temp.push(`DROP INDEX "${e}"`);
-                temp.push(`CREATE INDEX "${e}" ${mods[entity].indexes[e]}`);
-            });
+            Object.keys(mods[entity].indexes).forEach((e: string) => temp.push(`CREATE INDEX IF NOT EXISTS "${e}" ${mods[entity].indexes[e]}`));
             mods[entity].trigger?.forEach((e: string) => temp.push(e));
             if (mods[entity].clean) {
                 mods[entity].clean.forEach((e) => {
