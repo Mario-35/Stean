@@ -44,12 +44,6 @@ export class Entity extends EntityPass {
         this.prepareColums();
         this.createConstraints();
         this.createTriggers();
-        // if (name === "Datastreams") {
-        //     this.trigger = [];
-        //     this.clean = [];
-        //     console.log(this);
-        //     process.exit(111);
-        // }
     }
 
     addTrigger(action: string, table: string, relTable: string) {
@@ -137,6 +131,11 @@ export class Entity extends EntityPass {
 
     private prepareColums() {
         Object.keys(this.columns).forEach((e) => {
+            if (this.columns[e].indexes) {
+                this.columns[e].indexes.forEach((k) => {
+                    this.addToIndexes(`${this.table}_${e}_${k}`, `ON public."${this.table}" USING btree ("${e}", "${k}")`);
+                });
+            }
             if (this.columns[e].dataType === EDataType.tstzrange || this.columns[e].dataType === EDataType.tsrange) {
                 const entityRelation = this.columns[e].entityRelation;
                 const coalesce = this.columns[e].coalesce;
@@ -175,11 +174,7 @@ export class Entity extends EntityPass {
         this.constraints[key] = value;
     }
 
-    private addToIndexes(src: string, key: string, value: string) {
-        // console.log(`---${this.table}------------${src}----------------------`);
-        // console.log(key);
-        // console.log(value);
-
+    private addToIndexes(key: string, value: string) {
         this.indexes[key] = value;
     }
 
@@ -188,11 +183,10 @@ export class Entity extends EntityPass {
             if (this.columns[elem].orderBy) this.orderBy = `"${elem}" ${this.columns[elem].orderBy.toUpperCase()}`;
             if (this.columns[elem].create.startsWith("BIGINT GENERATED ALWAYS AS IDENTITY")) {
                 this.addToConstraints(`${this.table}_pkey`, `PRIMARY KEY ("${elem}")`);
-                this.addToIndexes("BIGINT GENERATED ALWAYS AS IDENTITY", `${this.table}_${elem}`, `ON public."${this.table}" USING btree ("${elem}")`);
+                this.addToIndexes(`${this.table}_${elem}`, `ON public."${this.table}" USING btree ("${elem}")`);
             } else if (this.columns[elem].create.includes(" UNIQUE")) {
                 this.addToConstraints(`${this.table}_unik_${elem}`, `UNIQUE ("${elem}")`);
-                this.addToIndexes("BIGINT GENERATED ALWAYS AS IDENTITY", `${this.table}_${elem}`, `ON public."${this.table}" USING btree ("${elem}")`);
-                // this.addToIndexes(`${this.table}_${elem}_id`, `ON public."${this.table}" USING btree ("${elem}_id")`);
+                this.addToIndexes(`${this.table}_${elem}`, `ON public."${this.table}" USING btree ("${elem}")`);
             }
         });
 
@@ -203,8 +197,7 @@ export class Entity extends EntityPass {
                     const value = `FOREIGN KEY ("${elem.toLowerCase()}_id") REFERENCES "${elem.toLowerCase()}"("id") ON UPDATE CASCADE ON DELETE CASCADE`;
                     if (this.relations[elem].entityRelation && this.is(elem)) this.addToPass(this.relations[elem].entityRelation, value);
                     else if (this.is(elem)) this.addToConstraints(`${this.table}_${elem.toLowerCase()}_id_fkey`, value);
-                    if (!this.relations[elem].entityRelation)
-                        this.addToIndexes("FOREIGN KEY", `${this.table}_${elem.toLowerCase()}_id`, `ON public."${this.table}" USING btree ("${elem.toLowerCase()}_id")`);
+                    if (!this.relations[elem].entityRelation) this.addToIndexes(`${this.table}_${elem.toLowerCase()}_id`, `ON public."${this.table}" USING btree ("${elem.toLowerCase()}_id")`);
                     break;
                 case ERelations.defaultUnique:
                     this.addToConstraints(
