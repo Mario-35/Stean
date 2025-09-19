@@ -1,4 +1,4 @@
-import { _DEBUG, timestampNow } from "../constants";
+import { _DEBUG, appVersion, timestampNow } from "../constants";
 import { color, EChar, EColor, EConstant } from "../enums";
 import util from "util";
 import { logToHtml } from "../helpers";
@@ -169,15 +169,15 @@ class Logging {
         return this;
     }
 
-    logo(ver: string) {
+    logo() {
         Logging._s =
             `${color(EColor.Code)}${color(EColor.Sql)}${EConstant.return} ____ __________    _     _   _ ${EConstant.return}/ ___|_ __  ____|  / \\   | \\ | |${
                 EConstant.return
             }\\___ \\| | |  _|   / _ \\  |  \\| |${EConstant.return} ___) | | | |___ / ___ \\ | |\\  |${EConstant.return}|____/|_| |_____|_/   \\_\\|_| \\_|  ${color(EColor.Blue)}run API ${
                 EChar.arrowright
-            } ${color(EColor.Green)} ${ver}${color(EColor.Sql)}${color(EColor.Code)}${EConstant.return}${EChar.web} ${color(EColor.White)}https://github.com/Mario-35/Stean/ ${EChar.mail} ${color(
-                EColor.Yellow
-            )} mario.adam@inrae.fr${color(EColor.Reset)}` + EConstant.return;
+            } ${color(EColor.Green)} ${appVersion.version} du ${appVersion.date} ${color(EColor.Sql)}${color(EColor.Code)}${EConstant.return}${EChar.web} ${color(
+                EColor.White
+            )}https://github.com/Mario-35/Stean/ ${EChar.mail} ${color(EColor.Yellow)} mario.adam@inrae.fr${color(EColor.Reset)}` + EConstant.return;
         return this;
     }
 
