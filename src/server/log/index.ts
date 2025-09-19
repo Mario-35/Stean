@@ -53,6 +53,13 @@ class Logging {
         return this;
     }
 
+    toDebugString() {
+        if (_DEBUG) {
+            const tmp = Logging._s;
+            Logging._s = "";
+            return tmp;
+        }
+    }
     toString() {
         const tmp = Logging._s;
         Logging._s = "";
@@ -153,10 +160,12 @@ class Logging {
 
     head<T>(cle: string, col: number = EColor.Cyan) {
         Logging._s = "";
-        this.line(12, col);
-        this.color(EColor.White);
-        this.space(cle);
-        this.line(12, col);
+        if (_DEBUG) {
+            this.line(12, col);
+            this.color(EColor.White);
+            this.space(cle);
+            this.line(12, col);
+        }
         return this;
     }
 

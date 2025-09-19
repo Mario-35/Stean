@@ -27,10 +27,10 @@ export const LORA: Ientity = new Entity("Loras", {
     },
     relations: {
         Datastream: {
-            type: ERelations.belongsTo
+            type: ERelations.hasOne
         },
         MultiDatastream: {
-            type: ERelations.belongsTo
+            type: ERelations.hasOne
         },
         Decoder: {
             type: ERelations.belongsTo

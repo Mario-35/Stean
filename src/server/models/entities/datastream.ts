@@ -43,7 +43,7 @@ export const DATASTREAM = new Entity("Datastreams", {
             type: ERelations.hasMany
         },
         Lora: {
-            type: ERelations.belongsTo
+            type: ERelations.hasOne
         },
         FeatureOfInterest: {
             type: ERelations.defaultUnique

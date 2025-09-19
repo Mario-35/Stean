@@ -32,11 +32,11 @@ const extractEntityNames = (input: string, search: string | string[]): string[] 
 };
 
 export const relationInfos = (service: Iservice, entityName: string, relationName: string, loop?: boolean): IrelationInfos => {
-    console.log(logging.whereIam(new Error().stack).toString());
+    console.log(logging.whereIam(new Error().stack).toDebugString());
     const leftEntity = models.getEntity(service, entityName);
     const rightEntity = models.getEntity(service, relationName);
     if (entityName !== relationName && leftEntity && rightEntity) {
-        console.log(logging.head(`Entity ====> ${leftEntity.name} : ${rightEntity.name}`).toString());
+        console.log(logging.head(`Entity ====> ${leftEntity.name} : ${rightEntity.name}`).toDebugString());
         const leftRelation = models.getRelation(service, leftEntity, rightEntity);
         const rightRelationName = models.getRelationName(rightEntity, [entityName, leftEntity.name, leftEntity.singular, entityName.replace(relationName, ""), relationName.replace(entityName, "")]);
         const rightRelation = rightRelationName ? rightEntity.relations[rightRelationName] : undefined;
@@ -71,12 +71,12 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                 }
                 return fnError();
             };
-            console.log(logging.message("leftRelation ; rightRelation", `${leftRelation.type} : ${rightRelation ? rightRelation.type : "undefined"}`).toString());
+            console.log(logging.message("leftRelation ; rightRelation", `${leftRelation.type} : ${rightRelation ? rightRelation.type : "undefined"}`).toDebugString());
 
             switch (leftRelation.type) {
                 // === : 1
                 case ERelations.defaultUnique:
-                    console.log(logging.message("leftRelation Type", `====> defaultUnique : ${ERelations.defaultUnique}`).toString());
+                    console.log(logging.message("leftRelation Type", `====> defaultUnique : ${ERelations.defaultUnique}`).toDebugString());
                     if (rightRelation && rightRelation.type) {
                         switch (rightRelation.type) {
                             // ===> 1.4
@@ -304,6 +304,19 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                     link: `${formatPgTableColumn(rightEntity.table, rightKey)} = (SELECT ${formatPgTableColumn(leftEntity.table, leftKey)} FROM ${formatPgTableColumn(
                                         leftEntity.table
                                     )} WHERE ${formatPgTableColumn(leftEntity.table, leftKey)} =$ID)`,
+                                    expand: `${formatPgTableColumn(rightEntity.table, rightKey)} = ${formatPgTableColumn(leftEntity.table, leftKey)}`
+                                };
+                            // ===> 5.5
+                            case ERelations.hasOne:
+                                return {
+                                    type: `${leftRelation.type}.${rightRelation.type}`,
+                                    leftKey: leftKey,
+                                    rightKey: rightKey,
+                                    entity: leftEntity,
+                                    column: idColumnName(leftEntity, rightEntity) || "id",
+                                    link: `${formatPgTableColumn(rightEntity.table, rightKey)} = (SELECT ${formatPgTableColumn(leftEntity.table, leftKey)} FROM ${formatPgTableColumn(
+                                        leftEntity.table
+                                    )} WHERE ${formatPgTableColumn(leftEntity.table, rightKey)} =$ID)`,
                                     expand: `${formatPgTableColumn(rightEntity.table, rightKey)} = ${formatPgTableColumn(leftEntity.table, leftKey)}`
                                 };
                         }
