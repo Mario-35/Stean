@@ -9,10 +9,9 @@
 
 import { config } from "../../configuration";
 import { setDebug, setReplay } from "../../constants";
-import { EConstant, EFrom } from "../../enums";
+import { EConstant, EFrom, EHttpCode } from "../../enums";
 import { cleanUrl, getUrlKey, removeFromUrl } from "../../helpers";
 import { logging } from "../../log";
-import { errors } from "../../messages";
 import { IdecodedUrl, koaContext } from "../../types";
 //   service root URI                   resource path     query options
 // __________|______________________________|___________ _______|____________
@@ -50,8 +49,8 @@ export const decodeUrl = (ctx: koaContext, input?: string): IdecodedUrl | undefi
 
     // no service
     if (paths[0]) configName = configName || config.getConfigNameFromName(paths[0].toLowerCase());
-    else throw new Error(errors.noNameIdentified);
-
+    else ctx.throw(EHttpCode.notFound);
+    // else throw new Error(errors.noNameIdentified);
     // get getLinkBase from service
     if (configName) {
         const LinkBase = config.getInfos(ctx, configName);
