@@ -81,7 +81,10 @@ export const server = isTest()
     : // Production or dev init
       config
           .initialisation()
-          .then(async () => await config.afterInitialisation().then((e) => logging.logo().write(true)))
+          .then(() => {
+              config.afterInitialisation();
+              logging.logo().write(true);
+          })
           .catch((err) => {
               console.log(err);
           });

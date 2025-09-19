@@ -565,20 +565,21 @@ class Configuration {
      * @returns boolean when it's done
      */
 
-    async afterInitialisation(): Promise<boolean> {
-        await asyncForEach(Object.keys(Configuration.afterInit), async (service: string) => {
-            if (Configuration.afterInit[service])
+    afterInitialisation(): boolean {
+        asyncForEach(Object.keys(Configuration.afterInit), async (service: string) => {
+            if (Configuration.afterInit[service]) {
+                if (this.getService(service).options.includes(EOptions.speedCount)) {
+                    await this.connection(service)
+                        .unsafe(createTableCount)
+                        .then(async () => {
+                            const queries = models.upSertCountSql(service);
+                            if (queries) executeSql(this.getService(service), queries);
+                        })
+                        .catch((err) => logDbError(err));
+                }
                 executeSql(this.getService(service), Configuration.afterInit[service])
                     .then(() => {
                         logging.init(info.dbWorks, EColor.Magenta).status(true, service).write(true);
-                    })
-                    .catch((err) => logDbError(err));
-            if (this.getService(service).options.includes(EOptions.speedCount)) {
-                await this.connection(service)
-                    .unsafe(createTableCount)
-                    .then(async () => {
-                        const queries = models.upSertCountSql(service);
-                        if (queries) executeSql(this.getService(service), queries);
                     })
                     .catch((err) => logDbError(err));
             }
