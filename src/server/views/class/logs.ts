@@ -22,13 +22,6 @@ export class HtmlLogs extends CoreHtmlView {
         this.logs(fileContent);
     }
     private logs(message: string) {
-        this._HTMLResult = [
-            `<!DOCTYPE html>
-            <html>
-                <body style="background-color:#353535;">
-                    ${message}
-                </body>
-            </html>`
-        ];
+        this._HTMLResult = [message];
     }
 }

@@ -28,12 +28,12 @@ import { IdecodedUrl, koaContext } from "../../types";
  * @returns IdecodedUrl
  */
 export const decodeUrl = (ctx: koaContext, input?: string): IdecodedUrl | undefined => {
-    // get input
+    // get input.separator
     input = input || ctx.href;
     // debug mode
-    setDebug(input.includes("?$debug=true") || input.includes("&$debug=true"));
+    if (input.includes("?$debug=true") || input.includes("&$debug=true")) setDebug(true);
     setReplay(input.includes("?$replay=") || input.includes("&$replay=") ? getUrlKey(input, "replay") : undefined);
-    console.log(logging.whereIam(new Error().stack).toString());
+    console.log(logging.whereIam(new Error().stack));
     // decode url
     const url = new URL(
         cleanUrl(

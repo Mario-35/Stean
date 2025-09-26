@@ -12,13 +12,18 @@ import { logging } from "../../log";
 import { EChar } from "../../enums";
 import { OBSERVATION } from "../../models/entities";
 import { splitLast } from "../../helpers";
+import { _DEBUG } from "../../constants";
 
 export async function queryInsertFromCsv(service: Iservice, paramsFile: IcsvFile): Promise<{ count: number; query: string[] } | undefined> {
-    console.log(logging.whereIam(new Error().stack).toString());
+    console.log(logging.whereIam(new Error().stack));
     const sqlRequest = await columnsNameFromHydrasCsv(paramsFile);
     if (sqlRequest) {
         const stream = await streamCsvFile(service, paramsFile, sqlRequest);
-        console.log(logging.message(`COPY TO ${paramsFile.tempTable}`, stream > 0 ? EChar.ok : EChar.notOk).toString());
+        logging
+            .message(`COPY TO ${paramsFile.tempTable}`, stream > 0 ? EChar.ok : EChar.notOk)
+            .to()
+            .log()
+            .file();
         if (stream > 0) {
             const fileImport = splitLast(paramsFile.filename, "/");
             const dateImport = new Date().toLocaleString();

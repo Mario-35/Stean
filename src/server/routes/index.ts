@@ -9,7 +9,7 @@
 import { decodeToken } from "../authentication";
 import { _DEBUG } from "../constants";
 import { logging } from "../log";
-import { EHttpCode } from "../enums";
+import { EColor, EHttpCode } from "../enums";
 import { createBearerToken, returnFormats, splitLast } from "../helpers";
 import { adminRoute, decodeUrl, logsRoute, exportRoute, docRoute } from "./helper";
 import { errors } from "../messages";
@@ -59,8 +59,8 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     if (splitLast(ctx.path, "/").toLocaleUpperCase().startsWith("REPLAYS(")) {
         await config.trace.rePlay(ctx);
     }
-
-    if (_DEBUG) console.log(logging.message("decodedUrl", decodedUrl));
+    logging.debug().separator("decodeUrl", EColor.White, true).to().file().log();
+    logging.debug().message("decodedUrl", decodedUrl).to().file().log();
     // if service is not identified get out
     if (!decodedUrl.service) throw new Error(errors.noNameIdentified);
     // get service

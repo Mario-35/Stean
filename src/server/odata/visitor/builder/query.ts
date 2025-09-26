@@ -18,6 +18,7 @@ import { logging } from "../../../log";
 import { expand } from "../../../models/helpers";
 import { isAllowedTo, isTestEntity } from "../../../helpers/tests";
 import { createDefaultContext, createIentityColumnAliasOptions } from "../helper";
+import { _DEBUG } from "../../../constants";
 export class Query {
     from: string;
     where: Where;
@@ -29,7 +30,7 @@ export class Query {
     _pgQuery: IpgQuery | undefined = undefined;
 
     constructor() {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         this.where = new Where();
         this.select = new Select();
         this.orderBy = new OrderBy();
@@ -115,10 +116,11 @@ export class Query {
         }
         return returnValue;
     }
+
     // Create SQL Query
     private create(main: RootPgVisitor | PgVisitor, toWhere: boolean, _element?: PgVisitor): IpgQuery | undefined {
         const element = _element ? _element : main;
-        console.log(logging.whereIam(new Error().stack, "blank").toString());
+        console.log(logging.whereIam(new Error().stack));
         if (element.entity) {
             // get columns
             const select = toWhere === true ? ["id"] : this.columnList(element.entity.name, main, element);
@@ -149,6 +151,7 @@ export class Query {
                             }
                         });
                     // create all relations Query
+
                     if (toWhere === false)
                         relations
                             .filter((e) => e.includes("SELECT") || Object.keys(main.ctx.model).includes(models.getEntityName(main.ctx.service, e) || e))
@@ -160,17 +163,19 @@ export class Query {
                                     );
                                 }
                             });
+
                     const res = {
                         select: select.join(`,${EConstant.return}${EConstant.tab}${EConstant.tab}`),
                         from: [doubleQuotes(element.entity.table)],
                         where: element.query.where.toString(),
                         groupBy: element.query.groupBy.notNull() === true ? element.query.groupBy.toString() : undefined,
                         orderBy: element.query.orderBy.notNull() === true ? element.query.orderBy.toString() : element.entity.orderBy,
+                        join: element.joinOffset,
                         skip: element.skip,
                         limit: element.limit,
                         keys: this.keyNames.toArray(),
-                        count: element.ctx.service.options.includes(EOptions.speedCount)
-                            ? `SELECT nb FROM "row_counts" AS c WHERE "name" = '${element.entity.table}'`
+                        count: element.countOffset
+                            ? element.countOffset
                             : `SELECT COUNT(DISTINCT ${Object.keys(element.entity.columns)[0]}) AS "${EConstant.count}" FROM (SELECT ${Object.keys(element.entity.columns)[0]} FROM "${
                                   element.entity.table
                               }"${element.query.where.notNull() === true ? ` WHERE ${element.query.where.toString()}` : ""}) AS c`
@@ -183,17 +188,18 @@ export class Query {
         return undefined;
     }
     private pgQueryToString(input: IpgQuery | undefined): string | undefined {
+        const offsetJoin = input?.join?.includes("_index_") || false;
         return input
-            ? `SELECT ${input.select}${EConstant.return} FROM ${input.from}${EConstant.return} ${input.where ? `WHERE ${input.where}${EConstant.return}` : ""}${
+            ? `SELECT ${input.select}${EConstant.return} FROM ${input.from}${EConstant.return} ${input.join ? input.join : ""} ${input.where ? `WHERE ${input.where}${EConstant.return}` : ""}${
                   input.groupBy ? `GROUP BY ${cleanStringComma(input.groupBy)}${EConstant.return}` : ""
               }${input.orderBy ? `ORDER BY ${cleanStringComma(input.orderBy, ["ASC", "DESC"])}${EConstant.return}` : ""}${
-                  input.skip && input.skip > 0 ? `OFFSET ${input.skip}${EConstant.return}` : ""
-              } ${input.limit && input.limit > 0 ? `LIMIT ${input.limit}${EConstant.return}` : ""}`
+                  !offsetJoin && input.skip && input.skip > 0 ? `OFFSET ${input.skip}${EConstant.return}` : ""
+              } ${!offsetJoin && input.limit && input.limit > 0 ? `LIMIT ${input.limit}${EConstant.return}` : ""}`
             : undefined;
     }
 
     toWhere(main: RootPgVisitor | PgVisitor, _element?: PgVisitor): string {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         this._pgQuery = this.create(main, true, _element);
         if (this._pgQuery) {
             const query = `SELECT ${this._pgQuery.select}${EConstant.return} FROM ${this._pgQuery.from}${EConstant.return} ${
@@ -208,7 +214,7 @@ export class Query {
     }
 
     toString(main: RootPgVisitor | PgVisitor, _element?: PgVisitor): string {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         if (!this._pgQuery) this._pgQuery = this.create(main, false, _element);
         const query = this.pgQueryToString(this._pgQuery);
         if (query) return query;
@@ -216,7 +222,7 @@ export class Query {
     }
 
     toPgQuery(main: RootPgVisitor | PgVisitor, _element?: PgVisitor): IpgQuery | undefined {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         if (!this._pgQuery) this._pgQuery = this.create(main, false, _element);
         return this._pgQuery;
     }

@@ -9,7 +9,7 @@
 
 import { doubleQuotes, returnFormats } from "../../helpers/index";
 import { IreturnResult, keyobj, koaContext } from "../../types";
-import { removeKeyFromUrl } from "../helpers";
+import { executeSqlValues, removeKeyFromUrl } from "../helpers";
 import { getErrorCode, info } from "../../messages";
 import { logging } from "../../log";
 import { config } from "../../configuration";
@@ -27,7 +27,7 @@ export class Common {
     public linkBase: string;
 
     constructor(ctx: koaContext) {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         this.ctx = ctx;
         this.nextLinkBase = removeKeyFromUrl(`${this.ctx.decodedUrl.root}/${this.ctx.href.split(`${ctx.service.apiVersion}/`)[1]}`, ["top", "skip"]);
         this.linkBase = `${this.ctx.decodedUrl.root}/${this.constructor.name}`;
@@ -75,7 +75,7 @@ export class Common {
      * @returns IreturnResult
      */
     public formatReturnResult(args: Record<string, any>): IreturnResult {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         return {
             ...{
                 location: args[EConstant.selfLink] ? String(args[EConstant.selfLink]) : args.body && typeof args.body === "object" ? args.body[EConstant.selfLink] : undefined,
@@ -120,7 +120,7 @@ export class Common {
      * @returns IreturnResult | undefined
      */
     async getAll(): Promise<IreturnResult | undefined> {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         // create query
         let sql = this.ctx.odata.getSql();
         // Return results
@@ -135,8 +135,7 @@ export class Common {
                     this.ctx.attachment(`${this.ctx.odata.entity?.name || "export"}.csv`);
                     return this.formatReturnResult({ body: await config.connection(this.ctx.service.name).unsafe(sql).readable() });
                 default:
-                    return await config
-                        .executeSqlValues(this.ctx.service, sql)
+                    return await executeSqlValues(this.ctx.service, sql)
                         .then(async (res: Record<string, any>) => {
                             if (this.ctx.odata.returnFormat === returnFormats.dataArray) res[0] = +Object.entries(res[1][0]["dataArray"]).length;
                             return res[0] > 0
@@ -159,7 +158,7 @@ export class Common {
      * @returns IreturnResult | undefined
      */
     async getSingle(): Promise<IreturnResult | undefined> {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         // create query
         const sql = this.ctx.odata.getSql();
         // Return results
@@ -170,13 +169,12 @@ export class Common {
                     return this.formatReturnResult({ body: sql });
                 // return only GeoJSON values
                 case returnFormats.GeoJSON:
-                    return await config.executeSqlValues(this.ctx.service, sql).then((res: Record<string, any>) => {
+                    return await executeSqlValues(this.ctx.service, sql).then((res: Record<string, any>) => {
                         return this.formatReturnResult({ body: res[0] });
                     });
                 // json values
                 default:
-                    return await config
-                        .executeSqlValues(this.ctx.service, sql)
+                    return await executeSqlValues(this.ctx.service, sql)
                         .then((res: Record<string, any>) => {
                             if (this.ctx.odata.query.select && this.ctx.odata.onlyValue === true) {
                                 this.ctx.odata.returnFormat = typeof res[0] === "object" ? returnFormats.json : returnFormats.txt;
@@ -199,7 +197,7 @@ export class Common {
      * @returns IreturnResult
      */
     async addMultiLines(dataInput: Record<string, any> | undefined): Promise<IreturnResult | undefined> {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         // TODO
         // stop save to log cause if datainput too big
         if (this.ctx.log) this.ctx.log.datas = { datas: info.MultilinesNotSaved };
@@ -214,8 +212,7 @@ export class Common {
         // return results
         const results: Record<string, any>[] = [];
         // execute query
-        await config
-            .executeSqlValues(this.ctx.service, sqls.join(";"))
+        await executeSqlValues(this.ctx.service, sqls.join(";"))
             .then((res: Record<string, any>) => results.push(res[0 as keyobj]))
             .catch((error: Error) => {
                 console.log(error);
@@ -234,7 +231,7 @@ export class Common {
      * @returns IreturnResult
      */
     async post(dataInput: Record<string, any> | undefined): Promise<IreturnResult | undefined> {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
 
         // Format datas
         dataInput = this.formatDataInput(dataInput);
@@ -252,8 +249,7 @@ export class Common {
 
                 // JSON values
                 default:
-                    return await config
-                        .executeSqlValues(this.ctx.service, sql)
+                    return await executeSqlValues(this.ctx.service, sql)
                         .then((res: Record<string, any>) => {
                             if (res[0]) {
                                 if (res[0].duplicate)
@@ -282,13 +278,12 @@ export class Common {
      * @returns IreturnResult
      */
     async put(dataInput: Record<string, any> | undefined): Promise<IreturnResult | undefined> {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         if (dataInput && this.ctx.odata.entity) {
             // Format datas
             dataInput = this.formatDataInput(dataInput);
             if (dataInput)
-                return await config
-                    .executeSqlValues(this.ctx.service, `SELECT id FROM "${this.ctx.odata.entity.table}" WHERE "name" = '${dataInput["name" as keyof object]}'`)
+                return await executeSqlValues(this.ctx.service, `SELECT id FROM "${this.ctx.odata.entity.table}" WHERE "name" = '${dataInput["name" as keyof object]}'`)
                     .then((res) => {
                         // search id from name
                         this.ctx.odata.id = res[0 as keyof object];
@@ -310,7 +305,7 @@ export class Common {
      * @returns IreturnResult
      */
     async update(dataInput: Record<string, any> | undefined): Promise<IreturnResult | undefined> {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
 
         // Format datas
         dataInput = this.formatDataInput(dataInput);
@@ -327,8 +322,7 @@ export class Common {
                     return this.formatReturnResult({ body: sql });
                 // JSON values
                 default:
-                    return await config
-                        .executeSqlValues(this.ctx.service, sql)
+                    return await executeSqlValues(this.ctx.service, sql)
                         .then((res: Record<string, any>) => {
                             if (res[0]) {
                                 return this.formatReturnResult({
@@ -351,7 +345,7 @@ export class Common {
      * @returns IreturnResult
      */
     async delete(idInput: bigint | string): Promise<IreturnResult | undefined> {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         // create Query
         const sql = `DELETE FROM ${doubleQuotes(this.ctx.model[this.constructor.name].table)} WHERE "id" = ${idInput} RETURNING id`;
         // Return results
@@ -362,8 +356,7 @@ export class Common {
             // JSON values
             default:
                 return this.formatReturnResult({
-                    body: await config
-                        .executeSqlValues(this.ctx.service, sql)
+                    body: await executeSqlValues(this.ctx.service, sql)
                         .then((res) => res)
                         .catch(() => BigInt(0))
                 });

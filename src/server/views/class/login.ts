@@ -6,6 +6,7 @@
  *
  */
 
+import { _DEBUG } from "../../constants";
 import { logging } from "../../log";
 import { info } from "../../messages";
 import { Idatas, koaContext } from "../../types";
@@ -17,7 +18,7 @@ import { CoreHtmlView } from "./core";
 
 export class Login extends CoreHtmlView {
     constructor(ctx: koaContext, datas: Idatas) {
-        console.log(logging.whereIam(new Error().stack, "View").toString());
+        console.log(logging.whereIam(new Error().stack));
         super(ctx, datas);
         this.login(datas);
     }

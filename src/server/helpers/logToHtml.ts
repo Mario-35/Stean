@@ -26,15 +26,15 @@ export function logToHtml(input: string): string {
             "[31m": col("FF0000"), // Red
             "[32m": col("00FF00"), // Green
             "[33m": col("FFFF00"), // Yellow
-            "[34m": col("0000FF"), // Blue
-            "[35m": col("FF00FF"), // Magenta
+            "[34m": col("85D076"), // Blue
+            "[35m": col("0FA2DB"),
             "[36m": col("00FFFF"), // Cyan
             "[37m": col("FFFFFF"), // White
             "[39m": col("FFFFFF"), // White
             "[90m": col("DBA57D"), // Orange
             "[91m": col("FFFFFF"), // Logo
-            "[93m": col("DB61D9"), // Magenta
-            "[95m": col("DB61D9"), // Rose
+            "[93m": col("CFFF89"),
+            "[95m": col("00FFFF"),
             "[0m": "",
             "[1m": '<span style="font-weight:bold;">',
             "[22m": "</span>",

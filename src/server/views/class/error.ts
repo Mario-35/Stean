@@ -6,6 +6,7 @@
  *
  */
 
+import { _DEBUG } from "../../constants";
 import { logging } from "../../log";
 import { Idatas, koaContext } from "../../types";
 import { CoreHtmlView } from "./core";
@@ -16,7 +17,7 @@ import { CoreHtmlView } from "./core";
 
 export class HtmlError extends CoreHtmlView {
     constructor(ctx: koaContext, datas: Idatas) {
-        console.log(logging.whereIam(new Error().stack, "View").toString());
+        console.log(logging.whereIam(new Error().stack));
         super(ctx, datas);
         this.error(datas.message, datas.url);
     }

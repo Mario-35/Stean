@@ -13,7 +13,7 @@ import { logging } from "../../log";
 import { Ientity } from "../../types";
 
 export function createUpdateValues(entity: Ientity, input: Record<string, any>): string {
-    console.log(logging.whereIam(new Error().stack).toString());
+    console.log(logging.whereIam(new Error().stack));
     return Object.keys(input)
         .map(
             (elem: string) =>

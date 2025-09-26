@@ -9,9 +9,10 @@
 import fs from "fs";
 import readline from "readline";
 import { logging } from "../../log";
+import { _DEBUG } from "../../constants";
 
 export const getColumnsNamesFromCsvFile = async (filename: string): Promise<string[] | undefined> => {
-    console.log(logging.whereIam(new Error().stack).toString());
+    console.log(logging.whereIam(new Error().stack));
     const fileStream = fs.createReadStream(filename);
     const rl = readline.createInterface({
         input: fileStream,

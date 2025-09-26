@@ -22,7 +22,6 @@ export { resultKeys } from "./resultKeys";
 export { multiDatastreamUoM } from "./multiDatastreamUoM";
 export const createExtension = (name: string): string => `CREATE EXTENSION IF NOT EXISTS ${name}`;
 export const createTableService = `CREATE TABLE public.services ( "name" text NOT NULL, "datas" jsonb NULL, CONSTRAINT services_unik_name UNIQUE (name) ); CREATE INDEX services_name ON public.services USING btree (name);`;
-export const createTableCount = `CREATE TABLE IF NOT EXISTS "row_counts" (name text PRIMARY KEY, nb bigint);`;
 export const drop = (table: string): string => `DROP TABLE "${table}";`;
 export const createTrigger = (table: string, triggerName: string): string =>
     `CREATE TRIGGER "${table}_${triggerName}" BEFORE INSERT OR DELETE ON "${table}" FOR EACH ROW EXECUTE PROCEDURE ${triggerName}();`;

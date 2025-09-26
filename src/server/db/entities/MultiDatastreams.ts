@@ -12,15 +12,16 @@ import { errors, msg } from "../../messages/";
 import { logging } from "../../log";
 import { MULTIDATASTREAM } from "../../models/entities";
 import { EHttpCode } from "../../enums";
+import { _DEBUG } from "../../constants";
 
 export class MultiDatastreams extends Common {
     constructor(ctx: koaContext) {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         super(ctx);
     }
 
     formatDataInput(input: Record<string, any> | undefined): Record<string, any> | undefined {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         if (!input) this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.noData });
         const temp = this.getKeysValue(input, ["FeaturesOfInterest", "foi"]);
         if (temp) input["_default_featureofinterest"] = temp;

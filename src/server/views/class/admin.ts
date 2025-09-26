@@ -7,6 +7,7 @@
  */
 
 import { config } from "../../configuration";
+import { _DEBUG } from "../../constants";
 import { EConstant, EExtensions, enumKeys, EOptions } from "../../enums";
 import { removeAllQuotes } from "../../helpers";
 import { logging } from "../../log";
@@ -25,7 +26,7 @@ import path from "path";
 
 export class Admin extends CoreHtmlView {
     constructor(ctx: koaContext, datas: Idatas) {
-        console.log(logging.whereIam(new Error().stack, "View").toString());
+        console.log(logging.whereIam(new Error().stack));
         super(ctx, datas);
         this.init();
     }
@@ -115,7 +116,6 @@ export class Admin extends CoreHtmlView {
                             <li class="card-list-item canPoint icon-${services[e].service.options.includes(EOptions.canDrop) ? "yes" : "no"}" onclick="selectChange('${e}', this)">canDrop</li>
                             <li class="card-list-item canPoint icon-${services[e].service.options.includes(EOptions.forceHttps) ? "yes" : "no"}" onclick="selectChange('${e}', this)">forceHttps</li>
                             <li class="card-list-item canPoint icon-${services[e].service.options.includes(EOptions.stripNull) ? "yes" : "no"}" onclick="selectChange('${e}', this)">stripNull</li>
-                            <li class="card-list-item canPoint icon-${services[e].service.options.includes(EOptions.speedCount) ? "yes" : "no"}" onclick="selectChange('${e}', this)">speedCount</li>
                             <li class="card-list-item canPoint icon-${services[e].service.options.includes(EOptions.unique) ? "yes" : "no"}" onclick="selectChange('${e}', this)">unique</li>
                         </ul>
                     </fieldset>

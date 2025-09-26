@@ -6,12 +6,13 @@
  *
  */
 
+import { _DEBUG } from "../constants";
 import { logging } from "../log";
 import { errors } from "../messages";
 import { ILoraDecodingResult } from "../types";
 
 export const decodingPayload = (decoder: { name: string; code: string; nomenclature: string }, payload: string): ILoraDecodingResult | undefined => {
-    console.log(logging.head("decodingPayload").toString());
+    console.log(logging.debug().head("decodingPayload").to().text());
     try {
         const F = new Function("input", "nomenclature", `${String(decoder.code)}; return decode(input, nomenclature);`);
         let nomenclature = "";

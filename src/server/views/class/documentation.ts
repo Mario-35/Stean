@@ -7,6 +7,7 @@
  */
 
 import { config } from "../../configuration";
+import { _DEBUG } from "../../constants";
 import { EConstant, EExtensions, enumKeys, EOptions } from "../../enums";
 import { removeAllQuotes } from "../../helpers";
 import { logging } from "../../log";
@@ -25,7 +26,7 @@ import path from "path";
 
 export class Documentation extends CoreHtmlView {
     constructor(ctx: koaContext, datas: Idatas) {
-        console.log(logging.whereIam(new Error().stack, "View").toString());
+        console.log(logging.whereIam(new Error().stack));
         super(ctx, datas);
         this.documentationHtml();
     }

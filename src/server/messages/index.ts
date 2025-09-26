@@ -6,7 +6,7 @@
  *
  */
 
-import { color, EColor, EConstant, EHttpCode } from "../enums";
+import { EColor, EConstant, EHttpCode } from "../enums";
 import jsonErrors from "./error.json";
 import jsonInfos from "./infos.json";
 export const msg = (...args: string[]) => {
@@ -22,4 +22,4 @@ export const getErrorCode = (err: Error | any, actual: number): number => {
     return actual;
 };
 
-export const errorMessage = (message: string) => process.stdout.write(`${color(EColor.Red)} ------ERROR------${message} ${color(EColor.Reset)}` + EConstant.return);
+export const errorMessage = (message: string) => process.stdout.write(`\x1b[${EColor.Red}m ------ERROR------${message} \x1b[${EColor.Reset}m` + EConstant.return);

@@ -14,16 +14,17 @@ import { createService } from "../helpers";
 import { userAuthenticated } from "../../authentication";
 import { logging } from "../../log";
 import { EExtensions, EHttpCode } from "../../enums";
+import { _DEBUG } from "../../constants";
 
 export class Services extends Common {
     constructor(ctx: koaContext) {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         super(ctx);
     }
 
     // Override Get All serwices
     async getAll(): Promise<IreturnResult | undefined> {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         let can = userAuthenticated(this.ctx);
         if (can) {
             can = this.ctx.user.PDCUAS[4] === true;
@@ -46,7 +47,7 @@ export class Services extends Common {
 
     // Override Get One serwice
     async getSingle(): Promise<IreturnResult | undefined> {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         // Return result If not authorised
         if (!userAuthenticated(this.ctx)) this.ctx.throw(EHttpCode.Unauthorized);
         // Return result
@@ -57,7 +58,7 @@ export class Services extends Common {
 
     // Override Post service
     async post(dataInput: Record<string, any> | undefined): Promise<IreturnResult | undefined> {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         if (!this.ctx.service.extensions.includes(EExtensions.users)) this.ctx.throw(EHttpCode.Unauthorized);
         if (dataInput && dataInput["create"] && dataInput["create"]["name"]) {
             return this.formatReturnResult({
@@ -76,14 +77,14 @@ export class Services extends Common {
 
     // Override Update service
     async update(dataInput: Record<string, any> | undefined): Promise<IreturnResult | undefined> {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         // This function not exists
         return;
     }
 
     // Override Delete service
     async delete(idInput: bigint | string): Promise<IreturnResult | undefined> {
-        console.log(logging.whereIam(new Error().stack, String(idInput)).toString());
+        console.log(logging.whereIam(new Error().stack));
         // This function not exists
         return;
     }

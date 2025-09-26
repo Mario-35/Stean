@@ -21,7 +21,7 @@ import { Iservice } from "../../types";
  * @returns string
  */
 export function createInsertValues(ctxService: Iservice | undefined, input: Record<string, any>, entityName?: string): string {
-    console.log(logging.whereIam(new Error().stack).toString());
+    console.log(logging.whereIam(new Error().stack));
     if (input) {
         const keys: string[] = [];
         const values: string[] = [];

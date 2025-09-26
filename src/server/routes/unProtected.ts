@@ -7,7 +7,7 @@
  */
 import Router from "koa-router";
 import { userAuthenticated, getAuthenticatedUser } from "../authentication";
-import { _DEBUG, _READY } from "../constants";
+import { _DEBUG } from "../constants";
 import { getUrlKey, isAdmin, returnFormats } from "../helpers";
 import { apiAccess } from "../db/dataAccess";
 import { IreturnResult } from "../types";
@@ -16,7 +16,7 @@ import { createOdata } from "../odata";
 import { info } from "../messages";
 import { config } from "../configuration";
 import { createDatabase, testDatas } from "../db/createDb";
-import { disconnectDb, exportService } from "../db/helpers";
+import { disconnectDb, executeSql, exportService } from "../db/helpers";
 import { models } from "../models";
 import { testRoute } from "./helper";
 import { createService } from "../db/helpers";
@@ -123,7 +123,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
             let sql = getUrlKey(ctx.request.url, "query");
             if (sql) {
                 sql = atob(sql);
-                const resultSql = await config.executeSql(sql.includes("log_request") ? config.getService(EConstant.admin) : ctx.service, sql);
+                const resultSql = await executeSql(sql.includes("log_request") ? config.getService(EConstant.admin) : ctx.service, sql);
                 ctx.status = EHttpCode.created;
                 ctx.body = [resultSql];
             }
@@ -141,7 +141,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
         // Create DB test
         case "CREATE":
             if (ctx.decodedUrl.service === EConstant.test) {
-                console.log(logging.head("Create service").toString());
+                console.log(logging.debug().head("Create service").to().text());
                 try {
                     (ctx.body = await createService(ctx.service, testDatas)), (ctx.status = EHttpCode.created);
                 } catch (error) {
@@ -153,7 +153,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
             ctx.throw(EHttpCode.notFound);
         // Drop DB
         case "DROP":
-            console.log(logging.head("drop database"));
+            console.log(logging.debug().head("drop database").to().text());
             if (ctx.service.options.includes(EOptions.canDrop).toString()) {
                 await disconnectDb(ctx.service.pg.database, true);
                 try {
@@ -181,7 +181,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
 
     // API GET REQUEST
     if (ctx.decodedUrl.path.includes(ctx.service.apiVersion) || ctx.decodedUrl.version) {
-        console.log(logging.head(`unProtected GET ${ctx.service.apiVersion}`).toString());
+        console.log(logging.debug().head(`unProtected GET ${ctx.service.apiVersion}`).to().text());
         // decode odata url infos
         const odataVisitor = await createOdata(ctx);
 
@@ -191,7 +191,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
                 ctx.body = { values: [] };
                 return;
             }
-            console.log(logging.head(`GET ${ctx.service.apiVersion}`).toString());
+            console.log(logging.debug().head(`GET ${ctx.service.apiVersion}`).to().text());
             // Create api object
             const objectAccess = new apiAccess(ctx);
             if (objectAccess) {
@@ -229,7 +229,6 @@ unProtectedRoutes.put("/(.*)", async (ctx) => {
 
     if (ctx.request.url.includes("/synonyms")) {
         if (ctx.request.type.startsWith("application/json") && Object.keys(ctx.body).length > 0) {
-            console.log(ctx.body);
             ctx.service.synonyms = ctx.body;
             ctx.body = await config.updateConfig(ctx.service);
         }

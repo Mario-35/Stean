@@ -15,6 +15,7 @@ import { logging } from "../../log";
 import { createRole } from "../helpers/createRole";
 import { createExtension } from "../queries";
 import { pgFunctions } from ".";
+import { _DEBUG } from "../../constants";
 
 /**
  *
@@ -23,7 +24,7 @@ import { pgFunctions } from ".";
  */
 
 export const createDatabase = async (serviceName: string): Promise<Record<string, string>> => {
-    console.log(logging.head(`createDatabase [${serviceName}]`).toString());
+    console.log(logging.debug().head(`createDatabase [${serviceName}]`).to().text());
 
     // init result
     const servicePg = config.getService(serviceName).pg;
@@ -83,6 +84,11 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
         .then(() => EChar.ok)
         .catch((err: Error) => err.message);
 
+    await dbConnection
+        .unsafe("SET client_min_messages TO INFO;")
+        .then(() => EChar.ok)
+        .catch((err: Error) => err.message);
+
     // Get complete model
     const DB = models.DBFullCreate(serviceName);
 
@@ -91,7 +97,7 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
         Object.keys(DB).filter((e) => e.trim() !== ""),
         async (keyName: string) => {
             const res = await createTable(serviceName, DB[keyName], undefined);
-            Object.keys(res).forEach((e: string) => logging.message(e, res[e]));
+            Object.keys(res).forEach((e: string) => logging.debug().message(e, res[e]));
         }
     );
 
@@ -111,7 +117,7 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
         await dbConnection
             .unsafe(query)
             .then(() => {
-                logging.message(name, EChar.ok);
+                logging.debug().message(name, EChar.ok);
             })
             .catch((error: Error) => {
                 console.log(error);

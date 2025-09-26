@@ -13,6 +13,7 @@ export interface IpgQuery {
     count?: string;
     where?: string;
     orderBy?: string;
+    join?: string;
     groupBy?: string;
     skip?: number;
     limit?: number;

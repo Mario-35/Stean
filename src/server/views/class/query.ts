@@ -6,6 +6,7 @@
  *
  */
 
+import { _DEBUG } from "../../constants";
 import { EConstant } from "../../enums";
 import { removeAllQuotes } from "../../helpers";
 import { logging } from "../../log";
@@ -28,7 +29,7 @@ export class Query extends CoreHtmlView {
         this.createQueryHtmlString();
     }
     createQueryHtmlString() {
-        console.log(logging.head("commonHtml").toString());
+        console.log(logging.whereIam(new Error().stack));
         // if js or css .min
         const fileWithOutMin = (input: string): string => input.replace(".min", "");
         // Split files for better search and replace

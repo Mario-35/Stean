@@ -71,19 +71,24 @@ app.use(cors());
 app.use(unProtectedRoutes.routes());
 // authenticated routes
 app.use(protectedRoutes.routes());
+
 // Start server initialisaion
 export const server = isTest()
     ? // Test-driven development init
       app.listen(config.getService(EConstant.admin).ports?.http || 8029, async () => {
           await disconnectDb(EConstant.test, true);
-          console.log(logging.message(`${EConstant.appName} version : ${appVersion}`, "ready " + EChar.ok).write(true));
+          logging
+              .message(`${EConstant.appName} version : ${appVersion}`, "ready " + EChar.ok)
+              .to()
+              .log()
+              .file();
       })
     : // Production or dev init
       config
           .initialisation()
-          .then(() => {
-              config.afterInitialisation();
-              logging.logo().write(true);
+          .then(async () => {
+              await config.afterInitialisation();
+              logging.logo().to().log().file();
           })
           .catch((err) => {
               console.log(err);

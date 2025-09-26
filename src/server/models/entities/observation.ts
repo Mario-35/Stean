@@ -22,8 +22,8 @@ export const OBSERVATION: Ientity = new Entity("Observations", {
         resultQuality: new Jsonb().column(),
         validTime: new Period("tz").column(),
         parameters: new Jsonb().column(),
-        datastream_id: new Relation("Datastreams").addIndexes(["phenomenonTime", "resultTime"]).column(),
-        multidatastream_id: new Relation("MultiDatastreams").addIndexes(["phenomenonTime", "resultTime"]).column(),
+        datastream_id: new Relation("Datastreams").addIndexes(["phenomenonTime", "resultTime"]).partition().column(),
+        multidatastream_id: new Relation("MultiDatastreams").addIndexes(["phenomenonTime", "resultTime"]).partition().column(),
         featureofinterest_id: new Relation("FeaturesOfInterest").addIndexes(["phenomenonTime", "resultTime"]).notNull().default(1).column()
     },
     relations: {

@@ -7,7 +7,7 @@
  */
 
 import { config } from "../../configuration";
-import { appVersion } from "../../constants";
+import { _DEBUG, appVersion } from "../../constants";
 import { EConstant } from "../../enums";
 import { decrypt } from "../../helpers";
 import { logging } from "../../log";
@@ -27,7 +27,7 @@ export class CoreHtmlView {
     adminConnection: boolean = false;
 
     constructor(ctx: koaContext, datas: Idatas) {
-        console.log(logging.whereIam(new Error().stack, "View").toString());
+        console.log(logging.whereIam(new Error().stack));
         this.ctx = ctx;
         this.datas = datas;
         this.message = datas.message;

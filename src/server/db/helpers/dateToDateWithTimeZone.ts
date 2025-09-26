@@ -6,10 +6,11 @@
  *
  */
 
+import { _DEBUG } from "../../constants";
 import { logging } from "../../log";
 
 export const dateToDateWithTimeZone = (value: string) => {
-    console.log(logging.whereIam(new Error().stack).toString());
+    console.log(logging.whereIam(new Error().stack));
     //Create Date object from ISO string
     const date = new Date(value);
     //Get ms for date

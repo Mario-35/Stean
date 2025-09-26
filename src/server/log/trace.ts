@@ -13,6 +13,7 @@ import postgres from "postgres";
 import { logging } from ".";
 import { EConstant, EEncodingType } from "../enums";
 import { FORMAT_JSONB } from "../db/constants";
+import { errors } from "../messages";
 
 /**
  * Class to trace requests
@@ -45,7 +46,7 @@ export class Trace {
      * @param ctx koa context
      */
     async write(ctx: koaContext) {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         if (ctx.request.url.includes("Replays(") || ctx.request.url.includes("$replay=") || _REPLAY) return;
         if (ctx.method !== "GET") {
             const datas = this.query(ctx);
@@ -74,7 +75,7 @@ export class Trace {
      * @param ctx koa context
      */
     async error(ctx: koaContext, error: any) {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         if (ctx.request.url.includes("Replays(")) return;
         try {
             await Trace.adminConnection.unsafe(_REPLAY ? this.queryReplay(ctx, error) : this.query(ctx, error));
@@ -93,7 +94,7 @@ export class Trace {
                 })
                 .catch((err: Error) => {
                     if (!isTest() && +err["code" as keyof object] === 23505) {
-                        logging.queryError(query, err).write(true);
+                        logging.debug().error(errors.execQuery, query).to().log().file();
                     }
                     reject(err);
                 });
@@ -110,7 +111,7 @@ export class Trace {
                 })
                 .catch((err: Error) => {
                     if (!isTest() && +err["code" as keyof object] === 23505) {
-                        logging.queryError(query, err).write(true);
+                        logging.debug().error(errors.execQuery, query).to().log().file();
                     }
                     reject(err);
                 });
@@ -118,7 +119,7 @@ export class Trace {
     }
 
     async rePlay(ctx: koaContext): Promise<boolean> {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         await this.get(`SELECT * FROM log WHERE id=${ctx.decodedUrl.id}`).then(async (input: Record<string, any>) => {
             if (["POST", "PUT", "PATCH"].includes(input.method)) {
                 // const id = getBigIntFromString(input.url );

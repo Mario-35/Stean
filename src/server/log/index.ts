@@ -1,91 +1,134 @@
 import { _DEBUG, appVersion, timestampNow } from "../constants";
-import { color, EChar, EColor, EConstant } from "../enums";
+import { EChar, EColor, EConstant } from "../enums";
 import util from "util";
 import { logToHtml } from "../helpers";
 import { paths } from "../paths";
+import { info } from "../messages";
 
-// class to logCreate configs environements
-class Logging {
-    static _s: string = "";
+export class LoggingResult {
+    _toFile: string | undefined = undefined;
+    _toString: string | undefined = undefined;
 
-    init(input?: string, col?: number) {
+    constructor(input: string) {
+        if (input.trim() !== "") {
+            this._toFile = logToHtml(input);
+            this._toString = input + `\x1b[${EColor.Reset}m${EConstant.return}`;
+        }
         Logging._s = "";
-        if (input) this.text(input, col);
+    }
+
+    file() {
+        if (this._toFile) paths.logFile.writeStream(this._toFile);
         return this;
     }
 
+    log() {
+        if (this._toString) process.stdout.write(this._toString);
+        return this;
+    }
+
+    text() {
+        return this._toString;
+    }
+
+    result(test: boolean) {
+        return test;
+    }
+}
+
+// class to logCreate configs environements
+export class Logging {
+    static _s: string;
+    static can: boolean = false;
+    init(state: boolean = true) {
+        Logging._s = "";
+        Logging.can = state;
+        return this;
+    }
+
+    private add(input: any) {
+        if (input) Logging._s += input;
+    }
+
+    debug(force?: boolean) {
+        Logging.can = force || _DEBUG;
+        return this;
+    }
+
+    return() {
+        this.add(EConstant.return);
+    }
+
     color(col?: number) {
-        Logging._s += `\x1b[${col || EColor.White}m`;
+        this.add(`\x1b[${col || EColor.White}m`);
         return this;
     }
 
     text(text: string, col?: number) {
         this.color(col);
-        Logging._s += this.objet(text);
+        this.add(this.objet(text));
         return this;
     }
 
     line(nb: number, col?: number) {
         this.color(col);
-        Logging._s += "▬".repeat(nb);
+        this.add("■".repeat(nb));
         return this;
     }
 
     space(text?: string) {
-        Logging._s += text ? ` ${text} ` : " ";
+        this.add(text ? ` ${text} ` : " ");
         return this;
     }
 
-    whereIam(input: string | undefined, infos?: string) {
-        Logging._s = "";
-        if (_DEBUG) {
-            this.color(EColor.Logo);
-            Logging._s += "===> ";
+    head<T>(cle: string) {
+        this.init(Logging.can);
+        if (Logging.can === true) {
+            this.line(12, EColor.Blue);
+            this.color(EColor.White);
+            this.space(cle);
+            this.line(12, EColor.Blue);
+        }
+        return this;
+    }
+
+    whereIam(input?: string) {
+        // important to preserve catch console log error
+        if (_DEBUG === true) {
+            this.init(Logging.can);
+            this.text("■■■► ", EColor.Red);
             this.message(
                 new Error().stack?.split(EConstant.return)[2].trim().split("(")[0].split("at ")[1].trim() || "Error",
                 input?.split(EConstant.return)[2].trim().split("(")[0].split("at ")[1].trim(),
                 "FROM"
             );
-            if (infos) this.space(infos);
-            this.color(EColor.Logo);
-            Logging._s += " <===";
+            this.text(" ◀■■■", EColor.Red);
+            return this.to().text();
         }
-        return this;
-    }
-
-    toDebugString() {
-        if (_DEBUG) {
-            const tmp = Logging._s;
-            Logging._s = "";
-            return tmp;
-        }
-    }
-    toString() {
-        const tmp = Logging._s;
-        Logging._s = "";
-        return tmp;
+        return undefined;
     }
 
     sep(input?: string, col?: number) {
         this.color(col || EColor.Cyan);
-        Logging._s += ` ${input || ":"} `;
+        this.add(` ${input || ":"} `);
         return this;
     }
 
     date(col?: number) {
         this.color(col || EColor.Green);
-        Logging._s += ` ${new Date().toLocaleDateString()} : ${timestampNow()} `;
+        this.add(` ${new Date().toLocaleDateString()} : ${timestampNow()} `);
         return this;
     }
 
-    separator(title: string, col?: number) {
-        Logging._s = this.init()
-            .line(20, col || EColor.Red)
-            .space()
-            .text(title)
-            .space()
-            .line(20, col || EColor.Red)
-            .toString();
+    separator(title: string, col: number = EColor.Cyan, end?: boolean) {
+        this.init(Logging.can);
+        if (Logging.can === true) {
+            if (end) this.text("◀", col);
+            this.line(20, col);
+            this.space(title);
+            this.line(20, col);
+            if (end) this.text("► ");
+        }
         return this;
     }
 
@@ -93,11 +136,12 @@ class Logging {
         return typeof input === "object" ? util.inspect(input, { showHidden: false, depth: null, colors: true }) : input;
     }
 
-    error<T>(cle: unknown, infos?: T) {
-        this.init(String(cle), EColor.Cyan);
-        this.sep();
-        this.color(EColor.Magenta);
-        if (infos) this.objet(infos);
+    // function to be used in catch
+
+    error<T>(message: string = "Error", error: T) {
+        this.separator(message, EColor.Red);
+        this.return();
+        this.add(this.objet(error));
         return this;
     }
 
@@ -108,25 +152,23 @@ class Logging {
      * @returns formated string
      */
     public message<T>(cle: string, infos: T, sep?: string) {
-        this.text(cle, EColor.Green).sep(sep).color(EColor.White);
-        Logging._s += this.objet(infos);
+        if (Logging.can === true) {
+            this.text(cle, EColor.Green);
+            this.sep(sep);
+            this.color(EColor.White);
+            this.add(this.objet(infos));
+        }
         return this;
     }
 
     write(test: boolean) {
         if (test === true && Logging._s) {
             const tmp = this.toString();
-            if (tmp) {
-                process.stdout.write(tmp + EConstant.return);
-                // write in stream file
-                paths.logFile.writeStream(logToHtml(tmp + EConstant.return));
-            }
+            process.stdout.write(tmp + EConstant.return);
+            // write in stream file
+            paths.logFile.writeStream(logToHtml(tmp + EConstant.return));
         }
         return this;
-    }
-
-    result(test: boolean) {
-        return test;
     }
 
     /**
@@ -135,60 +177,71 @@ class Logging {
      * @returns formated string
      */
     public query(src: string, sql: unknown) {
-        if (_DEBUG) {
-            this.separator("[ Query " + src + " ]");
-            Logging._s += EConstant.return;
-            this.color(EColor.Cyan);
-            Logging._s += this.objet(sql);
+        this.init(Logging.can);
+        if (Logging.can === true) {
+            this.separator("[ Query " + src + " ]", EColor.Blue);
+            this.add(EConstant.return);
+            this.color(EColor.Sql);
+            this.add(this.objet(sql));
         }
         return this;
     }
 
-    /**
-     * format Sql error
-     *
-     * @param query sql query
-     * @param error error message
-     * @returns formated string
-     */
-    public queryError<T>(query: unknown, error: T) {
-        this.separator("ERROR");
-        Logging._s += this.objet(error);
-        Logging._s += this.objet(query);
-        return this;
-    }
-
-    head<T>(cle: string, col: number = EColor.Cyan) {
-        Logging._s = "";
-        if (_DEBUG) {
-            this.line(12, col);
-            this.color(EColor.White);
-            this.space(cle);
-            this.line(12, col);
-        }
+    start() {
+        this.init();
+        this.line(20, EColor.Magenta);
+        this.color(EColor.Cyan);
+        this.space(`START ${EConstant.appName} ${info.ver} : ${appVersion.version}`);
+        this.text("du");
+        this.color(EColor.Yellow);
+        this.space(`${appVersion.date} [${process.env.NODE_ENV}]`);
+        this.line(20, EColor.Magenta);
         return this;
     }
 
     logo() {
-        Logging._s =
-            `${color(EColor.Code)}${color(EColor.Sql)}${EConstant.return} ____ __________    _     _   _ ${EConstant.return}/ ___|_ __  ____|  / \\   | \\ | |${
-                EConstant.return
-            }\\___ \\| | |  _|   / _ \\  |  \\| |${EConstant.return} ___) | | | |___ / ___ \\ | |\\  |${EConstant.return}|____/|_| |_____|_/   \\_\\|_| \\_|  ${color(EColor.Blue)}run API ${
-                EChar.arrowright
-            } ${color(EColor.Green)} ${appVersion.version} du ${appVersion.date} ${color(EColor.Sql)}${color(EColor.Code)}${EConstant.return}${EChar.web} ${color(
-                EColor.White
-            )}https://github.com/Mario-35/Stean/ ${EChar.mail} ${color(EColor.Yellow)} mario.adam@inrae.fr${color(EColor.Reset)}` + EConstant.return;
+        this.color(EColor.Blue);
+        this.return();
+        this.text(` ____ __________    _     _   _`, EColor.Green);
+        this.return();
+        this.text(`/ ___|_ __  ____|  / \\   | \\ | |`, EColor.Green);
+        this.return();
+        this.text(`\\___ \\| | |  _|   / _ \\  |  \\| |`, EColor.Green);
+        this.return();
+        this.text(` ___) | | | |___ / ___ \\ | |\\  |`, EColor.Green);
+        this.return();
+        this.text(`|____/|_| |_____|_/   \\_\\|_| \\_|`, EColor.Green);
+        this.space();
+        this.text(`run API ${EChar.arrowright}`, EColor.Blue);
+        this.text(` ${appVersion.version} du ${appVersion.date}`, EColor.Green);
+        this.return();
+        this.space(EChar.web);
+        this.text("https://github.com/Mario-35/Stean/", EColor.White);
+        this.space(EChar.mail);
+        this.text("mario.adam@inrae.fr", EColor.Yellow);
+        this.return();
         return this;
     }
 
-    status(test: boolean, cle: string) {
-        Logging._s += "    ";
-        this.color(EColor.Sql);
-        this.space(EChar.arrowright);
+    to() {
+        return new LoggingResult(Logging.can === true ? Logging._s : "");
+    }
+
+    status(test: boolean, cle: string, car: string = EChar.arrowright) {
+        this.init();
+        this.text(" ".repeat(4));
+        this.color(EColor.Blue);
+        this.space(car);
         this.color(EColor.Default);
         this.space(cle);
-        this.space(test ? EChar.ok : EChar.notOk);
+        this.text(test ? EChar.ok : EChar.notOk);
         return this;
+    }
+
+    force(data: any) {
+        this.init(true);
+        this.add(this.objet(data));
+        process.stdout.write(Logging._s + `\x1b[${EColor.Reset}m${EConstant.return}`);
     }
 }
 export const logging = new Logging();

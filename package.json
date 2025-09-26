@@ -3,7 +3,7 @@
     "description": "SensorThings Enhanced API Node",
     "author": "Adam Mario",
     "license": "ISC",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "lockfileVersion": 1,
     "requires": true,
     "repository": {
@@ -14,6 +14,7 @@
         "------DEV-----": "",
         "find-deadcode": "ts-prune",
         "dev": "nodemon --inspect ./src/server/index.ts",
+        "devDebug": "nodemon --inspect ./src/server/index.ts debug",
         "debug": "nodemon",
         "lint": "tsc --noEmit && eslint \"./src/server/**/*.{js,ts}\" --quiet --fix",
         "prettier-format": "prettier --config .prettierrc ./src/server/**/*.ts --write",

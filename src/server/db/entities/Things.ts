@@ -6,13 +6,14 @@
  *
  */
 
+import { _DEBUG } from "../../constants";
 import { logging } from "../../log";
 import { koaContext } from "../../types";
 import { Common } from "./common";
 
 export class Things extends Common {
     constructor(ctx: koaContext) {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         super(ctx);
     }
 }

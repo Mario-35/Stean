@@ -17,20 +17,21 @@ import { models } from "../../../models";
 import { errors } from "../../../messages";
 import { link } from "../../../models/helpers";
 import { doubleQuotes } from "../../../helpers";
+import { _DEBUG } from "../../../constants";
 
 export class RootPgVisitor extends PgVisitor {
     static root = true;
     special: string[] = [];
 
     constructor(ctx: koaContext, options = <SqlOptions>{}, node: Token, special?: string[]) {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         super(ctx, options);
         if (special) this.special = special;
         if (node) this.StartVisitRessources(node);
     }
 
     protected verifyRessources = (): void => {
-        console.log(logging.head("verifyRessources").toString());
+        console.log(logging.debug().head("verifyRessources").to().text());
     };
 
     protected VisitRessources(node: Token, context?: IodataContext) {
@@ -38,11 +39,11 @@ export class RootPgVisitor extends PgVisitor {
         if (ressource) {
             ressource.call(this, node, context);
             if (this.debugOdata) {
-                console.log(logging.message("VisitRessources", `VisitRessources${node.type}`).toString());
-                console.log(logging.message("node.raw", node.raw).toString());
+                logging.debug().message("VisitRessources", `VisitRessources${node.type}`).to().file().log();
+                logging.debug().message("node.raw", node.raw).to().file().log();
             }
         } else {
-            logging.error(`Ressource Not Found ============> VisitRessources${node.type}`);
+            logging.error(`Ressource Not Found ============> VisitRessources${node.type}`, node);
             throw new Error(`Unhandled node type: ${node.type}`);
         }
         return this;
@@ -151,7 +152,7 @@ export class RootPgVisitor extends PgVisitor {
     }
 
     StartVisitRessources(node: Token) {
-        console.log(logging.head("INIT PgVisitor").toString());
+        console.log(logging.debug().head("INIT PgVisitor").to().text());
         this.limit = this.ctx.service.nb_page || 200;
         this.numeric = this.ctx.service.extensions.includes(EExtensions.resultNumeric);
         const temp = this.VisitRessources(node);

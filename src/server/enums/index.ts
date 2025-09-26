@@ -6,7 +6,6 @@
  *
  */
 
-import { EColor } from "./colors";
 import { EOptions } from "./options";
 export { EChar } from "./chars";
 export { EentityType } from "./entityType";
@@ -27,6 +26,5 @@ export { ERelations } from "./relations";
 export { EOptions } from "./options";
 export { EQuery } from "./query";
 export { EUserRights } from "./userRights";
-export const color = (col?: number) => `\x1b[${col || EColor.Reset}m`;
 export const enumKeys = (input: any) => Object.keys(input).filter((prop) => isNaN(parseInt(prop)));
 export const typeOptions = Object.keys(EOptions) as Array<keyof typeof EOptions>;

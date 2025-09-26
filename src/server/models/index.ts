@@ -29,6 +29,8 @@ import {
 } from "./entities";
 import { Geometry, Jsonb, Text } from "./types";
 import { logging } from "../log";
+import { _CLEAN, _DEBUG } from "../constants";
+import { executeSql, executeSqlValues } from "../db/helpers";
 
 export class Models {
     static models: {
@@ -87,16 +89,14 @@ export class Models {
 
         result["extensions"] = extensions;
         result["options"] = ctx.service.options;
-        await config
-            .executeSqlValues(
-                ctx.service,
-                ` select version(), (SELECT ARRAY(SELECT extname||'-'||extversion AS extension FROM pg_extension) AS extension), (SELECT c.relname||'.'||a.attname FROM pg_attribute a JOIN pg_class c ON (a.attrelid=c.relfilenode) WHERE a.atttypid = 114) ;`
-            )
-            .then((res) => {
-                result["Postgres"]["version"] = res[0 as keyof object];
-                result["Postgres"]["extensions"] = res[1 as keyof object];
-            });
-        await config.executeSql(ctx.service, `select username, "canPost", "canDelete", "canCreateUser", "canCreateDb", "admin", "superAdmin" FROM public.user ORDER By username;`).then((res) => {
+        await executeSqlValues(
+            ctx.service,
+            ` select version(), (SELECT ARRAY(SELECT extname||'-'||extversion AS extension FROM pg_extension) AS extension), (SELECT c.relname||'.'||a.attname FROM pg_attribute a JOIN pg_class c ON (a.attrelid=c.relfilenode) WHERE a.atttypid = 114) ;`
+        ).then((res) => {
+            result["Postgres"]["version"] = res[0 as keyof object];
+            result["Postgres"]["extensions"] = res[1 as keyof object];
+        });
+        await executeSql(ctx.service, `select username, "canPost", "canDelete", "canCreateUser", "canCreateDb", "admin", "superAdmin" FROM public.user ORDER By username;`).then((res) => {
             Object.keys(res).forEach((e) => {
                 result["users"][res[+e as keyof object]["username"]] = {
                     "canPost": res[+e as keyof object]["canPost"],
@@ -108,28 +108,19 @@ export class Models {
                 };
             });
         });
-        if (ctx.service.options.includes(EOptions.speedCount)) {
-            await config.executeSql(ctx.service, `SELECT * from row_counts`).then((res) => {
-                const count: { [key: string]: Number } = {};
-                Object.values(res).forEach((e) => {
-                    count[e.name] = +e.nb;
-                });
-                result["count"] = count;
+
+        const a = models.getStats(ctx.service);
+        if (a)
+            await executeSql(ctx.service, a).then((res) => {
+                result["count"] = res[0 as keyof object]["results"][0 as keyof object];
             });
-        } else {
-            const a = models.getStats(ctx.service);
-            if (a)
-                await config.executeSql(ctx.service, a).then((res) => {
-                    result["count"] = res[0 as keyof object]["results"][0 as keyof object];
-                });
-        }
 
         return result;
     }
 
     // Get multiDatastream or Datastreams infos
     public async getStreamInfos(service: Iservice, input: Record<string, any>): Promise<IstreamInfos | undefined> {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         const stream: _STREAM = input["Datastream"] ? "Datastream" : input["MultiDatastream"] ? "MultiDatastream" : undefined;
         if (!stream) return undefined;
         const streamEntity = models.getEntityName(service, stream);
@@ -139,8 +130,7 @@ export class Models {
         const streamId: string | undefined = isNaN(searchKey) ? searchKey[EConstant.id] : searchKey;
         if (streamId) {
             const query = `SELECT "id", "observationType", "_default_featureofinterest" FROM ${doubleQuotes(models.DBFull(service)[streamEntity].table)} WHERE "id" = ${BigInt(streamId)} LIMIT 1`;
-            return config
-                .executeSqlValues(service, asJson({ query: query, singular: true, strip: false, count: false }))
+            return executeSqlValues(service, asJson({ query: query, singular: true, strip: false, count: false }))
                 .then((res: object) => {
                     return res
                         ? {
@@ -192,7 +182,7 @@ export class Models {
     }
 
     private createVersion(verStr: string): boolean {
-        console.log(logging.whereIam(new Error().stack, verStr).toString());
+        console.log(logging.whereIam(new Error().stack));
         switch (verStr) {
             case "v1.1":
                 this.createVersion("v1.0");
@@ -240,18 +230,6 @@ export class Models {
         }
     }
 
-    public upSertCountSql(service: Iservice | string): string[] | undefined {
-        try {
-            const a = this.filtered(this.get(service), EentityType.table);
-            return Object.keys(this.filtered(this.get(service), EentityType.table)).map(
-                (e) => `INSERT INTO row_counts (name, nb) VALUES ('${a[e].table}', (SELECT COUNT('${a[e].orderBy.split(" ")[0]}') FROM "${a[e].table}"))
-                ON CONFLICT (name) DO UPDATE SET nb = (SELECT COUNT('${a[e].orderBy.split(" ")[0]}') FROM "${a[e].table}");`
-            );
-        } catch (error) {
-            return;
-        }
-    }
-
     public listTables(service: Iservice | string): string[] {
         return Object.values(this.filtered(this.get(service), EentityType.table))
             .map((e) => e.table)
@@ -266,21 +244,26 @@ export class Models {
     }
 
     public getClean(service: Iservice | string): string[] | undefined {
+        const replaceTable = (input: string, table: string) => {
+            if (input.includes("@UPDATE@")) input = input.replace("@UPDATE@", `UPDATE "${table}" SET`);
+            else if (input.includes("@DROPCOLUMN@")) input = input.replace("@DROPCOLUMN@", `ALTER TABLE "${table}" DROP COLUMN IF EXISTS`);
+            else if (input.includes("@ADDCOLUMN@")) input = input.replace("@ADDCOLUMN@", `ALTER TABLE "${table}" ADD COLUMN IF NOT EXISTS`);
+            return input;
+        };
         const mods = Models.models[this.get(service).apiVersion];
-        const temp: string[] = ["SET client_min_messages TO WARNING ;"];
+        const temp: string[] = ["SET client_min_messages TO INFO;"];
+        if (_CLEAN)
+            Object.keys(mods).forEach((entity) => {
+                mods[entity].trigger?.forEach((e: string) => temp.push(e));
+                if (mods[entity].clean) {
+                    mods[entity].clean.forEach((e) => temp.push(replaceTable(e, mods[entity].table)));
+                }
+            });
         Object.keys(mods).forEach((entity) => {
-            Object.keys(mods[entity].indexes).forEach((e: string) => temp.push(`CREATE INDEX IF NOT EXISTS "${e}" ${mods[entity].indexes[e]}`));
-            mods[entity].trigger?.forEach((e: string) => temp.push(e));
-            if (mods[entity].clean) {
-                mods[entity].clean.forEach((e) => {
-                    if (e.includes("@UPDATE@")) temp.push(e.replace("@UPDATE@", `UPDATE "${mods[entity].table}" SET`));
-                    else if (e.includes("@DROPCOLUMN@")) temp.push(e.replace("@DROPCOLUMN@", `ALTER TABLE "${mods[entity].table}" DROP COLUMN IF EXISTS`));
-                    else if (e.includes("@ADDCOLUMN@")) temp.push(e.replace("@ADDCOLUMN@", `ALTER TABLE "${mods[entity].table}" ADD COLUMN IF NOT EXISTS`));
-                    else temp.push(e);
-                });
+            if (mods[entity].start) {
+                mods[entity].start.forEach((e) => temp.push(replaceTable(e, mods[entity].table)));
             }
         });
-
         return temp;
     }
 
@@ -409,7 +392,7 @@ export class Models {
     }
 
     public getRoot(ctx: koaContext) {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         let expectedResponse: object[] = [];
         Object.keys(ctx.model)
             .filter((elem: string) => ctx.model[elem].order > 0)

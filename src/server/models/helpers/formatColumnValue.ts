@@ -6,7 +6,7 @@
  *
  */
 
-import { ESCAPE_SIMPLE_QUOTE } from "../../constants";
+import { _DEBUG, ESCAPE_SIMPLE_QUOTE } from "../../constants";
 import { EConstant, EDataType } from "../../enums";
 import { doubleQuotes, simpleQuotesString, removeFirstEndSimpleQuotes, removeFirstAndEnd, isString } from "../../helpers";
 import { logging } from "../../log";
@@ -27,7 +27,7 @@ export function formatColumnValue(columnName: string, value: any, column: Ientit
             ? value[EConstant.id]
             : removeFirstAndEnd(value, "@");
     };
-    console.log(logging.head(`${columnName} [${column.dataType}] ==> ${value}`).toString());
+    console.log(logging.debug().head(`${columnName} [${column.dataType}] ==> ${value}`).to().text());
     if (value)
         switch (value) {
             case void 0:

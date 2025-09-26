@@ -298,3 +298,10 @@ jsonDatas.onpaste = function() {
 jsonDatas.onkeyup = function() {
 	setJSON()
 };
+
+
+
+// logout actual user
+testMario.onclick = () => {
+	testa();
+};

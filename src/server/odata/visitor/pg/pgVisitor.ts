@@ -43,6 +43,8 @@ export class PgVisitor extends Visitor {
     splitResult: string[] | undefined;
     interval: string | undefined;
     payload: string | undefined;
+    joinOffset: string | undefined;
+    countOffset: string | undefined;
     skip = 0;
     limit = 0;
     count = false;
@@ -55,7 +57,7 @@ export class PgVisitor extends Visitor {
     debugOdata = isTest() ? false : _DEBUG;
     single: boolean = false;
     constructor(ctx: koaContext, options = <SqlOptions>{}) {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         super(ctx, options);
     }
 
@@ -63,7 +65,8 @@ export class PgVisitor extends Visitor {
     // ***                                                           ROSSOURCES                                                                                            ***
     // ***********************************************************************************************************************************************************************
     public noLimit() {
-        this.limit = 0;
+        this.limit = 1000000;
+        // this.limit = 0;
         this.skip = 0;
     }
 
@@ -89,7 +92,7 @@ export class PgVisitor extends Visitor {
     }
 
     protected getColumn(input: string, operation: string, context: IodataContext) {
-        console.log(logging.whereIam(new Error().stack, input).toString());
+        console.log(logging.whereIam(new Error().stack));
 
         const tempEntity =
             models.getEntity(this.ctx.service, context.identifier || "".split(".")[0]) || models.getEntity(this.ctx.service, this.entity || this.parentEntity || this.navigationProperty);
@@ -130,7 +133,7 @@ export class PgVisitor extends Visitor {
         return input;
     }
     start(node: Token) {
-        console.log(logging.head("Start PgVisitor").toString());
+        console.log(logging.debug().head("Start PgVisitor").to().text());
         const temp = this.Visit(node);
         this.verifyQuery();
         // Logs.infos("PgVisitor", temp);
@@ -138,7 +141,7 @@ export class PgVisitor extends Visitor {
         return temp;
     }
     verifyQuery = (): void => {
-        console.log(logging.head("verifyQuery").toString());
+        console.log(logging.debug().head("verifyQuery").to().text());
         const expands: string[] = [];
         if (this.includes)
             this.includes.forEach((element: PgVisitor) => {
@@ -170,14 +173,13 @@ export class PgVisitor extends Visitor {
             if (visitor) {
                 visitor.call(this, node, context);
                 if (this.debugOdata) {
-                    console.log(logging.message("Visit", `Visit${node.type}`).toString());
-                    console.log(logging.message("node.raw", node.raw).toString());
-                    console.log(logging.message("this.query.where", this.query.where.toString()).toString());
-                    console.log(logging.message("context", context).toString());
+                    logging.debug().message("Visit", `Visit${node.type}`).to().file().log();
+                    logging.debug().message("node.raw", node.raw).to().file().log();
+                    logging.debug().message("this.query.where", this.query.where.toString()).to().file().log();
+                    logging.debug().message("context", context).to().file().log();
                 }
             } else {
-                logging.error(`Node error =================> Visit${node.type}`);
-                logging.error(node);
+                logging.error(`Node error =================> Visit${node.type}`, node);
                 throw new Error(`Unhandled node type: ${node.type}`);
             }
         }
@@ -190,6 +192,7 @@ export class PgVisitor extends Visitor {
         }
         return this;
     }
+    isOrderBy = (context: IodataContext): boolean => (context.target ? context.target === EQuery.OrderBy : false);
     isWhere = (context: IodataContext): boolean => (context.target ? context.target === EQuery.Where : false);
     isSelect = (context: IodataContext): boolean => (context.target ? context.target === EQuery.Select : false);
     protected VisitExpand(node: Token, context: IodataContext) {
@@ -253,6 +256,8 @@ export class PgVisitor extends Visitor {
 
     protected VisitInlineCount(node: Token, context: IodataContext) {
         this.count = Literal.convert(node.value.value, node.value.raw);
+        // if (this.ctx.service.tableIndex === true && this.entity && this.parentEntity && isTestEntity(this.entity, "Observations") === true && isTestEntity(this.parentEntity, "Datastreams") === true)
+        //     this.countOffset = `SELECT MAX("row_number") from "_index_${this.parentEntity.table}_${this.entity.table}" WHERE "${this.parentEntity.table}_id" =${this.parentId}`;
     }
     protected VisitFilter(node: Token, context: IodataContext) {
         context.target = EQuery.Where;
@@ -273,6 +278,8 @@ export class PgVisitor extends Visitor {
 
     protected VisitSkip(node: Token, context: IodataContext) {
         this.skip = +node.value.raw;
+        // if (this.ctx.service.tableIndex === true && this.entity && this.parentEntity && isTestEntity(this.entity, "Observations") === true && isTestEntity(this.parentEntity, "Datastreams") === true)
+        //     this.joinOffset = `INNER JOIN (SELECT "_index_${this.parentEntity.table}_${this.entity.table}".myid FROM "_index_${this.parentEntity.table}_${this.entity.table}" WHERE "${this.parentEntity.table}_id" =${this.parentId} AND "row_number" >= ${this.skip} LIMIT ${this.limit}) indexes ON id = indexes.myid`;
     }
 
     protected VisitTop(node: Token, context: IodataContext) {
@@ -428,7 +435,7 @@ export class PgVisitor extends Visitor {
             }
     }
     addToWhere(value: string, context: IodataContext) {
-        console.log(logging.head("addToWhere").toString());
+        console.log(logging.debug().head("addToWhere").to().text());
         if (context.target === EQuery.Geo) this.subQuery.where ? (this.subQuery.where += value) : (this.subQuery.where = value);
         else this.query.where.add(value);
     }
@@ -462,7 +469,7 @@ export class PgVisitor extends Visitor {
         };
     }
     public createComplexWhere(entity: string, node: Token, context: IodataContext) {
-        console.log(logging.head("createComplexWhere").toString());
+        console.log(logging.debug().head("createComplexWhere").to().text());
 
         if (context.target) {
             if (!models.getEntity(this.ctx.service, entity)) return;

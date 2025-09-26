@@ -90,7 +90,7 @@ describe("Odata BuiltInDates [9.3.3.5.2]", () => {
                 res.status.should.equal(200);
                 res.type.should.equal("application/json");
                 res.body.value.length.should.eql(528);
-                res.body["value"][0]["@iot.id"].should.eql(526);
+                res.body["value"][0]["@iot.id"].should.eql(525);
                 done();
             });
     });

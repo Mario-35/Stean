@@ -6,6 +6,7 @@
  *
  */
 
+import { _DEBUG } from "../../constants";
 import { EHttpCode } from "../../enums";
 import { logging } from "../../log";
 import { errors } from "../../messages";
@@ -19,12 +20,12 @@ import { Common } from "./common";
 
 export class Datastreams extends Common {
     constructor(ctx: koaContext) {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         super(ctx);
     }
 
     formatDataInput(input: Record<string, any> | undefined): Record<string, any> | undefined {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         if (input) {
             const colName = "observationType";
             if (input[colName]) {

@@ -10,9 +10,10 @@ import fs from "fs";
 import { IcsvFile, IcsvImport } from "../../types";
 import readline from "readline";
 import { logging } from "../../log";
+import { _DEBUG } from "../../constants";
 
 export const columnsNameFromHydrasCsv = async (paramsFile: IcsvFile): Promise<IcsvImport | undefined> => {
-    console.log(logging.whereIam(new Error().stack).toString());
+    console.log(logging.whereIam(new Error().stack));
     const returnValue: IcsvImport = { header: false, dateSql: "", columns: [] };
     const fileStream = fs.createReadStream(paramsFile.filename);
     const regexDate = /^[0-9]{2}[\/][0-9]{2}[\/][0-9]{4}$/g;
@@ -28,14 +29,14 @@ export const columnsNameFromHydrasCsv = async (paramsFile: IcsvFile): Promise<Ic
         const splitColumns = line.split(";");
         if (regexDateHour.test(splitColumns[0]) == true) {
             const nbCol = (line.match(/;/g) || []).length;
-            console.log(logging.message("dateSqlRequest", "Date Hour").toString());
+            logging.debug().message("dateSqlRequest", "Date Hour").to().log().file();
             returnValue.columns = ["datehour"];
             for (let i = 0; i < nbCol; i++) returnValue.columns.push(`value${i + 1}`);
             fileStream.destroy();
             returnValue.dateSql = `TO_TIMESTAMP(REPLACE("${paramsFile.tempTable}".datehour, '24:00:00', '23:59:59'), 'DD/MM/YYYY HH24:MI:SS')`;
             return returnValue;
         } else if (regexDate.test(splitColumns[0]) == true && regexHour.test(splitColumns[1]) == true) {
-            console.log(logging.message("dateSqlRequest", "date ; hour").toString());
+            logging.debug().message("dateSqlRequest", "date ; hour").to().log().file();
             const nbCol = (line.match(/;/g) || []).length;
             returnValue.columns = ["date", "hour"];
             for (let i = 0; i < nbCol - 1; i++) returnValue.columns.push(`value${i + 1}`);

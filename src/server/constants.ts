@@ -10,7 +10,6 @@ import fs from "fs";
 import { paths } from "./paths";
 import { Iversion } from "./types";
 import { EConstant } from "./enums";
-import { logging } from "./log";
 
 process.env.NODE_ENV = process.env.NODE_ENV || "production";
 
@@ -33,18 +32,6 @@ export function setDebug(input: boolean) {
     _DEBUG = input;
 }
 
-export function setReady(input: boolean) {
-    _READY = input;
-    return input;
-}
-
+export const _CLEAN = !process.argv.includes("clean") ? true : undefined;
 export let _DEBUG = process.env.NODE_ENV?.trim() === EConstant.test || false;
-export let _READY = false;
 export let _REPLAY: string | undefined = undefined;
-
-// function to be used in catch
-export function logDbError(err: any) {
-    console.log(err);
-    logging.error(err);
-    return false;
-}

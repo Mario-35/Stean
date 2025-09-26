@@ -8,13 +8,14 @@
 
 import { getAuthenticatedUser } from "../../authentication";
 import { config } from "../../configuration";
+import { _DEBUG } from "../../constants";
 import { EConstant } from "../../enums";
 import { logging } from "../../log";
 import { Ientities, IqueryOptions, koaContext } from "../../types";
 import { blankUser } from "./";
 
 export async function createQueryParams(ctx: koaContext): Promise<IqueryOptions | undefined> {
-    console.log(logging.whereIam(new Error().stack).toString());
+    console.log(logging.whereIam(new Error().stack));
     let user = await getAuthenticatedUser(ctx);
     user = user ? user : blankUser(ctx.service);
     const listEntities =

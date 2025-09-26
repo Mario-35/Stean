@@ -46,6 +46,11 @@ export class Core {
         return this;
     }
 
+    partition() {
+        this._.partition = true;
+        return this;
+    }
+
     default(input: string | number): this {
         if (typeof input === "number") input = String(input);
         this._.create = this._.create.replace("@DEFAULT@", input.trim() !== "" ? ` DEFAULT '${input.trim()}'${this.cast ? `::${this.cast}` : ""}` : "");

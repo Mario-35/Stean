@@ -11,10 +11,12 @@ import { logging } from "../../log";
 import { isTest } from "../../helpers";
 import { Iservice, keyobj } from "../../types";
 import { _DEBUG } from "../../constants";
+import { errors } from "../../messages";
 
 const executeSqlOne = async (service: Iservice, query: string): Promise<object> => {
-    logging.query("executeSqlOne", query).write(_DEBUG);
+    console.log(logging.whereIam(new Error().stack));
     return new Promise(async function (resolve, reject) {
+        logging.debug().query(`executeSqlOne ${service.name}`, query).to().log().file();
         await config
             .connection(service.name)
             .unsafe(query)
@@ -22,23 +24,28 @@ const executeSqlOne = async (service: Iservice, query: string): Promise<object> 
                 resolve(res);
             })
             .catch((err: Error) => {
-                if (!isTest() && +err["code" as keyobj] === 23505) logging.queryError(query, err).write(true);
+                if (!isTest() && +err["code" as keyobj] === 23505) logging.debug().error(errors.execQuery, err).to().log().file();
                 reject(err);
             });
     });
 };
 
-const executeSqlMulti = async (service: Iservice, query: string[]): Promise<object> => {
-    logging.query("executeSqlMulti", query).write(_DEBUG);
+const executeSqlMulti = async (service: Iservice, queries: string[]): Promise<object> => {
+    console.log(logging.whereIam(new Error().stack));
     return new Promise(async function (resolve, reject) {
         await config
             .connection(service.name)
-            .begin((sql) => query.map((e: string) => sql.unsafe(e)))
+            .begin((sql) =>
+                queries.map(async (query: string) => {
+                    logging.debug().query(`executeSqlMulti ${service.name}`, query).to().log().file();
+                    await sql.unsafe(query);
+                })
+            )
             .then((res: object) => {
                 resolve(res);
             })
             .catch((err: Error) => {
-                if (!isTest() && +err["code" as keyobj] === 23505) logging.queryError(query, err).write(true);
+                if (!isTest() && +err["code" as keyobj] === 23505) logging.debug().error(errors.execQuery, err).to().log().file();
                 reject(err);
             });
     });

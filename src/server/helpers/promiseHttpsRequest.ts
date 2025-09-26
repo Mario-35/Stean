@@ -26,12 +26,24 @@ export function promiseHttpsRequest(url: string, options: https.RequestOptions) 
             });
             res.on("end", function () {
                 if (res && res.statusCode && res.statusCode === 200) return resolve(body);
-                logging.message("update", "Bad Response " + res.statusCode + EConstant.return).write(true);
+                logging
+                    .message("update", "Bad Response " + res.statusCode + EConstant.return)
+                    .to()
+                    .log()
+                    .file();
                 reject(res.statusCode);
             });
         });
-        logging.message("update", "Sending request to " + url + EConstant.return).write(true);
-        logging.message("update", "Options: " + JSON.stringify(options) + EConstant.return).write(true);
+        logging
+            .message("update", "Sending request to " + url + EConstant.return)
+            .to()
+            .log()
+            .file();
+        logging
+            .message("update", "Options: " + JSON.stringify(options) + EConstant.return)
+            .to()
+            .log()
+            .file();
         req.on("error", reject);
         req.end();
     });

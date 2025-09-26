@@ -22,6 +22,8 @@ import { Login, Query } from "../views";
 import { createQueryParams } from "../views/helpers";
 import { logging } from "../log";
 import { USER } from "../models/entities";
+import { executeSqlValues } from "../db/helpers";
+import { _DEBUG } from "../constants";
 export const protectedRoutes = new Router<DefaultState, Context>();
 
 protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
@@ -50,7 +52,7 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
             if (ctx.body["username"].trim() === "") {
                 why["username"] = msg(errors.empty, "username");
             } else {
-                const user = await config.executeSqlValues(config.getService(EConstant.admin), `SELECT "username" FROM "${USER.table}" WHERE username = '${ctx.body["username"]}' LIMIT 1`);
+                const user = await executeSqlValues(config.getService(EConstant.admin), `SELECT "username" FROM "${USER.table}" WHERE username = '${ctx.body["username"]}' LIMIT 1`);
                 if (user) why["username"] = errors.alreadyPresent;
             }
             // Email
@@ -115,7 +117,7 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
         } else if (ctx.request.type.startsWith("multipart/")) {
             // If upload datas
             const getDatas = async (): Promise<object> => {
-                console.log(logging.head("getDatas ...").toString());
+                console.log(logging.debug().head("getDatas ...").to().text());
                 return new Promise(async (resolve, reject) => {
                     await upload(ctx)
                         .then((data) => {
@@ -130,7 +132,7 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
             const odataVisitor = await createOdata(ctx);
             if (odataVisitor) ctx.odata = odataVisitor;
             if (ctx.odata) {
-                console.log(logging.head("POST FORM").toString());
+                console.log(logging.debug().head("POST FORM").to().text());
                 const objectAccess = new apiAccess(ctx);
                 const returnValue = await objectAccess.post();
                 if (ctx.datas) fs.unlinkSync(ctx.datas["file" as keyof object]);
@@ -176,7 +178,7 @@ protectedRoutes.patch("/(.*)", async (ctx) => {
         const odataVisitor = await createOdata(ctx);
         if (odataVisitor) ctx.odata = odataVisitor;
         if (ctx.odata) {
-            console.log(logging.head("PATCH").toString());
+            console.log(logging.debug().head("PATCH").to().text());
             const objectAccess = new apiAccess(ctx);
             if (ctx.odata.id) {
                 const returnValue: IreturnResult | undefined | void = await objectAccess.update();
@@ -202,7 +204,7 @@ protectedRoutes.delete("/(.*)", async (ctx) => {
         const odataVisitor = await createOdata(ctx);
         if (odataVisitor) ctx.odata = odataVisitor;
         if (ctx.odata) {
-            console.log(logging.head("DELETE").toString());
+            console.log(logging.debug().head("DELETE").to().text());
             const objectAccess = new apiAccess(ctx);
             if (!ctx.odata.id) ctx.throw(EHttpCode.badRequest, { detail: errors.idRequired });
             const returnValue = await objectAccess.delete(ctx.odata.id);

@@ -7,12 +7,13 @@
  */
 
 import { config } from "../../configuration";
+import { _DEBUG } from "../../constants";
 import { EConstant } from "../../enums";
 import { asyncForEach } from "../../helpers";
 import { logging } from "../../log";
 import { Iservice } from "../../types";
 export const getMetrics = async (service: Iservice): Promise<string[] | { [key: string]: any }> => {
-    console.log(logging.whereIam(new Error().stack).toString());
+    console.log(logging.whereIam(new Error().stack));
     const username = "postgres";
     const type = "all";
     const lto = 3 * 1000;

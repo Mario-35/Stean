@@ -28,7 +28,7 @@ export class OdataGeoColumn {
         this.test = this.init();
     }
     init(): string | undefined {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         this.column = removeAllQuotes(this.column);
         let test: string | undefined = undefined;
         const tempEntity = this.src.entity;

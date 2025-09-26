@@ -12,16 +12,17 @@ import { config } from "../../configuration";
 import { logging } from "../../log";
 import { EConstant, EHttpCode } from "../../enums";
 import { returnFormats } from "../../helpers";
+import { _DEBUG } from "../../constants";
 
 export class Logs extends Common {
     constructor(ctx: koaContext) {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         super(ctx);
     }
 
     // Override Get All logs
     async getAll(): Promise<IreturnResult | undefined> {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         // create query
         this.ctx.odata.query.where.add(`"url" LIKE '%${this.ctx.service.name}%'`);
         let sql = this.ctx.odata.getSql();
@@ -41,7 +42,7 @@ export class Logs extends Common {
 
     // Override Get one logs
     async getSingle(): Promise<IreturnResult | undefined> {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         // create query
         this.ctx.odata.query.where.add(` AND url LIKE '%${this.ctx.service.name}%'`);
         const sql = this.ctx.odata.getSql();
@@ -66,21 +67,21 @@ export class Logs extends Common {
 
     // Override Post service
     async post(dataInput: Record<string, any> | undefined): Promise<IreturnResult | undefined> {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         // This function not exists
         return;
     }
 
     // Override Update service
     async update(dataInput: Record<string, any> | undefined): Promise<IreturnResult | undefined> {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         // This function not exists
         return;
     }
 
     // Override Delete service
     async delete(idInput: bigint | string): Promise<IreturnResult | undefined> {
-        console.log(logging.whereIam(new Error().stack, String(idInput)).toString());
+        console.log(logging.whereIam(new Error().stack));
         // This function not exists
         return;
     }

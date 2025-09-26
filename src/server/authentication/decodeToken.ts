@@ -10,6 +10,7 @@ import jsonwebtoken from "jsonwebtoken";
 import { IuserToken, keyobj, koaContext } from "../types";
 import { blankUserToken } from "../types/userToken";
 import { logging } from "../log";
+import { _DEBUG } from "../constants";
 
 /**
  * decode token from koa context
@@ -18,7 +19,7 @@ import { logging } from "../log";
  */
 
 export const decodeToken = (ctx: koaContext): IuserToken => {
-    console.log(logging.whereIam(new Error().stack).toString());
+    console.log(logging.whereIam(new Error().stack));
     if (ctx.request.hasOwnProperty("token")) {
         const token = jsonwebtoken.decode(ctx.request["token" as keyobj]);
         if (token && token["data" as keyobj]["id"] > 0)

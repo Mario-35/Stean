@@ -26,6 +26,7 @@ export {
     isArray
 } from "./tests";
 export { asyncForEach } from "./asyncForEach";
+export { logToHtml } from "./logToHtml";
 export { cleanStringComma } from "./cleanStringComma";
 export { cleanUrl } from "./cleanUrl";
 export { removeFromUrl } from "./removeFromUrl";
@@ -49,7 +50,6 @@ export { httpsDownload } from "./httpsDownload";
 export { httpsDownloadJSON } from "./httpsDownloadJson";
 export { upload } from "./upload";
 export { connectWeb } from "./connectWeb";
-export { logToHtml } from "./logToHtml";
 export { Csv } from "./csv";
 export const removeFirstAndEnd = (input: string, char: string) => (input[0] === char && input[input.length - 1] === char[0] ? input.slice(0, -1).slice(1).trim() : input);
 export const removeAllQuotes = (input: string): string => input.replace(/['"]+/g, "");

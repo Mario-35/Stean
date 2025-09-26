@@ -9,7 +9,7 @@
 import Aedes, { AedesPublishPacket, Client, PublishPacket, Subscription } from "aedes";
 import { config } from "../configuration";
 import { logging } from "../log";
-import { color, EColor, EEncodingType } from "../enums";
+import { EEncodingType } from "../enums";
 import { errors, infos } from "../messages";
 import { loginUser } from "../authentication";
 import { createServer } from "aedes-server-factory";
@@ -43,7 +43,7 @@ export class MqttServer {
         });
     }
     apiCaller(packet: PublishPacket, client: Client) {
-        console.log(logging.whereIam(new Error().stack).toString());
+        console.log(logging.whereIam(new Error().stack));
         return new Promise(async (resolve, reject) => {
             try {
                 const api = await fetch(`http://localhost:8029${packet.topic}`, {
@@ -56,7 +56,10 @@ export class MqttServer {
                     body: packet.payload.toString()
                 });
                 if (api) {
-                    logging.message(`[MESSAGE_PUBLISHED] Client ${client ? client.id : "BROKER_" + this.broker.id} has published message on ${packet.topic} to broker`, this.broker.id).write(_DEBUG);
+                    logging
+                        .message(`[MESSAGE_PUBLISHED] Client ${client ? client.id : "BROKER_" + this.broker.id} has published message on ${packet.topic} to broker`, this.broker.id)
+                        .to()
+                        .text();
                     api.json().then((e: any) => {
                         client.emit("message", e);
                         resolve(e);
@@ -70,7 +73,7 @@ export class MqttServer {
     init() {
         // authenticate the connecting client
         this.broker.authenticate = async (client: Client | null, username: any, password: any, callback: any) => {
-            console.log(logging.whereIam(new Error().stack).toString());
+            console.log(logging.whereIam(new Error().stack));
             if (client && client.req && client.req.url) {
                 const url = client.req.url
                     .trim()
@@ -80,8 +83,9 @@ export class MqttServer {
                     return await loginUser(undefined, { configName: url[0], username: String(username), password: Buffer.from(password, "base64").toString() })
                         .then((user) => {
                             logging
-                                .message(`${color(user ? EColor.Green : EColor.Red)}${color(EColor.Cyan)}${user ? infos(["auth", "success"]) : errors.authFailed} to broker`, this.broker.id)
-                                .write(_DEBUG);
+                                .message(`}${user ? infos(["auth", "success"]) : errors.authFailed} to broker`, this.broker.id)
+                                .to()
+                                .text();
                             return callback(user ? null : new Error(errors.authFailed), user ? true : false);
                         })
                         .catch((error: Error) => {
@@ -100,8 +104,9 @@ export class MqttServer {
                         })
                             .then((user) => {
                                 logging
-                                    .message(`${color(user ? EColor.Green : EColor.Red)}${color(EColor.Cyan)}${user ? infos(["auth", "success"]) : errors.authFailed} to broker`, this.broker.id)
-                                    .write(_DEBUG);
+                                    .message(`${user ? infos(["auth", "success"]) : errors.authFailed} to broker`, this.broker.id)
+                                    .to()
+                                    .text();
                                 return callback(user ? null : new Error(errors.authFailed), user ? true : false);
                             })
                             .catch((error: Error) => {
@@ -116,43 +121,52 @@ export class MqttServer {
 
         // authorizing client to publish on a message topic
         this.broker.authorizePublish = (client: Client | null, packet: PublishPacket, callback: any) => {
-            console.log(logging.whereIam("authorizePublish").toString());
+            console.log(logging.whereIam("authorizePublish"));
             return callback(client && packet.topic.trim() !== "" ? null : new Error("You are not authorized to publish on this message topic."));
         };
         this.broker.published = (packet: AedesPublishPacket, client: Client | null, callback: any) => {
             if (client) {
-                console.log(logging.whereIam("published").toString());
-                if (client) logging.message(`${color(EColor.Green)}[PUBLISHED] ${color(EColor.Cyan)}${client ? client.id : client}`, packet.payload.toString()).write(_DEBUG);
+                console.log(logging.whereIam("published"));
+                if (client && _DEBUG)
+                    logging
+                        .message(`[PUBLISHED] ${client ? client.id : client}`, packet.payload.toString())
+                        .to()
+                        .text();
             }
         };
         // emitted when a client connects to the broker
         this.broker.on("client", (client: Client | null) => {
             if (client) {
-                console.log(logging.whereIam(`client : ${client ? client.id : client}`).toString());
-                logging.message(`${color(EColor.Green)}[CLIENT_CONNECTED] ${color(EColor.Cyan)}${client ? client.id : client} connected to broker`, this.broker.id).write(_DEBUG);
+                console.log(logging.whereIam(`client : ${client ? client.id : client}`));
+                if (_DEBUG)
+                    logging
+                        .message(`[CLIENT_CONNECTED] ${client ? client.id : client} connected to broker`, this.broker.id)
+                        .to()
+                        .text();
             }
         });
 
         // emitted when a client disconnects from the broker
         this.broker.on("clientDisconnect", (client: Client | null) => {
             if (client) {
-                console.log(logging.whereIam(new Error().stack, "clientDisconnect").toString());
-                logging.message(`${color(EColor.Red)}[CLIENT_DISCONNECTED] ${color(EColor.Cyan)}${client ? client.id : client} disconnected from the broker`, this.broker.id).write(_DEBUG);
+                console.log(logging.whereIam(new Error().stack));
+                if (_DEBUG)
+                    logging
+                        .message(`$[CLIENT_DISCONNECTED] ${client ? client.id : client} disconnected from the broker`, this.broker.id)
+                        .to()
+                        .text();
             }
         });
 
         // emitted when a client subscribes to a message topic
         this.broker.on("subscribe", (subscriptions: Subscription[], client: Client | null) => {
             if (client) {
-                console.log(logging.whereIam(new Error().stack, "subscribe").toString());
-                logging
-                    .message(
-                        `${color(EColor.Yellow)}[TOPIC_SUBSCRIBED] ${color(EColor.Green)}${client ? client.id : client} subscribed to topics: ${subscriptions
-                            .map((s: any) => s.topic)
-                            .join(",")} on broker`,
-                        this.broker.id
-                    )
-                    .write(_DEBUG);
+                console.log(logging.whereIam(new Error().stack));
+                if (_DEBUG)
+                    logging
+                        .message(`[TOPIC_SUBSCRIBED] ${client ? client.id : client} subscribed to topics: ${subscriptions.map((s: any) => s.topic).join(",")} on broker`, this.broker.id)
+                        .to()
+                        .text();
             }
         });
 
@@ -160,14 +174,11 @@ export class MqttServer {
         this.broker.on("unsubscribe", (subscriptions: any, client: Client | null) => {
             if (client) {
                 console.log(logging.whereIam("unsubscribe"));
-                logging
-                    .message(
-                        `${color(EColor.Yellow)}[TOPIC_UNSUBSCRIBED] ${color(EColor.Red)}${client ? client.id : client} unsubscribed to topics: ${subscriptions
-                            .map((s: any) => s.topic)
-                            .join(",")} from broker`,
-                        this.broker.id
-                    )
-                    .write(_DEBUG);
+                if (_DEBUG)
+                    logging
+                        .message(`[TOPIC_UNSUBSCRIBED] $${client ? client.id : client} unsubscribed to topics: ${subscriptions.map((s: any) => s.topic).join(",")} from broker`, this.broker.id)
+                        .to()
+                        .text();
             }
         });
 
