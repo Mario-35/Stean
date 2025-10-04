@@ -7,8 +7,8 @@
  */
 
 import { Common } from "./common";
-import { flatten, getBigIntFromString, notNull, searchInJson } from "../../helpers/index";
-import { _DEBUG, ESCAPE_SIMPLE_QUOTE } from "../../constants";
+import { escapeSimpleQuotes, flatten, getBigIntFromString, notNull, searchInJson } from "../../helpers/index";
+import { _DEBUG } from "../../constants";
 import { IreturnResult, keyobj, koaContext } from "../../types";
 import { errors, msg } from "../../messages/";
 import { EConstant, EDatesType, EHttpCode } from "../../enums";
@@ -179,7 +179,7 @@ export class Loras extends Common {
             }
             const resultCreate = `'${JSON.stringify({
                 value: Object.values(listOfSortedValues),
-                valueskeys: ESCAPE_SIMPLE_QUOTE(JSON.stringify(listOfSortedValues)),
+                valueskeys: escapeSimpleQuotes(JSON.stringify(listOfSortedValues)),
                 payload: this.stean["frame"]
             })}'::jsonb`;
             const insertObject: Record<string, any> = {
@@ -196,7 +196,7 @@ export class Loras extends Common {
                 .map((elem: string) => `"${elem}" = ${insertObject[elem]} AND `)
                 .concat(`"result" = ${resultCreate}`)
                 .join("");
-            const sql = `WITH "${EConstant.voidtable}" AS (SELECT srid FROM "${EConstant.voidtable}" LIMIT 1)
+            const sql = `WITH "${EConstant.voidtable}" AS (${EConstant.voidSql})
                , multidatastream1 AS (SELECT id, thing_id, _default_featureofinterest, ${searchMulti} LIMIT 1)
                , myValues ( "${Object.keys(insertObject).join(EConstant.doubleQuotedComa)}") AS (values (${Object.values(insertObject).join()}))
                , searchDuplicate AS (SELECT * FROM "${OBSERVATION.table}" WHERE ${searchDuplicate})
@@ -279,7 +279,7 @@ export class Loras extends Common {
                 .concat(`"result" = ${resultCreate}`)
                 .join("");
             logging.debug().message("searchDuplicate", searchDuplicate).to().log().file();
-            const sql = `WITH "${EConstant.voidtable}" AS (SELECT srid FROM "${EConstant.voidtable}" LIMIT 1)
+            const sql = `WITH "${EConstant.voidtable}" AS (${EConstant.voidSql})
               , datastream1 AS (SELECT id, _default_featureofinterest, thing_id FROM "${DATASTREAM.table}" WHERE id =${stream["id"]})
               , myValues ( "${Object.keys(insertObject).join(EConstant.doubleQuotedComa)}") AS (values (${Object.values(insertObject).join()}))
               , searchDuplicate AS (SELECT * FROM "${OBSERVATION.table}" WHERE ${searchDuplicate})

@@ -7,7 +7,7 @@
  */
 
 import { _DEBUG, _REPLAY } from "../constants";
-import { isTest, notNull } from "../helpers";
+import { isTest, notNull, simpleQuotes } from "../helpers";
 import { koaContext } from "../types";
 import postgres from "postgres";
 import { logging } from ".";
@@ -23,6 +23,7 @@ export class Trace {
     static adminConnection: postgres.Sql<Record<string, unknown>>;
 
     constructor(adminConnection: postgres.Sql<Record<string, unknown>>) {
+        console.log(logging.whereIam(new Error().stack));
         Trace.adminConnection = adminConnection;
     }
 
@@ -36,7 +37,7 @@ export class Trace {
         return ctx.traceId && error
             ? `UPDATE public.log SET error = ${FORMAT_JSONB(error)} WHERE id = ${ctx.traceId}`
             : `INSERT INTO public.log (method, url${notNull(ctx.body) ? ", datas" : ""}${notNull(error) ? ", error" : ""}) VALUES('${ctx.method}', '${ctx.request.url}'${
-                  notNull(ctx.body) ? `,${FORMAT_JSONB(ctx.body)}` : ""
+                  notNull(ctx.body) ? `,${simpleQuotes(JSON.stringify(ctx.body))}` : ""
               }${notNull(error) ? `,${FORMAT_JSONB(error)}` : ""}) RETURNING id;`;
     }
 

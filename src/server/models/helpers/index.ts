@@ -8,7 +8,7 @@
 
 import { EQuery } from "../../enums";
 import { doubleQuotes } from "../../helpers";
-import { IentityColumnAliasOptions, Iservice } from "../../types";
+import { Ientity, IentityColumnAliasOptions, Iservice } from "../../types";
 import { relationInfos } from "./relationInfos";
 export { idColumnName } from "./idColumnName";
 export { createInsertValues } from "./createInsertValues";
@@ -20,3 +20,5 @@ export { createBlankEntity } from "./createBlankEntity";
 export const expand = (service: Iservice, entityName: string, entityRelation: string) => relationInfos(service, entityName, entityRelation).expand;
 export const link = (service: Iservice, entityName: string, entityRelation: string) => relationInfos(service, entityName, entityRelation).link;
 export const as = (options: IentityColumnAliasOptions) => (options.context?.target === EQuery.Select ? ` AS ${doubleQuotes(options.columnName)}` : "");
+export const getUniques = (entity: Ientity) => Object.keys(entity.columns).filter((elem: string) => entity.columns[elem].create.includes("UNIQUE"));
+export const getIsId = (entity: Ientity) => Object.keys(entity.columns).filter((elem: string) => elem === "id").length > 0;

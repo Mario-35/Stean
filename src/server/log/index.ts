@@ -176,7 +176,7 @@ export class Logging {
      * @param sql sql query
      * @returns formated string
      */
-    public query(src: string, sql: unknown) {
+    query(src: string, sql: unknown) {
         this.init(Logging.can);
         if (Logging.can === true) {
             this.separator("[ Query " + src + " ]", EColor.Blue);
@@ -238,8 +238,9 @@ export class Logging {
         return this;
     }
 
-    force(data: any) {
+    force(data: any, separator?: boolean) {
         this.init(true);
+        if (separator) this.add("=".repeat(50));
         this.add(this.objet(data));
         process.stdout.write(Logging._s + `\x1b[${EColor.Reset}m${EConstant.return}`);
     }

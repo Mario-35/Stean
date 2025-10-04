@@ -100,5 +100,5 @@ function setTheme(themeName) {
 	if (window.location.href.includes('Query?')) decodeUrl(window.location.href);
 	jsonViewer = new JSONViewer();
 	wait(false);
-
+	optDistHost.value="http://localhost:8029/test/v1.1/" ;
 })();

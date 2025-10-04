@@ -39,11 +39,6 @@ enum EnumLogEntities {
     Logs = "Logs",
     Replays = "Replays"
 }
-enum EnumFileEntities {
-    Files = "Files",
-    Lines = "Lines",
-    CreateFile = "CreateFile"
-}
 
 export const filterEntities = (exts: string[], name?: string) => {
     let res = exts.includes(EExtensions.base) ? EnumBaseEntities : {};
@@ -52,5 +47,5 @@ export const filterEntities = (exts: string[], name?: string) => {
     if (exts.includes(EExtensions.users)) res = { ...res, ...EnumUsersEntities };
     return res;
 };
-export type allEntitiesType = EnumBaseEntities | EnumMultiDatastreamEntities | EnumUsersEntities | EnumLoraEntities | EnumLogEntities | EnumFileEntities;
-export const allEntities: Record<string, any> = { ...EnumBaseEntities, ...EnumMultiDatastreamEntities, ...EnumUsersEntities, ...EnumLoraEntities, ...EnumLogEntities, ...EnumFileEntities };
+export type allEntitiesType = EnumBaseEntities | EnumMultiDatastreamEntities | EnumUsersEntities | EnumLoraEntities | EnumLogEntities;
+export const allEntities: Record<string, any> = { ...EnumBaseEntities, ...EnumMultiDatastreamEntities, ...EnumUsersEntities, ...EnumLoraEntities, ...EnumLogEntities };

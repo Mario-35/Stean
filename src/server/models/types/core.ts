@@ -38,6 +38,7 @@ export class Core {
 
     unique(): this {
         this._.create = this._.create.replace("@UNIQUE@", " UNIQUE");
+        // if (test) this._.create = this._.create.replace("@UNIQUE@", " UNIQUE");
         return this;
     }
 

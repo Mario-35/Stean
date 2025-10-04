@@ -71,7 +71,7 @@ export const createService = async (service: Iservice, dataInput: Record<string,
                 if (goodEntity) {
                     try {
                         const sqls: string[] = dataInput[entityName].map(
-                            (element: any) => `INSERT INTO ${doubleQuotes(goodEntity.table)} ${createInsertValues(service, prepareDatas(element, goodEntity.name), goodEntity.name)}`
+                            (element: any) => `INSERT INTO ${doubleQuotes(goodEntity.table)} ${createInsertValues(goodEntity, prepareDatas(element, goodEntity.name))}`
                         );
                         await executeSqlValues(config.getService(newServiceName), sqls.join(";"))
                             .then((res: Record<string, any>) => {

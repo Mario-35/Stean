@@ -6,22 +6,21 @@
  *
  */
 
-import { doubleQuotes, getBigIntFromString } from "../../../helpers";
+import { doubleQuotes, getBigIntFromString, simpleQuotes } from "../../../helpers";
 import { Ientity, IqueryMaker } from "../../../types";
 import { EConstant, EOperation, EOptions, EentityType } from "../../../enums";
 import { asJson } from "../../../db/queries";
 import { models } from "../../../models";
 import { logging } from "../../../log";
-import { createInsertValues, createUpdateValues, relationInfos } from "../../../models/helpers";
+import { createInsertValues, createUpdateValues, getUniques, getIsId, relationInfos } from "../../../models/helpers";
 import { apiAccess } from "../../../db/dataAccess";
-import * as entities from "../../../db/entities";
 import { PgVisitor } from "..";
 import { DATASTREAM } from "../../../models/entities";
 import { _DEBUG } from "../../../constants";
 export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor): string | undefined {
     const formatInsertEntityData = (entity: string, datas: object, main: PgVisitor): Record<string, any> => {
         const goodEntity = models.getEntityName(main.ctx.service, entity);
-        if (goodEntity && goodEntity in entities) {
+        if (goodEntity && goodEntity in models.getModelOptions(src.ctx.service)) {
             try {
                 const objectEntity = new apiAccess(main.ctx, entity);
                 const tempDatas = objectEntity.formatDataInput(datas);
@@ -53,18 +52,28 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
      * @param query query for the query not in as
      * @returns
      */
-    const onConflict = (element: string): string => {
+    const onConflict = (element: string, nothing?: boolean): string => {
+        console.log(logging.whereIam(new Error().stack));
         let conflictNames = Object.keys(queryMaker[element].datas).filter((e) => queryMaker[element].entity.columns[e].create.includes("UNIQUE"));
         if (conflictNames.length <= 0 && src.id) conflictNames = Object.keys(queryMaker[element].datas);
-        return conflictNames.length <= 0 ? "" : ` ON CONFLICT ("${conflictNames.join('","')}") do update set ${createUpdateValues(queryMaker[element].entity, queryMaker[element].datas)}`;
+        return conflictNames.length <= 0
+            ? ""
+            : `\n\tON CONFLICT ("${conflictNames.join('","')}") DO ${nothing ? "NOTHING " : `UPDATE SET ${createUpdateValues(queryMaker[element].entity, queryMaker[element].datas)}`}`;
     };
+
+    const essai = (element: string): string[] => {
+        console.log(logging.whereIam(new Error().stack));
+        let conflictNames = Object.keys(queryMaker[element].datas).filter((e) => queryMaker[element].entity.columns[e].create.includes("UNIQUE"));
+        return conflictNames;
+    };
+
     const queryMakerToString = (query: string): string => {
         const returnValue: string[] = [query];
         const links: { [key: string]: string[] } = {};
         const sorting: string[] = [];
         Object.keys(queryMaker).forEach((element: string) => {
             Object.keys(queryMaker).forEach((elem: string) => {
-                if (JSON.stringify(queryMaker[elem].datas).includes(`select ${element}`)) {
+                if (JSON.stringify(queryMaker[elem].datas).includes(`SELECT ${element}`)) {
                     if (links[elem]) links[elem].push(element);
                     else links[elem] = [element];
                 }
@@ -86,37 +95,52 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
         });
         // LOOP on sorting
         sorting.forEach((element: string) => {
+            const canSpec = getIsId(queryMaker[element].entity) && getUniques(queryMaker[element].entity).length > 0;
+            const isMain = postEntity.table == queryMaker[element].entity.table;
+            const retCol = isMain ? allFields : doubleQuotes(queryMaker[element].keyId);
+
             if (queryMaker[element].datas.hasOwnProperty(EConstant.id)) {
                 const searchId = queryMaker[element].datas[EConstant.id as keyof object];
-                returnValue.push(`, ${element} AS (select verifyId('${queryMaker[element].entity.table}', ${searchId}) as id)`);
+                returnValue.push(`, ${element} AS (SELECT verifyId('${queryMaker[element].entity.table}', ${searchId}) AS id)`);
             } else if (queryMaker[element].datas.hasOwnProperty(EConstant.name)) {
                 const searchByName = queryMaker[element].datas[EConstant.name as keyof object];
-                returnValue.push(`, ${element} AS (select "id" from "${queryMaker[element].entity.table}" where "name" = '${searchByName}')`);
+                returnValue.push(`, ${element} AS (SELECT "id" FROM "${queryMaker[element].entity.table}" WHERE "name" = '${searchByName}')`);
             } else {
-                returnValue.push(`, ${element} AS (`);
+                returnValue.push(`,${canSpec === true && isMain === false ? "insert" : ""}${element} AS (`);
                 if (src.id) {
                     if (queryMaker[element].type == EOperation.Association) {
                         returnValue.push(
-                            `INSERT INTO "${queryMaker[element].entity.table}" ${createInsertValues(
-                                src.ctx.service,
+                            `\tINSERT INTO "${queryMaker[element].entity.table}" ${createInsertValues(
+                                queryMaker[element].entity,
                                 formatInsertEntityData(queryMaker[element].entity.table, queryMaker[element].datas, src)
                             )}${onConflict(element)} WHERE "${queryMaker[element].entity.table}"."${queryMaker[element].keyId}" = ${BigInt(src.id).toString()}`
                         );
                     } else
                         returnValue.push(
-                            `UPDATE "${queryMaker[element].entity.table}" SET ${createUpdateValues(queryMaker[element].entity, queryMaker[element].datas)} WHERE "${
+                            `\tUPDATE "${queryMaker[element].entity.table}" SET ${createUpdateValues(queryMaker[element].entity, queryMaker[element].datas)} WHERE "${
                                 queryMaker[element].entity.table
-                            }"."${queryMaker[element].keyId}" = (select verifyId('${queryMaker[element].entity.table}', ${src.id}) as id)`
+                            }"."${queryMaker[element].keyId}" = (SELECT verifyId('${queryMaker[element].entity.table}', ${src.id}) AS id)`
                         );
-                } else
+                } else {
                     returnValue.push(
-                        `INSERT INTO "${queryMaker[element].entity.table}" ${createInsertValues(
-                            src.ctx.service,
+                        `\tINSERT INTO "${queryMaker[element].entity.table}" ${createInsertValues(
+                            queryMaker[element].entity,
                             formatInsertEntityData(queryMaker[element].entity.table, queryMaker[element].datas, src)
                         )}${queryMaker[element].entity.type === EentityType.link ? onConflict(element) : ""}`
                     );
+                }
 
-                returnValue.push(`RETURNING ${postEntity.table == queryMaker[element].entity.table ? allFields : queryMaker[element].keyId})`);
+                if (canSpec === true && !src.id && isMain === false) {
+                    returnValue.push(
+                        `${
+                            canSpec == true ? "\tON CONFLICT DO NOTHING" : ""
+                        } RETURNING ${retCol}),\n${element} AS (\n\tSELECT ${retCol} FROM "insert${element}" WHERE EXISTS (SELECT ${retCol} FROM "insert${element}")\n\tUNION ALL\n\tSELECT ${retCol} FROM "${
+                            queryMaker[element].entity.table
+                        }" WHERE ${essai(element)
+                            .map((e) => `${doubleQuotes(e)} = ${simpleQuotes(queryMaker[element].datas[e as keyof object])}`)
+                            .join(" AND ")} AND NOT EXISTS (SELECT ${retCol} FROM "insert${element}"))`
+                    );
+                } else returnValue.push(`RETURNING ${retCol})`);
             }
         });
         return returnValue.join(EConstant.return).replace(/\'@/g, "").replace(/\@'/g, "");
@@ -216,24 +240,24 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
                     logging.debug().message("Found a relation to do in sub query", subParentEntity.name).to().log().file();
                     const tableName = names[subEntity.table];
                     const parentTableName = names[subParentEntity.table];
-                    addToQueryMaker(EOperation.Relation, tableName, subEntity, `@(select ${parentTableName}.id from ${parentTableName})@`, parentCardinality.leftKey, parentCardinality.rightKey);
+                    addToQueryMaker(EOperation.Relation, tableName, subEntity, `@(SELECT ${parentTableName}.id FROM ${parentTableName})@`, parentCardinality.leftKey, parentCardinality.rightKey);
                 } else if (relCardinality.entity && parentCardinality.entity && relCardinality.entity.table == parentCardinality.entity.table) {
                     if (relCardinality.entity.table == subParentEntity.table) {
                         const tableName = names[subEntity.table];
                         const parentTableName = names[subParentEntity.table];
-                        logging.debug().message(`Add parent relation ${tableName} in`, parentTableName).to().log().file();
-                        addToQueryMaker(EOperation.Relation, parentTableName, subParentEntity, `@(select ${tableName}.id from ${tableName})@`, parentCardinality.leftKey, relCardinality.rightKey);
+                        logging.debug().message(`Add parent relation ${tableName} IN`, parentTableName).to().log().file();
+                        addToQueryMaker(EOperation.Relation, parentTableName, subParentEntity, `@(SELECT ${tableName}.id from ${tableName})@`, parentCardinality.leftKey, relCardinality.rightKey);
                     } else if (relCardinality.entity && relCardinality.entity.table != subParentEntity.table && relCardinality.entity.table != subEntity.table) {
                         const tableName = names[subEntity.table];
                         const parentTableName = names[subParentEntity.table];
-                        logging.debug().message(`Add Table association ${tableName} in`, parentTableName).to().log().file();
+                        logging.debug().message(`Add Table association ${tableName} IN`, parentTableName).to().log().file();
                         addToQueryMaker(
                             EOperation.Association,
                             relCardinality.entity.table,
                             relCardinality.entity,
                             {
-                                [`${subEntity.table}_id`]: `@(select ${tableName}.id from ${tableName})@`,
-                                [`${subParentEntity.table}_id`]: `@(select ${parentTableName}.id from ${parentTableName})@`
+                                [`${subEntity.table}_id`]: `@(SELECT ${tableName}.id FROM ${tableName})@`,
+                                [`${subParentEntity.table}_id`]: `@(SELECT ${parentTableName}.id FROM ${parentTableName})@`
                             },
                             relCardinality.entity.columns[relCardinality.rightKey].create.includes("UNIQUE") ? relCardinality.rightKey : relCardinality.leftKey,
                             undefined
@@ -248,7 +272,7 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
                         parentTableName,
                         subParentEntity,
                         {
-                            [relCardinality.rightKey]: `@(select ${tableName}.id from ${tableName})@`
+                            [relCardinality.rightKey]: `@(SELECT ${tableName}.id FROM ${tableName})@`
                         },
                         relCardinality.leftKey,
                         undefined
@@ -320,7 +344,7 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
     if ((names[postEntity.table] && queryMaker[postEntity.table] && queryMaker[postEntity.table].datas) || root === undefined) {
         queryMaker[postEntity.table].datas = Object.assign(root as object, queryMaker[postEntity.table].datas);
         queryMaker[postEntity.table].keyId = src.id ? "id" : "*";
-        sqlResult = queryMakerToString(`WITH "log_request" AS (${EConstant.return}${EConstant.tab}SELECT srid FROM ${doubleQuotes(EConstant.voidtable)} LIMIT 1${EConstant.return})`);
+        sqlResult = queryMakerToString(`WITH "${EConstant.voidtable}" AS (${EConstant.return}${EConstant.tab}${EConstant.voidSql})`);
     } else {
         sqlResult = queryMakerToString(
             src.id
@@ -333,7 +357,7 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
                           EConstant.tab
                       }WHERE "id" = ${src.id.toString()})`
                 : `WITH ${postEntity.table} AS (${EConstant.return}${EConstant.tab}INSERT INTO ${doubleQuotes(postEntity.table)} ${createInsertValues(
-                      src.ctx.service,
+                      postEntity,
                       formatInsertEntityData(postEntity.name, root, src)
                   )} RETURNING ${allFields})`
         );

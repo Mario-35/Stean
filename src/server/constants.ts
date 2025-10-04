@@ -21,7 +21,6 @@ const _appVersion = (): Iversion => {
     };
 };
 export const appVersion: Iversion = _appVersion();
-export const ESCAPE_SIMPLE_QUOTE = (input: string) => input.replace(/[']+/g, "''");
 export const timestampNow = (): string => new Date().toLocaleTimeString();
 
 export function setReplay(input: string | undefined) {

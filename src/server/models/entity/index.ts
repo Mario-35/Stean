@@ -32,6 +32,7 @@ export class Entity extends EntityPass {
     trigger: string[];
     clean?: string[];
     start?: string[];
+    uniques?: string[];
     partition?: {
         column: string;
         entityRelation?: string[];
@@ -82,11 +83,14 @@ export class Entity extends EntityPass {
                 if (this.columns[e].entityRelation) {
                     if (this.partition && this.partition.entityRelation) {
                         this.partition.entityRelation.push(this.columns[e].entityRelation);
-                    } else
+                    } else {
                         this.partition = {
                             column: e,
                             entityRelation: [this.columns[e].entityRelation]
                         };
+                        this.after += `CREATE TABLE IF NOT EXISTS "${this.table}default" PARTITION OF "${this.table}" DEFAULT;`;
+                        // this.after += `CREATE TABLE IF NOT EXISTS "${this.table}01" PARTITION OF "${this.table}" FOR VALUES IN (01);`;
+                    }
                 }
             }
 

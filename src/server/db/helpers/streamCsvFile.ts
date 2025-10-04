@@ -17,16 +17,20 @@ import { _DEBUG } from "../../constants";
 
 export async function streamCsvFile(service: Iservice, paramsFile: IcsvFile, sqlRequest: IcsvImport): Promise<number> {
     console.log(logging.whereIam(new Error().stack));
-    const cols: string[] = [];
+    const cols: string[] = Array(sqlRequest.columns.length)
+        .fill("")
+        .map((_, i) => `value${i}`);
     const controller = new AbortController();
     const readable = createReadStream(paramsFile.filename);
-    sqlRequest.columns.forEach((value) => cols.push(`"${value}" varchar(255) NULL`));
-    await executeSql(service, `CREATE TABLE "${paramsFile.tempTable}" ( id serial4 NOT NULL, ${cols}, CONSTRAINT ${paramsFile.tempTable}_pkey PRIMARY KEY (id));`).catch((error: any) => {
+    await executeSql(
+        service,
+        `CREATE TABLE "${paramsFile.tempTable}" ( id serial4 NOT NULL, ${cols.map((e) => `"${e}" varchar(255) NULL`)}, CONSTRAINT ${paramsFile.tempTable}_pkey PRIMARY KEY (id));`
+    ).catch((error: any) => {
         console.log(error);
     });
     const writable = config
         .connection(service.name)
-        .unsafe(`COPY "${paramsFile.tempTable}" (${sqlRequest.columns.join(",")}) FROM STDIN WITH(FORMAT csv, DELIMITER ';'${paramsFile.header})`)
+        .unsafe(`COPY "${paramsFile.tempTable}" (${cols.join(",")}) FROM STDIN WITH(FORMAT csv, DELIMITER ';', NULL ' ' ${paramsFile.header})`)
         .writable();
     return new Promise(async function (resolve, reject) {
         readable

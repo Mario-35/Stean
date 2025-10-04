@@ -6,13 +6,11 @@
  *
  */
 
-import { formatColumnValue, relationInfos } from ".";
-import { models } from "..";
-import { ESCAPE_SIMPLE_QUOTE } from "../../constants";
 import { EConstant } from "../../enums";
-import { doubleQuotes, simpleQuotesString, removeFirstEndDoubleQuotes } from "../../helpers";
+import { doubleQuotes, removeFirstEndDoubleQuotes } from "../../helpers";
 import { logging } from "../../log";
-import { Iservice } from "../../types";
+import { Ientity } from "../../types";
+import { formatColumnValue } from "./formatColumnValue";
 /**
  *
  * @param service Service
@@ -20,54 +18,26 @@ import { Iservice } from "../../types";
  * @param entityName string
  * @returns string
  */
-export function createInsertValues(ctxService: Iservice | undefined, input: Record<string, any>, entityName?: string): string {
+export function createInsertValues(entity: Ientity, input: Record<string, any>): string {
     console.log(logging.whereIam(new Error().stack));
     if (input) {
         const keys: string[] = [];
         const values: string[] = [];
-        if (ctxService && entityName) {
-            const entity = models.getEntity(ctxService, entityName);
-            if (!entity) return "";
-            Object.keys(input).forEach((elem: string) => {
-                if (input[elem] && entity.columns[elem]) {
-                    const temp = formatColumnValue(elem, input[elem], entity.columns[elem]);
-                    if (temp) {
-                        keys.push(doubleQuotes(elem));
-                        values.push(temp);
-                    }
-                } else if (input[elem] && entity.relations[elem]) {
-                    const relation = relationInfos(ctxService, entity.name, elem);
-                    if (entity.columns[relation.column]) {
-                        const temp = formatColumnValue(relation.column, input[elem], entity.columns[relation.column]);
-                        if (temp) {
-                            keys.push(doubleQuotes(relation.column));
-                            values.push(temp);
-                        }
-                    }
+        Object.keys(input).forEach((elem: string) => {
+            if (input[elem]) {
+                if (input[elem].startsWith && input[elem].startsWith('"{') && input[elem].endsWith('}"')) {
+                    input[elem] = removeFirstEndDoubleQuotes(input[elem].replace(/\\"+/g, ""));
+                } else if (input[elem].startsWith && input[elem].startsWith('{"@iot.name"')) {
+                    input[elem] = `(SELECT "id" FROM "${elem.split("_")[0]}" WHERE "name" = '${JSON.parse(removeFirstEndDoubleQuotes(input[elem]))[EConstant.name]}')`;
                 }
-            });
-        } else {
-            Object.keys(input).forEach((elem: string) => {
-                if (input[elem]) {
-                    if (input[elem].startsWith && input[elem].startsWith('"{') && input[elem].endsWith('}"')) {
-                        input[elem] = removeFirstEndDoubleQuotes(input[elem].replace(/\\"+/g, ""));
-                    } else if (input[elem].startsWith && input[elem].startsWith('{"@iot.name"')) {
-                        input[elem] = `(SELECT "id" FROM "${elem.split("_")[0]}" WHERE "name" = '${JSON.parse(removeFirstEndDoubleQuotes(input[elem]))[EConstant.name]}')`;
-                    }
+                const tmp = formatColumnValue(elem, input[elem], entity.columns[elem]);
+                if (tmp) {
                     keys.push(doubleQuotes(elem));
-                    values.push(
-                        typeof input[elem] === "string"
-                            ? input[elem].startsWith("(SELECT")
-                                ? input[elem]
-                                : simpleQuotesString(ESCAPE_SIMPLE_QUOTE(input[elem].trim()))
-                            : elem === "result"
-                            ? `'{"value": ${input[elem]}}'::jsonb`
-                            : ESCAPE_SIMPLE_QUOTE(input[elem].trim())
-                    );
-                }
-            });
-        }
-        return `(${keys.join()}) VALUES (${values.join()})`;
+                    values.push(tmp);
+                } else logging.error(`ERROR createInsertValues : ${elem}`, input[elem]).to().log().file();
+            }
+        });
+        return `\n\t(${keys.join(",\n\t")})\n\tVALUES\n\t(${values.join(",\n\t")})`;
     }
     return "";
 }

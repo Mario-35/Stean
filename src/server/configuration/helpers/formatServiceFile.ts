@@ -12,7 +12,6 @@ import { errors } from "../../messages";
 import { Iservice, typeExtensions } from "../../types";
 import { logging } from "../../log";
 import { _DEBUG } from "../../constants";
-
 /**
  *
  * @param name configuration name
@@ -54,8 +53,8 @@ export function formatServiceFile(name: string, input: Record<string, any>): Ise
         options: options,
         csvDelimiter: input["csvDelimiter"] ? input["csvDelimiter"] : ";",
         synonyms: input["synonyms"] ? input["synonyms"] : undefined,
-        _connection: undefined,
-        users: undefined
+        users: undefined,
+        _connection: undefined
     };
 
     if (Object.values(returnValue).includes("ERROR"))

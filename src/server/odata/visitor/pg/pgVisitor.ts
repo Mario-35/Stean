@@ -6,7 +6,7 @@
  *
  */
 
-import { simpleQuotesString, isReturnGraph, isTest, removeAllQuotes, returnFormats, formatPgTableColumn, doubleQuotes } from "../../../helpers";
+import { simpleQuotes, isReturnGraph, isTest, removeAllQuotes, returnFormats, formatPgTableColumn, doubleQuotes } from "../../../helpers";
 import { IodataContext, Ientity, IpgQuery, koaContext, IvisitRessource, IentityColumnAliasOptions, IentityColumn } from "../../../types";
 import { Token } from "../../parser/lexer";
 import { Literal } from "../../parser/literal";
@@ -256,8 +256,6 @@ export class PgVisitor extends Visitor {
 
     protected VisitInlineCount(node: Token, context: IodataContext) {
         this.count = Literal.convert(node.value.value, node.value.raw);
-        // if (this.ctx.service.tableIndex === true && this.entity && this.parentEntity && isTestEntity(this.entity, "Observations") === true && isTestEntity(this.parentEntity, "Datastreams") === true)
-        //     this.countOffset = `SELECT MAX("row_number") from "_index_${this.parentEntity.table}_${this.entity.table}" WHERE "${this.parentEntity.table}_id" =${this.parentId}`;
     }
     protected VisitFilter(node: Token, context: IodataContext) {
         context.target = EQuery.Where;
@@ -278,8 +276,6 @@ export class PgVisitor extends Visitor {
 
     protected VisitSkip(node: Token, context: IodataContext) {
         this.skip = +node.value.raw;
-        // if (this.ctx.service.tableIndex === true && this.entity && this.parentEntity && isTestEntity(this.entity, "Observations") === true && isTestEntity(this.parentEntity, "Datastreams") === true)
-        //     this.joinOffset = `INNER JOIN (SELECT "_index_${this.parentEntity.table}_${this.entity.table}".myid FROM "_index_${this.parentEntity.table}_${this.entity.table}" WHERE "${this.parentEntity.table}_id" =${this.parentId} AND "row_number" >= ${this.skip} LIMIT ${this.limit}) indexes ON id = indexes.myid`;
     }
 
     protected VisitTop(node: Token, context: IodataContext) {
@@ -336,7 +332,7 @@ export class PgVisitor extends Visitor {
                 models.isColumnType(this.ctx.service, this.entity, node.value.current.raw, "json") &&
                 node.value.next.raw[0] == "/"
             ) {
-                this.addToWhere(`${doubleQuotes(node.value.current.raw)}->>${simpleQuotesString(node.value.next.raw.slice(1))}`, context);
+                this.addToWhere(`${doubleQuotes(node.value.current.raw)}->>${simpleQuotes(node.value.next.raw.slice(1))}`, context);
             } else if (node.value.next.raw[0] == "/") {
                 this.Visit(node.value.current, context);
                 context.identifier += ".";
@@ -499,7 +495,7 @@ export class PgVisitor extends Visitor {
         const alias = this.getColumn(node.value.name, "", context);
         node.value.name = alias || node.value.name;
         if (context.relation && context.identifier && models.isColumnType(this.ctx.service, this.ctx.model[context.relation], this.cleanColumn(context.identifier), "json")) {
-            context.identifier = `${doubleQuotes(this.cleanColumn(context.identifier))}->>${simpleQuotesString(node.raw)}`;
+            context.identifier = `${doubleQuotes(this.cleanColumn(context.identifier))}->>${simpleQuotes(node.raw)}`;
         } else {
             if (this.isWhere(context) && this.entity) this.createComplexWhere(context.identifier ? this.cleanColumn(context.identifier) : this.entity.name, node, context);
             if (!context.relation && !context.identifier && alias && context.target) {
@@ -639,7 +635,7 @@ export class PgVisitor extends Visitor {
                 );
             // Geo datas
             const temp = decodeURIComponent(Literal.convert(params[index].value, params[index].raw)).replace("geography", "");
-            return simpleQuotesString(this.entity && this.entity.columns[temp] ? temp : removeAllQuotes(temp));
+            return simpleQuotes(this.entity && this.entity.columns[temp] ? temp : removeAllQuotes(temp));
         };
 
         const cleanData = (index: number): string =>

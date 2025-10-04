@@ -28,6 +28,6 @@ export interface Iservice {
     alias: string[]; // alias name of the service
     synonyms: Isynonyms | undefined;
     csvDelimiter: ";" | ","; // csv format delimiter
-    _connection: postgres.Sql<Record<string, unknown>> | undefined; // not in file only when running to store connection
     users: JSON | undefined; // users list
+    _connection: postgres.Sql<Record<string, unknown>> | undefined; // not in file only when running to store connection
 }

@@ -8,7 +8,6 @@
 
 export { createIdList } from "./createIdList";
 export { asDataArray } from "./asDataArray";
-export const asCsv = (sql: string, csvDelimiter: ";" | ","): string => `COPY (${sql}) TO STDOUT WITH (FORMAT CSV, NULL "NULL", HEADER, DELIMITER '${csvDelimiter}')`;
 export { asJson } from "./asJson";
 export { asGeoJSON } from "./asGeoJSON";
 export { graphDatastream } from "./graphDatastream";
@@ -26,3 +25,4 @@ export const drop = (table: string): string => `DROP TABLE "${table}";`;
 export const createTrigger = (table: string, triggerName: string): string =>
     `CREATE TRIGGER "${table}_${triggerName}" BEFORE INSERT OR DELETE ON "${table}" FOR EACH ROW EXECUTE PROCEDURE ${triggerName}();`;
 export const dropTrigger = (table: string, triggerName: string): string => `DROP TRIGGER IF EXISTS "${table}_${triggerName}" ON "${table}";`;
+export const asCsv = (sql: string, csvDelimiter: ";" | ","): string => `COPY (${sql}) TO STDOUT WITH (FORMAT CSV, NULL "NULL", HEADER, DELIMITER '${csvDelimiter}')`;

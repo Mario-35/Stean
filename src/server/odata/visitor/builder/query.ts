@@ -49,7 +49,6 @@ export class Query {
         // Add ceil and return if graph
         if (isReturnGraph(main)) {
             if (element.query.orderBy.notNull()) element.query.orderBy.add(", ");
-            // element.query.orderBy.add('"resultTime" ASC,');
             return [main.interval ? `timestamp_ceil("resultTime", interval '${main.interval}') AS srcdate` : `@GRAPH@`];
         }
         if (isReturnGeoJson(tempEntity, main)) {
@@ -188,13 +187,12 @@ export class Query {
         return undefined;
     }
     private pgQueryToString(input: IpgQuery | undefined): string | undefined {
-        const offsetJoin = input?.join?.includes("_index_") || false;
         return input
             ? `SELECT ${input.select}${EConstant.return} FROM ${input.from}${EConstant.return} ${input.join ? input.join : ""} ${input.where ? `WHERE ${input.where}${EConstant.return}` : ""}${
                   input.groupBy ? `GROUP BY ${cleanStringComma(input.groupBy)}${EConstant.return}` : ""
               }${input.orderBy ? `ORDER BY ${cleanStringComma(input.orderBy, ["ASC", "DESC"])}${EConstant.return}` : ""}${
-                  !offsetJoin && input.skip && input.skip > 0 ? `OFFSET ${input.skip}${EConstant.return}` : ""
-              } ${!offsetJoin && input.limit && input.limit > 0 ? `LIMIT ${input.limit}${EConstant.return}` : ""}`
+                  input.skip && input.skip > 0 ? `OFFSET ${input.skip}${EConstant.return}` : ""
+              } ${input.limit && input.limit > 0 ? `LIMIT ${input.limit}${EConstant.return}` : ""}`
             : undefined;
     }
 

@@ -6,9 +6,8 @@
  *
  */
 
-import { ESCAPE_SIMPLE_QUOTE } from "../../constants";
 import { EDataType } from "../../enums";
-import { doubleQuotes, simpleQuotesString } from "../../helpers";
+import { doubleQuotes, escapeSimpleQuotes, simpleQuotes } from "../../helpers";
 import { logging } from "../../log";
 import { Ientity } from "../../types";
 
@@ -19,10 +18,10 @@ export function createUpdateValues(entity: Ientity, input: Record<string, any>):
             (elem: string) =>
                 `${doubleQuotes(elem)} = ${
                     input[elem][0] === "{"
-                        ? `${entity.columns[elem].dataType === EDataType.any || EDataType.jsonb ? "" : `COALESCE(${doubleQuotes(elem)}, '{}'::jsonb) ||`} ${simpleQuotesString(
-                              ESCAPE_SIMPLE_QUOTE(input[elem])
+                        ? `${entity.columns[elem].dataType === EDataType.any || EDataType.jsonb ? "" : `COALESCE(${doubleQuotes(elem)}, '{}'::jsonb) ||`} ${simpleQuotes(
+                              escapeSimpleQuotes(input[elem])
                           )}`
-                        : simpleQuotesString(ESCAPE_SIMPLE_QUOTE(input[elem]))
+                        : simpleQuotes(escapeSimpleQuotes(input[elem]))
                 }`
         )
         .join();

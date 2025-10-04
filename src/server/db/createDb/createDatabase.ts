@@ -8,7 +8,7 @@
 
 import { createTable, createUser } from "../helpers";
 import { config } from "../../configuration";
-import { doubleQuotes, simpleQuotesString, asyncForEach } from "../../helpers";
+import { doubleQuotes, asyncForEach, simpleQuotes } from "../../helpers";
 import { EChar, EConstant, EExtensions } from "../../enums";
 import { models } from "../../models";
 import { logging } from "../../log";
@@ -43,15 +43,15 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
         .then(async () => {
             returnValue[`Create Database`] = `${servicePg.database} ${EChar.ok}`;
             // create default USER if not exist
-            await adminConnection.unsafe(`SELECT COUNT(*) FROM pg_user WHERE usename = ${simpleQuotesString(servicePg.user)};`).then(async (res: Record<string, any>) => {
+            await adminConnection.unsafe(`SELECT COUNT(*) FROM pg_user WHERE usename = ${simpleQuotes(servicePg.user)};`).then(async (res: Record<string, any>) => {
                 if (res[0].count == 0) {
                     returnValue[`CREATE ROLE ${servicePg.user}`] = await adminConnection
-                        .unsafe(`CREATE ROLE ${servicePg.user} WITH PASSWORD ${simpleQuotesString(servicePg.password)} ${EConstant.rights}`)
+                        .unsafe(`CREATE ROLE ${servicePg.user} WITH PASSWORD ${simpleQuotes(servicePg.password)} ${EConstant.rights}`)
                         .then(() => EChar.ok)
                         .catch((err: Error) => err.message);
                 } else {
                     await adminConnection
-                        .unsafe(`ALTER ROLE ${servicePg.user} WITH PASSWORD ${simpleQuotesString(servicePg.password)}  ${EConstant.rights}`)
+                        .unsafe(`ALTER ROLE ${servicePg.user} WITH PASSWORD ${simpleQuotes(servicePg.password)}  ${EConstant.rights}`)
                         .then(() => {
                             returnValue[`Create/Alter ROLE`] = `${servicePg.user} ${EChar.ok}`;
                         })
@@ -160,7 +160,7 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
 
     // final test
     await dbConnection
-        .unsafe(`SELECT COUNT(*) FROM pg_user WHERE usename = ${simpleQuotesString(servicePg.user)};`)
+        .unsafe(`SELECT COUNT(*) FROM pg_user WHERE usename = ${simpleQuotes(servicePg.user)};`)
         .then(() => {
             returnValue["ALL finished ..."] = EChar.ok;
         })

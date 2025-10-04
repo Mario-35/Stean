@@ -133,6 +133,7 @@ export class Common {
                 case returnFormats.csv:
                     sql = asCsv(sql, this.ctx.service.csvDelimiter);
                     this.ctx.attachment(`${this.ctx.odata.entity?.name || "export"}.csv`);
+                    logging.debug().query("Get csv", sql).to().log().file();
                     return this.formatReturnResult({ body: await config.connection(this.ctx.service.name).unsafe(sql).readable() });
                 default:
                     return await executeSqlValues(this.ctx.service, sql)

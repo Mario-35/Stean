@@ -30,7 +30,7 @@ export const createTable = async (serviceName: string, tableEntity: Ientity, doA
             .connection(serviceName)
             .unsafe(_sql)
             .then(() => {
-                logging.debug().status(true, "Execution").to().log().file();
+                logging.debug().status(true, message).to().log().file();
                 return EChar.ok;
             })
             .catch((error: Error) => {
@@ -58,7 +58,6 @@ export const createTable = async (serviceName: string, tableEntity: Ientity, doA
 
     Object.keys(tableEntity.columns).forEach((column) => {
         if (tableEntity.columns[column].create.trim() != "") tabIeInsert.push(`${doubleQuotes(column)} ${tableEntity.columns[column].create}`);
-        else console.log(tableEntity.columns[column]);
     });
     insertion = tabIeInsert.join(", ");
 
@@ -81,7 +80,6 @@ export const createTable = async (serviceName: string, tableEntity: Ientity, doA
 
     if (tableEntity.partition) {
         if (tableEntity.partition.entityRelation) {
-            // EXECUTE 'CREATE TABLE IF NOT EXISTS "${tableEntity.table}0${i > 0 ? "" : `'||NEW."id"||'`}" PARTITION OF ${tableEntity.table} FOR VALUES IN (${i > 0 ? "0" : `'||NEW."id"||'`})' using NEW;
             sql = tableEntity.partition.entityRelation
                 .map(
                     (e, i: number) =>
@@ -93,27 +91,16 @@ export const createTable = async (serviceName: string, tableEntity: Ientity, doA
       BEGIN 
         IF (NEW."id" is not null) THEN 
             EXECUTE '${partitionTable(tableEntity.table, i)}' using NEW;
+            EXECUTE '${partitionTable(tableEntity.table, i + 1)}' using NEW;
         END IF;
         RETURN NEW; 
       END;
       $function$;
-    CREATE OR REPLACE TRIGGER ${e.toLowerCase()}_on_insert BEFORE INSERT ON public."${singular(e).toLowerCase()}" FOR EACH ROW EXECUTE FUNCTION ${e.toLowerCase()}_on_action();
+    CREATE OR REPLACE TRIGGER ${e.toLowerCase()}_on_insert BEFORE INSERT ON public."${singular(e).toLowerCase()}" FOR EACH STATEMENT EXECUTE FUNCTION ${e.toLowerCase()}_on_action();
     `
                 )
                 .join(";");
-            // sql = `CREATE OR REPLACE FUNCTION public.observation_action()
-            //     RETURNS trigger
-            //     LANGUAGE plpgsql
-            //     AS $function$ BEGIN
-            //     EXECUTE 'CREATE TABLE IF NOT EXISTS "observation0'||COALESCE(NEW."datastream_id", 0)||'" PARTITION OF observation FOR VALUES IN ('||COALESCE(NEW."datastream_id", 0)||')' using NEW;
-            //     RETURN NEW;
-            //     END;
-            //     $function$;
-            //     CREATE OR REPLACE TRIGGER observation_action_on_insert BEFORE INSERT ON public."observation" FOR EACH ROW EXECUTE FUNCTION observation_action();`;
-
             sql += `CREATE TABLE IF NOT EXISTS "observationdefault" PARTITION OF "${tableEntity.table}" DEFAULT;`;
-            // if (doAfter) doAfter += sql;
-            // else doAfter = sql;
         }
         await executeMessageQuery(String(`CREATE PARTITION TRIGGER ${doubleQuotes(tableEntity.table)}`), sql);
     }
@@ -122,7 +109,7 @@ export const createTable = async (serviceName: string, tableEntity: Ientity, doA
     if (tableConstraints.length > 0) await executeMessageQuery(`${tab()}Create constraints for ${tableEntity.table}`, tableConstraints.join(";"));
 
     // CREATE SOMETHING AFTER
-    if (tableEntity.after) if (tableEntity.after.toUpperCase().startsWith("INSERT")) await executeMessageQuery(`${tab()}Something to do after for ${tableEntity.table}`, tableEntity.after);
+    if (tableEntity.after) await executeMessageQuery(`${tab()}Something to do after for ${tableEntity.table}`, tableEntity.after);
 
     // CREATE SOMETHING AFTER (migration)
     if (doAfter) await executeMessageQuery(`${tab()} doAfter ${tableEntity.table}`, doAfter);

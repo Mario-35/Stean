@@ -301,7 +301,12 @@ jsonDatas.onkeyup = function() {
 
 
 
-// logout actual user
+// copy service to actual service
+btnCopyService.onclick = () => {
+	copyFromService();
+};
+
+// test charly loop
 testMario.onclick = () => {
 	testa();
 };

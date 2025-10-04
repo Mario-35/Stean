@@ -37,10 +37,12 @@ export class Models {
         [key: string]: Ientities;
     } = {};
 
+    // Test i version exist
     private testVersion(verStr: string) {
         return Models.models.hasOwnProperty(verStr);
     }
 
+    // Create drawInfo diagram
     public getDrawIo(service: Iservice) {
         const deleteId = (id: string) => {
             const start = `<mxCell id="${id}"`;
@@ -239,6 +241,7 @@ export class Models {
     public addTriggersOnTables(service: Iservice | string, triggerName: string): string[] {
         return this.listTables(service).map((table) => createTrigger(table, triggerName));
     }
+
     public removeTriggersOnTables(service: Iservice | string, triggerName: string): string[] {
         return this.listTables(service).map((table) => dropTrigger(table, triggerName));
     }
@@ -269,9 +272,7 @@ export class Models {
 
     public DBFullCreate(service: Iservice | string): Ientities {
         service = this.get(service);
-
         const name = service.options.includes(EOptions.unique) ? new Text().notNull().default(info.noName).unique().column() : new Text().notNull().column();
-
         const description = service.options.includes(EOptions.unique) ? new Text().notNull().default(info.noName).unique().column() : new Text().notNull().column();
 
         const s = Models.models[service.apiVersion];
@@ -283,7 +284,7 @@ export class Models {
     }
 
     public DBFull(service: Iservice | string): Ientities {
-        return Models.models[this.get(service).apiVersion];
+        return this.getModelOptions(service);
     }
 
     public DBAdmin(service: Iservice): Ientities {
@@ -301,7 +302,7 @@ export class Models {
 
     public getEntityName(service: Iservice, search: string): string | undefined {
         if (config && search) {
-            const tempModel = Models.models[service.apiVersion];
+            const tempModel = this.getModelOptions(service);
             const testString: string | undefined = search
                 .trim()
                 .match(/[a-zA-Z_]/g)
@@ -464,6 +465,18 @@ export class Models {
      */
     public initialisation() {
         if (isTest()) this.createVersion("v1.1");
+    }
+
+    public getModelOptions(service: Iservice | string): Ientities {
+        service = this.get(service);
+        const name = service.options.includes(EOptions.unique) ? new Text().notNull().default(info.noName).unique().column() : new Text().notNull().column();
+        const description = service.options.includes(EOptions.unique) ? new Text().notNull().default(info.noName).unique().column() : new Text().notNull().column();
+        Object.keys(Models.models[service.apiVersion]).map((k: string) => {
+            if (Models.models[service.apiVersion][k].columns["name"]) Models.models[service.apiVersion][k].columns.name = name;
+            if (Models.models[service.apiVersion][k].columns["description"]) Models.models[service.apiVersion][k].columns.name = description;
+        });
+        return Models.models[service.apiVersion];
+        1;
     }
 }
 

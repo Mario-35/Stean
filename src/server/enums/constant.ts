@@ -30,7 +30,8 @@ export const EConstant = Object.freeze({
     host: "localhost",
     pg: "postgres",
     port: 5432,
-    voidtable: "spatial_ref_sys",
+    voidtable: "voidTable",
+    voidSql: "SELECT 1=1",
     appName: process.env.npm_package_name || "_STEAN",
     stringException: ["CONCAT", "CASE", "COALESCE"],
     helmetConfig: {

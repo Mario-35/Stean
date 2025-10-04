@@ -8,8 +8,8 @@
 
 import { Common } from "./common";
 import { IcsvColumn, IcsvFile, IreturnResult, IstreamInfos, koaContext } from "../../types";
-import { queryInsertFromCsv, dateToDateWithTimeZone, executeSql, executeSqlValues } from "../helpers";
-import { doubleQuotes, asyncForEach, splitLast } from "../../helpers";
+import { executeSql, executeSqlValues, dateToDateWithTimeZone, InsertFromCsv } from "../helpers";
+import { doubleQuotes, asyncForEach, splitLast, makeNull } from "../../helpers";
 import { errors, msg } from "../../messages/";
 import { EChar, EConstant, EDatesType, EExtensions, EHttpCode } from "../../enums";
 import util from "util";
@@ -19,7 +19,7 @@ import { OBSERVATION } from "../../models/entities";
 import { _DEBUG } from "../../constants";
 
 /**
- * CreateFile Class
+ * CreateObservations Class
  */
 
 export class CreateObservations extends Common {
@@ -29,6 +29,8 @@ export class CreateObservations extends Common {
         super(ctx);
     }
     createListColumnsValues(type: "COLUMNS" | "VALUES", input: string[]): string[] {
+        console.log(logging.whereIam(new Error().stack));
+
         const res: string[] = [];
         const separateur = type === "COLUMNS" ? '"' : "'";
         input.forEach((elem: string, index: number) => {
@@ -53,7 +55,7 @@ export class CreateObservations extends Common {
                     ? this.ctx.service.extensions.includes(EExtensions.resultNumeric)
                         ? elem
                         : `'{"value": ${elem}}'`
-                    : elem
+                    : `${separateur}${elem}${separateur}`
             );
         });
         return res;
@@ -97,7 +99,8 @@ export class CreateObservations extends Common {
             stream: streamInfos
         };
         // stream file in temp table and get query to insert
-        const sqlInsert = await queryInsertFromCsv(this.ctx.service, paramsFile);
+
+        const sqlInsert = await new InsertFromCsv(this.ctx, paramsFile).query();
         logging
             .message(`Stream csv file ${paramsFile.filename} in PostgreSql`, sqlInsert ? EChar.ok : EChar.notOk)
             .to()
@@ -132,7 +135,7 @@ export class CreateObservations extends Common {
             await asyncForEach(dataInput["dataArray"], async (elem: string[]) => {
                 const keys = [`"${dataStreamId.type?.toLowerCase()}_id"`].concat(this.createListColumnsValues("COLUMNS", dataInput["components"]));
                 const values = this.createListColumnsValues("VALUES", [String(dataStreamId.id), ...elem]);
-                await executeSqlValues(this.ctx.service, `INSERT INTO ${doubleQuotes(OBSERVATION.table)} (${keys}) VALUES (${values}) RETURNING id`)
+                await executeSqlValues(this.ctx.service, `INSERT INTO ${doubleQuotes(OBSERVATION.table)} (${keys}) VALUES (${makeNull(values.toString())}) RETURNING id`)
                     .then((res: Record<string, any>) => {
                         returnValue.push(this.linkBase.replace("Create", "") + "(" + res[0] + ")");
                         total += 1;

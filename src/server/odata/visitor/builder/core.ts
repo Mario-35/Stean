@@ -7,6 +7,7 @@
  */
 
 import { removeAllQuotes } from "../../../helpers";
+
 export class Core {
     private _src: string[];
 
