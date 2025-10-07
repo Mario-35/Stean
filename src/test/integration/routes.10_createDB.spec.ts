@@ -6,7 +6,27 @@ import { server } from "../../server/index";
 import { testVersion, VERSION, _RAWDB, testLog } from "./constant";
 import { AddToTestFile } from "./tests";
 const should = chai.should();
-const n = [_RAWDB.Things.name, _RAWDB.Locations.name, _RAWDB.HistoricalLocations.name, _RAWDB.Datastreams.name, _RAWDB.MultiDatastreams.name, _RAWDB.Sensors.name, _RAWDB.ObservedProperties.name, _RAWDB.Observations.name, _RAWDB.CreateObservations.name, _RAWDB.Loras.name, "literals", "Odatas", "BuiltInFunctions", "BuiltInFilter", "BuiltinDates", "BuiltinMaths", "BuiltinGeospatial", "BuiltinMisc", "Various"];
+const n = [
+    _RAWDB.Things.name,
+    _RAWDB.Locations.name,
+    _RAWDB.HistoricalLocations.name,
+    _RAWDB.Datastreams.name,
+    _RAWDB.MultiDatastreams.name,
+    _RAWDB.Sensors.name,
+    _RAWDB.ObservedProperties.name,
+    _RAWDB.Observations.name,
+    _RAWDB.CreateObservations.name,
+    _RAWDB.Loras.name,
+    "literals",
+    "Odatas",
+    "BuiltInFunctions",
+    "BuiltInFilter",
+    "BuiltinDates",
+    "BuiltinMaths",
+    "BuiltinGeospatial",
+    "BuiltinMisc",
+    "Various"
+];
 AddToTestFile(`\r\r# <a id="start">TEST : ${new Date().toLocaleDateString()} : ${new Date().toLocaleTimeString()}</a> version[${VERSION}]\r\r`);
 AddToTestFile(`${n.map((e) => `[${e}](#${e})`)}\r\r`);
 describe("Create Test Database.", function () {

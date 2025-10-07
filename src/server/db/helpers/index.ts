@@ -17,7 +17,6 @@ export { dateToDateWithTimeZone } from "./dateToDateWithTimeZone";
 export { getDBDateNow } from "./getDBDateNow";
 export { removeKeyFromUrl } from "./removeKeyFromUrl";
 export { getEntityIdInDatas } from "./getEntityIdInDatas";
-export { getColumnsNamesFromCsvFile } from "./getColumnsNamesFromCsvFile";
 export { streamCsvFile } from "./streamCsvFile";
 export { disconnectDb } from "./disconnectDb";
 export { executeSql } from "./executeSql";

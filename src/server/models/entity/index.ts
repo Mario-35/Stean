@@ -88,8 +88,9 @@ export class Entity extends EntityPass {
                             column: e,
                             entityRelation: [this.columns[e].entityRelation]
                         };
-                        this.after += `CREATE TABLE IF NOT EXISTS "${this.table}default" PARTITION OF "${this.table}" DEFAULT;`;
-                        // this.after += `CREATE TABLE IF NOT EXISTS "${this.table}01" PARTITION OF "${this.table}" FOR VALUES IN (01);`;
+                        this.after = `CREATE TABLE IF NOT EXISTS "${this.table}default" PARTITION OF "${this.table}" DEFAULT;
+                        CREATE TABLE IF NOT EXISTS "${this.table}0" PARTITION OF "${this.table}" FOR VALUES IN (NULL);
+                        CREATE TABLE IF NOT EXISTS "${this.table}1" PARTITION OF "${this.table}" FOR VALUES IN (1);`;
                     }
                 }
             }

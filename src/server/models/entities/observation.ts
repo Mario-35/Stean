@@ -39,6 +39,4 @@ export const OBSERVATION: Ientity = new Entity("Observations", {
             type: ERelations.belongsTo
         }
     }
-    // after: `CREATE TABLE IF NOT EXISTS "observationdefault" PARTITION OF "observation" DEFAULT;
-    // CREATE TABLE IF NOT EXISTS "observation01" PARTITION OF observation FOR VALUES IN (01);`
 });

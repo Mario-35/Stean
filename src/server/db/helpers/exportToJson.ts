@@ -46,8 +46,8 @@ export const exportToJson = async (ctx: koaContext) => {
                 const tempResult = await config
                     .connection(ctx.service.name)
                     .unsafe(
-                        `select ${columnListWithQuotes}${rels.length > 1 ? rels.join() : ""}${EConstant.return} FROM "${ctx.model[entity].table}" LIMIT ${
-                            getUrlKey(ctx.request.url, "limit") || ctx.service.nb_page
+                        `SELECT ${columnListWithQuotes}${rels.length > 1 ? rels.join() : ""}${EConstant.return} FROM "${ctx.model[entity].table}" LIMIT ${
+                            getUrlKey(ctx.request.url, "LIMIT") || ctx.service.nb_page
                         }`
                     );
                 // remove null and store datas result

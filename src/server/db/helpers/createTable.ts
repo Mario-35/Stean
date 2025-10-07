@@ -12,8 +12,6 @@ import { doubleQuotes } from "../../helpers";
 import { Ientity } from "../../types";
 import { EChar } from "../../enums";
 import { _DEBUG } from "../../constants";
-import { singular } from "../../models/helpers";
-import { partitionTable } from "../constants";
 
 /**
  *
@@ -64,7 +62,6 @@ export const createTable = async (serviceName: string, tableEntity: Ientity, doA
     Object.keys(tableEntity.constraints).forEach((constraint) => {
         tableConstraints.push(`ALTER TABLE ${doubleQuotes(tableEntity.table)} ADD CONSTRAINT ${doubleQuotes(constraint)} ${tableEntity.constraints[constraint]}`);
     });
-
     let sql = `CREATE TABLE ${doubleQuotes(tableEntity.table)} (${insertion})${tableEntity.partition ? `PARTITION BY LIST(${tableEntity.partition.column})` : ""};`;
     if (tableEntity.table.trim() != "") await executeMessageQuery(String(`Create table ${doubleQuotes(tableEntity.table)}`), sql);
     const indexes = tableEntity.indexes;
@@ -77,33 +74,6 @@ export const createTable = async (serviceName: string, tableEntity: Ientity, doA
         });
 
     if (tabTemp.length > 0) await executeMessageQuery(`${tab()}Create indexes for ${tableEntity.name}`, tabTemp.join(";"));
-
-    if (tableEntity.partition) {
-        if (tableEntity.partition.entityRelation) {
-            sql = tableEntity.partition.entityRelation
-                .map(
-                    (e, i: number) =>
-                        `CREATE OR REPLACE FUNCTION public.${e.toLowerCase()}_on_action()
-      RETURNS trigger
-      LANGUAGE plpgsql
-      AS $function$ 
-      DECLARE id BIGINT;
-      BEGIN 
-        IF (NEW."id" is not null) THEN 
-            EXECUTE '${partitionTable(tableEntity.table, i)}' using NEW;
-            EXECUTE '${partitionTable(tableEntity.table, i + 1)}' using NEW;
-        END IF;
-        RETURN NEW; 
-      END;
-      $function$;
-    CREATE OR REPLACE TRIGGER ${e.toLowerCase()}_on_insert BEFORE INSERT ON public."${singular(e).toLowerCase()}" FOR EACH STATEMENT EXECUTE FUNCTION ${e.toLowerCase()}_on_action();
-    `
-                )
-                .join(";");
-            sql += `CREATE TABLE IF NOT EXISTS "observationdefault" PARTITION OF "${tableEntity.table}" DEFAULT;`;
-        }
-        await executeMessageQuery(String(`CREATE PARTITION TRIGGER ${doubleQuotes(tableEntity.table)}`), sql);
-    }
 
     // CREATE CONSTRAINTS
     if (tableConstraints.length > 0) await executeMessageQuery(`${tab()}Create constraints for ${tableEntity.table}`, tableConstraints.join(";"));
