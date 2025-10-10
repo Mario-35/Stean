@@ -12,7 +12,7 @@
  * @returns the bigint extract number
  */
 
-export const getBigIntFromString = (input: string | bigint | number): bigint | undefined => {
+export const getBigIntFromString = (input: string | bigint | number): number | bigint | undefined => {
     if (input) {
         try {
             if (typeof input === "string") {

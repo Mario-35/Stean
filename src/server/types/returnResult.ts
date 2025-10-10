@@ -13,5 +13,5 @@ export interface IreturnResult {
     "@iot.nextLink": string | undefined; // pagination next link
     "@iot.prevLink": string | undefined; // pagination prev link
     body: JSON | string | undefined; // body result
-    total: bigint | undefined; // total items
+    total: number | bigint | undefined; // total items
 }

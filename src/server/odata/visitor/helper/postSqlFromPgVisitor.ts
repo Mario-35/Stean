@@ -333,7 +333,7 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
         const entityName = src.parentEntity.name;
         logging.debug().message("Found entity : ", entityName).to().log().file();
         const callEntity = entityName ? src.ctx.model[entityName] : undefined;
-        const id: bigint | undefined = typeof src.parentId == "string" ? getBigIntFromString(src.parentId) : src.parentId;
+        const id: number | bigint | undefined = typeof src.parentId == "string" ? getBigIntFromString(src.parentId) : src.parentId;
         if (entityName && callEntity && id && id > 0) {
             const relationName = getRelationNameFromEntity(postEntity, callEntity);
             if (relationName) datas[relationName] = { "@iot.id": id.toString() };
@@ -352,7 +352,7 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
                     ? `WITH ${postEntity.table} AS (${EConstant.return}${EConstant.tab}UPDATE ${doubleQuotes(postEntity.table)}${EConstant.return}${EConstant.tab}SET ${createUpdateValues(
                           postEntity,
                           root
-                      )} WHERE "id" = (${EConstant.return}${EConstant.tab}select verifyId('${postEntity.table}', ${src.id}) as id) RETURNING ${allFields})`
+                      )} WHERE "id" = (${EConstant.return}${EConstant.tab}SELECT verifyId('${postEntity.table}', ${src.id}) as id) RETURNING ${allFields})`
                     : `WITH ${postEntity.table} AS (${EConstant.return}${EConstant.tab}SELECT * FROM ${doubleQuotes(postEntity.table)}${EConstant.return}${
                           EConstant.tab
                       }WHERE "id" = ${src.id.toString()})`

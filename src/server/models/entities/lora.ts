@@ -10,13 +10,13 @@ import { Entity } from "../entity";
 import { ERelations, EentityType } from "../../enums";
 import { Ientity } from "../../types";
 import { info } from "../../messages";
-import { Bigint, Jsonb, Relation, Text } from "../types";
+import { SmallInt, Jsonb, Relation, Text } from "../types";
 export const LORA: Ientity = new Entity("Loras", {
     createOrder: 11,
     type: EentityType.table,
     order: 11,
     columns: {
-        id: new Bigint().generated().column(),
+        id: new SmallInt().generated().column(),
         name: new Text().notNull().default(info.noName).unique().column(),
         description: new Text().notNull().default(info.noDescription).column(),
         properties: new Jsonb().column(),

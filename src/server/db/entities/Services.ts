@@ -83,7 +83,7 @@ export class Services extends Common {
     }
 
     // Override Delete service
-    async delete(idInput: bigint | string): Promise<IreturnResult | undefined> {
+    async delete(idInput: number | bigint | string): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
         // This function not exists
         return;

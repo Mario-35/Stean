@@ -13,7 +13,7 @@ export interface IdecodedUrl {
     root: string;
     search: string;
     path: string;
-    id: bigint;
+    id: number | bigint;
     idStr: string | undefined;
     service: string;
     version: string;

@@ -178,7 +178,7 @@ export class CreateObservations extends Common {
         this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest });
     }
     // Override delete to return error Bad request
-    async delete(idInput: bigint | string): Promise<IreturnResult | undefined> {
+    async delete(idInput: number | bigint | string): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
         this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest });
     }

@@ -864,7 +864,7 @@ describe("endpoint : Thing [8.2.1]", () => {
                     res.type.should.equal("application/json");
                     res.body.should.include.keys(testsKeys);
                     const thingId = +res.body["@iot.id"];
-                    executeQuery(`SELECT id::int FROM "location" ORDER BY id desc LIMIT 1`)
+                    executeQuery(`SELECT id FROM "location" ORDER BY id desc LIMIT 1`)
                         .then(async (locationRes) => {
                             executeQuery(`SELECT * FROM "thinglocation" WHERE "thing_id" = ${thingId} AND "location_id" = ${locationRes["id" as keyof object]}`)
                                 .then((tempSearchNew) => {
@@ -925,12 +925,12 @@ describe("endpoint : Thing [8.2.1]", () => {
                     res.type.should.equal("application/json");
                     res.body.should.include.keys(testsKeys);
                     const thingId = +res.body["@iot.id"];
-                    executeQuery(`SELECT "location_id"::int, "thing_id"::int FROM "thinglocation" WHERE "thing_id" = ${thingId} AND "location_id" = 1`)
+                    executeQuery(`SELECT "location_id", "thing_id" FROM "thinglocation" WHERE "thing_id" = ${thingId} AND "location_id" = 1`)
                         .then((tempSearchNew: Record<string, any>) => {
                             if (tempSearchNew) {
                                 tempSearchNew["location_id"].should.eql(1);
                                 tempSearchNew["thing_id"].should.eql(thingId);
-                                executeQuery(`SELECT "thing_id"::int FROM "historicallocation" ORDER BY "id" desc LIMIT 1`)
+                                executeQuery(`SELECT "thing_id" FROM "historicallocation" ORDER BY "id" desc LIMIT 1`)
                                     .then((historicallocationRes: Record<string, any>) => {
                                         if (historicallocationRes) {
                                             historicallocationRes["thing_id"].should.eql(thingId);
@@ -1041,16 +1041,16 @@ describe("endpoint : Thing [8.2.1]", () => {
                     res.header.location.should.contain(entity.name);
                     res.type.should.equal("application/json");
                     res.body.should.include.keys(testsKeys);
-                    const thingId = String(res.body["@iot.id"]);
+                    const thingId = +res.body["@iot.id"];
                     executeQuery(`SELECT * FROM "datastream" ORDER BY "id" desc LIMIT 1`)
                         .then((datastreamRes: Record<string, any>) => {
                             executeQuery(`SELECT "id" FROM "sensor" ORDER BY "id" desc LIMIT 1`)
                                 .then((sensorRes: Record<string, any>) => {
                                     executeQuery(`SELECT "id" FROM "observedproperty" ORDER BY "id" desc LIMIT 1`)
                                         .then((observedpropertyRes: Record<string, any>) => {
-                                            datastreamRes["thing_id"].should.eql(thingId);
-                                            datastreamRes["sensor_id"].should.eql(sensorRes["id"]);
-                                            datastreamRes["observedproperty_id"].should.eql(observedpropertyRes["id"]);
+                                            Number(datastreamRes["thing_id"]).should.eql(thingId);
+                                            Number(datastreamRes["sensor_id"]).should.eql(sensorRes["id"]);
+                                            Number(datastreamRes["observedproperty_id"]).should.eql(observedpropertyRes["id"]);
                                             addToApiDoc({
                                                 ...infos,
                                                 result: limitResult(res)
@@ -1278,7 +1278,7 @@ describe("endpoint : Thing [8.2.1]", () => {
                                 if (tempSearchNew) {
                                     Number(tempSearchNew["location_id"]).should.eql(10);
                                     Number(tempSearchNew["thing_id"]).should.eql(thingId);
-                                    executeQuery(`SELECT "thing_id"::int FROM "historicallocation" ORDER BY "id" desc LIMIT 1`)
+                                    executeQuery(`SELECT "thing_id" FROM "historicallocation" ORDER BY "id" desc LIMIT 1`)
                                         .then((historicallocationRes: Record<string, any>) => {
                                             if (historicallocationRes && historicallocationRes) {
                                                 historicallocationRes["thing_id"].should.eql(thingId);
@@ -1323,12 +1323,12 @@ describe("endpoint : Thing [8.2.1]", () => {
                         res.header.location.should.contain(entity.name);
                         res.type.should.equal("application/json");
                         res.body.should.include.keys(testsKeys);
-                        const thingId = String(res.body["@iot.id"]);
+                        const thingId = +res.body["@iot.id"];
                         executeQuery(`SELECT * FROM "thinglocation" WHERE "thing_id" = ${thingId} AND "location_id" = 2`)
                             .then((tempSearchNew: Record<string, any>) => {
                                 if (tempSearchNew) {
-                                    tempSearchNew["location_id"].should.eql("2");
-                                    tempSearchNew["thing_id"].should.eql(thingId);
+                                    Number(tempSearchNew["location_id"]).should.eql(2);
+                                    Number(tempSearchNew["thing_id"]).should.eql(thingId);
                                     executeQuery(`SELECT "thing_id" FROM "historicallocation" ORDER BY "id" DESC LIMIT 1`)
                                         .then((historicallocationRes: Record<string, any>) => {
                                             if (historicallocationRes && historicallocationRes) {
@@ -1354,7 +1354,7 @@ describe("endpoint : Thing [8.2.1]", () => {
             writeLog(true);
         });
         it(`Delete ${entity.name} return no content with code 204 ${nbColor}[10.4.1]`, (done) => {
-            executeQuery(`SELECT (SELECT count(id) FROM "${entity.table}")::int as count, (${last(entity.table)})::int as id `).then((beforeDelete: Record<string, any>) => {
+            executeQuery(`SELECT (SELECT count(id) FROM "${entity.table}") as count, (${last(entity.table)}) as id `).then((beforeDelete: Record<string, any>) => {
                 const infos = addTest({
                     type: "delete",
                     short: "One",
@@ -1368,9 +1368,9 @@ describe("endpoint : Thing [8.2.1]", () => {
                     .end((err: Error, res: any) => {
                         should.not.exist(err);
                         res.status.should.equal(204);
-                        executeQuery(`SELECT count(id)::int FROM "${entity.table}"`).then((afterDelete: Record<string, any>) => {
+                        executeQuery(`SELECT count(id) FROM "${entity.table}"`).then((afterDelete: Record<string, any>) => {
                             afterDelete["count"].should.eql(beforeDelete["count"] - 1);
-                            executeQuery(`SELECT count(*)::int FROM "historicallocation" WHERE "thing_id" = ${beforeDelete["id"]}`).then((hists: Record<string, any>) => {
+                            executeQuery(`SELECT count(*) FROM "historicallocation" WHERE "thing_id" = ${beforeDelete["id"]}`).then((hists: Record<string, any>) => {
                                 hists["count"].should.eql(0);
                                 addToApiDoc({
                                     ...infos,

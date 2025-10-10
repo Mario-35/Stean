@@ -32,8 +32,9 @@ export const createTable = async (serviceName: string, tableEntity: Ientity, doA
                 return EChar.ok;
             })
             .catch((error: Error) => {
-                logging.error(message, error).to().log().file();
-                return error.message;
+                logging.force(error);
+                logging.debug().status(false, message).to().log().file();
+                process.exit(111);
             });
     }
 
@@ -62,7 +63,7 @@ export const createTable = async (serviceName: string, tableEntity: Ientity, doA
     Object.keys(tableEntity.constraints).forEach((constraint) => {
         tableConstraints.push(`ALTER TABLE ${doubleQuotes(tableEntity.table)} ADD CONSTRAINT ${doubleQuotes(constraint)} ${tableEntity.constraints[constraint]}`);
     });
-    let sql = `CREATE TABLE ${doubleQuotes(tableEntity.table)} (${insertion})${tableEntity.partition ? `PARTITION BY LIST(${tableEntity.partition.column})` : ""};`;
+    let sql = `CREATE TABLE ${doubleQuotes(tableEntity.table)} (${insertion})${tableEntity.partition ? `PARTITION BY LIST(${tableEntity.partition[0]})` : ""};`;
     if (tableEntity.table.trim() != "") await executeMessageQuery(String(`Create table ${doubleQuotes(tableEntity.table)}`), sql);
     const indexes = tableEntity.indexes;
     const tabTemp: string[] = [];
@@ -77,6 +78,9 @@ export const createTable = async (serviceName: string, tableEntity: Ientity, doA
 
     // CREATE CONSTRAINTS
     if (tableConstraints.length > 0) await executeMessageQuery(`${tab()}Create constraints for ${tableEntity.table}`, tableConstraints.join(";"));
+
+    // CREATE TRIGGERS
+    if (tableEntity.trigger) await executeMessageQuery(`${tab()}Trigger ${tableEntity.table}`, tableEntity.trigger.join(";"));
 
     // CREATE SOMETHING AFTER
     if (tableEntity.after) await executeMessageQuery(`${tab()}Something to do after for ${tableEntity.table}`, tableEntity.after);

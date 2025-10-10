@@ -31,7 +31,7 @@ import { logging } from "./log";
 declare module "koa" {
     interface DefaultContext {
         decodedUrl: IdecodedUrl;
-        traceId: bigint | undefined;
+        traceId: number | bigint | undefined;
         service: Iservice;
         odata: RootPgVisitor;
         datas: Record<string, any>;

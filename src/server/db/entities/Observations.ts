@@ -28,7 +28,7 @@ export class Observations extends Common {
         // IF MultiDatastream
         if ((dataInput["MultiDatastream"] && dataInput["MultiDatastream"] != null) || (this.ctx.odata.parentEntity && this.ctx.odata.parentEntity.name.startsWith("MultiDatastream"))) {
             // get MultiDatastream search ID
-            const searchID: bigint | undefined =
+            const searchID: number | bigint | undefined =
                 dataInput["MultiDatastream"] && dataInput["MultiDatastream"] != null ? BigInt(dataInput["MultiDatastream"][EConstant.id]) : getBigIntFromString(this.ctx.odata.parentId);
             if (!searchID) this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: msg(errors.noFound, "MultiDatastreams") });
             // Search id keys

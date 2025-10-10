@@ -9,8 +9,8 @@
 import { _STREAM } from "../db/constants";
 import { EObservationType } from "../enums";
 export interface IstreamInfos {
-    type:            _STREAM, 
-    id:              BigInt, 
-    observationType: EObservationType, 
-    FoId:            BigInt
+    type: _STREAM;
+    id: number | BigInt;
+    observationType: EObservationType;
+    FoId: number | BigInt;
 }

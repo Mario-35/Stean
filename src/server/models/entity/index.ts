@@ -33,11 +33,7 @@ export class Entity extends EntityPass {
     clean?: string[];
     start?: string[];
     uniques?: string[];
-    partition?: {
-        column: string;
-        entityRelation?: string[];
-    };
-
+    partition?: string[];
     constructor(name: string, datas: IentityCore) {
         super();
         const entity = allEntities[name];
@@ -52,10 +48,25 @@ export class Entity extends EntityPass {
         this.prepareColums();
         this.createConstraints();
         this.createTriggers();
+        this.after?.replace("@PARTITION@", "");
         // if (name === "Observations") {
         //     console.log(this);
         //     process.exit(111);
         // }
+    }
+
+    addToTrigger(action: string, table: string, when: string) {
+        const tmp = `do $$ BEGIN
+        CREATE OR REPLACE TRIGGER ${table}_update_insert
+            ${when}
+            on "${table}"
+            for each STATEMENT
+            execute ${action};
+      exception
+        when others then null;
+      end $$;`;
+        if (this.trigger) this.trigger.push(tmp);
+        else this.trigger = [tmp];
     }
 
     addTrigger(action: string, table: string, relTable: string) {
@@ -81,16 +92,23 @@ export class Entity extends EntityPass {
         Object.keys(this.columns).forEach((e) => {
             if (this.columns[e].partition && this.columns[e].partition === true) {
                 if (this.columns[e].entityRelation) {
-                    if (this.partition && this.partition.entityRelation) {
-                        this.partition.entityRelation.push(this.columns[e].entityRelation);
+                    if (this.partition) {
+                        // this.after =
+                        //     this.after?.replace("@FUTURECOLUMN@", `"${e}"`) +
+                        //     `
+                        //  CREATE TABLE IF NOT EXISTS "${e}1" PARTITION OF "${this.partition.column}0" FOR VALUES IN (1);`;
+                        this.partition.push(e);
+                        this.after = this.after?.replace("@PARTITION@", ` PARTITION BY LIST("${e}")`);
+                        this.after += `
+                        CREATE TABLE IF NOT EXISTS "${e}default" PARTITION OF "${this.partition[0]}0" DEFAULT;
+                        CREATE TABLE IF NOT EXISTS "${e}1" PARTITION OF "${this.partition[0]}0" FOR VALUES IN (1);`;
                     } else {
-                        this.partition = {
-                            column: e,
-                            entityRelation: [this.columns[e].entityRelation]
-                        };
-                        this.after = `CREATE TABLE IF NOT EXISTS "${this.table}default" PARTITION OF "${this.table}" DEFAULT;
-                        CREATE TABLE IF NOT EXISTS "${this.table}0" PARTITION OF "${this.table}" FOR VALUES IN (NULL);
-                        CREATE TABLE IF NOT EXISTS "${this.table}1" PARTITION OF "${this.table}" FOR VALUES IN (1);`;
+                        this.partition = [e];
+                        this.after = `CREATE TABLE IF NOT EXISTS "${e}default" PARTITION OF "${this.table}" DEFAULT;
+                        CREATE TABLE IF NOT EXISTS "${e}0" PARTITION OF "${this.table}" FOR VALUES IN (NULL)@PARTITION@;
+                        CREATE TABLE IF NOT EXISTS "${e}1" PARTITION OF "${this.table}" FOR VALUES IN (1);`;
+                        // this.addToTrigger(`'CREATE TABLE IF NOT EXISTS "${e}' ||NEW.ID || '" PARTITION OF "${this.table}" FOR VALUES IN (' ||NEW.ID || ');'`, "datastream", "BEFORE INSERT");
+                        // trigger: [`do $$ begin CREATE TRIGGER datastream_update_insert BEFORE INSERT on "datastream" for each statement execute procedure datastream_partition(); end $$;`]
                     }
                 }
             }
@@ -102,8 +120,6 @@ export class Entity extends EntityPass {
             }
             if (this.columns[e].dataType === EDataType.tstzrange || this.columns[e].dataType === EDataType.tsrange) {
                 const entityRelation = this.columns[e].entityRelation;
-                // const coalesce = this.columns[e].coalesce;
-                // const cast = EDataType.tstzrange ? "TIMESTAMPTZ" : "TIMESTAMP";
                 if (entityRelation) {
                     if (!Entity.trigger[this.table]) Entity.trigger[this.table] = {};
                     const relationTable = singular(allEntities[entityRelation as keyof object]).toLowerCase();
@@ -139,23 +155,30 @@ export class Entity extends EntityPass {
     }
 
     private addToConstraints(key: string, value: string) {
-        this.constraints[key] = value;
+        this.constraints[key] = value + "\n";
     }
 
     private addToIndexes(key: string, value: string) {
-        this.indexes[key] = value;
+        this.indexes[key] = value + "\n";
+    }
+
+    unik(list: string[] | undefined, add?: string) {
+        if (list) {
+            return add ? [`"${add}"`, ...new Set(list.map((e) => `"${e}"`))] : [...new Set(list.map((e) => `"${e}"`))];
+        }
+        if (add) return [`"${add}"`];
+        return [];
     }
 
     private createConstraints() {
         Object.keys(this.columns).forEach((elem: string) => {
             if (this.columns[elem].orderBy) this.orderBy = `"${elem}" ${this.columns[elem].orderBy.toUpperCase()}`;
-            if (this.columns[elem].create.startsWith("BIGINT GENERATED ALWAYS AS IDENTITY")) {
-                this.addToConstraints(`${this.table}_pkey`, this.partition ? `UNIQUE NULLS NOT DISTINCT ("${elem}","${this.partition.column}")` : `PRIMARY KEY ("${elem}")`);
-                // this.addToConstraints(`${this.table}_pkey`, `PRIMARY KEY ("${elem}"${this.partition ? `,"${this.partition.column}"` : ""})`);
-                this.addToIndexes(`${this.table}_${elem}`, `ON public."${this.table}" USING btree ("${elem}")`);
+            if (this.columns[elem].create.endsWith(" GENERATED ALWAYS AS IDENTITY")) {
+                this.addToConstraints(`${this.table}_pkey`, `PRIMARY KEY ("${elem}")`);
+                this.addToConstraints(`${this.table}_pkey`, this.partition ? `UNIQUE NULLS NOT DISTINCT (${this.unik(this.partition, elem).join(",")})` : `PRIMARY KEY ("${elem}")`);
+                // this.addToIndexes(`${this.table}_${elem}`, `ON public."${this.table}" USING btree ("${elem}")`);
             } else if (this.columns[elem].create.includes(" UNIQUE")) {
-                this.addToConstraints(`${this.table}_unik_${elem}`, this.partition ? `UNIQUE NULLS NOT DISTINCT ("${elem}","${this.partition.column}")` : `UNIQUE ("${elem}")`);
-                // this.addToConstraints(`${this.table}_unik_${elem}`, `UNIQUE ("${elem}"${this.partition ? `,"${this.partition.column}"` : ""})`);
+                this.addToConstraints(`${this.table}_unik_${elem}`, this.partition ? `UNIQUE NULLS NOT DISTINCT (${this.unik(this.partition, elem).join(",")})` : `UNIQUE ("${elem}")`);
                 this.addToIndexes(`${this.table}_${elem}`, `ON public."${this.table}" USING btree ("${elem}")`);
             }
         });
@@ -165,7 +188,8 @@ export class Entity extends EntityPass {
                 this.addToConstraints(
                     `${this.table}_unik_${elem.toLowerCase()}`,
                     this.partition
-                        ? `UNIQUE NULLS NOT DISTINCT (${this.relations[elem].unique.filter((e) => e !== this.partition?.column).map((e) => `"${e}"`)},"${this.partition.column}")`
+                        ? // ? `UNIQUE NULLS NOT DISTINCT (${this.relations[elem].unique.map((e) => `${this.unik(this.partition, e).join(",")}`)})`
+                          `UNIQUE NULLS NOT DISTINCT (${this.unik([...new Set(this.partition), ...new Set(this.relations[elem].unique)])})`
                         : `UNIQUE (${this.relations[elem].unique.map((e) => `"${e}"`)})`
                 );
             switch (this.relations[elem].type) {
@@ -192,9 +216,6 @@ export class Entity extends EntityPass {
 
         if (this.type === EentityType.link && Object.keys(this.columns).length === 2) {
             this.addToConstraints(`${this.table}_pkey`, `PRIMARY KEY (${Object.keys(this.columns).map((e) => `"${e}"`)})`);
-            Object.keys(this.columns).forEach((elem) => {
-                //   this.addToIndexes("ELSE", `${this.table}_${elem}`, `ON public."${this.table}" USING btree ("${elem}")`);
-            });
         }
 
         if (Entity.pass[this.name]) {

@@ -9,13 +9,13 @@
 import { Entity } from "../entity";
 import { EObservationType, ERelations, EentityType } from "../../enums";
 import { Ientity } from "../../types";
-import { Bigint, Geometry, Jsonb, Period, Relation, Text, Texts } from "../types";
+import { SmallInt, Geometry, Jsonb, Period, Relation, Text, Texts } from "../types";
 export const MULTIDATASTREAM: Ientity = new Entity("MultiDatastreams", {
     createOrder: 8,
     type: EentityType.table,
     order: 2,
     columns: {
-        id: new Bigint().generated().column(),
+        id: new SmallInt().generated().column(),
         name: new Text().notNull().column(),
         description: new Text().notNull().column(),
         unitOfMeasurements: new Jsonb().notNull().column(),

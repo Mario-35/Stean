@@ -46,6 +46,8 @@ export type keyobj = keyof object;
 
 export const getColumnType = (input: IentityColumn): string => {
     switch (input.dataType) {
+        case EDataType.smallint:
+        case EDataType.integer:
         case EDataType.bigint:
             return "number";
         case EDataType.text:

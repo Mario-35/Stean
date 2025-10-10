@@ -7,7 +7,7 @@
  */
 
 import { Entity } from "../entity";
-import { ERelations, EentityType } from "../../enums";
+import { EDataType, ERelations, EentityType } from "../../enums";
 import { Ientity } from "../../types";
 import { Bigint, Jsonb, Period, Relation, Any, Timestamp } from "../types";
 export const OBSERVATION: Ientity = new Entity("Observations", {
@@ -22,9 +22,9 @@ export const OBSERVATION: Ientity = new Entity("Observations", {
         resultQuality: new Jsonb().column(),
         validTime: new Period("tz").column(),
         parameters: new Jsonb().column(),
-        datastream_id: new Relation("Datastreams").addIndexes(["phenomenonTime", "resultTime"]).partition().column(),
-        multidatastream_id: new Relation("MultiDatastreams").addIndexes(["phenomenonTime", "resultTime"]).partition().column(),
-        featureofinterest_id: new Relation("FeaturesOfInterest").addIndexes(["phenomenonTime", "resultTime"]).notNull().default(1).column()
+        datastream_id: new Relation("Datastreams", EDataType.smallint).addIndexes(["phenomenonTime", "resultTime"]).partition().column(),
+        multidatastream_id: new Relation("MultiDatastreams", EDataType.smallint).addIndexes(["phenomenonTime", "resultTime"]).partition().column(),
+        featureofinterest_id: new Relation("FeaturesOfInterest", EDataType.smallint).addIndexes(["phenomenonTime", "resultTime"]).notNull().default(1).column()
     },
     relations: {
         Datastream: {

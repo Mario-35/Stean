@@ -14,19 +14,13 @@ import { _DEBUG } from "../../constants";
 import { errors } from "../../messages";
 
 const executeSqlOneValues = async (service: Iservice, query: string): Promise<object> => {
-    const test = query.match(new RegExp('INSERT INTO "datastream"', "g"))?.length;
-    let sql = "";
-    await config
-        .connection(service.name)
-        .unsafe("select last_value from datastream_id_seq")
-        .then((e: Record<string, any>) => {
-            if (test)
-                for (let i = 1; i <= test; i++) {
-                    const nb = +e[0]["last_value"] + i;
-                    sql += `CREATE TABLE IF NOT EXISTS "observation${nb}" PARTITION OF observation FOR VALUES IN (${nb});`;
-                }
-        });
-    await config.connection(service.name).unsafe(sql);
+    let test = query.match(new RegExp('INSERT INTO "datastream"', "g"))?.length;
+    if (test) await config.connection(service.name).unsafe(`select datastream_partition(${test});`);
+    test = query.match(new RegExp('INSERT INTO "multidatastream"', "g"))?.length;
+    if (test) {
+        logging.force(`____________multidatastream_________${test}______________________________________________________`);
+        await config.connection(service.name).unsafe(`select multidatastream_partition(${test});`);
+    }
     console.log(logging.whereIam(new Error().stack));
     return new Promise(async function (resolve, reject) {
         logging.debug().query(`executeSqlOneValues ${service.name}`, query).to().log().file();

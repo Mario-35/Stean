@@ -345,7 +345,7 @@ export class Common {
      * @param dataInput Recocd input
      * @returns IreturnResult
      */
-    async delete(idInput: bigint | string): Promise<IreturnResult | undefined> {
+    async delete(idInput: number | bigint | string): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
         // create Query
         const sql = `DELETE FROM ${doubleQuotes(this.ctx.model[this.constructor.name].table)} WHERE "id" = ${idInput} RETURNING id`;
@@ -359,7 +359,7 @@ export class Common {
                 return this.formatReturnResult({
                     body: await executeSqlValues(this.ctx.service, sql)
                         .then((res) => res)
-                        .catch(() => BigInt(0))
+                        .catch(() => 0)
                 });
         }
     }

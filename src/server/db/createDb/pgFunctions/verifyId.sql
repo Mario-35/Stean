@@ -1,11 +1,10 @@
-
 /* function verifyId */
-CREATE OR REPLACE FUNCTION verifyId(_tbl varchar, searchId BIGINT)
-RETURNS bigint
+CREATE OR REPLACE FUNCTION verifyId(_tbl varchar, searchId NUMERIC)
+RETURNS NUMERIC
   AS
     $body$
     declare
-    id_return integer;
+    id_return NUMERIC;
     BEGIN
         EXECUTE 'select 1 FROM ' || quote_ident(_tbl) || ' WHERE ' || quote_ident(_tbl) || '.id = ' || searchId || '' INTO id_return;
         if id_return then return searchId; 
@@ -15,7 +14,4 @@ RETURNS bigint
     $body$
   LANGUAGE 'plpgsql'
   VOLATILE;
-
-
   
-

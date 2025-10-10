@@ -8,7 +8,7 @@
 import { createIdList, interval } from ".";
 import { cleanStringComma } from "../../helpers";
 import { PgVisitor } from "../../odata/visitor";
-export const graphDatastream = (table: string, id: string | bigint, input: PgVisitor): string => {
+export const graphDatastream = (table: string, id: number | string | bigint, input: PgVisitor): string => {
     const query = interval(input);
     const ids = typeof id === "string" ? createIdList(id) : [String(id)];
     const pgQuery = input.toPgQuery();

@@ -9,14 +9,14 @@
 import { Entity } from "../entity";
 import { ERelations, EentityType } from "../../enums";
 import { Ientity } from "../../types";
-import { Bigint, Text } from "../types";
+import { SmallInt, Text } from "../types";
 
 export const SENSOR: Ientity = new Entity("Sensors", {
     createOrder: 6,
     type: EentityType.table,
     order: 9,
     columns: {
-        id: new Bigint().generated().column(),
+        id: new SmallInt().generated().column(),
         name: new Text().notNull().column(),
         description: new Text().notNull().column(),
         encodingType: new Text().default("application/pdf").column(),

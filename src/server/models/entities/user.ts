@@ -9,14 +9,14 @@
 import { Ientity } from "../../types";
 import { Entity } from "../entity";
 import { EentityType } from "../../enums";
-import { Bigint, Bool, Text } from "../types";
+import { Integer, Bool, Text } from "../types";
 
 export const USER: Ientity = new Entity("Users", {
     createOrder: -1,
     type: EentityType.table,
     order: 21,
     columns: {
-        id: new Bigint().generated().column(),
+        id: new Integer().generated().column(),
         username: new Text().notNull().unique().defaultOrder("asc").column(),
         email: new Text().column(),
         password: new Text().column(),

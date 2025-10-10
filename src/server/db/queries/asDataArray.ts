@@ -18,6 +18,7 @@ export const asDataArray = (input: PgVisitor): string => {
         if (input.entity?.columns[colName])
             switch (input.entity.columns[colName].dataType) {
                 case EDataType.bigint:
+                case EDataType.smallint:
                 case EDataType.integer:
                 case EDataType.any:
                     return "";

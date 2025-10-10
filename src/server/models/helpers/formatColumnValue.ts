@@ -38,6 +38,7 @@ export function formatColumnValue(columnName: string, value: any, column: Ientit
                 return value.toQuery();
             default:
                 switch (column.dataType) {
+                    case EDataType.smallint:
                     case EDataType.bigint:
                         return isNaN(value) ? idLink(value) : value;
                     case EDataType.bool:

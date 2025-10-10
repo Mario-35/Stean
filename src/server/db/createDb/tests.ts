@@ -273,7 +273,7 @@ export const testDatas: Record<string, any> = {
         "nb_page": 1000,
         "alias": [],
         "extensions": ["base", "multiDatastream", "lora", "users", "mqtt", "logs"],
-        "options": ["canDrop"]
+        "options": ["canDrop", "unique"]
     },
     "Things": [
         {

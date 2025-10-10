@@ -58,7 +58,7 @@ export class apiAccess implements Icomon {
         if (this.myEntity) return await this.myEntity.update(this.ctx.body);
     }
 
-    async delete(idInput: bigint | string): Promise<IreturnResult | undefined> {
+    async delete(idInput: number | bigint | string): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
         if (this.myEntity) return await this.myEntity.delete(idInput);
     }

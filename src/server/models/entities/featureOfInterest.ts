@@ -9,14 +9,14 @@
 import { Entity } from "../entity";
 import { ERelations, EentityType } from "../../enums";
 import { Ientity } from "../../types";
-import { Bigint, Jsonb, Text } from "../types";
+import { SmallInt, Jsonb, Text } from "../types";
 
 export const FEATUREOFINTEREST: Ientity = new Entity("FeaturesOfInterest", {
     createOrder: 4,
     type: EentityType.table,
     order: 4,
     columns: {
-        id: new Bigint().generated().column(),
+        id: new SmallInt().generated().column(),
         name: new Text().notNull().column(),
         description: new Text().notNull().column(),
         encodingType: new Text().column(),

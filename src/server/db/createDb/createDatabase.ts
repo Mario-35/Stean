@@ -98,6 +98,9 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
         async (keyName: string) => {
             const res = await createTable(serviceName, DB[keyName], undefined);
             Object.keys(res).forEach((e: string) => logging.debug().message(e, res[e]));
+            if (res.toString().includes(EChar.notOk)) {
+                process.exit(111);
+            }
         }
     );
 

@@ -127,7 +127,7 @@ export class Models {
         if (!stream) return undefined;
         const streamEntity = models.getEntityName(service, stream);
         if (!streamEntity) return undefined;
-        const foiId: bigint | undefined = input["FeaturesOfInterest"] ? input["FeaturesOfInterest"] : undefined;
+        const foiId: number | bigint | undefined = input["FeaturesOfInterest"] ? input["FeaturesOfInterest"] : undefined;
         const searchKey = input[models.DBFull(service)[streamEntity].name] || input[models.DBFull(service)[streamEntity].singular];
         const streamId: string | undefined = isNaN(searchKey) ? searchKey[EConstant.id] : searchKey;
         if (streamId) {

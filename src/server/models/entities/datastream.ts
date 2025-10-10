@@ -9,14 +9,14 @@
 import { EObservationType, ERelations, EentityType } from "../../enums";
 import { info } from "../../messages";
 import { Entity } from "../entity";
-import { Bigint, Geometry, Jsonb, Period, Relation, Text } from "../types";
+import { SmallInt, Geometry, Jsonb, Period, Relation, Text } from "../types";
 
 export const DATASTREAM = new Entity("Datastreams", {
     createOrder: 7,
     type: EentityType.table,
     order: 1,
     columns: {
-        id: new Bigint().generated().column(),
+        id: new SmallInt().generated().column(),
         name: new Text().notNull().column(),
         description: new Text().notNull().default(info.noDescription).column(),
         observationType: new Text().notNull().default("http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement").verify(Object.keys(EObservationType)).column(),

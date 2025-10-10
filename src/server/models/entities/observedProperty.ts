@@ -9,13 +9,13 @@
 import { Entity } from "../entity";
 import { ERelations, EentityType } from "../../enums";
 import { Ientity } from "../../types";
-import { Bigint, Text } from "../types";
+import { SmallInt, Text } from "../types";
 export const OBSERVEDPROPERTY: Ientity = new Entity("ObservedProperties", {
     createOrder: 5,
     type: EentityType.table,
     order: 8,
     columns: {
-        id: new Bigint().generated().column(),
+        id: new SmallInt().generated().column(),
         name: new Text().notNull().column(),
         description: new Text().notNull().column(),
         definition: new Text().notNull().default("no definition").column()
