@@ -49,4 +49,4 @@ export const DATASTREAM = new Entity("Datastreams", {
             type: ERelations.defaultUnique
         }
     }
-});
+}).toEntity();

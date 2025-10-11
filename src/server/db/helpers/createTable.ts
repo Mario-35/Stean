@@ -43,13 +43,14 @@ export const createTable = async (serviceName: string, tableEntity: Ientity, doA
         .head(`CreateTable [${tableEntity.table || `pseudo ${tableEntity.name}`}] for ${serviceName}`)
         .to()
         .log();
+
     if (!tableEntity || tableEntity.table.trim() === "") return {};
-    const space = 5;
-    const tab = () => " ".repeat(space);
+
+    const tab = () => " ".repeat(5);
     const tabIeInsert: string[] = [];
     const tableConstraints: string[] = [];
     const returnValue: Record<string, string> = {};
-    let insertion = "";
+
     if (!config.connection(serviceName)) {
         logging.error("connection Error", "connection Error");
         return { error: "connection Error" };
@@ -58,32 +59,36 @@ export const createTable = async (serviceName: string, tableEntity: Ientity, doA
     Object.keys(tableEntity.columns).forEach((column) => {
         if (tableEntity.columns[column].create.trim() != "") tabIeInsert.push(`${doubleQuotes(column)} ${tableEntity.columns[column].create}`);
     });
-    insertion = tabIeInsert.join(", ");
 
     Object.keys(tableEntity.constraints).forEach((constraint) => {
         tableConstraints.push(`ALTER TABLE ${doubleQuotes(tableEntity.table)} ADD CONSTRAINT ${doubleQuotes(constraint)} ${tableEntity.constraints[constraint]}`);
     });
-    let sql = `CREATE TABLE ${doubleQuotes(tableEntity.table)} (${insertion})${tableEntity.partition ? `PARTITION BY LIST(${tableEntity.partition[0]})` : ""};`;
-    if (tableEntity.table.trim() != "") await executeMessageQuery(String(`Create table ${doubleQuotes(tableEntity.table)}`), sql);
-    const indexes = tableEntity.indexes;
+
+    // CREATE TABLE
+    if (tableEntity.table.trim() != "")
+        await executeMessageQuery(
+            String(`Create table ${doubleQuotes(tableEntity.table)}`),
+            `CREATE TABLE ${doubleQuotes(tableEntity.table)} (${tabIeInsert.join(", ")})${tableEntity.partition ? ` PARTITION BY LIST(${tableEntity.partition.main})` : ""};`
+        );
+
     const tabTemp: string[] = [];
 
     // CREATE INDEXES
-    if (indexes)
-        Object.keys(indexes).forEach((index) => {
-            tabTemp.push(`CREATE INDEX "${index}" ${indexes[index]}`);
+    if (tableEntity.indexes)
+        Object.keys(tableEntity.indexes).forEach((index) => {
+            tabTemp.push(`CREATE INDEX "${index}" ${tableEntity.indexes[index]}`);
         });
 
-    if (tabTemp.length > 0) await executeMessageQuery(`${tab()}Create indexes for ${tableEntity.name}`, tabTemp.join(";"));
+    if (tabTemp.length > 0) await executeMessageQuery(`${tab()}Indexes for ${tableEntity.name}`, tabTemp.join(";"));
 
     // CREATE CONSTRAINTS
-    if (tableConstraints.length > 0) await executeMessageQuery(`${tab()}Create constraints for ${tableEntity.table}`, tableConstraints.join(";"));
+    if (tableConstraints.length > 0) await executeMessageQuery(`${tab()}Constraints for ${tableEntity.table}`, tableConstraints.join(";"));
 
     // CREATE TRIGGERS
     if (tableEntity.trigger) await executeMessageQuery(`${tab()}Trigger ${tableEntity.table}`, tableEntity.trigger.join(";"));
 
     // CREATE SOMETHING AFTER
-    if (tableEntity.after) await executeMessageQuery(`${tab()}Something to do after for ${tableEntity.table}`, tableEntity.after);
+    if (tableEntity.after) await executeMessageQuery(`${tab()}Something to do after for ${tableEntity.table}`, tableEntity.after.join(";"));
 
     // CREATE SOMETHING AFTER (migration)
     if (doAfter) await executeMessageQuery(`${tab()} doAfter ${tableEntity.table}`, doAfter);

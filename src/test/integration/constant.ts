@@ -28,6 +28,7 @@ export const nbColor = "\x1b[36m";
 export const nbColorTitle = "\x1b[35m";
 export const testLog = (input: any) => {
     process.stdout.write(util.inspect(input, { showHidden: false, depth: null, colors: false }));
+    process.stdout.write("\n");
 };
 export const proxy = (moi: boolean) => (moi !== true ? "http://localhost:8029/test" : `http://PROXY/`);
 import packageJson from "../../../package.json";

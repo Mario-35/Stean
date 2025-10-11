@@ -30,4 +30,4 @@ export const SENSOR: Ientity = new Entity("Sensors", {
             type: ERelations.hasMany
         }
     }
-});
+}).toEntity();

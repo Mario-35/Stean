@@ -35,4 +35,4 @@ export const THING: Ientity = new Entity("Things", {
             type: ERelations.hasMany
         }
     }
-});
+}).toEntity();

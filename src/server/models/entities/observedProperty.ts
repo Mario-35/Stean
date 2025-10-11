@@ -29,4 +29,4 @@ export const OBSERVEDPROPERTY: Ientity = new Entity("ObservedProperties", {
             entityRelation: "MultiDatastreamObservedProperties"
         }
     }
-});
+}).toEntity();

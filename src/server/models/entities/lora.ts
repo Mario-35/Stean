@@ -36,4 +36,4 @@ export const LORA: Ientity = new Entity("Loras", {
             type: ERelations.belongsTo
         }
     }
-});
+}).toEntity();

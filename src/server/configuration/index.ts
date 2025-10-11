@@ -46,6 +46,9 @@ class Configuration {
         // override console log for TDD important in production build will remove all console.log
         if (isTest()) {
             console.log = (data: any) => {};
+            // console.log = (data: any) => {
+            //     if (data) process.stdout.write(typeof data === "object" ? util.inspect(data, { showHidden: false, depth: null, colors: true }) + EConstant.return : data + EConstant.return);
+            // };
             setDebug(false);
             this.readConfigFile();
         } else

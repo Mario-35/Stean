@@ -29,4 +29,4 @@ export const USER: Ientity = new Entity("Users", {
         superAdmin: new Bool().column()
     },
     relations: {}
-});
+}).toEntity();

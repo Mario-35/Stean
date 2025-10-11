@@ -47,8 +47,8 @@ export class Core {
         return this;
     }
 
-    partition() {
-        this._.partition = true;
+    partition(input: "main" | "sub") {
+        this._.partition = input;
         return this;
     }
 

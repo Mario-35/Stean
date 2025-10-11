@@ -17,10 +17,7 @@ const executeSqlOneValues = async (service: Iservice, query: string): Promise<ob
     let test = query.match(new RegExp('INSERT INTO "datastream"', "g"))?.length;
     if (test) await config.connection(service.name).unsafe(`select datastream_partition(${test});`);
     test = query.match(new RegExp('INSERT INTO "multidatastream"', "g"))?.length;
-    if (test) {
-        logging.force(`____________multidatastream_________${test}______________________________________________________`);
-        await config.connection(service.name).unsafe(`select multidatastream_partition(${test});`);
-    }
+    if (test) await config.connection(service.name).unsafe(`select multidatastream_partition(${test});`);
     console.log(logging.whereIam(new Error().stack));
     return new Promise(async function (resolve, reject) {
         logging.debug().query(`executeSqlOneValues ${service.name}`, query).to().log().file();

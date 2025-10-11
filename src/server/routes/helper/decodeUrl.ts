@@ -31,7 +31,7 @@ export const decodeUrl = (ctx: koaContext, input?: string): IdecodedUrl | undefi
     // get input.separator
     input = input || ctx.href;
     // debug mode
-    if (input.includes("?$debug=true") || input.includes("&$debug=true")) setDebug(true);
+    setDebug(input.includes("?$debug=true"));
     setReplay(input.includes("?$replay=") || input.includes("&$replay=") ? getUrlKey(input, "replay") : undefined);
     console.log(logging.whereIam(new Error().stack));
     // decode url

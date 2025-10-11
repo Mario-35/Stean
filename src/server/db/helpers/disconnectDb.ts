@@ -7,6 +7,8 @@
  */
 
 import { config } from "../../configuration";
+import { logging } from "../../log";
+import { errors } from "../../messages";
 
 /**
  *
@@ -21,7 +23,7 @@ export const disconnectDb = async (dbName: string, drop: boolean): Promise<boole
             return true;
         });
     } catch (error) {
-        console.log(error);
+        logging.debug().error(errors.execQuery, error).to().log().file();
     }
     return false;
 };

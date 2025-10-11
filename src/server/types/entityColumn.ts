@@ -21,5 +21,5 @@ export interface IentityColumn {
         default: string;
     };
     indexes?: string[];
-    partition?: boolean;
+    partition?: "main" | "sub";
 }

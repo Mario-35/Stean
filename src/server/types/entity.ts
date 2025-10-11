@@ -15,7 +15,7 @@ export interface IentityCore {
     order: number; // order eault show
     columns: { [key: string]: IentityColumn }; // columns table
     relations: { [key: string]: IentityRelation }; // relations table
-    after?: string; // execute after create (default ata for example)
+    after?: string[]; // execute after create (default ata for example)
     trigger?: string[];
 }
 
@@ -28,5 +28,8 @@ export interface Ientity extends IentityCore {
     orderBy: string; // default orderBy
     clean?: string[]; // Clean to execute at start service when argv clean is found _CLEAN global var to process after new version
     start?: string[]; // Start to execute at start service (recalc date or flush)
-    partition?: string[];
+    partition?: {
+        main: string;
+        sub?: string;
+    };
 }

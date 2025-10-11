@@ -30,4 +30,4 @@ export const LOCATION: Ientity = new Entity("Locations", {
             type: ERelations.belongsToMany
         }
     }
-});
+}).toEntity();

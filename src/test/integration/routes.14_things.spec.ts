@@ -1369,9 +1369,9 @@ describe("endpoint : Thing [8.2.1]", () => {
                         should.not.exist(err);
                         res.status.should.equal(204);
                         executeQuery(`SELECT count(id) FROM "${entity.table}"`).then((afterDelete: Record<string, any>) => {
-                            afterDelete["count"].should.eql(beforeDelete["count"] - 1);
+                            Number(afterDelete["count"]).should.eql(+beforeDelete["count"] - 1);
                             executeQuery(`SELECT count(*) FROM "historicallocation" WHERE "thing_id" = ${beforeDelete["id"]}`).then((hists: Record<string, any>) => {
-                                hists["count"].should.eql(0);
+                                Number(hists["count"]).should.eql(0);
                                 addToApiDoc({
                                     ...infos,
                                     result: limitResult(res)

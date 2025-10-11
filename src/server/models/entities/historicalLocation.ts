@@ -29,4 +29,4 @@ export const HISTORICALLOCATION: Ientity = new Entity("HistoricalLocations", {
             entityRelation: "LocationsHistoricalLocations"
         }
     }
-});
+}).toEntity();

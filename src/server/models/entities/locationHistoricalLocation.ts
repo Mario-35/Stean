@@ -20,4 +20,4 @@ export const LOCATIONHISTORICALLOCATION: Ientity = new Entity("LocationsHistoric
         historicallocation_id: new SmallInt().notNull().column()
     },
     relations: {}
-});
+}).toEntity();

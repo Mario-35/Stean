@@ -6,6 +6,7 @@
  *
  */
 
+import { EentityType } from "../../enums";
 import { Ientity } from "../../types";
 import { createBlankEntity } from "../helpers";
 
@@ -29,3 +30,16 @@ export { THING } from "./thing";
 export { THINGLOCATION } from "./thingLocation";
 export { USER } from "./user";
 export { LOG } from "./log";
+export const _BLANKENTITY: Ientity = {
+    name: "",
+    singular: "",
+    table: "",
+    constraints: {},
+    indexes: {},
+    orderBy: "",
+    createOrder: -1,
+    type: EentityType.blank,
+    order: 0,
+    columns: {},
+    relations: {}
+};

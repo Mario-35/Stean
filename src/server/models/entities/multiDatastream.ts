@@ -49,4 +49,4 @@ export const MULTIDATASTREAM: Ientity = new Entity("MultiDatastreams", {
             type: ERelations.defaultUnique
         }
     }
-});
+}).toEntity();

@@ -28,4 +28,4 @@ export const DECODER: Ientity = new Entity("Decoders", {
             type: ERelations.hasMany
         }
     }
-});
+}).toEntity();

@@ -53,10 +53,8 @@ export class Query {
         }
         if (isReturnGeoJson(tempEntity, main)) {
             const col = tempEntity.name === "Locations" ? "location" : "feature";
-            console.log(main.query.where);
             if (main.query.where.toString().trim() != "") main.query.where.add(" AND ");
             main.query.where.add(`"${col}"::text LIKE '%coordinates%'`);
-            console.log(main.query.where);
             return [`${col} AS "geometry"`];
         }
         const returnValue: string[] = [];

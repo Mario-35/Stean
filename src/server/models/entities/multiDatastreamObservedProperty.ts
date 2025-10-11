@@ -20,4 +20,4 @@ export const MULTIDATASTREAMOBSERVEDPROPERTY: Ientity = new Entity("MultiDatastr
         observedproperty_id: new SmallInt().notNull().column()
     },
     relations: {}
-});
+}).toEntity();

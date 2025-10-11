@@ -33,5 +33,5 @@ export const FEATUREOFINTEREST: Ientity = new Entity("FeaturesOfInterest", {
             type: ERelations.hasMany
         }
     },
-    after: "INSERT INTO featureofinterest (name, description, \"encodingType\", feature) VALUES ('Default Feature of Interest', 'Default Feature of Interest', 'application/vnd.geo+json', '{}');"
-});
+    after: ["INSERT INTO featureofinterest (name, description, \"encodingType\", feature) VALUES ('Default Feature of Interest', 'Default Feature of Interest', 'application/vnd.geo+json', '{}');"]
+}).toEntity();

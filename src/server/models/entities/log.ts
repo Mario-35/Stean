@@ -24,4 +24,4 @@ export const LOG: Ientity = new Entity("Logs", {
         error: new Jsonb().column()
     },
     relations: {}
-});
+}).toEntity();
