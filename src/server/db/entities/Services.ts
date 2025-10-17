@@ -7,7 +7,7 @@
  */
 
 import { Common } from "./common";
-import { IreturnResult, koaContext } from "../../types";
+import { Id, IreturnResult, koaContext } from "../../types";
 import { config } from "../../configuration";
 import { hideKeysInJson, hidePassword } from "../../helpers";
 import { createService } from "../helpers";
@@ -83,7 +83,7 @@ export class Services extends Common {
     }
 
     // Override Delete service
-    async delete(idInput: number | bigint | string): Promise<IreturnResult | undefined> {
+    async delete(idInput: Id | string): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
         // This function not exists
         return;

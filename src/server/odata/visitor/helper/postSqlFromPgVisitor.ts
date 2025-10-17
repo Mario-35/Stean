@@ -7,7 +7,7 @@
  */
 
 import { doubleQuotes, getBigIntFromString, simpleQuotes } from "../../../helpers";
-import { Ientity, IqueryMaker } from "../../../types";
+import { Id, Ientity, IqueryMaker } from "../../../types";
 import { EConstant, EOperation, EOptions, EentityType } from "../../../enums";
 import { asJson } from "../../../db/queries";
 import { models } from "../../../models";
@@ -333,7 +333,7 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
         const entityName = src.parentEntity.name;
         logging.debug().message("Found entity : ", entityName).to().log().file();
         const callEntity = entityName ? src.ctx.model[entityName] : undefined;
-        const id: number | bigint | undefined = typeof src.parentId == "string" ? getBigIntFromString(src.parentId) : src.parentId;
+        const id: Id = typeof src.parentId == "string" ? getBigIntFromString(src.parentId) : src.parentId;
         if (entityName && callEntity && id && id > 0) {
             const relationName = getRelationNameFromEntity(postEntity, callEntity);
             if (relationName) datas[relationName] = { "@iot.id": id.toString() };

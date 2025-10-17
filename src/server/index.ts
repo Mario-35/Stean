@@ -21,7 +21,7 @@ import { isTest, logToHtml } from "./helpers";
 import { RootPgVisitor } from "./odata/visitor";
 import { EChar, EConstant } from "./enums";
 import { protectedRoutes, routerHandle, unProtectedRoutes } from "./routes/";
-import { Iservice, IdecodedUrl, Ientities, IuserToken } from "./types";
+import { Iservice, IdecodedUrl, Ientities, IuserToken, Id } from "./types";
 import { appVersion } from "./constants";
 import { paths } from "./paths";
 import { disconnectDb } from "./db/helpers";
@@ -31,7 +31,7 @@ import { logging } from "./log";
 declare module "koa" {
     interface DefaultContext {
         decodedUrl: IdecodedUrl;
-        traceId: number | bigint | undefined;
+        traceId: Id;
         service: Iservice;
         odata: RootPgVisitor;
         datas: Record<string, any>;

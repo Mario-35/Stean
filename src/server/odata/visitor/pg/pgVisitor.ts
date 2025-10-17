@@ -13,7 +13,7 @@ import { Literal } from "../../parser/literal";
 import { SQLLiteral } from "../../parser/sqlLiteral";
 import { SqlOptions } from "../../parser/sqlOptions";
 import { createDefaultContext, createIentityColumnAliasOptions, oDataDateFormat, OdataGeoColumn } from "../helper";
-import { errors, msg } from "../../../messages";
+import { messages } from "../../../messages";
 import { EColumnType, EConstant, EDataType, EHttpCode, EQuery } from "../../../enums";
 import { models } from "../../../models";
 import { logging } from "../../../log";
@@ -155,13 +155,13 @@ export class PgVisitor extends Visitor {
                     this.ctx.throw(EHttpCode.badRequest, {
                         detail: `Invalid expand path ${elems[1]} for ${elems[0]}`
                     });
-            } else this.ctx.throw(EHttpCode.badRequest, { detail: msg(errors.invalid, "entity") + elems[0] });
+            } else this.ctx.throw(EHttpCode.badRequest, { detail: messages.create(messages.errors.invalid).toString("entity") + elems[0] });
         });
         if (this.entity && isTestEntity(this.entity, "Observations") === true && this.splitResult !== undefined && Number(this.parentId) == 0) {
-            this.ctx.throw(EHttpCode.badRequest, { detail: errors.splitNotAllowed });
+            this.ctx.throw(EHttpCode.badRequest, { detail: messages.errors.splitNotAllowed });
         }
         if (this.returnFormat === returnFormats.dataArray && BigInt(this.id) > 0 && !this.parentEntity) {
-            this.ctx.throw(EHttpCode.badRequest, { detail: errors.dataArrayNotAllowed });
+            this.ctx.throw(EHttpCode.badRequest, { detail: messages.errors.dataArrayNotAllowed });
         }
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

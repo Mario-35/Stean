@@ -13,7 +13,7 @@ import { PgVisitor, RootPgVisitor } from "..";
 import { models } from "../../../models";
 import { EConstant, EDataType, EOptions, EQuery, EUserRights } from "../../../enums";
 import { GroupBy, Key, OrderBy, Select, Where, Join } from ".";
-import { errors } from "../../../messages";
+import { messages } from "../../../messages";
 import { logging } from "../../../log";
 import { expand } from "../../../models/helpers";
 import { isAllowedTo, isTestEntity } from "../../../helpers/tests";
@@ -144,11 +144,10 @@ export class Query {
                                         strip: main.ctx.service.options.includes(EOptions.stripNull),
                                         count: false
                                     })}) AS ${doubleQuotes(name)}`;
-                                else throw new Error(errors.invalidQuery);
+                                else throw new Error(messages.errors.invalidQuery);
                             }
                         });
                     // create all relations Query
-
                     if (toWhere === false)
                         relations
                             .filter((e) => e.includes("SELECT") || Object.keys(main.ctx.model).includes(models.getEntityName(main.ctx.service, e) || e))
@@ -160,15 +159,21 @@ export class Query {
                                     );
                                 }
                             });
+                    const pagination =
+                        element.ctx.service.options.includes(EOptions.optimized) && element.query.where.toString().includes(`"observation"."${element.parentEntity?.table}_id" =`) && element.skip > 0
+                            ? `"observation"."${element.parentEntity?.table}_id" =${element.query.where.toString().split("=")[1].split(" ")[0]}`
+                            : undefined;
+
+                    if (pagination) element.query.where.replace(pagination, `_nb > ${element.skip}`);
 
                     const res = {
                         select: select.join(`,${EConstant.return}${EConstant.tab}${EConstant.tab}`),
-                        from: [doubleQuotes(element.entity.table)],
+                        from: pagination ? [`"${element.parentEntity?.table}_id${pagination.split("=")[1].split(" ")[0]}" AS "${element.entity.table}"`] : [doubleQuotes(element.entity.table)],
                         where: element.query.where.toString(),
                         groupBy: element.query.groupBy.notNull() === true ? element.query.groupBy.toString() : undefined,
-                        orderBy: element.query.orderBy.notNull() === true ? element.query.orderBy.toString() : element.entity.orderBy,
+                        orderBy: element.query.orderBy.notNull() === true ? element.query.orderBy.toString() : pagination ? "" : element.entity.orderBy,
                         join: element.joinOffset,
-                        skip: element.skip,
+                        skip: pagination ? 0 : element.skip,
                         limit: element.limit,
                         keys: this.keyNames.toArray(),
                         count: element.countOffset
@@ -185,6 +190,7 @@ export class Query {
         return undefined;
     }
     private pgQueryToString(input: IpgQuery | undefined): string | undefined {
+        console.log(logging.whereIam(new Error().stack));
         return input
             ? `SELECT ${input.select}${EConstant.return} FROM ${input.from}${EConstant.return} ${input.join ? input.join : ""} ${input.where ? `WHERE ${input.where}${EConstant.return}` : ""}${
                   input.groupBy ? `GROUP BY ${cleanStringComma(input.groupBy)}${EConstant.return}` : ""
@@ -206,7 +212,7 @@ export class Query {
                 return query;
             }
         }
-        throw new Error(errors.invalidQuery);
+        throw new Error(messages.errors.invalidQuery);
     }
 
     toString(main: RootPgVisitor | PgVisitor, _element?: PgVisitor): string {
@@ -214,7 +220,7 @@ export class Query {
         if (!this._pgQuery) this._pgQuery = this.create(main, false, _element);
         const query = this.pgQueryToString(this._pgQuery);
         if (query) return query;
-        throw new Error(errors.invalidQuery);
+        throw new Error(messages.errors.invalidQuery);
     }
 
     toPgQuery(main: RootPgVisitor | PgVisitor, _element?: PgVisitor): IpgQuery | undefined {

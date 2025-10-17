@@ -8,9 +8,9 @@
  */
 
 import { doubleQuotes, returnFormats } from "../../helpers/index";
-import { IreturnResult, keyobj, koaContext } from "../../types";
+import { Id, IreturnResult, keyobj, koaContext } from "../../types";
 import { executeSqlValues, removeKeyFromUrl } from "../helpers";
-import { getErrorCode, info } from "../../messages";
+import { getErrorCode, messages } from "../../messages";
 import { logging } from "../../log";
 import { config } from "../../configuration";
 import { EConstant, EHttpCode } from "../../enums";
@@ -201,7 +201,7 @@ export class Common {
         console.log(logging.whereIam(new Error().stack));
         // TODO
         // stop save to log cause if datainput too big
-        if (this.ctx.log) this.ctx.log.datas = { datas: info.MultilinesNotSaved };
+        if (this.ctx.log) this.ctx.log.datas = { datas: messages.infos.MultilinesNotSaved };
         // create queries
         const sqls: string[] = Object(dataInput).map((datas: Record<string, any>) => {
             const modifiedDatas = this.formatDataInput(datas);
@@ -345,7 +345,7 @@ export class Common {
      * @param dataInput Recocd input
      * @returns IreturnResult
      */
-    async delete(idInput: number | bigint | string): Promise<IreturnResult | undefined> {
+    async delete(idInput: Id | string): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
         // create Query
         const sql = `DELETE FROM ${doubleQuotes(this.ctx.model[this.constructor.name].table)} WHERE "id" = ${idInput} RETURNING id`;

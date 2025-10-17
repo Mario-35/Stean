@@ -9,7 +9,7 @@
 import { decodingPayload } from ".";
 import { executeSql } from "../db/helpers";
 import { logging } from "../log";
-import { errors } from "../messages";
+import { messages } from "../messages";
 import { DECODER, LORA } from "../models/entities";
 import { ILoraDecodingResult, Iservice } from "../types";
 
@@ -30,7 +30,7 @@ export const decodeloraDeveuiPayload = async (service: Iservice, loraDeveui: str
             return {
                 decoder: "undefined",
                 result: undefined,
-                error: errors.DecodingPayloadError
+                error: messages.errors.DecodingPayloadError
             };
         });
 };

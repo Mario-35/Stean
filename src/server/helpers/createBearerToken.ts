@@ -7,11 +7,11 @@
  */
 
 import cookieParser from "cookie-parser";
-import { errors } from "../messages";
 import cookieModule from "cookie";
 import { keyobj, koaContext } from "../types";
 import { EHttpCode } from "../enums";
 import { paths } from "../paths";
+import { messages } from "../messages";
 
 export const createBearerToken = (ctx: koaContext) => {
     const getCookie = (serializedCookies: string, key: string) => cookieModule.parse(serializedCookies)[key] ?? false;
@@ -21,7 +21,7 @@ export const createBearerToken = (ctx: koaContext) => {
     const cookie = true;
 
     if (cookie && !paths.key) {
-        throw new Error(errors.tokenMissing);
+        throw new Error(messages.errors.tokenMissing);
     }
 
     const { body, header, query } = ctx.request;
@@ -64,7 +64,7 @@ export const createBearerToken = (ctx: koaContext) => {
     // in more than one place in a single request.
     if (count > 1) {
         ctx.throw(EHttpCode.badRequest, "token_invalid", {
-            message: errors.tokenInvalid
+            message: messages.errors.tokenInvalid
         });
     }
     // @ts-ignore

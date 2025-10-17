@@ -10,7 +10,7 @@ import { Common } from "./common";
 import { escapeSimpleQuotes, flatten, getBigIntFromString, notNull, searchInJson } from "../../helpers/index";
 import { _DEBUG } from "../../constants";
 import { IreturnResult, keyobj, koaContext } from "../../types";
-import { errors, msg } from "../../messages/";
+import { messages } from "../../messages/";
 import { EConstant, EDatesType, EHttpCode } from "../../enums";
 import { multiDatastreamFromDeveui, streamFromDeveui } from "../queries";
 import { decodeloraDeveuiPayload } from "../../lora";
@@ -64,12 +64,12 @@ export class Loras extends Common {
         if (dataInput) this.stean = await this.prepareInputResult(dataInput);
         logging.debug().message("input formated", this.stean).to().log().file();
 
-        if (this.stean["frame"] === "000000000000000000") this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.frameNotConform });
+        if (this.stean["frame"] === "000000000000000000") this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: messages.errors.frameNotConform });
         // search for MultiDatastream
         if (notNull(dataInput["MultiDatastream"])) {
             if (!notNull(this.stean["deveui"])) {
-                if (silent) return this.formatReturnResult({ body: errors.deveuiMessage });
-                else this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: errors.deveuiMessage });
+                if (silent) return this.formatReturnResult({ body: messages.errors.deveuiMessage });
+                else this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: messages.errors.deveuiMessage });
             }
             addToStean("MultiDatastream");
             return await super.post(this.stean);
@@ -77,22 +77,22 @@ export class Loras extends Common {
         // search for Datastream
         if (notNull(dataInput["Datastream"])) {
             if (!notNull(this.stean["deveui"])) {
-                if (silent) return this.formatReturnResult({ body: errors.deveuiMessage });
-                else this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: errors.deveuiMessage });
+                if (silent) return this.formatReturnResult({ body: messages.errors.deveuiMessage });
+                else this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: messages.errors.deveuiMessage });
             }
             addToStean("Datastream");
             return await super.post(this.stean);
         }
         // search for deveui
         if (!notNull(this.stean["deveui"])) {
-            if (silent) return this.formatReturnResult({ body: errors.deveuiMessage });
-            else this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: errors.deveuiMessage });
+            if (silent) return this.formatReturnResult({ body: messages.errors.deveuiMessage });
+            else this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: messages.errors.deveuiMessage });
         }
 
         const stream = await executeSql(this.ctx.service, streamFromDeveui(this.stean["deveui"])).then((res: Record<string, any>) => {
             if (res[0]["multidatastream"] != null) return res[0]["multidatastream"][0];
             if (res[0]["datastream"] != null) return res[0]["datastream"][0];
-            this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: msg(errors.deveuiNotFound, this.stean["deveui"]) });
+            this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: messages.create(messages.errors.deveuiNotFound, this.stean["deveui"]) });
         });
         logging.debug().message("stream", stream).to().log().file();
         // search for frame and decode payload if found
@@ -104,7 +104,7 @@ export class Loras extends Common {
                 else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: temp.error });
             }
             this.stean["decodedPayload"] = temp["result"];
-            if (this.stean["decodedPayload"].valid === false) this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.InvalidPayload });
+            if (this.stean["decodedPayload"].valid === false) this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: messages.errors.InvalidPayload });
         }
 
         const searchMulti = multiDatastreamFromDeveui(this.stean["deveui"]);
@@ -122,22 +122,22 @@ export class Loras extends Common {
                 });
 
             if (!notNull(this.stean["formatedDatas"])) {
-                if (silent) return this.formatReturnResult({ body: errors.dataMessage });
-                else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.dataMessage });
+                if (silent) return this.formatReturnResult({ body: messages.errors.dataMessage });
+                else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: messages.errors.dataMessage });
             }
         } else {
             if (this.stean["decodedPayload"] && this.stean["decodedPayload"]["datas"]) {
                 this.stean["formatedDatas"] = this.stean["decodedPayload"]["datas"];
             } else if (!this.stean["value"]) {
-                if (silent) return this.formatReturnResult({ body: errors.dataMessage });
-                else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.dataMessage });
+                if (silent) return this.formatReturnResult({ body: messages.errors.dataMessage });
+                else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: messages.errors.dataMessage });
             }
         }
         logging.debug().message("Formated datas", this.stean["formatedDatas"]).to().log().file();
         this.stean["date"] = searchInJson(dataInput, ["datetime", "phenomenonTime", "timestamp", "Time"]);
         if (!this.stean["date"]) {
-            if (silent) return this.formatReturnResult({ body: errors.noValidDate });
-            else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.noValidDate });
+            if (silent) return this.formatReturnResult({ body: messages.errors.noValidDate });
+            else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: messages.errors.noValidDate });
         }
 
         if (stream["multidatastream"]) {
@@ -162,7 +162,8 @@ export class Loras extends Common {
 
             logging.debug().message("Values", listOfSortedValues).to().log().file();
             if (Object.values(listOfSortedValues).filter((word) => word != null).length < 1) {
-                const errorMessage = `${errors.dataNotCorresponding} [${stream["keys"]}] with [${Object.keys(this.stean["formatedDatas"])}]`;
+                logging.error;
+                const errorMessage = `${messages.errors.dataNotCorresponding} [${stream["keys"]}] with [${Object.keys(this.stean["formatedDatas"])}]`;
                 if (silent) return this.formatReturnResult({ body: errorMessage });
                 else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errorMessage });
             }
@@ -172,7 +173,7 @@ export class Loras extends Common {
                 const tempLength = Object.keys(temp).length;
                 logging.debug().message("data : Keys", `${tempLength} : ${stream["keys"].length}`).to().log().file();
                 if (tempLength != stream["keys"].length) {
-                    const errorMessage = msg(errors.sizeListKeys, String(tempLength), stream["keys"].length);
+                    const errorMessage = messages.create(messages.errors.sizeListKeys).create(String(tempLength), stream["keys"].length).toString();
                     if (silent) return this.formatReturnResult({ body: errorMessage });
                     else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errorMessage });
                 }
@@ -229,11 +230,11 @@ export class Loras extends Common {
                     });
                     return this.formatReturnResult({ body: result, query: sql });
                 } else {
-                    if (silent) return this.formatReturnResult({ body: errors.observationExist });
+                    if (silent) return this.formatReturnResult({ body: messages.errors.observationExist });
                     else
                         this.ctx.throw(EHttpCode.conflict, {
                             code: EHttpCode.conflict,
-                            detail: errors.observationExist,
+                            detail: messages.errors.observationExist,
                             link: `${this.ctx.decodedUrl.root}/Observations(${[tempResult.duplicate]})`
                         });
                 }
@@ -251,8 +252,8 @@ export class Loras extends Common {
             );
 
             if (searchFOI[0].length < 1) {
-                if (silent) return this.formatReturnResult({ body: errors.noFoi });
-                else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.noFoi });
+                if (silent) return this.formatReturnResult({ body: messages.errors.noFoi });
+                else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: messages.errors.noFoi });
             }
             const value = this.stean["value"]
                 ? this.stean["value"]
@@ -262,8 +263,8 @@ export class Loras extends Common {
                 ? this.stean["data"]["Data"]
                 : undefined;
             if (!value) {
-                if (silent) return this.formatReturnResult({ body: errors.noValue });
-                else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.noValue });
+                if (silent) return this.formatReturnResult({ body: messages.errors.noValue });
+                else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: messages.errors.noValue });
             }
             const resultCreate = `'${JSON.stringify({ value: value })}'::jsonb`;
             const insertObject: Record<string, any> = {
@@ -313,11 +314,11 @@ export class Loras extends Common {
                         query: sql
                     });
                 } else {
-                    if (silent) return this.formatReturnResult({ body: errors.observationExist });
+                    if (silent) return this.formatReturnResult({ body: messages.errors.observationExist });
                     else
                         this.ctx.throw(EHttpCode.conflict, {
                             code: EHttpCode.conflict,
-                            detail: errors.observationExist,
+                            detail: messages.errors.observationExist,
                             link: `${this.ctx.decodedUrl.root}/Observations(${[tempResult.duplicate]})`
                         });
                 }

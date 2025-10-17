@@ -59,7 +59,7 @@ export const createService = async (service: Iservice, dataInput: Record<string,
         console.log(error);
     }
 
-    const tmp = models.filtered(newService);
+    const tmp = models.getModelOptions(newService);
 
     await asyncForEach(
         Object.keys(tmp)

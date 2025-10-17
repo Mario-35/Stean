@@ -8,7 +8,7 @@
 import util from "util";
 import { EConstant, EOptions } from "../../enums";
 import { unikeList, unique } from "../../helpers";
-import { errors } from "../../messages";
+import { messages } from "../../messages";
 import { Iservice, typeExtensions } from "../../types";
 import { logging } from "../../log";
 import { _DEBUG } from "../../constants";
@@ -59,7 +59,7 @@ export function formatServiceFile(name: string, input: Record<string, any>): Ise
 
     if (Object.values(returnValue).includes("ERROR"))
         throw new TypeError(
-            `${errors.inConfigFile} [${util.inspect(returnValue, {
+            `${messages.errors.inConfigFile} [${util.inspect(returnValue, {
                 showHidden: false,
                 depth: null
             })}]`

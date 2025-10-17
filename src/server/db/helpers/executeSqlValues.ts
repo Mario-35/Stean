@@ -11,7 +11,7 @@ import { logging } from "../../log";
 import { asyncForEach, isTest } from "../../helpers";
 import { Iservice, keyobj } from "../../types";
 import { _DEBUG } from "../../constants";
-import { errors } from "../../messages";
+import { messages } from "../../messages";
 
 const executeSqlOneValues = async (service: Iservice, query: string): Promise<object> => {
     let test = query.match(new RegExp('INSERT INTO "datastream"', "g"))?.length;
@@ -29,7 +29,7 @@ const executeSqlOneValues = async (service: Iservice, query: string): Promise<ob
                 resolve(res[0]);
             })
             .catch((err: Error) => {
-                if (!isTest() && +err["code" as keyobj] === 23505) logging.debug().error(errors.execQuery, err).to().log().file();
+                if (!isTest() && +err["code" as keyobj] === 23505) logging.debug().error(messages.errors.execQuery, err).to().log().file();
                 reject(err);
             });
     });
@@ -47,7 +47,7 @@ const executeSqlMultiValues = async (service: Iservice, queries: string[]): Prom
                     result = { ...result, ...res[0] };
                 })
                 .catch((err: Error) => {
-                    if (!isTest() && +err["code" as keyof object] === 23505) logging.debug().error(errors.execQuery, err).to().log().file();
+                    if (!isTest() && +err["code" as keyof object] === 23505) logging.debug().error(messages.errors.execQuery, err).to().log().file();
                     reject(err);
                 });
         });

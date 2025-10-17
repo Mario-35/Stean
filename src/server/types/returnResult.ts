@@ -6,6 +6,8 @@
  *
  */
 
+import { Id } from ".";
+
 // return format api
 export interface IreturnResult {
     location: string | undefined; // api location return
@@ -13,5 +15,5 @@ export interface IreturnResult {
     "@iot.nextLink": string | undefined; // pagination next link
     "@iot.prevLink": string | undefined; // pagination prev link
     body: JSON | string | undefined; // body result
-    total: number | bigint | undefined; // total items
+    total: Id; // total items
 }

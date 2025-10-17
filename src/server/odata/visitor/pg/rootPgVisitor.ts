@@ -14,7 +14,7 @@ import { EConstant, EExtensions, EHttpCode } from "../../../enums";
 import { logging } from "../../../log";
 import { PgVisitor } from "../.";
 import { models } from "../../../models";
-import { errors } from "../../../messages";
+import { messages } from "../../../messages";
 import { link } from "../../../models/helpers";
 import { doubleQuotes } from "../../../helpers";
 import { _DEBUG } from "../../../constants";
@@ -138,7 +138,7 @@ export class RootPgVisitor extends PgVisitor {
         } else if (this.entity && this.entity.columns[node.value.name]) {
             this.query.select.add(`${doubleQuotes(node.value.name)}${EConstant.columnSeparator}`);
             this.showRelations = false;
-        } else this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: errors.notValid });
+        } else this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: messages.errors.notValid });
     }
 
     protected VisitRessourcesPropertyPath(node: Token, context: IodataContext) {

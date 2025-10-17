@@ -11,7 +11,7 @@ import { Common } from "./common";
 import { IreturnResult } from "../../types";
 import { config } from "../../configuration";
 import { hidePassword } from "../../helpers";
-import { errors } from "../../messages/";
+import { messages } from "../../messages/";
 import { EConstant, EHttpCode, EUserRights } from "../../enums";
 import { models } from "../../models";
 import { logging } from "../../log";
@@ -31,12 +31,12 @@ export class Users extends Common {
         if (this.ctx.user?.PDCUAS[EUserRights.SuperAdmin] === true || this.ctx.user?.PDCUAS[EUserRights.Admin] === true) {
             const temp = await executeSqlValues(
                 config.getService(EConstant.admin),
-                `SELECT ${models.getSelectColumnList(this.ctx.service, models.DBAdmin(config.getService(EConstant.admin)).Users, true)} FROM "${USER.table}" ORDER BY "id"`
+                `SELECT ${models.getSelectColumnList(this.ctx.service, models.getFullModel(config.getService(EConstant.admin)).Users, true)} FROM "${USER.table}" ORDER BY "id"`
             );
             return this.formatReturnResult({
                 body: hidePassword(temp)
             });
-        } else this.ctx.throw(EHttpCode.Unauthorized, { code: EHttpCode.Unauthorized, detail: errors[EHttpCode.Unauthorized as keyobj] });
+        } else this.ctx.throw(EHttpCode.Unauthorized, { code: EHttpCode.Unauthorized, detail: messages.errors[EHttpCode.Unauthorized as keyobj] });
     }
 
     // Override to creste a new config and load it

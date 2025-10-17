@@ -3,7 +3,7 @@ import { EChar, EColor, EConstant } from "../enums";
 import util from "util";
 import { logToHtml } from "../helpers";
 import { paths } from "../paths";
-import { info } from "../messages";
+import { messages } from "../messages";
 
 export class LoggingResult {
     _toFile: string | undefined = undefined;
@@ -191,7 +191,7 @@ export class Logging {
         this.init();
         this.line(20, EColor.Magenta);
         this.color(EColor.Cyan);
-        this.space(`START ${EConstant.appName} ${info.ver} : ${appVersion.version}`);
+        this.space(`START ${EConstant.appName} ${messages.infos.ver} : ${appVersion.version}`);
         this.text("du");
         this.color(EColor.Yellow);
         this.space(`${appVersion.date} [${process.env.NODE_ENV}]`);

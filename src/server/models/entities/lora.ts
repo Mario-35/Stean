@@ -9,16 +9,16 @@
 import { Entity } from "../entity";
 import { ERelations, EentityType } from "../../enums";
 import { Ientity } from "../../types";
-import { info } from "../../messages";
 import { SmallInt, Jsonb, Relation, Text } from "../types";
+import { messages } from "../../messages";
 export const LORA: Ientity = new Entity("Loras", {
     createOrder: 11,
     type: EentityType.table,
     order: 11,
     columns: {
         id: new SmallInt().generated().column(),
-        name: new Text().notNull().default(info.noName).unique().column(),
-        description: new Text().notNull().default(info.noDescription).column(),
+        name: new Text().notNull().default(messages.infos.noName).unique().column(),
+        description: new Text().notNull().default(messages.infos.noDescription).column(),
         properties: new Jsonb().column(),
         deveui: new Text().unique().column(),
         decoder_id: new Relation("Decoders").notNull().column(),

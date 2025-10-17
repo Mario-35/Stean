@@ -13,7 +13,7 @@ import { apiAccess } from "../db/dataAccess";
 import { IreturnResult } from "../types";
 import { DefaultState, Context } from "koa";
 import { createOdata } from "../odata";
-import { info } from "../messages";
+import { messages } from "../messages";
 import { config } from "../configuration";
 import { createDatabase, testDatas } from "../db/createDb";
 import { disconnectDb, executeSql, exportService } from "../db/helpers";
@@ -115,7 +115,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
             if (ctx.request.header.accept && ctx.request.header.accept.includes("text/html")) ctx.redirect(`${ctx.decodedUrl.root}/login`);
             else ctx.status = EHttpCode.ok;
             ctx.body = {
-                message: info.logoutOk
+                message: messages.infos.logoutOk
             };
             return;
         // Execute Sql query pass in url
@@ -131,7 +131,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
         // Show draw.io model
         case "DRAW":
             ctx.type = returnFormats.xml.type;
-            ctx.body = models.getDrawIo(ctx.service);
+            ctx.body = models.getDrawIo(ctx);
             return;
         // Infos and link of a services
         case "INFOS":
@@ -182,7 +182,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
     // API GET REQUEST
     if (ctx.decodedUrl.path.includes(ctx.service.apiVersion) || ctx.decodedUrl.version) {
         console.log(logging.debug().head(`unProtected GET ${ctx.service.apiVersion}`).to().text());
-        // decode odata url infos
+        // decode odata url messages.infoss
         const odataVisitor = await createOdata(ctx);
 
         if (odataVisitor) {

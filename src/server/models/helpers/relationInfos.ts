@@ -12,7 +12,6 @@ import { _DEBUG } from "../../constants";
 import { ERelations, EentityType } from "../../enums";
 import { formatPgTableColumn } from "../../helpers";
 import { logging } from "../../log";
-import { errorMessage } from "../../messages";
 import { IrelationInfos, Ientity, Iservice } from "../../types";
 
 const _KeyLink = (entity: Ientity, column: string) => Object.keys(entity.columns).filter((e) => e !== column)[0];
@@ -104,7 +103,7 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                 };
                         }
                     }
-                    errorMessage("defaultUnique");
+                    logging.debug().error("Relation Infos", "defaultUnique").to().log().file();
                     break;
                 // === : 2
                 case ERelations.belongsTo:
@@ -185,7 +184,8 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                 };
                         }
                     }
-                    errorMessage("belongsTo");
+                    logging.debug().error("Relation Infos", "belongsTo").to().log().file();
+
                     break;
                 // === : 3
                 case ERelations.belongsToMany:
@@ -254,7 +254,8 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                 return fnHasMany();
                         }
                     }
-                    errorMessage("belongsToMany");
+                    logging.debug().error("Relation Infos", "belongsToMany").to().log().file();
+
                     break;
                 // === : 4
                 case ERelations.hasMany:
@@ -293,7 +294,7 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                 return fnHasMany();
                         }
                     }
-                    errorMessage("hasMany");
+                    logging.debug().error("Relation Infos", "hasMany").to().log().file();
                     break;
                 // === : 5
                 case ERelations.hasOne:
@@ -329,11 +330,11 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                 };
                         }
                     }
-                    errorMessage("hasOne");
+                    logging.debug().error("Relation Infos", "hasOne").to().log().file();
                     break;
             }
         }
-        errorMessage(`relationInfos [${leftEntity.name} ${leftRelation?.type}] : [${rightEntity.name} ${rightRelation?.type}]`);
+        logging.debug().message("Relation Infos", `[${leftEntity.name} ${leftRelation?.type}] : [${rightEntity.name} ${rightRelation?.type}]`).to().log().file();
     }
 
     return { type: "ERROR", rightKey: "", leftKey: "", entity: undefined, column: "cardinality ERROR", expand: "", link: "" };

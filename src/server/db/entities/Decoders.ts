@@ -27,19 +27,16 @@ export class Decoders extends Common {
     // Override get all decoders to be able to search by deveui instead of id only
     async getAll(): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
+        // test all decoder with the payload
         if (this.ctx.odata.payload) {
             const result: Record<string, any> = {};
             const decoders = await executeSql(this.ctx.service, `SELECT "id", "name", "code", "nomenclature", "synonym" FROM "${DECODER.table}"`);
-            await asyncForEach(
-                // Start connectionsening ALL entries in config file
-                Object(decoders),
-                async (decoder: Record<string, any>) => {
-                    if (this.ctx.odata.payload) {
-                        const temp = decodingPayload({ name: decoder["name"], code: String(decoder["code"]), nomenclature: decoder["nomenclature"] }, this.ctx.odata.payload);
-                        result[decoder["id"]] = temp;
-                    }
+            await asyncForEach(Object(decoders), async (decoder: Record<string, any>) => {
+                if (this.ctx.odata.payload) {
+                    const temp = decodingPayload({ name: decoder["name"], code: String(decoder["code"]), nomenclature: decoder["nomenclature"] }, this.ctx.odata.payload);
+                    result[decoder["id"]] = temp;
                 }
-            );
+            });
             return this.formatReturnResult({ body: result });
         } else return await super.getAll();
     }

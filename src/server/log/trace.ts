@@ -13,7 +13,7 @@ import postgres from "postgres";
 import { logging } from ".";
 import { EConstant, EEncodingType } from "../enums";
 import { FORMAT_JSONB } from "../db/constants";
-import { errors } from "../messages";
+import { messages } from "../messages";
 
 /**
  * Class to trace requests
@@ -95,7 +95,7 @@ export class Trace {
                 })
                 .catch((err: Error) => {
                     if (!isTest() && +err["code" as keyof object] === 23505) {
-                        logging.debug().error(errors.execQuery, query).to().log().file();
+                        logging.debug().error(messages.errors.execQuery, query).to().log().file();
                     }
                     reject(err);
                 });
@@ -112,7 +112,7 @@ export class Trace {
                 })
                 .catch((err: Error) => {
                     if (!isTest() && +err["code" as keyof object] === 23505) {
-                        logging.debug().error(errors.execQuery, query).to().log().file();
+                        logging.debug().error(messages.errors.execQuery, query).to().log().file();
                     }
                     reject(err);
                 });

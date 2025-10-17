@@ -1,3 +1,11 @@
+/**
+ * Type Maker
+ *
+ * @copyright 2020-present Inrae
+ * @author mario.adam@inrae.fr
+ *
+ */
+
 import { EDataType } from "../../enums";
 import { doubleQuotes } from "../../helpers";
 import { IentityColumn, IentityColumnAliasOptions } from "../../types";

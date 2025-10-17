@@ -1,3 +1,5 @@
+import { Id } from "../../types";
+
 /**
  * testId
  *
@@ -5,7 +7,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-export const testId = (table: string, id: number | bigint | string): string =>
+export const testId = (table: string, id: Id | string): string =>
     `SELECT 
 CASE WHEN EXISTS(
   SELECT 

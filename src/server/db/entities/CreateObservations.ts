@@ -7,10 +7,10 @@
  */
 
 import { Common } from "./common";
-import { IcsvColumn, IcsvFile, IreturnResult, IstreamInfos, koaContext } from "../../types";
+import { IcsvColumn, IcsvFile, Id, IreturnResult, IstreamInfos, koaContext } from "../../types";
 import { executeSql, executeSqlValues, dateToDateWithTimeZone, InsertFromCsv } from "../helpers";
 import { doubleQuotes, asyncForEach, splitLast, makeNull } from "../../helpers";
-import { errors, msg } from "../../messages/";
+import { messages } from "../../messages/";
 import { EChar, EConstant, EDatesType, EExtensions, EHttpCode } from "../../enums";
 import util from "util";
 import { models } from "../../models";
@@ -76,7 +76,7 @@ export class CreateObservations extends Common {
         console.log(logging.whereIam(new Error().stack));
         // verify is there FORM data
         const datasJson = JSON.parse(this.ctx.datas["jsonDatas"] || this.ctx.datas["datas"] || this.ctx.datas["json"]);
-        if (!datasJson["columns"]) this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: errors.noColumn });
+        if (!datasJson["columns"]) this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: messages.errors.noColumn });
         const myColumns: IcsvColumn[] = [];
         const streamInfos: IstreamInfos[] = [];
         // loop for mulitDatastreams inputs or one for datastream
@@ -88,7 +88,14 @@ export class CreateObservations extends Common {
                     column: key,
                     stream: tempStreamInfos
                 });
-            } else this.ctx.throw(EHttpCode.notFound, msg(errors.noValidStream, util.inspect(datasJson["columns"][key], { showHidden: false, depth: null, colors: false })));
+            } else
+                this.ctx.throw(
+                    EHttpCode.notFound,
+                    messages
+                        .create(messages.errors.noValidStream)
+                        .replace(util.inspect(datasJson["columns"][key], { showHidden: false, depth: null, colors: false }))
+                        .toString()
+                );
         });
         // Create paramsFile
         const paramsFile: IcsvFile = {
@@ -130,7 +137,7 @@ export class CreateObservations extends Common {
         let total = 0;
         /// classic Create
         const dataStreamId = await models.getStreamInfos(this.ctx.service, dataInput);
-        if (!dataStreamId) this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: errors.noStream });
+        if (!dataStreamId) this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: messages.errors.noStream });
         else {
             await asyncForEach(dataInput["dataArray"], async (elem: string[]) => {
                 const keys = [`"${dataStreamId.type?.toLowerCase()}_id"`].concat(this.createListColumnsValues("COLUMNS", dataInput["components"]));
@@ -178,7 +185,7 @@ export class CreateObservations extends Common {
         this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest });
     }
     // Override delete to return error Bad request
-    async delete(idInput: number | bigint | string): Promise<IreturnResult | undefined> {
+    async delete(idInput: Id | string): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
         this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest });
     }

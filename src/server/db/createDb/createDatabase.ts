@@ -84,11 +84,6 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
         .then(() => EChar.ok)
         .catch((err: Error) => err.message);
 
-    await dbConnection
-        .unsafe("SET client_min_messages TO INFO;")
-        .then(() => EChar.ok)
-        .catch((err: Error) => err.message);
-
     // Get complete model
     const DB = models.DBFullCreate(serviceName);
 

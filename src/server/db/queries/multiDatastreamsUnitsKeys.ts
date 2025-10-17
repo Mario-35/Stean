@@ -1,3 +1,5 @@
+import { Id } from "../../types";
+
 /**
  * multiDatastreamsUnitsKeys.
  *
@@ -5,7 +7,7 @@
  * @author mario.adam@inrae.fr
  *
  */
-export const multiDatastreamsUnitsKeys = (searchId: number | bigint | string): string =>
+export const multiDatastreamsUnitsKeys = (searchId: Id | string): string =>
     `SELECT 
     jsonb_agg(tmp.units -> 'name') AS keys 
 FROM (

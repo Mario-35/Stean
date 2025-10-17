@@ -11,7 +11,7 @@ import { _DEBUG, appVersion } from "../../constants";
 import { EConstant } from "../../enums";
 import { decrypt } from "../../helpers";
 import { logging } from "../../log";
-import { info } from "../../messages";
+import { messages } from "../../messages";
 import { Idatas, koaContext } from "../../types";
 import { addCssFile } from "../css";
 
@@ -261,28 +261,28 @@ export class CoreHtmlView {
             `<div class="login-html" color="#FF0000">`,
             this.title("Admin Access"),
             `<input id="tab-1" type="radio" name="tab" class="sign-in" checked>`,
-            `<label for="tab-1" class="tab">${info.pg} Admin</label>`,
+            `<label for="tab-1" class="tab">${messages.infos.pg} Admin</label>`,
             `<input id="tab-2" type="radio" name="tab" class="sign-up">`,
             `<label for="tab-2" class="tab">Help</label>`,
             `<div class="login-form">`,
             `<form action="/${actionForm}" method="post">`,
             `<div class="sign-in-htm">`,
             this.datas.connection ? this.hidden("_connection", this.datas.connection) : "",
-            this.textInput({ name: "host", label: info.host, value: (this.datas.body && this.datas.body.host) || EConstant.host, alert: alert("host") }),
+            this.textInput({ name: "host", label: messages.infos.host, value: (this.datas.body && this.datas.body.host) || EConstant.host, alert: alert("host") }),
             this.textInput({
                 name: "port",
-                label: info.pg + " port",
+                label: messages.infos.pg + " port",
                 value: (this.datas.body && this.datas.body.port) || EConstant.port,
                 alert: alert("port")
             }),
             this.textInput({
                 name: "adminname",
-                label: info.user,
+                label: messages.infos.user,
                 value: (this.datas.body && this.datas.body.adminname) || EConstant.pg,
                 alert: alert("username")
             }),
-            this.textInput({ name: "adminpassword", label: info.pass, password: true, value: "", alert: alert("password") }),
-            this.submitButton(info.conn),
+            this.textInput({ name: "adminpassword", label: messages.infos.pass, password: true, value: "", alert: alert("password") }),
+            this.submitButton(messages.infos.conn),
             this.datas.connection && this.datas.connection.startsWith("[error]") ? this.errorMessage(this.datas.connection.split("[error]")[1]) : "",
             `</div> `,
             `</form>`,

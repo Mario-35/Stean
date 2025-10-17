@@ -8,7 +8,7 @@
 
 import { koaContext } from "../../types";
 import { Common } from "./common";
-import { errors, msg } from "../../messages/";
+import { messages } from "../../messages/";
 import { logging } from "../../log";
 import { MULTIDATASTREAM } from "../../models/entities";
 import { EHttpCode } from "../../enums";
@@ -22,26 +22,26 @@ export class MultiDatastreams extends Common {
 
     formatDataInput(input: Record<string, any> | undefined): Record<string, any> | undefined {
         console.log(logging.whereIam(new Error().stack));
-        if (!input) this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors.noData });
+        if (!input) this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: messages.errors.noData });
         const temp = this.getKeysValue(input, ["FeaturesOfInterest", "foi"]);
         if (temp) input["_default_featureofinterest"] = temp;
         if (input["multiObservationDataTypes"] && input["unitOfMeasurements"] && input["ObservedProperties"]) {
             if (input["multiObservationDataTypes"].length != input["unitOfMeasurements"].length)
                 this.ctx.throw(EHttpCode.badRequest, {
                     code: EHttpCode.badRequest,
-                    detail: msg(errors.sizeListKeysUnitOfMeasurements, input["unitOfMeasurements"].length, input["multiObservationDataTypes"].length)
+                    detail: messages.create(messages.errors.sizeListKeysUnitOfMeasurements).replace(input["unitOfMeasurements"].length, input["multiObservationDataTypes"].length).toString()
                 });
             if (input["multiObservationDataTypes"].length != input["ObservedProperties"].length)
                 this.ctx.throw(EHttpCode.badRequest, {
                     code: EHttpCode.badRequest,
-                    detail: msg(errors.sizeListKeysObservedProperties, input["ObservedProperties"].length, input["multiObservationDataTypes"].length)
+                    detail: messages.create(messages.errors.sizeListKeysObservedProperties).replace(input["ObservedProperties"].length, input["multiObservationDataTypes"].length).toString()
                 });
         }
         if (input && input["multiObservationDataTypes"] && input["multiObservationDataTypes"] != null)
             input["multiObservationDataTypes"] = JSON.stringify(input["multiObservationDataTypes"]).replace("[", "{").replace("]", "}");
         if (input["observationType"]) {
             if (!MULTIDATASTREAM.columns["observationType"].verify?.list.includes(input["observationType"]))
-                this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors["observationType"] });
+                this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: messages.errors["observationType"] });
         } else input["observationType"] = MULTIDATASTREAM.columns["observationType"].verify?.default;
         return input;
     }

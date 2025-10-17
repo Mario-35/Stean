@@ -30,7 +30,5 @@ export function setReplay(input: string | undefined) {
 export function setDebug(input: boolean) {
     _DEBUG = input;
 }
-
-export const _CLEAN = !process.argv.includes("clean") ? true : undefined;
 export let _DEBUG = process.env.NODE_ENV?.trim() === EConstant.test || false;
 export let _REPLAY: string | undefined = undefined;

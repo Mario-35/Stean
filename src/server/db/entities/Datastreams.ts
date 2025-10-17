@@ -9,7 +9,7 @@
 import { _DEBUG } from "../../constants";
 import { EHttpCode } from "../../enums";
 import { logging } from "../../log";
-import { errors } from "../../messages";
+import { messages } from "../../messages";
 import { DATASTREAM } from "../../models/entities";
 import { koaContext } from "../../types";
 import { Common } from "./common";
@@ -29,7 +29,7 @@ export class Datastreams extends Common {
         if (input) {
             const colName = "observationType";
             if (input[colName]) {
-                if (!DATASTREAM.columns[colName].verify?.list.includes(input[colName])) this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: errors[colName] });
+                if (!DATASTREAM.columns[colName].verify?.list.includes(input[colName])) this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: messages.errors[colName] });
             } else input[colName] = DATASTREAM.columns[colName].verify?.default;
         }
         return input;

@@ -27,7 +27,6 @@ export interface Ientity extends IentityCore {
     indexes: { [key: string]: string }; // indexes table
     orderBy: string; // default orderBy
     clean?: string[]; // Clean to execute at start service when argv clean is found _CLEAN global var to process after new version
-    start?: string[]; // Start to execute at start service (recalc date or flush)
     partition?: {
         main: string;
         sub?: string;

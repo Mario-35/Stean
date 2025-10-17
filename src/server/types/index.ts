@@ -43,6 +43,7 @@ export type koaContext = Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultC
 export const typeOptions = Object.keys(EOptions) as Array<keyof typeof EOptions>;
 export const typeExtensions = Object.keys(EExtensions) as Array<keyof typeof EExtensions>;
 export type keyobj = keyof object;
+export type Id = number | bigint | undefined;
 
 export const getColumnType = (input: IentityColumn): string => {
     switch (input.dataType) {

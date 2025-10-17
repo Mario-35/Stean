@@ -1,6 +1,7 @@
 {
-	"try":"Try create Database",
-	"auth": "Authentication",
+	"createDB":"Start create database",
+    "createUser" : "Create user",
+	
 	"csvFile": "csv file",
     "classConstructor" : "class $1 override $2",
     "config" : "configuration",
@@ -10,8 +11,9 @@
 	"connectName": "connection name",
     "constructor": "Constructor",
 	"create": "Create",
+	"logLevel": "Set log level",
+	"updateNb": "Create optimized column for pagination",
 	"delTemp": "Delete temp table(s)",
-    "createAdminUser" : "create user => ",
     "adminConnection" : "Admin connection",
     "accessServies" : "Access service table",
     "createServies" : "Create service table",
@@ -50,7 +52,6 @@
 	"addServer": "Add to server",
 	"success": "successfull",
 	"tryCreate": "Try create $1",
-    "tryCreateUser" : "Try to create user => ",
 	"tunnel": "Tunneling to $1 established",
     "updateUser" : "update user => ",
 	"user": "username",

@@ -1,3 +1,11 @@
+/**
+ * Type Any
+ *
+ * @copyright 2020-present Inrae
+ * @author mario.adam@inrae.fr
+ *
+ */
+
 import { EConstant, EDataType, EQuery } from "../../enums";
 import { doubleQuotes } from "../../helpers";
 import { IentityColumnAliasOptions } from "../../types";

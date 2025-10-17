@@ -1,8 +1,18 @@
+/**
+ * entity Maker
+ *
+ * @copyright 2020-present Inrae
+ * @author mario.adam@inrae.fr
+ *
+ */
+
 import { EDataType, EDatesType, EQuery, ERelations, EentityType, allEntities } from "../../enums";
 import { doubleQuotes } from "../../helpers";
-import { msg, errors } from "../../messages";
+import { messages } from "../../messages";
 import { Ientity, IentityColumnAliasOptions, IentityCore } from "../../types";
 import { as, singular } from "../helpers";
+
+// class to be extend to pass params for global
 
 class EntityPass {
     // global trigger
@@ -39,7 +49,7 @@ export class Entity extends EntityPass {
             if (datas.trigger) this._.trigger = datas.trigger;
             this._.singular = singular(entity);
             this._.table = this._.singular.toLowerCase();
-        } else throw new Error(msg(errors.noValidEntity, name));
+        } else throw new Error(messages.create(messages.errors.noValidEntity, name).toString());
         this.prepareColums();
         this.createConstraints();
         this.createTriggers();

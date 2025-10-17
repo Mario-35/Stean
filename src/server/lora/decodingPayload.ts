@@ -8,7 +8,7 @@
 
 import { _DEBUG } from "../constants";
 import { logging } from "../log";
-import { errors } from "../messages";
+import { messages } from "../messages";
 import { ILoraDecodingResult } from "../types";
 
 export const decodingPayload = (decoder: { name: string; code: string; nomenclature: string }, payload: string): ILoraDecodingResult | undefined => {
@@ -29,7 +29,7 @@ export const decodingPayload = (decoder: { name: string; code: string; nomenclat
         return {
             decoder: decoder.name,
             result: undefined,
-            error: errors.DecodingPayloadError
+            error: messages.errors.DecodingPayloadError
         };
     }
 };

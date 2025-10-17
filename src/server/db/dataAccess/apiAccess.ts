@@ -8,11 +8,11 @@
 
 import * as entities from "../entities/index";
 import { Common } from "../entities/common";
-import { Icomon, IreturnResult, koaContext } from "../../types";
+import { Icomon, Id, IreturnResult, koaContext } from "../../types";
 import { isArray } from "../../helpers";
 import { models } from "../../models";
 import { logging } from "../../log";
-import { errors } from "../../messages";
+import { messages } from "../../messages";
 import { _DEBUG } from "../../constants";
 
 /**
@@ -30,7 +30,7 @@ export class apiAccess implements Icomon {
         if (entityName && entityName in entities) {
             // @ts-ignore
             this.myEntity = new entities[(this.ctx, entityName)](ctx);
-        } else logging.error(errors.noValidEntity, entityName);
+        } else logging.error(messages.errors.noValidEntity, entityName);
     }
 
     formatDataInput(input: object | undefined): object | undefined {
@@ -58,7 +58,7 @@ export class apiAccess implements Icomon {
         if (this.myEntity) return await this.myEntity.update(this.ctx.body);
     }
 
-    async delete(idInput: number | bigint | string): Promise<IreturnResult | undefined> {
+    async delete(idInput: Id | string): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
         if (this.myEntity) return await this.myEntity.delete(idInput);
     }

@@ -7,7 +7,7 @@
  */
 
 import { Common } from "./common";
-import { IreturnResult, keyobj, koaContext } from "../../types";
+import { Id, IreturnResult, keyobj, koaContext } from "../../types";
 import { config } from "../../configuration";
 import { logging } from "../../log";
 import { EConstant, EHttpCode } from "../../enums";
@@ -68,21 +68,18 @@ export class Logs extends Common {
     // Override Post service
     async post(dataInput: Record<string, any> | undefined): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
-        // This function not exists
-        return;
+        this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest });
     }
 
     // Override Update service
     async update(dataInput: Record<string, any> | undefined): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
-        // This function not exists
-        return;
+        this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest });
     }
 
     // Override Delete service
-    async delete(idInput: number | bigint | string): Promise<IreturnResult | undefined> {
+    async delete(idInput: Id | string): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
-        // This function not exists
-        return;
+        this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest });
     }
 }
