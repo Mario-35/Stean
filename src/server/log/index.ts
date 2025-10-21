@@ -1,9 +1,8 @@
 import { _DEBUG, appVersion, timestampNow } from "../constants";
-import { EChar, EColor, EConstant } from "../enums";
+import { EChar, EColor, EConstant, EInfos } from "../enums";
 import util from "util";
 import { logToHtml } from "../helpers";
 import { paths } from "../paths";
-import { messages } from "../messages";
 
 export class LoggingResult {
     _toFile: string | undefined = undefined;
@@ -48,11 +47,6 @@ export class Logging {
 
     private add(input: any) {
         if (input) Logging._s += input;
-    }
-
-    debug(force?: boolean) {
-        Logging.can = force || _DEBUG;
-        return this;
     }
 
     return() {
@@ -191,7 +185,7 @@ export class Logging {
         this.init();
         this.line(20, EColor.Magenta);
         this.color(EColor.Cyan);
-        this.space(`START ${EConstant.appName} ${messages.infos.ver} : ${appVersion.version}`);
+        this.space(`START ${EConstant.appName} ${EInfos.ver} : ${appVersion.version}`);
         this.text("du");
         this.color(EColor.Yellow);
         this.space(`${appVersion.date} [${process.env.NODE_ENV}]`);
@@ -225,6 +219,11 @@ export class Logging {
 
     to() {
         return new LoggingResult(Logging.can === true ? Logging._s : "");
+    }
+
+    debug(force?: boolean) {
+        Logging.can = force || _DEBUG;
+        return this;
     }
 
     status(test: boolean, cle: string, car: string = EChar.arrowright) {

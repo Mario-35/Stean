@@ -13,7 +13,6 @@ import { apiAccess } from "../db/dataAccess";
 import { IreturnResult } from "../types";
 import { DefaultState, Context } from "koa";
 import { createOdata } from "../odata";
-import { messages } from "../messages";
 import { config } from "../configuration";
 import { createDatabase, testDatas } from "../db/createDb";
 import { disconnectDb, executeSql, exportService } from "../db/helpers";
@@ -22,8 +21,7 @@ import { testRoute } from "./helper";
 import { createService } from "../db/helpers";
 import { HtmlError, Login, Status, Query } from "../views/";
 import { createQueryParams } from "../views/helpers";
-import { EOptions, EHttpCode, EConstant } from "../enums";
-import { getMetrics } from "../db/monitoring";
+import { EOptions, EHttpCode, EConstant, EInfos } from "../enums";
 import { logging } from "../log";
 
 export const unProtectedRoutes = new Router<DefaultState, Context>();
@@ -55,11 +53,6 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
                 return;
             }
             ctx.throw(EHttpCode.notFound);
-        // metrics for monitoring
-        case "METRICS":
-            ctx.type = returnFormats.json.type;
-            ctx.body = await getMetrics(ctx.service);
-            return;
         // error show in html if query call
         case "ERROR":
             const bodyError = new HtmlError(ctx, { url: "what ?" });
@@ -115,7 +108,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
             if (ctx.request.header.accept && ctx.request.header.accept.includes("text/html")) ctx.redirect(`${ctx.decodedUrl.root}/login`);
             else ctx.status = EHttpCode.ok;
             ctx.body = {
-                message: messages.infos.logoutOk
+                message: EInfos.logoutOk
             };
             return;
         // Execute Sql query pass in url

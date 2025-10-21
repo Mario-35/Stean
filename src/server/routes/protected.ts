@@ -13,17 +13,17 @@ import fs from "fs";
 import { IreturnResult, Iuser, koaContext } from "../types";
 import { DefaultState, Context } from "koa";
 import { createOdata } from "../odata";
-import { EConstant, EExtensions, EHttpCode, EUserRights } from "../enums";
+import { EConstant, EErrors, EExtensions, EHttpCode, EInfos, EUserRights } from "../enums";
 import { loginUser } from "../authentication";
 import { config } from "../configuration";
 import { checkPassword, emailIsValid } from "./helper";
 import { Login, Query } from "../views";
 import { createQueryParams } from "../views/helpers";
 import { logging } from "../log";
-import { USER } from "../models/entities";
 import { executeSqlValues } from "../db/helpers";
 import { _DEBUG } from "../constants";
 import { messages } from "../messages";
+import { queries } from "../db/queries";
 export const protectedRoutes = new Router<DefaultState, Context>();
 
 protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
@@ -37,7 +37,7 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
                     if (ctx.request.header.accept && ctx.request.header.accept.includes("text/html")) ctx.redirect(`${ctx.decodedUrl.root}/Status`);
                     else
                         ctx.body = {
-                            message: messages.infos.loginOk,
+                            message: EInfos.loginOk,
                             user: user.username,
                             token: user.token
                         };
@@ -50,29 +50,29 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
             const why: Record<string, string> = {};
             // Username
             if (ctx.body["username"].trim() === "") {
-                why["username"] = messages.create(messages.errors.empty, "username").toString();
+                why["username"] = messages.str(EErrors.empty, "username").toString();
             } else {
-                const user = await executeSqlValues(config.getService(EConstant.admin), `SELECT "username" FROM "${USER.table}" WHERE username = '${ctx.body["username"]}' LIMIT 1`);
-                if (user) why["username"] = messages.errors.alreadyPresent;
+                const user = await executeSqlValues(config.getService(EConstant.admin), queries.getUser(ctx.body["username"]));
+                if (user) why["username"] = EErrors.alreadyPresent;
             }
             // Email
             if (ctx.body["email"].trim() === "") {
-                why["email"] = messages.create(messages.errors.empty, "email").toString();
+                why["email"] = messages.str(EErrors.empty, "email").toString();
             } else {
-                if (emailIsValid(ctx.body["email"]) === false) why["email"] = messages.create(messages.errors.invalid, "email").toString();
+                if (emailIsValid(ctx.body["email"]) === false) why["email"] = messages.str(EErrors.invalid, "email").toString();
             }
             // Password
             if (ctx.body["password"].trim() === "") {
-                why["password"] = messages.create(messages.errors.empty, "password").toString();
+                why["password"] = messages.str(EErrors.empty, "password").toString();
             }
             // Repeat password
             if ((ctx.body["repeat"] as string).trim() === "") {
-                why["repeat"] = messages.create(messages.errors.empty, "repeat password").toString();
+                why["repeat"] = messages.str(EErrors.empty, "repeat password").toString();
             } else {
                 if (ctx.body["password"] != ctx.body.repeat) {
-                    why["repeat"] = messages.errors.passowrdDifferent;
+                    why["repeat"] = EErrors.passowrdDifferent;
                 } else {
-                    if (checkPassword(ctx.body["password"]) === false) why["password"] = messages.create(messages.errors.invalid, "password").toString();
+                    if (checkPassword(ctx.body["password"]) === false) why["password"] = messages.str(EErrors.invalid, "password").toString();
                 }
             }
             if (Object.keys(why).length === 0) {
@@ -168,7 +168,7 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
             }
         } else {
             // payload is malformed
-            ctx.throw(EHttpCode.badRequest, { details: messages.errors.payloadIsMalformed });
+            ctx.throw(EHttpCode.badRequest, { details: EErrors.payloadIsMalformed });
         }
     } else ctx.throw(EHttpCode.Unauthorized);
 });
@@ -189,7 +189,7 @@ protectedRoutes.patch("/(.*)", async (ctx) => {
                     if (returnValue.location) ctx.set("Location", returnValue.location);
                 }
             } else {
-                ctx.throw(EHttpCode.badRequest, { detail: messages.errors.idRequired });
+                ctx.throw(EHttpCode.badRequest, { detail: EErrors.idRequired });
             }
         } else {
             ctx.throw(EHttpCode.notFound);
@@ -206,12 +206,12 @@ protectedRoutes.delete("/(.*)", async (ctx) => {
         if (ctx.odata) {
             console.log(logging.debug().head("DELETE").to().text());
             const objectAccess = new apiAccess(ctx);
-            if (!ctx.odata.id) ctx.throw(EHttpCode.badRequest, { detail: messages.errors.idRequired });
+            if (!ctx.odata.id) ctx.throw(EHttpCode.badRequest, { detail: EErrors.idRequired });
             const returnValue = await objectAccess.delete(ctx.odata.id);
             if (returnValue && returnValue.body && +returnValue.body > 0) {
                 returnFormats.json.type;
                 ctx.status = EHttpCode.noContent;
-            } else ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: messages.errors.noId + ctx.odata.id });
+            } else ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: EErrors.noId + ctx.odata.id });
         } else {
             ctx.throw(EHttpCode.notFound);
         }

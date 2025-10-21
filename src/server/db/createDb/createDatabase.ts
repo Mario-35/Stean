@@ -8,14 +8,15 @@
 
 import { createTable, createUser } from "../helpers";
 import { config } from "../../configuration";
-import { doubleQuotes, asyncForEach, simpleQuotes } from "../../helpers";
-import { EChar, EConstant, EExtensions } from "../../enums";
+import { doubleQuotes, asyncForEach } from "../../helpers";
+import { EChar, EErrors, EExtensions, EInfos } from "../../enums";
 import { models } from "../../models";
 import { logging } from "../../log";
 import { createRole } from "../helpers/createRole";
-import { createExtension } from "../queries";
 import { pgFunctions } from ".";
 import { _DEBUG } from "../../constants";
+import { queries } from "../queries";
+import { messages } from "../../messages";
 
 /**
  *
@@ -24,45 +25,36 @@ import { _DEBUG } from "../../constants";
  */
 
 export const createDatabase = async (serviceName: string): Promise<Record<string, string>> => {
-    console.log(logging.debug().head(`createDatabase [${serviceName}]`).to().text());
+    console.log(logging.debug().head(`${EInfos.createDB} [${serviceName}]`).to().text());
 
     // init result
-    const servicePg = config.getService(serviceName).pg;
-    const returnValue: Record<string, string> = { "Start create Database": servicePg.database };
+    const service = config.getService(serviceName);
+    const servicePg = service.pg;
+    const returnValue: Record<string, string> = { [EInfos.startCreateDB]: servicePg.database };
     const adminConnection = config.adminConnection();
 
     // Test Admin connection
     if (!adminConnection) {
-        returnValue["DROP Error"] = "No Admin connection";
+        returnValue["DROP Error"] = EErrors.noAdmin;
         return returnValue;
     }
 
     // create blank DATABASE
-    await adminConnection
-        .unsafe(`CREATE DATABASE ${servicePg.database}`)
+    returnValue[EInfos.adminConnection] = await adminConnection
+        .unsafe(queries.creatdeDB(servicePg.database))
         .then(async () => {
-            returnValue[`Create Database`] = `${servicePg.database} ${EChar.ok}`;
             // create default USER if not exist
-            await adminConnection.unsafe(`SELECT COUNT(*) FROM pg_user WHERE usename = ${simpleQuotes(servicePg.user)};`).then(async (res: Record<string, any>) => {
-                if (res[0].count == 0) {
-                    returnValue[`CREATE ROLE ${servicePg.user}`] = await adminConnection
-                        .unsafe(`CREATE ROLE ${servicePg.user} WITH PASSWORD ${simpleQuotes(servicePg.password)} ${EConstant.rights}`)
-                        .then(() => EChar.ok)
-                        .catch((err: Error) => err.message);
-                } else {
-                    await adminConnection
-                        .unsafe(`ALTER ROLE ${servicePg.user} WITH PASSWORD ${simpleQuotes(servicePg.password)}  ${EConstant.rights}`)
-                        .then(() => {
-                            returnValue[`Create/Alter ROLE`] = `${servicePg.user} ${EChar.ok}`;
-                        })
-                        .catch((error: Error) => {
-                            console.log(error);
-                        });
-                }
-            });
+            returnValue[messages.str(EInfos.create, `/Alter ROLE ${servicePg.user}`)] = await createRole(service)
+                .then(() => EChar.ok)
+                .catch((error: Error) => {
+                    console.log(error);
+                    return EChar.notOk;
+                });
+            return EChar.ok;
         })
         .catch((error: Error) => {
             console.log(error);
+            return EChar.notOk;
         });
 
     // test user connection
@@ -73,14 +65,14 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
     }
 
     // create postgis
-    returnValue[`Create postgis`] = await dbConnection
-        .unsafe(createExtension("postgis"))
+    returnValue[messages.str(EInfos.create, "postgis")] = await dbConnection
+        .unsafe(queries.createExtension("postgis"))
         .then(() => EChar.ok)
         .catch((err: Error) => err.message);
 
     // create tablefunc
-    returnValue[`Create tablefunc`] = await dbConnection
-        .unsafe(createExtension("tablefunc"))
+    returnValue[messages.str(EInfos.create, "tablefunc")] = await dbConnection
+        .unsafe(queries.createExtension("tablefunc"))
         .then(() => EChar.ok)
         .catch((err: Error) => err.message);
 
@@ -92,20 +84,18 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
         Object.keys(DB).filter((e) => e.trim() !== ""),
         async (keyName: string) => {
             const res = await createTable(serviceName, DB[keyName], undefined);
-            Object.keys(res).forEach((e: string) => logging.debug().message(e, res[e]));
+            Object.keys(res).forEach((e: string) => {
+                logging.debug().message(e, res[e]);
+                returnValue["  ■■■►  " + e] = res[e];
+            });
             if (res.toString().includes(EChar.notOk)) {
                 process.exit(111);
             }
         }
     );
 
-    // create role
-    returnValue[`Create Role`] = await createRole(config.getService(serviceName))
-        .then(() => EChar.ok)
-        .catch((err: Error) => err.message);
-
     // create user
-    returnValue[`Create user`] = await createUser(config.getService(serviceName))
+    returnValue[messages.str(EInfos.create, "user")] = await createUser(config.getService(serviceName))
         .then(() => EChar.ok)
         .catch((err: Error) => err.message);
 
@@ -116,6 +106,7 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
             .unsafe(query)
             .then(() => {
                 logging.debug().message(name, EChar.ok);
+                returnValue["  ■■■►  " + name] = EChar.ok;
             })
             .catch((error: Error) => {
                 console.log(error);
@@ -134,10 +125,11 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
                         .then((e) => {
                             // to preserve size
                             DB[keyName].trigger = [];
+                            returnValue[messages.str(EInfos.create, "trigger")] = EChar.ok;
                         })
                         .catch((error: Error) => {
                             console.log(error);
-                            return error;
+                            returnValue[messages.str(EInfos.create, "trigger")] = EChar.notOk;
                         });
                 });
             }
@@ -146,23 +138,27 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
 
     // If only numeric extension
     if (config.getService(serviceName).extensions.includes(EExtensions.highPrecision)) {
-        await dbConnection.unsafe(`ALTER TABLE ${doubleQuotes(DB.Observations.table)} ALTER COLUMN 'result' TYPE float4 USING null;`).catch((error: Error) => {
-            console.log(error);
-            return error;
-        });
-        await dbConnection.unsafe(`ALTER TABLE ${doubleQuotes(DB.HistoricalLocations.table)} ALTER COLUMN '_result' TYPE float4 USING null;`).catch((error) => {
-            console.log(error);
-            return error;
-        });
+        returnValue[messages.str(EInfos.create, "High Precision result")] = await dbConnection
+            .unsafe(`ALTER TABLE ${doubleQuotes(DB.Observations.table)} ALTER COLUMN 'result' TYPE float4 USING null;`)
+            .then(() => {
+                return EChar.ok;
+            })
+            .catch((error: Error) => {
+                console.log(error);
+                return EChar.notOk;
+            });
     }
 
     // final test
-    await dbConnection
-        .unsafe(`SELECT COUNT(*) FROM pg_user WHERE usename = ${simpleQuotes(servicePg.user)};`)
+    returnValue["ALL finished ..."] = await dbConnection
+        .unsafe(queries.countUser(servicePg.user))
         .then(() => {
-            returnValue["ALL finished ..."] = EChar.ok;
+            return EChar.ok;
         })
-        .catch((err: Error) => err.message);
+        .catch((error: Error) => {
+            console.log(error);
+            return EChar.notOk;
+        });
 
     return returnValue;
 };

@@ -9,11 +9,10 @@
 import Aedes, { AedesPublishPacket, Client, PublishPacket, Subscription } from "aedes";
 import { config } from "../configuration";
 import { logging } from "../log";
-import { EEncodingType } from "../enums";
+import { EEncodingType, EErrors, EInfos } from "../enums";
 import { loginUser } from "../authentication";
 import { createServer } from "aedes-server-factory";
 import { _DEBUG } from "../constants";
-import { messages } from "../messages";
 
 export class MqttServer {
     broker: Aedes;
@@ -83,13 +82,13 @@ export class MqttServer {
                     return await loginUser(undefined, { configName: url[0], username: String(username), password: Buffer.from(password, "base64").toString() })
                         .then((user) => {
                             logging
-                                .message(`}${user ? messages.createInfos(["auth", "success"]) : messages.errors.authFailed} to broker`, this.broker.id)
+                                .message(`}${user ? EInfos.authOk : EErrors.authFailed} to broker`, this.broker.id)
                                 .to()
                                 .text();
-                            return callback(user ? null : new Error(messages.errors.authFailed), user ? true : false);
+                            return callback(user ? null : new Error(EErrors.authFailed), user ? true : false);
                         })
                         .catch((error: Error) => {
-                            logging.error(messages.errors.authFailed, error);
+                            logging.error(EErrors.authFailed, error);
                             return callback(error, false);
                         });
                 }
@@ -104,13 +103,13 @@ export class MqttServer {
                         })
                             .then((user) => {
                                 logging
-                                    .message(`${user ? messages.createInfos(["auth", "success"]) : messages.errors.authFailed} to broker`, this.broker.id)
+                                    .message(`${user ? EInfos.authOk : EErrors.authFailed} to broker`, this.broker.id)
                                     .to()
                                     .text();
-                                return callback(user ? null : new Error(messages.errors.authFailed), user ? true : false);
+                                return callback(user ? null : new Error(EErrors.authFailed), user ? true : false);
                             })
                             .catch((error: Error) => {
-                                logging.error(messages.errors.authFailed, error);
+                                logging.error(EErrors.authFailed, error);
                                 return callback(error, false);
                             });
                     }

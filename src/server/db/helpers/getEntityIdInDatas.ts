@@ -9,9 +9,10 @@
 import { EConstant } from "../../enums";
 import { getBigIntFromString } from "../../helpers";
 import { RootPgVisitor } from "../../odata/visitor";
+import { Id } from "../../types";
 
 export const getEntityIdInDatas = (dataInput: Record<string, string>, pg: RootPgVisitor) => {
-    const res: { [key: string]: number | BigInt | undefined } = {};
+    const res: { [key: string]: Id } = {};
     if (pg.entity)
         Object.keys(pg.entity.relations).forEach((elem) => {
             if (dataInput[elem]) {

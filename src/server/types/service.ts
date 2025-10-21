@@ -6,7 +6,6 @@
  *
  */
 
-import postgres from "postgres";
 import { Isynonyms, typeExtensions } from ".";
 import { IdbConnection } from "./dbConnection";
 export interface Iservice {
@@ -23,11 +22,11 @@ export interface Iservice {
     apiVersion: string; // api version / model
     date_format: string; // formating date
     nb_page: number; // number of items by page
+    nb_graph: number; // number of items max for graph
     options: string[]; // Options see Enum EOptions
     extensions: typeof typeExtensions; // extensions see Enum EExtensions
     alias: string[]; // alias name of the service
     synonyms: Isynonyms | undefined;
     csvDelimiter: ";" | ","; // csv format delimiter
     users: JSON | undefined; // users list
-    _connection: postgres.Sql<Record<string, unknown>> | undefined; // not in file only when running to store connection
 }

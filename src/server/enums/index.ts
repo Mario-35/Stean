@@ -7,6 +7,8 @@
  */
 
 import { EOptions } from "./options";
+export { EErrors } from "./errors";
+export { EInfos } from "./infos";
 export { EChar } from "./chars";
 export { EentityType } from "./entityType";
 export { EColor } from "./colors";

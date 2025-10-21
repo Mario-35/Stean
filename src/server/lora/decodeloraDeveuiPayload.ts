@@ -8,21 +8,19 @@
 
 import { decodingPayload } from ".";
 import { executeSql } from "../db/helpers";
+import { queries } from "../db/queries";
+import { EErrors, EInfos } from "../enums";
 import { logging } from "../log";
-import { messages } from "../messages";
-import { DECODER, LORA } from "../models/entities";
 import { ILoraDecodingResult, Iservice } from "../types";
 
 export const decodeloraDeveuiPayload = async (service: Iservice, loraDeveui: string, payload: string): Promise<ILoraDecodingResult | undefined> => {
-    logging.debug().message(`decodeLoraPayload deveui : [${loraDeveui}]`, payload).to().log().file();
-    return await executeSql(
-        service,
-        `SELECT "name", "code", "nomenclature", "synonym" FROM "${DECODER.table}" WHERE id = (SELECT "decoder_id" FROM "${LORA.table}" WHERE "deveui" = '${loraDeveui}') LIMIT 1`
-    )
+    logging.debug().message(`${EInfos.decodingPayload} : [${loraDeveui}]`, payload).to().log().file();
+    return await executeSql(service, queries.getDecoderFromDeveui(loraDeveui))
         .then((res: Record<string, any>) => {
             try {
                 return decodingPayload({ ...res[0] }, payload);
             } catch (error) {
+                logging.error(EErrors.DecodingPayloadError, error).to().log().file();
                 return undefined;
             }
         })
@@ -30,7 +28,7 @@ export const decodeloraDeveuiPayload = async (service: Iservice, loraDeveui: str
             return {
                 decoder: "undefined",
                 result: undefined,
-                error: messages.errors.DecodingPayloadError
+                error: EErrors.DecodingPayloadError
             };
         });
 };

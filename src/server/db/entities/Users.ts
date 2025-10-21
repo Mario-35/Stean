@@ -6,13 +6,12 @@
  *
  */
 
-import { keyobj, koaContext } from "../../types";
+import { koaContext } from "../../types";
 import { Common } from "./common";
 import { IreturnResult } from "../../types";
 import { config } from "../../configuration";
 import { hidePassword } from "../../helpers";
-import { messages } from "../../messages/";
-import { EConstant, EHttpCode, EUserRights } from "../../enums";
+import { EConstant, EErrors, EHttpCode, EUserRights } from "../../enums";
 import { models } from "../../models";
 import { logging } from "../../log";
 import { USER } from "../../models/entities";
@@ -36,7 +35,7 @@ export class Users extends Common {
             return this.formatReturnResult({
                 body: hidePassword(temp)
             });
-        } else this.ctx.throw(EHttpCode.Unauthorized, { code: EHttpCode.Unauthorized, detail: messages.errors[EHttpCode.Unauthorized as keyobj] });
+        } else this.ctx.throw(EHttpCode.Unauthorized, { code: EHttpCode.Unauthorized, detail: EErrors.Unauthorized });
     }
 
     // Override to creste a new config and load it

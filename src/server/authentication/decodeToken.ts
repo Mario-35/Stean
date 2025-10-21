@@ -7,7 +7,7 @@
  */
 
 import jsonwebtoken from "jsonwebtoken";
-import { IuserToken, keyobj, koaContext } from "../types";
+import { IuserToken, koaContext } from "../types";
 import { blankUserToken } from "../types/userToken";
 import { logging } from "../log";
 import { _DEBUG } from "../constants";
@@ -21,13 +21,13 @@ import { _DEBUG } from "../constants";
 export const decodeToken = (ctx: koaContext): IuserToken => {
     console.log(logging.whereIam(new Error().stack));
     if (ctx.request.hasOwnProperty("token")) {
-        const token = jsonwebtoken.decode(ctx.request["token" as keyobj]);
-        if (token && token["data" as keyobj]["id"] > 0)
+        const token = jsonwebtoken.decode(ctx.request["token" as keyof object]);
+        if (token && token["data" as keyof object]["id"] > 0)
             return Object.freeze({
-                id: +token["data" as keyobj]["id"],
-                username: token["data" as keyobj]["username"],
-                password: token["data" as keyobj]["password"],
-                PDCUAS: token["data" as keyobj]["PDCUAS"]
+                id: +token["data" as keyof object]["id"],
+                username: token["data" as keyof object]["username"],
+                password: token["data" as keyof object]["password"],
+                PDCUAS: token["data" as keyof object]["PDCUAS"]
             });
     }
     return blankUserToken;

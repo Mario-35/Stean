@@ -7,14 +7,13 @@
  *
  */
 
-import { doubleQuotes, returnFormats } from "../../helpers/index";
-import { Id, IreturnResult, keyobj, koaContext } from "../../types";
+import { returnFormats } from "../../helpers/index";
+import { Id, IreturnResult, koaContext } from "../../types";
 import { executeSqlValues, removeKeyFromUrl } from "../helpers";
-import { getErrorCode, messages } from "../../messages";
 import { logging } from "../../log";
 import { config } from "../../configuration";
-import { EConstant, EHttpCode } from "../../enums";
-import { asCsv } from "../queries";
+import { EConstant, EHttpCode, EInfos } from "../../enums";
+import { queries } from "../queries";
 import { _DEBUG } from "../../constants";
 
 /**
@@ -31,6 +30,10 @@ export class Common {
         this.ctx = ctx;
         this.nextLinkBase = removeKeyFromUrl(`${this.ctx.decodedUrl.root}/${this.ctx.href.split(`${ctx.service.apiVersion}/`)[1]}`, ["top", "skip"]);
         this.linkBase = `${this.ctx.decodedUrl.root}/${this.constructor.name}`;
+    }
+
+    getErrorCode(err: Error | any, actual: number): number {
+        return err["where"] && err["where"].includes("verifyid") ? EHttpCode.notFound : actual;
     }
 
     /**
@@ -131,7 +134,7 @@ export class Common {
                     return this.formatReturnResult({ body: sql });
                 // create csv format values
                 case returnFormats.csv:
-                    sql = asCsv(sql, this.ctx.service.csvDelimiter);
+                    sql = queries.asCsv(sql, this.ctx.service.csvDelimiter);
                     this.ctx.attachment(`${this.ctx.odata.entity?.name || "export"}.csv`);
                     logging.debug().query("Get csv", sql).to().log().file();
                     return this.formatReturnResult({ body: await config.connection(this.ctx.service.name).unsafe(sql).readable() });
@@ -201,7 +204,7 @@ export class Common {
         console.log(logging.whereIam(new Error().stack));
         // TODO
         // stop save to log cause if datainput too big
-        if (this.ctx.log) this.ctx.log.datas = { datas: messages.infos.MultilinesNotSaved };
+        if (this.ctx.log) this.ctx.log.datas = { datas: EInfos.MultilinesNotSaved };
         // create queries
         const sqls: string[] = Object(dataInput).map((datas: Record<string, any>) => {
             const modifiedDatas = this.formatDataInput(datas);
@@ -214,10 +217,10 @@ export class Common {
         const results: Record<string, any>[] = [];
         // execute query
         await executeSqlValues(this.ctx.service, sqls.join(";"))
-            .then((res: Record<string, any>) => results.push(res[0 as keyobj]))
+            .then((res: Record<string, any>) => results.push(res[0 as keyof object]))
             .catch((error: Error) => {
                 console.log(error);
-                this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: error["detail" as keyobj] });
+                this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: error["detail" as keyof object] });
             });
         // Return results
         return this.formatReturnResult({
@@ -266,7 +269,7 @@ export class Common {
                             }
                         })
                         .catch((err: Error) => {
-                            const code = getErrorCode(err, 400);
+                            const code = this.getErrorCode(err, 400);
                             this.ctx.throw(code, { code: code, detail: err.message });
                         });
             }
@@ -284,7 +287,7 @@ export class Common {
             // Format datas
             dataInput = this.formatDataInput(dataInput);
             if (dataInput)
-                return await executeSqlValues(this.ctx.service, `SELECT id FROM "${this.ctx.odata.entity.table}" WHERE "name" = '${dataInput["name" as keyof object]}'`)
+                return await executeSqlValues(this.ctx.service, queries.getIdFromName(this.ctx.odata.entity.table, dataInput["name" as keyof object]))
                     .then((res) => {
                         // search id from name
                         this.ctx.odata.id = res[0 as keyof object];
@@ -333,7 +336,7 @@ export class Common {
                             }
                         })
                         .catch((err: Error) => {
-                            const code = getErrorCode(err, 400);
+                            const code = this.getErrorCode(err, 400);
                             this.ctx.throw(code, { code: code, detail: err.message });
                         });
             }
@@ -348,7 +351,7 @@ export class Common {
     async delete(idInput: Id | string): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
         // create Query
-        const sql = `DELETE FROM ${doubleQuotes(this.ctx.model[this.constructor.name].table)} WHERE "id" = ${idInput} RETURNING id`;
+        const sql = queries.deleteFromId(this.ctx.model[this.constructor.name].table, idInput);
         // Return results
         switch (this.ctx.odata.returnFormat) {
             // return only postgres sql query as a string

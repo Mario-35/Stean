@@ -6,15 +6,14 @@
  *
  */
 
-import { IodataContext, IvisitRessource, koaContext } from "../../../types";
+import { Id, IodataContext, IvisitRessource, koaContext } from "../../../types";
 import { Token } from "../../parser/lexer";
 import { SqlOptions } from "../../parser/sqlOptions";
 import { postSqlFromPgVisitor } from "../helper";
-import { EConstant, EExtensions, EHttpCode } from "../../../enums";
+import { EConstant, EErrors, EExtensions, EHttpCode } from "../../../enums";
 import { logging } from "../../../log";
 import { PgVisitor } from "../.";
 import { models } from "../../../models";
-import { messages } from "../../../messages";
 import { link } from "../../../models/helpers";
 import { doubleQuotes } from "../../../helpers";
 import { _DEBUG } from "../../../constants";
@@ -55,7 +54,7 @@ export class RootPgVisitor extends PgVisitor {
         if (this.special) {
             this.special.forEach((element: string) => {
                 const nodeName = element.includes("(") ? element.split("(")[0] : element;
-                const id = element.includes("(") ? String(element.split("(")[1].split(")")[0]) : undefined;
+                const id: Id = element.includes("(") ? String(element.split("(")[1].split(")")[0]) : undefined;
                 if (this.entity && this.entity.relations[nodeName]) {
                     const where = this.parentEntity ? `(SELECT id FROM (${this.query.toWhere(this)}) as nop)${id ? `and id = ${id}` : ""}` : this.id;
                     const whereSql = link(this.ctx.service, this.entity.name, nodeName)
@@ -108,7 +107,7 @@ export class RootPgVisitor extends PgVisitor {
     protected VisitRessourcesKeyPropertyValue(node: Token, _context: IodataContext) {
         this.id = this.ctx.decodedUrl.idStr ? this.ctx.decodedUrl.idStr : node.value == "Edm.SByte" ? BigInt(node.raw) : node.raw;
         this.query.where.notNull;
-        const condition = this.ctx.decodedUrl.idStr ? `"lora"."deveui" = '${this.ctx.decodedUrl.idStr}'` : ` id = ${this.id}`;
+        const condition = this.ctx.decodedUrl.idStr ? `"lora"."deveui" = '${this.ctx.decodedUrl.idStr.toLocaleUpperCase()}'` : ` id = ${this.id}`;
         if (this.query.where.notNull() === true) this.query.where.add(` AND ${condition}`);
         else this.query.where.init(condition);
     }
@@ -138,7 +137,7 @@ export class RootPgVisitor extends PgVisitor {
         } else if (this.entity && this.entity.columns[node.value.name]) {
             this.query.select.add(`${doubleQuotes(node.value.name)}${EConstant.columnSeparator}`);
             this.showRelations = false;
-        } else this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: messages.errors.notValid });
+        } else this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: EErrors.notValid });
     }
 
     protected VisitRessourcesPropertyPath(node: Token, context: IodataContext) {

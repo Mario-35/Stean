@@ -69,7 +69,7 @@ describe("suscribe : mqtt", () => {
             chai.request(server)
                 .post(`/test/${info.examples.http}`)
                 .type("form")
-                .send(messages.infos.params)
+                .send(messages.str(EInfos.params)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(401);

@@ -9,7 +9,6 @@
 import { doubleQuotes, getBigIntFromString, simpleQuotes } from "../../../helpers";
 import { Id, Ientity, IqueryMaker } from "../../../types";
 import { EConstant, EOperation, EOptions, EentityType } from "../../../enums";
-import { asJson } from "../../../db/queries";
 import { models } from "../../../models";
 import { logging } from "../../../log";
 import { createInsertValues, createUpdateValues, getUniques, getIsId, relationInfos } from "../../../models/helpers";
@@ -17,6 +16,7 @@ import { apiAccess } from "../../../db/dataAccess";
 import { PgVisitor } from "..";
 import { DATASTREAM } from "../../../models/entities";
 import { _DEBUG } from "../../../constants";
+import { queries } from "../../../db/queries";
 export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor): string | undefined {
     const formatInsertEntityData = (entity: string, datas: object, main: PgVisitor): Record<string, any> => {
         const goodEntity = models.getEntityName(main.ctx.service, entity);
@@ -334,7 +334,7 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
         logging.debug().message("Found entity : ", entityName).to().log().file();
         const callEntity = entityName ? src.ctx.model[entityName] : undefined;
         const id: Id = typeof src.parentId == "string" ? getBigIntFromString(src.parentId) : src.parentId;
-        if (entityName && callEntity && id && id > 0) {
+        if (entityName && callEntity && id && Number(id) > 0) {
             const relationName = getRelationNameFromEntity(postEntity, callEntity);
             if (relationName) datas[relationName] = { "@iot.id": id.toString() };
         }
@@ -364,7 +364,7 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
     }
     const temp = src.toPgQuery();
     if (temp)
-        sqlResult += asJson({
+        sqlResult += queries.asJson({
             query: `SELECT ${temp && temp.select ? temp.select : "*"} FROM ${names[postEntity.table]} ${temp && temp.groupBy ? `GROUP BY ${temp.groupBy}` : ""}`,
             singular: false,
             strip: src.ctx.service.options.includes(EOptions.stripNull),

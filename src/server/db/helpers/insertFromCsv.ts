@@ -18,6 +18,7 @@ import fs from "fs";
 import { createReadStream } from "fs";
 import { addAbortSignal } from "stream";
 import { config } from "../../configuration";
+import { queries } from "../queries";
 
 export class InsertFromCsv {
     readonly ctx: koaContext;
@@ -103,7 +104,7 @@ export class InsertFromCsv {
             readable
                 .pipe(addAbortSignal(controller.signal, await writable))
                 .on("finish", async (e: any) => {
-                    await executeSqlValues(service, `SELECT count(id) FROM "${paramsFile.tempTable}"`)
+                    await executeSqlValues(service, queries.count(paramsFile.tempTable, "id"))
                         .then((e) => {
                             resolve(+e[0 as keyof object]);
                         })
@@ -126,8 +127,8 @@ export class InsertFromCsv {
             const kelResult = (def: any) => {
                 const tmp = sqlRequest.columns.findIndex((element) => element === "result");
                 return tmp > 0
-                    ? `json_build_object('value', TRANSLATE (SUBSTRING (value${tmp} FROM '(([0-9]+.*)*[0-9]+)'), '[]',''):: float)`
-                    : `json_build_object('value', CASE "${this.paramsFile.tempTable}"."${def}" WHEN '---' THEN NULL WHEN '#REF!' THEN NULL ELSE CAST(REPLACE(value2,',','.') AS float) END)`;
+                    ? `json_build_object('value', TRANSLATE (SUBSTRING (value${tmp} FROM '(([0-9]+.*)*[0-9]+)'), '[]','')::FLOAT)`
+                    : `json_build_object('value', CASE "${this.paramsFile.tempTable}"."${def}" WHEN '---' THEN NULL WHEN '#REF!' THEN NULL ELSE CAST(REPLACE(value2,',','.') AS FLOAT) END)`;
             };
             const kel = (search: string, def: any) => {
                 const tmp = sqlRequest.columns.findIndex((element) => element === search);
@@ -136,11 +137,11 @@ export class InsertFromCsv {
             const kelName = (search: string, def: any) => {
                 const tmp = sqlRequest.columns.findIndex((element) => element === search);
                 return tmp > 0
-                    ? `case value${tmp}
-            when 'NULL' then null
-            when NULL then null
-            else (select id from "${search.toLowerCase()}" where name = value${tmp}::jsonb->>'name')
-        end`
+                    ? `CASE value${tmp}
+            WHEN 'NULL' THEN NULL
+            WHEN NULL THEN NULL
+            ELSE (SELECT id FROM "${search.toLowerCase()}" WHERE name = value${tmp}::JSONB->>'name')
+        END`
                     : def;
             };
             const stream = await streamCsvFile(this.ctx.service, this.paramsFile, sqlRequest);

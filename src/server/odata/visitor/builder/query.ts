@@ -7,18 +7,17 @@
  */
 
 import { doubleQuotes, cleanStringComma, isReturnDataArray, isReturnGraph, isReturnGeoJson, removeAllQuotes, formatPgString } from "../../../helpers";
-import { asJson } from "../../../db/queries";
 import { IpgQuery } from "../../../types";
 import { PgVisitor, RootPgVisitor } from "..";
 import { models } from "../../../models";
-import { EConstant, EDataType, EOptions, EQuery, EUserRights } from "../../../enums";
+import { EConstant, EDataType, EErrors, EOptions, EQuery, EUserRights } from "../../../enums";
 import { GroupBy, Key, OrderBy, Select, Where, Join } from ".";
-import { messages } from "../../../messages";
 import { logging } from "../../../log";
 import { expand } from "../../../models/helpers";
 import { isAllowedTo, isTestEntity } from "../../../helpers/tests";
 import { createDefaultContext, createIentityColumnAliasOptions } from "../helper";
 import { _DEBUG } from "../../../constants";
+import { queries } from "../../../db/queries";
 export class Query {
     from: string;
     where: Where;
@@ -138,13 +137,13 @@ export class Query {
                                 // create sql query for this relatiion (IN JSON result)
                                 const query = this.pgQueryToString(this.create(item, false));
                                 if (query)
-                                    relations[index] = `(${asJson({
+                                    relations[index] = `(${queries.asJson({
                                         query: query,
                                         singular: models.isSingular(main.ctx.service, name),
                                         strip: main.ctx.service.options.includes(EOptions.stripNull),
                                         count: false
                                     })}) AS ${doubleQuotes(name)}`;
-                                else throw new Error(messages.errors.invalidQuery);
+                                else throw new Error(EErrors.invalidQuery);
                             }
                         });
                     // create all relations Query
@@ -160,18 +159,27 @@ export class Query {
                                 }
                             });
                     const pagination =
-                        element.ctx.service.options.includes(EOptions.optimized) && element.query.where.toString().includes(`"observation"."${element.parentEntity?.table}_id" =`) && element.skip > 0
+                        element.ctx.service.options.includes(EOptions.optimized) &&
+                        element.query.where.toString().includes(`"observation"."${element.parentEntity?.table}_id" =`) &&
+                        (isReturnGraph(element) || element.skip > 0)
                             ? `"observation"."${element.parentEntity?.table}_id" =${element.query.where.toString().split("=")[1].split(" ")[0]}`
                             : undefined;
-
-                    if (pagination) element.query.where.replace(pagination, `_nb > ${element.skip}`);
+                    if (pagination)
+                        element.query.where.replace(
+                            pagination,
+                            `_nb > ${element.skip}${
+                                isReturnGraph(element)
+                                    ? ` AND _nb % (SELECT COALESCE(NULLIF(COUNT(id) / ${element.ctx.service.nb_graph}, 0), 1) FROM "datastream_id${pagination.split("=")[1].split(" ")[0]}") = 0`
+                                    : ""
+                            }`
+                        );
 
                     const res = {
                         select: select.join(`,${EConstant.return}${EConstant.tab}${EConstant.tab}`),
                         from: pagination ? [`"${element.parentEntity?.table}_id${pagination.split("=")[1].split(" ")[0]}" AS "${element.entity.table}"`] : [doubleQuotes(element.entity.table)],
                         where: element.query.where.toString(),
                         groupBy: element.query.groupBy.notNull() === true ? element.query.groupBy.toString() : undefined,
-                        orderBy: element.query.orderBy.notNull() === true ? element.query.orderBy.toString() : pagination ? "" : element.entity.orderBy,
+                        orderBy: element.query.orderBy.notNull() === true ? element.query.orderBy.toString() : pagination ? "_nb" : element.entity.orderBy,
                         join: element.joinOffset,
                         skip: pagination ? 0 : element.skip,
                         limit: element.limit,
@@ -212,7 +220,7 @@ export class Query {
                 return query;
             }
         }
-        throw new Error(messages.errors.invalidQuery);
+        throw new Error(EErrors.invalidQuery);
     }
 
     toString(main: RootPgVisitor | PgVisitor, _element?: PgVisitor): string {
@@ -220,7 +228,7 @@ export class Query {
         if (!this._pgQuery) this._pgQuery = this.create(main, false, _element);
         const query = this.pgQueryToString(this._pgQuery);
         if (query) return query;
-        throw new Error(messages.errors.invalidQuery);
+        throw new Error(EErrors.invalidQuery);
     }
 
     toPgQuery(main: RootPgVisitor | PgVisitor, _element?: PgVisitor): IpgQuery | undefined {

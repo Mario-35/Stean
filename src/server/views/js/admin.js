@@ -5,6 +5,8 @@
 
 // create json default configuration
 function updateDataService()  {
+	const opt = multiSelects["optionsOption"].getData();
+	const ext = multiSelects["extensionsOption"].getData();
 	var obj = {
 		name: optName.value,
 		pg: {
@@ -18,8 +20,9 @@ function updateDataService()  {
 		"version": optVersion.value || "v1.1",
 		"date_format": dateOption.value || "DD/MM/YYYY hh:mi:ss",
         "nb_page": pageOption.value || 200,
-		"extensions": multiSelects["extensionsOption"].getData(["base"]),
-        "options": multiSelects["optionsOption"].getData(),
+        "nb_graph": graphOption.value || 1000000,
+		"extensions": ext.length > 0 ? ext : ["base", "multiDatastream"],
+        "options": opt.length > 0 ? opt : ["canDrop", "unique", "optimized"],
         "csvDelimiter": csvOption.value || ";"
 	}
 	setJSON(JSON.stringify(obj, null, 4));
@@ -39,8 +42,15 @@ jsonDatas.onkeyup = function() {
 };
 
 // catch click on service block
-btnPipo.onclick = async (e) => {	
+btnBlank.onclick = async (e) => {	
 	e.preventDefault();
+	optVersion.value = "v1.1";
+	dateOption.value = "DD/MM/YYYY hh:mi:ss";
+    pageOption.value = 200;
+    graphOption.value = 1000000;
+    csvOption.value =";";
+	populateMultiSelect("optionsOption", _PARAMS.options, ["canDrop", "unique", "optimized"]);
+	populateMultiSelect("extensionsOption", _PARAMS.extensions, ["base", "multiDatastream"]);
 	updateDataService();
 }
 
@@ -76,16 +86,19 @@ btnService.onclick = async (e) => {
 
 // fill form service from another
 function fillService(name, newName) {
-	csvOption.value = _PARAMS.services[name].service.csvDelimiter;
-	pageOption.value = _PARAMS.services[name].service.nb_page;
-	dateOption.value = _PARAMS.services[name].service.date_format;
-	populateSelect(optVersion, _PARAMS.versions, _PARAMS.services[name].service.version);
-	populateMultiSelect("optionsOption", _PARAMS.options, _PARAMS.services[name].service.options);
-	populateMultiSelect("extensionsOption", _PARAMS.extensions, _PARAMS.services[name].service.extensions);
+	const serv = _PARAMS.services[name]["service"];
+	csvOption.value = serv.csvDelimiter;
+	pageOption.value = serv.nb_page;
+	graphOption.value = serv.nb_graph;
+	dateOption.value = serv.date_format;
+	populateSelect(optVersion, _PARAMS.versions, serv.apiVersion);
+	populateMultiSelect("optionsOption", _PARAMS.options, serv.options);
+	populateMultiSelect("extensionsOption", _PARAMS.extensions, serv.extensions);
 	optName.value = newName || name;
 	optPassword.value = newName || "";
 	optRepeat.value = newName ||"";
 	Labelchck1.innerText = "Service " + optName.value;
+	optDistHost.value = _PARAMS.services[name].linkBase + "/" + serv.apiVersion + "/" ;
 }
 
 // load Log file from log select
@@ -106,15 +119,19 @@ getDatas = async (url) => {
 // fill form for create service from another
 async function selectCard(name) {
 	fillService(name);
-	
 }
 
 // fill form for create service from another
-function copyService(name) {
-	const newName = window.prompt("Name of the service", "");
+async function delService(name) {
+	const newName = window.prompt("Name of the service", name);
 	if (newName !== null && newName !== "") {
-		fillService(name, newName);
-		updateDataService();
+		console.log(_PARAMS.services);
+		let response = await fetch(`${_PARAMS.services[newName].linkBase}/${_PARAMS.services[newName]["service"].apiVersion}/Services(${newName})`, {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
 	}
 }
 
@@ -123,7 +140,7 @@ function editPage(name ,elem) {
 	const temp = window.prompt("Number of page for " + name, elem.textContent);
 	if (temp !== null && temp !== "" && +temp > 0) {
 		elem.textContent = temp; 		
-		fetch(`${_PARAMS.services[name].linkBase}/${_PARAMS.services[name].version}/nb_page`, {
+		fetch(`${_PARAMS.services[name].linkBase}/${_PARAMS.services[name]["service"]["service"].apiVersion}/nb_page`, {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -132,21 +149,35 @@ function editPage(name ,elem) {
 		});
 	}
 }
+// change nb Graph
+function editGraph(name ,elem) {
+	const temp = window.prompt("Number of point for graph", elem.textContent);
+	if (temp !== null && temp !== "" && +temp > 0) {
+		elem.textContent = temp; 		
+		fetch(`${_PARAMS.services[name].linkBase}/${_PARAMS.services[name]["service"].apiVersion}/nb_graph`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: `{"nb_graph": ${temp}}`
+		});
+	}
+}
 
 // edit synonyms
 async function editList(name ,elem) {
 	show(getElement("editList"+ name));
 	hide(getElement("options"+ name));
-	const lines = Object.values(_PARAMS.services[name].service.synonyms[elem]);
-	const temp = window.prompt("Synonyms for " + elem, _PARAMS.services[name].service.synonyms[elem]);
+	const lines = Object.values(_PARAMS.services[name]["service"].synonyms[elem]);
+	const temp = window.prompt("Synonyms for " + elem, _PARAMS.services[name]["service"].synonyms[elem]);
 	if (temp !== null && temp !== "" && temp != lines) {
-		_PARAMS.services[name].service.synonyms[elem] = temp.split(',');
-		await fetch(`${_PARAMS.services[name].linkBase}/${_PARAMS.services[name].version}/synonyms`, {
+		_PARAMS.services[name]["service"].synonyms[elem] = temp.split(',');
+		await fetch(`${_PARAMS.services[name].linkBase}/${_PARAMS.services[name]["service"].apiVersion}/synonyms`, {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify(_PARAMS.services[name].service.synonyms)
+			body: JSON.stringify(_PARAMS.services[name]["service"].synonyms)
 		});
 	}
 
@@ -158,7 +189,7 @@ async function editCsv(name ,elem) {
 	const temp = window.prompt("Csv delimiter for " + name, elem.textContent);
 	if (temp === "," || temp === ";") elem.textContent = temp; 
 	if (temp === "," || temp === ";") {
-		await fetch(`${_PARAMS.services[name].linkBase}/${_PARAMS.services[name].version}/csvDelimiter`, {
+		await fetch(`${_PARAMS.services[name].linkBase}/${_PARAMS.services[name]["service"].apiVersion}/csvDelimiter`, {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -168,53 +199,50 @@ async function editCsv(name ,elem) {
 	}
 }
 
-
 // change card selector
 async function selectChange(name ,elem) {
 	switch (elem.value) {
-		case "Users":	
-		console.log(_PARAMS.services[name]);
-				
+		case "Users":				
 			getElement("infos"+ name).innerHTML = _PARAMS.services[name].stats["Users"].map(e => `<option value="${e["username"]}" onclick="showUserInfos('${name}', '${e["username"]}')">${e["username"]}</option>`).join("\n");
 			break;
 		case "Loras":
-			const url = `${_PARAMS.services[name].linkBase}/${_PARAMS.services[name].version}/Decoders?$select=id,name`;		
+			const url = `${_PARAMS.services[name].linkBase}/${_PARAMS.services[name]["service"].apiVersion}/Decoders?$select=id,name`;		
 			const datas = await getDatas(url);
 			getElement("infos"+ name).innerHTML =  Object.values(datas.value).map(e => `<option value="${e.name}" onclick="showDecoderInfos('${name}','${e["@iot.id"]}')">${e.name}</option>`).join("\n");
 			break;
 		case "Synonyms": 
 			if (_PARAMS.services[name].service)
-				getElement("infos"+ name).innerHTML = Object.keys(_PARAMS.services[name].service.synonyms).map(e => `<option value="${e["username"]}" onclick="editList('${name}','${e}')">${e}</option>`).join("\n");
+				getElement("infos"+ name).innerHTML = Object.keys(_PARAMS.services[name]["service"].synonyms).map(e => `<option value="${e["username"]}" onclick="editList('${name}','${e}')">${e}</option>`).join("\n");
 			break;	
-		case 0: 		
-			if (["canDrop", "forceHttps", "stripNull","speedCount","unique"].includes(elem.textContent)) {
-				if (_PARAMS.services[name].service.options.includes(elem.textContent)) {
-					var index = _PARAMS.services[name].service.options.indexOf(elem.textContent);
-					_PARAMS.services[name].service.options.splice(index, 1);
-				} else _PARAMS.services[name].service.options.push(elem.textContent);
+		case 0:
+			if (_PARAMS.options.includes(elem.textContent)) {
+				if (_PARAMS.services[name]["service"].options.includes(elem.textContent)) {
+					var index = _PARAMS.services[name]["service"].options.indexOf(elem.textContent);
+					_PARAMS.services[name]["service"].options.splice(index, 1);
+				} else _PARAMS.services[name]["service"].options.push(elem.textContent);
 				try {					
-					await fetch(`${_PARAMS.services[name].linkBase}/${_PARAMS.services[name].version}/options`, {
+					await fetch(`${_PARAMS.services[name].linkBase}/${_PARAMS.services[name]["service"].apiVersion}/options`, {
 						method: "PUT",
 						headers: {
 							"Content-Type": "application/json",
 						},
-						body: JSON.stringify(_PARAMS.services[name].service.options)
+						body: JSON.stringify(_PARAMS.services[name]["service"].options)
 					});
 				} catch (error) {
 					console.log(error);
-					await fetch(`${_PARAMS.services[name].linkBase.replace('https', 'http')}/${_PARAMS.services[name].version}/options`, {
+					await fetch(`${_PARAMS.services[name].linkBase.replace('https', 'http')}/${_PARAMS.services[name]["service"].apiVersion}/options`, {
 						method: "PUT",
 						headers: {
 							"Content-Type": "application/json",
 						},
-						body: JSON.stringify(_PARAMS.services[name].service.options)
+						body: JSON.stringify(_PARAMS.services[name]["service"].options)
 					});
 				}
 			}
 			showInfos(name);
 			break;						
 		default:
-			getElement("infos"+ name).innerHTML = _PARAMS.services[name].service.extensions.map(e => `<option value="${e}">${e}</option>`).join("\n");
+			getElement("infos"+ name).innerHTML = _PARAMS.services[name]["service"].extensions.map(e => `<option value="${e}">${e}</option>`).join("\n");
 			showInfos(name);
 	}
 }
@@ -236,12 +264,6 @@ optLogs.onclick = async () => {
 	}
 }
 
-// export config
-btnExport.onclick = async () => {
-	const url = `${_PARAMS.addUrl.split("service")[0]}export`;	
-	beautifyDatas(getElement("jsonDatas"), await getFetchDatas(url), "json");
-}
-
 // change view for user infos
 function showUserInfos(service, element) {
 	var obj = Object(_PARAMS.services[service].stats["Users"]).filter(e => e.username === element)[0];
@@ -251,15 +273,15 @@ function showUserInfos(service, element) {
 
 // change view for standard default infos
 async function showDecoderInfos(name, decoder) {
-	const datas = await getDatas(`${_PARAMS.services[name].linkBase}/${_PARAMS.services[name].version}/Decoders(${decoder})`);
+	const datas = await getDatas(`${_PARAMS.services[name].linkBase}/${_PARAMS.services[name]["service"].apiVersion}/Decoders(${decoder})`);
 	decoderWindow(datas, name);
 }
 
 // Change view for standard default infos
 function showInfos(service) {
-	const li = (operation) => `<li class="card-list-item canPoint icon-${_PARAMS.services[service].service.options.includes(operation) ? "yes" : "no" }"  onclick="selectChange('${service}', this)">${operation}</li>`;
+	const li = (operation) => `<li class="card-list-item canPoint icon-${_PARAMS.services[service]["service"].options.includes(operation) ? "yes" : "no" }"  onclick="selectChange('${service}', this)">${operation}</li>`;
 	const ul = ['<legend>Options</legend>','<ul class="card-list">'];
-	["canDrop","forceHttps","stripNull","speedCount","unique"].forEach( e => ul.push(li(e)));
+	["canDrop","forceHttps","stripNull","unique","optimized"].forEach( e => ul.push(li(e)));
 	ul.push("</ul>");	
 	getElement("options"+ service).innerHTML = ul.join("");
 }
@@ -278,7 +300,7 @@ async function deleteDecoder() {
 	const serviceName = getElement("optDecoderId").name;
 	const id = getElement("optDecoderId").value;	
 	if (Number(id) > 0) {
-		let response = await fetch(`${_PARAMS.services[serviceName].linkBase}/${_PARAMS.services[serviceName].version}/Decoders(${id})`, {
+		let response = await fetch(`${_PARAMS.services[serviceName].linkBase}/${_PARAMS.services[serviceName]["service"].apiVersion}/Decoders(${id})`, {
 			method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
@@ -295,7 +317,7 @@ async function deleteDecoder() {
 // Save decoder as PUT http verb
 async function saveDecoder() {
 	const serviceName = getElement("optDecoderId").name;	
-	await fetch(`${_PARAMS.services[serviceName].linkBase}/${_PARAMS.services[serviceName].version}/Decoders`, {
+	await fetch(`${_PARAMS.services[serviceName].linkBase}/${_PARAMS.services[serviceName]["service"].apiVersion}/Decoders`, {
 		method: "PUT",
 		headers: {
 			"Content-Type": "application/json",
@@ -326,7 +348,7 @@ function decodingPayload(payload) {
 // Save configs as PUT http verb
 async function saveDecoder() {
 	const serviceName = getElement("optDecoderId").name;	
-	await fetch(`${_PARAMS.services[serviceName].linkBase}/${_PARAMS.services[serviceName].version}/Synonims`, {
+	await fetch(`${_PARAMS.services[serviceName].linkBase}/${_PARAMS.services[serviceName]["service"].apiVersion}/Synonims`, {
 		method: "PUT",
 		headers: {
 			"Content-Type": "application/json",
@@ -342,6 +364,8 @@ async function saveDecoder() {
 // Start
 (function init() {
 	wait(false);
+	console.log(_PARAMS);
+	
 	new SplitterBar(container, first, two);
 	populateSelect(optVersion, _PARAMS.versions, "v1.1");
 	populateSelect(optLogs, _PARAMS.logsFiles);
@@ -351,7 +375,16 @@ async function saveDecoder() {
 	pageOption.value = '200';
 	dateOption.value = "DD/MM/YYYY hh:mi:ss";
 	jsonViewer = new JSONViewer();
-	if (_PARAMS.mussage) notifyConfirm("Confirmation", _PARAMS.mussage);
+	if (_PARAMS.message) notifyConfirm("Confirmation", _PARAMS.message);
 }
 )();
 
+// test charly loop
+testLoop.onclick = () => {
+	loop();
+};
+
+// copy service to actual service
+btnCopyService.onclick = () => {
+	copyFromService();
+};

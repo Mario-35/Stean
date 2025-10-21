@@ -6,17 +6,15 @@
  *
  */
 
-import { asDataArray, asGeoJSON, asJson, graphDatastream, graphMultiDatastream, interval } from "../db/queries";
+import { queries } from "../db/queries";
 import { IreturnFormat, koaContext } from "../types";
 import { addCssFile } from "../views/css";
 import { addJsFile } from "../views/js";
 import util from "util";
-import { EConstant, EEncodingType, EOptions, EReturnFormats } from "../enums";
+import { EConstant, EEncodingType, EErrors, EOptions, EReturnFormats } from "../enums";
 import { isReturnGraph } from ".";
 import { PgVisitor } from "../odata/visitor";
 import { DATASTREAM } from "../models/entities";
-import { messages } from "../messages";
-
 // Default "blank" function
 const defaultFunction = (input: string | object) => input;
 
@@ -40,9 +38,9 @@ const generateGraphSql = (input: PgVisitor) => {
     const entity = input.parentEntity || input.entity;
     if (entity) {
         const id = input.parentId ? input.parentId : input.id;
-        const query = entity.table === DATASTREAM.table ? graphDatastream(entity.table, id, input) : graphMultiDatastream(entity.table, id, input);
+        const query = entity.table === DATASTREAM.table ? queries.graphDatastream(entity.table, id, input) : queries.graphMultiDatastream(entity.table, id, input);
 
-        return asJson({
+        return queries.asJson({
             query: query,
             singular: false,
             strip: false,
@@ -66,8 +64,8 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
         format: defaultFunction,
         generateSql(input: PgVisitor) {
             return input.interval
-                ? asJson({ query: interval(input), singular: false, strip: false, count: true })
-                : asJson({
+                ? queries.asJson({ query: queries.interval(input), singular: false, strip: false, count: true })
+                : queries.asJson({
                       query: input.toString(),
                       singular: false,
                       count: true,
@@ -97,7 +95,7 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
             const height = String(100 / Object.entries(input).length).split(".")[0];
             if (typeof input === "object") {
                 // input = input["value" as keyof object];git
-                if (input[0 as keyof object]["infos"] === null) return messages.errors.noDatas;
+                if (input[0 as keyof object]["infos"] === null) return EErrors.noDatas;
                 Object.entries(input).forEach((element: Record<string, any>, index: number) => {
                     // if (input["infos" as keyof object] == null && input["datas" as keyof object] == null) return "";
                     graphNames.push(`<button type="button" id="btngraph${index}" onclick="graph${index}.remove(); btngraph${index}.remove();">X</button>
@@ -129,7 +127,7 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
         type: EEncodingType.json,
         format: defaultFunction,
         generateSql(input: PgVisitor) {
-            return asDataArray(input);
+            return queries.asDataArray(input);
         }
     },
 
@@ -138,7 +136,7 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
         type: EEncodingType.json,
         format: defaultFunction,
         generateSql(input: PgVisitor) {
-            return asGeoJSON(input);
+            return queries.asGeoJSON(input);
         }
     },
     csv: {
@@ -154,7 +152,7 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
         type: EEncodingType.txt,
         format: (input: string | object) => (Object.entries(input).length > 0 ? util.inspect(input, { showHidden: true, depth: 4 }) : JSON.stringify(input)),
         generateSql(input: PgVisitor) {
-            return asJson({ query: input.toString(), singular: false, strip: false, count: false });
+            return queries.asJson({ query: input.toString(), singular: false, strip: false, count: false });
         }
     },
     sql: {

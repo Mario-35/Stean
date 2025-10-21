@@ -6,9 +6,8 @@
  *
  */
 import util from "util";
-import { EConstant, EOptions } from "../../enums";
+import { EConstant, EErrors, EOptions } from "../../enums";
 import { unikeList, unique } from "../../helpers";
-import { messages } from "../../messages";
 import { Iservice, typeExtensions } from "../../types";
 import { logging } from "../../log";
 import { _DEBUG } from "../../constants";
@@ -48,18 +47,18 @@ export function formatServiceFile(name: string, input: Record<string, any>): Ise
         apiVersion: version,
         date_format: input["date_format"] || "DD/MM/YYYY hh:mi:ss",
         nb_page: input["nb_page"] ? +input["nb_page"] : 200,
+        nb_graph: input["nb_graph"] ? +input["nb_graph"] : 1000000,
         alias: input["alias"] ? unikeList(String(input["alias"]).split(",")) : [],
         extensions: extensions,
         options: options,
         csvDelimiter: input["csvDelimiter"] ? input["csvDelimiter"] : ";",
         synonyms: input["synonyms"] ? input["synonyms"] : undefined,
-        users: undefined,
-        _connection: undefined
+        users: undefined
     };
 
     if (Object.values(returnValue).includes("ERROR"))
         throw new TypeError(
-            `${messages.errors.inConfigFile} [${util.inspect(returnValue, {
+            `${EErrors.inConfigFile} [${util.inspect(returnValue, {
                 showHidden: false,
                 depth: null
             })}]`

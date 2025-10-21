@@ -116,7 +116,6 @@ async function executeSqlValues(e) {
 
 // epdate json datas and test valid
 const setJSON = (input) => {
-	return;
 	if (jsonDatas.value != "" || input) {
 		jsonDatas.value = JSON.stringify(input || jsonDatas.value , undefined, 4);
 		jsonDatas.classList.remove("valid");

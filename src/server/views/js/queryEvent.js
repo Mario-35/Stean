@@ -300,13 +300,8 @@ jsonDatas.onkeyup = function() {
 };
 
 
-
 // copy service to actual service
 btnCopyService.onclick = () => {
 	copyFromService();
 };
 
-// test charly loop
-testMario.onclick = () => {
-	testa();
-};

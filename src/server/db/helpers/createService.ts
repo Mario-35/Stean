@@ -11,10 +11,11 @@ import { config } from "../../configuration";
 import { doubleQuotes, asyncForEach } from "../../helpers";
 import { models } from "../../models";
 import { createInsertValues } from "../../models/helpers";
-import { keyobj, Iservice } from "../../types";
+import { Iservice } from "../../types";
 import { logging } from "../../log";
-import { EChar } from "../../enums";
+import { EChar, EInfos } from "../../enums";
 import { _DEBUG } from "../../constants";
+import { messages } from "../../messages";
 
 /**
  *
@@ -39,23 +40,23 @@ export const createService = async (service: Iservice, dataInput: Record<string,
     }
 
     const results: Record<string, string> = {};
-    const newServiceName = dataInput["create" as keyobj]["name"];
+    const newServiceName = dataInput["create" as keyof object]["name"];
     const newService = config.getService(newServiceName);
-    const mess = `Database [${newServiceName}]`;
+    const mess = ` database [${newServiceName}]`;
 
     try {
         await disconnectDb(newServiceName, true);
-        results[`Drop ${mess}`] = EChar.ok;
+        results[messages.str(EInfos.disconnect, mess)] = EChar.ok;
     } catch (error) {
-        results[`Drop ${mess}`] = EChar.notOk;
+        results[messages.str(EInfos.disconnect, mess)] = EChar.notOk;
         console.log(error);
     }
 
     try {
         await createDatabase(newServiceName);
-        results[`Create ${mess}`] = EChar.ok;
+        results[messages.str(EInfos.create, mess)] = EChar.ok;
     } catch (error) {
-        results[`Create ${mess}`] = EChar.notOk;
+        results[messages.str(EInfos.create, mess)] = EChar.notOk;
         console.log(error);
     }
 

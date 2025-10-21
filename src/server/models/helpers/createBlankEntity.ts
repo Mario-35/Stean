@@ -7,7 +7,7 @@
  */
 
 import { singular } from ".";
-import { allEntities, EentityType } from "../../enums";
+import { allEntities, EentityType, EErrors } from "../../enums";
 import { messages } from "../../messages";
 import { Ientity } from "../../types";
 
@@ -28,5 +28,5 @@ export const createBlankEntity = (name: string, table?: string): Ientity => {
             indexes: {}
         };
     }
-    throw new Error(messages.create(messages.errors.noValidEntity).replace(name).toString());
+    throw new Error(messages.str(EErrors.noValidEntity, name));
 };

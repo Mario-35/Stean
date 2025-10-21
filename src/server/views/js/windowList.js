@@ -230,7 +230,7 @@ function decoderWindow(input, serviceName) {
 		`                </div>`,
 		`                <div class="patrom-col patrom-col-span-2">`,
 		`                   <label for="testDecoder">Tests</label>`,
-		`					<button id="testDecoder" onclick="testDecoder()"> test decoder </button>`,
+		`					<button id="testDecoder" onclick="testDecoder()"> test </button>`,
 		`				</div>`,
 		`                <div class="patrom-col patrom-col-span-2">`,
 		`                   <label for="testDecoder">Save</label>`,

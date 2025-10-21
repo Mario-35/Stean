@@ -6,8 +6,7 @@
  *
  */
 
-import { EObservationType, ERelations, EentityType } from "../../enums";
-import { messages } from "../../messages";
+import { EInfos, EObservationType, ERelations, EentityType } from "../../enums";
 import { Entity } from "../entity";
 import { SmallInt, Geometry, Jsonb, Period, Relation, Text } from "../types";
 
@@ -18,7 +17,7 @@ export const DATASTREAM = new Entity("Datastreams", {
     columns: {
         id: new SmallInt().generated().column(),
         name: new Text().notNull().column(),
-        description: new Text().notNull().default(messages.infos.noDescription).column(),
+        description: new Text().notNull().default(EInfos.noDescription).column(),
         observationType: new Text().notNull().default("http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement").verify(Object.keys(EObservationType)).column(),
         unitOfMeasurement: new Jsonb().notNull().column(),
         observedArea: new Geometry().column(),

@@ -7,9 +7,9 @@
  */
 
 import { config } from "../../configuration";
-import { EChar, EConstant } from "../../enums";
-import { simpleQuotes } from "../../helpers";
+import { EChar } from "../../enums";
 import { Iservice } from "../../types";
+import { queries } from "../queries";
 
 /**
  *
@@ -19,13 +19,13 @@ import { Iservice } from "../../types";
 
 export const createRole = async (service: Iservice): Promise<string> => {
     return new Promise(async function (resolve, reject) {
-        await config.executeAdmin(`SELECT COUNT(*) FROM pg_user WHERE usename = ${simpleQuotes(service.pg.user)};`).then(async (res: Record<string, any>) => {
+        await config.executeAdmin(queries.countUser(service.pg.user)).then(async (res: Record<string, any>) => {
             if (res[0].count == 0) {
-                await config.executeAdmin(`CREATE ROLE ${service.pg.user} WITH PASSWORD ${simpleQuotes(service.pg.password)} ${EConstant.rights}`).catch((err: Error) => {
+                await config.executeAdmin(queries.createRole(service.pg.user, service.pg.password)).catch((err: Error) => {
                     reject(err);
                 });
             } else {
-                await config.executeAdmin(`ALTER ROLE ${service.pg.user} WITH PASSWORD ${simpleQuotes(service.pg.password)}  ${EConstant.rights}`).catch((err: Error) => {
+                await config.executeAdmin(queries.updateRole(service.pg.user, service.pg.password)).catch((err: Error) => {
                     reject(err);
                 });
             }

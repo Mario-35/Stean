@@ -7,7 +7,6 @@
  */
 
 import { EConstant } from "../../enums";
-import { keyobj } from "../../types";
 
 /**
  * Verify is valid config
@@ -19,7 +18,7 @@ import { keyobj } from "../../types";
 export function validJSONService(input: Record<string, any>): boolean {
     if (!input.hasOwnProperty(EConstant.admin)) return false;
     if (!input[EConstant.admin].hasOwnProperty("pg")) return false;
-    const admin = input[EConstant.admin]["pg" as keyobj] as JSON;
+    const admin = input[EConstant.admin]["pg" as keyof object] as JSON;
     if (!admin.hasOwnProperty("host")) return false;
     if (!admin.hasOwnProperty("user")) return false;
     if (!admin.hasOwnProperty("password")) return false;

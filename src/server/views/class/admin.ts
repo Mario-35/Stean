@@ -101,9 +101,9 @@ export class Admin extends CoreHtmlView {
             .map(
                 (e) => `<div class="card">
                 <div class="title" onclick="selectCard('${e}')">${e}</div>
-                <button class="copy-btn" id="copy${e}" onclick="copyService('${e}')"> COPY </button>
+                <button class="del-btn" id="del${e}" onclick="delService('${e}')"> X </button>
                 <div class="product">
-                    <span class="service-name">${services[e].version}&nbsp;:&nbsp;</span>
+                    <span class="service-name">${services[e].service.apiVersion}&nbsp;:&nbsp;</span>
                     <span id="root" class="service-root" onclick="location.href = '${services[e].root}';">${services[e].root}</span>
                 </div>
                 <div class="description">
@@ -113,10 +113,11 @@ export class Admin extends CoreHtmlView {
                     <fieldset id="options${e}">
                         <legend>Options</legend>
                         <ul class="card-list">
-                            <li class="card-list-item canPoint icon-${services[e].service.options.includes(EOptions.canDrop) ? "yes" : "no"}" onclick="selectChange('${e}', this)">canDrop</li>
-                            <li class="card-list-item canPoint icon-${services[e].service.options.includes(EOptions.forceHttps) ? "yes" : "no"}" onclick="selectChange('${e}', this)">forceHttps</li>
-                            <li class="card-list-item canPoint icon-${services[e].service.options.includes(EOptions.stripNull) ? "yes" : "no"}" onclick="selectChange('${e}', this)">stripNull</li>
-                            <li class="card-list-item canPoint icon-${services[e].service.options.includes(EOptions.unique) ? "yes" : "no"}" onclick="selectChange('${e}', this)">unique</li>
+                        ${params.options
+                            .map(
+                                (key: string) => `<li class="card-list-item canPoint icon-${services[e].service.options.includes(key) ? "yes" : "no"}" onclick="selectChange('${e}', this)">${key}</li>`
+                            )
+                            .join("")}
                         </ul>
                     </fieldset>
     
@@ -126,16 +127,32 @@ export class Admin extends CoreHtmlView {
     
                 </div>
                 <div class="description">
-                    <span class="page canPoint" onclick="editPage('${e}', this)">${services[e].service.nb_page}</span>
+                    <span class="service-name">csv delimiter:</span>
                     <span class="csv canPoint" onclick="editCsv('${e}', this)">${services[e].service.csvDelimiter}</span>
                     <select class="patrom-select tabindex="1" onchange="selectChange('${e}', this)">
-                        <option selected="selected">Services</option>
-                        <option>Statistiques</option>
-                        ${services[e].service.extensions.includes("users") ? "<option>Users</option>" : ""} 
+                        <option selected="selected">Services</option>                        
+                        ${services[e].service.extensions.includes("users") && services[e].service.users ? "<option>Users</option>" : ""} 
                         ${services[e].service.extensions.includes("lora") ? "<option>Loras</option>" : ""} 
                         ${services[e].service.extensions.includes("lora") ? "<option>Synonyms</option>" : ""} 
                     </select>
                 </div>
+
+
+                <div class="description">
+                    <span class="service-name">items per page :</span>
+                    <span class="page canPoint" onclick="editPage('${e}', this)">${services[e].service.nb_page}</span>
+                </div>
+                <div class="description">
+                    <span class="service-name">point per graph :</span>
+                    <span class="page canPoint" onclick="editGraph('${e}', this)">${services[e].service.nb_graph}</span>
+                </div>
+
+
+
+
+
+
+
                 </div>`
             );
 

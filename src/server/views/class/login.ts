@@ -7,8 +7,8 @@
  */
 
 import { _DEBUG } from "../../constants";
+import { EInfos } from "../../enums";
 import { logging } from "../../log";
-import { messages } from "../../messages";
 import { Idatas, koaContext } from "../../types";
 import { CoreHtmlView } from "./core";
 
@@ -59,26 +59,26 @@ export class Login extends CoreHtmlView {
                         <div class="sign-up-htm">
                           ${this.textInput({
                               name: "username",
-                              label: messages.infos.user,
+                              label: EInfos.user,
                               value: datas.body && datas.body.username ? datas.body.username : "",
                               alert: alert("username"),
-                              toolType: `Name ${messages.infos.least5Tool}`
+                              toolType: `Name ${EInfos.least5Tool}`
                           })}
                           ${this.textInput({
                               name: "pass",
-                              label: messages.infos.pass,
+                              label: EInfos.pass,
                               password: true,
                               value: datas.body && datas.body.password ? datas.body.password : "",
                               alert: alert("password"),
-                              toolType: messages.infos.passTool
+                              toolType: EInfos.passTool
                           })}
-                          ${this.textInput({ name: "repeat", label: messages.infos.rep, password: true, value: "", alert: alert("repeat"), toolType: messages.infos.repTool })}
+                          ${this.textInput({ name: "repeat", label: EInfos.rep, password: true, value: "", alert: alert("repeat"), toolType: EInfos.repTool })}
                           ${this.textInput({
                               name: "mail",
                               label: "Email address",
                               value: datas.body && datas.body.email ? datas.body.email : "",
                               alert: alert("email"),
-                              toolType: messages.infos.mailTool
+                              toolType: EInfos.mailTool
                           })}
                           ${this.submitButton("Sign UP")}
                           ${this.hr()}                                

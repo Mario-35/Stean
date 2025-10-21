@@ -61,7 +61,7 @@ export const decodeUrl = (ctx: koaContext, input?: string): IdecodedUrl | undefi
         // id string or number
         if (paths[2]) {
             id = paths[2].includes("(") ? paths[2].split("(")[1].split(")")[0] : 0;
-            idStr = isNaN(+id) ? String(id).toLocaleUpperCase() : undefined;
+            idStr = isNaN(+id) ? String(id) : undefined;
             path = paths.slice(2).join("/");
         }
 

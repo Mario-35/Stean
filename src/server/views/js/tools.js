@@ -1,11 +1,3 @@
-async function testa(obj) {
-	let url = optHost.value + "/v1.1/Datastreams(1)/Observations?$top=100000";
-    while (url) {
-        url = await getmy(url);
-    }        
-    
-}
-
 async function getmy(url) {
     try {
 		const response = await fetch(encodeURI(url), {
@@ -19,6 +11,14 @@ async function getmy(url) {
 	} catch (err) {
 		notifyError("Error", err);
 	}
+}
+
+async function loop(obj) {
+	let url = optDistHost.value + "Datastreams(1)/Observations?$top=" + disTopOption.value || 100000;
+    while (url) {
+        url = await getmy(url);
+    }        
+    
 }
 
 
@@ -88,15 +88,15 @@ async function getObservations(url) {
 
 async function copyFromService(obj) {
 	const src = optDistHost.value;
-	const dest = "http://localhost:8029/copie/v1.1/";
-	const foi  = await getDatas(src + "FeaturesOfInterest?$select=id&$orderby=id asc");
+	const dest = `${optHost.value}/${optVersion.value}/`;
+	const foi  = await getDatas(src + "FeaturesOfInterest?$select=id");
 	for (let i = 0; i < +foi["@iot.count"]; i++) {
 		let datas  = await getDatas(src + "FeaturesOfInterest("+ foi["value"][i]["@iot.id"] +")"); 
 		datas = cleanData(datas);
 		await postDatas(dest+"FeaturesOfInterest", datas);
 	};
 
-	let stream  = await getDatas(src + "Datastreams?$select=id&$orderby=id asc");
+	let stream  = await getDatas(src + "Datastreams?$select=id");
 	for (let i = 0; i < +stream["@iot.count"]; i++) {
 		const myId = stream["value"][i]["@iot.id"];
 		let datas  = await getDatas(src + "Datastreams("+ myId +")?$expand=Thing/Locations,Sensor,ObservedProperty"); 
@@ -110,7 +110,7 @@ async function copyFromService(obj) {
 		// 	url = await getmy(url);
 	}    
 
-	stream  = await getDatas(src + "MultiDatastreams?$select=id&$orderby=id asc");
+	stream  = await getDatas(src + "MultiDatastreams?$select=id");
 	for (let i = 0; i < +stream["@iot.count"]; i++) {
 		const myId = stream["value"][i]["@iot.id"];
 		let datas  = await getDatas(src + "MultiDatastreams("+ myId +")?$expand=Thing/Locations,Sensor,ObservedProperties"); 

@@ -6,7 +6,7 @@
  *
  */
 
-import { EDataType, EDatesType, EQuery, ERelations, EentityType, allEntities } from "../../enums";
+import { EDataType, EDatesType, EErrors, EQuery, ERelations, EentityType, allEntities } from "../../enums";
 import { doubleQuotes } from "../../helpers";
 import { messages } from "../../messages";
 import { Ientity, IentityColumnAliasOptions, IentityCore } from "../../types";
@@ -49,7 +49,7 @@ export class Entity extends EntityPass {
             if (datas.trigger) this._.trigger = datas.trigger;
             this._.singular = singular(entity);
             this._.table = this._.singular.toLowerCase();
-        } else throw new Error(messages.create(messages.errors.noValidEntity, name).toString());
+        } else throw new Error(messages.str(EErrors.noValidEntity, name));
         this.prepareColums();
         this.createConstraints();
         this.createTriggers();

@@ -7,7 +7,6 @@
  */
 
 import { EConstant } from "../../enums";
-import { keyobj } from "../../types";
 // Shortcuts for space
 let startDate = new Date("2023-02-11T00:00:01.000Z");
 const n = {
@@ -218,7 +217,7 @@ const createObservations = () => {
                     "value": 200 + i * 10
                 },
                 "datastream_id": {
-                    "@iot.name": `${n[type as keyobj]} Datastream`
+                    "@iot.name": `${n[type as keyof object]} Datastream`
                 }
             });
         }
@@ -229,15 +228,15 @@ const createObservations = () => {
         const result: object[] = [];
         for (let i = 0; i < 12; i++) {
             const values: Record<string, any> = {};
-            values[`${n["unit1"]} ${n[type as keyobj]}`] = 20 + i;
-            values[`${n["unit2"]} ${n[type as keyobj]}`] = i + i / 100;
+            values[`${n["unit1"]} ${n[type as keyof object]}`] = 20 + i;
+            values[`${n["unit2"]} ${n[type as keyof object]}`] = i + i / 100;
             result.push({
                 "phenomenonTime": addMinutesToDate(),
                 "result": {
                     "value": Object.values(values),
                     "valueskeys": values
                 },
-                "multidatastream_id": { "@iot.name": `${n[type as keyobj]} MultiDatastream` }
+                "multidatastream_id": { "@iot.name": `${n[type as keyof object]} MultiDatastream` }
             });
         }
         return result;

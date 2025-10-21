@@ -8,9 +8,8 @@
 
 import { readRemoteVersion } from ".";
 import { appVersion } from "../constants";
-import { EConstant } from "../enums";
+import { EConstant, EErrors } from "../enums";
 import { logging } from "../log";
-import { messages } from "../messages";
 import { Iversion } from "../types";
 
 /**
@@ -27,7 +26,7 @@ export async function compareVersions(): Promise<{ upToDate: boolean; appVersion
         return remoteVersion ? { upToDate: appVersion.version == remoteVersion.version && appVersion.date == remoteVersion.date, appVersion: appVersion, remoteVersion: remoteVersion } : undefined;
     } catch (err) {
         logging
-            .error(messages.errors.compareVersion, err + EConstant.return)
+            .error(EErrors.compareVersion, err + EConstant.return)
             .to()
             .log()
             .file();

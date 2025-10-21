@@ -6,22 +6,14 @@
  *
  */
 
-import { Isynonyms } from "./synonyms";
+import { Iservice } from "./service";
+
+// import { Isynonyms } from "./synonyms";
 
 export interface IserviceInfos {
     protocol: string; // protocol http or https
     linkBase: string; // linkBase of the service
-    version: string; // api version
     root: string; // root url
     model: string; // url to drawio
-    service: {
-        apiVersion: string;
-        date_format: string;
-        nb_page: number;
-        extensions: string[];
-        options: string[];
-        synonyms: Isynonyms | undefined;
-        csvDelimiter: string;
-    };
-    users?: JSON;
+    service: Iservice;
 }

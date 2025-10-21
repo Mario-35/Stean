@@ -64,6 +64,13 @@
                         <input id="pageOption" name="pageOption" maxlength="8" type="text" class="patrom-text-input" size="6">
                       </div>
                     </div>
+                    <!-- item Graph -->
+                    <div class="patrom-col col-span-2">
+                      <div class="field">
+                        <label for="graphOption">point graph</label>
+                        <input id="graphOption" name="graphOption" maxlength="8" type="text" class="patrom-text-input" size="6">
+                      </div>
+                    </div>
                   </div>
                   <div class="patrom-row">
                     <!-- Password -->
@@ -120,15 +127,15 @@
                       <button class="patrom-button-bar__button" id="btnService"> Create service </button>
                     </div>
                     <div class="patrom-button-bar__item">
-                      <button class="patrom-button-bar__button" id="btnPipo"> Test </button>
+                      <button class="patrom-button-bar__button" id="btnBlank"> Blank </button>
                     </div>
                   </div>
                 </div>
               </div>
-              <!-- Tools -->
+              <!-- Logs -->
               <div class="patrom-accordion">
                 <input class="patrom-accordion-check" type="checkbox" name="propertyTab" id="chck4">
-                <label class="patrom-accordion-label" for="chck4">Tools</label>
+                <label class="patrom-accordion-label" for="chck4">Logs</label>
                 <div class="patrom-accordion-content">
                   <!-- Logs -->
                   <div class="patrom-col col-span-2">
@@ -138,23 +145,49 @@
                       <select class="patrom-select" tabindex="1" name="optLogs" id="optLogs"></select>
                     </div>
                   </div>
-                  <div class="patrom-col col-span-12">
-                    <div class="patrom-button-bar">
-                      <div class="patrom-button-bar__item">
-                        <button class="patrom-button-bar__button" id="btnExport">Export</button>
-                      </div> &nbsp; <div class="patrom-button-bar__item">
-                        <button class="patrom-button-bar__button" id="btnClear">clear</button>
-                      </div> &nbsp; <div class="patrom-button-bar__item">
-                        <button class="patrom-button-bar__button" id="btnPostTemplate">Template</button>
-                      </div> &nbsp; <div class="patrom-button-bar__item">
-                        <button class="patrom-button-bar__button" id="btnShowLinks">urls</button>
-                      </div> &nbsp; <div class="patrom-button-bar__item">
-                        <button class="patrom-button-bar__button" id="btnShowGeo">geos</button>
-                      </div>
-                    </div>
+                </div>
+              </div>
+
+
+
+            <!-- Tools-->
+            <div class="patrom-accordion">
+              <input class="patrom-accordion-check" type="checkbox" id="chck5">
+              <label class="patrom-accordion-label" for="chck5">Tools</label>
+              <div class="patrom-accordion-content">
+                <!-- Distant root -->
+                <div class="patrom-row">
+                  <div class="patrom-col-span-12">
+                      <label for="optDistHost">Distant root :</label>
+                      <input id="optDistHost" name="optDistHost" type="text" class="patrom-text-input fillCol" >
+                  </div>
+                </div>
+                <div class="patrom-row">
+                  <!-- Version -->
+                  <div class="patrom-col-span-4">
+                    <button id="testLoop" name="testLoop" type="button">Test loop</button>
+                  </div>
+                  <!-- Top -->
+                  <div class="patrom-col-span-4">
+                      <label for="disTop">Top :</label>
+                      <input id="disTopOption" name="disTop" maxlength="8" type="text" class="patrom-text-input fillCol" size="6">
+                  </div>
+                  <!-- Skip -->
+                  <div class="patrom-col-span-4">
+                      <label for="distSkip">Skip :</label>
+                      <input id="distSkipOption" name="distSkip" maxlength="8" type="text" class="patrom-text-input fillCol" size="6">
                   </div>
                 </div>
               </div>
+            </div>
+
+
+
+
+
+
+
+
               <!-- Infos -->
               <div class="patrom-row">
                 <div class="patrom-col col-span-2">
@@ -187,6 +220,7 @@
     <script src="modal.js"></script>
     <script src="steanPrism.js"></script>
     <script src="window.js"></script>
+    <script src="tools.js"></script>
     <script src="windowList.js"></script>
     <script src="social.js"></script>
   </body>

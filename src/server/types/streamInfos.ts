@@ -6,11 +6,12 @@
  *
  */
 
+import { Id } from ".";
 import { _STREAM } from "../db/constants";
 import { EObservationType } from "../enums";
 export interface IstreamInfos {
     type: _STREAM;
-    id: number | BigInt;
+    id: Id;
     observationType: EObservationType;
-    FoId: number | BigInt;
+    FoId: Id;
 }

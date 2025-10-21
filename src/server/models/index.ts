@@ -8,8 +8,8 @@
 
 import { config } from "../configuration";
 import { _STREAM } from "../db/constants";
-import { asJson, createTrigger, dropTrigger } from "../db/queries";
-import { EColumnType, EConstant, EDataType, EExtensions, EOptions } from "../enums";
+import { queries } from "../db/queries";
+import { EColumnType, EConstant, EDataType, EErrors, EExtensions, EInfos, EOptions } from "../enums";
 import { doubleQuotes, deepClone, isTest, formatPgTableColumn, isString } from "../helpers";
 import { Iservice, Ientities, Ientity, IstreamInfos, koaContext, IentityRelation, getColumnType, IentityColumn, Id } from "../types";
 import path from "path";
@@ -38,7 +38,6 @@ import { Geometry, Jsonb, Text } from "./types";
 import { logging } from "../log";
 import { _DEBUG } from "../constants";
 import { executeSql, executeSqlValues } from "../db/helpers";
-import { messages } from "../messages";
 
 export class Models {
     static models: {
@@ -82,7 +81,7 @@ export class Models {
         const temp = config.getInfos(ctx, ctx.service.name);
         const result: Record<string, any> = {
             ...temp,
-            ready: ctx.service._connection ? true : false,
+            ready: config.connection(ctx.service.name) ? true : false,
             Postgres: {},
             users: {}
         };
@@ -128,20 +127,11 @@ export class Models {
         ).then((res) => {
             result["tables"] = res[0 as keyof object]["results"][0 as keyof object];
         });
-
-        await executeSql(
-            ctx.service,
-            `SELECT JSON_AGG(t) AS results FROM (
-select table_name,
-(xpath('/row/c/text()', query_to_xml(format('select count(*) AS c from %I.%I', table_schema, table_name), 
-    false, true,'')))[1]::text::int AS count 
-from information_schema.tables
-where table_name IN (SELECT (inhrelid::regclass)::text AS child FROM  pg_catalog.pg_inherits WHERE inhparent = 'observation'::regclass OR inhparent = 'datastream_id0'::regclass)
-order by count DESC) AS t`
-        ).then((res) => {
-            result["partitioned"] = {};
-            Object.values(res[0 as keyof object]["results"]).forEach((e: any) => (result["partitioned"][e["table_name"]] = e["count"]));
-        });
+        if (ctx.service.options.includes(EOptions.optimized))
+            await executeSql(ctx.service, queries.countAll()).then((res) => {
+                result["partitioned"] = {};
+                Object.values(res[0 as keyof object]["results"]).forEach((e: any) => (result["partitioned"][e["table_name"]] = e["count"]));
+            });
 
         return result;
     }
@@ -155,11 +145,11 @@ order by count DESC) AS t`
         if (!streamEntity) return undefined;
         const foiId: Id = input["FeaturesOfInterest"] ? input["FeaturesOfInterest"] : undefined;
         const searchKey = input[models.DBFull(service)[streamEntity].name] || input[models.DBFull(service)[streamEntity].singular];
-        const streamId: string | undefined = isNaN(searchKey) ? searchKey[EConstant.id] : searchKey;
+        const streamId: Id = isNaN(searchKey) ? searchKey[EConstant.id] : searchKey;
         if (streamId) {
             return executeSqlValues(
                 service,
-                asJson({
+                queries.asJson({
                     query: `SELECT "id", "observationType", "_default_featureofinterest" FROM ${doubleQuotes(models.DBFull(service)[streamEntity].table)} WHERE "id" = ${BigInt(streamId)} LIMIT 1`,
                     singular: true,
                     strip: false,
@@ -177,7 +167,7 @@ order by count DESC) AS t`
                         : undefined;
                 })
                 .catch((error) => {
-                    logging.error(messages.infos.createUser, error).to().log().file();
+                    logging.error(EInfos.createUser, error).to().log().file();
                     return undefined;
                 });
         }
@@ -236,7 +226,7 @@ order by count DESC) AS t`
     public get(service: Iservice | string): Iservice {
         if (typeof service === "string") {
             const nameConfig = config.getConfigNameFromName(service);
-            if (!nameConfig) throw new Error(messages.errors.configName);
+            if (!nameConfig) throw new Error(EErrors.configName);
             if (this.versionExist(config.getService(nameConfig).apiVersion) === false) this.createVersion(config.getService(nameConfig).apiVersion);
             return config.getService(nameConfig);
         }
@@ -252,17 +242,17 @@ order by count DESC) AS t`
     }
 
     public addTriggersOnTables(service: Iservice | string, triggerName: string): string[] {
-        return this.listTables(service).map((table) => createTrigger(table, triggerName));
+        return this.listTables(service).map((table) => queries.createTrigger(table, triggerName));
     }
 
     public removeTriggersOnTables(service: Iservice | string, triggerName: string): string[] {
-        return this.listTables(service).map((table) => dropTrigger(table, triggerName));
+        return this.listTables(service).map((table) => queries.dropTrigger(table, triggerName));
     }
 
     public DBFullCreate(service: Iservice | string): Ientities {
         service = this.get(service);
-        const name = service.options.includes(EOptions.unique) ? new Text().notNull().default(messages.infos.noName).unique().column() : new Text().notNull().column();
-        const description = service.options.includes(EOptions.unique) ? new Text().notNull().default(messages.infos.noName).unique().column() : new Text().notNull().column();
+        const name = service.options.includes(EOptions.unique) ? new Text().notNull().default(EInfos.noName).unique().column() : new Text().notNull().column();
+        const description = service.options.includes(EOptions.unique) ? new Text().notNull().default(EInfos.noName).unique().column() : new Text().notNull().column();
 
         const s = Models.models[service.apiVersion];
         Object.keys(s).forEach((k: string) => {
@@ -429,8 +419,8 @@ order by count DESC) AS t`
     public getModelOptions(service: Iservice | string): Ientities {
         service = this.get(service);
         this.createVersion(service.apiVersion);
-        const name = service.options.includes(EOptions.unique) ? new Text().notNull().default(messages.infos.noName).unique().column() : new Text().notNull().column();
-        const description = service.options.includes(EOptions.unique) ? new Text().notNull().default(messages.infos.noName).unique().column() : new Text().notNull().column();
+        const name = service.options.includes(EOptions.unique) ? new Text().notNull().default(EInfos.noName).unique().column() : new Text().notNull().column();
+        const description = service.options.includes(EOptions.unique) ? new Text().notNull().default(EInfos.noName).unique().column() : new Text().notNull().column();
         Object.keys(Models.models[service.apiVersion]).map((k: string) => {
             if (Models.models[service.apiVersion][k].columns["name"]) Models.models[service.apiVersion][k].columns.name = name;
             if (Models.models[service.apiVersion][k].columns["description"]) Models.models[service.apiVersion][k].columns.name = description;

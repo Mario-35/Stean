@@ -13,8 +13,9 @@ import { hideKeysInJson, hidePassword } from "../../helpers";
 import { createService } from "../helpers";
 import { userAuthenticated } from "../../authentication";
 import { logging } from "../../log";
-import { EExtensions, EHttpCode } from "../../enums";
+import { EErrors, EExtensions, EHttpCode } from "../../enums";
 import { _DEBUG } from "../../constants";
+import { queries } from "../queries";
 
 export class Services extends Common {
     constructor(ctx: koaContext) {
@@ -85,7 +86,22 @@ export class Services extends Common {
     // Override Delete service
     async delete(idInput: Id | string): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
-        // This function not exists
-        return;
+        if (typeof idInput === "string") {
+            const conn = await config.delete(idInput);
+            if (conn) logging.force("ehnohenohehnao");
+            if (conn)
+                return this.formatReturnResult({
+                    body: await conn
+                        .unsafe(queries.deleteConfig(idInput))
+                        .values()
+                        .then((res: Record<string, any>) => {
+                            return res[0];
+                        })
+                        .catch((err: Error) => {
+                            logging.debug().error(EErrors.execQuery, err).to().log().file();
+                            return;
+                        })
+                });
+        }
     }
 }

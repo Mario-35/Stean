@@ -9,10 +9,9 @@
 import { decodeToken } from "../authentication";
 import { _DEBUG } from "../constants";
 import { logging } from "../log";
-import { EColor, EHttpCode } from "../enums";
+import { EColor, EErrors, EHttpCode } from "../enums";
 import { createBearerToken, returnFormats, splitLast } from "../helpers";
 import { adminRoute, decodeUrl, logsRoute, exportRoute, docRoute } from "./helper";
-import { messages } from "../messages";
 import { config } from "../configuration";
 import { models } from "../models";
 export { unProtectedRoutes } from "./unProtected";
@@ -62,7 +61,7 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     logging.debug().separator("decodeUrl", EColor.White, true).to().file().log();
     logging.debug().message("decodedUrl", decodedUrl).to().file().log();
     // if service is not identified get out
-    if (!decodedUrl.service) throw new Error(messages.errors.noNameIdentified);
+    if (!decodedUrl.service) throw new Error(EErrors.noNameIdentified);
     // get service
     if (decodedUrl.service && decodedUrl.configName) ctx.service = config.getService(decodedUrl.configName);
     else return;

@@ -12,8 +12,8 @@ import { Icomon, Id, IreturnResult, koaContext } from "../../types";
 import { isArray } from "../../helpers";
 import { models } from "../../models";
 import { logging } from "../../log";
-import { messages } from "../../messages";
 import { _DEBUG } from "../../constants";
+import { EErrors } from "../../enums";
 
 /**
  * Interface API
@@ -30,7 +30,7 @@ export class apiAccess implements Icomon {
         if (entityName && entityName in entities) {
             // @ts-ignore
             this.myEntity = new entities[(this.ctx, entityName)](ctx);
-        } else logging.error(messages.errors.noValidEntity, entityName);
+        } else logging.error(EErrors.noValidEntity, entityName);
     }
 
     formatDataInput(input: object | undefined): object | undefined {

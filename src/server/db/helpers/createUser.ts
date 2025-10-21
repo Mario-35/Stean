@@ -20,7 +20,7 @@ export const createUser = async (service: Iservice): Promise<string> => {
         await userAccess
             .post(service.name, {
                 username: service.pg.user,
-                email: "TWOdefault@email.com",
+                email: "default@email.com",
                 password: service.pg.password,
                 database: service.pg.database,
                 canPost: true,

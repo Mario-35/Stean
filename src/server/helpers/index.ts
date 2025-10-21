@@ -41,6 +41,8 @@ export { hidePassword } from "./hidePassword";
 export { notNull } from "./notNull";
 export { returnFormats } from "./returnFormats";
 export { unique } from "./unique";
+export { filterObject } from "./filterObject";
+
 export { searchInJson } from "./searchInJson";
 export { flatten } from "./flatten";
 export { listFiles } from "./listFiles";

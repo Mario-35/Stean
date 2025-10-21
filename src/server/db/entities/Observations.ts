@@ -7,14 +7,15 @@
  */
 
 import { Common } from "./common";
-import { Id, IreturnResult, keyobj, koaContext } from "../../types";
+import { Id, IreturnResult, koaContext } from "../../types";
 import { getBigIntFromString } from "../../helpers";
 import { messages } from "../../messages";
-import { multiDatastreamsUnitsKeys } from "../queries";
-import { EConstant, EExtensions, EHttpCode } from "../../enums";
+import { EConstant, EErrors, EExtensions, EHttpCode } from "../../enums";
 import { logging } from "../../log";
 import { executeSqlValues } from "../helpers";
 import { _DEBUG } from "../../constants";
+import { queries } from "../queries";
+import { DATASTREAM, MULTIDATASTREAM } from "../../models/entities";
 
 export class Observations extends Common {
     constructor(ctx: koaContext) {
@@ -26,16 +27,21 @@ export class Observations extends Common {
     async prepareInputResult(dataInput: Record<string, any>): Promise<object> {
         console.log(logging.whereIam(new Error().stack));
         // IF MultiDatastream
-        if ((dataInput["MultiDatastream"] && dataInput["MultiDatastream"] != null) || (this.ctx.odata.parentEntity && this.ctx.odata.parentEntity.name.startsWith("MultiDatastream"))) {
+        if (
+            (dataInput[MULTIDATASTREAM.singular] && dataInput[MULTIDATASTREAM.singular] != null) ||
+            (this.ctx.odata.parentEntity && this.ctx.odata.parentEntity.name.startsWith(MULTIDATASTREAM.singular))
+        ) {
             // get MultiDatastream search ID
             const searchID: Id =
-                dataInput["MultiDatastream"] && dataInput["MultiDatastream"] != null ? BigInt(dataInput["MultiDatastream"][EConstant.id]) : getBigIntFromString(this.ctx.odata.parentId);
-            if (!searchID) this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: messages.create(messages.errors.noFound, "MultiDatastreams").toString() });
+                dataInput[MULTIDATASTREAM.singular] && dataInput[MULTIDATASTREAM.singular] != null
+                    ? BigInt(dataInput[MULTIDATASTREAM.singular][EConstant.id])
+                    : getBigIntFromString(this.ctx.odata.parentId);
+            if (!searchID) this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: messages.str(EErrors.noFound, MULTIDATASTREAM.name) });
             // Search id keys
-            const tempSql = await executeSqlValues(this.ctx.service, multiDatastreamsUnitsKeys(searchID));
-            if (tempSql[0 as keyof object] === null) this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: messages.create(messages.errors.noFound, "MultiDatastreams").toString() });
+            const tempSql = await executeSqlValues(this.ctx.service, queries.multiDatastreamsUnitsKeys(searchID));
+            if (tempSql[0 as keyof object] === null) this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: messages.str(EErrors.noFound, MULTIDATASTREAM.name) });
 
-            const multiDatastream: Record<string, any> = tempSql[0 as keyobj];
+            const multiDatastream: Record<string, any> = tempSql[0 as keyof object];
             if (dataInput["result"] && typeof dataInput["result"] == "object") {
                 logging
                     .message("result : keys", `${Object.keys(dataInput["result"]).length} : ${multiDatastream.length}`)
@@ -45,22 +51,18 @@ export class Observations extends Common {
                 if (Object.keys(dataInput["result"]).length != multiDatastream.length) {
                     this.ctx.throw(EHttpCode.badRequest, {
                         code: EHttpCode.badRequest,
-                        detail: messages
-                            .create(messages.errors.sizeResultUnitOfMeasurements)
-                            .toString()
-                            .replace(String(Object.keys(dataInput["result"]).length), multiDatastream.length)
-                            .toString()
+                        detail: messages.str(EErrors.sizeResultUnitOfMeasurements, String(Object.keys(dataInput["result"]).length), multiDatastream.length)
                     });
                 }
                 dataInput["result"] = { value: Object.values(dataInput["result"]), valueskeys: dataInput["result"] };
             }
         } // IF Datastream
-        else if ((dataInput["Datastream"] && dataInput["Datastream"] != null) || (this.ctx.odata.parentEntity && this.ctx.odata.parentEntity.name.startsWith("Datastream"))) {
+        else if ((dataInput[DATASTREAM.singular] && dataInput[DATASTREAM.singular] != null) || (this.ctx.odata.parentEntity && this.ctx.odata.parentEntity.name.startsWith(DATASTREAM.singular))) {
             if (dataInput["result"] && typeof dataInput["result"] != "object")
                 dataInput["result"] = this.ctx.service.extensions.includes(EExtensions.resultNumeric) ? dataInput["result"] : { value: dataInput["result"] };
             // if no stream go out with error
         } else if (this.ctx.request.method === "POST") {
-            this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: messages.errors.noStream });
+            this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: EErrors.noStream });
         }
         return dataInput;
     }

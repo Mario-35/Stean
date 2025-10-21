@@ -6,8 +6,7 @@
  *
  */
 
-import { EConstant } from "../enums";
-import { messages } from "../messages";
+import { EConstant, EErrors } from "../enums";
 export class Csv {
     flattenArray(array: Record<string, any>, ancestors?: Record<string, any>) {
         ancestors || (ancestors = []);
@@ -34,7 +33,7 @@ export class Csv {
                 row: Record<string, any> = {},
                 orows: Record<string, any> = {},
                 count = 1;
-            if (o !== undefined && o !== null && (!this.isObject(o) || Array.isArray(o))) throw messages.errors.errorItemNotAnObject.replace("{0}", JSON.stringify(o));
+            if (o !== undefined && o !== null && (!this.isObject(o) || Array.isArray(o))) throw EErrors.errorItemNotAnObject.replace("{0}", JSON.stringify(o));
             const keys = this.getKeys(o);
             for (let k = 0; k < keys.length; k++) {
                 const value = o[keys[k]],
@@ -74,11 +73,11 @@ export class Csv {
     convert(data: Record<string, any>, options?: Record<string, any>) {
         options || (options = {});
 
-        if (!this.isObject(data)) throw messages.errors.errorNotAnArray;
+        if (!this.isObject(data)) throw EErrors.errorNotAnArray;
         if (!Array.isArray(data)) data = [data];
 
         const separator = options.separator || ",";
-        if (!separator) throw messages.errors.errorMissingSeparator;
+        if (!separator) throw EErrors.errorMissingSeparator;
 
         const flatten = options.flatten || false;
         if (flatten) data = this.flattenArray(data);
@@ -88,7 +87,7 @@ export class Csv {
         data.forEach((d: any) => {
             const o = d[0] || d;
             const row: Record<string, any> = {};
-            if (o !== undefined && o !== null && (!this.isObject(o) || Array.isArray(o))) throw messages.errors.errorItemNotAnObject.replace("{0}", JSON.stringify(o));
+            if (o !== undefined && o !== null && (!this.isObject(o) || Array.isArray(o))) throw EErrors.errorItemNotAnObject.replace("{0}", JSON.stringify(o));
             const keys = this.getKeys(o);
             for (let k = 0; k < keys.length; k++) {
                 const key = keys[k];

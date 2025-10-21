@@ -12,8 +12,7 @@ import { cleanUrl } from "../helpers";
 import { SqlOptions } from "./parser/sqlOptions";
 import { RootPgVisitor } from "./visitor";
 import { koaContext } from "../types";
-import { messages } from "../messages";
-import { EConstant, EHttpCode } from "../enums";
+import { EConstant, EErrors, EHttpCode } from "../enums";
 import { doSomeWorkAfterCreateAst, escapesOdata } from "./visitor/helper";
 
 export const createOdata = async (ctx: koaContext): Promise<RootPgVisitor | undefined> => {
@@ -75,7 +74,7 @@ export const createOdata = async (ctx: koaContext): Promise<RootPgVisitor | unde
         astRessources = src.length > 1 ? <Token>resourcePath(<string>[src.shift(), src.shift()].filter((e) => e !== "").join("/")) : <Token>resourcePath(<string>urlSrcSplit[0]);
     } catch (error) {
         console.log(error);
-        ctx.throw(EHttpCode.notFound, { code: EHttpCode.badRequest, detail: messages.errors.notValid });
+        ctx.throw(EHttpCode.notFound, { code: EHttpCode.badRequest, detail: EErrors.notValid });
     }
     // INIT query
     const astQuery: Token = <Token>query(decodeURIComponent(urlSrcSplit[1]));

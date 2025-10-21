@@ -7,7 +7,7 @@
  */
 
 import { Common } from "./common";
-import { Id, IreturnResult, keyobj, koaContext } from "../../types";
+import { Id, IreturnResult, koaContext } from "../../types";
 import { config } from "../../configuration";
 import { logging } from "../../log";
 import { EConstant, EHttpCode } from "../../enums";
@@ -52,7 +52,7 @@ export class Logs extends Common {
                 .getValues(sql)
                 .then((res: Record<string, any>) => {
                     if (this.ctx.odata.query.select && this.ctx.odata.onlyValue === true) {
-                        const temp = res[this.ctx.odata.query.select[0 as keyobj] == "id" ? EConstant.id : 0];
+                        const temp = res[this.ctx.odata.query.select[0 as keyof object] == "id" ? EConstant.id : 0];
                         if (typeof temp === "object") {
                             this.ctx.odata.returnFormat = returnFormats.json;
                             return this.formatReturnResult({ body: temp });

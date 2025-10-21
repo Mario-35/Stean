@@ -11,12 +11,13 @@ import { IcsvColumn, IcsvFile, Id, IreturnResult, IstreamInfos, koaContext } fro
 import { executeSql, executeSqlValues, dateToDateWithTimeZone, InsertFromCsv } from "../helpers";
 import { doubleQuotes, asyncForEach, splitLast, makeNull } from "../../helpers";
 import { messages } from "../../messages/";
-import { EChar, EConstant, EDatesType, EExtensions, EHttpCode } from "../../enums";
+import { EChar, EConstant, EDatesType, EErrors, EExtensions, EHttpCode, EInfos } from "../../enums";
 import util from "util";
 import { models } from "../../models";
 import { logging } from "../../log";
 import { OBSERVATION } from "../../models/entities";
 import { _DEBUG } from "../../constants";
+import { queries } from "../queries";
 
 /**
  * CreateObservations Class
@@ -28,6 +29,7 @@ export class CreateObservations extends Common {
         console.log(logging.whereIam(new Error().stack));
         super(ctx);
     }
+
     createListColumnsValues(type: "COLUMNS" | "VALUES", input: string[]): string[] {
         console.log(logging.whereIam(new Error().stack));
 
@@ -76,7 +78,7 @@ export class CreateObservations extends Common {
         console.log(logging.whereIam(new Error().stack));
         // verify is there FORM data
         const datasJson = JSON.parse(this.ctx.datas["jsonDatas"] || this.ctx.datas["datas"] || this.ctx.datas["json"]);
-        if (!datasJson["columns"]) this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: messages.errors.noColumn });
+        if (!datasJson["columns"]) this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: EErrors.noColumn });
         const myColumns: IcsvColumn[] = [];
         const streamInfos: IstreamInfos[] = [];
         // loop for mulitDatastreams inputs or one for datastream
@@ -88,14 +90,7 @@ export class CreateObservations extends Common {
                     column: key,
                     stream: tempStreamInfos
                 });
-            } else
-                this.ctx.throw(
-                    EHttpCode.notFound,
-                    messages
-                        .create(messages.errors.noValidStream)
-                        .replace(util.inspect(datasJson["columns"][key], { showHidden: false, depth: null, colors: false }))
-                        .toString()
-                );
+            } else this.ctx.throw(EHttpCode.notFound, messages.str(EErrors.noValidStream, util.inspect(datasJson["columns"][key], { showHidden: false, depth: null, colors: false })));
         });
         // Create paramsFile
         const paramsFile: IcsvFile = {
@@ -109,20 +104,20 @@ export class CreateObservations extends Common {
 
         const sqlInsert = await new InsertFromCsv(this.ctx, paramsFile).query();
         logging
-            .message(`Stream csv file ${paramsFile.filename} in PostgreSql`, sqlInsert ? EChar.ok : EChar.notOk)
+            .message(messages.str(EInfos.streamFile, paramsFile.filename), sqlInsert ? EChar.ok : EChar.notOk)
             .to()
             .log()
             .file();
         if (sqlInsert) {
             const sqls = sqlInsert.query.map((e: string, index: number) => `${index === 0 ? "WITH " : ", "}updated${index + 1} as (${e})${EConstant.return}`);
             // Remove logs and triggers for speed insert
-            await executeSql(this.ctx.service, `SET session_replication_role = replica;`);
+            await executeSql(this.ctx.service, queries.logsAndTriggers(false));
             const resultSql: Record<string, any> = await executeSql(
                 this.ctx.service,
                 `${sqls.join("")}SELECT (SELECT count(*) FROM ${paramsFile.tempTable}) AS total, (SELECT count(*) FROM updated1) AS inserted`
             );
             // Restore logs and triggers
-            await executeSql(this.ctx.service, `SET session_replication_role = DEFAULT;`);
+            await executeSql(this.ctx.service, queries.logsAndTriggers(true));
             return this.formatReturnResult({
                 total: sqlInsert.count,
                 body: [`Add ${resultSql[0]["inserted"]} on ${resultSql[0]["total"]} lines from ${splitLast(paramsFile.filename, "/")}`]
@@ -137,7 +132,7 @@ export class CreateObservations extends Common {
         let total = 0;
         /// classic Create
         const dataStreamId = await models.getStreamInfos(this.ctx.service, dataInput);
-        if (!dataStreamId) this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: messages.errors.noStream });
+        if (!dataStreamId) this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: EErrors.noStream });
         else {
             await asyncForEach(dataInput["dataArray"], async (elem: string[]) => {
                 const keys = [`"${dataStreamId.type?.toLowerCase()}_id"`].concat(this.createListColumnsValues("COLUMNS", dataInput["components"]));

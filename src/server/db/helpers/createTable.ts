@@ -10,8 +10,9 @@ import { config } from "../../configuration";
 import { logging } from "../../log";
 import { doubleQuotes } from "../../helpers";
 import { Ientity } from "../../types";
-import { EChar } from "../../enums";
+import { EChar, EErrors } from "../../enums";
 import { _DEBUG } from "../../constants";
+import { messages } from "../../messages";
 
 /**
  *
@@ -28,12 +29,11 @@ export const createTable = async (serviceName: string, tableEntity: Ientity, doA
             .connection(serviceName)
             .unsafe(_sql)
             .then(() => {
-                logging.debug().status(true, message).to().log().file();
+                logging.status(true, message).debug().to().log().file();
                 return EChar.ok;
             })
             .catch((error: Error) => {
-                logging.force(error);
-                logging.debug().status(false, message).to().log().file();
+                logging.error(messages.str(EErrors.connError, serviceName), error).to().log().file();
                 process.exit(111);
             });
     }
@@ -52,7 +52,7 @@ export const createTable = async (serviceName: string, tableEntity: Ientity, doA
     const returnValue: Record<string, string> = {};
 
     if (!config.connection(serviceName)) {
-        logging.error("connection Error", "connection Error");
+        logging.error(messages.str(EErrors.connError, serviceName), "connection Error");
         return { error: "connection Error" };
     }
 
