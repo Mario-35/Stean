@@ -69,11 +69,15 @@ class Queries {
         return `CREATE TABLE public.services ( "name" text NOT NULL, "datas" jsonb NULL, CONSTRAINT services_unik_name UNIQUE (name) ); CREATE INDEX services_name ON public.services USING btree (name);`;
     }
     createRole(name: string, password: string) {
-        return `CREATE ROLE ${name} WITH PASSWORD '${password}' ${EConstant.rights}`;
+        return `CREATE ROLE ${name} WITH PASSWORD '${password}' ${this.rights()}`;
+    }
+
+    rights() {
+        return "SUPERUSER CREATEDB NOCREATEROLE INHERIT LOGIN NOREPLICATION NOBYPASSRLS CONNECTION LIMIT -1";
     }
 
     updateRole(name: string, password: string) {
-        return `ALTER ROLE ${name} WITH PASSWORD '${password}' ${EConstant.rights}`;
+        return `ALTER ROLE ${name} WITH PASSWORD '${password}' ${this.rights()}`;
     }
 
     countUser(name: string) {
@@ -101,7 +105,7 @@ class Queries {
 
     asDataArray(input: PgVisitor) {
         function castToText(colName: string) {
-            colName = colName === "@iot.id" ? "id" : colName;
+            colName = colName === EConstant.id ? "id" : colName;
             if (input.entity?.columns[colName])
                 switch (input.entity.columns[colName].dataType) {
                     case EDataType.bigint:
@@ -115,7 +119,7 @@ class Queries {
             return "";
         }
         // create names
-        const names: string[] = input.onlyRef === true ? ["@iot.selfLink"] : input.toPgQuery()?.keys.map((e: string) => formatPgString(e)) || [];
+        const names: string[] = input.onlyRef === true ? [EConstant.selfLink] : input.toPgQuery()?.keys.map((e: string) => formatPgString(e)) || [];
         // loop subQuery
         if (input.includes)
             input.includes.forEach((include: PgVisitor) => {
@@ -401,6 +405,9 @@ FROM
 
     getUser(name: string) {
         return `SELECT "username" FROM "${USER.table}" WHERE username = '${name}' LIMIT 1`;
+    }
+    getFromIdOrName(table: string, column: string, test: any) {
+        return `SELECT "${column}" FROM "${table}" WHERE ${test[EConstant.id] ? `id=${test[EConstant.id]}` : test[EConstant.name] ? `name='${test[EConstant.name]}'` : "ERROR"}`;
     }
 }
 export const queries = new Queries();

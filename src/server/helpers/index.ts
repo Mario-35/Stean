@@ -42,6 +42,7 @@ export { notNull } from "./notNull";
 export { returnFormats } from "./returnFormats";
 export { unique } from "./unique";
 export { filterObject } from "./filterObject";
+export { hideUnderscoreObject } from "./hideUnderscoreObject";
 
 export { searchInJson } from "./searchInJson";
 export { flatten } from "./flatten";

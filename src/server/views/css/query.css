@@ -277,3 +277,15 @@
 	text-decoration: underline;
 }
 
+.testprog {
+	width: 80%;
+}
+
+.progression {
+	background-color: rgb(116, 194, 92);
+	color: white;
+	padding: 3%;
+	text-align: right;
+	font-size: var(--font-size);
+	border-radius: 5px;
+}

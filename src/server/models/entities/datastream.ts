@@ -41,9 +41,6 @@ export const DATASTREAM = new Entity("Datastreams", {
         Observations: {
             type: ERelations.hasMany
         },
-        Lora: {
-            type: ERelations.hasOne
-        },
         FeatureOfInterest: {
             type: ERelations.defaultUnique
         }

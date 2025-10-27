@@ -30,7 +30,7 @@ export class RootPgVisitor extends PgVisitor {
     }
 
     protected verifyRessources = (): void => {
-        console.log(logging.debug().head("verifyRessources").to().text());
+        console.log(logging.head("verifyRessources").to().text());
     };
 
     protected VisitRessources(node: Token, context?: IodataContext) {
@@ -38,8 +38,8 @@ export class RootPgVisitor extends PgVisitor {
         if (ressource) {
             ressource.call(this, node, context);
             if (this.debugOdata) {
-                logging.debug().message("VisitRessources", `VisitRessources${node.type}`).to().file().log();
-                logging.debug().message("node.raw", node.raw).to().file().log();
+                logging.message("VisitRessources", `VisitRessources${node.type}`).to().file().log();
+                logging.message("node.raw", node.raw).to().file().log();
             }
         } else {
             logging.error(`Ressource Not Found ============> VisitRessources${node.type}`, node);
@@ -57,12 +57,12 @@ export class RootPgVisitor extends PgVisitor {
                 const id: Id = element.includes("(") ? String(element.split("(")[1].split(")")[0]) : undefined;
                 if (this.entity && this.entity.relations[nodeName]) {
                     const where = this.parentEntity ? `(SELECT id FROM (${this.query.toWhere(this)}) as nop)${id ? `and id = ${id}` : ""}` : this.id;
-                    const whereSql = link(this.ctx.service, this.entity.name, nodeName)
+                    const whereSql = link(this.ctx.model, this.entity.name, nodeName)
                         .split("$ID")
                         .join(<string>where);
 
                     this.query.where.init(whereSql);
-                    const tempEntity = models.getEntity(this.ctx.service, nodeName);
+                    const tempEntity = models.getEntity(this.ctx.model, nodeName);
                     if (tempEntity) {
                         this.swapEntity(tempEntity);
                         this.single = tempEntity.singular === nodeName || BigInt(this.id) > 0 ? true : false;
@@ -76,7 +76,7 @@ export class RootPgVisitor extends PgVisitor {
     }
 
     protected VisitRessourcesEntitySetName(node: Token, _context: IodataContext) {
-        this.entity = models.getEntityStrict(this.ctx.service, node.value.name);
+        this.entity = models.getEntityStrict(this.ctx.model, node.value.name);
         if (!this.entity) this.ctx.throw(EHttpCode.notFound, "Not Found");
     }
 
@@ -124,12 +124,12 @@ export class RootPgVisitor extends PgVisitor {
             });
         } else if (this.entity && this.entity.relations[node.value.name]) {
             const where = this.parentEntity ? `(SELECT ID FROM (${this.query.toWhere(this)}) AS nop)` : this.id;
-            const whereSql = link(this.ctx.service, this.entity.name, node.value.name)
+            const whereSql = link(this.ctx.model, this.entity.name, node.value.name)
                 .split("$ID")
                 .join(<string>where);
 
             this.query.where.init(whereSql);
-            const tempEntity = models.getEntity(this.ctx.service, node.value.name);
+            const tempEntity = models.getEntity(this.ctx.model, node.value.name);
             if (tempEntity) {
                 this.swapEntity(tempEntity);
                 this.single = tempEntity.singular === node.value.name || BigInt(this.id) > 0 ? true : false;
@@ -151,7 +151,7 @@ export class RootPgVisitor extends PgVisitor {
     }
 
     StartVisitRessources(node: Token) {
-        console.log(logging.debug().head("INIT PgVisitor").to().text());
+        console.log(logging.head("INIT PgVisitor").to().text());
         this.limit = this.ctx.service.nb_page || 200;
         this.numeric = this.ctx.service.extensions.includes(EExtensions.resultNumeric);
         const temp = this.VisitRessources(node);
@@ -167,7 +167,7 @@ export class RootPgVisitor extends PgVisitor {
                     include.navigationProperty = names[0];
                     const visitor = new PgVisitor(this.ctx, { ...this.options });
                     if (visitor) {
-                        const nameEntity = models.getEntity(this.ctx.service, names[0]);
+                        const nameEntity = models.getEntity(this.ctx.model, names[0]);
                         if (nameEntity) {
                             visitor.entity = nameEntity;
                             visitor.navigationProperty = names[1];

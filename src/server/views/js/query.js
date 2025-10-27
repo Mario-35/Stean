@@ -67,28 +67,39 @@ function setTheme(themeName) {
 	document.documentElement.className = themeName;
 }
 
+function setProgression(nb) {
+	if (nb > 0) nb = (nb * 100) / maxProg;
+	if (nb === 0) {
+		hide(progression);
+		return;
+	}3
+	show(progression);
+	if (nb === 0) hide(progression);
+	progression.style.width = nb + "%";
+	progression.innerHTML = `${String(nb).split(".")[0]}%`;
+}
 
 // Start
 (function init() {
 	header("==== Init ====");
-	if (isDebug) console.log(_PARAMS);
+	if (isDebug) console.log(_PARAMS); // them color
 	if (localStorage.getItem('theme')) {
-		setTheme(localStorage.getItem('theme'))
+		setTheme(localStorage.getItem('theme'));
 	} else {
-		setTheme('dark')
+		setTheme('dark');
 	}
-	
 	hide(btnShowGeo);
+	// create splitter bar
 	new SplitterBar(container, first, two);
+	// Entity not empty
 	const tempEntity = _PARAMS.entity || "Things";
 	populateSelect(entityOption, getEntityList(), tempEntity);
 	const subs = getRelationsList(tempEntity);
 	populateSelect(subentityOption, subs, subs.includes(_PARAMS.subentityOption) ? _PARAMS.subentityOption : _NONE, true);
-
 	populateSelect(entityOption, Object.keys(_PARAMS._DATAS), tempEntity);
 	populateSelect(services, Object.keys(_PARAMS.services), _PARAMS.decodedUrl.root.split("/").pop());
-
 	populateSelect(methodOption, entityOption.value == "Loras" ? ["GET", "POST"] : _PARAMS.methods, _PARAMS.method ? _PARAMS.method : "GET");
+	
 	idOption.value = _PARAMS.decodedUrl.idStr || _PARAMS.decodedUrl.id;
 	idSubOption.value = 0;
 
@@ -99,6 +110,7 @@ function setTheme(themeName) {
 	queryOptions.value = _PARAMS.options;
 	if (window.location.href.includes('Query?')) decodeUrl(window.location.href);
 	jsonViewer = new JSONViewer();
+	setProgression(0);
+	optDistHost.value = 'http://localhost:8029/rennesmetro/v1.1/';
 	wait(false);
-	optDistHost.value="http://localhost:8029/test/v1.1/" ;
 })();

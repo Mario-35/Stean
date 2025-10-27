@@ -304,4 +304,8 @@ jsonDatas.onkeyup = function() {
 btnCopyService.onclick = () => {
 	copyFromService();
 };
+// copy service to actual service
+btnCopyServiceStart.onclick = () => {
+	copyFromServiceObservations();
+};
 

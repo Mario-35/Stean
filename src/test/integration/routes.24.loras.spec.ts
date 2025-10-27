@@ -10,12 +10,28 @@
 process.env.NODE_ENV = "test";
 import chai from "chai";
 import chaiHttp from "chai-http";
-import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, limitResult, apiInfos, showHide, nbColor, nbColorTitle, testVersion, _RAWDB, infos, listOfColumns } from "./constant";
+import {
+    IApiDoc,
+    generateApiDoc,
+    IApiInput,
+    prepareToApiDoc,
+    identification,
+    keyTokenName,
+    limitResult,
+    apiInfos,
+    showHide,
+    nbColor,
+    nbColorTitle,
+    testVersion,
+    _RAWDB,
+    infos,
+    listOfColumns
+} from "./constant";
 import { server } from "../../server/index";
 import { Ientity } from "../../server/types";
 import { addStartNewTest, addTest, writeLog } from "./tests";
 
-const testsKeys = ["@iot.id", "name", "deveui", "description", "properties", "@iot.selfLink", "Datastream@iot.navigationLink", "MultiDatastream@iot.navigationLink", "Decoder@iot.navigationLink"];
+const testsKeys = ["@iot.id", "name", "deveui", "description", "properties", "@iot.selfLink", "Datastreams@iot.navigationLink", "MultiDatastream@iot.navigationLink", "Decoder@iot.navigationLink"];
 
 chai.use(chaiHttp);
 
@@ -89,7 +105,6 @@ describe("endpoint : Lora", () => {
             const infos = addTest({
                 type: "get",
                 short: "One",
-
                 description: `Get a specific ${entity.singular}.${apiInfos["9.2.3"]}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-entity",
                 request: `${testVersion}/${entity.name}(1)`
@@ -104,7 +119,7 @@ describe("endpoint : Lora", () => {
                     res.body["@iot.id"].should.eql(1);
                     res.body["@iot.selfLink"].should.contain(`${entity.name}(1)`);
                     res.body["Decoder@iot.navigationLink"].should.contain(`${entity.name}(1)/Decoder`);
-                    res.body["Datastream@iot.navigationLink"].should.contain(`${entity.name}(1)/Datastream`);
+                    res.body["Datastreams@iot.navigationLink"].should.contain(`${entity.name}(1)/Datastreams`);
                     res.body["MultiDatastream@iot.navigationLink"].should.contain(`${entity.name}(1)/MultiDatastream`);
                     addToApiDoc({
                         ...infos,
@@ -150,7 +165,7 @@ describe("endpoint : Lora", () => {
                     res.body["@iot.id"].should.eql(2);
                     res.body["@iot.selfLink"].should.contain(`${entity.name}(2)`);
                     res.body["Decoder@iot.navigationLink"].should.contain(`${entity.name}(2)/Decoder`);
-                    res.body["Datastream@iot.navigationLink"].should.contain(`${entity.name}(2)/Datastream`);
+                    res.body["Datastreams@iot.navigationLink"].should.contain(`${entity.name}(2)/Datastreams`);
                     res.body["MultiDatastream@iot.navigationLink"].should.contain(`${entity.name}(2)/MultiDatastream`);
                     addToApiDoc({
                         ...infos,
@@ -198,12 +213,11 @@ describe("endpoint : Lora", () => {
                     done();
                 });
         });
-        it(`Return ${entity.name} Subentity Datastream ${nbColor}[9.2.6]`, (done) => {
-            const name = "Datastream";
+        it(`Return ${entity.name} Subentity Datastreams ${nbColor}[9.2.6]`, (done) => {
+            const name = "Datastreams";
             const infos = addTest({
                 type: "get",
                 short: `Subentity ${name}`,
-
                 description: "",
                 reference: "",
                 request: `${testVersion}/${entity.name}(5)/${name}`
@@ -214,14 +228,13 @@ describe("endpoint : Lora", () => {
                     should.not.exist(err);
                     res.status.should.equal(200);
                     res.type.should.equal("application/json");
-                    const id = Number(res.body["@iot.id"]);
-                    res.body["@iot.selfLink"].should.contain(`${name}s(${id})`);
-                    res.body["Thing@iot.navigationLink"].should.contain(`/${name}s(${id})/Thing`);
-                    res.body["Sensor@iot.navigationLink"].should.contain(`/${name}s(${id})/Sensor`);
-                    res.body["ObservedProperty@iot.navigationLink"].should.contain(`/${name}s(${id})/ObservedProperty`);
-                    res.body["Observations@iot.navigationLink"].should.contain(`/${name}s(${id})/Observations`);
-                    res.body["Lora@iot.navigationLink"].should.contain(`/${name}s(${id})/Lora`);
-
+                    const id = Number(res.body.value[0]["@iot.id"]);
+                    res.body.value[0]["@iot.selfLink"].should.contain(`${name}(${id})`);
+                    res.body.value[0]["Thing@iot.navigationLink"].should.contain(`/${name}(${id})/Thing`);
+                    res.body.value[0]["Sensor@iot.navigationLink"].should.contain(`/${name}(${id})/Sensor`);
+                    res.body.value[0]["ObservedProperty@iot.navigationLink"].should.contain(`/${name}(${id})/ObservedProperty`);
+                    res.body.value[0]["Observations@iot.navigationLink"].should.contain(`/${name}(${id})/Observations`);
+                    res.body.value[0]["Loras@iot.navigationLink"].should.contain(`/${name}(${id})/Loras`);
                     done();
                 });
         });
@@ -273,8 +286,8 @@ describe("endpoint : Lora", () => {
                     done();
                 });
         });
-        it(`Return ${entity.name} Expand Datastream ${nbColor}[9.3.2.1]`, (done) => {
-            const name = "Datastream";
+        it(`Return ${entity.name} Expand Datastreams ${nbColor}[9.3.2.1]`, (done) => {
+            const name = "Datastreams";
             const infos = addTest({
                 type: "get",
                 short: `Return error${entity.name} Expand ${name}`,
@@ -289,13 +302,12 @@ describe("endpoint : Lora", () => {
                     should.not.exist(err);
                     res.status.should.equal(200);
                     res.type.should.equal("application/json");
-                    const id = res.body[name]["@iot.id"];
-                    res.body[name]["Thing@iot.navigationLink"].should.contain(`/${name}s(${id})/Thing`);
-                    res.body[name]["Sensor@iot.navigationLink"].should.contain(`/${name}s(${id})/Sensor`);
-                    res.body[name]["ObservedProperty@iot.navigationLink"].should.contain(`/${name}s(${id})/ObservedProperty`);
-                    res.body[name]["Observations@iot.navigationLink"].should.contain(`/${name}s(${id})/Observations`);
-                    res.body[name]["Lora@iot.navigationLink"].should.contain(`/${name}s(${id})/Lora`);
-
+                    const id = res.body[name][0]["@iot.id"];
+                    res.body[name][0]["Thing@iot.navigationLink"].should.contain(`/${name}(${id})/Thing`);
+                    res.body[name][0]["Sensor@iot.navigationLink"].should.contain(`/${name}(${id})/Sensor`);
+                    res.body[name][0]["ObservedProperty@iot.navigationLink"].should.contain(`/${name}(${id})/ObservedProperty`);
+                    res.body[name][0]["Observations@iot.navigationLink"].should.contain(`/${name}(${id})/Observations`);
+                    res.body[name][0]["Loras@iot.navigationLink"].should.contain(`/${name}(${id})/Loras`);
                     done();
                 });
         });
@@ -355,7 +367,7 @@ describe("endpoint : Lora", () => {
         afterEach(() => {
             writeLog(true);
         });
-        it("should return the Lora Affected multi that was added", (done) => {
+        it("should return the Lora Affected multiDatastream that was added", (done) => {
             const datas = {
                 "MultiDatastream": {
                     "@iot.id": 2
@@ -392,7 +404,7 @@ describe("endpoint : Lora", () => {
 
         it("should return the Lora Affected datastream that was added", (done) => {
             const datas = {
-                "Datastream": {
+                "Datastreams": {
                     "@iot.id": 14
                 },
                 "Decoder": {
@@ -423,9 +435,10 @@ describe("endpoint : Lora", () => {
                     done();
                 });
         });
+
         it("should return an error because datastream not exist", (done) => {
             const datas = {
-                "Datastream": {
+                "Datastreams": {
                     "@iot.id": 155
                 },
                 "Decoder": {
@@ -437,7 +450,7 @@ describe("endpoint : Lora", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "Return Error if the payload is malformed",
+                short: "Return Error if datastream not exist",
 
                 description: "",
                 reference: "",

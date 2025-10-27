@@ -6,6 +6,8 @@
  *
  */
 
+let maxProg = 100;
+
 // log debug test
 let isDebug = false;
 // store url for geoJson

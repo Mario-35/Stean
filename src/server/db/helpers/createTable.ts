@@ -24,22 +24,21 @@ import { messages } from "../../messages";
 
 export const createTable = async (serviceName: string, tableEntity: Ientity, doAfter: string | undefined): Promise<Record<string, string>> => {
     async function executeMessageQuery(message: string, _sql: string) {
-        logging.debug().query(message, _sql).to().log().file();
+        logging.query(message, _sql).toLogAndFile();
         returnValue[message] = await config
             .connection(serviceName)
             .unsafe(_sql)
             .then(() => {
-                logging.status(true, message).debug().to().log().file();
+                logging.status(true, message).toLogAndFile();
                 return EChar.ok;
             })
             .catch((error: Error) => {
-                logging.error(messages.str(EErrors.connError, serviceName), error).to().log().file();
+                logging.error(messages.str(EErrors.connError, serviceName), error).toLogAndFile();
                 process.exit(111);
             });
     }
 
     logging
-        .debug()
         .head(`CreateTable [${tableEntity.table || `pseudo ${tableEntity.name}`}] for ${serviceName}`)
         .to()
         .log();

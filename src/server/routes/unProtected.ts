@@ -134,9 +134,9 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
         // Create DB test
         case "CREATE":
             if (ctx.decodedUrl.service === EConstant.test) {
-                console.log(logging.debug().head("Create service").to().text());
+                console.log(logging.head("Create service").to().text());
                 try {
-                    (ctx.body = await createService(ctx.service, testDatas)), (ctx.status = EHttpCode.created);
+                    (ctx.body = await createService(testDatas)), (ctx.status = EHttpCode.created);
                 } catch (error) {
                     ctx.status = EHttpCode.badRequest;
                     ctx.redirect(`${ctx.decodedUrl.root}/error`);
@@ -146,7 +146,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
             ctx.throw(EHttpCode.notFound);
         // Drop DB
         case "DROP":
-            console.log(logging.debug().head("drop database").to().text());
+            console.log(logging.head("drop database").to().text());
             if (ctx.service.options.includes(EOptions.canDrop).toString()) {
                 await disconnectDb(ctx.service.pg.database, true);
                 try {
@@ -174,7 +174,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
 
     // API GET REQUEST
     if (ctx.decodedUrl.path.includes(ctx.service.apiVersion) || ctx.decodedUrl.version) {
-        console.log(logging.debug().head(`unProtected GET ${ctx.service.apiVersion}`).to().text());
+        console.log(logging.head(`unProtected GET ${ctx.service.apiVersion}`).to().text());
         // decode odata url messages.infoss
         const odataVisitor = await createOdata(ctx);
 
@@ -184,7 +184,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
                 ctx.body = { values: [] };
                 return;
             }
-            console.log(logging.debug().head(`GET ${ctx.service.apiVersion}`).to().text());
+            console.log(logging.head(`GET ${ctx.service.apiVersion}`).to().text());
             // Create api object
             const objectAccess = new apiAccess(ctx);
             if (objectAccess) {

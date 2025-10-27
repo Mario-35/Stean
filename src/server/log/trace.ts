@@ -94,7 +94,7 @@ export class Trace {
                 })
                 .catch((err: Error) => {
                     if (!isTest() && +err["code" as keyof object] === 23505) {
-                        logging.debug().error(EErrors.execQuery, query).to().log().file();
+                        logging.error(EErrors.execQuery, query).toLogAndFile();
                     }
                     reject(err);
                 });
@@ -111,7 +111,7 @@ export class Trace {
                 })
                 .catch((err: Error) => {
                     if (!isTest() && +err["code" as keyof object] === 23505) {
-                        logging.debug().error(EErrors.execQuery, query).to().log().file();
+                        logging.error(EErrors.execQuery, query).toLogAndFile();
                     }
                     reject(err);
                 });

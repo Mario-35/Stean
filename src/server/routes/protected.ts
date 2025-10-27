@@ -117,7 +117,7 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
         } else if (ctx.request.type.startsWith("multipart/")) {
             // If upload datas
             const getDatas = async (): Promise<object> => {
-                console.log(logging.debug().head("getDatas ...").to().text());
+                console.log(logging.head("getDatas ...").to().text());
                 return new Promise(async (resolve, reject) => {
                     await upload(ctx)
                         .then((data) => {
@@ -132,7 +132,7 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
             const odataVisitor = await createOdata(ctx);
             if (odataVisitor) ctx.odata = odataVisitor;
             if (ctx.odata) {
-                console.log(logging.debug().head("POST FORM").to().text());
+                console.log(logging.head("POST FORM").to().text());
                 const objectAccess = new apiAccess(ctx);
                 const returnValue = await objectAccess.post();
                 if (ctx.datas) fs.unlinkSync(ctx.datas["file" as keyof object]);
@@ -178,7 +178,7 @@ protectedRoutes.patch("/(.*)", async (ctx) => {
         const odataVisitor = await createOdata(ctx);
         if (odataVisitor) ctx.odata = odataVisitor;
         if (ctx.odata) {
-            console.log(logging.debug().head("PATCH").to().text());
+            console.log(logging.head("PATCH").to().text());
             const objectAccess = new apiAccess(ctx);
             if (ctx.odata.id) {
                 const returnValue: IreturnResult | undefined | void = await objectAccess.update();
@@ -204,7 +204,7 @@ protectedRoutes.delete("/(.*)", async (ctx) => {
         const odataVisitor = await createOdata(ctx);
         if (odataVisitor) ctx.odata = odataVisitor;
         if (ctx.odata) {
-            console.log(logging.debug().head("DELETE").to().text());
+            console.log(logging.head("DELETE").to().text());
             const objectAccess = new apiAccess(ctx);
             if (!ctx.odata.id) ctx.throw(EHttpCode.badRequest, { detail: EErrors.idRequired });
             const returnValue = await objectAccess.delete(ctx.odata.id);

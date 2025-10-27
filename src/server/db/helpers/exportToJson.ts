@@ -37,7 +37,7 @@ export const exportToJson = async (ctx: koaContext) => {
                     .forEach((e: string) => {
                         const table = e.split("_")[0];
                         rels.push(
-                            `CASE WHEN "${e}" ISNULL THEN NULL ELSE JSON_BUILD_OBJECT('@iot.name', (SELECT REPLACE (name, '''', '''''') FROM "${table}" WHERE "${table}"."id" = ${e} LIMIT 1)) END AS "${e}"`
+                            `CASE WHEN "${e}" ISNULL THEN NULL ELSE JSON_BUILD_OBJECT('${EConstant.name}', (SELECT REPLACE (name, '''', '''''') FROM "${table}" WHERE "${table}"."id" = ${e} LIMIT 1)) END AS "${e}"`
                         );
                     });
                 const columnListWithQuotes = columnList.map((e) => doubleQuotes(e)).join();

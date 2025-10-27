@@ -49,21 +49,13 @@ export class CoreHtmlView {
     }
 
     head(title: string, css?: string | string[]): string {
-        return `<head>
-                <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-                <style>${addCssFile(css || ["userForm.css", "message.css"])}</style>
-                <title>${title}</title>
-              </head>`;
+        return `<head> <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> <style>${addCssFile(css || ["userForm.css", "message.css"])}</style> <title>${title}</title> </head>`;
     }
 
     foot(links: { href: string; class: string; name: string }[]): string {
         const returnValue: string[] = [this.hr()];
         links.forEach((element: { href: string; class: string; name: string }) => {
-            returnValue.push(`
-          <div class="inner">
-            <a  href="${element.href}" 
-                class="${element.class}">${element.name}</a>
-          </div>`);
+            returnValue.push(` <div class="inner"> <a  href="${element.href}" class="${element.class}">${element.name}</a> </div>`);
         });
         return returnValue.join();
     }
@@ -104,23 +96,15 @@ export class CoreHtmlView {
     }
 
     select(input: { name: string; message: string; list: string[]; value: any; alert?: string; toolType?: string; password?: boolean }) {
-        return `<div class="group">
-                <label  for="${input.name}" class="label">
-                 ${input.message}
-                </label>
-                <select class="select" id="${input.name}" name="${input.name}">
-                  ${this.multiSelectItem(input.list)}
-                </select>
-              </div>`;
+        return `<div class="group"> <label  for="${input.name}" class="label"> ${input.message} </label> <select class="select" id="${input.name}" name="${input.name}"> ${this.multiSelectItem(
+            input.list
+        )} </select> </div>`;
     }
 
     multiSelect(input: { name: string; message: string; list: string[]; values: string[] }) {
         // const idName = this.makeIdName(input.name);
         const res = input.list.map((e: string, n: number) => `<option value="${e}">${e}</option>`);
-        return `<div class="group">
-                <label  for="${input.name}" class="label">Select ${input.name}</label>
-                <select id="${input.name}" name="${input.name}" multiple> ${res} </select>
-                </div>`;
+        return `<div class="group"> <label  for="${input.name}" class="label">Select ${input.name}</label> <select id="${input.name}" name="${input.name}" multiple> ${res} </select> </div>`;
     }
 
     textInput(input: { name: string; label: string; value: string; alert?: string; toolType?: string; password?: boolean; disabled?: boolean; onlyAlpha?: boolean }) {

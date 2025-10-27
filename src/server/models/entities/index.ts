@@ -14,6 +14,7 @@ import { createBlankEntity } from "../helpers";
 export const SERVICE: Ientity = createBlankEntity("Services");
 export const CREATEOBSERVATION: Ientity = createBlankEntity("CreateObservations");
 export { DATASTREAM } from "./datastream";
+export { DATASTREAMLORA } from "./datastreamLora";
 export { DECODER } from "./decoder";
 export { FEATUREOFINTEREST } from "./featureOfInterest";
 export { HISTORICALLOCATION } from "./historicalLocation";

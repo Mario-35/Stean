@@ -73,17 +73,20 @@ class Configuration {
 
     // update options
     private async createUpdateOptions(connectionName: string): Promise<void> {
-        logging.status(true, EInfos.UpdateCount).to().log().file();
+        logging.status(true, EInfos.UpdateCount).toLogAndFile(true);
     }
 
     // create a new instance in DB
     private async addService(input: Iservice): Promise<boolean> {
+        // except admin
         if (input && input.name === EConstant.admin) return false;
         const datas = queries.insertConfig(input.name, FORMAT_JSONB(input));
+        // test database connection
         return await this.adminConnection()
             .unsafe(datas)
             .then((e) => true)
             .catch(async (error) => {
+                // relation does not exist error
                 if (error.code === "42P01") {
                     return await this.adminConnection()
                         .unsafe(queries.createTableService())
@@ -92,19 +95,21 @@ class Configuration {
                                 .unsafe(datas)
                                 .then((e) => true);
                         })
-                        .catch(async (err) => {
-                            if (err.code === "42P07") {
+                        .catch(async (error) => {
+                            // relation already exist error
+                            if (error.code === "42P07") {
                                 return await this.adminConnection()
                                     .unsafe(datas)
                                     .then((e) => true);
                             } else {
-                                process.stdout.write(err + EConstant.return);
+                                process.stdout.write(error + EConstant.return);
                                 return false;
                             }
                         });
+                    // Duplicate Key Violation error
                 } else if (error.code === "23505") {
                     return true;
-                } else return logging.error(EInfos.createUser, error).to().log().file().result(false);
+                } else return logging.error(EInfos.createUser, error).to(true).log().file().result(false);
             });
     }
 
@@ -117,8 +122,8 @@ class Configuration {
      */
 
     messageListen(what: string, port: string, db?: boolean) {
-        if (db) logging.status(true, messages.str(EInfos.dbReady, what), EChar.web).to().log().file();
-        else logging.status(true, `${what} ${EInfos.listenPort} ${port}`, EChar.web).to().log().file();
+        if (db) logging.status(true, messages.str(EInfos.dbReady, what), EChar.web).toLogAndFile(true);
+        else logging.status(true, `${what} ${EInfos.listenPort} ${port}`, EChar.web).toLogAndFile(true);
     }
 
     /**
@@ -128,7 +133,7 @@ class Configuration {
      * @returns true if it's done
      */
     private async readConfigFile(input?: string): Promise<boolean> {
-        logging.start().to().log().file();
+        logging.start().toLogAndFile(true);
         logging
             .message(EInfos.readConfig, input ? "content" : paths.configFile.fileName)
             .to()
@@ -138,7 +143,7 @@ class Configuration {
             // load File
             const fileContent = input || fs.readFileSync(paths.configFile.fileName, "utf8");
             if (fileContent.trim() === "") {
-                logging.error(messages.str(EErrors.fileEmpty, paths.configFile.fileName), paths.configFile.fileName).to().log().file();
+                logging.error(messages.str(EErrors.fileEmpty, paths.configFile.fileName), paths.configFile.fileName).toLogAndFile(true);
                 process.exit(111);
             }
             // decrypt file
@@ -162,12 +167,12 @@ class Configuration {
                             });
                         });
             } catch (error: any) {
-                logging.error(EInfos.accessServies, error).to().log().file();
+                logging.error(EInfos.accessServies, error).toLogAndFile(true);
                 if (error.code === "42P01")
                     await this.adminConnection()
                         .unsafe(queries.createTableService())
                         .catch((e) => {
-                            logging.error(EInfos.createServies, EErrors.serviceCreateError).to().log().file();
+                            logging.error(EInfos.createServies, EErrors.serviceCreateError).toLogAndFile(true);
                             process.exit(112);
                         });
             }
@@ -183,13 +188,13 @@ class Configuration {
                     });
                 }
             } else {
-                logging.error("Unknown error", EErrors.configFileError).to().log().file();
+                logging.error("Unknown error", EErrors.configFileError).toLogAndFile(true);
                 process.exit(112);
             }
             // rewrite file (to update config modification except in test mode)
             if (!isTest() && config.configFileExist() === false) this.writeConfig();
         } catch (error: any) {
-            logging.error(error, EErrors.configFileError).to().log().file();
+            logging.error(error, EErrors.configFileError).toLogAndFile(true);
             process.exit(111);
         }
 
@@ -302,7 +307,7 @@ class Configuration {
      * @returns true if it's done
      */
     async initConfig(input: string): Promise<boolean> {
-        logging.message(EInfos.readConfig, paths.configFile.fileName).to().log().file();
+        logging.message(EInfos.readConfig, paths.configFile.fileName).toLogAndFile(true);
         return await this.readConfigFile(input);
     }
 
@@ -312,7 +317,7 @@ class Configuration {
      * @returns true if it's done
      */
     private writeConfig(input?: JSON): boolean {
-        logging.message(EInfos.writeConfig, paths.configFile.fileName).to().log().file();
+        logging.message(EInfos.writeConfig, paths.configFile.fileName).toLogAndFile(true);
         const datas: string = input ? JSON.stringify(input, null, 4) : JSON.stringify({ admin: Configuration.services[EConstant.admin] }, null, 4);
         return this.writeFile(paths.configFile.fileName, isProduction() === true ? encrypt(datas) : datas);
     }
@@ -323,7 +328,7 @@ class Configuration {
      * @returns result postgres.js object
      */
     async executeAdmin(query: string): Promise<object> {
-        logging.debug().query("executeAdmin", query).to().log().file();
+        logging.query("executeAdmin", query).toLogAndFile();
         return new Promise(async function (resolve, reject) {
             await config
                 .adminConnection()
@@ -397,9 +402,9 @@ class Configuration {
             await config
                 .connection(connectionName)
                 .unsafe(query)
-                .catch((error: Error) => logging.error(EInfos.createFunc, error).to().log().file().result(false));
+                .catch((error: Error) => logging.error(EInfos.createFunc, error).to(true).log().file().result(false));
         });
-        logging.status(true, EInfos.createFunc).to().log().file();
+        logging.status(true, EInfos.createFunc).toLogAndFile(true);
         return true;
     }
 
@@ -444,7 +449,7 @@ class Configuration {
                     try {
                         await this.addToServer(key);
                     } catch (error) {
-                        status = logging.error(EInfos.addServer, error).to().log().file().result(false);
+                        status = logging.error(EInfos.addServer, error).to(true).log().file().result(false);
                     }
                 }
             );
@@ -474,9 +479,9 @@ class Configuration {
             if (Configuration.afterInit[service]) {
                 await executeSql(myService, Configuration.afterInit[service])
                     .then(() => {
-                        logging.init().text(EInfos.queryAfter, EColor.Magenta).status(true, service).to().log().file();
+                        logging.init().text(EInfos.queryAfter, EColor.Magenta).status(true, service).toLogAndFile(true);
                     })
-                    .catch((err) => logging.error(EInfos.queryAfter, err).to().log().file().result(false));
+                    .catch((err) => logging.error(EInfos.queryAfter, err).to(true).log().file().result(false));
             }
         });
         return true;
@@ -580,8 +585,10 @@ class Configuration {
                 return res;
             })
             .catch((error: Error) => {
-                logging.error(EErrors.unableFindCreate, Configuration.services[key].pg.database).to().log().file();
-                logging.error(EErrors.unableFindCreate, error).to().log().file().result(false);
+                logging.debug("================> Ici");
+                logging.debug(error);
+                logging.error(EErrors.unableFindCreate, Configuration.services[key].pg.database).toLogAndFile(true);
+                logging.error(EErrors.unableFindCreate, error).to(true).log().file().result(false);
                 process.exit(111);
             });
     }
@@ -611,14 +618,14 @@ class Configuration {
      * @returns true if it's done
      */
     private async createDB(connectName: string): Promise<boolean> {
-        logging.debug().message(EInfos.createDB, Configuration.services[connectName].pg.database).to().log().file();
+        logging.message(EInfos.createDB, Configuration.services[connectName].pg.database).toLogAndFile(true);
         return await createDatabase(connectName)
             .then(async () => {
                 this.createDbConnectionFromConfigName(connectName);
-                return logging.debug().message(`${EInfos.db} ${EInfos.createDB} [${Configuration.services[connectName].pg.database}]`, EChar.ok).to().log().file().result(true);
+                return logging.message(`${EInfos.db} ${EInfos.createDB} [${Configuration.services[connectName].pg.database}]`, EChar.ok).to(true).log().file().result(true);
             })
             .catch((err: Error) => {
-                return logging.error(err.message, EInfos.createDB).to().log().file().result(false);
+                return logging.error(err.message, EInfos.createDB).to(true).log().file().result(false);
             });
     }
 
@@ -629,10 +636,10 @@ class Configuration {
      * @returns true if it's done
      */
     private async isServiceExist(serviceName: string, create: boolean): Promise<boolean> {
-        logging.debug(true).head(Configuration.services[serviceName].pg.database).to().log().file();
+        logging.head(Configuration.services[serviceName].pg.database).toLogAndFile(true);
         return await this.connection(serviceName)`select 1+1 AS result`
             .then(async () => {
-                logging.status(true, EInfos.dbExist).to().log().file();
+                logging.status(true, EInfos.dbExist).toLogAndFile(true);
                 const listTempTables = await this.connection(serviceName)`SELECT array_agg(table_name) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE 'temp%';`;
                 const tables = listTempTables[0]["array_agg"];
                 if (tables != null)
@@ -645,7 +652,7 @@ class Configuration {
                                     });
                                 })
                                 .then(() => true)
-                                .catch((err: Error) => logging.error(EInfos.delTemp, err).to().log().file().result(false)),
+                                .catch((err: Error) => logging.error(EInfos.delTemp, err).to(true).log().file().result(false)),
                             "Delete temp table(s)"
                         )
                         .to()
@@ -655,29 +662,29 @@ class Configuration {
                 await this.connection(serviceName)
                     .unsafe(queries.logLevel("WARNING"))
                     .then(() => {
-                        logging.status(true, EInfos.logLevel).to().log().file();
+                        logging.status(true, EInfos.logLevel).toLogAndFile(true);
                     })
-                    .catch((err: Error) => logging.error(EInfos.logLevel, err).to().log().file());
+                    .catch((err: Error) => logging.error(EInfos.logLevel, err).to(true).log().file());
 
                 if (Configuration.services[serviceName].options.includes(EOptions.optimized))
                     this.connection(serviceName)
                         .unsafe(`\n${queries.addNbToTable("observation")}\n${queries.updateNb("datastream").toString()}\n${queries.updateNb("multidatastream")}`)
                         .then(() => {
-                            logging.message(serviceName, EInfos.updateNb).to().log().file();
+                            logging.statusAfter(serviceName, EInfos.updateNb).toLogAndFile(true);
                         });
                 return true;
             })
             .catch(async (error: Error) => {
                 // Password authentication failed
                 if (error["code" as keyof object] === "ECONNREFUSED") {
-                    logging.error(EErrors.connUser, error).to().log().file();
+                    logging.error(EErrors.connUser, error).toLogAndFile(true);
                 } else if (error["code" as keyof object] === "28P01") {
                     if (!isTest()) return await this.createDB(serviceName);
                     // Database does not exist
                 } else if (error["code" as keyof object] === "3D000" && create == true) {
-                    logging.debug().message(EInfos.startCreateDB, Configuration.services[serviceName].pg.database).to().log().file();
+                    logging.message(EInfos.startCreateDB, Configuration.services[serviceName].pg.database).toLogAndFile(true);
                     if (serviceName !== EConstant.test) return await this.createDB(serviceName);
-                } else return logging.error(EErrors.connUser, error).to().log().file().result(false);
+                } else return logging.error(EErrors.connUser, error).to(true).log().file().result(false);
                 return false;
             });
     }
@@ -695,7 +702,7 @@ class Configuration {
             path,
             content,
             (error) => {
-                if (error) return logging.error(messages.str(EErrors.write, path), error).to().log().file().result(false);
+                if (error) return logging.error(messages.str(EErrors.write, path), error).to(true).log().file().result(false);
             }
         );
         return true;
@@ -707,7 +714,7 @@ class Configuration {
      * @returns true if it's done
      */
     public saveConfig(myPath: string): boolean {
-        logging.message(EInfos.writeConfig, `in ${myPath}`).to().log().file();
+        logging.message(EInfos.writeConfig, `in ${myPath}`).toLogAndFile(true);
         const datas: string = JSON.stringify({ admin: Configuration.services[EConstant.admin] }, null, 4);
         if (this.writeFile(path.join(myPath, "configuration.json"), isProduction() === true ? encrypt(datas) : datas) === false) return false;
         if (this.writeFile(path.join(myPath, ".key"), paths.key) === false) return false;
@@ -725,7 +732,7 @@ class Configuration {
             return await this.adminConnection()
                 .unsafe(queries.updateConfig(input.name, FORMAT_JSONB(input)))
                 .then(async () => await this.refresh(input.name))
-                .catch((err) => logging.error(EErrors.serviceUpdateteError, err).to().log().file().result(false));
+                .catch((err) => logging.error(EErrors.serviceUpdateteError, err).to(true).log().file().result(false));
         }
         return false;
     }
@@ -741,7 +748,7 @@ class Configuration {
                             .then(() => this.adminConnection())
                 );
         } catch (error) {
-            logging.error(EErrors.serviceUpdateteError, error).to().log().file();
+            logging.error(EErrors.serviceUpdateteError, error).toLogAndFile(true);
             return;
         }
     }

@@ -42,9 +42,6 @@ export const MULTIDATASTREAM: Ientity = new Entity("MultiDatastreams", {
             type: ERelations.hasMany,
             entityRelation: "MultiDatastreamObservedProperties"
         },
-        Lora: {
-            type: ERelations.hasOne
-        },
         FeatureOfInterest: {
             type: ERelations.defaultUnique
         }

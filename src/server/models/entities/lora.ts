@@ -25,8 +25,9 @@ export const LORA: Ientity = new Entity("Loras", {
         multidatastream_id: new Relation("MultiDatastreams").unique().column()
     },
     relations: {
-        Datastream: {
-            type: ERelations.hasOne
+        Datastreams: {
+            type: ERelations.belongsToMany,
+            entityRelation: "DatastreamsLoras"
         },
         MultiDatastream: {
             type: ERelations.hasOne

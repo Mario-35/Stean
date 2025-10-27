@@ -6,9 +6,8 @@
  *
  */
 
-import { EDataType, EDatesType, EErrors, EQuery, ERelations, EentityType, allEntities } from "../../enums";
+import { EDataType, EDatesType, EQuery, ERelations, EentityType } from "../../enums";
 import { doubleQuotes } from "../../helpers";
-import { messages } from "../../messages";
 import { Ientity, IentityColumnAliasOptions, IentityCore } from "../../types";
 import { as, singular } from "../helpers";
 
@@ -42,14 +41,11 @@ export class Entity extends EntityPass {
     };
     constructor(name: string, datas: IentityCore) {
         super();
-        const entity = allEntities[name];
-        if (entity) {
-            (this._.createOrder = datas.createOrder), (this._.type = datas.type), (this._.order = datas.order), (this._.columns = datas.columns), (this._.orderBy = Object.keys(datas.columns)[0]);
-            (this._.relations = datas.relations), (this._.constraints = {}), (this._.indexes = {}), (this._.after = datas.after), (this._.name = name);
-            if (datas.trigger) this._.trigger = datas.trigger;
-            this._.singular = singular(entity);
-            this._.table = this._.singular.toLowerCase();
-        } else throw new Error(messages.str(EErrors.noValidEntity, name));
+        (this._.createOrder = datas.createOrder), (this._.type = datas.type), (this._.order = datas.order), (this._.columns = datas.columns), (this._.orderBy = Object.keys(datas.columns)[0]);
+        (this._.relations = datas.relations), (this._.constraints = {}), (this._.indexes = {}), (this._.after = datas.after), (this._.name = name);
+        if (datas.trigger) this._.trigger = datas.trigger;
+        this._.singular = singular(name);
+        this._.table = this._.singular.toLowerCase();
         this.prepareColums();
         this.createConstraints();
         this.createTriggers();
@@ -91,7 +87,7 @@ export class Entity extends EntityPass {
                 const entityRelation = this._.columns[e].entityRelation;
                 if (entityRelation) {
                     if (!Entity.trigger[this._.table]) Entity.trigger[this._.table] = {};
-                    const relationTable = singular(allEntities[entityRelation as keyof object]).toLowerCase();
+                    const relationTable = singular(entityRelation).toLowerCase();
                     this._.columns[e].create = "";
                     this._.columns[e].alias = function functionResult(options: IentityColumnAliasOptions) {
                         return options.context?.target === EQuery.OrderBy

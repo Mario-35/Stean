@@ -25,7 +25,7 @@ import { messages } from "../../messages";
  */
 
 export const createDatabase = async (serviceName: string): Promise<Record<string, string>> => {
-    console.log(logging.debug().head(`${EInfos.createDB} [${serviceName}]`).to().text());
+    console.log(logging.head(`${EInfos.createDB} [${serviceName}]`).to().text());
 
     // init result
     const service = config.getService(serviceName);
@@ -58,7 +58,7 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
         });
 
     // test user connection
-    const dbConnection = config.connection(serviceName);
+    const dbConnection = config.connection(service.name);
     if (!dbConnection) {
         returnValue["DROP Error"] = `No DB connection ${EChar.notOk}`;
         return returnValue;
@@ -77,15 +77,15 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
         .catch((err: Error) => err.message);
 
     // Get complete model
-    const DB = models.DBFullCreate(serviceName);
+    const DB = models.getModel();
 
     // loop to create each table
     await asyncForEach(
         Object.keys(DB).filter((e) => e.trim() !== ""),
         async (keyName: string) => {
-            const res = await createTable(serviceName, DB[keyName], undefined);
+            const res = await createTable(service.name, DB[keyName], undefined);
             Object.keys(res).forEach((e: string) => {
-                logging.debug().message(e, res[e]);
+                logging.message(e, res[e]);
                 returnValue["  ■■■►  " + e] = res[e];
             });
             if (res.toString().includes(EChar.notOk)) {
@@ -95,7 +95,7 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
     );
 
     // create user
-    returnValue[messages.str(EInfos.create, "user")] = await createUser(config.getService(serviceName))
+    returnValue[messages.str(EInfos.create, "user")] = await createUser(service)
         .then(() => EChar.ok)
         .catch((err: Error) => err.message);
 
@@ -105,7 +105,7 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
         await dbConnection
             .unsafe(query)
             .then(() => {
-                logging.debug().message(name, EChar.ok);
+                logging.message(name, EChar.ok);
                 returnValue["  ■■■►  " + name] = EChar.ok;
             })
             .catch((error: Error) => {
@@ -137,7 +137,7 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
     );
 
     // If only numeric extension
-    if (config.getService(serviceName).extensions.includes(EExtensions.highPrecision)) {
+    if (service.extensions.includes(EExtensions.highPrecision)) {
         returnValue[messages.str(EInfos.create, "High Precision result")] = await dbConnection
             .unsafe(`ALTER TABLE ${doubleQuotes(DB.Observations.table)} ALTER COLUMN 'result' TYPE float4 USING null;`)
             .then(() => {

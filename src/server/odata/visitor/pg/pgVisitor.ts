@@ -94,8 +94,7 @@ export class PgVisitor extends Visitor {
     protected getColumn(input: string, operation: string, context: IodataContext) {
         console.log(logging.whereIam(new Error().stack));
 
-        const tempEntity =
-            models.getEntity(this.ctx.service, context.identifier || "".split(".")[0]) || models.getEntity(this.ctx.service, this.entity || this.parentEntity || this.navigationProperty);
+        const tempEntity = models.getEntity(this.ctx.model, context.identifier || "".split(".")[0]) || models.getEntity(this.ctx.model, this.entity || this.parentEntity || this.navigationProperty);
 
         const columnName = tempEntity
             ? this.getColumnAlias(tempEntity, input, context, false, operation, createIentityColumnAliasOptions(tempEntity, input, context, operation, undefined, this))
@@ -103,7 +102,7 @@ export class PgVisitor extends Visitor {
 
         if (columnName) return columnName;
         else if (this.isSelect(context) && tempEntity && tempEntity.relations[input]) {
-            const entityName = models.getEntityName(this.ctx.service, input);
+            const entityName = models.getEntityName(this.ctx.model, input);
             return tempEntity && entityName
                 ? `CONCAT('${this.ctx.decodedUrl.root}/${tempEntity.name}(', "${tempEntity.table}"."id", ')/${entityName}') AS "${entityName}${EConstant.navLink}"`
                 : undefined;
@@ -122,7 +121,7 @@ export class PgVisitor extends Visitor {
         options?: IentityColumnAliasOptions
     ): string | undefined {
         options = options || createIentityColumnAliasOptions(entity, columnName, context, operation, undefined, this);
-        const retResult = models.getColumn(this.ctx.service, entity, columnName)?.alias(options);
+        const retResult = models.getColumn(this.ctx.model, entity, columnName)?.alias(options);
         return retResult ? `${showTable === true && retResult && retResult[0] === '"' ? `${doubleQuotes(entity.table)}.${retResult}` : retResult}` : undefined;
     }
     clear(input: string) {
@@ -133,7 +132,7 @@ export class PgVisitor extends Visitor {
         return input;
     }
     start(node: Token) {
-        console.log(logging.debug().head("Start PgVisitor").to().text());
+        console.log(logging.head("Start PgVisitor").to().text());
         const temp = this.Visit(node);
         this.verifyQuery();
         // Logs.infos("PgVisitor", temp);
@@ -141,7 +140,7 @@ export class PgVisitor extends Visitor {
         return temp;
     }
     verifyQuery = (): void => {
-        console.log(logging.debug().head("verifyQuery").to().text());
+        console.log(logging.head("verifyQuery").to().text());
         const expands: string[] = [];
         if (this.includes)
             this.includes.forEach((element: PgVisitor) => {
@@ -173,10 +172,10 @@ export class PgVisitor extends Visitor {
             if (visitor) {
                 visitor.call(this, node, context);
                 if (this.debugOdata) {
-                    logging.debug().message("Visit", `Visit${node.type}`).to().file().log();
-                    logging.debug().message("node.raw", node.raw).to().file().log();
-                    logging.debug().message("this.query.where", this.query.where.toString()).to().file().log();
-                    logging.debug().message("context", context).to().file().log();
+                    logging.message("Visit", `Visit${node.type}`).to().file().log();
+                    logging.message("node.raw", node.raw).to().file().log();
+                    logging.message("this.query.where", this.query.where.toString()).to().file().log();
+                    logging.message("context", context).to().file().log();
                 }
             } else {
                 logging.error(`Node error =================> Visit${node.type}`, node);
@@ -328,8 +327,8 @@ export class PgVisitor extends Visitor {
             // deterwine if its column AND JSON
             if (
                 this.entity &&
-                models.getRelationColumnTable(this.ctx.service, this.entity, node.value.current.raw) === EColumnType.Column &&
-                models.isColumnType(this.ctx.service, this.entity, node.value.current.raw, "json") &&
+                models.getRelationColumnTable(this.ctx.model, this.entity, node.value.current.raw) === EColumnType.Column &&
+                models.isColumnType(this.ctx.model, this.entity, node.value.current.raw, "json") &&
                 node.value.next.raw[0] == "/"
             ) {
                 this.addToWhere(`${doubleQuotes(node.value.current.raw)}->>${simpleQuotes(node.value.next.raw.slice(1))}`, context);
@@ -371,8 +370,8 @@ export class PgVisitor extends Visitor {
         if (
             this.entity &&
             context.sign &&
-            models.getRelationColumnTable(this.ctx.service, this.entity, node.value.left.raw) === EColumnType.Column &&
-            [EDataType.date, EDataType.timestamp, EDataType.timestamptz].includes(models.getColumnType(this.ctx.service, this.entity, node.value.left.raw))
+            models.getRelationColumnTable(this.ctx.model, this.entity, node.value.left.raw) === EColumnType.Column &&
+            [EDataType.date, EDataType.timestamp, EDataType.timestamptz].includes(models.getColumnType(this.ctx.model, this.entity, node.value.left.raw))
         ) {
             const columnName = this.getColumnAlias(this.ctx.model[context.identifier || this.entity.name], node.value.left.raw, context, true, undefined);
             const testIsDate = oDataDateFormat(node, context.sign);
@@ -388,8 +387,8 @@ export class PgVisitor extends Visitor {
         if (
             context.entity &&
             context.sign &&
-            models.getRelationColumnTable(this.ctx.service, context.entity, node.value.left.raw) === EColumnType.Column &&
-            [EDataType.tsrange, EDataType.tstzrange].includes(models.getColumnType(this.ctx.service, context.entity, node.value.left.raw))
+            models.getRelationColumnTable(this.ctx.model, context.entity, node.value.left.raw) === EColumnType.Column &&
+            [EDataType.tsrange, EDataType.tstzrange].includes(models.getColumnType(this.ctx.model, context.entity, node.value.left.raw))
         ) {
             const testIsDate = oDataDateFormat(node, context.sign);
             let columnName: string | undefined = undefined;
@@ -431,7 +430,7 @@ export class PgVisitor extends Visitor {
             }
     }
     addToWhere(value: string, context: IodataContext) {
-        console.log(logging.debug().head("addToWhere").to().text());
+        console.log(logging.head("addToWhere").to().text());
         if (context.target === EQuery.Geo) this.subQuery.where ? (this.subQuery.where += value) : (this.subQuery.where = value);
         else this.query.where.add(value);
     }
@@ -465,13 +464,13 @@ export class PgVisitor extends Visitor {
         };
     }
     public createComplexWhere(entity: string, node: Token, context: IodataContext) {
-        console.log(logging.debug().head("createComplexWhere").to().text());
+        console.log(logging.head("createComplexWhere").to().text());
 
         if (context.target) {
-            if (!models.getEntity(this.ctx.service, entity)) return;
-            const tempEntity = models.getEntity(this.ctx.service, node.value.name);
+            if (!models.getEntity(this.ctx.model, entity)) return;
+            const tempEntity = models.getEntity(this.ctx.model, node.value.name);
             if (tempEntity) {
-                const relation = relationInfos(this.ctx.service, entity, node.value.name);
+                const relation = relationInfos(this.ctx.model, entity, node.value.name);
                 if (context.relation) {
                     context.sql = `${formatPgTableColumn(this.ctx.model[entity].table, relation.column)} IN (SELECT ${formatPgTableColumn(
                         tempEntity.table,
@@ -494,7 +493,7 @@ export class PgVisitor extends Visitor {
     protected VisitODataIdentifier(node: Token, context: IodataContext) {
         const alias = this.getColumn(node.value.name, "", context);
         node.value.name = alias || node.value.name;
-        if (context.relation && context.identifier && models.isColumnType(this.ctx.service, this.ctx.model[context.relation], this.cleanColumn(context.identifier), "json")) {
+        if (context.relation && context.identifier && models.isColumnType(this.ctx.model, this.ctx.model[context.relation], this.cleanColumn(context.identifier), "json")) {
             context.identifier = `${doubleQuotes(this.cleanColumn(context.identifier))}->>${simpleQuotes(node.raw)}`;
         } else {
             if (this.isWhere(context) && this.entity) this.createComplexWhere(context.identifier ? this.cleanColumn(context.identifier) : this.entity.name, node, context);
@@ -547,7 +546,7 @@ export class PgVisitor extends Visitor {
                 .filter((e) => e != "");
             context.sign = temp.pop();
             this.query.where.init(temp.join(" "));
-            const relation = relationInfos(this.ctx.service, this.entity.name, context.relation);
+            const relation = relationInfos(this.ctx.model, this.entity.name, context.relation);
             this.addToWhere(
                 ` ${context.in && context.in === true ? "" : " IN @START@"}(SELECT ${
                     this.entity.relations[context.relation] ? doubleQuotes(relation.rightKey) : `${doubleQuotes(context.table)}."id"`
@@ -559,7 +558,7 @@ export class PgVisitor extends Visitor {
                 if (context.identifier.startsWith("CASE") || context.identifier.startsWith("("))
                     this.addToWhere(`${context.identifier} ${context.sign} ${SQLLiteral.convert(node.value, node.raw)})`, context);
                 else if (context.identifier.includes("@EXPRESSION@")) {
-                    const tempEntity = models.getEntity(this.ctx.service, context.relation);
+                    const tempEntity = models.getEntity(this.ctx.model, context.relation);
                     const alias = tempEntity ? this.getColumnAlias(tempEntity, context.identifier, context, false, undefined) : undefined;
 
                     this.addToWhere(
@@ -569,7 +568,7 @@ export class PgVisitor extends Visitor {
                         context
                     );
                 } else {
-                    const tempEntity = models.getEntity(this.ctx.service, context.relation);
+                    const tempEntity = models.getEntity(this.ctx.model, context.relation);
                     const quotes = context.identifier[0] === '"' ? "" : '"';
                     const alias = tempEntity ? this.getColumnAlias(tempEntity, context.identifier, context, false, undefined) : undefined;
                     this.addToWhere(
@@ -607,7 +606,7 @@ export class PgVisitor extends Visitor {
             if (column.includes("/")) {
                 const temp = column.split("/");
                 if (entity && entity.relations.hasOwnProperty(temp[0])) {
-                    const tempEntity = models.getEntity(this.ctx.service, temp[0]);
+                    const tempEntity = models.getEntity(this.ctx.model, temp[0]);
                     if (tempEntity) return temp[1];
                 }
             } else if (entity && entity.columns.hasOwnProperty(column)) return column;
@@ -619,9 +618,9 @@ export class PgVisitor extends Visitor {
             // if (FeatureOfInterest/feature)
             if (this.entity && test.includes("/")) {
                 const tests = test.split("/");
-                const relation = relationInfos(this.ctx.service, this.entity.name, tests[0]);
+                const relation = relationInfos(this.ctx.model, this.entity.name, tests[0]);
                 if (relation && relation.entity) {
-                    const relationEntity = models.getEntity(this.ctx.service, tests[0]);
+                    const relationEntity = models.getEntity(this.ctx.model, tests[0]);
                     if (relationEntity) this.subQuery.from.push(relationEntity.table);
                     this.query.where.add(`${formatPgTableColumn(relation.entity.table, relation.leftKey)} = "src"."id"`);
                     return formatPgTableColumn(tests[0], tests[1]);

@@ -482,6 +482,74 @@ class Confirm extends Component {
 
 }
 
+class Ok extends Component {
+
+	constructor(options) {
+		super(options);
+		this.buttonOk = isString(options.buttonOk) ? options.buttonOk : 'Ok';
+		this.injectTemplate();
+		this.render();
+	}
+
+	injectTemplate() {
+
+		const head = h('div', {
+			class: 'head',
+			style: "--data-color: #4e6400"
+		}, [
+			h('p', {
+				class: 'title'
+			}, [this.title])
+		]);
+
+		this.port.appendChild(head);
+
+		let innerContainer;
+
+		if (this.useInnerHTML) {
+			const content = h('div', {
+				class: 'content'
+			});
+			content.innerHTML = this.content;
+
+			innerContainer = h('div', {
+				class: 'inner-container'
+			}, [
+				content
+			]);
+
+		} else {
+			innerContainer = h('div', {
+				class: 'inner-container'
+			}, [
+				h('p', {
+					class: 'content'
+				}, [this.content])
+			]);
+		}
+
+		innerContainer.appendChild(
+			h('div', {
+				class: 'buttons'
+			}, [
+				h('button', {
+					class: 'button',
+					click: () => {
+						this.close();
+						if (this.options.onOk) {
+							this.options.onOkl(this);
+						}
+					}
+				}, [this.buttonOk])
+			])
+		);
+
+		this.port.appendChild(head);
+		this.port.appendChild(innerContainer);
+	}
+
+}
+
 class Observation extends Component {
 	constructor(options) {
 		super(options);

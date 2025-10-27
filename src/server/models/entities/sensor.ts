@@ -7,7 +7,7 @@
  */
 
 import { Entity } from "../entity";
-import { ERelations, EentityType } from "../../enums";
+import { ERelations, ESensorEncodingType, EentityType } from "../../enums";
 import { Ientity } from "../../types";
 import { SmallInt, Text } from "../types";
 
@@ -19,8 +19,8 @@ export const SENSOR: Ientity = new Entity("Sensors", {
         id: new SmallInt().generated().column(),
         name: new Text().notNull().column(),
         description: new Text().notNull().column(),
-        encodingType: new Text().default("application/pdf").column(),
-        metadata: new Text().default("none.pdf").column()
+        encodingType: new Text().verify(Object.keys(ESensorEncodingType)).column(),
+        metadata: new Text().column()
     },
     relations: {
         Datastreams: {

@@ -9,9 +9,9 @@
 import { config } from "../configuration";
 import { _STREAM } from "../db/constants";
 import { queries } from "../db/queries";
-import { EColumnType, EConstant, EDataType, EErrors, EExtensions, EInfos, EOptions } from "../enums";
+import { EColumnType, EConstant, EDataType, EErrors, EExtensions, EInfos, EOptions, ERelations } from "../enums";
 import { doubleQuotes, deepClone, isTest, formatPgTableColumn, isString } from "../helpers";
-import { Iservice, Ientities, Ientity, IstreamInfos, koaContext, IentityRelation, getColumnType, IentityColumn, Id } from "../types";
+import { Iservice, Ientities, Ientity, IstreamInfos, koaContext, IentityRelation, getColumnType, IentityColumn, Id, typeExtensions } from "../types";
 import path from "path";
 import fs from "fs";
 import {
@@ -21,6 +21,7 @@ import {
     SERVICE,
     CREATEOBSERVATION,
     DATASTREAM,
+    DATASTREAMLORA,
     DECODER,
     HISTORICALLOCATION,
     LORA,
@@ -34,7 +35,7 @@ import {
     THINGLOCATION,
     LOG
 } from "./entities";
-import { Geometry, Jsonb, Text } from "./types";
+import { Geometry, Jsonb, Relation, Text } from "./types";
 import { logging } from "../log";
 import { _DEBUG } from "../constants";
 import { executeSql, executeSqlValues } from "../db/helpers";
@@ -44,11 +45,6 @@ export class Models {
         [key: string]: Ientities;
     } = {};
 
-    // Test if version exist
-    private versionExist(verStr: string) {
-        return Models.models.hasOwnProperty(verStr);
-    }
-
     // Create drawInfo diagram
     public getDrawIo(ctx: koaContext) {
         const deleteId = (id: string) => {
@@ -56,21 +52,20 @@ export class Models {
             const end = "</mxCell>";
             fileContent = fileContent.replace(`${start}${fileContent.split(start)[1].split(end)[0]}${end}`, "");
         };
-        const entities = Models.models[ctx.service.apiVersion];
         let fileContent = fs.readFileSync(path.join(__dirname, "/", "model.drawio"), "utf8");
         fileContent = fileContent.replace("&gt;Version&lt;", `&gt;version : ${ctx.service.apiVersion}&lt;`);
         if (!ctx.service.extensions.includes(EExtensions.multiDatastream)) {
             ["114", "115", "117", "118", "119", "116", "120", "121"].forEach((e) => deleteId(e));
-            fileContent = fileContent.replace(`&lt;hr&gt;COLUMNS.${entities.MultiDatastreams.name}`, "");
-            fileContent = fileContent.replace(`&lt;hr&gt;COLUMNS.${entities.MultiDatastreams.name}`, "");
-            fileContent = fileContent.replace(`&lt;strong&gt;${entities.MultiDatastreams.singular}&lt;/strong&gt;`, "");
+            fileContent = fileContent.replace(`&lt;hr&gt;COLUMNS.${ctx.mode.MultiDatastreams.name}`, "");
+            fileContent = fileContent.replace(`&lt;hr&gt;COLUMNS.${ctx.mode.MultiDatastreams.name}`, "");
+            fileContent = fileContent.replace(`&lt;strong&gt;${ctx.mode.MultiDatastreams.singular}&lt;/strong&gt;`, "");
         }
-        Object.keys(entities).forEach((strEntity: string) => {
+        Object.keys(ctx.mode).forEach((strEntity: string) => {
             fileContent = fileContent.replace(
-                `COLUMNS.${entities[strEntity].name}`,
-                Object.keys(entities[strEntity].columns)
+                `COLUMNS.${ctx.mode[strEntity].name}`,
+                Object.keys(ctx.mode[strEntity].columns)
                     .filter((word) => !word.includes("_") && !word.includes("id"))
-                    .map((colName: string) => `&lt;p style=&quot;margin: 0px; margin-left: 8px;&quot;&gt;${colName}: ${getColumnType(entities[strEntity].columns[colName]).toUpperCase()}&lt;/p&gt;`)
+                    .map((colName: string) => `&lt;p style=&quot;margin: 0px; margin-left: 8px;&quot;&gt;${colName}: ${getColumnType(ctx.mode[strEntity].columns[colName]).toUpperCase()}&lt;/p&gt;`)
                     .join("")
             );
         });
@@ -115,14 +110,11 @@ export class Models {
                 };
             });
         });
-
-        const mod = this.getModelOptions(this.get(ctx.service));
-
         await executeSql(
             ctx.service,
-            ` SELECT JSON_AGG(t) AS results FROM ( SELECT ${Object.keys(mod)
-                .filter((e) => mod[e].table !== "")
-                .map((e) => `(SELECT COUNT('${mod[e].orderBy.split(" ")[0]}') FROM "${mod[e].table}") AS "${mod[e].name}"${EConstant.return}`)
+            ` SELECT JSON_AGG(t) AS results FROM ( SELECT ${Object.keys(ctx.model)
+                .filter((e) => ctx.model[e].table !== "")
+                .map((e) => `(SELECT COUNT('${ctx.model[e].orderBy.split(" ")[0]}') FROM "${ctx.model[e].table}") AS "${ctx.model[e].name}"${EConstant.return}`)
                 .join()}) AS t`
         ).then((res) => {
             result["tables"] = res[0 as keyof object]["results"][0 as keyof object];
@@ -137,20 +129,22 @@ export class Models {
     }
 
     // Get multiDatastream or Datastreams infos
-    public async getStreamInfos(service: Iservice, input: Record<string, any>): Promise<IstreamInfos | undefined> {
+    public async getStreamInfos(ctx: koaContext, input: Record<string, any>): Promise<IstreamInfos | undefined> {
         console.log(logging.whereIam(new Error().stack));
         const stream: _STREAM = input["Datastream"] ? "Datastream" : input["MultiDatastream"] ? "MultiDatastream" : undefined;
         if (!stream) return undefined;
-        const streamEntity = models.getEntityName(service, stream);
+        const streamEntity = models.getEntityName(ctx.model, stream);
         if (!streamEntity) return undefined;
         const foiId: Id = input["FeaturesOfInterest"] ? input["FeaturesOfInterest"] : undefined;
-        const searchKey = input[models.DBFull(service)[streamEntity].name] || input[models.DBFull(service)[streamEntity].singular];
+        const searchKey = input[models.getModel(ctx.service)[streamEntity].name] || input[models.getModel(ctx.service)[streamEntity].singular];
         const streamId: Id = isNaN(searchKey) ? searchKey[EConstant.id] : searchKey;
         if (streamId) {
             return executeSqlValues(
-                service,
+                ctx.service,
                 queries.asJson({
-                    query: `SELECT "id", "observationType", "_default_featureofinterest" FROM ${doubleQuotes(models.DBFull(service)[streamEntity].table)} WHERE "id" = ${BigInt(streamId)} LIMIT 1`,
+                    query: `SELECT "id", "observationType", "_default_featureofinterest" FROM ${doubleQuotes(models.getModel(ctx.service)[streamEntity].table)} WHERE "id" = ${BigInt(
+                        streamId
+                    )} LIMIT 1`,
                     singular: true,
                     strip: false,
                     count: false
@@ -167,55 +161,66 @@ export class Models {
                         : undefined;
                 })
                 .catch((error) => {
-                    logging.error(EInfos.createUser, error).to().log().file();
+                    logging.error(EInfos.createUser, error).toLogAndFile();
                     return undefined;
                 });
         }
     }
 
-    private version1_0(): Ientities {
-        return {
-            Things: THING,
-            FeaturesOfInterest: FEATUREOFINTEREST,
-            Locations: LOCATION,
-            ThingsLocations: THINGLOCATION,
-            HistoricalLocations: HISTORICALLOCATION,
-            LocationsHistoricalLocations: LOCATIONHISTORICALLOCATION,
-            ObservedProperties: OBSERVEDPROPERTY,
-            Sensors: SENSOR,
-            Datastreams: DATASTREAM,
-            MultiDatastreams: MULTIDATASTREAM,
-            MultiDatastreamObservedProperties: MULTIDATASTREAMOBSERVEDPROPERTY,
-            Observations: OBSERVATION,
-            Decoders: DECODER,
-            Loras: LORA,
-            Users: USER,
-            Services: SERVICE,
-            Logs: LOG,
-            CreateObservations: CREATEOBSERVATION
-        };
+    private version1_0(extensions?: typeof typeExtensions): Ientities {
+        const base: Ientities = {};
+        base["Things"] = THING;
+        base["FeaturesOfInterest"] = FEATUREOFINTEREST;
+        base["Locations"] = LOCATION;
+        base["ThingsLocations"] = THINGLOCATION;
+        base["HistoricalLocations"] = HISTORICALLOCATION;
+        base["LocationsHistoricalLocations"] = LOCATIONHISTORICALLOCATION;
+        base["ObservedProperties"] = OBSERVEDPROPERTY;
+        base["Sensors"] = SENSOR;
+        base["Datastreams"] = DATASTREAM;
+        base["MultiDatastreams"] = MULTIDATASTREAM;
+        base["Observations"] = OBSERVATION;
+        base["Services"] = SERVICE;
+        base["Logs"] = LOG;
+        base["CreateObservations"] = CREATEOBSERVATION;
+        base["MultiDatastreamObservedProperties"] = MULTIDATASTREAMOBSERVEDPROPERTY;
+        if ((extensions && extensions.includes(EExtensions.lora)) || !extensions) {
+            base["DatastreamsLoras"] = DATASTREAMLORA;
+            base["Decoders"] = DECODER;
+            base["Loras"] = LORA;
+            base["Datastreams"].relations["Loras"] = {
+                type: ERelations.hasOne,
+                entityRelation: "DatastreamsLoras"
+            };
+            base["MultiDatastreams"].relations["Lora"] = {
+                type: ERelations.hasOne
+            };
+            base["MultiDatastreams"].columns["lora_id"] = new Relation("Lora").column();
+        }
+        if ((extensions && extensions.includes(EExtensions.users)) || !extensions) {
+            base["Users"] = USER;
+        }
+        return base;
     }
 
     private version1_1(input: Ientities): Ientities {
         // add properties to entities
         ["Locations", "FeaturesOfInterest", "ObservedProperties", "Sensors", "Datastreams", "MultiDatastreams"].forEach((entityName: string) => {
-            input[entityName].columns["properties"] = new Jsonb().column();
+            if (input[entityName]) input[entityName].columns["properties"] = new Jsonb().column();
         });
         // add geom to Location
         input.Locations.columns["geom"] = new Geometry().column();
         return input;
     }
 
-    private createVersion(verStr: string): boolean {
+    private createVersion(verStr: string, extensions?: typeof typeExtensions): Ientities {
         console.log(logging.whereIam(new Error().stack));
         switch (verStr) {
             case "v1.1":
-                this.createVersion("v1.0");
-                Models.models["v1.1"] = this.version1_1(deepClone(Models.models["v1.0"]));
+                return this.version1_1(deepClone(this.createVersion("v1.0", extensions)));
             default:
-                Models.models["v1.0"] = this.version1_0();
+                return this.version1_0(extensions);
         }
-        return this.versionExist(verStr);
     }
 
     public listVersion() {
@@ -223,84 +228,65 @@ export class Models {
         return ["v1.0", "v1.1"];
     }
 
-    public get(service: Iservice | string): Iservice {
+    public getService(service: Iservice | string): Iservice {
         if (typeof service === "string") {
             const nameConfig = config.getConfigNameFromName(service);
             if (!nameConfig) throw new Error(EErrors.configName);
-            if (this.versionExist(config.getService(nameConfig).apiVersion) === false) this.createVersion(config.getService(nameConfig).apiVersion);
             return config.getService(nameConfig);
         }
         return service;
     }
 
-    public listTables(service: Iservice | string): string[] {
+    public listTables(model: Ientities): string[] {
         console.log(logging.whereIam(new Error().stack));
 
-        return Object.values(this.getModelOptions(this.get(service)))
+        return Object.values(model)
             .map((e) => e.table)
             .filter((e) => e.trim() !== "");
     }
 
-    public addTriggersOnTables(service: Iservice | string, triggerName: string): string[] {
-        return this.listTables(service).map((table) => queries.createTrigger(table, triggerName));
+    public addTriggersOnTables(model: Ientities, triggerName: string): string[] {
+        return this.listTables(model).map((table) => queries.createTrigger(table, triggerName));
     }
 
-    public removeTriggersOnTables(service: Iservice | string, triggerName: string): string[] {
-        return this.listTables(service).map((table) => queries.dropTrigger(table, triggerName));
+    public removeTriggersOnTables(model: Ientities, triggerName: string): string[] {
+        return this.listTables(model).map((table) => queries.dropTrigger(table, triggerName));
     }
 
-    public DBFullCreate(service: Iservice | string): Ientities {
-        service = this.get(service);
-        const name = service.options.includes(EOptions.unique) ? new Text().notNull().default(EInfos.noName).unique().column() : new Text().notNull().column();
-        const description = service.options.includes(EOptions.unique) ? new Text().notNull().default(EInfos.noName).unique().column() : new Text().notNull().column();
-
-        const s = Models.models[service.apiVersion];
-        Object.keys(s).forEach((k: string) => {
-            if (s[k].columns["name"]) s[k].columns.name = name;
-            if (s[k].columns["description"]) s[k].columns.name = description;
-        });
-        return Models.models[service.apiVersion];
-    }
-
-    public DBFull(service: Iservice | string): Ientities {
-        return this.getModelOptions(service);
-    }
-
-    public isSingular(service: Iservice, input: string): boolean {
+    public isSingular(model: Ientities, input: string): boolean {
         if (config && input) {
-            const entityName = this.getEntityName(service, input);
-            return entityName ? Models.models[service.apiVersion][entityName].singular == input : false;
+            const entityName = this.getEntityName(model, input);
+            return entityName ? model[entityName].singular == input : false;
         }
         return false;
     }
 
-    public getEntityName(service: Iservice, search: string): string | undefined {
-        const tempModel = this.getModelOptions(service);
+    public getEntityName(model: Ientities, search: string): string | undefined {
         const testString: string | undefined = search
             .trim()
             .match(/[a-zA-Z_]/g)
             ?.join("");
-        return tempModel && testString
-            ? tempModel.hasOwnProperty(testString)
+        return testString
+            ? model.hasOwnProperty(testString)
                 ? testString
-                : Object.keys(tempModel).filter((elem: string) => tempModel[elem].table == testString.toLowerCase() || tempModel[elem].singular == testString)[0]
+                : Object.keys(model).filter((elem: string) => model[elem].table == testString.toLowerCase() || model[elem].singular == testString)[0]
             : undefined;
     }
 
-    public getEntityStrict = (service: Iservice, entity: Ientity | string): Ientity | undefined => {
-        return typeof entity === "string" ? Models.models[service.apiVersion][entity] : Models.models[service.apiVersion][entity.name];
+    public getEntityStrict = (model: Ientities, entity: Ientity | string): Ientity | undefined => {
+        return typeof entity === "string" ? model[entity] : model[entity.name];
     };
 
-    public getEntity = (service: Iservice, entity: Ientity | string): Ientity | undefined => {
-        return Models.models[service.apiVersion][this.getEntityName(service, isString(entity) ? entity.trim() : entity.name) || ""];
+    public getEntity = (model: Ientities, entity: Ientity | string): Ientity | undefined => {
+        return model[this.getEntityName(model, isString(entity) ? entity.trim() : entity.name) || ""];
     };
 
-    public getColumn = (service: Iservice, entity: Ientity | string, columnName: string): IentityColumn | undefined => {
-        return Models.models[service.apiVersion][this.getEntity(service, entity)?.name || ""].columns[columnName];
+    public getColumn = (model: Ientities, entity: Ientity | string, columnName: string): IentityColumn | undefined => {
+        return model[this.getEntity(model, entity)?.name || ""].columns[columnName];
     };
 
-    public getColumnType = (service: Iservice, entity: Ientity | string, columnName: string): EDataType => {
-        return Models.models[service.apiVersion][this.getEntity(service, entity)?.name || ""].columns[columnName].dataType;
+    public getColumnType = (model: Ientities, entity: Ientity | string, columnName: string): EDataType => {
+        return model[this.getEntity(model, entity)?.name || ""].columns[columnName].dataType;
     };
 
     public getRelationName = (entity: Ientity, searchs: string[]): string | undefined => {
@@ -314,18 +300,18 @@ export class Models {
         return res;
     };
 
-    public getRelation = (service: Iservice, entity: Ientity, relation: Ientity | string): IentityRelation | undefined => {
-        const entityRelation = this.getEntity(service, relation);
+    public getRelation = (model: Ientities, entity: Ientity, relation: Ientity | string): IentityRelation | undefined => {
+        const entityRelation = this.getEntity(model, relation);
         return entityRelation ? entity.relations[entityRelation.name] || entity.relations[entityRelation.singular] : undefined;
     };
 
-    public getRelationColumnTable = (service: Iservice, entity: Ientity | string, test: string): EColumnType | undefined => {
-        const tempEntity = this.getEntity(service, entity);
+    public getRelationColumnTable = (model: Ientities, entity: Ientity | string, test: string): EColumnType | undefined => {
+        const tempEntity = this.getEntity(model, entity);
         if (tempEntity) return tempEntity.relations.hasOwnProperty(test) ? EColumnType.Relation : tempEntity.columns.hasOwnProperty(test) ? EColumnType.Column : undefined;
     };
 
-    public getSelectColumnList(service: Iservice, entity: Ientity | string, complete: boolean, exclus?: string[]) {
-        const tempEntity = this.getEntity(service, entity);
+    public getSelectColumnList(model: Ientities, entity: Ientity | string, complete: boolean, exclus?: string[]) {
+        const tempEntity = this.getEntity(model, entity);
         return tempEntity
             ? Object.keys(tempEntity.columns)
                   .filter((word) => !word.includes("_") && !(exclus || [""]).includes(word))
@@ -333,9 +319,9 @@ export class Models {
             : [];
     }
 
-    public isColumnType(service: Iservice, entity: Ientity | string, column: string, test: string): boolean {
+    public isColumnType(model: Ientities, entity: Ientity | string, column: string, test: string): boolean {
         if (config && entity) {
-            const tempEntity = this.getEntity(service, entity);
+            const tempEntity = this.getEntity(model, entity);
             return tempEntity && tempEntity.columns[column] ? getColumnType(tempEntity.columns[column]) === test.toLowerCase() : false;
         }
         return false;
@@ -413,23 +399,28 @@ export class Models {
      * initialize model class
      */
     public initialisation() {
-        if (isTest()) this.createVersion("v1.1");
+        if (isTest()) this.getModel(EConstant.test);
     }
 
-    public getModelOptions(service: Iservice | string): Ientities {
-        service = this.get(service);
-        this.createVersion(service.apiVersion);
-        const name = service.options.includes(EOptions.unique) ? new Text().notNull().default(EInfos.noName).unique().column() : new Text().notNull().column();
-        const description = service.options.includes(EOptions.unique) ? new Text().notNull().default(EInfos.noName).unique().column() : new Text().notNull().column();
-        Object.keys(Models.models[service.apiVersion]).map((k: string) => {
-            if (Models.models[service.apiVersion][k].columns["name"]) Models.models[service.apiVersion][k].columns.name = name;
-            if (Models.models[service.apiVersion][k].columns["description"]) Models.models[service.apiVersion][k].columns.name = description;
+    public getModel(service?: Iservice | string): Ientities {
+        if (service) {
+            service = this.getService(service);
+            if (!Models.models[service.name]) Models.models[service.name] = this.createModel(service.apiVersion, service.options, service.extensions);
+            return Models.models[service.name];
+        }
+        return this.createVersion("v1.1");
+    }
+
+    private createModel(version: string, options: string[], extensions: typeof typeExtensions): Ientities {
+        console.log(logging.whereIam(new Error().stack));
+        let model = this.createVersion(version, extensions);
+        const name = options.includes(EOptions.unique) ? new Text().notNull().default(EInfos.noName).unique().column() : new Text().notNull().column();
+        const description = options.includes(EOptions.unique) ? new Text().notNull().default(EInfos.noName).unique().column() : new Text().notNull().column();
+        Object.keys(model).forEach((k: string) => {
+            if (model[k].columns["name"]) model[k].columns.name = name;
+            if (model[k].columns["description"]) model[k].columns.name = description;
         });
-        return Models.models[service.apiVersion];
-    }
-
-    public getFullModel(service: Iservice): Ientities {
-        return Object.fromEntries(Object.entries(Models.models["v1.1"])) as Ientities;
+        return model;
     }
 }
 

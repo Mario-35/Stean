@@ -24,7 +24,8 @@
   </head>
   <body>
     <div id="spinner" class="loading">Loading&#8230;</div>
-    <div id="container">      <div id="first">
+    <div id="container">
+      <div id="first">
         <div id="popup" class="popup">
           <div class='popup-text' id="parici">
             <pre id="pre">Nothing</pre>
@@ -249,22 +250,43 @@
 
             <!-- Tools-->
             <div class="patrom-accordion">
-              <input class="patrom-accordion-check" type="checkbox" id="chck8">
+              <input class="patrom-accordion-check" type="checkbox" name="toolsTab" id="chck8">
               <label class="patrom-accordion-label" for="chck8">Tools</label>
               <div class="patrom-accordion-content">
                 <div class="patrom-row">
                   <!-- Root -->
-                  <div class="patrom-col-span-12">
-                      <label for="optDistHost">Distant root :</label>
-                      <input id="optDistHost" name="optDistHost" type="text" class="patrom-text-input fillCol" >
+                  <div class="patrom-col-span-2">
+                      <label for="optDistHost">root</label>
+                    </div>
+                  <div class="patrom-col-span-10">
+                    <input id="optDistHost" name="optDistHost" type="text" class="patrom-text-input fillCol" >
                   </div>
                 </div>
                 <div class="patrom-row">
-                  <!-- Version -->
-                  <div class="patrom-col-span-12">
-                    <button id="btnCopyService" name="btnCopyService" type="button">Copy distant to actual</button>
+                  <!-- Step -->
+                  <div class="patrom-col-span-3">
+                    <label for="optDistHostStep">Step :</label>
+                    <input id="optDistHostStep" name="optDistHostStep" type="text" class="patrom-text-input fillCol">
+                  </div>
+                  <!-- Start -->
+                  <div class="patrom-col-span-3">
+                    <label for="optDistHostStart">Start :</label>
+                    <input id="optDistHostStart" name="optDistHostStart" type="text" class="patrom-text-input fillCol">
                   </div>
                 </div>
+
+                <div class="patrom-row">
+                  <!-- Buttons copy -->
+                  <div class="patrom-col-span-6">
+                    <button id="btnCopyService" name="btnCopyService" type="button">Copy structure</button>
+                  </div>
+                  <div class="patrom-col-span-6">
+                    <button id="btnCopyServiceStart" name="btnCopyServiceStart" type="button">copy observations</button>
+                  </div>
+                </div>
+                <div class="patrom-row">
+                  <div id="progression" class="progression testprog">80%</div>
+              </div>
               </div>
             </div>
 
@@ -274,22 +296,6 @@
           <!-- OPTIONS -->
           <div class="patrom-row">
               <input id="queryOptions" type="text" class="patrom-text-input fillCol">
-          </div>
-        
-          <!-- ICONS BUTTONS  -->
-          <div class="patrom-row center">
-            <div class="patrom-col-span-12">
-              <!-- <div class="patrom-button-bar"> -->
-                <!-- <div class="patrom-button-bar__item">
-                  <button class="patrom-button-bar__button" id="btnPostTemplate">Template</button>
-                </div> &nbsp; -->
-                <!-- <div class="patrom-button-bar__item">
-                  <button class="patrom-button-bar__button" id="btnShowGeo">geos</button>
-                </div> &nbsp;  -->
-                <!-- <div class="patrom-button-bar__item"> -->
-                  <!-- </div> -->
-              <!-- </div> -->
-            </div>
           </div>
 
           <!-- BUTTONS ICONS -->
@@ -357,6 +363,7 @@
             </label>
           </div>
         </div>
+
       </div>
       <!-- SOCIAL PANEL HTML -->
        @social@
@@ -375,10 +382,10 @@
     <script src="url.js"></script>
     <script src="patrom.js"></script>
     <script src="multiSelect.js"></script>
+    <script src="modal.js"></script>
     <script src="query.js"></script>
     <script src="csv.js"></script>
     <script src="graph.js"></script>
-    <script src="modal.js"></script>
     <script src="window.js"></script>
     <script src="logs.js"></script>
     <script src="windowList.js"></script>

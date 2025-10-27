@@ -255,6 +255,19 @@ const addMinutesToDate = (dat?: string) => {
     startDate.setTime(startDate.getTime() + 15 * 60_000);
     return startDate.toISOString();
 };
+
+const UOM = [
+    {
+        "name": "soil moisture",
+        "symbol": "%",
+        "definition": "https://in-situ.theia-land.fr/skosmos/theia_ozcar_thesaurus/en/page/c_cd6670c7"
+    },
+    {
+        "name": "soil temperature",
+        "symbol": "€",
+        "definition": "https://in-situ.theia-land.fr/skosmos/theia_ozcar_thesaurus/en/page/c_759e6eec"
+    }
+];
 export const testDatas: Record<string, any> = {
     "create": {
         "name": EConstant.test,
@@ -1679,18 +1692,7 @@ export const testDatas: Record<string, any> = {
         {
             "name": `Lora ST1_50 [${n.ui[0]}]`,
             "description": "Streams Lora ST1_50",
-            "unitOfMeasurements": [
-                {
-                    "name": "soil moisture",
-                    "symbol": "%",
-                    "definition": "https://in-situ.theia-land.fr/skosmos/theia_ozcar_thesaurus/en/page/c_cd6670c7"
-                },
-                {
-                    "name": "soil temperature",
-                    "symbol": "€",
-                    "definition": "https://in-situ.theia-land.fr/skosmos/theia_ozcar_thesaurus/en/page/c_759e6eec"
-                }
-            ],
+            "unitOfMeasurements": UOM,
             "observationType": "http://www.opengis.net/def/observation-type/ogc-om/2.0/om_complex-observation",
             "multiObservationDataTypes": ['"Measurement"', '"Measurement"'],
             "thing_id": {
@@ -1703,18 +1705,7 @@ export const testDatas: Record<string, any> = {
         {
             "name": `Lora ST3_75 [${n.ui[1]}]`,
             "description": "Streams Lora ST3_75",
-            "unitOfMeasurements": [
-                {
-                    "name": "soil moisture",
-                    "symbol": "%",
-                    "definition": "https://in-situ.theia-land.fr/skosmos/theia_ozcar_thesaurus/en/page/c_760c9f6f"
-                },
-                {
-                    "name": "soil temperature",
-                    "symbol": "€",
-                    "definition": "https://in-situ.theia-land.fr/skosmos/theia_ozcar_thesaurus/en/page/c_c6abc183"
-                }
-            ],
+            "unitOfMeasurements": UOM,
             "observationType": "http://www.opengis.net/def/observation-type/ogc-om/2.0/om_complex-observation",
             "multiObservationDataTypes": ['"Measurement"', '"Measurement"'],
             "thing_id": {
@@ -1727,18 +1718,7 @@ export const testDatas: Record<string, any> = {
         {
             "name": `Lora ST4_25 [${n.ui[2]}]`,
             "description": "Streams Lora ST4_25",
-            "unitOfMeasurements": [
-                {
-                    "name": "soil moisture",
-                    "symbol": "%",
-                    "definition": "https://in-situ.theia-land.fr/skosmos/theia_ozcar_thesaurus/en/page/c_ca3b7456"
-                },
-                {
-                    "name": "soil temperature",
-                    "symbol": "€",
-                    "definition": "https://in-situ.theia-land.fr/skosmos/theia_ozcar_thesaurus/en/page/c_29661069"
-                }
-            ],
+            "unitOfMeasurements": UOM,
             "observationType": "http://www.opengis.net/def/observation-type/ogc-om/2.0/om_complex-observation",
             "multiObservationDataTypes": ['"Measurement"', '"Measurement"'],
             "thing_id": {
@@ -2180,9 +2160,24 @@ export const testDatas: Record<string, any> = {
             "deveui": n.ui[4],
             "decoder_id": {
                 "@iot.name": "Watteco"
-            },
+            }
+        }
+    ],
+    "DatastreamsLoras": [
+        {
             "datastream_id": {
                 "@iot.name": `Pressure sensor [${n.ui[4]}]`
+            },
+            "lora_id": {
+                "@iot.name": "Pressure Watteco"
+            }
+        },
+        {
+            "datastream_id": {
+                "@iot.name": "Humidité de la chambre climatique"
+            },
+            "lora_id": {
+                "@iot.name": "Pressure Watteco"
             }
         }
     ],

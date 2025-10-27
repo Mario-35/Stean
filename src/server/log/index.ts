@@ -39,6 +39,7 @@ export class LoggingResult {
 export class Logging {
     static _s: string;
     static can: boolean = false;
+
     init(state: boolean = true) {
         Logging._s = "";
         Logging.can = state;
@@ -217,13 +218,13 @@ export class Logging {
         return this;
     }
 
-    to() {
+    to(force?: boolean) {
+        Logging.can = force || _DEBUG;
         return new LoggingResult(Logging.can === true ? Logging._s : "");
     }
 
-    debug(force?: boolean) {
-        Logging.can = force || _DEBUG;
-        return this;
+    toLogAndFile(force?: boolean) {
+        return this.to(force).log().file();
     }
 
     status(test: boolean, cle: string, car: string = EChar.arrowright) {
@@ -237,7 +238,19 @@ export class Logging {
         return this;
     }
 
-    force(data: any, separator?: boolean) {
+    statusAfter(message: string, cle: string) {
+        this.init();
+        this.text(" ".repeat(4));
+        this.text(cle, EColor.Green);
+        this.color(EColor.Blue);
+        this.space(EChar.arrowright);
+        this.color(EColor.Default);
+        this.space(message);
+        this.text(EChar.ok);
+        return this;
+    }
+
+    debug(data: any, separator?: boolean) {
         this.init(true);
         if (separator) this.add("=".repeat(50));
         this.add(this.objet(data));

@@ -12,7 +12,7 @@ import { _DEBUG } from "../../constants";
 import { ERelations, EentityType } from "../../enums";
 import { formatPgTableColumn } from "../../helpers";
 import { logging } from "../../log";
-import { IrelationInfos, Ientity, Iservice } from "../../types";
+import { IrelationInfos, Ientity, Ientities } from "../../types";
 
 const _KeyLink = (entity: Ientity, column: string) => Object.keys(entity.columns).filter((e) => e !== column)[0];
 
@@ -31,13 +31,13 @@ const extractEntityNames = (input: string, search: string | string[]): string[] 
     return search.map((e) => input.replace(e, "")).filter((e) => e != input);
 };
 
-export const relationInfos = (service: Iservice, entityName: string, relationName: string, loop?: boolean): IrelationInfos => {
+export const relationInfos = (model: Ientities, entityName: string, relationName: string, loop?: boolean): IrelationInfos => {
     console.log(logging.whereIam(new Error().stack));
-    const leftEntity = models.getEntity(service, entityName);
-    const rightEntity = models.getEntity(service, relationName);
+    const leftEntity = models.getEntity(model, entityName);
+    const rightEntity = models.getEntity(model, relationName);
     if (entityName !== relationName && leftEntity && rightEntity) {
-        console.log(logging.debug().head(`Entity ====> ${leftEntity.name} : ${rightEntity.name}`).to().text());
-        const leftRelation = models.getRelation(service, leftEntity, rightEntity);
+        logging.head(`Entity ====> ${leftEntity.name} : ${rightEntity.name}`).to().text();
+        const leftRelation = models.getRelation(model, leftEntity, rightEntity);
         const rightRelationName = models.getRelationName(rightEntity, [entityName, leftEntity.name, leftEntity.singular, entityName.replace(relationName, ""), relationName.replace(entityName, "")]);
         const rightRelation = rightRelationName ? rightEntity.relations[rightRelationName] : undefined;
         if (leftRelation && leftRelation.type) {
@@ -49,10 +49,10 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
             };
             const fnHasMany = () => {
                 const complexEntity =
-                    models.getEntity(service, `${leftEntity.name}${rightEntity.name}`) ||
-                    models.getEntity(service, `${rightEntity.name}${leftEntity.name}`) ||
-                    models.getEntity(service, `${leftEntity.singular}${rightEntity.singular}`) ||
-                    models.getEntity(service, `${rightEntity.singular}${leftEntity.singular}`);
+                    models.getEntity(model, `${leftEntity.name}${rightEntity.name}`) ||
+                    models.getEntity(model, `${rightEntity.name}${leftEntity.name}`) ||
+                    models.getEntity(model, `${leftEntity.singular}${rightEntity.singular}`) ||
+                    models.getEntity(model, `${rightEntity.singular}${leftEntity.singular}`);
                 if (complexEntity && rightRelation) {
                     leftKey = _Key(complexEntity, leftEntity);
                     rightKey = _Key(complexEntity, rightEntity);
@@ -81,7 +81,7 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
             switch (leftRelation.type) {
                 // === : 1
                 case ERelations.defaultUnique:
-                    logging.debug().message("leftRelation Type", `====> defaultUnique : ${ERelations.defaultUnique}`).to().text();
+                    logging.message("leftRelation Type", `====> defaultUnique : ${ERelations.defaultUnique}`).to().text();
                     if (rightRelation && rightRelation.type) {
                         switch (rightRelation.type) {
                             // ===> 1.4
@@ -103,7 +103,7 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                 };
                         }
                     }
-                    logging.debug().error("Relation Infos", "defaultUnique").to().log().file();
+                    logging.error("Relation Infos", "defaultUnique").toLogAndFile();
                     break;
                 // === : 2
                 case ERelations.belongsTo:
@@ -125,7 +125,7 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                             // ===> 2.3
                             case ERelations.belongsToMany:
                                 if (leftRelation.entityRelation) {
-                                    const tempEntity = models.getEntity(service, leftRelation.entityRelation);
+                                    const tempEntity = models.getEntity(model, leftRelation.entityRelation);
                                     if (leftRelation && tempEntity && tempEntity.type === EentityType.link && !loop) {
                                         leftKey = _Key(tempEntity, rightEntity);
                                         rightKey = _KeyLink(tempEntity, leftKey);
@@ -143,8 +143,8 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                         };
                                     }
                                 } else if (rightRelationName && !loop && leftEntity.type !== EentityType.link) {
-                                    const entityName = relationInfos(service, rightRelationName, rightEntity.name, true);
-                                    const complexEntity = models.getEntity(service, `${rightRelationName}${rightEntity.name}`) || models.getEntity(service, `${rightEntity.name}${rightRelationName}`);
+                                    const entityName = relationInfos(model, rightRelationName, rightEntity.name, true);
+                                    const complexEntity = models.getEntity(model, `${rightRelationName}${rightEntity.name}`) || models.getEntity(model, `${rightEntity.name}${rightRelationName}`);
                                     if (complexEntity && entityName.external) {
                                         leftKey = entityName.external.leftKey;
                                         rightKey = entityName.external.rightKey;
@@ -184,7 +184,7 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                 };
                         }
                     }
-                    logging.debug().error("Relation Infos", "belongsTo").to().log().file();
+                    logging.error("Relation Infos", "belongsTo").toLogAndFile();
 
                     break;
                 // === : 3
@@ -194,16 +194,16 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                             // ===> 3.2
                             case ERelations.belongsTo:
                                 const complexEntity2 =
-                                    models.getEntity(service, `${leftEntity.name}${rightEntity.name}`) ||
-                                    models.getEntity(service, `${rightEntity.name}${leftEntity.name}`) ||
-                                    models.getEntity(service, `${leftEntity.singular}${rightEntity.singular}`) ||
-                                    models.getEntity(service, `${rightEntity.singular}${leftEntity.singular}`);
+                                    models.getEntity(model, `${leftEntity.name}${rightEntity.name}`) ||
+                                    models.getEntity(model, `${rightEntity.name}${leftEntity.name}`) ||
+                                    models.getEntity(model, `${leftEntity.singular}${rightEntity.singular}`) ||
+                                    models.getEntity(model, `${rightEntity.singular}${leftEntity.singular}`);
                                 // ===> 3.2.1
                                 if (rightRelation.entityRelation) {
                                     const tmp = extractEntityNames(rightRelation.entityRelation, [leftEntity.name, rightEntity.name]);
-                                    const tempEntity = models.getEntity(service, tmp[0]);
+                                    const tempEntity = models.getEntity(model, tmp[0]);
                                     if (tempEntity && !loop) {
-                                        const tempCardinality = relationInfos(service, leftEntity.name, tempEntity.name, true);
+                                        const tempCardinality = relationInfos(model, leftEntity.name, tempEntity.name, true);
                                         if (complexEntity2 && tempCardinality.entity && complexEntity2.type !== EentityType.link) {
                                             leftKey = _Key(complexEntity2, rightEntity);
                                             rightKey = _Key(complexEntity2, leftEntity);
@@ -252,9 +252,12 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                             // ===> 3.3
                             case ERelations.belongsToMany:
                                 return fnHasMany();
+                            // ===> 3.5
+                            case ERelations.hasOne:
+                                return fnHasMany();
                         }
                     }
-                    logging.debug().error("Relation Infos", "belongsToMany").to().log().file();
+                    logging.error("Relation Infos", "belongsToMany").toLogAndFile();
 
                     break;
                 // === : 4
@@ -294,7 +297,7 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                 return fnHasMany();
                         }
                     }
-                    logging.debug().error("Relation Infos", "hasMany").to().log().file();
+                    logging.error("Relation Infos", "hasMany").toLogAndFile();
                     break;
                 // === : 5
                 case ERelations.hasOne:
@@ -302,6 +305,8 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                         switch (rightRelation.type) {
                             // ===> 5.2
                             case ERelations.belongsTo:
+                            // ===> 5.3
+                            case ERelations.belongsToMany:
                                 return {
                                     type: `${leftRelation.type}.${rightRelation.type}`,
                                     leftKey: leftKey,
@@ -313,6 +318,18 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                     )} WHERE ${formatPgTableColumn(leftEntity.table, leftKey)} =$ID)`,
                                     expand: `${formatPgTableColumn(rightEntity.table, rightKey)} = ${formatPgTableColumn(leftEntity.table, leftKey)}`
                                 };
+                            // ===> 5.3
+                            // return {
+                            //     type: `${leftRelation.type}.${rightRelation.type}`,
+                            //     leftKey: leftKey,
+                            //     rightKey: rightKey,
+                            //     entity: leftEntity,
+                            //     column: idColumnName(leftEntity, rightEntity) || "id",
+                            //     link: `${formatPgTableColumn(rightEntity.table, rightKey)} = (SELECT ${formatPgTableColumn(leftEntity.table, leftKey)} FROM ${formatPgTableColumn(
+                            //         leftEntity.table
+                            //     )} WHERE ${formatPgTableColumn(leftEntity.table, leftKey)} =$ID)`,
+                            //     expand: `${formatPgTableColumn(rightEntity.table, rightKey)} = ${formatPgTableColumn(leftEntity.table, leftKey)}`
+                            // };
                             // ===> 5.5
                             case ERelations.hasOne:
                                 return {
@@ -330,11 +347,11 @@ export const relationInfos = (service: Iservice, entityName: string, relationNam
                                 };
                         }
                     }
-                    logging.debug().error("Relation Infos", "hasOne").to().log().file();
+                    logging.error("Relation Infos", "hasOne").toLogAndFile();
                     break;
             }
         }
-        logging.debug().message("Relation Infos", `[${leftEntity.name} ${leftRelation?.type}] : [${rightEntity.name} ${rightRelation?.type}]`).to().log().file();
+        logging.message("Relation Infos", `[${leftEntity.name} ${leftRelation?.type}] : [${rightEntity.name} ${rightRelation?.type}]`).toLogAndFile();
     }
 
     return { type: "ERROR", rightKey: "", leftKey: "", entity: undefined, column: "cardinality ERROR", expand: "", link: "" };

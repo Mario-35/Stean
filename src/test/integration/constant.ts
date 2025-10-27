@@ -23,7 +23,7 @@ export function getNB(message: string): string {
     nb += 1;
     return `${message} ${String(nb)}`;
 }
-export const _RAWDB = models.DBFull("test");
+export const _RAWDB = models.getModel("test");
 export const nbColor = "\x1b[36m";
 export const nbColorTitle = "\x1b[35m";
 export const testLog = (input: any) => {

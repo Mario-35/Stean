@@ -14,13 +14,13 @@ import { logging } from "../log";
 import { ILoraDecodingResult, Iservice } from "../types";
 
 export const decodeloraDeveuiPayload = async (service: Iservice, loraDeveui: string, payload: string): Promise<ILoraDecodingResult | undefined> => {
-    logging.debug().message(`${EInfos.decodingPayload} : [${loraDeveui}]`, payload).to().log().file();
+    logging.message(`${EInfos.decodingPayload} : [${loraDeveui}]`, payload).toLogAndFile();
     return await executeSql(service, queries.getDecoderFromDeveui(loraDeveui))
         .then((res: Record<string, any>) => {
             try {
                 return decodingPayload({ ...res[0] }, payload);
             } catch (error) {
-                logging.error(EErrors.DecodingPayloadError, error).to().log().file();
+                logging.error(EErrors.DecodingPayloadError, error).toLogAndFile();
                 return undefined;
             }
         })

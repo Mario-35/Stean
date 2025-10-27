@@ -40,7 +40,7 @@ export class Query {
 
     private columnList(tableName: string, main: PgVisitor, element: PgVisitor): string[] | undefined {
         // get good entity name
-        const tempEntity = models.getEntity(main.ctx.service, tableName);
+        const tempEntity = models.getEntity(main.ctx.model, tableName);
         if (!tempEntity) {
             logging.error("no entity For", tableName);
             return;
@@ -132,14 +132,14 @@ export class Query {
                             const index = relations.indexOf(name);
                             // if is relation
                             if (element.entity && index >= 0) {
-                                item.entity = models.getEntity(main.ctx.service, name);
-                                item.query.where.add(`${item.query.where.notNull() === true ? " AND " : ""}${expand(main.ctx.service, element.entity.name, name)}`);
+                                item.entity = models.getEntity(main.ctx.model, name);
+                                item.query.where.add(`${item.query.where.notNull() === true ? " AND " : ""}${expand(main.ctx.model, element.entity.name, name)}`);
                                 // create sql query for this relatiion (IN JSON result)
                                 const query = this.pgQueryToString(this.create(item, false));
                                 if (query)
                                     relations[index] = `(${queries.asJson({
                                         query: query,
-                                        singular: models.isSingular(main.ctx.service, name),
+                                        singular: models.isSingular(main.ctx.model, name),
                                         strip: main.ctx.service.options.includes(EOptions.stripNull),
                                         count: false
                                     })}) AS ${doubleQuotes(name)}`;
@@ -149,7 +149,7 @@ export class Query {
                     // create all relations Query
                     if (toWhere === false)
                         relations
-                            .filter((e) => e.includes("SELECT") || Object.keys(main.ctx.model).includes(models.getEntityName(main.ctx.service, e) || e))
+                            .filter((e) => e.includes("SELECT") || Object.keys(main.ctx.model).includes(models.getEntityName(main.ctx.model, e) || e))
                             .forEach((rel: string) => {
                                 if (rel[0] == "(") select.push(rel);
                                 else if (element.entity && element.showRelations == true && main.onlyRef == false) {

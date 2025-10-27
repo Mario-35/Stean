@@ -8,14 +8,14 @@
 
 import { Common } from "./common";
 import { Id, IreturnResult, koaContext } from "../../types";
-import { getBigIntFromString } from "../../helpers";
+import { asyncForEach, doubleQuotes, getBigIntFromString, makeNull } from "../../helpers";
 import { messages } from "../../messages";
 import { EConstant, EErrors, EExtensions, EHttpCode } from "../../enums";
 import { logging } from "../../log";
-import { executeSqlValues } from "../helpers";
+import { executeSql, executeSqlValues } from "../helpers";
 import { _DEBUG } from "../../constants";
 import { queries } from "../queries";
-import { DATASTREAM, MULTIDATASTREAM } from "../../models/entities";
+import { DATASTREAM, MULTIDATASTREAM, OBSERVATION } from "../../models/entities";
 
 export class Observations extends Common {
     constructor(ctx: koaContext) {
@@ -26,6 +26,9 @@ export class Observations extends Common {
     // Prepare odservations
     async prepareInputResult(dataInput: Record<string, any>): Promise<object> {
         console.log(logging.whereIam(new Error().stack));
+        if (dataInput.hasOwnProperty("value")) {
+            return dataInput["value"][0];
+        }
         // IF MultiDatastream
         if (
             (dataInput[MULTIDATASTREAM.singular] && dataInput[MULTIDATASTREAM.singular] != null) ||
@@ -73,11 +76,59 @@ export class Observations extends Common {
         return input;
     }
 
+    columnsValues(keys: string[], input: string[]): string {
+        const res: string[] = [];
+        keys.forEach((elem: string, index: number) => {
+            if (Object.keys(OBSERVATION.relations).includes(elem)) {
+                if (typeof input[index] === "object") {
+                    try {
+                        const tmp = input[index]["name" as keyof object];
+                        res.push(`(SELECT id from "${elem.toLowerCase()}" WHERE name = '${tmp}')`);
+                    } catch (error) {
+                        res.push(`null`);
+                    }
+                }
+            } else
+                switch (elem) {
+                    case EConstant.id:
+                        break;
+                    case "result":
+                        if (typeof input[index] === "object") res.push(`'{"value" : [${input[index]}]}'`);
+                        else res.push(`'{"value" : ${input[index]}}'`);
+                        break;
+
+                    default:
+                        res.push(`'${input[index]}'`);
+                }
+        });
+        return makeNull(res.join(","));
+    }
+
     // Override post to prepare datas before use super class
     async post(dataInput: Record<string, any>): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
         if (dataInput) dataInput = await this.prepareInputResult(dataInput);
-        if (dataInput["import"]) {
+        if (dataInput.hasOwnProperty("components")) {
+            let keys: string[] = dataInput["components"];
+            let added = 0;
+            let errors = 0;
+            const sql = `INSERT INTO "${OBSERVATION.table}" (${keys
+                .filter((e) => e !== EConstant.id)
+                .map((e) => (Object.keys(OBSERVATION.relations).includes(e) ? doubleQuotes(`${e.toLowerCase()}_id`) : doubleQuotes(e)))
+                .join(",")})\n VALUES`;
+            await asyncForEach(dataInput["dataArray"], async (values: string[]) => {
+                try {
+                    await executeSql(this.ctx.service, `${sql} (${this.columnsValues(keys, values)})\n`).then(() => (added += 1));
+                } catch (error) {
+                    errors += 1;
+                }
+            });
+            return this.formatReturnResult({
+                body: {
+                    added: added,
+                    error: errors
+                }
+            });
         } else return await super.post(dataInput);
     }
 

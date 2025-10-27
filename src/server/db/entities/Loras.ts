@@ -14,7 +14,7 @@ import { messages } from "../../messages/";
 import { EConstant, EDatesType, EErrors, EHttpCode } from "../../enums";
 import { decodeloraDeveuiPayload } from "../../lora";
 import { logging } from "../../log";
-import { DATASTREAM, FEATUREOFINTEREST, OBSERVATION } from "../../models/entities";
+import { DATASTREAM, FEATUREOFINTEREST, MULTIDATASTREAM, OBSERVATION } from "../../models/entities";
 import { executeSql, executeSqlValues } from "../helpers";
 import { queries } from "../queries";
 
@@ -62,27 +62,33 @@ export class Loras extends Common {
         const addToStean = (key: string) => (this.stean[key] = dataInput[key]);
 
         if (dataInput) this.stean = await this.prepareInputResult(dataInput);
-        logging.debug().message("input formated", this.stean).to().log().file();
+        logging.message("input formated", this.stean).toLogAndFile();
 
         if (this.stean["frame"] === "000000000000000000") this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: EErrors.frameNotConform });
-        // search for MultiDatastream
-        if (notNull(dataInput["MultiDatastream"])) {
+        // search for MultiDatastream or Datastream
+
+        const searchStream = dataInput[MULTIDATASTREAM.singular] ? MULTIDATASTREAM.singular : dataInput[DATASTREAM.name] ? DATASTREAM.name : undefined;
+        if (searchStream && notNull(dataInput[searchStream])) {
             if (!notNull(this.stean["deveui"])) {
                 if (silent) return this.formatReturnResult({ body: EErrors.deveuiMessage });
                 else this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: EErrors.deveuiMessage });
             }
-            addToStean("MultiDatastream");
+            addToStean(searchStream);
+
+            // const uom = `unitOfMeasurement${searchStream === MULTIDATASTREAM.singular ? "s" : ""}`;
+            // if (!dataInput[uom]) {
+            //     await executeSql(this.ctx.service, queries.getFromIdOrName(searchStream.toLowerCase(), uom, dataInput[searchStream]))
+            //         .then((res: Record<string, any>) => {
+            //             this.stean["unitOfMeasurements"] = res[0][uom];
+            //         })
+            //         .catch((e) => {
+            //             console.log(e);
+            //         });
+            // }
+
             return await super.post(this.stean);
         }
-        // search for Datastream
-        if (notNull(dataInput["Datastream"])) {
-            if (!notNull(this.stean["deveui"])) {
-                if (silent) return this.formatReturnResult({ body: EErrors.deveuiMessage });
-                else this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: EErrors.deveuiMessage });
-            }
-            addToStean("Datastream");
-            return await super.post(this.stean);
-        }
+
         // search for deveui
         if (!notNull(this.stean["deveui"])) {
             if (silent) return this.formatReturnResult({ body: EErrors.deveuiMessage });
@@ -94,7 +100,7 @@ export class Loras extends Common {
             if (res[0]["datastream"] != null) return res[0]["datastream"][0];
             this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: messages.str(EErrors.deveuiNotFound, this.stean["deveui"]) });
         });
-        logging.debug().message("stream", stream).to().log().file();
+        logging.message("stream", stream).toLogAndFile();
         // search for frame and decode payload if found
         if (notNull(this.stean["frame"])) {
             const temp = await decodeloraDeveuiPayload(this.ctx.service, this.stean["deveui"], this.stean["frame"]);
@@ -133,7 +139,7 @@ export class Loras extends Common {
                 else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: EErrors.dataMessage });
             }
         }
-        logging.debug().message("Formated datas", this.stean["formatedDatas"]).to().log().file();
+        logging.message("Formated datas", this.stean["formatedDatas"]).toLogAndFile();
         this.stean["date"] = searchInJson(dataInput, ["datetime", "phenomenonTime", "timestamp", "Time"]);
         if (!this.stean["date"]) {
             if (silent) return this.formatReturnResult({ body: EErrors.noValidDate });
@@ -141,7 +147,7 @@ export class Loras extends Common {
         }
 
         if (stream["multidatastream"]) {
-            logging.debug().message("multiDatastream", stream).to().log().file();
+            logging.message("multiDatastream", stream).toLogAndFile();
             const listOfSortedValues: { [key: string]: number | null } = {};
             stream["keys"].forEach((element: string) => {
                 listOfSortedValues[element] = null;
@@ -160,7 +166,7 @@ export class Loras extends Common {
                     });
             });
 
-            logging.debug().message("Values", listOfSortedValues).to().log().file();
+            logging.message("Values", listOfSortedValues).toLogAndFile();
             if (Object.values(listOfSortedValues).filter((word) => word != null).length < 1) {
                 logging.error;
                 const errorMessage = `${EErrors.dataNotCorresponding} [${stream["keys"]}] with [${Object.keys(this.stean["formatedDatas"])}]`;
@@ -171,7 +177,7 @@ export class Loras extends Common {
             const temp = listOfSortedValues;
             if (temp && typeof temp == "object") {
                 const tempLength = Object.keys(temp).length;
-                logging.debug().message("data : Keys", `${tempLength} : ${stream["keys"].length}`).to().log().file();
+                logging.message("data : Keys", `${tempLength} : ${stream["keys"].length}`).toLogAndFile();
                 if (tempLength != stream["keys"].length) {
                     const errorMessage = messages.str(EErrors.sizeListKeys, String(tempLength), stream["keys"].length).toString();
                     if (silent) return this.formatReturnResult({ body: errorMessage });
@@ -240,7 +246,7 @@ export class Loras extends Common {
                 }
             });
         } else if (stream["datastream"]) {
-            logging.debug().message("datastream", stream["datastream"]).to().log().file();
+            logging.message("datastream", stream["datastream"]).toLogAndFile();
             const getFeatureOfInterest = getBigIntFromString(dataInput["FeatureOfInterest"]);
             const searchFOI: Record<string, any> = await executeSql(
                 this.ctx.service,
@@ -279,7 +285,7 @@ export class Loras extends Common {
                 .map((elem: string) => `"${elem}" = ${insertObject[elem]} AND `)
                 .concat(`"result" = ${resultCreate}`)
                 .join("");
-            logging.debug().message("searchDuplicate", searchDuplicate).to().log().file();
+            logging.message("searchDuplicate", searchDuplicate).toLogAndFile();
             const sql = `WITH "${EConstant.voidtable}" AS (${EConstant.voidSql})
               , datastream1 AS (SELECT id, _default_featureofinterest, thing_id FROM "${DATASTREAM.table}" WHERE id =${stream["id"]})
               , myValues ( "${Object.keys(insertObject).join(EConstant.doubleQuotedComa)}") AS (values (${Object.values(insertObject).join()}))

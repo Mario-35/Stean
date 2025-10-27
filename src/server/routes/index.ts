@@ -58,8 +58,8 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     if (splitLast(ctx.path, "/").toLocaleUpperCase().startsWith("REPLAYS(")) {
         await config.trace.rePlay(ctx);
     }
-    logging.debug().separator("decodeUrl", EColor.White, true).to().file().log();
-    logging.debug().message("decodedUrl", decodedUrl).to().file().log();
+    logging.separator("decodeUrl", EColor.White, true).to().file().log();
+    logging.message("decodedUrl", decodedUrl).to().file().log();
     // if service is not identified get out
     if (!decodedUrl.service) throw new Error(EErrors.noNameIdentified);
     // get service
@@ -74,7 +74,7 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     ctx.querystring = ctx.request.method === "POST" && ctx.originalUrl.includes(`${decodedUrl.version}/Loras`) ? "" : decodeURIComponent(querystring.unescape(ctx.querystring));
 
     // get model
-    ctx.model = models.getModelOptions(ctx.service);
+    ctx.model = models.getModel(ctx.service);
     try {
         // Init config context
         if (!ctx.service) return;

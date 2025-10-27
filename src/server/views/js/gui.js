@@ -70,6 +70,18 @@ function notifyError(titleMess, err) {
  * @param {*} titleMess 
  * @param {*} message 
  */
+function notifyOk(titleMess, message) {
+	new Ok({
+		title: titleMess,
+		content: message
+	});
+}
+
+/**
+ * Show message popup
+ * @param {*} titleMess 
+ * @param {*} message 
+ */
 function notifyAlert(titleMess, message) {
 	new Alert({
 		title: titleMess,

@@ -7,17 +7,16 @@
  */
 
 export const EConstant = Object.freeze({
-    rights: "SUPERUSER CREATEDB NOCREATEROLE INHERIT LOGIN NOREPLICATION NOBYPASSRLS CONNECTION LIMIT -1",
     repository: "https://github.com/Mario-35/Stean",
     branch: "main",
     id: "@iot.id",
     name: "@iot.name",
     navLink: "@iot.navigationLink",
     selfLink: "@iot.selfLink",
-    encoding: "encodingType",
-    count: "@iot.count",
     nextLink: "@iot.nextLink",
     prevLink: "@iot.prevLink",
+    encoding: "encodingType",
+    count: "@iot.count",
     rePlay: "@iot.rePlay",
     columnSeparator: "@|@",
     admin: "admin",

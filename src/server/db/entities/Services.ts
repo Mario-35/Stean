@@ -63,7 +63,7 @@ export class Services extends Common {
         if (!this.ctx.service.extensions.includes(EExtensions.users)) this.ctx.throw(EHttpCode.Unauthorized);
         if (dataInput && dataInput["create"] && dataInput["create"]["name"]) {
             return this.formatReturnResult({
-                body: await createService(this.ctx.service, dataInput)
+                body: await createService(dataInput)
             });
         }
         if (!userAuthenticated(this.ctx)) this.ctx.throw(EHttpCode.Unauthorized);
@@ -88,7 +88,6 @@ export class Services extends Common {
         console.log(logging.whereIam(new Error().stack));
         if (typeof idInput === "string") {
             const conn = await config.delete(idInput);
-            if (conn) logging.force("ehnohenohehnao");
             if (conn)
                 return this.formatReturnResult({
                     body: await conn
@@ -98,7 +97,7 @@ export class Services extends Common {
                             return res[0];
                         })
                         .catch((err: Error) => {
-                            logging.debug().error(EErrors.execQuery, err).to().log().file();
+                            logging.error(EErrors.execQuery, err).toLogAndFile();
                             return;
                         })
                 });

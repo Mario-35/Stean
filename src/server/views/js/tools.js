@@ -61,14 +61,32 @@ function removeProp(obj, propToDelete) {
 	  }
 	}
 	return obj;
-  }
+}
+
+function renameProp(obj, propOldName, propNewName) {
+	for (var property in obj) {
+	  if (obj.hasOwnProperty(property)) {
+		if (obj[property] == null) {
+			delete obj[property];
+		}
+		if (typeof obj[property] == "object") {
+			renameProp(obj[property], propOldName, propNewName);
+		} else if (property.includes(propOldName)) {
+			obj[propNewName] = obj[propOldName];
+			delete obj[propOldName];
+		}
+	  }
+	}
+	return obj;
+	}
+  
 
 function cleanData(obj) {
 	obj = removeProp(obj, "@iot.id");
 	obj = removeProp(obj, "selfLink");
 	obj = removeProp(obj, "navigationLink");
-
-	return obj
+	obj = removeProp(obj, "@iot.selfLink");
+	return obj;
 }
 
 async function getObservations(url) {
@@ -86,47 +104,130 @@ async function getObservations(url) {
 	}
 }
 
-async function copyFromService(obj) {
+async function copyEntity(src, dest, entity, debug) {
+	let flux  = await getDatas(src + entity + "?$select=id&$orderby=id asc");
+	setProgression(0);
+	for (let i = 0; i < + flux["@iot.count"]; i++) {
+		let datas  = await getDatas(src + entity + "("+ flux["value"][i]["@iot.id"] +")"); 
+		datas = cleanData(datas);
+		const d =debug ? '?$debug=true' : '';
+		await postDatas(dest + entity + d , datas);
+	};
+}
+
+async function copyFromService() {
+	if (optDistHost.value.trim() === "") {
+		notifyError("Error", "Distant root can't be empty");
+		return;
+	} 
+
 	const src = optDistHost.value;
 	const dest = `${optHost.value}/${optVersion.value}/`;
-	const foi  = await getDatas(src + "FeaturesOfInterest?$select=id");
-	for (let i = 0; i < +foi["@iot.count"]; i++) {
-		let datas  = await getDatas(src + "FeaturesOfInterest("+ foi["value"][i]["@iot.id"] +")"); 
-		datas = cleanData(datas);
-		await postDatas(dest+"FeaturesOfInterest", datas);
-	};
+	const root  = await getDatas(src);
+	console.log(root);
+	let loras = undefined;
+	root.value.forEach(element => {
+		if (element.name === 'Loras') loras = true;
+	});
+	copyEntity(src, dest, "FeaturesOfInterest");
+	copyEntity(src, dest, "Decoders");
 
-	let stream  = await getDatas(src + "Datastreams?$select=id");
+	let stream  = await getDatas(src + "Datastreams?$select=id&$orderby=id asc");
+	maxProg = +stream["@iot.count"];
 	for (let i = 0; i < +stream["@iot.count"]; i++) {
+		setProgression(i + 1);
 		const myId = stream["value"][i]["@iot.id"];
-		let datas  = await getDatas(src + "Datastreams("+ myId +")?$expand=Thing/Locations,Sensor,ObservedProperty"); 
-		datas = cleanData(datas);
-		console.log(datas);
-		
+		let datas  = await getDatas(src + "Datastreams("+ myId +")?$expand=Thing/Locations,Sensor,ObservedProperty");
+		datas = cleanData(datas);		
 		await postDatas(dest+"Datastreams", datas);
-		// let url = optHost.value + "/v1.1/Datastreams("+ myId +")/Observations?$resultFormat=csv";
-		// let url = optHost.value + "/v1.1/Datastreams("+ myId +")/Observations?$top=100000";
-		// while (url) {
-		// 	url = await getmy(url);
 	}    
 
-	stream  = await getDatas(src + "MultiDatastreams?$select=id");
+	stream  = await getDatas(src + "MultiDatastreams?$select=id&$orderby=id asc");
+	setProgression(0);
+	maxProg = +stream["@iot.count"];
 	for (let i = 0; i < +stream["@iot.count"]; i++) {
+		setProgression(i + 1);
 		const myId = stream["value"][i]["@iot.id"];
-		let datas  = await getDatas(src + "MultiDatastreams("+ myId +")?$expand=Thing/Locations,Sensor,ObservedProperties"); 
-		datas = cleanData(datas);
-		console.log(datas);
-		
+		let datas  = await getDatas(src + "MultiDatastreams("+ myId +")?$expand=Thing/Locations,Sensor,ObservedProperties" );
+		datas = cleanData(datas);		
 		await postDatas(dest+"MultiDatastreams", datas);
-		// let url = optHost.value + "/v1.1/Datastreams("+ myId +")/Observations?$top=100000";
-		// while (url) {
-			// 	url = await getmy(url);
-		}    
-		let url = src + "Observations?$expand=Datastream($select=name),MultiDatastream($select=name),FeatureOfInterest($select=name)&$orderby=phenomenonTime&$resultFormat=csv";
+	}
+
+
+	http://localhost:8029/rennesmetro/v1.1/
+
+	if (loras) {
+		stream  = await getDatas(src + "Loras?$expand=Datastreams($select=id),MultiDatastream($select=id),Decoder($select=id)&$orderby=id asc");
+		setProgression(0);
+		console.log(stream);
+		
+		maxProg = +stream["@iot.count"];
+		for (let i = 0; i < +stream["@iot.count"]; i++) {
+			setProgression(i + 1);
+			const myId = stream["value"][i]["@iot.id"];
+			let datas  = await getDatas(src + "MultiDatastreams("+ myId +")?$expand=Thing/Locations,Sensor,ObservedProperties" );
+			datas = cleanData(datas);		
+			await postDatas(dest+"MultiDatastreams", datas);
+		}
+	}
+
+	notifyOk("Copy structure from", src);
 };
 
-// }
 
-// http://localhost:8029/agrhys/v1.1/Datastreams(1)/Observations?$top=10000&$skip=2250000?$debug=true
+// copy service to actual service
+async function copyFromServiceObservations() {
+	setProgression(0); 
+	const src = optDistHost.value;
+	const dest = `${optHost.value}/${optVersion.value}/`;
+	let datas  = await getDatas(src + "Observations?$count=true"); 
+	if(!datas["@iot.count"]) return;
+	maxProg = +datas["@iot.count"];	
+	let prog = 0;
+	if (optDistHost.value.trim() === "") {
+		notifyError("Error", "Distant root can't be empty");
+		return;
+	} 
+	if (optDistHostStep.value === "") optDistHostStep.value = 5000;
+	let url = src + "Observations?$expand=Datastream($select=name),MultiDatastream($select=name),FeatureOfInterest($select=name)&$orderby=phenomenonTime&$resultFormat=dataArray&$top="+ optDistHostStep.value;
+	if (optDistHostStart.value || 0 > 0) url = url + '&$skip=' + optDistHostStart.value;
+	while (url) {
+		try {
+			prog += +optDistHostStep.value;
+			datas  = await getDatas(url); 
+			setProgression(prog);
+			url = datas["@iot.nextLink"] ? datas["@iot.nextLink"] : undefined;	
+			// url = undefined;	
+			await postDatas(dest+"Observations", datas);
+
+		} catch (err) {
+			notifyError("Error", err);
+		}
+    };
+	notifyOk("Copy observations", src);
+};
+// async function copyFromServiceObservations() {
+// 	if (optDistHost.value.trim() === "") {
+// 		notifyError("Error", "Distant root can't be empty");
+// 		return;
+// 	} 
+// 	if (optDistHostStep.value === "") optDistHostStep.value = 2000;
+// 	const src = optDistHost.value;
+// 	const dest = `${optHost.value}/${optVersion.value}/`;
+// 	let url = src + "Observations?$expand=Datastream($select=name),MultiDatastream($select=name),FeatureOfInterest($select=name)&$orderby=phenomenonTime&$top="+ optDistHostStep.value;
+// 	if (optDistHostStart.value || 0 > 0) url = url + '&$skip=' + optDistHostStart.value;
+// 	while (url) {
+// 		try {
+// 			let datas  = await getDatas(url); 
+// 			url = datas["@iot.nextLink"] ? datas["@iot.nextLink"] : undefined;
+// 			datas = cleanData(datas["value"]);		
+// 			await postDatas(dest+"Observations", renameProp(datas, "name", "@iot.name"));
+// 		} catch (err) {
+// 			notifyError("Error", err);
+// 		}
+//     };
+// 	notifyOk("Copy observations", src);
+// };
+
     
 

@@ -20,7 +20,7 @@ const executeSqlOneValues = async (service: Iservice, query: string): Promise<ob
     if (test) await config.connection(service.name).unsafe(`select multidatastream_partition(${test});`);
     console.log(logging.whereIam(new Error().stack));
     return new Promise(async function (resolve, reject) {
-        logging.debug().query(`executeSqlOneValues ${service.name}`, query).to().log().file();
+        logging.query(`executeSqlOneValues ${service.name}`, query).toLogAndFile();
         await config
             .connection(service.name)
             .unsafe(query)
@@ -29,7 +29,7 @@ const executeSqlOneValues = async (service: Iservice, query: string): Promise<ob
                 resolve(res[0]);
             })
             .catch((err: Error) => {
-                if (!isTest() && +err["code" as keyof object] === 23505) logging.debug().error(EErrors.execQuery, err).to().log().file();
+                if (!isTest() && +err["code" as keyof object] === 23505) logging.error(EErrors.execQuery, err).toLogAndFile();
                 reject(err);
             });
     });
@@ -47,7 +47,7 @@ const executeSqlMultiValues = async (service: Iservice, queries: string[]): Prom
                     result = { ...result, ...res[0] };
                 })
                 .catch((err: Error) => {
-                    if (!isTest() && +err["code" as keyof object] === 23505) logging.debug().error(EErrors.execQuery, err).to().log().file();
+                    if (!isTest() && +err["code" as keyof object] === 23505) logging.error(EErrors.execQuery, err).toLogAndFile();
                     reject(err);
                 });
         });

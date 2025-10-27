@@ -66,7 +66,7 @@ export class InsertFromCsv {
                 return returnValue;
                 // detect if is csv observation save
             } else if (Object.keys(OBSERVATION.columns).includes(splitColumns[0]) || Object.keys(OBSERVATION.columns).includes(splitColumns[1])) {
-                logging.debug().message("nothing found", "default").to().log().file();
+                logging.message("nothing found", "default").toLogAndFile();
                 const obs = Object.keys(OBSERVATION.columns).filter((e) => !e.includes("_id"));
                 Object.keys(OBSERVATION.relations).forEach((e) => obs.push(e));
                 splitColumns.forEach((e, i) => {

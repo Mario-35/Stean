@@ -27,7 +27,7 @@ export function formatColumnValue(columnName: string, value: any, column: Ientit
             ? value[EConstant.id]
             : simpleQuotes(value.trim());
     };
-    console.log(logging.debug().head(`${columnName} [${column.dataType}] ==> ${value}`).to().text());
+    // console.log(logging.head(`${columnName} [${column.dataType}] ==> ${value}`).to().text());
     if (value)
         switch (value) {
             case void 0:
@@ -65,15 +65,8 @@ export function formatColumnValue(columnName: string, value: any, column: Ientit
                             return simpleQuotes(typeof value === "object" ? JSON.stringify(value) : value);
                         }
                     default:
-                        logging.error(`ERROR formatColumnValue : ${columnName}`, value).to().log().file();
+                        logging.error(`ERROR formatColumnValue : ${columnName}`, value).toLogAndFile();
                         return undefined;
-                    // break;
                 }
-            // if (String(value).startsWith("(SELECT")) return `${value}`;
-            // try {
-            //     return value.includes("'") ? simpleQuotes(escapeSimpleQuotes(value)) : simpleQuotes(value);
-            // } catch (error) {
-            //     return simpleQuotes(value);
-            // }
         }
 }

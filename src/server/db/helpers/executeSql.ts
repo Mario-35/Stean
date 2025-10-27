@@ -16,7 +16,7 @@ import { EErrors } from "../../enums";
 const executeSqlOne = async (service: Iservice, query: string): Promise<object> => {
     console.log(logging.whereIam(new Error().stack));
     return new Promise(async function (resolve, reject) {
-        logging.debug().query(`executeSqlOne ${service.name}`, query).to().log().file();
+        logging.query(`executeSqlOne ${service.name}`, query).toLogAndFile();
         await config
             .connection(service.name)
             .unsafe(query)
@@ -24,7 +24,7 @@ const executeSqlOne = async (service: Iservice, query: string): Promise<object> 
                 resolve(res);
             })
             .catch((err: Error) => {
-                if (!isTest() && +err["code" as keyof object] === 23505) logging.debug().error(EErrors.execQuery, err).to().log().file();
+                if (!isTest() && +err["code" as keyof object] === 23505) logging.error(EErrors.execQuery, err).toLogAndFile();
                 reject(err);
             });
     });
@@ -37,7 +37,7 @@ const executeSqlMulti = async (service: Iservice, queries: string[]): Promise<ob
             .connection(service.name)
             .begin((sql) =>
                 queries.map(async (query: string) => {
-                    logging.debug().query(`executeSqlMulti ${service.name}`, query).to().log().file();
+                    logging.query(`executeSqlMulti ${service.name}`, query).toLogAndFile();
                     await sql.unsafe(query);
                 })
             )
@@ -45,7 +45,7 @@ const executeSqlMulti = async (service: Iservice, queries: string[]): Promise<ob
                 resolve(res);
             })
             .catch((err: Error) => {
-                if (!isTest() && +err["code" as keyof object] === 23505) logging.debug().error(EErrors.execQuery, err).to().log().file();
+                if (!isTest() && +err["code" as keyof object] === 23505) logging.error(EErrors.execQuery, err).toLogAndFile();
                 reject(err);
             });
     });

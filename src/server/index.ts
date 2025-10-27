@@ -88,7 +88,7 @@ export const server = isTest()
           .initialisation()
           .then(async () => {
               await config.afterInitialisation();
-              logging.logo().to().log().file();
+              logging.logo().toLogAndFile();
           })
           .catch((err) => {
               console.log(err);

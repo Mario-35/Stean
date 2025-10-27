@@ -12,6 +12,7 @@ import { EConstant, EExtensions, enumKeys, EOptions } from "../../enums";
 import { removeAllQuotes } from "../../helpers";
 import { logging } from "../../log";
 import { models } from "../../models";
+import { SERVICE } from "../../models/entities";
 import { paths } from "../../paths";
 import { Idatas, koaContext } from "../../types";
 import { listaddCssFiles, addCssFile } from "../css";
@@ -36,7 +37,7 @@ export class Admin extends CoreHtmlView {
      */
     private init() {
         if (this.adminConnection === true) this.adminHtml();
-        else this.adminLogin("admin");
+        else this.adminLogin(EConstant.admin);
     }
 
     /**
@@ -47,7 +48,7 @@ export class Admin extends CoreHtmlView {
         const services = config.getInfosForAll(this.ctx);
 
         const dest = this.ctx.header.referer?.split("/");
-        if (dest) dest[dest.length - 1] = "service";
+        if (dest) dest[dest.length - 1] = SERVICE.table;
 
         // create params object
         const params = {
