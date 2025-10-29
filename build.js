@@ -335,7 +335,7 @@ fs.writeFile(FINAL + "package.json", JSON.stringify(packageJson, null, 2), { enc
   }
 
 
-  const fileRelease = `stean_${packageJson.apiVersion}.zip`
+  const fileRelease = `stean_${packageJson.version}.zip`
   fs.writeFile(`./builds/stean_latest.info`, JSON.stringify({ "version": packageJson.version, "date": new Date().toLocaleDateString() + "-" + new Date().toLocaleTimeString()}), "utf-8");
 
   if (!mode.includes("docker")) zipDirectory(FINAL, `./builds/${fileRelease}`).then(function (e) {
