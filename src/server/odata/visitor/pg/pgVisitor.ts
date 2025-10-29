@@ -77,6 +77,22 @@ export class PgVisitor extends Visitor {
         this.id = id ? id : BigInt(0);
     }
 
+    changeContext(target: string | undefined) {
+        return {
+            key: undefined,
+            entity: undefined,
+            table: undefined,
+            target: target,
+            identifier: undefined,
+            relation: undefined,
+            literal: undefined,
+            sign: undefined,
+            sql: undefined,
+            in: undefined,
+            onEachResult: undefined
+        };
+    }
+
     addToIntervalColumns(name: string, column: IentityColumn) {
         // TODO test with create
         if (column) {
@@ -257,12 +273,14 @@ export class PgVisitor extends Visitor {
         this.count = Literal.convert(node.value.value, node.value.raw);
     }
     protected VisitFilter(node: Token, context: IodataContext) {
-        context.target = EQuery.Where;
+        context = this.changeContext(EQuery.Where);
+        // context.target = EQuery.Where;
         if (this.query.where.toString().trim() != "") this.addToWhere(" AND ", context);
         this.Visit(node.value, context);
     }
     protected VisitOrderBy(node: Token, context: IodataContext) {
-        context.target = EQuery.OrderBy;
+        context = this.changeContext(EQuery.OrderBy);
+        // context.target = EQuery.OrderBy;
         node.value.items.forEach((item: Token, i: number) => {
             this.Visit(item, context);
             if (i < node.value.items.length - 1) this.query.orderBy.add(", ");
@@ -281,7 +299,9 @@ export class PgVisitor extends Visitor {
         this.limit = +node.value.raw;
     }
     protected VisitSelect(node: Token, context: IodataContext) {
-        context.target = EQuery.Select;
+        context = this.changeContext(EQuery.Select);
+
+        // context.target = EQuery.Select;
         node.value.items.forEach((item: Token) => {
             this.Visit(item, context);
         });

@@ -252,7 +252,7 @@ fileone.addEventListener("change", (e) => {
 	} finally {
 		buttonGo();
 	}
-	entityOption.value = _PARAMS._DATAS.hasOwnProperty("CreateFile") ? "CreateFile" : "CreateObservations";
+	entityOption.value = "CreateObservations";
 	updateForm();
 });
 

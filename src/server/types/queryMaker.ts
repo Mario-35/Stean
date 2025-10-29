@@ -9,11 +9,11 @@
 import { EOperation } from "../enums";
 import { Ientity } from "./entity";
 
-export interface IqueryMaker  {
+export interface IqueryMaker {
     [key: string]: {
         type: EOperation;
         entity: Ientity;
         datas: object;
         keyId: string;
-    }
+    };
 }

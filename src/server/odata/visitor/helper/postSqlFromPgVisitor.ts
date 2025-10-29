@@ -17,7 +17,19 @@ import { PgVisitor } from "..";
 import { DATASTREAM } from "../../../models/entities";
 import { _DEBUG } from "../../../constants";
 import { queries } from "../../../db/queries";
-export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor): string | undefined {
+
+export function postSqlFromPgVisitor(input: Record<string, any>, src: PgVisitor): string | undefined {
+    // properties first
+    const pop: Record<string, any> = {};
+    Object.keys(input).map((e) => {
+        if (typeof input[e] !== "object") {
+            pop[e] = input[e];
+            delete input[e];
+        }
+    });
+
+    const datas = { ...pop, ...input };
+
     const formatInsertEntityData = (entity: string, datas: object, main: PgVisitor): Record<string, any> => {
         const goodEntity = models.getEntityName(main.ctx.model, entity);
         if (goodEntity && goodEntity in src.ctx.model) {
@@ -97,7 +109,7 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
         sorting.forEach((element: string) => {
             const canSpec = getIsId(queryMaker[element].entity) && getUniques(queryMaker[element].entity).length > 0;
             const isMain = postEntity.table == queryMaker[element].entity.table;
-            const retCol = isMain ? allFields : doubleQuotes(queryMaker[element].keyId);
+            const retCol = isMain ? allFields : queryMaker[element].keyId === "all" ? "*" : doubleQuotes(queryMaker[element].keyId);
 
             if (queryMaker[element].datas.hasOwnProperty(EConstant.id)) {
                 const searchId = queryMaker[element].datas[EConstant.id as keyof object];
@@ -154,7 +166,12 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
      * @returns result
      */
     const start = (datas: object, entity?: Ientity, parentEntity?: Ientity): object | undefined => {
-        console.log(logging.head(`start level ${level++}`).to().text());
+        console.log(
+            logging
+                .head(`start level ${level + 1}`)
+                .to()
+                .text()
+        );
         const returnValue: Record<string, any> = {};
         entity = entity ? entity : postEntity;
         parentEntity = parentEntity ? parentEntity : postParentEntity ? postParentEntity : postEntity;
@@ -266,18 +283,42 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
                 } else {
                     const tableName = names[subEntity.table];
                     const parentTableName = names[subParentEntity.table];
-                    logging.message(`Add Relation ${tableName} in`, parentTableName).toLogAndFile();
-                    addToQueryMaker(
-                        EOperation.Table,
-                        parentTableName,
-                        subParentEntity,
-                        {
-                            [relCardinality.rightKey]: `@(SELECT ${tableName}.id FROM ${tableName})@`
-                        },
-                        relCardinality.leftKey,
-                        undefined
-                    );
+                    if (entity.columns.hasOwnProperty(`_default_${subEntity.table}`) && entity.columns[`_default_${subEntity.table}`].entityRelation === subEntity.name) {
+                        const tableName = names[subEntity.table];
+                        const parentTableName = names[subParentEntity.table];
+                        logging.message(`Add default relation ${tableName} IN`, parentTableName).toLogAndFile();
+                        addToQueryMaker(EOperation.Relation, parentTableName, subParentEntity, `@(SELECT ${tableName}.id from ${tableName})@`, parentCardinality.leftKey, relCardinality.rightKey);
+                    } else if (entity.relations[subEntity.name].entityRelation === subEntity.relations[entity.name].entityRelation) {
+                        const tmp = entity.relations[subEntity.name].entityRelation;
+                        if (tmp) {
+                            const tableRel = models.getEntity(src.ctx.model, tmp);
+                            if (tableRel)
+                                addToQueryMaker(
+                                    EOperation.Table,
+                                    tableRel.name,
+                                    tableRel,
+                                    {
+                                        [`${entity.table}_id`]: `@(SELECT ${entity.table}.id FROM ${entity.table})@`,
+                                        [`${subEntity.table}_id`]: `@(SELECT id FROM ${subEntity.table}1)@`
+                                    },
+                                    "all",
+                                    undefined
+                                );
+                        }
+                    } else {
+                        addToQueryMaker(
+                            EOperation.Table,
+                            parentTableName,
+                            subParentEntity,
+                            {
+                                [relCardinality.rightKey]: `@(SELECT ${tableName}.id FROM ${tableName})@`
+                            },
+                            relCardinality.leftKey,
+                            undefined
+                        );
+                    }
                 }
+                logging.error("addAssociation", "Case not found").toLogAndFile();
             }
         };
         /**
@@ -320,7 +361,7 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
                     });
                 } else if (typeof datas[key as keyof object] === "object") {
                     if (Object.keys(entity.relations).includes(key)) {
-                        logging.message(`Found a object relation for ${entity.name}`, key).toLogAndFile();
+                        logging.message(`Found a relation for ${entity.name}`, key).toLogAndFile();
                         subBlock(key, datas[key as keyof object]);
                     }
                 } else returnValue[key as keyof object] = datas[key as keyof object];

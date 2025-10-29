@@ -2116,9 +2116,6 @@ export const testDatas: Record<string, any> = {
             "deveui": n.ui[0],
             "decoder_id": {
                 "@iot.name": "Sensecap"
-            },
-            "multidatastream_id": {
-                "@iot.name": `Lora ST1_50 [${n.ui[0]}]`
             }
         },
         {
@@ -2127,9 +2124,6 @@ export const testDatas: Record<string, any> = {
             "deveui": n.ui[1],
             "decoder_id": {
                 "@iot.name": "Sensecap"
-            },
-            "multidatastream_id": {
-                "@iot.name": `Lora ST3_75 [${n.ui[1]}]`
             }
         },
         {
@@ -2138,9 +2132,6 @@ export const testDatas: Record<string, any> = {
             "deveui": n.ui[2],
             "decoder_id": {
                 "@iot.name": "Sensecap"
-            },
-            "multidatastream_id": {
-                "@iot.name": `Lora ST4_25 [${n.ui[2]}]`
             }
         },
         {
@@ -2149,9 +2140,6 @@ export const testDatas: Record<string, any> = {
             "deveui": n.ui[3],
             "decoder_id": {
                 "@iot.name": "RHF1S001"
-            },
-            "multidatastream_id": {
-                "@iot.name": `THR Quince [${n.ui[3]}]`
             }
         },
         {
@@ -2163,7 +2151,40 @@ export const testDatas: Record<string, any> = {
             }
         }
     ],
-    "DatastreamsLoras": [
+    "LoraStreams": [
+        {
+            "lora_id": {
+                "@iot.name": "ST1_50"
+            },
+            "multidatastream_id": {
+                "@iot.name": `Lora ST1_50 [${n.ui[0]}]`
+            }
+        },
+        {
+            "lora_id": {
+                "@iot.name": "ST3_75"
+            },
+            "multidatastream_id": {
+                "@iot.name": `Lora ST3_75 [${n.ui[1]}]`
+            }
+        },
+        {
+            "lora_id": {
+                "@iot.name": "ST4_25"
+            },
+            "multidatastream_id": {
+                "@iot.name": `Lora ST4_25 [${n.ui[2]}]`
+            }
+        },
+        {
+            "lora_id": {
+                "@iot.name": "THR Quince"
+            },
+            "multidatastream_id": {
+                "@iot.name": `THR Quince [${n.ui[3]}]`
+            }
+        },
+
         {
             "datastream_id": {
                 "@iot.name": `Pressure sensor [${n.ui[4]}]`

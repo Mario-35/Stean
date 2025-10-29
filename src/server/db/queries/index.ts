@@ -353,16 +353,77 @@ FROM
       SELECT * FROM results`;
     }
 
+    streamFromDeveui(stream: string, input: string): string {
+        return `SELECT 
+            "lorastream"."${stream}_id" 
+          FROM 
+            "lorastream" 
+          WHERE 
+            "lorastream"."lora_id" = (SELECT id FROM "lora" WHERE deveui = '${input}')`;
+    }
     multiDatastreamFromDeveui(input: string): string {
-        return `(SELECT jsonb_agg(tmp.units -> 'name') AS keys FROM ( SELECT jsonb_array_elements("unitOfMeasurements") AS units ) AS tmp ) FROM "multidatastream" WHERE "multidatastream".id = ( SELECT "lora"."multidatastream_id" FROM "lora" WHERE "lora"."deveui" = '${input}' )`;
+        return `(SELECT jsonb_agg(tmp.units -> 'name') AS keys FROM ( SELECT jsonb_array_elements("unitOfMeasurements") AS units ) AS tmp ) FROM "multidatastream" WHERE "multidatastream".id = (${this.streamFromDeveui(
+            "multidatastream",
+            input
+        )})`;
     }
 
     multiDatastreamKeys(inputID: Id | string) {
         return `SELECT jsonb_agg(tmp.units -> 'name') AS keys FROM ( SELECT jsonb_array_elements("unitOfMeasurements") AS units FROM "multidatastream" WHERE id = ${inputID} ) AS tmp`;
     }
 
-    streamFromDeveui(input: string): string {
-        return `WITH multidatastream AS ( SELECT JSON_AGG(t) AS multidatastream FROM ( SELECT id AS multidatastream, id, _default_featureofinterest, thing_id, ( SELECT JSONB_AGG(tmp.units -> 'name') AS keys FROM ( SELECT JSONB_ARRAY_ELEMENTS("unitOfMeasurements") AS units ) AS tmp ) FROM "multidatastream" WHERE "multidatastream".id = ( SELECT "lora"."multidatastream_id" FROM "lora" WHERE "lora"."deveui" = '${input}' ) ) AS t ), datastream AS ( SELECT json_agg(t) AS datastream FROM ( SELECT id AS datastream, id, _default_featureofinterest, thing_id, '{}' :: jsonb AS keys FROM "datastream" WHERE "datastream".id = ( SELECT "lora"."datastream_id" FROM "lora" WHERE "lora"."deveui" = '${input}' ) ) AS t ) SELECT datastream.datastream, multidatastream.multidatastream FROM multidatastream, datastream`;
+    streamInfosFromDeveui(input: string): string {
+        return `WITH multidatastream AS (
+  SELECT 
+    JSON_AGG(t) AS multidatastream 
+  FROM 
+    (
+      SELECT 
+        id AS multidatastream, 
+        id, 
+        _default_featureofinterest, 
+        thing_id, 
+        (
+          SELECT 
+            JSONB_AGG(tmp.units -> 'name') AS keys 
+          FROM 
+            (
+              SELECT 
+                JSONB_ARRAY_ELEMENTS("unitOfMeasurements") AS units
+            ) AS tmp
+        ) 
+      FROM 
+        "multidatastream" 
+      WHERE 
+        "multidatastream".id = (${this.streamFromDeveui("multidatastream", input)}
+        )
+    ) AS t
+), 
+datastream AS (
+  SELECT 
+    json_agg(t) AS datastream 
+  FROM 
+    (
+      SELECT 
+        id AS datastream, 
+        id, 
+        _default_featureofinterest, 
+        thing_id, 
+        '{}' :: jsonb AS keys 
+      FROM 
+        "datastream"
+      WHERE 
+        "datastream".id = (${this.streamFromDeveui("datastream", input)}
+        )
+    ) AS t
+) 
+SELECT 
+  datastream.datastream, 
+  multidatastream.multidatastream 
+FROM 
+  multidatastream, 
+  datastream
+`;
     }
     multiDatastreamsUnitsKeys(searchId: Id | string): string {
         return `SELECT jsonb_agg(tmp.units -> 'name') AS keys FROM ( SELECT jsonb_array_elements("unitOfMeasurements") AS units FROM "multidatastream" WHERE id = ${searchId} ) AS tmp`;

@@ -482,7 +482,7 @@ export const infos: Record<string, any> = {
     },
     Decoders: {},
     Loras: {
-        definition: "Lora is an extension for adding observations in sensorThings from LORA sensors, the link with sensor is done by deveui (the unique ID of lora sensor) in things properties",
+        definition: "Lora is an extension for adding lora/lorawan sensor in sensorThings, the link with sensor is done by deveui (the unique ID of lora sensor)",
         reference: "",
         columns: {
             id: definitions.id,
@@ -496,6 +496,12 @@ export const infos: Record<string, any> = {
             MultiDatastream: "A Lora can have one-and-only-one MultiDatastream. One MultiDatastream SHALL occur in one-and-only-one Lora.",
             Decoder: "A Decoder can have zero-to-many Lora. One Lora SHALL occur in one-and-only-one Decoder."
         }
+    },
+    Payload: {
+        definition: "Lora is a pseudo entity for adding observations in sensorThings from LORA payload sensors.",
+        reference: "",
+        columns: {},
+        relations: {}
     },
     Users: {},
     Services: {

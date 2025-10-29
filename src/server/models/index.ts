@@ -21,7 +21,7 @@ import {
     SERVICE,
     CREATEOBSERVATION,
     DATASTREAM,
-    DATASTREAMLORA,
+    LORASTREAMS,
     DECODER,
     HISTORICALLOCATION,
     LORA,
@@ -33,9 +33,10 @@ import {
     LOCATIONHISTORICALLOCATION,
     OBSERVEDPROPERTY,
     THINGLOCATION,
-    LOG
+    LOG,
+    PAYLOAD
 } from "./entities";
-import { Geometry, Jsonb, Relation, Text } from "./types";
+import { Geometry, Jsonb, Text } from "./types";
 import { logging } from "../log";
 import { _DEBUG } from "../constants";
 import { executeSql, executeSqlValues } from "../db/helpers";
@@ -185,17 +186,18 @@ export class Models {
         base["CreateObservations"] = CREATEOBSERVATION;
         base["MultiDatastreamObservedProperties"] = MULTIDATASTREAMOBSERVEDPROPERTY;
         if ((extensions && extensions.includes(EExtensions.lora)) || !extensions) {
-            base["DatastreamsLoras"] = DATASTREAMLORA;
+            base["LoraStreams"] = LORASTREAMS;
             base["Decoders"] = DECODER;
             base["Loras"] = LORA;
             base["Datastreams"].relations["Loras"] = {
-                type: ERelations.hasOne,
-                entityRelation: "DatastreamsLoras"
+                type: ERelations.hasMany,
+                entityRelation: "LoraStreams"
             };
-            base["MultiDatastreams"].relations["Lora"] = {
-                type: ERelations.hasOne
+            base["MultiDatastreams"].relations["Loras"] = {
+                type: ERelations.hasMany,
+                entityRelation: "LoraStreams"
             };
-            base["MultiDatastreams"].columns["lora_id"] = new Relation("Lora").column();
+            base["Payload"] = PAYLOAD;
         }
         if ((extensions && extensions.includes(EExtensions.users)) || !extensions) {
             base["Users"] = USER;
@@ -405,10 +407,16 @@ export class Models {
     public getModel(service?: Iservice | string): Ientities {
         if (service) {
             service = this.getService(service);
-            if (!Models.models[service.name]) Models.models[service.name] = this.createModel(service.apiVersion, service.options, service.extensions);
+            // if (!Models.models[service.name]) Models.models[service.name] = this.createModel(service.apiVersion, service.options, service.extensions);
+            Models.models[service.name] = this.createModel(service.apiVersion, service.options, service.extensions);
             return Models.models[service.name];
         }
         return this.createVersion("v1.1");
+    }
+
+    public getCreateModel(service: Iservice | string): Ientities {
+        service = this.getService(service);
+        return this.createModel(service.apiVersion, service.options, service.extensions);
     }
 
     private createModel(version: string, options: string[], extensions: typeof typeExtensions): Ientities {

@@ -73,7 +73,7 @@ export const relationInfos = (model: Ientities, entityName: string, relationName
             };
             console.log(
                 logging
-                    .message("leftRelation ; rightRelation", `${leftRelation.type} : ${rightRelation ? rightRelation.type : "undefined"}`)
+                    .message("Search For --> leftRelation : rightRelation", `${leftRelation.type} : ${rightRelation ? rightRelation.type : "undefined"}`)
                     .to()
                     .text()
             );

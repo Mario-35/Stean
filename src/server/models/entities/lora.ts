@@ -20,17 +20,16 @@ export const LORA: Ientity = new Entity("Loras", {
         description: new Text().notNull().default(EInfos.noDescription).column(),
         properties: new Jsonb().column(),
         deveui: new Text().unique().column(),
-        decoder_id: new Relation("Decoders").notNull().column(),
-        datastream_id: new Relation("Datastreams").unique().column(),
-        multidatastream_id: new Relation("MultiDatastreams").unique().column()
+        decoder_id: new Relation("Decoders").notNull().column()
     },
     relations: {
         Datastreams: {
-            type: ERelations.belongsToMany,
-            entityRelation: "DatastreamsLoras"
+            type: ERelations.hasMany,
+            entityRelation: "LoraStreams"
         },
-        MultiDatastream: {
-            type: ERelations.hasOne
+        MultiDatastreams: {
+            type: ERelations.hasMany,
+            entityRelation: "LoraStreams"
         },
         Decoder: {
             type: ERelations.belongsTo
