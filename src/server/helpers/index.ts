@@ -53,6 +53,7 @@ export { httpsDownload } from "./httpsDownload";
 export { httpsDownloadJSON } from "./httpsDownloadJson";
 export { upload } from "./upload";
 export { connectWeb } from "./connectWeb";
+export { reorganiseRecord } from "./reorganiseRecord";
 export { Csv } from "./csv";
 export const removeFirstAndEnd = (input: string, char: string) => (input[0] === char && input[input.length - 1] === char[0] ? input.slice(0, -1).slice(1).trim() : input);
 export const removeAllQuotes = (input: string): string => input.replace(/['"]+/g, "");

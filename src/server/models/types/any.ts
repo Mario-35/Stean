@@ -42,18 +42,16 @@ export class Any extends Core {
                       `result @? '$.value ? (@EXPRESSION@ @)'`;
             } else {
                 return options.valueskeys || options.numeric
-                    ? `CASE
-                            WHEN JSONB_TYPEOF( ${doubleQuotes(options.columnName)}->'value') = 'number' THEN (${doubleQuotes(options.columnName)}->${options.numeric == true ? "" : ">"}'value')::jsonb
-                            WHEN JSONB_TYPEOF( ${doubleQuotes(options.columnName)}->'value') = 'array'  THEN (${doubleQuotes(options.columnName)}->'${
+                    ? `CASE \n\t\tWHEN JSONB_TYPEOF( ${doubleQuotes(options.columnName)}->'value') = 'number' THEN (${doubleQuotes(options.columnName)}->${
+                          options.numeric == true ? "" : ">"
+                      }'value')::jsonb \n\t\tWHEN JSONB_TYPEOF( ${doubleQuotes(options.columnName)}->'value') = 'array'  THEN (${doubleQuotes(options.columnName)}->'${
                           options.valueskeys == true ? "valueskeys" : "value"
-                      }')::jsonb
-                            ELSE (${doubleQuotes(options.columnName)}->'${options.valueskeys == true ? "valueskeys" : "value"}')::jsonb
-                        END${as(options)}`
-                    : `CASE
-                            WHEN JSONB_TYPEOF( ${doubleQuotes(options.columnName)}->'value') = 'number' THEN (${doubleQuotes(options.columnName)}->>'value')::jsonb
-                            WHEN JSONB_TYPEOF( ${doubleQuotes(options.columnName)}->'value') = 'array'  THEN (${doubleQuotes(options.columnName)}->'value')::jsonb
-                            ELSE (${doubleQuotes(options.columnName)}->'value')::jsonb
-                        END${as(options)}`;
+                      }')::jsonb \n\t\tELSE (${doubleQuotes(options.columnName)}->'${options.valueskeys == true ? "valueskeys" : "value"}')::jsonb \n\tEND${as(options)}`
+                    : `CASE \n\t\tWHEN JSONB_TYPEOF( ${doubleQuotes(options.columnName)}->'value') = 'number' THEN (${doubleQuotes(
+                          options.columnName
+                      )}->>'value')::jsonb \n\t\tWHEN JSONB_TYPEOF( ${doubleQuotes(options.columnName)}->'value') = 'array'  THEN (${doubleQuotes(
+                          options.columnName
+                      )}->'value')::jsonb \n\t\tELSE (${doubleQuotes(options.columnName)}->'value')::jsonb \n\tEND${as(options)}`;
             }
         };
     }

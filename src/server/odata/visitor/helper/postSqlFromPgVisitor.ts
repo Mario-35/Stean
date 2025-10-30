@@ -6,7 +6,7 @@
  *
  */
 
-import { doubleQuotes, getBigIntFromString, simpleQuotes } from "../../../helpers";
+import { doubleQuotes, getBigIntFromString, reorganiseRecord, simpleQuotes } from "../../../helpers";
 import { Id, Ientity, IqueryMaker } from "../../../types";
 import { EConstant, EOperation, EOptions, EentityType } from "../../../enums";
 import { models } from "../../../models";
@@ -18,18 +18,8 @@ import { DATASTREAM } from "../../../models/entities";
 import { _DEBUG } from "../../../constants";
 import { queries } from "../../../db/queries";
 
-export function postSqlFromPgVisitor(input: Record<string, any>, src: PgVisitor): string | undefined {
-    // properties first
-    const pop: Record<string, any> = {};
-    Object.keys(input).map((e) => {
-        if (typeof input[e] !== "object") {
-            pop[e] = input[e];
-            delete input[e];
-        }
-    });
-
-    const datas = { ...pop, ...input };
-
+export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor): string | undefined {
+    datas = reorganiseRecord(datas);
     const formatInsertEntityData = (entity: string, datas: object, main: PgVisitor): Record<string, any> => {
         const goodEntity = models.getEntityName(main.ctx.model, entity);
         if (goodEntity && goodEntity in src.ctx.model) {

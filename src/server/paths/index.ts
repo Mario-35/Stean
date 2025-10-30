@@ -64,12 +64,6 @@ class Paths {
     packageFile(myPath?: string) {
         return myPath ? path.join(myPath, this.pkg) : path.join(this.root, this.pkg);
     }
-
-    newVersion(create: boolean) {
-        const folder = path.join(this.root, "newVersion/");
-        if (create === true && !fs.existsSync(folder)) fs.mkdirSync(folder);
-        return folder;
-    }
 }
 
 export const paths = new Paths();
