@@ -90,16 +90,22 @@
               <div class="patrom-accordion-content">
                 <div class="patrom-row">
                   <!-- Root -->
-                  <div class="patrom-col-span-12">
+                  <div class="patrom-col-span-10">
                       <label for="optHost">Root :</label>
                       <input id="optHost" name="optHost" type="text" class="patrom-text-input fillCol">
                   </div>
+                  <!-- Version -->
+                  <div class="patrom-col-span-2">
+                    <label for="optVersion">Version :</label>
+                    <input id="optVersion" name="optVersion" maxlength="5" type="text" class="patrom-text-input fillCol" size="4">
+                  </div>
                 </div>
                 <div class="patrom-row">
-                  <!-- Version -->
-                  <div class="patrom-col-span-4">
-                      <label for="optVersion">Version :</label>
-                      <input id="optVersion" name="optVersion" maxlength="5" type="text" class="patrom-text-input fillCol" size="4">
+                  <!-- Count -->
+                  <div class="patrom-col-span-4">                    
+                    <label class="patrom-checkbox-labeled fillCol">Count <input type="checkbox" id="countOption">
+                      <span class="checkmark"></span>
+                    </label>
                   </div>
                   <!-- Top -->
                   <div class="patrom-col-span-4">
@@ -140,25 +146,19 @@
               <div class="patrom-accordion-content">
                 <div class="patrom-row">
                   <!-- Property -->
-                  <div class="patrom-col-span-6">
+                  <div class="patrom-col-span-8">
                     <label for="propertyOption">Property : </label>
                     <select class="patrom-select fillCol" tabindex="1" id="propertyOption"></select>
                   </div>
                   <!-- Only Value -->
-                  <div class="patrom-col-span-3">
-                    <label class="patrom-checkbox-labeled fillCol">Only value <input type="checkbox" id="onlyValueOption">
-                      <span class="checkmark"></span>
-                    </label>
-                  </div>
-
-                  <!-- Count & ref -->
-                  <div class="patrom-col-span-3">
-                    <label class="patrom-checkbox-labeled fillCol">Count <input type="checkbox" id="countOption">
-                      <span class="checkmark"></span>
-                    </label>
-                    <label class="patrom-checkbox-labeled fillCol">Ref <input type="checkbox" id="refOption">
-                      <span class="checkmark"></span>
-                    </label>
+                  <div class="patrom-col-span-4">
+                      <label class="patrom-checkbox-labeled fillCol">Only value <input type="checkbox" id="onlyValueOption">
+                        <span class="checkmark"></span>
+                      </label>
+                      <!-- Count & ref -->
+                      <label class="patrom-checkbox-labeled fillCol">Ref <input type="checkbox" id="refOption">
+                        <span class="checkmark"></span>
+                      </label>
                   </div>
                 </div>
               </div>

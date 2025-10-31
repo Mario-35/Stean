@@ -133,8 +133,8 @@ async function copyFromService() {
 	copyEntity(src, dest, "Decoders");
 
 	let stream = await getDatas(src + "Datastreams?$select=id&$orderby=id asc");
-	maxProg = +stream["@iot.count"];
-	for (let i = 0; i < +stream["@iot.count"]; i++) {
+	maxProg = +stream["@iot.count"] || +stream["value"].length;
+	for (let i = 0; i < maxProg; i++) {
 		setProgression(i + 1);
 		const myId = stream["value"][i]["@iot.id"];
 		let datas = await getDatas(src + "Datastreams(" + myId + ")?$expand=Thing/Locations,Sensor,ObservedProperty");
