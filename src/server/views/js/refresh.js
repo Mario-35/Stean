@@ -7,8 +7,8 @@ function updateForm() {
 	populateSelect(resultFormatOption, tempOptions, getDefaultValue(resultFormatOption, tempOptions));
 	getElement("actionForm").action = `${optHost.value}/${optVersion.value}/${entityOption.value}${entityOption.value === "CreateObservations" || isObservation() ? "" : `` }`;
 	tabEnabledDisabled("propertyTab", (idOption.value != ""));
-	tabEnabledDisabled("toolsTab", _PARAMS.user.canPost);
-	tabEnabledDisabled("importTab", false);
+	tabEnabledDisabled("toolsTab", false);
+	tabEnabledDisabled("importTab", _PARAMS.user.canPost);
 	tabEnabledDisabled("observationsTab", isObservation());
 	tabEnabledDisabled("AdminTab", (_PARAMS.user.admin || _PARAMS.user.superAdmin));
 	ended("updateForm");
