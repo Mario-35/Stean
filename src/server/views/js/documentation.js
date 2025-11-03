@@ -98,7 +98,7 @@ function getStructure(input) {
 function replaceProxy(input) {
 	console.log(_PARAMS);
 	
-	return input.replaceAll('proxy', _PARAMS.services['test'].linkBase + '/');
+	return input.replaceAll('proxy', _PARAMS.services['test'].linkBase );
 }
 
 function showDoc(event) {

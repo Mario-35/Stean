@@ -30,7 +30,7 @@ export const testLog = (input: any) => {
     process.stdout.write(util.inspect(input, { showHidden: false, depth: null, colors: false }));
     process.stdout.write("\n");
 };
-export const proxy = (moi: boolean) => (moi !== true ? "http://localhost:8029/test" : `http://PROXY/`);
+export const proxy = (test: boolean) => (test !== true ? "http://localhost:8029/test" : `http://PROXY`);
 import packageJson from "../../../package.json";
 import { EConstant, EEncodingType } from "../../server/enums";
 import { highlight, languages } from "prismjs";
@@ -72,10 +72,10 @@ export const defaultPostPatch = (lang: string, method: string, request: string):
         case "HTTP":
             return highlight(`${request}`, languages.javascript, "javascript");
         case "CURL":
-            return highlight(`curl -X ${method.toUpperCase()} -H 'Content-Type: application/json' -d 'DATASSATAD' proxy${request}`, languages.http, "http");
+            return highlight(`curl -X ${method.toUpperCase()} -H 'Content-Type: application/json' -d 'DATASSATAD' proxy/${request}`, languages.http, "http");
         case "JAVASCRIPT":
             return highlight(
-                `const response = await fetch("proxy${request}", {\r\n${EConstant.tab}method: "${method.toUpperCase()}",\r\n\theaders: {\r\n${EConstant.tab}    "Content-Type": "${
+                `const response = await fetch("proxy/${request}", {\r\n${EConstant.tab}method: "${method.toUpperCase()}",\r\n\theaders: {\r\n${EConstant.tab}    "Content-Type": "${
                     EEncodingType.json
                 }",\r\n\t},\r\n\tbody:DATASSATAD\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();`,
                 languages.javascript,
@@ -83,7 +83,7 @@ export const defaultPostPatch = (lang: string, method: string, request: string):
             );
         case "PYTHON":
             return highlight(
-                `import requests\r\nimport json\r\nresponse_API = requests.${method}('proxy${request}', (headers = { "Content-Type": "${EEncodingType.json}" }), (data = json.dumps(DATASSATAD)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)`,
+                `import requests\r\nimport json\r\nresponse_API = requests.${method}('proxy/${request}', (headers = { "Content-Type": "${EEncodingType.json}" }), (data = json.dumps(DATASSATAD)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)`,
                 languages.python,
                 "python"
             );
@@ -101,16 +101,16 @@ export const defaultDelete = (lang: string, request: string): string => {
         case "HTTP":
             return highlight(`${request}`, languages.javascript, "javascript");
         case "CURL":
-            return `curl -DELETE "proxy${request}"`;
+            return `curl -DELETE "proxy/${request}"`;
         case "JAVASCRIPT":
             return highlight(
-                `const response = await fetch("proxy${request}", {\r\n\tmethod: "DELETE"\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();`,
+                `const response = await fetch("proxy/${request}", {\r\n\tmethod: "DELETE"\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();`,
                 languages.javascript,
                 "javascript"
             );
         case "PYTHON":
             return highlight(
-                `import requests\r\nimport json\r\nresponse_API = requests.delete('proxy${request}')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)`,
+                `import requests\r\nimport json\r\nresponse_API = requests.delete('proxy/${request}')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)`,
                 languages.python,
                 "python"
             );
@@ -122,16 +122,16 @@ export const defaultGet = (lang: string, request: string): string => {
         case "HTTP":
             return highlight(`${request}`, languages.javascript, "javascript");
         case "CURL":
-            return `curl -GET "proxy${request}"`;
+            return `curl -GET "proxy/${request}"`;
         case "JAVASCRIPT":
             return highlight(
-                `const response = await fetch("proxy${request}", {\r\n\tmethod: "GET",\r\n\theaders: {\r\n\t    "Content-Type": ${EEncodingType.json},\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();`,
+                `const response = await fetch("proxy/${request}", {\r\n\tmethod: "GET",\r\n\theaders: {\r\n\t    "Content-Type": ${EEncodingType.json},\r\n\t},\r\n});\r\nconst valueJson = await response.json();\r\nconst valueTxt = await response.text();`,
                 languages.javascript,
                 "javascript"
             );
         case "PYTHON":
             return highlight(
-                `import requests\r\nimport json\r\nresponse_API = requests.get('proxy${request}')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)`,
+                `import requests\r\nimport json\r\nresponse_API = requests.get('proxy/${request}')\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)`,
                 languages.python,
                 "python"
             );
