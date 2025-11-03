@@ -8,9 +8,10 @@
  */
 
 export enum EOptions {
-    forceHttps = "forceHttps",
-    stripNull = "stripNull",
     canDrop = "canDrop",
-    unique = "unique",
-    optimized = "optimized"
+    forceHttps = "forceHttps",
+    locked = "locked",
+    optimized = "optimized",
+    stripNull = "stripNull",
+    unique = "unique"
 }

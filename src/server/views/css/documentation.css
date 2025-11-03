@@ -11,6 +11,9 @@
   --meth-infos: gray;
 }
 
+.ogc-ref {
+  color: #23b90d;
+}
 #content {
   margin-top: 10px;
   padding-left: 10px;

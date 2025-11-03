@@ -20,8 +20,9 @@ function getFormatOptions() {
 	return temp;
 }
 
-function tabEnabledDisabled(objName, test) {
+function tabEnabledDisabled(objName, test, testLocked) {
 	const elemId = (typeof objName === "string") ? document.getElementsByName(objName)[0] : objName;
+	if (testLocked=== true && _PARAMS.services[_PARAMS.decodedUrl.configName].service.options.includes("locked")) test = false;
 	if (typeof(elemId) != 'undefined' && elemId != null) {
 		if (test === true) elemId.removeAttribute("disabled");
 		else {
@@ -97,9 +98,9 @@ function setProgression(nb) {
 	const subs = getRelationsList(tempEntity);
 	populateSelect(subentityOption, subs, subs.includes(_PARAMS.subentityOption) ? _PARAMS.subentityOption : _NONE, true);
 	populateSelect(entityOption, Object.keys(_PARAMS._DATAS), tempEntity);
-	populateSelect(services, Object.keys(_PARAMS.services), _PARAMS.decodedUrl.root.split("/").pop());
+	populateSelect(services, Object.keys(_PARAMS.services), _PARAMS.decodedUrl.configName);
 	populateSelect(methodOption, entityOption.value == "Loras" ? ["GET", "POST"] : _PARAMS.methods, _PARAMS.method ? _PARAMS.method : "GET");
-	
+
 	idOption.value = _PARAMS.decodedUrl.idStr || _PARAMS.decodedUrl.id;
 	idSubOption.value = 0;
 

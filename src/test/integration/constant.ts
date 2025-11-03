@@ -212,7 +212,9 @@ export const prepareToApiDoc = (input: IApiInput): IApiDoc => {
         type: input.type,
         version: "1.1.0",
         apiPermission: input.apiPermission,
-        description: `${input.description} ${input.reference ? ` <a href="${input.reference}" target="_blank">[${input.reference.includes("docs.ogc.org") ? "OGC " : ""}reference]</a>` : ""}`,
+        description: `${input.description} ${
+            input.reference ? ` <a class="ogc-ref" href="${input.reference}" target="_blank">[${input.reference.includes("docs.ogc.org") ? "OGC " : ""}reference]</a>` : ""
+        }`,
         request: input.request,
         examples: input.examples,
         apiError: input.apiError,

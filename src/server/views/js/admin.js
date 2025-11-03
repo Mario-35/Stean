@@ -281,7 +281,7 @@ async function showDecoderInfos(name, decoder) {
 function showInfos(service) {
 	const li = (operation) => `<li class="card-list-item canPoint icon-${_PARAMS.services[service]["service"].options.includes(operation) ? "yes" : "no" }"  onclick="selectChange('${service}', this)">${operation}</li>`;
 	const ul = ['<legend>Options</legend>','<ul class="card-list">'];
-	["canDrop","forceHttps","stripNull","unique","optimized"].forEach( e => ul.push(li(e)));
+	["canDrop","forceHttps","stripNull","unique","locked"].forEach( e => ul.push(li(e)));
 	ul.push("</ul>");	
 	getElement("options"+ service).innerHTML = ul.join("");
 }

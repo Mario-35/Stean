@@ -18,12 +18,13 @@ function getExamples(input, datas) {
 			`<label for="tab${i}">${lang}</label>`,
 			`<div class="patrom-tab">`,
 			`<code class='language-${lang}'>`,
-			input[lang].replace('DATASSATAD', datas),
+			
+			lang === 'http' ? `${_PARAMS.services['test'].linkBase}/${input[lang].replace('DATASSATAD', datas)}`: input[lang].replace('DATASSATAD', datas),
 			`</code>`,
 			`</div>`);
 	});
 	lines.push('</div>');
-	return lines.join("");
+	return replaceProxy(lines.join(""));
 }
 
 function getContent(input) {
@@ -94,10 +95,17 @@ function getStructure(input) {
 	return lines.join("");
 }
 
+function replaceProxy(input) {
+	console.log(_PARAMS);
+	
+	return input.replaceAll('proxy', _PARAMS.services['test'].linkBase + '/');
+}
+
 function showDoc(event) {
 	const main = event ? getMenuMain(event.srcElement) : 'sensorThings';
-	const actual = docDatas[main][event ? event.srcElement.id : 0];
+	const actual = docDatas[main][event ? event.srcElement.id : 0];	
 	const content = getContent(actual);
+	console.log(content);
 
 	document.getElementById("content").innerHTML = content;
 	document.getElementById("two").style.overflow = 'auto';
@@ -105,14 +113,14 @@ function showDoc(event) {
 	if (actual.params) {
 	  const jsonViewerParams = new JSONViewer();
 	  params.appendChild(jsonViewerParams.getContainer());  
-	  jsonViewerParams.showJSON(JSON.parse(actual.params));
+	  jsonViewerParams.showJSON(JSON.parse(replaceProxy(actual.params)));
 	}  
 
 	if (actual.success) {
 		const jsonViewerSuccess = new JSONViewer();
 		success.appendChild(jsonViewerSuccess.getContainer());
 		try {
-			jsonViewerSuccess.showJSON(JSON.parse(actual.success));
+			jsonViewerSuccess.showJSON(JSON.parse(replaceProxy(actual.success)));
 		} catch (error) {
 			console.log(error);			
 		}
