@@ -41,3 +41,30 @@
     add replay key word
     add location header return
     
+## version 1.0.0
+    update doc url
+    update multi datastream graph
+    update for options modifs
+    update error not found code
+    Add synonms admin modif
+    better admin css
+    update documentation
+    update script
+
+## version 1.1.0
+    correction ref with dataArray
+    correction components syntax in dataArray
+    ref correction
+    add tests dates in doc
+    import query correction
+    perform filter with jsonpath
+
+## version 1.2.0
+    add partitionned for Datastream
+    
+## version 1.2.1
+    complete proxy in help
+    add locked options
+    add partitionned for multiDatastream
+    correction odata context and graph
+    add copy existing service 
