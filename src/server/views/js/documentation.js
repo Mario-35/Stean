@@ -95,9 +95,7 @@ function getStructure(input) {
 	return lines.join("");
 }
 
-function replaceProxy(input) {
-	console.log(_PARAMS);
-	
+function replaceProxy(input) {	
 	return input.replaceAll('proxy', _PARAMS.services['test'].linkBase );
 }
 

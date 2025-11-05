@@ -308,7 +308,6 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
                         );
                     }
                 }
-                logging.error("addAssociation", "Case not found").toLogAndFile();
             }
         };
         /**

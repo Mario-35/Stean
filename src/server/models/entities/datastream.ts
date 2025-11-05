@@ -26,7 +26,7 @@ export const DATASTREAM = new Entity("Datastreams", {
         thing_id: new Relation("Things").column(),
         observedproperty_id: new Relation("ObservedProperties").column(),
         sensor_id: new Relation("Sensors").column(),
-        _default_featureofinterest: new Relation("FeaturesOfInterest").default(1).column()
+        _default_featureofinterest: new SmallInt().column()
     },
     relations: {
         Thing: {
@@ -40,9 +40,6 @@ export const DATASTREAM = new Entity("Datastreams", {
         },
         Observations: {
             type: ERelations.hasMany
-        },
-        FeatureOfInterest: {
-            type: ERelations.defaultUnique
         }
     }
 }).toEntity();

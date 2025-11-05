@@ -13,6 +13,7 @@ import { logging } from "../../log";
 import { MULTIDATASTREAM } from "../../models/entities";
 import { EErrors, EHttpCode } from "../../enums";
 import { _DEBUG } from "../../constants";
+import { queries } from "../queries";
 
 export class MultiDatastreams extends Common {
     constructor(ctx: koaContext) {
@@ -25,7 +26,11 @@ export class MultiDatastreams extends Common {
         // no data input
         if (!input) this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: EErrors.noData });
         const temp = this.getKeysValue(input, ["FeaturesOfInterest", "foi"]);
-        if (temp) input["_default_featureofinterest"] = temp;
+        if (temp) {
+            input["_default_featureofinterest"] = `@(${queries.getFromIdOrName("featureofinterest", "id", input[temp])})@`;
+            delete input[temp];
+        }
+
         if (input["multiObservationDataTypes"] && input["unitOfMeasurements"] && input["ObservedProperties"]) {
             if (input["multiObservationDataTypes"].length != input["unitOfMeasurements"].length)
                 this.ctx.throw(EHttpCode.badRequest, {

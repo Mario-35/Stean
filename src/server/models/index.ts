@@ -111,14 +111,16 @@ export class Models {
                 };
             });
         });
-        await executeSql(
+        await executeSqlValues(
             ctx.service,
-            ` SELECT JSON_AGG(t) AS results FROM ( SELECT ${Object.keys(ctx.model)
-                .filter((e) => ctx.model[e].table !== "")
-                .map((e) => `(SELECT COUNT('${ctx.model[e].orderBy.split(" ")[0]}') FROM "${ctx.model[e].table}") AS "${ctx.model[e].name}"${EConstant.return}`)
-                .join()}) AS t`
-        ).then((res) => {
-            result["tables"] = res[0 as keyof object]["results"][0 as keyof object];
+            `SELECT array_agg(table_name) FROM information_schema.tables WHERE table_schema LIKE 'public' AND table_type LIKE 'BASE TABLE' AND position('_' in table_name) = 0`
+        ).then(async (res: Record<string, any>) => {
+            await executeSql(
+                ctx.service,
+                ` SELECT JSON_AGG(t) AS results FROM ( SELECT ${res[0 as keyof object].map((e: string) => `(SELECT COUNT(*) FROM "${e}") AS "${e}"${EConstant.return}`).join()}) AS t`
+            ).then((res) => {
+                result["tables"] = res[0 as keyof object]["results"][0 as keyof object];
+            });
         });
         if (ctx.service.options.includes(EOptions.optimized))
             await executeSql(ctx.service, queries.countAll()).then((res) => {
