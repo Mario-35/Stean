@@ -10,7 +10,7 @@ import { config } from "../configuration";
 import { _STREAM } from "../db/constants";
 import { queries } from "../db/queries";
 import { EColumnType, EConstant, EDataType, EErrors, EExtensions, EInfos, EOptions, ERelations } from "../enums";
-import { doubleQuotes, deepClone, isTest, formatPgTableColumn, isString } from "../helpers";
+import { doubleQuotes, deepClone, isTest, formatPgTableColumn, isString, hidePassword } from "../helpers";
 import { Iservice, Ientities, Ientity, IstreamInfos, koaContext, IentityRelation, getColumnType, IentityColumn, Id, typeExtensions } from "../types";
 import path from "path";
 import fs from "fs";
@@ -76,7 +76,7 @@ export class Models {
     public async getInfos(ctx: koaContext) {
         const temp = config.getInfos(ctx, ctx.service.name);
         const result: Record<string, any> = {
-            ...temp,
+            ...hidePassword(temp),
             ready: config.connection(ctx.service.name) ? true : false,
             Postgres: {},
             users: {}
