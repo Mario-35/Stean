@@ -182,11 +182,11 @@ export class Logging {
         return this;
     }
 
-    start() {
+    start(mess: string) {
         this.init();
         this.line(20, EColor.Magenta);
         this.color(EColor.Cyan);
-        this.space(`START ${EConstant.appName} ${EInfos.ver} : ${appVersion.version}`);
+        this.space(`${mess} ${EConstant.appName} ${EInfos.ver} : ${appVersion.version}`);
         this.text("du");
         this.color(EColor.Yellow);
         this.space(`${appVersion.date} [${process.env.NODE_ENV}]`);
@@ -194,7 +194,20 @@ export class Logging {
         return this;
     }
 
+    end() {
+        this.init();
+        this.line(20, EColor.Yellow);
+        this.color(EColor.Blue);
+        this.space(`INIT FINISHED ${EConstant.appName} ${EInfos.ver} : ${appVersion.version}`);
+        this.text("du");
+        this.color(EColor.Red);
+        this.space(`${appVersion.date} [${process.env.NODE_ENV}]`);
+        this.line(20, EColor.Yellow);
+        return this;
+    }
+
     logo() {
+        this.init(true);
         this.color(EColor.Blue);
         this.return();
         this.text(` ____ __________    _     _   _`, EColor.Green);

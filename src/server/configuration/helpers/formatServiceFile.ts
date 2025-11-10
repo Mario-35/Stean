@@ -53,7 +53,8 @@ export function formatServiceFile(name: string, input: Record<string, any>): Ise
         options: options,
         csvDelimiter: input["csvDelimiter"] ? input["csvDelimiter"] : ";",
         synonyms: input["synonyms"] ? input["synonyms"] : undefined,
-        users: undefined
+        users: undefined,
+        _READY: false
     };
 
     if (Object.values(returnValue).includes("ERROR"))

@@ -6,7 +6,7 @@
  *
  */
 
-import { _DEBUG, _REPLAY } from "../constants";
+import { _DEBUG } from "../constants";
 import { isTest, notNull, simpleQuotes } from "../helpers";
 import { koaContext } from "../types";
 import postgres from "postgres";
@@ -26,12 +26,6 @@ export class Trace {
         Trace.adminConnection = adminConnection;
     }
 
-    private queryReplay(ctx: koaContext, error: any[]) {
-        return `INSERT INTO public.log ( method, url ${notNull(error) ? ", error" : ""}) VALUES( 'REPLAY', '${ctx.decodedUrl.root}/Logs(${_REPLAY})' ${
-            notNull(error) ? `,${FORMAT_JSONB(error)}` : ""
-        }) RETURNING id;`;
-    }
-
     private query(ctx: koaContext, error?: any[]) {
         return ctx.traceId && error
             ? `UPDATE public.log SET error = ${FORMAT_JSONB(error)} WHERE id = ${ctx.traceId}`
@@ -47,7 +41,6 @@ export class Trace {
      */
     async write(ctx: koaContext) {
         console.log(logging.whereIam(new Error().stack));
-        if (ctx.request.url.includes("Replays(") || ctx.request.url.includes("$replay=") || _REPLAY) return;
         if (ctx.method !== "GET") {
             const datas = this.query(ctx);
             await Trace.adminConnection
@@ -76,9 +69,8 @@ export class Trace {
      */
     async error(ctx: koaContext, error: any) {
         console.log(logging.whereIam(new Error().stack));
-        if (ctx.request.url.includes("Replays(")) return;
         try {
-            await Trace.adminConnection.unsafe(_REPLAY ? this.queryReplay(ctx, error) : this.query(ctx, error));
+            await Trace.adminConnection.unsafe(this.query(ctx, error));
         } catch (err) {
             console.log("---- [Error Log Error]-------------");
             console.log(err);

@@ -6,7 +6,7 @@
  *
  */
 
-import { _DEBUG, appVersion, setDebug } from "../constants";
+import { _DEBUG, appVersion, setDebug, setReady } from "../constants";
 import { asyncForEach, compareVersions, decrypt, encrypt, hidePassword, isProduction, isTest } from "../helpers";
 import { Iservice, IdbConnection, IserviceInfos, koaContext, Iversion } from "../types";
 import { messages } from "../messages";
@@ -49,11 +49,19 @@ class Configuration {
         if (isTest()) {
             console.log = (data: any) => {};
             setDebug(false);
+            logging.debug("========================================>");
             this.readConfigFile();
+            Configuration.services[EConstant.test] = this.formatConfig(testDatas["create"]);
         } else
             console.log = (data: any) => {
                 if (data) process.stdout.write(typeof data === "object" ? util.inspect(data, { showHidden: false, depth: null, colors: true }) + EConstant.return : data + EConstant.return);
             };
+    }
+
+    allReady(): boolean {
+        return !Object.values(Configuration.services)
+            .map((e) => e._READY)
+            .includes(false);
     }
 
     // stean version
@@ -109,7 +117,7 @@ class Configuration {
                     // Duplicate Key Violation error
                 } else if (error.code === "23505") {
                     return true;
-                } else return logging.error(EInfos.createUser, error).to(true).log().file().result(false);
+                } else return logging.error(EInfos.createUser, error).toLogAndFile(true).result(false);
             });
     }
 
@@ -133,12 +141,7 @@ class Configuration {
      * @returns true if it's done
      */
     private async readConfigFile(input?: string): Promise<boolean> {
-        logging.start().toLogAndFile(true);
-        logging
-            .message(EInfos.readConfig, input ? "content" : paths.configFile.fileName)
-            .to()
-            .log()
-            .file();
+        logging.message(EInfos.readConfig, input ? "content" : paths.configFile.fileName).toLogAndFile(true);
         try {
             // load File
             const fileContent = input || fs.readFileSync(paths.configFile.fileName, "utf8");
@@ -148,7 +151,6 @@ class Configuration {
             }
             // decrypt file
             Configuration.services = JSON.parse(decrypt(fileContent));
-
             const infosAdmin = Configuration.services[EConstant.admin].pg;
             Configuration.adminConnection = postgres(`postgres://${infosAdmin.user}:${infosAdmin.password}@${infosAdmin.host}:${infosAdmin.port || 5432}/${EConstant.pg}`, {
                 debug: _DEBUG,
@@ -211,12 +213,12 @@ class Configuration {
     }
 
     /** Initialivze mqtt */
-    private initMqtt() {
-        Configuration.MqttServer = new MqttServer({
-            wsPort: Configuration.services[EConstant.admin].ports?.ws || 1883,
-            tcpPort: Configuration.services[EConstant.admin].ports?.tcp || 9000
-        });
-    }
+    // private initMqtt() {
+    //     Configuration.MqttServer = new MqttServer({
+    //         wsPort: Configuration.services[EConstant.admin].ports?.ws || 1883,
+    //         tcpPort: Configuration.services[EConstant.admin].ports?.tcp || 9000
+    //     });
+    // }
 
     /**
      *
@@ -402,7 +404,7 @@ class Configuration {
             await config
                 .connection(connectionName)
                 .unsafe(query)
-                .catch((error: Error) => logging.error(EInfos.createFunc, error).to(true).log().file().result(false));
+                .catch((error: Error) => logging.error(EInfos.createFunc, error).toLogAndFile(true).result(false));
         });
         logging.status(true, EInfos.createFunc).toLogAndFile(true);
         return true;
@@ -449,19 +451,15 @@ class Configuration {
                     try {
                         await this.addToServer(key);
                     } catch (error) {
-                        status = logging.error(EInfos.addServer, error).to(true).log().file().result(false);
+                        status = logging.error(EInfos.addServer, error).toLogAndFile(true).result(false);
                     }
                 }
             );
-            this.initMqtt();
+            // this.initMqtt();
             return status;
             // no configuration file so First install
         } else {
-            logging
-                .message("file", paths.configFile.fileName + " " + EChar.notOk)
-                .to()
-                .log()
-                .file();
+            logging.message("file", paths.configFile.fileName + " " + EChar.notOk).toLogAndFile();
             this.addListening(this.defaultHttp(), "First launch");
             return true;
         }
@@ -481,7 +479,7 @@ class Configuration {
                     .then(() => {
                         logging.init().text(EInfos.queryAfter, EColor.Magenta).status(true, service).toLogAndFile(true);
                     })
-                    .catch((err) => logging.error(EInfos.queryAfter, err).to(true).log().file().result(false));
+                    .catch((err) => logging.error(EInfos.queryAfter, err).toLogAndFile(true).result(false));
             }
         });
         return true;
@@ -585,10 +583,9 @@ class Configuration {
                 return res;
             })
             .catch((error: Error) => {
-                logging.debug("================> Ici");
                 logging.debug(error);
                 logging.error(EErrors.unableFindCreate, Configuration.services[key].pg.database).toLogAndFile(true);
-                logging.error(EErrors.unableFindCreate, error).to(true).log().file().result(false);
+                logging.error(EErrors.unableFindCreate, error).toLogAndFile(true).result(false);
                 process.exit(111);
             });
     }
@@ -622,10 +619,10 @@ class Configuration {
         return await createDatabase(connectName)
             .then(async () => {
                 this.createDbConnectionFromConfigName(connectName);
-                return logging.message(`${EInfos.db} ${EInfos.createDB} [${Configuration.services[connectName].pg.database}]`, EChar.ok).to(true).log().file().result(true);
+                return logging.message(`${EInfos.db} ${EInfos.createDB} [${Configuration.services[connectName].pg.database}]`, EChar.ok).toLogAndFile(true).result(true);
             })
             .catch((err: Error) => {
-                return logging.error(err.message, EInfos.createDB).to(true).log().file().result(false);
+                return logging.error(err.message, EInfos.createDB).toLogAndFile(true).result(false);
             });
     }
 
@@ -652,7 +649,7 @@ class Configuration {
                                     });
                                 })
                                 .then(() => true)
-                                .catch((err: Error) => logging.error(EInfos.delTemp, err).to(true).log().file().result(false)),
+                                .catch((err: Error) => logging.error(EInfos.delTemp, err).toLogAndFile(true).result(false)),
                             "Delete temp table(s)"
                         )
                         .to()
@@ -664,14 +661,21 @@ class Configuration {
                     .then(() => {
                         logging.status(true, EInfos.logLevel).toLogAndFile(true);
                     })
-                    .catch((err: Error) => logging.error(EInfos.logLevel, err).to(true).log().file());
+                    .catch((err: Error) => logging.error(EInfos.logLevel, err).toLogAndFile(true));
 
-                if (Configuration.services[serviceName].options.includes(EOptions.optimized))
+                if (Configuration.services[serviceName].options.includes(EOptions.optimized)) {
+                    Configuration.services[serviceName]._READY = false;
                     this.connection(serviceName)
-                        .unsafe(`\n${queries.addNbToTable("observation")}\n${queries.updateNb("datastream").toString()}\n${queries.updateNb("multidatastream")}`)
+                        .unsafe(`\n${queries.addNbToTable("observation")}\n${queries.updateNb("datastream", false)}\n${queries.updateNb("multidatastream", false)}`)
                         .then(() => {
+                            Configuration.services[serviceName]._READY = true;
                             logging.statusAfter(serviceName, EInfos.updateNb).toLogAndFile(true);
+                            if (this.allReady() === true) {
+                                setReady(true);
+                                logging.end().toLogAndFile(true);
+                            }
                         });
+                } else Configuration.services[serviceName]._READY = true;
                 return true;
             })
             .catch(async (error: Error) => {
@@ -684,7 +688,7 @@ class Configuration {
                 } else if (error["code" as keyof object] === "3D000" && create == true) {
                     logging.message(EInfos.startCreateDB, Configuration.services[serviceName].pg.database).toLogAndFile(true);
                     if (serviceName !== EConstant.test) return await this.createDB(serviceName);
-                } else return logging.error(EErrors.connUser, error).to(true).log().file().result(false);
+                } else return logging.error(EErrors.connUser, error).toLogAndFile(true).result(false);
                 return false;
             });
     }
@@ -702,7 +706,7 @@ class Configuration {
             path,
             content,
             (error) => {
-                if (error) return logging.error(messages.str(EErrors.write, path), error).to(true).log().file().result(false);
+                if (error) return logging.error(messages.str(EErrors.write, path), error).toLogAndFile(true).result(false);
             }
         );
         return true;
@@ -732,7 +736,7 @@ class Configuration {
             return await this.adminConnection()
                 .unsafe(queries.updateConfig(input.name, FORMAT_JSONB(input)))
                 .then(async () => await this.refresh(input.name))
-                .catch((err) => logging.error(EErrors.serviceUpdateteError, err).to(true).log().file().result(false));
+                .catch((err) => logging.error(EErrors.serviceUpdateteError, err).toLogAndFile(true).result(false));
         }
         return false;
     }
@@ -751,6 +755,21 @@ class Configuration {
             logging.error(EErrors.serviceUpdateteError, error).toLogAndFile(true);
             return;
         }
+    }
+
+    async start(restart: boolean): Promise<boolean> {
+        setReady(false);
+        logging.start(restart === true ? "Restart" : "Start").toLogAndFile(true);
+        return this.initialisation()
+            .then(async () => {
+                await config.afterInitialisation();
+                logging.logo().toLogAndFile(true);
+                return true;
+            })
+            .catch((err) => {
+                console.log(err);
+                return false;
+            });
     }
 }
 

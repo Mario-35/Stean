@@ -201,7 +201,7 @@ export class Models {
             };
             base["Payload"] = PAYLOAD;
         }
-        if ((extensions && extensions.includes(EExtensions.users)) || !extensions) {
+        if (extensions && extensions.includes(EExtensions.users)) {
             base["Users"] = USER;
         }
         return base;
@@ -406,8 +406,8 @@ export class Models {
         if (isTest()) this.getModel(EConstant.test);
     }
 
-    public getModel(service?: Iservice | string): Ientities {
-        if (service) {
+    public getModel(service: Iservice | string): Ientities {
+        if (!isTest()) {
             service = this.getService(service);
             // if (!Models.models[service.name]) Models.models[service.name] = this.createModel(service.apiVersion, service.options, service.extensions);
             Models.models[service.name] = this.createModel(service.apiVersion, service.options, service.extensions);

@@ -7,7 +7,7 @@
  */
 import Router from "koa-router";
 import { userAuthenticated, getAuthenticatedUser } from "../authentication";
-import { _DEBUG } from "../constants";
+import { _DEBUG, _READY } from "../constants";
 import { getUrlKey, isAdmin, returnFormats } from "../helpers";
 import { apiAccess } from "../db/dataAccess";
 import { IreturnResult } from "../types";
@@ -15,7 +15,7 @@ import { DefaultState, Context } from "koa";
 import { createOdata } from "../odata";
 import { config } from "../configuration";
 import { createDatabase, testDatas } from "../db/createDb";
-import { disconnectDb, executeSql, exportService } from "../db/helpers";
+import { cleanDb, disconnectDb, executeSql, exportService } from "../db/helpers";
 import { models } from "../models";
 import { testRoute } from "./helper";
 import { createService } from "../db/helpers";
@@ -28,12 +28,6 @@ export const unProtectedRoutes = new Router<DefaultState, Context>();
 // ALL others
 unProtectedRoutes.get("/(.*)", async (ctx) => {
     switch (ctx.decodedUrl.path.toUpperCase()) {
-        // login html page or connection login
-        case "RESTART":
-            if (ctx.request["token" as keyof object]) {
-                process.exit(100);
-            }
-            return;
         // Root path
         case `/`:
             ctx.body = models.getRoot(ctx);
@@ -59,6 +53,19 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
             ctx.type = returnFormats.html.type;
             ctx.body = bodyError.toString();
             return;
+        // Clean
+        case "CLEAN":
+            ctx.type = returnFormats.json.type;
+            ctx.body = { clean: _READY === true ? await cleanDb(ctx) : "Not Ready" };
+            return;
+        // Restart
+        case "RESTART":
+            if (userAuthenticated(ctx)) {
+                ctx.type = returnFormats.json.type;
+                ctx.status = _READY === true ? 200 : 202;
+                ctx.body = { restart: _READY === true ? await config.start(true) : "Not Ready" };
+                return;
+            }
         // logs
         case "LOGGING":
             ctx.redirect(`${ctx.decodedUrl.origin}/logging`);
@@ -67,7 +74,6 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
         case "EXPORT":
             ctx.type = returnFormats.json.type;
             ctx.body = await exportService(ctx);
-            // ctx.body = { "pipo": "le maka" };
             return;
         // Admin login
         case "ADMIN":

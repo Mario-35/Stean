@@ -27,7 +27,6 @@ export class MqttServer {
             config.messageListen("MQTT Broker on TCP", String(ports.tcpPort));
         });
     }
-
     sendMessage(client: Client, topic: string, message: string) {
         const packet: PublishPacket = {
             cmd: "publish",

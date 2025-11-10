@@ -51,8 +51,10 @@ class Queries {
         return `ALTER TABLE IF EXISTS "${table}" ADD COLUMN IF NOT EXISTS _nb BIGINT NULL;`;
     }
 
-    updateNb(stream: string) {
-        return `UPDATE "observation" SET _nb = row_number FROM ( SELECT ROW_NUMBER() OVER ( PARTITION BY ${stream}_id ORDER BY "phenomenonTime" ), id FROM "observation" WHERE ${stream}_id IS NOT NULL ) i WHERE "observation".id = i.id AND _nb IS NULL;`;
+    updateNb(stream: string, all: boolean) {
+        return `UPDATE "observation" SET _nb = row_number FROM ( SELECT ROW_NUMBER() OVER ( PARTITION BY ${stream}_id ORDER BY "phenomenonTime" ), id FROM "observation" WHERE ${stream}_id IS NOT NULL ) i WHERE "observation".id = i.id${
+            all === true ? "" : " AND _nb IS NULL"
+        };`;
     }
 
     logLevel(level: string) {
@@ -452,6 +454,10 @@ FROM
         return `SELECT JSON_AGG(t) AS results FROM ( select table_name, ( xpath( '/row/c/text()', query_to_xml( format( 'select count(*) AS c from %I.%I', table_schema, table_name ), false, true, '' ) ) ) [1] :: text :: int AS count from information_schema.tables where table_name IN ( SELECT (inhrelid :: regclass):: text AS child FROM pg_catalog.pg_inherits WHERE inhparent = 'observation' :: regclass OR inhparent = 'datastream_id0' :: regclass ) order by count DESC ) AS t `;
     }
 
+    listPartionned() {
+        return `SELECT array_agg(table_name) from information_schema.tables where table_name IN ( SELECT (inhrelid :: regclass):: text AS child FROM pg_catalog.pg_inherits WHERE inhparent = 'observation' :: regclass OR inhparent = 'datastream_id0' :: regclass )`;
+    }
+
     getDate() {
         return "SELECT current_timestamp;";
     }
@@ -469,6 +475,14 @@ FROM
     }
     getFromIdOrName(table: string, column: string, test: any) {
         return `SELECT "${column}" FROM "${table}" WHERE ${test[EConstant.id] ? `id=${test[EConstant.id]}` : test[EConstant.name] ? `name='${test[EConstant.name]}'` : "ERROR"}`;
+    }
+
+    cluster(table: string) {
+        return `CLUSTER ${table} USING "${table}_nb";`;
+    }
+
+    createClusterIndex(table: string) {
+        return `CREATE UNIQUE INDEX IF NOT EXISTS "${table}_nb" on ${table} (_nb);`;
     }
 }
 export const queries = new Queries();

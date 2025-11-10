@@ -158,6 +158,7 @@ export class Query {
                                     );
                                 }
                             });
+
                     const pagination =
                         element.ctx.service.options.includes(EOptions.optimized) &&
                         element.query.where.toString().includes(`"observation"."${element.parentEntity?.table}_id" =`) &&

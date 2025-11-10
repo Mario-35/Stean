@@ -8,9 +8,9 @@
  */
 
 import { config } from "../../configuration";
-import { setDebug, setReplay } from "../../constants";
+import { setDebug } from "../../constants";
 import { EConstant, EFrom, EHttpCode } from "../../enums";
-import { cleanUrl, getUrlKey, removeFromUrl } from "../../helpers";
+import { cleanUrl, removeFromUrl } from "../../helpers";
 import { logging } from "../../log";
 import { IdecodedUrl, koaContext } from "../../types";
 //   service root URI                   resource path     query options
@@ -32,7 +32,6 @@ export const decodeUrl = (ctx: koaContext, input?: string): IdecodedUrl | undefi
     input = input || ctx.href;
     // debug mode
     setDebug(input.includes("?$debug=true"));
-    setReplay(input.includes("?$replay=") || input.includes("&$replay=") ? getUrlKey(input, "replay") : undefined);
     console.log(logging.whereIam(new Error().stack));
     // decode url
     const url = new URL(

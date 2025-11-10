@@ -28,10 +28,7 @@ export class Users extends Common {
     async getAll(): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
         if (this.ctx.user?.PDCUAS[EUserRights.SuperAdmin] === true || this.ctx.user?.PDCUAS[EUserRights.Admin] === true) {
-            const temp = await executeSqlValues(
-                config.getService(EConstant.admin),
-                `SELECT ${models.getSelectColumnList(this.ctx.model, models.getModel().Users, true)} FROM "${USER.table}" ORDER BY "id"`
-            );
+            const temp = await executeSqlValues(config.getService(EConstant.admin), `SELECT ${models.getSelectColumnList(this.ctx.model, USER, true)} FROM "${USER.table}" ORDER BY "id"`);
             return this.formatReturnResult({
                 body: hidePassword(temp)
             });

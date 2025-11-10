@@ -77,19 +77,7 @@ export const server = isTest()
     ? // Test-driven development init
       app.listen(config.getService(EConstant.admin).ports?.http || 8029, async () => {
           await disconnectDb(EConstant.test, true);
-          logging
-              .message(`${EConstant.appName} version : ${appVersion}`, "ready " + EChar.ok)
-              .to()
-              .log()
-              .file();
+          logging.message(`${EConstant.appName} version : ${appVersion}`, "ready " + EChar.ok).toLogAndFile();
       })
     : // Production or dev init
-      config
-          .initialisation()
-          .then(async () => {
-              await config.afterInitialisation();
-              logging.logo().toLogAndFile();
-          })
-          .catch((err) => {
-              console.log(err);
-          });
+      config.start(false);

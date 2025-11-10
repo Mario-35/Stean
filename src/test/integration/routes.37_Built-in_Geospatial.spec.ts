@@ -374,7 +374,6 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
     //             res.type.should.equal("application/json");
     //             res.body.value.length.should.eql(1);
     //             res.body["value"][0]["@iot.id"].should.eql(20);
-    //             pipo
     //             addToApiDoc({ ...infos, result: limitResult(res) });
     //
     //           done();
@@ -402,7 +401,6 @@ describe("{get} BuiltInGeospatial [9.3.3.5.2]", () => {
     //             res.type.should.equal("application/json");
     //             res.body.value.length.should.eql(1);
     //             res.body["value"][0]["@iot.id"].should.eql(7);
-    //             pipo
     //             addToApiDoc({ ...infos, result: limitResult(res) });
     //
     //            done();

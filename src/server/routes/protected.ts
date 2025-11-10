@@ -21,7 +21,7 @@ import { Login, Query } from "../views";
 import { createQueryParams } from "../views/helpers";
 import { logging } from "../log";
 import { executeSqlValues } from "../db/helpers";
-import { _DEBUG } from "../constants";
+import { _DEBUG, _READY } from "../constants";
 import { messages } from "../messages";
 import { queries } from "../db/queries";
 export const protectedRoutes = new Router<DefaultState, Context>();
@@ -99,7 +99,6 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
             return;
     }
     // Add new lora observation this is a special route without ahtorisatiaon to post (deveui and correct payload limit risks)
-    console.log(ctx.request.headers["authorization"]);
     if (
         (ctx.user && ctx.user.id > 0) ||
         !ctx.service.extensions.includes(EExtensions.users) ||

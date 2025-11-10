@@ -1,3 +1,11 @@
+/**
+ * createDbTest
+ *
+ * @copyright 2020-present Inrae
+ * @author mario.adam@inrae.fr
+ *
+ */
+
 import { EHttpCode } from "../../enums";
 import { koaContext } from "../../types";
 import { testDatas } from "../createDb";

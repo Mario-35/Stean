@@ -20,6 +20,7 @@ export { getEntityIdInDatas } from "./getEntityIdInDatas";
 export { streamCsvFile } from "./streamCsvFile";
 export { disconnectDb } from "./disconnectDb";
 export { executeSql } from "./executeSql";
+export { cleanDb } from "./cleanDb";
 export { executeSqlValues } from "./executeSqlValues";
 export { InsertFromCsv } from "./insertFromCsv";
 export const exportService = async (ctx: koaContext) => exportToJson(ctx);

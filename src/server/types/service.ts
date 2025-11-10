@@ -29,4 +29,5 @@ export interface Iservice {
     synonyms: Isynonyms | undefined;
     csvDelimiter: ";" | ","; // csv format delimiter
     users: JSON | undefined; // users list
+    _READY: boolean; // flag when all init done (optimisation)
 }

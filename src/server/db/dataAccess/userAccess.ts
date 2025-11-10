@@ -9,23 +9,22 @@
 import { Iuser } from "../../types";
 import { encrypt } from "../../helpers";
 import { config } from "../../configuration";
-import { models } from "../../models";
 import { USER } from "../../models/entities";
 
 // Get all the columns of user table
-const userColumns = () => Object.keys(models.getModel().Users.columns);
+const userColumns = () => Object.keys(USER.columns);
 
 // TODO why not class ?
 export const userAccess = {
     getAll: async (configName: string) => {
         const conn = config.connection(configName);
-        const query = await conn<Iuser[]>`SELECT ${conn(userColumns())} FROM ${conn(models.getModel().Users.table)} ORDER BY id`;
+        const query = await conn<Iuser[]>`SELECT ${conn(userColumns())} FROM ${conn(USER.table)} ORDER BY id`;
         return query[0];
     },
     getSingle: async (configName: string, id: string | number) => {
         const conn = config.connection(configName);
         id = typeof id === "number" ? String(id) : id;
-        const query = await conn<Iuser[]>`SELECT ${conn(userColumns())} FROM ${conn(models.getModel().Users.table)} WHERE id = ${+id} LIMIT 1`;
+        const query = await conn<Iuser[]>`SELECT ${conn(userColumns())} FROM ${conn(USER.table)} WHERE id = ${+id} LIMIT 1`;
         if (query.length === 1) return query[0];
     },
     post: async (configName: string, data: Iuser) => {

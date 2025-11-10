@@ -23,13 +23,12 @@ const _appVersion = (): Iversion => {
 export const appVersion: Iversion = _appVersion();
 export const timestampNow = (): string => new Date().toLocaleTimeString();
 
-export function setReplay(input: string | undefined) {
-    _REPLAY = input;
-}
-
 export function setDebug(input: boolean) {
     _DEBUG = input;
 }
 // export let _DEBUG = true;
 export let _DEBUG = process.env.NODE_ENV?.trim() === EConstant.test || false;
-export let _REPLAY: string | undefined = undefined;
+export let _READY = false;
+export function setReady(input: boolean) {
+    _READY = input;
+}

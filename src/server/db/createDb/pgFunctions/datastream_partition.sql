@@ -10,6 +10,7 @@ $$
   FROM  datastream_id_seq;
     for counter in id..id + nb  loop
     EXECUTE 'CREATE TABLE IF NOT EXISTS "datastream_id' || counter || '" PARTITION OF observation FOR VALUES IN (' || counter || ')'; 
+    EXECUTE 'CREATE UNIQUE INDEX IF NOT EXISTS "datastream_id' || counter || '_nb" on datastream_id' || counter || ' (_nb)';
   end loop;
  END;
 $$;
