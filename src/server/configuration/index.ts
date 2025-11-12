@@ -141,7 +141,7 @@ class Configuration {
      * @returns true if it's done
      */
     private async readConfigFile(input?: string): Promise<boolean> {
-        logging.message(EInfos.readConfig, input ? "content" : paths.configFile.fileName).toLogAndFile(true);
+        logging.startEnd(`${EInfos.readConfig} : ${input ? "content" : paths.configFile.fileName}`, EColor.Green, EColor.Yellow).toLogAndFile(true);
         try {
             // load File
             const fileContent = input || fs.readFileSync(paths.configFile.fileName, "utf8");
@@ -160,7 +160,7 @@ class Configuration {
             });
 
             try {
-                if (!isTest())
+                if (!isTest()) {
                     await this.adminConnection()
                         .unsafe("SELECT * FROM services")
                         .then((res: any) => {
@@ -168,6 +168,12 @@ class Configuration {
                                 Configuration.services[element["name" as keyof object]] = element["datas" as keyof object];
                             });
                         });
+                    await this.adminConnection()
+                        .unsafe("SELECT version()")
+                        .then((res: any) => {
+                            logging.startEnd(res[0].version, EColor.Cyan, EColor.White).toLogAndFile(true);
+                        });
+                }
             } catch (error: any) {
                 logging.error(EInfos.accessServies, error).toLogAndFile(true);
                 if (error.code === "42P01")
@@ -438,7 +444,6 @@ class Configuration {
                 Configuration.upToDate = result.upToDate;
             }
         });
-
         if (this.configFileExist() === true || input) {
             await this.readConfigFile(input);
             let status = true;
@@ -672,7 +677,7 @@ class Configuration {
                             logging.statusAfter(serviceName, EInfos.updateNb).toLogAndFile(true);
                             if (this.allReady() === true) {
                                 setReady(true);
-                                logging.end().toLogAndFile(true);
+                                logging.startEnd(`INIT FINISHED ${EConstant.appName} ${EInfos.ver} : ${appVersion.version}`, EColor.Green, EColor.Yellow).toLogAndFile(true);
                             }
                         });
                 } else Configuration.services[serviceName]._READY = true;

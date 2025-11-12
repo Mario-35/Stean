@@ -103,7 +103,6 @@ function showDoc(event) {
 	const main = event ? getMenuMain(event.srcElement) : 'sensorThings';
 	const actual = docDatas[main][event ? event.srcElement.id : 0];	
 	const content = getContent(actual);
-	console.log(content);
 
 	document.getElementById("content").innerHTML = content;
 	document.getElementById("two").style.overflow = 'auto';

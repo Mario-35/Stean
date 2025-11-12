@@ -124,7 +124,6 @@ async function copyFromService() {
 	const src = optDistHost.value;
 	const dest = `${optHost.value}/${optVersion.value}/`;
 	const root = await getDatas(src);
-	console.log(root);
 	let loras = undefined;
 	root.value.forEach(element => {
 		if (element.name === 'Loras') loras = true;
@@ -156,7 +155,6 @@ async function copyFromService() {
 	if (loras) {
 		setProgression(0);
 		stream = await getDatas(src + "Loras?$expand=Datastreams($select=id),MultiDatastream($select=id),Decoder($select=id)&$orderby=id asc");
-		console.log(stream);
 		if (stream["detail"] = "la relation « datastreamlora » n'existe pas") {
 			const sql = `${src}/Sql?$query=${btoa(`SELECT "lora"."id" AS "@iot.id",
 		"name",
@@ -193,7 +191,6 @@ async function copyFromService() {
 					data["Datastreams"] = {
 						"@iot.name": datas[i]["datastream_name"]
 					};
-				console.log(data);
 				await postDatas(dest + "Loras?$debug=true", data);
 			}
 

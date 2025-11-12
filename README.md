@@ -93,7 +93,7 @@ you have something like this :
 
 ![run](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/run.jpg "run")
 
-http://localhost:8029/ show the documentation
+http://localhost:8029/help show the documentation
 
 http://localhost:8029/admin (to admin stean and install services)
 

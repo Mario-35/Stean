@@ -55,12 +55,10 @@ export class Models {
         };
         let fileContent = fs.readFileSync(path.join(__dirname, "/", "model.drawio"), "utf8");
         fileContent = fileContent.replace("&gt;Version&lt;", `&gt;version : ${ctx.service.apiVersion}&lt;`);
-        if (!ctx.service.extensions.includes(EExtensions.multiDatastream)) {
-            ["114", "115", "117", "118", "119", "116", "120", "121"].forEach((e) => deleteId(e));
-            fileContent = fileContent.replace(`&lt;hr&gt;COLUMNS.${ctx.mode.MultiDatastreams.name}`, "");
-            fileContent = fileContent.replace(`&lt;hr&gt;COLUMNS.${ctx.mode.MultiDatastreams.name}`, "");
-            fileContent = fileContent.replace(`&lt;strong&gt;${ctx.mode.MultiDatastreams.singular}&lt;/strong&gt;`, "");
-        }
+        ["114", "115", "117", "118", "119", "116", "120", "121"].forEach((e) => deleteId(e));
+        fileContent = fileContent.replace(`&lt;hr&gt;COLUMNS.${ctx.mode.MultiDatastreams.name}`, "");
+        fileContent = fileContent.replace(`&lt;hr&gt;COLUMNS.${ctx.mode.MultiDatastreams.name}`, "");
+        fileContent = fileContent.replace(`&lt;strong&gt;${ctx.mode.MultiDatastreams.singular}&lt;/strong&gt;`, "");
         Object.keys(ctx.mode).forEach((strEntity: string) => {
             fileContent = fileContent.replace(
                 `COLUMNS.${ctx.mode[strEntity].name}`,
@@ -377,7 +375,7 @@ export class Models {
                 // "https://github.com/INSIDE-information-systems/SensorThingsAPI/blob/master/EntityLinking/Linking.md#Filter",
                 // "https://github.com/INSIDE-information-systems/SensorThingsAPI/blob/master/EntityLinking/Linking.md#NavigationLinks"],
                 if (ctx.service.extensions.includes(EExtensions.lora)) list.push(`${ctx.decodedUrl.origin}/#api-Loras`);
-                if (ctx.service.extensions.includes(EExtensions.multiDatastream)) list.push("https://docs.ogc.org/is/18-088/18-088.html#multidatastream-extension");
+                list.push("https://docs.ogc.org/is/18-088/18-088.html#multidatastream-extension");
                 if (ctx.service.extensions.includes(EExtensions.mqtt))
                     list.push("https://docs.ogc.org/is/18-088/18-088.html#req-create-observations-via-mqtt-observations-creation", "https://docs.ogc.org/is/18-088/18-088.html#mqtt-extension");
                 const temp: Record<string, any> = {

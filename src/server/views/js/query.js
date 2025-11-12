@@ -83,7 +83,7 @@ function setProgression(nb) {
 // Start
 (function init() {
 	header("==== Init ====");
-	if (isDebug) console.log(_PARAMS); // them color
+	message(_PARAMS); 
 	if (localStorage.getItem('theme')) {
 		setTheme(localStorage.getItem('theme'));
 	} else {

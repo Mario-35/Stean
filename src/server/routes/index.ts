@@ -42,6 +42,7 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
         case "EXPORT":
             if (!decodedUrl) await exportRoute(ctx);
         // logging for all
+        case "HELP":
         case "DOCUMENTATION":
             if (!decodedUrl) return await docRoute(ctx);
         case "LOGGING":

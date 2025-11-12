@@ -8117,7 +8117,6 @@
     // TODO(danvk): should be area.width
     xAxisOptionsView, this);
     // var msg = 'ticker(' + range[0] + ', ' + range[1] + ', ' + this.width_ + ', ' + this.attr_('pixelsPerXLabel') + ') -> ' + JSON.stringify(xTicks);
-    // console.log(msg);
     this.layout_.setXTicks(xTicks);
   };
   
@@ -8453,7 +8452,6 @@
     this.renderGraph_(is_initial_draw);
     if (this.getStringOption("timingName")) {
       var end = new Date();
-      console.log(this.getStringOption("timingName") + " - drawGraph: " + (end - start) + "ms");
     }
   };
   

@@ -194,15 +194,12 @@ export class Logging {
         return this;
     }
 
-    end() {
+    startEnd(mess: string, color1: EColor, color2: EColor) {
         this.init();
-        this.line(20, EColor.Yellow);
-        this.color(EColor.Blue);
-        this.space(`INIT FINISHED ${EConstant.appName} ${EInfos.ver} : ${appVersion.version}`);
-        this.text("du");
-        this.color(EColor.Red);
-        this.space(`${appVersion.date} [${process.env.NODE_ENV}]`);
-        this.line(20, EColor.Yellow);
+        this.line(20, color1);
+        this.color(color2);
+        this.space(mess);
+        this.line(20, color1);
         return this;
     }
 

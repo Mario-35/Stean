@@ -125,7 +125,6 @@ async function selectCard(name) {
 async function delService(name) {
 	const newName = window.prompt("Name of the service", name);
 	if (newName !== null && newName !== "") {
-		console.log(_PARAMS.services);
 		let response = await fetch(`${_PARAMS.services[newName].linkBase}/${_PARAMS.services[newName]["service"].apiVersion}/Services(${newName})`, {
 			method: "DELETE",
 			headers: {
@@ -335,9 +334,7 @@ function decodingPayload(payload) {
 	try {
 		const F = new Function("input", "nomenclature", `${getElement("jsonDecoderCode").innerText}; return decode(input, nomenclature);`);
 		let nomenclature = JSON.parse(getElement("jsonDecoderNomenclature").innerText);
-		const result = F(payload, nomenclature);
-		console.log(result);
-		
+		const result = F(payload, nomenclature);		
 		beautifyDatas(getElement("jsonDecoderResult"), result.datas, "json");		
 	}
 	catch (error) {
@@ -364,8 +361,7 @@ async function saveDecoder() {
 // Start
 (function init() {
 	wait(false);
-	console.log(_PARAMS);
-	
+	message(_PARAMS);	
 	new SplitterBar(container, first, two);
 	populateSelect(optVersion, _PARAMS.versions, "v1.1");
 	populateSelect(optLogs, _PARAMS.logsFiles);
@@ -385,6 +381,6 @@ testLoop.onclick = () => {
 };
 
 // copy service to actual service
-btnCopyService.onclick = () => {
-	copyFromService();
-};
+// btnCopyService.onclick = () => {
+// 	copyFromService();
+// };

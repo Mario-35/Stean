@@ -13,7 +13,6 @@ export enum EExtensions {
     lora = "lora",
     tasking = "tasking",
     mqtt = "mqtt",
-    multiDatastream = "multiDatastream",
     highPrecision = "highPrecision",
     resultNumeric = "resultNumeric"
 }
