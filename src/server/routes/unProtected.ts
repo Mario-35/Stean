@@ -30,7 +30,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
     switch (ctx.decodedUrl.path.toUpperCase()) {
         // Root path
         case `/`:
-            ctx.body = models.getRoot(ctx);
+            ctx.body = models.root(ctx);
             ctx.type = returnFormats.json.type;
             return;
         // tests only for testing wip features
@@ -130,12 +130,12 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
         // Show draw.io model
         case "DRAW":
             ctx.type = returnFormats.xml.type;
-            ctx.body = models.getDrawIo(ctx);
+            ctx.body = models.drawIo(ctx);
             return;
         // Infos and link of a services
         case "INFOS":
             ctx.type = returnFormats.json.type;
-            ctx.body = await models.getInfos(ctx);
+            ctx.body = await models.infos(ctx);
             return;
         // Create DB test
         case "CREATE":

@@ -33,12 +33,18 @@ const extractEntityNames = (input: string, search: string | string[]): string[] 
 
 export const relationInfos = (model: Ientities, entityName: string, relationName: string, loop?: boolean): IrelationInfos => {
     console.log(logging.whereIam(new Error().stack));
-    const leftEntity = models.getEntity(model, entityName);
-    const rightEntity = models.getEntity(model, relationName);
+    const leftEntity = models.entity(model, entityName);
+    const rightEntity = models.entity(model, relationName);
     if (entityName !== relationName && leftEntity && rightEntity) {
         logging.head(`Entity ====> ${leftEntity.name} : ${rightEntity.name}`).to().text();
-        const leftRelation = models.getRelation(model, leftEntity, rightEntity);
-        const rightRelationName = models.getRelationName(rightEntity, [entityName, leftEntity.name, leftEntity.singular, entityName.replace(relationName, ""), relationName.replace(entityName, "")]);
+        const leftRelation = models.entityRelation(model, leftEntity, rightEntity);
+        const rightRelationName = models.entityRelationName(rightEntity, [
+            entityName,
+            leftEntity.name,
+            leftEntity.singular,
+            entityName.replace(relationName, ""),
+            relationName.replace(entityName, "")
+        ]);
         const rightRelation = rightRelationName ? rightEntity.relations[rightRelationName] : undefined;
         if (leftRelation && leftRelation.type) {
             let leftKey = _Key(leftEntity, rightEntity);
@@ -49,10 +55,10 @@ export const relationInfos = (model: Ientities, entityName: string, relationName
             };
             const fnHasMany = () => {
                 const complexEntity =
-                    models.getEntity(model, `${leftEntity.name}${rightEntity.name}`) ||
-                    models.getEntity(model, `${rightEntity.name}${leftEntity.name}`) ||
-                    models.getEntity(model, `${leftEntity.singular}${rightEntity.singular}`) ||
-                    models.getEntity(model, `${rightEntity.singular}${leftEntity.singular}`);
+                    models.entity(model, `${leftEntity.name}${rightEntity.name}`) ||
+                    models.entity(model, `${rightEntity.name}${leftEntity.name}`) ||
+                    models.entity(model, `${leftEntity.singular}${rightEntity.singular}`) ||
+                    models.entity(model, `${rightEntity.singular}${leftEntity.singular}`);
                 if (complexEntity && rightRelation) {
                     leftKey = _Key(complexEntity, leftEntity);
                     rightKey = _Key(complexEntity, rightEntity);
@@ -125,7 +131,7 @@ export const relationInfos = (model: Ientities, entityName: string, relationName
                             // ===> 2.3
                             case ERelations.belongsToMany:
                                 if (leftRelation.entityRelation) {
-                                    const tempEntity = models.getEntity(model, leftRelation.entityRelation);
+                                    const tempEntity = models.entity(model, leftRelation.entityRelation);
                                     if (leftRelation && tempEntity && tempEntity.type === EentityType.link && !loop) {
                                         leftKey = _Key(tempEntity, rightEntity);
                                         rightKey = _KeyLink(tempEntity, leftKey);
@@ -144,7 +150,7 @@ export const relationInfos = (model: Ientities, entityName: string, relationName
                                     }
                                 } else if (rightRelationName && !loop && leftEntity.type !== EentityType.link) {
                                     const entityName = relationInfos(model, rightRelationName, rightEntity.name, true);
-                                    const complexEntity = models.getEntity(model, `${rightRelationName}${rightEntity.name}`) || models.getEntity(model, `${rightEntity.name}${rightRelationName}`);
+                                    const complexEntity = models.entity(model, `${rightRelationName}${rightEntity.name}`) || models.entity(model, `${rightEntity.name}${rightRelationName}`);
                                     if (complexEntity && entityName.external) {
                                         leftKey = entityName.external.leftKey;
                                         rightKey = entityName.external.rightKey;
@@ -194,14 +200,14 @@ export const relationInfos = (model: Ientities, entityName: string, relationName
                             // ===> 3.2
                             case ERelations.belongsTo:
                                 const complexEntity2 =
-                                    models.getEntity(model, `${leftEntity.name}${rightEntity.name}`) ||
-                                    models.getEntity(model, `${rightEntity.name}${leftEntity.name}`) ||
-                                    models.getEntity(model, `${leftEntity.singular}${rightEntity.singular}`) ||
-                                    models.getEntity(model, `${rightEntity.singular}${leftEntity.singular}`);
+                                    models.entity(model, `${leftEntity.name}${rightEntity.name}`) ||
+                                    models.entity(model, `${rightEntity.name}${leftEntity.name}`) ||
+                                    models.entity(model, `${leftEntity.singular}${rightEntity.singular}`) ||
+                                    models.entity(model, `${rightEntity.singular}${leftEntity.singular}`);
                                 // ===> 3.2.1
                                 if (rightRelation.entityRelation) {
                                     const tmp = extractEntityNames(rightRelation.entityRelation, [leftEntity.name, rightEntity.name]);
-                                    const tempEntity = models.getEntity(model, tmp[0]);
+                                    const tempEntity = models.entity(model, tmp[0]);
                                     if (tempEntity && !loop) {
                                         const tempCardinality = relationInfos(model, leftEntity.name, tempEntity.name, true);
                                         if (complexEntity2 && tempCardinality.entity && complexEntity2.type !== EentityType.link) {

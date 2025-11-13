@@ -21,7 +21,7 @@ import { queries } from "../../../db/queries";
 export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor): string | undefined {
     datas = reorganiseRecord(datas);
     const formatInsertEntityData = (entity: string, datas: object, main: PgVisitor): Record<string, any> => {
-        const goodEntity = models.getEntityName(main.ctx.model, entity);
+        const goodEntity = models.entityName(main.ctx.model, entity);
         if (goodEntity && goodEntity in src.ctx.model) {
             try {
                 const objectEntity = new apiAccess(main.ctx, entity);
@@ -281,7 +281,7 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
                     } else if (entity.relations[subEntity.name].entityRelation === subEntity.relations[entity.name].entityRelation) {
                         const tmp = entity.relations[subEntity.name].entityRelation;
                         if (tmp) {
-                            const tableRel = models.getEntity(src.ctx.model, tmp);
+                            const tableRel = models.entity(src.ctx.model, tmp);
                             if (tableRel)
                                 addToQueryMaker(
                                     EOperation.Table,
@@ -316,7 +316,7 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
          * @param value Datas to process
          */
         const subBlock = (key: string, value: object) => {
-            const entityNameSearch = models.getEntityName(src.ctx.model, key);
+            const entityNameSearch = models.entityName(src.ctx.model, key);
             if (entityNameSearch) {
                 const newEntity = src.ctx.model[entityNameSearch];
                 const name = createName(newEntity.table);

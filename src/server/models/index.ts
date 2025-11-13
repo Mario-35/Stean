@@ -15,26 +15,26 @@ import { Iservice, Ientities, Ientity, IstreamInfos, koaContext, IentityRelation
 import path from "path";
 import fs from "fs";
 import {
-    FEATUREOFINTEREST,
-    THING,
-    LOCATION,
-    SERVICE,
-    CREATEOBSERVATION,
-    DATASTREAM,
     LORASTREAMS,
     DECODER,
-    HISTORICALLOCATION,
     LORA,
-    MULTIDATASTREAM,
-    MULTIDATASTREAMOBSERVEDPROPERTY,
-    OBSERVATION,
-    SENSOR,
     USER,
+    PAYLOAD,
+    CREATEOBSERVATION,
+    DATASTREAM,
+    FEATUREOFINTEREST,
+    HISTORICALLOCATION,
+    LOCATION,
     LOCATIONHISTORICALLOCATION,
-    OBSERVEDPROPERTY,
-    THINGLOCATION,
     LOG,
-    PAYLOAD
+    MULTIDATASTREAM,
+    OBSERVATION,
+    OBSERVEDPROPERTY,
+    SENSOR,
+    SERVICE,
+    THING,
+    THINGLOCATION,
+    MULTIDATASTREAMOBSERVEDPROPERTY
 } from "./entities";
 import { Geometry, Jsonb, Text } from "./types";
 import { logging } from "../log";
@@ -47,7 +47,7 @@ export class Models {
     } = {};
 
     // Create drawInfo diagram
-    public getDrawIo(ctx: koaContext) {
+    public drawIo(ctx: koaContext) {
         const deleteId = (id: string) => {
             const start = `<mxCell id="${id}"`;
             const end = "</mxCell>";
@@ -71,7 +71,7 @@ export class Models {
         return fileContent;
     }
 
-    public async getInfos(ctx: koaContext) {
+    public async infos(ctx: koaContext) {
         const temp = config.getInfos(ctx, ctx.service.name);
         const result: Record<string, any> = {
             ...hidePassword(temp),
@@ -130,11 +130,11 @@ export class Models {
     }
 
     // Get multiDatastream or Datastreams infos
-    public async getStreamInfos(ctx: koaContext, input: Record<string, any>): Promise<IstreamInfos | undefined> {
+    public async streamInfos(ctx: koaContext, input: Record<string, any>): Promise<IstreamInfos | undefined> {
         console.log(logging.whereIam(new Error().stack));
         const stream: _STREAM = input["Datastream"] ? "Datastream" : input["MultiDatastream"] ? "MultiDatastream" : undefined;
         if (!stream) return undefined;
-        const streamEntity = models.getEntityName(ctx.model, stream);
+        const streamEntity = models.entityName(ctx.model, stream);
         if (!streamEntity) return undefined;
         const foiId: Id = input["FeaturesOfInterest"] ? input["FeaturesOfInterest"] : undefined;
         const searchKey = input[models.getModel(ctx.service)[streamEntity].name] || input[models.getModel(ctx.service)[streamEntity].singular];
@@ -168,23 +168,19 @@ export class Models {
         }
     }
 
-    private version1_0(extensions?: typeof typeExtensions): Ientities {
+    // Internal create version
+    /**
+     *
+     * @param entities list of entities to create
+     * @param extensions extensions services
+     * @returns Ientities
+     */
+    private makeModel(entities: Ientity[], extensions?: typeof typeExtensions) {
         const base: Ientities = {};
-        base["Things"] = THING;
-        base["FeaturesOfInterest"] = FEATUREOFINTEREST;
-        base["Locations"] = LOCATION;
-        base["ThingsLocations"] = THINGLOCATION;
-        base["HistoricalLocations"] = HISTORICALLOCATION;
-        base["LocationsHistoricalLocations"] = LOCATIONHISTORICALLOCATION;
-        base["ObservedProperties"] = OBSERVEDPROPERTY;
-        base["Sensors"] = SENSOR;
-        base["Datastreams"] = DATASTREAM;
-        base["MultiDatastreams"] = MULTIDATASTREAM;
-        base["Observations"] = OBSERVATION;
-        base["Services"] = SERVICE;
-        base["Logs"] = LOG;
-        base["CreateObservations"] = CREATEOBSERVATION;
-        base["MultiDatastreamObservedProperties"] = MULTIDATASTREAMOBSERVEDPROPERTY;
+        entities.forEach((e) => {
+            base[e.name] = e;
+        });
+
         if ((extensions && extensions.includes(EExtensions.lora)) || !extensions) {
             base["LoraStreams"] = LORASTREAMS;
             base["Decoders"] = DECODER;
@@ -205,23 +201,48 @@ export class Models {
         return base;
     }
 
-    private version1_1(input: Ientities): Ientities {
+    private version1_0(extensions?: typeof typeExtensions): Ientities {
+        return this.makeModel(
+            [
+                THING,
+                FEATUREOFINTEREST,
+                LOCATION,
+                THINGLOCATION,
+                HISTORICALLOCATION,
+                LOCATIONHISTORICALLOCATION,
+                OBSERVEDPROPERTY,
+                SENSOR,
+                DATASTREAM,
+                MULTIDATASTREAM,
+                OBSERVATION,
+                SERVICE,
+                LOG,
+                CREATEOBSERVATION,
+                MULTIDATASTREAMOBSERVEDPROPERTY
+            ],
+            extensions
+        );
+    }
+
+    private version1_1(entities: Ientities): Ientities {
         // add properties to entities
         ["Locations", "FeaturesOfInterest", "ObservedProperties", "Sensors", "Datastreams", "MultiDatastreams"].forEach((entityName: string) => {
-            if (input[entityName]) input[entityName].columns["properties"] = new Jsonb().column();
+            if (entities[entityName]) entities[entityName].columns["properties"] = new Jsonb().column();
         });
         // add geom to Location
-        input.Locations.columns["geom"] = new Geometry().column();
-        return input;
+        entities.Locations.columns["geom"] = new Geometry().column();
+        return entities;
     }
 
     private createVersion(verStr: string, extensions?: typeof typeExtensions): Ientities {
         console.log(logging.whereIam(new Error().stack));
         switch (verStr) {
-            case "v1.1":
-                return this.version1_1(deepClone(this.createVersion("v1.0", extensions)));
-            default:
+            case "v1.0":
                 return this.version1_0(extensions);
+            case "v1.1":
+                return this.version1_1(deepClone(this.version1_0(extensions)));
+            default:
+                return {};
         }
     }
 
@@ -239,59 +260,58 @@ export class Models {
         return service;
     }
 
-    public listTables(model: Ientities): string[] {
+    public listTables(entities: Ientities): string[] {
         console.log(logging.whereIam(new Error().stack));
-
-        return Object.values(model)
+        return Object.values(entities)
             .map((e) => e.table)
             .filter((e) => e.trim() !== "");
     }
 
-    public addTriggersOnTables(model: Ientities, triggerName: string): string[] {
-        return this.listTables(model).map((table) => queries.createTrigger(table, triggerName));
+    public addTriggersOnTables(entities: Ientities, triggerName: string): string[] {
+        return this.listTables(entities).map((table) => queries.createTrigger(table, triggerName));
     }
 
-    public removeTriggersOnTables(model: Ientities, triggerName: string): string[] {
-        return this.listTables(model).map((table) => queries.dropTrigger(table, triggerName));
+    public removeTriggersOnTables(entities: Ientities, triggerName: string): string[] {
+        return this.listTables(entities).map((table) => queries.dropTrigger(table, triggerName));
     }
 
-    public isSingular(model: Ientities, input: string): boolean {
-        if (config && input) {
-            const entityName = this.getEntityName(model, input);
-            return entityName ? model[entityName].singular == input : false;
+    public isEntitySingular(entities: Ientities, tableName: string): boolean {
+        if (config && tableName) {
+            const entityName = this.entityName(entities, tableName);
+            return entityName ? entities[entityName].singular == tableName : false;
         }
         return false;
     }
 
-    public getEntityName(model: Ientities, search: string): string | undefined {
+    public entityName(entities: Ientities, search: string): string | undefined {
         const testString: string | undefined = search
             .trim()
             .match(/[a-zA-Z_]/g)
             ?.join("");
         return testString
-            ? model.hasOwnProperty(testString)
+            ? entities.hasOwnProperty(testString)
                 ? testString
-                : Object.keys(model).filter((elem: string) => model[elem].table == testString.toLowerCase() || model[elem].singular == testString)[0]
+                : Object.keys(entities).filter((elem: string) => entities[elem].table == testString.toLowerCase() || entities[elem].singular == testString)[0]
             : undefined;
     }
 
-    public getEntityStrict = (model: Ientities, entity: Ientity | string): Ientity | undefined => {
-        return typeof entity === "string" ? model[entity] : model[entity.name];
+    public entityStrict = (entities: Ientities, entity: Ientity | string): Ientity | undefined => {
+        return typeof entity === "string" ? entities[entity] : entities[entity.name];
     };
 
-    public getEntity = (model: Ientities, entity: Ientity | string): Ientity | undefined => {
-        return model[this.getEntityName(model, isString(entity) ? entity.trim() : entity.name) || ""];
+    public entity = (entities: Ientities, entity: Ientity | string): Ientity | undefined => {
+        return entities[this.entityName(entities, isString(entity) ? entity.trim() : entity.name) || ""];
     };
 
-    public getColumn = (model: Ientities, entity: Ientity | string, columnName: string): IentityColumn | undefined => {
-        return model[this.getEntity(model, entity)?.name || ""].columns[columnName];
+    public entityColumn = (entities: Ientities, entity: Ientity | string, columnName: string): IentityColumn | undefined => {
+        return entities[this.entity(entities, entity)?.name || ""].columns[columnName];
     };
 
-    public getColumnType = (model: Ientities, entity: Ientity | string, columnName: string): EDataType => {
-        return model[this.getEntity(model, entity)?.name || ""].columns[columnName].dataType;
+    public entityColumnType = (entities: Ientities, entity: Ientity | string, columnName: string): EDataType => {
+        return entities[this.entity(entities, entity)?.name || ""].columns[columnName].dataType;
     };
 
-    public getRelationName = (entity: Ientity, searchs: string[]): string | undefined => {
+    public entityRelationName = (entity: Ientity, searchs: string[]): string | undefined => {
         let res: string | undefined = undefined;
         searchs.forEach((e) => {
             if (entity.relations[e]) {
@@ -302,18 +322,18 @@ export class Models {
         return res;
     };
 
-    public getRelation = (model: Ientities, entity: Ientity, relation: Ientity | string): IentityRelation | undefined => {
-        const entityRelation = this.getEntity(model, relation);
+    public entityRelation = (entities: Ientities, entity: Ientity, relation: Ientity | string): IentityRelation | undefined => {
+        const entityRelation = this.entity(entities, relation);
         return entityRelation ? entity.relations[entityRelation.name] || entity.relations[entityRelation.singular] : undefined;
     };
 
-    public getRelationColumnTable = (model: Ientities, entity: Ientity | string, test: string): EColumnType | undefined => {
-        const tempEntity = this.getEntity(model, entity);
+    public entityRelationColumnTable = (entities: Ientities, entity: Ientity | string, test: string): EColumnType | undefined => {
+        const tempEntity = this.entity(entities, entity);
         if (tempEntity) return tempEntity.relations.hasOwnProperty(test) ? EColumnType.Relation : tempEntity.columns.hasOwnProperty(test) ? EColumnType.Column : undefined;
     };
 
-    public getSelectColumnList(model: Ientities, entity: Ientity | string, complete: boolean, exclus?: string[]) {
-        const tempEntity = this.getEntity(model, entity);
+    public entityColumnListForSelect(entities: Ientities, entity: Ientity | string, complete: boolean, exclus?: string[]) {
+        const tempEntity = this.entity(entities, entity);
         return tempEntity
             ? Object.keys(tempEntity.columns)
                   .filter((word) => !word.includes("_") && !(exclus || [""]).includes(word))
@@ -321,15 +341,15 @@ export class Models {
             : [];
     }
 
-    public isColumnType(model: Ientities, entity: Ientity | string, column: string, test: string): boolean {
+    public isEntityColumnType(entities: Ientities, entity: Ientity | string, column: string, test: string): boolean {
         if (config && entity) {
-            const tempEntity = this.getEntity(model, entity);
+            const tempEntity = this.entity(entities, entity);
             return tempEntity && tempEntity.columns[column] ? getColumnType(tempEntity.columns[column]) === test.toLowerCase() : false;
         }
         return false;
     }
 
-    public getRoot(ctx: koaContext) {
+    public root(ctx: koaContext) {
         console.log(logging.whereIam(new Error().stack));
         let expectedResponse: object[] = [];
         Object.keys(ctx.model)
@@ -405,21 +425,12 @@ export class Models {
     }
 
     public getModel(service: Iservice | string): Ientities {
-        if (!isTest()) {
-            service = this.getService(service);
-            // if (!Models.models[service.name]) Models.models[service.name] = this.createModel(service.apiVersion, service.options, service.extensions);
-            Models.models[service.name] = this.createModel(service.apiVersion, service.options, service.extensions);
-            return Models.models[service.name];
-        }
-        return this.createVersion("v1.1");
-    }
-
-    public getCreateModel(service: Iservice | string): Ientities {
         service = this.getService(service);
-        return this.createModel(service.apiVersion, service.options, service.extensions);
+        Models.models[service.name] = this.create(service.apiVersion, service.options, service.extensions);
+        return Models.models[service.name];
     }
 
-    private createModel(version: string, options: string[], extensions: typeof typeExtensions): Ientities {
+    private create(version: string, options: string[], extensions: typeof typeExtensions): Ientities {
         console.log(logging.whereIam(new Error().stack));
         let model = this.createVersion(version, extensions);
         const name = options.includes(EOptions.unique) ? new Text().notNull().default(EInfos.noName).unique().column() : new Text().notNull().column();

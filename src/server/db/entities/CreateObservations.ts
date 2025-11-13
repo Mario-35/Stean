@@ -83,7 +83,7 @@ export class CreateObservations extends Common {
         const streamInfos: IstreamInfos[] = [];
         // loop for mulitDatastreams inputs or one for datastream
         await asyncForEach(Object.keys(datasJson["columns"]), async (key: string) => {
-            const tempStreamInfos = await models.getStreamInfos(this.ctx, datasJson["columns"][key] as JSON);
+            const tempStreamInfos = await models.streamInfos(this.ctx, datasJson["columns"][key] as JSON);
             if (tempStreamInfos) {
                 streamInfos.push(tempStreamInfos);
                 myColumns.push({
@@ -131,7 +131,7 @@ export class CreateObservations extends Common {
         const returnValue: string[] = [];
         let total = 0;
         /// classic Create
-        const dataStreamId = await models.getStreamInfos(this.ctx, dataInput);
+        const dataStreamId = await models.streamInfos(this.ctx, dataInput);
         if (!dataStreamId) this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: EErrors.noStream });
         else {
             await asyncForEach(dataInput["dataArray"], async (elem: string[]) => {

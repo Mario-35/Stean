@@ -6,28 +6,17 @@
  *
  */
 
-import fs from "fs";
-import { paths } from "./paths";
+process.env.NODE_ENV = process.env.NODE_ENV || "production";
 import { Iversion } from "./types";
 import { EConstant } from "./enums";
+import { getVersion } from "./helpers";
 
-process.env.NODE_ENV = process.env.NODE_ENV || "production";
-
-const _appVersion = (): Iversion => {
-    const d = fs.fstatSync(fs.openSync(paths.packageFile(), "r")).mtime;
-    return {
-        version: String(JSON.parse(String(fs.readFileSync(paths.packageFile(), "utf-8"))).version),
-        date: d.toLocaleDateString() + "-" + d.toLocaleTimeString()
-    };
-};
-export const appVersion: Iversion = _appVersion();
+export const appVersion: Iversion = getVersion();
 export const timestampNow = (): string => new Date().toLocaleTimeString();
-
+export let _DEBUG = process.env.NODE_ENV?.trim() === EConstant.test || false;
 export function setDebug(input: boolean) {
     _DEBUG = input;
 }
-// export let _DEBUG = true;
-export let _DEBUG = process.env.NODE_ENV?.trim() === EConstant.test || false;
 export let _READY = false;
 export function setReady(input: boolean) {
     _READY = input;

@@ -182,25 +182,29 @@ export class Logging {
         return this;
     }
 
-    start(mess: string) {
+    private _start(mess1: string, mess2: string, separateur: string, colLine: EColor, colMess1: EColor, colMess2: EColor) {
         this.init();
-        this.line(20, EColor.Magenta);
-        this.color(EColor.Cyan);
-        this.space(`${mess} ${EConstant.appName} ${EInfos.ver} : ${appVersion.version}`);
-        this.text("du");
-        this.color(EColor.Yellow);
-        this.space(`${appVersion.date} [${process.env.NODE_ENV}]`);
-        this.line(20, EColor.Magenta);
+        this.line(20, colLine);
+        this.color(colMess1);
+        this.space(mess1);
+        this.text(separateur);
+        this.color(colMess2);
+        this.space(mess2);
+        this.line(20, colLine);
         return this;
     }
 
-    startEnd(mess: string, color1: EColor, color2: EColor) {
+    start(mess: string) {
+        return this._start(`${mess} ${EConstant.appName} ${EInfos.ver} : ${appVersion.version}`, `${appVersion.date} [${process.env.NODE_ENV}]`, "du", EColor.Magenta, EColor.Cyan, EColor.Yellow);
+    }
+
+    file(mess: string, file: string) {
         this.init();
-        this.line(20, color1);
-        this.color(color2);
-        this.space(mess);
-        this.line(20, color1);
-        return this;
+        return this._start(mess, file, EChar.arrowleft, EColor.Green, EColor.Cyan, EColor.Yellow);
+    }
+
+    startEnd(mess: string, color1: EColor, color2: EColor) {
+        return this._start(" " + mess, "", "", color1, color2, EColor.Reset);
     }
 
     logo() {

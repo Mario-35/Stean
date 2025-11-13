@@ -8,6 +8,14 @@
 
 import { koaContext } from "../../types";
 
+/**
+ *
+ * A route to tests
+ *
+ * @param ctx koa context
+ * @returns result json
+ */
+
 export const testRoute = async (ctx: koaContext): Promise<string[] | { [key: string]: any }> => {
     try {
         return { "Test": "No Test" };

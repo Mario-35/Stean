@@ -26,7 +26,7 @@ export class apiAccess implements Icomon {
     constructor(ctx: koaContext, entity?: string) {
         console.log(logging.whereIam(new Error().stack));
         this.ctx = ctx;
-        const entityName = entity ? models.getEntityName(this.ctx.model, entity) : this.ctx.odata.entity ? this.ctx.odata.entity.name : "none";
+        const entityName = entity ? models.entityName(this.ctx.model, entity) : this.ctx.odata.entity ? this.ctx.odata.entity.name : "none";
         if (entityName && entityName in entities) {
             // @ts-ignore
             this.myEntity = new entities[(this.ctx, entityName)](ctx);

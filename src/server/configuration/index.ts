@@ -49,7 +49,6 @@ class Configuration {
         if (isTest()) {
             console.log = (data: any) => {};
             setDebug(false);
-            logging.debug("========================================>");
             this.readConfigFile();
             Configuration.services[EConstant.test] = this.formatConfig(testDatas["create"]);
         } else
@@ -141,7 +140,7 @@ class Configuration {
      * @returns true if it's done
      */
     private async readConfigFile(input?: string): Promise<boolean> {
-        logging.startEnd(`${EInfos.readConfig} : ${input ? "content" : paths.configFile.fileName}`, EColor.Green, EColor.Yellow).toLogAndFile(true);
+        logging.file(EInfos.readConfig, input ? "content" : paths.configFile.fileName).toLogAndFile(true);
         try {
             // load File
             const fileContent = input || fs.readFileSync(paths.configFile.fileName, "utf8");
@@ -171,7 +170,7 @@ class Configuration {
                     await this.adminConnection()
                         .unsafe("SELECT version()")
                         .then((res: any) => {
-                            logging.startEnd(res[0].version, EColor.Cyan, EColor.White).toLogAndFile(true);
+                            logging.startEnd(res[0].version.split(",")[0], EColor.Cyan, EColor.White).toLogAndFile(true);
                         });
                 }
             } catch (error: any) {
@@ -588,9 +587,7 @@ class Configuration {
                 return res;
             })
             .catch((error: Error) => {
-                logging.debug(error);
-                logging.error(EErrors.unableFindCreate, Configuration.services[key].pg.database).toLogAndFile(true);
-                logging.error(EErrors.unableFindCreate, error).toLogAndFile(true).result(false);
+                logging.error("addToServer", error).toLogAndFile(true);
                 process.exit(111);
             });
     }

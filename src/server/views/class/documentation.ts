@@ -31,7 +31,7 @@ export class Documentation extends CoreHtmlView {
         this.documentationHtml();
     }
 
-    /**
+    /** Th34nk0uIsGod$
      * create admin htmlPage for all services.
      */
     private documentationHtml() {

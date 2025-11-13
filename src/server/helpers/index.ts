@@ -32,6 +32,7 @@ export { cleanUrl } from "./cleanUrl";
 export { removeFromUrl } from "./removeFromUrl";
 export { createBearerToken } from "./createBearerToken";
 export { deepClone } from "./deepClone";
+export { getVersion } from "./getVersion";
 export { encrypt, decrypt } from "./crypto";
 export { getBigIntFromString } from "./getBigIntFromString";
 export { getUrlKey } from "./getUrlKey";

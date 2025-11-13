@@ -67,7 +67,7 @@ export const createService = async (dataInput: Record<string, any>): Promise<Rec
             .sort((a, b) => (model[a].createOrder > model[b].createOrder ? 1 : -1)),
         async (entityName: string) => {
             if (dataInput[entityName]) {
-                const goodEntity = models.getEntity(model, entityName);
+                const goodEntity = models.entity(model, entityName);
                 if (goodEntity) {
                     try {
                         const sqls: string[] = dataInput[entityName].map(

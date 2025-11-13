@@ -35,7 +35,7 @@ export class OdataGeoColumn {
         if (tempEntity) {
             if (this.column.includes(".")) {
                 const temp = this.column.split(".");
-                const tm = models.getEntity(this.src.ctx.model, temp[0]);
+                const tm = models.entity(this.src.ctx.model, temp[0]);
                 if (tm && tm.columns.hasOwnProperty(temp[1])) {
                     this.src.subQuery.select = `"featureofinterest"."id"`;
                     this.src.subQuery.where = `CASE WHEN "${EConstant.encoding}" LIKE '%geo+json' THEN ST_GeomFromEWKT(ST_GeomFromGeoJSON(coalesce(${doubleQuotes(temp[1])}->'geometry',${doubleQuotes(

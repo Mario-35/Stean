@@ -62,7 +62,7 @@ export class RootPgVisitor extends PgVisitor {
                         .join(<string>where);
 
                     this.query.where.init(whereSql);
-                    const tempEntity = models.getEntity(this.ctx.model, nodeName);
+                    const tempEntity = models.entity(this.ctx.model, nodeName);
                     if (tempEntity) {
                         this.swapEntity(tempEntity);
                         this.single = tempEntity.singular === nodeName || BigInt(this.id) > 0 ? true : false;
@@ -76,7 +76,7 @@ export class RootPgVisitor extends PgVisitor {
     }
 
     protected VisitRessourcesEntitySetName(node: Token, _context: IodataContext) {
-        this.entity = models.getEntityStrict(this.ctx.model, node.value.name);
+        this.entity = models.entityStrict(this.ctx.model, node.value.name);
         if (!this.entity) this.ctx.throw(EHttpCode.notFound, "Not Found");
     }
 
@@ -129,7 +129,7 @@ export class RootPgVisitor extends PgVisitor {
                 .join(<string>where);
 
             this.query.where.init(whereSql);
-            const tempEntity = models.getEntity(this.ctx.model, node.value.name);
+            const tempEntity = models.entity(this.ctx.model, node.value.name);
             if (tempEntity) {
                 this.swapEntity(tempEntity);
                 this.single = tempEntity.singular === node.value.name || BigInt(this.id) > 0 ? true : false;
@@ -167,7 +167,7 @@ export class RootPgVisitor extends PgVisitor {
                     include.navigationProperty = names[0];
                     const visitor = new PgVisitor(this.ctx, { ...this.options });
                     if (visitor) {
-                        const nameEntity = models.getEntity(this.ctx.model, names[0]);
+                        const nameEntity = models.entity(this.ctx.model, names[0]);
                         if (nameEntity) {
                             visitor.entity = nameEntity;
                             visitor.navigationProperty = names[1];

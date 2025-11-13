@@ -77,7 +77,7 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
         .catch((err: Error) => err.message);
 
     // Get complete model
-    const DB = models.getCreateModel(service);
+    const DB = models.getModel(service);
 
     // loop to create each table
     await asyncForEach(
