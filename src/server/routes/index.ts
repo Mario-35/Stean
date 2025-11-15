@@ -24,7 +24,8 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     // copy body
     ctx.body = ctx.request.body;
     // if configuration exist
-    if (config.configFileExist() === true) await config.trace.write(ctx); // trace request
+    if (config.configFileExist() === true)
+        await config.trace.write(ctx); // trace request
     else return await adminRoute(ctx); // admin route for first start
 
     // create token

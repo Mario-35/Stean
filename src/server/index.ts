@@ -11,7 +11,6 @@ import Koa from "koa";
 import bodyParser from "koa-bodyparser";
 import logger from "koa-logger";
 import helmet from "koa-helmet";
-import json from "koa-json";
 import cors from "@koa/cors";
 import serve from "koa-static";
 import favicon from "koa-favicon";
@@ -63,10 +62,14 @@ if (!isTest())
             paths.logFile.writeStream(logToHtml(str));
         })
     );
-// add json capabilities to KOA server
-app.use(json());
 // add cors capabilities to KOA server
-app.use(cors());
+app.use(
+    cors({
+        origin(ctx) {
+            return ctx.get("Origin") || "*";
+        }
+    })
+);
 // free routes
 app.use(unProtectedRoutes.routes());
 // authenticated routes

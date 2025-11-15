@@ -26,7 +26,7 @@ import { messages } from "../messages";
 import { queries } from "../db/queries";
 export const protectedRoutes = new Router<DefaultState, Context>();
 
-protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
+protectedRoutes.post("/*path", async (ctx: koaContext, next) => {
     switch (ctx.decodedUrl.path.toUpperCase()) {
         // Restart App
         case "RESTART":
@@ -177,7 +177,7 @@ protectedRoutes.post("/(.*)", async (ctx: koaContext, next) => {
     } else ctx.throw(EHttpCode.Unauthorized);
 });
 
-protectedRoutes.patch("/(.*)", async (ctx) => {
+protectedRoutes.patch("/*path", async (ctx) => {
     if ((!ctx.service.extensions.includes(EExtensions.users) || isAllowedTo(ctx, EUserRights.Post) === true) && Object.keys(ctx.body).length > 0) {
         const odataVisitor = await createOdata(ctx);
         if (odataVisitor) ctx.odata = odataVisitor;
@@ -203,7 +203,7 @@ protectedRoutes.patch("/(.*)", async (ctx) => {
     }
 });
 
-protectedRoutes.delete("/(.*)", async (ctx) => {
+protectedRoutes.delete("/*path", async (ctx) => {
     if (!ctx.service.extensions.includes(EExtensions.users) || isAllowedTo(ctx, EUserRights.Delete) === true) {
         const odataVisitor = await createOdata(ctx);
         if (odataVisitor) ctx.odata = odataVisitor;

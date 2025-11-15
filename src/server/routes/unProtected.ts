@@ -26,7 +26,7 @@ import { logging } from "../log";
 
 export const unProtectedRoutes = new Router<DefaultState, Context>();
 // ALL others
-unProtectedRoutes.get("/(.*)", async (ctx) => {
+unProtectedRoutes.get("/*path", async (ctx) => {    
     switch (ctx.decodedUrl.path.toUpperCase()) {
         // Root path
         case `/`:
@@ -208,7 +208,7 @@ unProtectedRoutes.get("/(.*)", async (ctx) => {
 });
 
 // Put only for add decoder from admin
-unProtectedRoutes.put("/(.*)", async (ctx) => {
+unProtectedRoutes.put("/*path", async (ctx) => {
     if (ctx.request.url.includes("/Decoders")) {
         if (ctx.request.type.startsWith("application/json") && Object.keys(ctx.body).length > 0) {
             const odataVisitor = await createOdata(ctx);
