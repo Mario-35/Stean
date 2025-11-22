@@ -55,6 +55,7 @@ class Configuration {
             console.log = (data: any) => {
                 if (data) process.stdout.write(typeof data === "object" ? util.inspect(data, { showHidden: false, depth: null, colors: true }) + EConstant.return : data + EConstant.return);
             };
+            setDebug(true);
     }
 
     allReady(): boolean {
@@ -127,6 +128,7 @@ class Configuration {
      * @param port port number
      * @param db show db infos
      */
+
 
     messageListen(what: string, port: string, db?: boolean) {
         if (db) logging.status(true, messages.str(EInfos.dbReady, what), EChar.web).toLogAndFile(true);

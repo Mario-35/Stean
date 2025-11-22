@@ -26,7 +26,8 @@ export const EConstant = Object.freeze({
     newline: "\r\n",
     tab: "\t",
     return: "\n",
-    host: "localhost",
+    host: "127.0.0.1",
+   
     pg: "postgres",
     port: 5432,
     voidtable: "voidTable",

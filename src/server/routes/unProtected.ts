@@ -99,7 +99,7 @@ unProtectedRoutes.get("/*path", async (ctx) => {
                     return;
                 }
             }
-            ctx.cookies.set("jwt-session");
+            ctx.cookies.set("stean-session");
             ctx.redirect(`${ctx.decodedUrl.root}/login`);
             return;
         // Create user
@@ -110,7 +110,7 @@ unProtectedRoutes.get("/*path", async (ctx) => {
             return;
         // Logout user
         case "LOGOUT":
-            ctx.cookies.set("jwt-session");
+            ctx.cookies.set("stean-session");
             if (ctx.request.header.accept && ctx.request.header.accept.includes("text/html")) ctx.redirect(`${ctx.decodedUrl.root}/login`);
             else ctx.status = EHttpCode.ok;
             ctx.body = {

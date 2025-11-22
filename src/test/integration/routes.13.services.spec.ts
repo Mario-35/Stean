@@ -108,7 +108,6 @@ describe("endpoint : Service", () => {
             const infos = addTest({
                 type: "get",
                 short: "All",
-
                 description: `Retrieve all ${entity.name}}`,
                 reference: "",
                 request: `${testVersion}/${entity.name}`

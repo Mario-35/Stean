@@ -52,7 +52,7 @@ export interface Iinfos {
     params?: Record<string, any>;
     examples?: { [key: string]: string };
 }
-export const keyTokenName = "jwt-session";
+export const keyTokenName = "stean-session";
 export interface IApiInput {
     short: string;
     type: string;

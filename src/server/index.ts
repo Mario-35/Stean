@@ -44,6 +44,7 @@ models.initialisation();
 // new koa server https://koajs.com/
 export const app = new Koa();
 app.use(favicon(path.join(__dirname, "/", "favicon.ico")));
+
 // add public folder [static]
 app.use(serve(path.join(__dirname, "/", "public")));
 // helmet protection https://github.com/venables/koa-helmet

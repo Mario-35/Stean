@@ -48,7 +48,7 @@ export const createBearerToken = (ctx: koaContext) => {
 
         // cookie
         if (cookie && header.cookie) {
-            const plainCookie = getCookie(header.cookie, "jwt-session"); // seeks the key
+            const plainCookie = getCookie(header.cookie, "stean-session"); // seeks the key
             if (plainCookie) {
                 const cookieToken = cookieParser.signedCookie(plainCookie, paths.key);
                 if (cookieToken) {

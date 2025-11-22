@@ -43,7 +43,7 @@ export const loginUser = async (ctx: koaContext | undefined, login?: { configNam
         if (body["username"] && body["password"]) {
             const user = await getUser(ctx.service.name, body["username"], body["password"]);
             if (user) {
-                ctx.cookies.set("jwt-session", user["token" as keyof object]);
+                ctx.cookies.set("stean-session", user["token" as keyof object]);
                 return user;
             } else ctx.throw(EHttpCode.Unauthorized);
         } else ctx.throw(EHttpCode.Unauthorized);
