@@ -30,7 +30,7 @@ export async function createQueryParams(ctx: koaContext): Promise<IqueryOptions 
     return {
         methods: ["GET"],
         // decodedUrl: ctx._,
-        chose: ctx._,
+        _: ctx._,
         entity: "",
         options: ctx.querystring ? ctx.querystring : "",
         user: user,
