@@ -20,7 +20,7 @@ import { koaContext } from "../types";
 
 export const userAuthenticated = (ctx: koaContext): boolean => {
     console.log(logging.whereIam(new Error().stack));
-    if (ctx.service && ctx.service.extensions.includes(EExtensions.users)) {
+    if (ctx._.service && ctx._.service.extensions.includes(EExtensions.users)) {
         const token = decodeToken(ctx);
         return token && +token.id > 0;
     } else return true;

@@ -16,7 +16,6 @@ import {
     IApiInput,
     prepareToApiDoc,
     identification,
-    keyTokenName,
     limitResult,
     apiInfos,
     showHide,
@@ -30,6 +29,7 @@ import {
 import { server } from "../../server/index";
 import { Ientity } from "../../server/types";
 import { addStartNewTest, addTest, writeLog } from "./tests";
+import { EConstant } from "../../server/enums";
 
 const testsKeys = ["@iot.id", "name", "deveui", "description", "properties", "@iot.selfLink", "Datastreams@iot.navigationLink", "MultiDatastreams@iot.navigationLink", "Decoder@iot.navigationLink"];
 
@@ -388,7 +388,7 @@ describe("endpoint : Lora", () => {
             chai.request(server)
                 .post(`/test/${infos.request}`)
                 .send(infos.params)
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(201);
@@ -422,7 +422,7 @@ describe("endpoint : Lora", () => {
             chai.request(server)
                 .post(`/test/${infos.request}`)
                 .send(infos.params)
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(201);
@@ -457,7 +457,7 @@ describe("endpoint : Lora", () => {
             chai.request(server)
                 .post(`/test/${infos.request}`)
                 .send(datas)
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(404);

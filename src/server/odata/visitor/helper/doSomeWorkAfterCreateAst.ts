@@ -14,7 +14,7 @@ import { koaContext } from "../../../types";
 export const doSomeWorkAfterCreateAst = async (input: RootPgVisitor, ctx: koaContext) => {
     console.log(logging.whereIam(new Error().stack));
     if (input.entity && input.splitResult && input.splitResult[0].toUpperCase() == "ALL" && input.parentId && <bigint>input.parentId > 0) {
-        const temp = await config.connection(ctx.service.name).unsafe(`${queries.multiDatastreamKeys(input.parentId)}`);
+        const temp = await config.connection(ctx._.service.name).unsafe(`${queries.multiDatastreamKeys(input.parentId)}`);
         input.splitResult = temp[0]["keys"];
     }
 };

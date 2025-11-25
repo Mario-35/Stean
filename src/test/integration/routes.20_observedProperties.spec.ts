@@ -10,12 +10,13 @@
 process.env.NODE_ENV = "test";
 import chai from "chai";
 import chaiHttp from "chai-http";
-import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, getNB, listOfColumns, limitResult, infos, showHide, apiInfos, nbColorTitle, nbColor, testVersion, _RAWDB } from "./constant";
+import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, identification, getNB, listOfColumns, limitResult, infos, showHide, apiInfos, nbColorTitle, nbColor, testVersion, _RAWDB } from "./constant";
 import { server } from "../../server/index";
 import { Ientity } from "../../server/types";
 import { testsKeys as datastreams_testsKeys } from "./routes.17_datastreams.spec";
 import { executeQuery, last } from "./executeQuery";
 import { addStartNewTest, addTest, writeLog } from "./tests";
+import { EConstant } from "../../server/enums";
 export const testsKeys = ["@iot.id", "@iot.selfLink", "Datastreams@iot.navigationLink", "name", "description", "definition"];
 chai.use(chaiHttp);
 const should = chai.should();
@@ -341,7 +342,7 @@ describe("endpoint : ObservedProperties", () => {
             chai.request(server)
                 .post(`/test/${infos.request}`)
                 .send(infos.params)
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(201);
@@ -367,7 +368,7 @@ describe("endpoint : ObservedProperties", () => {
             chai.request(server)
                 .post(`/test/${infos.request}`)
                 .send({})
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(400);
@@ -397,7 +398,7 @@ describe("endpoint : ObservedProperties", () => {
                 chai.request(server)
                     .patch(`/test/${infos.request}`)
                     .send(infos.params)
-                    .set("Cookie", `${keyTokenName}=${token}`)
+                    .set("Cookie", `${EConstant.appName}=${token}`)
                     .end((err: Error, res: any) => {
                         should.not.exist(err);
                         res.status.should.equal(201);
@@ -431,7 +432,7 @@ describe("endpoint : ObservedProperties", () => {
             });
             chai.request(server)
                 .patch(`/test/${infos.request}`)
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .send(datas)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
@@ -457,7 +458,7 @@ describe("endpoint : ObservedProperties", () => {
                 });
                 chai.request(server)
                     .delete(`/test/${infos.request}`)
-                    .set("Cookie", `${keyTokenName}=${token}`)
+                    .set("Cookie", `${EConstant.appName}=${token}`)
                     .end((err: Error, res: any) => {
                         should.not.exist(err);
                         res.status.should.equal(204);
@@ -484,7 +485,7 @@ describe("endpoint : ObservedProperties", () => {
             });
             chai.request(server)
                 .delete(`/test/${infos.request}`)
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(404);

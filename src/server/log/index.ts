@@ -176,7 +176,7 @@ export class Logging {
         if (Logging.can === true) {
             this.separator("[ Query " + src + " ]", EColor.Blue);
             this.add(EConstant.return);
-            this.color(EColor.Sql);
+            this.color(EColor.Cyan);
             this.add(this.objet(sql));
         }
         return this;
@@ -246,7 +246,7 @@ export class Logging {
         this.text(" ".repeat(4));
         this.color(EColor.Blue);
         this.space(car);
-        this.color(EColor.Default);
+        this.color(EColor.Reset);
         this.space(cle);
         this.text(test ? EChar.ok : EChar.notOk);
         return this;
@@ -258,7 +258,7 @@ export class Logging {
         this.text(cle, EColor.Green);
         this.color(EColor.Blue);
         this.space(EChar.arrowright);
-        this.color(EColor.Default);
+        this.color(EColor.White);
         this.space(message);
         this.text(EChar.ok);
         return this;

@@ -28,13 +28,13 @@ export class Services extends Common {
         console.log(logging.whereIam(new Error().stack));
         let can = userAuthenticated(this.ctx);
         if (can) {
-            can = this.ctx.user.PDCUAS[4] === true;
-            if (this.ctx.user.PDCUAS[5] === true) can = true;
+            can = this.ctx._.user.PDCUAS[4] === true;
+            if (this.ctx._.user.PDCUAS[5] === true) can = true;
         }
         // Return result If not authorised
         if (!can)
             return this.formatReturnResult({
-                body: hidePassword(config.getService(this.ctx.service.name))
+                body: hidePassword(config.getService(this.ctx._.service.name))
             });
         // Return result
         return this.formatReturnResult({
@@ -53,14 +53,14 @@ export class Services extends Common {
         if (!userAuthenticated(this.ctx)) this.ctx.throw(EHttpCode.Unauthorized);
         // Return result
         return this.formatReturnResult({
-            body: hideKeysInJson(config.getService(typeof this.ctx.odata.id === "string" ? this.ctx.odata.id : this.ctx.service.name), ["entities"])
+            body: hideKeysInJson(config.getService(typeof this.ctx._.odata.id === "string" ? this.ctx._.odata.id : this.ctx._.service.name), ["entities"])
         });
     }
 
     // Override Post service
     async post(dataInput: Record<string, any> | undefined): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
-        if (!this.ctx.service.extensions.includes(EExtensions.users)) this.ctx.throw(EHttpCode.Unauthorized);
+        if (!this.ctx._.service.extensions.includes(EExtensions.users)) this.ctx.throw(EHttpCode.Unauthorized);
         if (dataInput && dataInput["create"] && dataInput["create"]["name"]) {
             return this.formatReturnResult({
                 body: await createService(dataInput)

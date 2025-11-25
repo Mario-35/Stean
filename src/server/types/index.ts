@@ -33,7 +33,6 @@ export { IstreamInfos } from "./streamInfos";
 export { Iuser } from "./user";
 export { IuserToken } from "./userToken";
 export { Iversion } from "./version";
-export { IdecodedUrl } from "./decodedUrl";
 export { IqueryMaker } from "./queryMaker";
 export { Idatas } from "./datas";
 export { IforwardConnection } from "./forwardConnection";

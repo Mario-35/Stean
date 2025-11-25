@@ -6,20 +6,18 @@
  *
  */
 
-import cookieParser from "cookie-parser";
-import cookieModule from "cookie";
+// import cookieParser from "cookie-parser";
 import { koaContext } from "../types";
-import { EErrors, EHttpCode } from "../enums";
+import { EConstant, EErrors, EHttpCode } from "../enums";
 import { paths } from "../paths";
 
 export const createBearerToken = (ctx: koaContext) => {
-    const getCookie = (serializedCookies: string, key: string) => cookieModule.parse(serializedCookies)[key] ?? false;
     const queryKey = "access_token";
     const bodyKey = "access_token";
     const headerKey = "Bearer";
-    const cookie = true;
+    const cookiePresent = true;
 
-    if (cookie && !paths.key) {
+    if (cookiePresent && !paths.key) {
         throw new Error(EErrors.tokenMissing);
     }
 
@@ -32,11 +30,12 @@ export const createBearerToken = (ctx: koaContext) => {
         token = query[queryKey];
         count += 1;
     }
+    
     if (body && body[bodyKey as keyof object]) {
         token = body[bodyKey as keyof object];
         count += 1;
     }
-
+    
     if (header) {
         if (header.authorization) {
             const parts = header.authorization.split(" ");
@@ -47,14 +46,11 @@ export const createBearerToken = (ctx: koaContext) => {
         }
 
         // cookie
-        if (cookie && header.cookie) {
-            const plainCookie = getCookie(header.cookie, "stean-session"); // seeks the key
+        if (cookiePresent && header.cookie) {
+            const plainCookie = ctx.cookies.get(EConstant.appName); // seeks the key
             if (plainCookie) {
-                const cookieToken = cookieParser.signedCookie(plainCookie, paths.key);
-                if (cookieToken) {
-                    token = cookieToken;
-                    count += 1;
-                }
+                token = plainCookie;
+                count += 1;                
             }
         }
     }

@@ -294,11 +294,6 @@ jsonDatas.onpaste = function() {
 		}, 100);
 	}
 };
-// update datas after key up
-jsonDatas.onkeyup = function() {
-	setJSON()
-};
-
 
 // copy service to actual service
 btnCopyService.onclick = () => {

@@ -49,9 +49,9 @@ export class Payload extends Common {
         const temp = Object.keys(dataInput).length === 1 ? flatten(dataInput[Object.keys(dataInput)[0]]) : dataInput;
         const result: Record<string, any> = {};
         // if sub json get it
-        if (this.ctx.service.synonyms)
-            Object.keys(this.ctx.service.synonyms).forEach((e: string) => {
-                let search = searchInJson(temp, [...(this.ctx.service.synonyms ? this.ctx.service.synonyms[e as keyof object] : []), ...[e]]);
+        if (this.ctx._.service.synonyms)
+            Object.keys(this.ctx._.service.synonyms).forEach((e: string) => {
+                let search = searchInJson(temp, [...(this.ctx._.service.synonyms ? this.ctx._.service.synonyms[e as keyof object] : []), ...[e]]);
                 if (search) result[e] = search.toUpperCase();
             });
         else Object.entries(temp).forEach(([k, v]) => (result[k] = ["frame", "deveui", "timestamp"].includes(k) ? String(v).toUpperCase() : v));
@@ -84,7 +84,7 @@ export class Payload extends Common {
             else this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: EErrors.deveuiMessage });
         }
 
-        const stream = await executeSql(this.ctx.service, queries.streamInfosFromDeveui(this.stean["deveui"])).then((res: Record<string, any>) => {
+        const stream = await executeSql(this.ctx._.service, queries.streamInfosFromDeveui(this.stean["deveui"])).then((res: Record<string, any>) => {
             if (res[0]["multidatastream"] != null) return res[0]["multidatastream"][0];
             if (res[0]["datastream"] != null) return res[0]["datastream"][0];
             this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: messages.str(EErrors.deveuiNotFound, this.stean["deveui"]) });
@@ -92,7 +92,7 @@ export class Payload extends Common {
         logging.message("stream", stream).toLogAndFile();
         // search for frame and decode payload if found
         if (notNull(this.stean["frame"])) {
-            const temp = await decodeloraDeveuiPayload(this.ctx.service, this.stean["deveui"], this.stean["frame"]);
+            const temp = await decodeloraDeveuiPayload(this.ctx._.service, this.stean["deveui"], this.stean["frame"]);
             if (!temp) return this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: "Error" });
             if (temp && temp.error) {
                 if (silent) return this.formatReturnResult({ body: temp.error });
@@ -209,7 +209,7 @@ export class Payload extends Common {
                    "(SELECT observation1.COLUMN FROM observation1), "
                )} (SELECT multidatastream1.id FROM multidatastream1) AS multidatastream, (SELECT multidatastream1.thing_id FROM multidatastream1) AS thing)
                  SELECT coalesce(json_agg(t), '[]') AS result FROM result1 AS t`;
-            return await executeSqlValues(this.ctx.service, sql).then(async (res: object) => {
+            return await executeSqlValues(this.ctx._.service, sql).then(async (res: object) => {
                 // TODO MULTI
                 const tempResult: Record<string, any> = res[0 as keyof object][0];
                 if (tempResult.id != null) {
@@ -219,9 +219,9 @@ export class Payload extends Common {
                         result: tempResult["result"]["value"]
                     };
                     result[EConstant.id] = tempResult.id;
-                    result[EConstant.selfLink] = `${this.ctx.decodedUrl.root}/Observations(${tempResult.id})`;
+                    result[EConstant.selfLink] = `${this.ctx._.root}/Observations(${tempResult.id})`;
                     Object.keys(OBSERVATION.relations).forEach((word) => {
-                        result[`${word}${EConstant.navLink}`] = `${this.ctx.decodedUrl.root}/Observations(${tempResult.id})/${word}`;
+                        result[`${word}${EConstant.navLink}`] = `${this.ctx._.root}/Observations(${tempResult.id})/${word}`;
                     });
                     return this.formatReturnResult({ body: result, query: sql });
                 } else {
@@ -230,7 +230,7 @@ export class Payload extends Common {
                         this.ctx.throw(EHttpCode.conflict, {
                             code: EHttpCode.conflict,
                             detail: EErrors.observationExist,
-                            link: `${this.ctx.decodedUrl.root}/Observations(${[tempResult.duplicate]})`
+                            link: `${this.ctx._.root}/Observations(${[tempResult.duplicate]})`
                         });
                 }
             });
@@ -238,7 +238,7 @@ export class Payload extends Common {
             logging.message("datastream", stream["datastream"]).toLogAndFile();
             const getFeatureOfInterest = getBigIntFromString(dataInput["FeatureOfInterest"]);
             const searchFOI: Record<string, any> = await executeSql(
-                this.ctx.service,
+                this.ctx._.service,
                 getFeatureOfInterest
                     ? `SELECT coalesce((SELECT "id" FROM "${FEATUREOFINTEREST.table}" WHERE "id" = ${getFeatureOfInterest}), ${getFeatureOfInterest}) AS id `
                     : stream["_default_featureofinterest"]
@@ -291,7 +291,7 @@ export class Payload extends Common {
                         "(SELECT observation1.COLUMN from observation1), "
                     )} (SELECT datastream1.id from datastream1) AS datastream, (SELECT datastream1.thing_id from datastream1) AS thing)
                 SELECT coalesce(json_agg(t), '[]') AS result FROM result1 AS t`;
-            return await executeSql(this.ctx.service, sql).then(async (res: object) => {
+            return await executeSql(this.ctx._.service, sql).then(async (res: object) => {
                 const tempResult: Record<string, any> = res[0 as keyof object]["result"][0];
                 if (tempResult.id != null) {
                     const result: Record<string, any> = {
@@ -300,9 +300,9 @@ export class Payload extends Common {
                         result: tempResult["result"]["value"]
                     };
                     result[EConstant.id] = tempResult.id;
-                    result[EConstant.selfLink] = `${this.ctx.decodedUrl.root}/Observations(${tempResult.id})`;
+                    result[EConstant.selfLink] = `${this.ctx._.root}/Observations(${tempResult.id})`;
                     Object.keys(OBSERVATION.relations).forEach((word) => {
-                        result[`${word}${EConstant.navLink}`] = `${this.ctx.decodedUrl.root}/Observations(${tempResult.id})/${word}`;
+                        result[`${word}${EConstant.navLink}`] = `${this.ctx._.root}/Observations(${tempResult.id})/${word}`;
                     });
                     return this.formatReturnResult({
                         body: result,
@@ -314,7 +314,7 @@ export class Payload extends Common {
                         this.ctx.throw(EHttpCode.conflict, {
                             code: EHttpCode.conflict,
                             detail: EErrors.observationExist,
-                            link: `${this.ctx.decodedUrl.root}/Observations(${[tempResult.duplicate]})`
+                            link: `${this.ctx._.root}/Observations(${[tempResult.duplicate]})`
                         });
                 }
             });

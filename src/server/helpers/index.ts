@@ -5,8 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-import { koaContext } from "../types";
-export const getUserId = (ctx: koaContext): number => (ctx.state.user && ctx.state.user.id ? ctx.state.user.id : -1);
 export const unikeList = (input: string[]) => [...new Set(input)];
 export {
     isTest,

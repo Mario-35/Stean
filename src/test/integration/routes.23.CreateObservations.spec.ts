@@ -10,10 +10,11 @@
 process.env.NODE_ENV = "test";
 import chai from "chai";
 import chaiHttp from "chai-http";
-import { IApiDoc, IApiInput, prepareToApiDoc, generateApiDoc, identification, keyTokenName, limitResult, blank, testVersion, _RAWDB } from "./constant";
+import { IApiDoc, IApiInput, prepareToApiDoc, generateApiDoc, identification, limitResult, blank, testVersion, _RAWDB } from "./constant";
 import { server } from "../../server/index";
 import { Ientity } from "../../server/types";
 import { addStartNewTest, addTest, writeLog } from "./tests";
+import { EConstant } from "../../server/enums";
 chai.use(chaiHttp);
 const should = chai.should();
 const docs: IApiDoc[] = [];
@@ -84,7 +85,7 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
         chai.request(server)
             .post(`/test/${infos.request}`)
             .send(infos.params)
-            .set("Cookie", `${keyTokenName}=${token}`)
+            .set("Cookie", `${EConstant.appName}=${token}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(201);
@@ -117,7 +118,7 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
         chai.request(server)
             .post(`/test/${infos.request}`)
             .send(datas)
-            .set("Cookie", `${keyTokenName}=${token}`)
+            .set("Cookie", `${EConstant.appName}=${token}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(404);
@@ -137,7 +138,7 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
         chai.request(server)
             .post(`/test/${infos.request}`)
             .send(datasObs(2))
-            .set("Cookie", `${keyTokenName}=${token}`)
+            .set("Cookie", `${EConstant.appName}=${token}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(201);
@@ -159,7 +160,7 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
         chai.request(server)
             .post(`/test/${infos.request}`)
             .send(datasObs(2))
-            .set("Cookie", `${keyTokenName}=${token}`)
+            .set("Cookie", `${EConstant.appName}=${token}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(201);
@@ -185,7 +186,7 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
         chai.request(server)
             .post(`/test/${infos.request}`)
             .send(datas)
-            .set("Cookie", `${keyTokenName}=${token}`)
+            .set("Cookie", `${EConstant.appName}=${token}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(201);
@@ -209,7 +210,7 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
         chai.request(server)
             .post(`/test/${infos.request}`)
             .send(datas)
-            .set("Cookie", `${keyTokenName}=${token}`)
+            .set("Cookie", `${EConstant.appName}=${token}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(201);
@@ -232,7 +233,7 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
         chai.request(server)
             .post(`/test/${infos.request}`)
             .send(datas)
-            .set("Cookie", `${keyTokenName}=${token}`)
+            .set("Cookie", `${EConstant.appName}=${token}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(201);
@@ -258,7 +259,7 @@ describe(`endpoint : ${entity.name} [13.2]`, () => {
         chai.request(server)
             .post(`/test/${infos.request}`)
             .send(datas)
-            .set("Cookie", `${keyTokenName}=${token}`)
+            .set("Cookie", `${EConstant.appName}=${token}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(201);

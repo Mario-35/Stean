@@ -15,9 +15,9 @@ import { koaContext } from "../../types";
 
 export const exportToJson = async (ctx: koaContext) => {
     // get config with hidden password
-    const result: Record<string, any> = { "create": hidePassword(config.getService(ctx.service.name)) };
+    const result: Record<string, any> = { "create": hidePassword(config.getService(ctx._.service.name)) };
     // get entites list
-    const entities = Object.keys(ctx.model).filter((e: string) => ctx.model[e].createOrder > 0);
+    const entities = Object.keys(ctx._.model()).filter((e: string) => ctx._.model()[e].createOrder > 0);
     // add ThingsLocations
     entities.push(THINGLOCATION.name);
     // async loop
@@ -26,13 +26,13 @@ export const exportToJson = async (ctx: koaContext) => {
         entities,
         // Action
         async (entity: string) => {
-            if (Object.keys(ctx.model[entity].columns) && ctx.model[entity].table != "") {
+            if (Object.keys(ctx._.model()[entity].columns) && ctx._.model()[entity].table != "") {
                 // Create columns list
-                const columnList = Object.keys(ctx.model[entity].columns).filter((e: string) => e != "id" && !e.endsWith("_id") && e[0] != "_" && ctx.model[entity].columns[e].create != "");
+                const columnList = Object.keys(ctx._.model()[entity].columns).filter((e: string) => e != "id" && !e.endsWith("_id") && e[0] != "_" && ctx._.model()[entity].columns[e].create != "");
 
                 // Create relations list
                 const rels = [""];
-                Object.keys(ctx.model[entity].columns)
+                Object.keys(ctx._.model()[entity].columns)
                     .filter((e: string) => e.endsWith("_id"))
                     .forEach((e: string) => {
                         const table = e.split("_")[0];
@@ -44,10 +44,10 @@ export const exportToJson = async (ctx: koaContext) => {
                 if (columnListWithQuotes.length <= 1) rels.shift();
                 // Execute query
                 const tempResult = await config
-                    .connection(ctx.service.name)
+                    .connection(ctx._.service.name)
                     .unsafe(
-                        `SELECT ${columnListWithQuotes}${rels.length > 1 ? rels.join() : ""}${EConstant.return} FROM "${ctx.model[entity].table}" LIMIT ${
-                            getUrlKey(ctx.request.url, "LIMIT") || ctx.service.nb_page
+                        `SELECT ${columnListWithQuotes}${rels.length > 1 ? rels.join() : ""}${EConstant.return} FROM "${ctx._.model()[entity].table}" LIMIT ${
+                            getUrlKey(ctx.request.url, "LIMIT") || ctx._.service.nb_page
                         }`
                     );
                 // remove null and store datas result
@@ -56,9 +56,9 @@ export const exportToJson = async (ctx: koaContext) => {
         }
     );
     delete result["FeaturesOfInterest"][0];
-    // const sql = asCsv("select * from observation", ctx.service.csvDelimiter);
+    // const sql = asCsv("select * from observation", ctx._.service.csvDelimiter);
     // console.log(sql);
     // ctx.attachment("obsexport.csv");
-    // return await config.connection(ctx.service.name).unsafe(sql).readable();
+    // return await config.connection(ctx._.service.name).unsafe(sql).readable();
     return result;
 };

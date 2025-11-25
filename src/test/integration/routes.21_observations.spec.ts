@@ -16,7 +16,6 @@ import {
     IApiInput,
     prepareToApiDoc,
     identification,
-    keyTokenName,
     listOfColumns,
     limitResult,
     infos,
@@ -34,6 +33,7 @@ import { executeQuery, last } from "./executeQuery";
 import { testDatas } from "../../server/db/createDb";
 import { addStartNewTest, addTest, writeLog } from "./tests";
 import geo from "./files/geo.json";
+import { EConstant } from "../../server/enums";
 
 export const testsKeys = [
     "@iot.id",
@@ -474,7 +474,7 @@ describe("endpoint : Observations", () => {
             chai.request(server)
                 .post(`/test/${infos.request}`)
                 .send(infos.params)
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(201);
@@ -496,7 +496,7 @@ describe("endpoint : Observations", () => {
             chai.request(server)
                 .post(`/test/${infos.request}`)
                 .send({})
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(400);
@@ -529,7 +529,7 @@ describe("endpoint : Observations", () => {
             chai.request(server)
                 .post(`/test/${infos.request}`)
                 .send(infos.params)
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(201);
@@ -557,7 +557,7 @@ describe("endpoint : Observations", () => {
             chai.request(server)
                 .post(`/test/${infos.request}`)
                 .send(infos.params)
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end(async (err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(201);
@@ -591,7 +591,7 @@ describe("endpoint : Observations", () => {
             chai.request(server)
                 .post(`/test/${infos.request}`)
                 .send(infos.params)
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end(async (err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(201);
@@ -634,7 +634,7 @@ describe("endpoint : Observations", () => {
             chai.request(server)
                 .post(`/test/${infos.request}`)
                 .send(infos.params)
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end(async (err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(201);
@@ -674,7 +674,7 @@ describe("endpoint : Observations", () => {
             chai.request(server)
                 .post(`/test/${infos.request}`)
                 .send(datas)
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end(async (err: any, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(404);
@@ -711,7 +711,7 @@ describe("endpoint : Observations", () => {
             chai.request(server)
                 .post(`/test/${infos.request}`)
                 .send(infos.params)
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end(async (err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(400);
@@ -742,7 +742,7 @@ describe("endpoint : Observations", () => {
                 chai.request(server)
                     .patch(`/test/${infos.request}`)
                     .send(infos.params)
-                    .set("Cookie", `${keyTokenName}=${token}`)
+                    .set("Cookie", `${EConstant.appName}=${token}`)
                     .end((err: Error, res: any) => {
                         should.not.exist(err);
                         res.status.should.equal(201);
@@ -774,7 +774,7 @@ describe("endpoint : Observations", () => {
             chai.request(server)
                 .patch(`/test/${infos.request}`)
                 .send(datas)
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(404);
@@ -802,7 +802,7 @@ describe("endpoint : Observations", () => {
                 chai.request(server)
                     .patch(`/test/${infos.request}`)
                     .send(infos.params)
-                    .set("Cookie", `${keyTokenName}=${token}`)
+                    .set("Cookie", `${EConstant.appName}=${token}`)
                     .end((err: Error, res: any) => {
                         should.not.exist(err);
                         res.status.should.equal(201);
@@ -832,7 +832,7 @@ describe("endpoint : Observations", () => {
                 });
                 chai.request(server)
                     .delete(`/test/${infos.request}`)
-                    .set("Cookie", `${keyTokenName}=${token}`)
+                    .set("Cookie", `${EConstant.appName}=${token}`)
                     .end((err: Error, res: any) => {
                         should.not.exist(err);
                         res.status.should.equal(204);
@@ -859,7 +859,7 @@ describe("endpoint : Observations", () => {
             });
             chai.request(server)
                 .delete(`/test/${infos.request}`)
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(404);

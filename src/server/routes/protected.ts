@@ -14,7 +14,7 @@ import { IreturnResult, Iuser, koaContext } from "../types";
 import { DefaultState, Context } from "koa";
 import { createOdata } from "../odata";
 import { EConstant, EErrors, EExtensions, EHttpCode, EInfos, EUserRights } from "../enums";
-import { loginUser } from "../authentication";
+import { loginUser, setToken } from "../authentication";
 import { config } from "../configuration";
 import { checkPassword, emailIsValid } from "./helper";
 import { Login, Query } from "../views";
@@ -27,7 +27,7 @@ import { queries } from "../db/queries";
 export const protectedRoutes = new Router<DefaultState, Context>();
 
 protectedRoutes.post("/*path", async (ctx: koaContext, next) => {
-    switch (ctx.decodedUrl.path.toUpperCase()) {
+    switch (ctx._.path.toUpperCase()) {
         // Restart App
         case "RESTART":
             // login html page or connection login
@@ -35,11 +35,12 @@ protectedRoutes.post("/*path", async (ctx: koaContext, next) => {
             process.exit(100);
             return;
         case "LOGIN":
-            if (ctx.request["token" as keyof object]) ctx.redirect(`${ctx.decodedUrl.root}/status`);
+            if (ctx.request["token" as keyof object]) ctx.redirect(`${ctx._.root}/status`);
             await loginUser(ctx).then((user: Iuser | undefined) => {
                 if (user) {
+                    setToken(ctx, String(user["token" as keyof object]));
                     ctx.status = EHttpCode.ok;
-                    if (ctx.request.header.accept && ctx.request.header.accept.includes("text/html")) ctx.redirect(`${ctx.decodedUrl.root}/Status`);
+                    if (ctx.request.header.accept && ctx.request.header.accept.includes("text/html")) ctx.redirect(`${ctx._.root}/Status`);
                     else
                         ctx.body = {
                             message: EInfos.loginOk,
@@ -82,9 +83,9 @@ protectedRoutes.post("/*path", async (ctx: koaContext, next) => {
             }
             if (Object.keys(why).length === 0) {
                 try {
-                    await userAccess.post(ctx.service.name, ctx.body);
+                    await userAccess.post(ctx._.service.name, ctx.body);
                 } catch (error) {
-                    ctx.redirect(`${ctx.decodedUrl.root}/error`);
+                    ctx.redirect(`${ctx._.root}/error`);
                 }
             } else {
                 const createHtml = new Login(ctx, {
@@ -100,15 +101,15 @@ protectedRoutes.post("/*path", async (ctx: koaContext, next) => {
     }
     // Add new lora observation this is a special route without ahtorisatiaon to post (deveui and correct payload limit risks)
     if (
-        (ctx.user && ctx.user.id > 0) ||
-        !ctx.service.extensions.includes(EExtensions.users) ||
+        (ctx._.user && ctx._.user.id > 0) ||
+        !ctx._.service.extensions.includes(EExtensions.users) ||
         ctx.request.url.includes("/Lora") ||
         (ctx.request.headers["authorization"] && ctx.request.headers["authorization"] === config.getBrokerId())
     ) {
         if (ctx.request.type.startsWith("application/json") && Object.keys(ctx.body).length > 0) {
             const odataVisitor = await createOdata(ctx);
-            if (odataVisitor) ctx.odata = odataVisitor;
-            if (ctx.odata) {
+            if (odataVisitor)  {
+                ctx._.odata = odataVisitor;
                 const objectAccess = new apiAccess(ctx);
                 const returnValue: IreturnResult | undefined | void = await objectAccess.post();
                 if (returnValue) {
@@ -134,8 +135,8 @@ protectedRoutes.post("/*path", async (ctx: koaContext, next) => {
             };
             ctx.datas = await getDatas();
             const odataVisitor = await createOdata(ctx);
-            if (odataVisitor) ctx.odata = odataVisitor;
-            if (ctx.odata) {
+            if (odataVisitor) {
+                ctx._.odata = odataVisitor;
                 console.log(logging.head("POST FORM").to().text());
                 const objectAccess = new apiAccess(ctx);
                 const returnValue = await objectAccess.post();
@@ -178,13 +179,13 @@ protectedRoutes.post("/*path", async (ctx: koaContext, next) => {
 });
 
 protectedRoutes.patch("/*path", async (ctx) => {
-    if ((!ctx.service.extensions.includes(EExtensions.users) || isAllowedTo(ctx, EUserRights.Post) === true) && Object.keys(ctx.body).length > 0) {
+    if ((!ctx._.service.extensions.includes(EExtensions.users) || isAllowedTo(ctx, EUserRights.Post) === true) && Object.keys(ctx.body).length > 0) {
         const odataVisitor = await createOdata(ctx);
-        if (odataVisitor) ctx.odata = odataVisitor;
-        if (ctx.odata) {
+        if (odataVisitor) {
+            ctx._.odata = odataVisitor;
             console.log(logging.head("PATCH").to().text());
             const objectAccess = new apiAccess(ctx);
-            if (ctx.odata.id) {
+            if (ctx._.odata.id) {
                 const returnValue: IreturnResult | undefined | void = await objectAccess.update();
                 if (returnValue) {
                     returnFormats.json.type;
@@ -204,18 +205,18 @@ protectedRoutes.patch("/*path", async (ctx) => {
 });
 
 protectedRoutes.delete("/*path", async (ctx) => {
-    if (!ctx.service.extensions.includes(EExtensions.users) || isAllowedTo(ctx, EUserRights.Delete) === true) {
+    if (!ctx._.service.extensions.includes(EExtensions.users) || isAllowedTo(ctx, EUserRights.Delete) === true) {
         const odataVisitor = await createOdata(ctx);
-        if (odataVisitor) ctx.odata = odataVisitor;
-        if (ctx.odata) {
+        if (odataVisitor) {
+            ctx._.odata = odataVisitor;
             console.log(logging.head("DELETE").to().text());
             const objectAccess = new apiAccess(ctx);
-            if (!ctx.odata.id) ctx.throw(EHttpCode.badRequest, { detail: EErrors.idRequired });
-            const returnValue = await objectAccess.delete(ctx.odata.id);
+            if (!ctx._.odata.id) ctx.throw(EHttpCode.badRequest, { detail: EErrors.idRequired });
+            const returnValue = await objectAccess.delete(ctx._.odata.id);
             if (returnValue && returnValue.body && +returnValue.body > 0) {
                 returnFormats.json.type;
                 ctx.status = EHttpCode.noContent;
-            } else ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: EErrors.noId + ctx.odata.id });
+            } else ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: EErrors.noId + ctx._.odata.id });
         } else {
             ctx.throw(EHttpCode.notFound);
         }

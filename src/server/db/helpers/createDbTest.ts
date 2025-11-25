@@ -18,6 +18,6 @@ export const createDbTest = async (ctx: koaContext) => {
     } catch (error) {
         console.log(error);
         ctx.status = EHttpCode.badRequest;
-        ctx.redirect(`${ctx.decodedUrl.root}/error`);
+        ctx.redirect(`${ctx.-.root}/error`);
     }
 };

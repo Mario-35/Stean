@@ -54,7 +54,7 @@ export class Models {
             fileContent = fileContent.replace(`${start}${fileContent.split(start)[1].split(end)[0]}${end}`, "");
         };
         let fileContent = fs.readFileSync(path.join(__dirname, "/", "model.drawio"), "utf8");
-        fileContent = fileContent.replace("&gt;Version&lt;", `&gt;version : ${ctx.service.apiVersion}&lt;`);
+        fileContent = fileContent.replace("&gt;Version&lt;", `&gt;version : ${ctx._.service.apiVersion}&lt;`);
         ["114", "115", "117", "118", "119", "116", "120", "121"].forEach((e) => deleteId(e));
         fileContent = fileContent.replace(`&lt;hr&gt;COLUMNS.${ctx.mode.MultiDatastreams.name}`, "");
         fileContent = fileContent.replace(`&lt;hr&gt;COLUMNS.${ctx.mode.MultiDatastreams.name}`, "");
@@ -72,15 +72,15 @@ export class Models {
     }
 
     public async infos(ctx: koaContext) {
-        const temp = config.getInfos(ctx, ctx.service.name);
+        const temp = config.getInfos(ctx, ctx._.service.name);
         const result: Record<string, any> = {
             ...hidePassword(temp),
-            ready: config.connection(ctx.service.name) ? true : false,
+            ready: config.connection(ctx._.service.name) ? true : false,
             Postgres: {},
             users: {}
         };
         const extensions: Record<string, any> = {};
-        switch (ctx.service.apiVersion) {
+        switch (ctx._.service.apiVersion) {
             case "11":
                 result["Ogc link"] = "https://docs.ogc.org/is/18-088/18-088.html";
                 break;
@@ -88,16 +88,16 @@ export class Models {
                 result["Ogc link"] = "https://docs.ogc.org/is/15-078r6/15-078r6.html";
                 break;
         }
-        if (ctx.service.extensions.includes(EExtensions.tasking)) extensions["tasking"] = "https://docs.ogc.org/is/17-079r1/17-079r1.html";
+        if (ctx._.service.extensions.includes(EExtensions.tasking)) extensions["tasking"] = "https://docs.ogc.org/is/17-079r1/17-079r1.html";
 
         await executeSqlValues(
-            ctx.service,
+            ctx._.service,
             ` select version(), (SELECT ARRAY(SELECT extname||'-'||extversion AS extension FROM pg_extension) AS extension), (SELECT c.relname||'.'||a.attname FROM pg_attribute a JOIN pg_class c ON (a.attrelid=c.relfilenode) WHERE a.atttypid = 114) ;`
         ).then((res) => {
             result["Postgres"]["version"] = res[0 as keyof object];
             result["Postgres"]["extensions"] = res[1 as keyof object];
         });
-        await executeSql(ctx.service, `select username, "canPost", "canDelete", "canCreateUser", "canCreateDb", "admin", "superAdmin" FROM public.user ORDER By username;`).then((res) => {
+        await executeSql(ctx._.service, `select username, "canPost", "canDelete", "canCreateUser", "canCreateDb", "admin", "superAdmin" FROM public.user ORDER By username;`).then((res) => {
             Object.keys(res).forEach((e) => {
                 result["users"][res[+e as keyof object]["username"]] = {
                     "canPost": res[+e as keyof object]["canPost"],
@@ -110,18 +110,18 @@ export class Models {
             });
         });
         await executeSqlValues(
-            ctx.service,
+            ctx._.service,
             `SELECT array_agg(table_name) FROM information_schema.tables WHERE table_schema LIKE 'public' AND table_type LIKE 'BASE TABLE' AND position('_' in table_name) = 0`
         ).then(async (res: Record<string, any>) => {
             await executeSql(
-                ctx.service,
+                ctx._.service,
                 ` SELECT JSON_AGG(t) AS results FROM ( SELECT ${res[0 as keyof object].map((e: string) => `(SELECT COUNT(*) FROM "${e}") AS "${e}"${EConstant.return}`).join()}) AS t`
             ).then((res) => {
                 result["tables"] = res[0 as keyof object]["results"][0 as keyof object];
             });
         });
-        if (ctx.service.options.includes(EOptions.optimized))
-            await executeSql(ctx.service, queries.countAll()).then((res) => {
+        if (ctx._.service.options.includes(EOptions.optimized))
+            await executeSql(ctx._.service, queries.countAll()).then((res) => {
                 result["partitioned"] = {};
                 Object.values(res[0 as keyof object]["results"]).forEach((e: any) => (result["partitioned"][e["table_name"]] = e["count"]));
             });
@@ -134,16 +134,16 @@ export class Models {
         console.log(logging.whereIam(new Error().stack));
         const stream: _STREAM = input["Datastream"] ? "Datastream" : input["MultiDatastream"] ? "MultiDatastream" : undefined;
         if (!stream) return undefined;
-        const streamEntity = models.entityName(ctx.model, stream);
+        const streamEntity = models.entityName(ctx._.model(), stream);
         if (!streamEntity) return undefined;
         const foiId: Id = input["FeaturesOfInterest"] ? input["FeaturesOfInterest"] : undefined;
-        const searchKey = input[models.getModel(ctx.service)[streamEntity].name] || input[models.getModel(ctx.service)[streamEntity].singular];
+        const searchKey = input[models.getModel(ctx._.service)[streamEntity].name] || input[models.getModel(ctx._.service)[streamEntity].singular];
         const streamId: Id = isNaN(searchKey) ? searchKey[EConstant.id] : searchKey;
         if (streamId) {
             return executeSqlValues(
-                ctx.service,
+                ctx._.service,
                 queries.asJson({
-                    query: `SELECT "id", "observationType", "_default_featureofinterest" FROM ${doubleQuotes(models.getModel(ctx.service)[streamEntity].table)} WHERE "id" = ${BigInt(
+                    query: `SELECT "id", "observationType", "_default_featureofinterest" FROM ${doubleQuotes(models.getModel(ctx._.service)[streamEntity].table)} WHERE "id" = ${BigInt(
                         streamId
                     )} LIMIT 1`,
                     singular: true,
@@ -352,17 +352,17 @@ export class Models {
     public root(ctx: koaContext) {
         console.log(logging.whereIam(new Error().stack));
         let expectedResponse: object[] = [];
-        Object.keys(ctx.model)
-            .filter((elem: string) => ctx.model[elem].order > 0)
-            .sort((a, b) => (ctx.model[a].order > ctx.model[b].order ? 1 : -1))
+        Object.keys(ctx._.model())
+            .filter((elem: string) => ctx._.model()[elem].order > 0)
+            .sort((a, b) => (ctx._.model()[a].order > ctx._.model()[b].order ? 1 : -1))
             .forEach((value: string) => {
                 expectedResponse.push({
-                    name: ctx.model[value].name,
-                    url: `${ctx.decodedUrl.linkbase}/${ctx.service.apiVersion}/${value}`
+                    name: ctx._.model()[value].name,
+                    url: `${ctx._.linkBase}/${ctx._.service.apiVersion}/${value}`
                 });
             });
 
-        switch (ctx.service.apiVersion) {
+        switch (ctx._.service.apiVersion) {
             case "v1.0":
                 return {
                     value: expectedResponse.filter((elem) => Object.keys(elem).length)
@@ -394,9 +394,9 @@ export class Models {
                 // "https://github.com/INSIDE-information-systems/SensorThingsAPI/blob/master/EntityLinking/Linking.md#Expand",
                 // "https://github.com/INSIDE-information-systems/SensorThingsAPI/blob/master/EntityLinking/Linking.md#Filter",
                 // "https://github.com/INSIDE-information-systems/SensorThingsAPI/blob/master/EntityLinking/Linking.md#NavigationLinks"],
-                if (ctx.service.extensions.includes(EExtensions.lora)) list.push(`${ctx.decodedUrl.origin}/#api-Loras`);
+                if (ctx._.service.extensions.includes(EExtensions.lora)) list.push(`${ctx._.origin}/#api-Loras`);
                 list.push("https://docs.ogc.org/is/18-088/18-088.html#multidatastream-extension");
-                if (ctx.service.extensions.includes(EExtensions.mqtt))
+                if (ctx._.service.extensions.includes(EExtensions.mqtt))
                     list.push("https://docs.ogc.org/is/18-088/18-088.html#req-create-observations-via-mqtt-observations-creation", "https://docs.ogc.org/is/18-088/18-088.html#mqtt-extension");
                 const temp: Record<string, any> = {
                     "value": expectedResponse.filter((elem) => Object.keys(elem).length),
@@ -404,11 +404,11 @@ export class Models {
                         "conformance": list
                     }
                 };
-                list.push(`${ctx.decodedUrl.origin}/#api-Services`);
-                list.push(`${ctx.decodedUrl.origin}/#api-Token`);
-                list.push(`${ctx.decodedUrl.origin}/#api-Import`);
-                list.push(`${ctx.decodedUrl.origin}/#api-Format`);
-                temp[`${ctx.decodedUrl.linkbase}/${ctx.service.apiVersion}/req/receive-updates-via-mqtt/receive-updates`] = {
+                list.push(`${ctx._.origin}/#api-Services`);
+                list.push(`${ctx._.origin}/#api-Token`);
+                list.push(`${ctx._.origin}/#api-Import`);
+                list.push(`${ctx._.origin}/#api-Format`);
+                temp[`${ctx._.linkBase}/${ctx._.service.apiVersion}/req/receive-updates-via-mqtt/receive-updates`] = {
                     "endpoints": [`mqtt://server.example.com:${config.getService(EConstant.admin).ports?.ws}`, "ws://server.example.com/sensorThings"]
                 };
                 return temp;

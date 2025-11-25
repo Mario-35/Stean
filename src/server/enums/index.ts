@@ -6,7 +6,6 @@
  *
  */
 
-import { EOptions } from "./options";
 export { EErrors } from "./errors";
 export { EInfos } from "./infos";
 export { EChar } from "./chars";
@@ -29,4 +28,3 @@ export { EOptions } from "./options";
 export { EQuery } from "./query";
 export { EUserRights } from "./userRights";
 export const enumKeys = (input: any) => Object.keys(input).filter((prop) => isNaN(parseInt(prop)));
-export const typeOptions = Object.keys(EOptions) as Array<keyof typeof EOptions>;

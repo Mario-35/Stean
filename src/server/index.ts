@@ -17,26 +17,22 @@ import favicon from "koa-favicon";
 import { config } from "./configuration";
 import { models } from "./models";
 import { isTest, logToHtml } from "./helpers";
-import { RootPgVisitor } from "./odata/visitor";
-import { EChar, EConstant } from "./enums";
+import { EConstant } from "./enums";
 import { protectedRoutes, routerHandle, unProtectedRoutes } from "./routes/";
-import { Iservice, IdecodedUrl, Ientities, IuserToken, Id } from "./types";
 import { appVersion } from "./constants";
 import { paths } from "./paths";
 import { disconnectDb } from "./db/helpers";
 import { logging } from "./log";
+import { SteanContext } from "./context";
+import { Id } from "./types";
 
 // Extend koa context
 declare module "koa" {
     interface DefaultContext {
-        decodedUrl: IdecodedUrl;
-        traceId: Id;
-        service: Iservice;
-        odata: RootPgVisitor;
-        datas: Record<string, any>;
-        user: IuserToken;
-        model: Ientities;
-        body: any;
+        _: SteanContext; // Stean context
+        traceId: Id; // id Log   
+        datas: Record<string, any>; // datas (POST)
+        body: any; //copy of request body
     }
 }
 // Initialisation of models
@@ -44,7 +40,6 @@ models.initialisation();
 // new koa server https://koajs.com/
 export const app = new Koa();
 app.use(favicon(path.join(__dirname, "/", "favicon.ico")));
-
 // add public folder [static]
 app.use(serve(path.join(__dirname, "/", "public")));
 // helmet protection https://github.com/venables/koa-helmet
@@ -75,13 +70,12 @@ app.use(
 app.use(unProtectedRoutes.routes());
 // authenticated routes
 app.use(protectedRoutes.routes());
-
 // Start server initialisaion
 export const server = isTest()
     ? // Test-driven development init
       app.listen(config.getService(EConstant.admin).ports?.http || 8029, async () => {
           await disconnectDb(EConstant.test, true);
-          logging.message(`${EConstant.appName} version : ${appVersion}`, "ready " + EChar.ok).toLogAndFile();
+          logging.message(`${EConstant.appName} version : ${appVersion}`, "ready ✔️️").toLogAndFile();
       })
     : // Production or dev init
       config.start(false);

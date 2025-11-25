@@ -8,7 +8,7 @@
 process.env.NODE_ENV = "test";
 import chai from "chai";
 import chaiHttp from "chai-http";
-import { IApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, limitResult, testVersion, generateApiDoc, _RAWDB, testLog } from "../integration/constant";
+import { IApiDoc, IApiInput, prepareToApiDoc, identification, limitResult, testVersion, generateApiDoc, _RAWDB, testLog } from "../integration/constant";
 import { server } from "../../server/index";
 import { Ientity } from "../../server/types";
 import { executeQuery } from "../integration/executeQuery";
@@ -59,7 +59,7 @@ describe(`CSV ${entity.name}`, function () {
         chai.request(server)
             .post(`/test/${testVersion}/Things`)
             .send(datas)
-            .set("Cookie", `${keyTokenName}=${token}`)
+            .set("Cookie", `${EConstant.appName}=${token}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.status.should.equal(201);
@@ -83,7 +83,7 @@ describe(`CSV ${entity.name}`, function () {
             .field("method", "POST")
             .field("nb", "1")
             .attach("file", "./src/test/integration/files/file.csv")
-            .set("Cookie", `${keyTokenName}=${token}`)
+            .set("Cookie", `${EConstant.appName}=${token}`)
             .end(async (err: Error, res: any) => {
                 if (err) console.log(err);
                 else {
@@ -114,7 +114,7 @@ describe(`CSV ${entity.name}`, function () {
             .field("method", "POST")
             .field("nb", "22")
             .attach("file", "./src/test/integration/files/duplicates/file.csv")
-            .set("Cookie", `${keyTokenName}=${token}`)
+            .set("Cookie", `${EConstant.appName}=${token}`)
             .end(async (err: Error, res: any) => {
                 console.log(res.body);
                 testLog(res.body);

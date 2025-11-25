@@ -54,7 +54,7 @@ export class CreateObservations extends Common {
                             : `${separateur}${elem}${separateur}`
                         : `${separateur}{${elem}}${separateur}`
                     : index === this.indexResult && type === "VALUES"
-                    ? this.ctx.service.extensions.includes(EExtensions.resultNumeric)
+                    ? this.ctx._.service.extensions.includes(EExtensions.resultNumeric)
                         ? elem
                         : `'{"value": ${elem}}'`
                     : `${separateur}${elem}${separateur}`
@@ -111,13 +111,13 @@ export class CreateObservations extends Common {
         if (sqlInsert) {
             const sqls = sqlInsert.query.map((e: string, index: number) => `${index === 0 ? "WITH " : ", "}updated${index + 1} as (${e})${EConstant.return}`);
             // Remove logs and triggers for speed insert
-            await executeSql(this.ctx.service, queries.logsAndTriggers(false));
+            await executeSql(this.ctx._.service, queries.logsAndTriggers(false));
             const resultSql: Record<string, any> = await executeSql(
-                this.ctx.service,
+                this.ctx._.service,
                 `${sqls.join("")}SELECT (SELECT count(*) FROM ${paramsFile.tempTable}) AS total, (SELECT count(*) FROM updated1) AS inserted`
             );
             // Restore logs and triggers
-            await executeSql(this.ctx.service, queries.logsAndTriggers(true));
+            await executeSql(this.ctx._.service, queries.logsAndTriggers(true));
             return this.formatReturnResult({
                 total: sqlInsert.count,
                 body: [`Add ${resultSql[0]["inserted"]} on ${resultSql[0]["total"]} lines from ${splitLast(paramsFile.filename, "/")}`]
@@ -137,7 +137,7 @@ export class CreateObservations extends Common {
             await asyncForEach(dataInput["dataArray"], async (elem: string[]) => {
                 const keys = [`"${dataStreamId.type?.toLowerCase()}_id"`].concat(this.createListColumnsValues("COLUMNS", dataInput["components"]));
                 const values = this.createListColumnsValues("VALUES", [String(dataStreamId.id), ...elem]);
-                await executeSqlValues(this.ctx.service, `INSERT INTO ${doubleQuotes(OBSERVATION.table)} (${keys}) VALUES (${makeNull(values.toString())}) RETURNING id`)
+                await executeSqlValues(this.ctx._.service, `INSERT INTO ${doubleQuotes(OBSERVATION.table)} (${keys}) VALUES (${makeNull(values.toString())}) RETURNING id`)
                     .then((res: Record<string, any>) => {
                         returnValue.push(this.linkBase.replace("Create", "") + "(" + res[0] + ")");
                         total += 1;
@@ -147,7 +147,7 @@ export class CreateObservations extends Common {
                             returnValue.push(`Duplicate (${elem})`);
                             if (dataInput["duplicate"] && dataInput["duplicate"].toUpperCase() === "DELETE") {
                                 await executeSqlValues(
-                                    this.ctx.service,
+                                    this.ctx._.service,
                                     `DELETE FROM ${doubleQuotes(OBSERVATION.table)} WHERE 1=1 ` + keys.map((e, i) => `AND ${e} = ${values[i]}`).join(" ") + ` RETURNING id`
                                 )
                                     .then((res: Record<string, any>) => {

@@ -28,12 +28,12 @@ export class Decoders extends Common {
     async getAll(): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
         // test all decoder with the payload
-        if (this.ctx.odata.payload) {
+        if (this.ctx._.odata.payload) {
             const result: Record<string, any> = {};
-            const decoders = await executeSql(this.ctx.service, queries.getDecoder());
+            const decoders = await executeSql(this.ctx._.service, queries.getDecoder());
             await asyncForEach(Object(decoders), async (decoder: Record<string, any>) => {
-                if (this.ctx.odata.payload) {
-                    const temp = decodingPayload({ name: decoder["name"], code: String(decoder["code"]), nomenclature: decoder["nomenclature"] }, this.ctx.odata.payload);
+                if (this.ctx._.odata.payload) {
+                    const temp = decodingPayload({ name: decoder["name"], code: String(decoder["code"]), nomenclature: decoder["nomenclature"] }, this.ctx._.odata.payload);
                     result[decoder["id"]] = temp;
                 }
             });
@@ -44,11 +44,11 @@ export class Decoders extends Common {
     // Override get one decoders to be able to search by deveui instead of id only
     async getSingle(): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
-        if (this.ctx.odata.payload) {
-            const decoder: Record<string, any> = await executeSql(this.ctx.service, queries.getDecoder(`id = ${this.ctx.odata.id}`));
+        if (this.ctx._.odata.payload) {
+            const decoder: Record<string, any> = await executeSql(this.ctx._.service, queries.getDecoder(`id = ${this.ctx._.odata.id}`));
             return decoder[0]
                 ? this.formatReturnResult({
-                      body: decodingPayload({ name: decoder[0]["name"], code: String(decoder[0]["code"]), nomenclature: decoder[0]["nomenclature"] }, this.ctx.odata.payload)
+                      body: decodingPayload({ name: decoder[0]["name"], code: String(decoder[0]["code"]), nomenclature: decoder[0]["nomenclature"] }, this.ctx._.odata.payload)
                   })
                 : undefined;
         } else return await super.getSingle();

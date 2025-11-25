@@ -8,10 +8,11 @@
 process.env.NODE_ENV = "test";
 import chai from "chai";
 import chaiHttp from "chai-http";
-import { IApiDoc, IApiInput, prepareToApiDoc, generateApiDoc, limitResult, testVersion, _RAWDB, keyTokenName, identification, apiInfos, blank, infos } from "./constant";
+import { IApiDoc, IApiInput, prepareToApiDoc, generateApiDoc, limitResult, testVersion, _RAWDB, identification, apiInfos, blank, infos } from "./constant";
 import { server } from "../../server/index";
 import { addStartNewTest, addTest, writeLog } from "./tests";
 import { Ientity } from "../../server/types";
+import { EConstant } from "../../server/enums";
 chai.use(chaiHttp);
 const should = chai.should();
 const docs: IApiDoc[] = [];
@@ -114,7 +115,7 @@ describe("endpoint : Service", () => {
             });
             chai.request(server)
                 .get(`/test/${infos.request}`)
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end((err, res) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -137,7 +138,7 @@ describe("endpoint : Service", () => {
             });
             chai.request(server)
                 .get(`/test/${infos.request}`)
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(200);
@@ -167,7 +168,7 @@ describe("endpoint : Service", () => {
             chai.request(server)
                 .post(`/test/${infos.request}`)
                 .send(conf)
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(201);

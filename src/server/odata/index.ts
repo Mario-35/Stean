@@ -23,7 +23,7 @@ export const createOdata = async (ctx: koaContext): Promise<RootPgVisitor | unde
         valueskeys: false
     };
     // normalize href
-    let urlSrc = `${ctx.decodedUrl.path}${ctx.decodedUrl.search}`;
+    let urlSrc = `${ctx._.path}${ctx._.search}`;
     if (urlSrc && urlSrc.trim() != "") urlSrc = escapesOdata(urlSrc);
 
     // replace element
@@ -43,7 +43,7 @@ export const createOdata = async (ctx: koaContext): Promise<RootPgVisitor | unde
     // if nothing to do return
     if (urlSrc === "/") return;
     // If params after ? in loras post delete them to not be catch by odata
-    if (ctx.request.method === "POST" && ctx.originalUrl.includes(`/Loras`)) urlSrc = urlSrc.split("?")[0];
+    if (ctx.request.method === "POST" && ctx._.href.includes(`/Loras`)) urlSrc = urlSrc.split("?")[0];
     // Remove actions that are not odata
     if (urlSrc.includes("$"))
         urlSrc.split("$").forEach((element: string) => {
@@ -65,7 +65,7 @@ export const createOdata = async (ctx: koaContext): Promise<RootPgVisitor | unde
         });
 
     const urlSrcSplit = cleanUrl(urlSrc).split("?");
-    if (!urlSrcSplit[1]) urlSrcSplit.push(`$top=${ctx.service.nb_page || 200}`);
+    if (!urlSrcSplit[1]) urlSrcSplit.push(`$top=${ctx._.service.nb_page || 200}`);
     if (urlSrcSplit[0].split("(").length != urlSrcSplit[0].split(")").length) urlSrcSplit[0] += ")";
     // INIT ressource
     let astRessources: Token;

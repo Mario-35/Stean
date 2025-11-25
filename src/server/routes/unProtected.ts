@@ -27,7 +27,7 @@ import { logging } from "../log";
 export const unProtectedRoutes = new Router<DefaultState, Context>();
 // ALL others
 unProtectedRoutes.get("/*path", async (ctx) => {    
-    switch (ctx.decodedUrl.path.toUpperCase()) {
+    switch (ctx._.path.toUpperCase()) {
         // Root path
         case `/`:
             ctx.body = models.root(ctx);
@@ -37,11 +37,11 @@ unProtectedRoutes.get("/*path", async (ctx) => {
         case "HELP":
         case "DOCUMENTATION":
         case "DOC":
-            ctx.redirect(`${ctx.decodedUrl.origin}/documentation`);
+            ctx.redirect(`${ctx._.origin}/documentation`);
             return;
         // tests only for testing wip features
         case "TEST":
-            if (!isAdmin(ctx.service)) {
+            if (!isAdmin(ctx._.service)) {
                 ctx.type = returnFormats.json.type;
                 ctx.body = await testRoute(ctx);
                 return;
@@ -68,7 +68,7 @@ unProtectedRoutes.get("/*path", async (ctx) => {
             }
         // logs
         case "LOGGING":
-            ctx.redirect(`${ctx.decodedUrl.origin}/logging`);
+            ctx.redirect(`${ctx._.root}/logging`);
             return;
         // export service
         case "EXPORT":
@@ -77,11 +77,11 @@ unProtectedRoutes.get("/*path", async (ctx) => {
             return;
         // Admin login
         case "ADMIN":
-            ctx.redirect(`${ctx.decodedUrl.origin}/admin`);
+            ctx.redirect(`${ctx._.origin}/admin`);
             return;
         // User login
         case "LOGIN":
-            if (userAuthenticated(ctx)) ctx.redirect(`${ctx.decodedUrl.root}/status`);
+            if (userAuthenticated(ctx)) ctx.redirect(`${ctx._.root}/status`);
             else {
                 const bodyLogin = new Login(ctx, { url: "", login: true });
                 ctx.type = returnFormats.html.type;
@@ -99,8 +99,8 @@ unProtectedRoutes.get("/*path", async (ctx) => {
                     return;
                 }
             }
-            ctx.cookies.set("stean-session");
-            ctx.redirect(`${ctx.decodedUrl.root}/login`);
+            ctx.cookies.set(EConstant.appName);
+            ctx.redirect(`${ctx._.root}/login`);
             return;
         // Create user
         case "REGISTER":
@@ -110,8 +110,8 @@ unProtectedRoutes.get("/*path", async (ctx) => {
             return;
         // Logout user
         case "LOGOUT":
-            ctx.cookies.set("stean-session");
-            if (ctx.request.header.accept && ctx.request.header.accept.includes("text/html")) ctx.redirect(`${ctx.decodedUrl.root}/login`);
+            ctx.cookies.set(EConstant.appName);
+            if (ctx.request.header.accept && ctx.request.header.accept.includes("text/html")) ctx.redirect(`${ctx._.root}/login`);
             else ctx.status = EHttpCode.ok;
             ctx.body = {
                 message: EInfos.logoutOk
@@ -122,7 +122,7 @@ unProtectedRoutes.get("/*path", async (ctx) => {
             let sql = getUrlKey(ctx.request.url, "query");
             if (sql) {
                 sql = atob(sql);
-                const resultSql = await executeSql(sql.includes("log_request") ? config.getService(EConstant.admin) : ctx.service, sql);
+                const resultSql = await executeSql(sql.includes("log_request") ? config.getService(EConstant.admin) : ctx._.service, sql);
                 ctx.status = EHttpCode.created;
                 ctx.body = [resultSql];
             }
@@ -139,13 +139,13 @@ unProtectedRoutes.get("/*path", async (ctx) => {
             return;
         // Create DB test
         case "CREATE":
-            if (ctx.decodedUrl.service === EConstant.test) {
+            if (ctx._.service.name === EConstant.test) {
                 console.log(logging.head("Create service").to().text());
                 try {
                     (ctx.body = await createService(testDatas)), (ctx.status = EHttpCode.created);
                 } catch (error) {
                     ctx.status = EHttpCode.badRequest;
-                    ctx.redirect(`${ctx.decodedUrl.root}/error`);
+                    ctx.redirect(`${ctx._.root}/error`);
                 }
                 return;
             }
@@ -153,14 +153,14 @@ unProtectedRoutes.get("/*path", async (ctx) => {
         // Drop DB
         case "DROP":
             console.log(logging.head("drop database").to().text());
-            if (ctx.service.options.includes(EOptions.canDrop).toString()) {
-                await disconnectDb(ctx.service.pg.database, true);
+            if (ctx._.service.options.includes(EOptions.canDrop).toString()) {
+                await disconnectDb(ctx._.service.pg.database, true);
                 try {
                     ctx.status = EHttpCode.created;
-                    ctx.body = await createDatabase(ctx.service.pg.database);
+                    ctx.body = await createDatabase(ctx._.service.pg.database);
                 } catch (error) {
                     ctx.status = EHttpCode.badRequest;
-                    ctx.redirect(`${ctx.decodedUrl.root}/error`);
+                    ctx.redirect(`${ctx._.root}/error`);
                 }
                 return;
             }
@@ -179,26 +179,26 @@ unProtectedRoutes.get("/*path", async (ctx) => {
     } // END Switch
 
     // API GET REQUEST
-    if (ctx.decodedUrl.path.includes(ctx.service.apiVersion) || ctx.decodedUrl.version) {
-        console.log(logging.head(`unProtected GET ${ctx.service.apiVersion}`).to().text());
+    if (ctx._.path.includes(ctx._.service.apiVersion) || ctx._.service.apiVersion) {
+        console.log(logging.head(`unProtected GET ${ctx._.service.apiVersion}`).to().text());
         // decode odata url messages.infoss
         const odataVisitor = await createOdata(ctx);
 
         if (odataVisitor) {
-            ctx.odata = odataVisitor;
-            if (ctx.odata.returnNull === true) {
+            ctx._.odata = odataVisitor;
+            if (ctx._.odata.returnNull === true) {
                 ctx.body = { values: [] };
                 return;
             }
-            console.log(logging.head(`GET ${ctx.service.apiVersion}`).to().text());
+            console.log(logging.head(`GET ${ctx._.service.apiVersion}`).to().text());
             // Create api object
             const objectAccess = new apiAccess(ctx);
             if (objectAccess) {
-                if (ctx.odata.entity) {
-                    const returnValue = ctx.odata.single === true ? await objectAccess.getSingle() : await objectAccess.getAll();
+                if (ctx._.odata.entity) {
+                    const returnValue = ctx._.odata.single === true ? await objectAccess.getSingle() : await objectAccess.getAll();
                     if (returnValue) {
-                        ctx.type = ctx.odata.returnFormat.type;
-                        ctx.body = ctx.odata.returnFormat.format(returnValue.body || returnValue, ctx);
+                        ctx.type = ctx._.odata.returnFormat.type;
+                        ctx.body = ctx._.odata.returnFormat.format(returnValue.body || returnValue, ctx);
                         if (returnValue.location) ctx.set("Location", returnValue.location);
                     } else ctx.throw(EHttpCode.notFound);
                 } else ctx.throw(EHttpCode.badRequest);
@@ -212,8 +212,8 @@ unProtectedRoutes.put("/*path", async (ctx) => {
     if (ctx.request.url.includes("/Decoders")) {
         if (ctx.request.type.startsWith("application/json") && Object.keys(ctx.body).length > 0) {
             const odataVisitor = await createOdata(ctx);
-            if (odataVisitor) ctx.odata = odataVisitor;
-            if (ctx.odata) {
+            if (odataVisitor) {
+                ctx._.odata = odataVisitor;
                 const objectAccess = new apiAccess(ctx);
                 const returnValue: IreturnResult | undefined | void = await objectAccess.put();
                 if (returnValue) {
@@ -228,13 +228,13 @@ unProtectedRoutes.put("/*path", async (ctx) => {
 
     if (ctx.request.url.includes("/synonyms")) {
         if (ctx.request.type.startsWith("application/json") && Object.keys(ctx.body).length > 0) {
-            ctx.service.synonyms = ctx.body;
-            ctx.body = await config.updateConfig(ctx.service);
+            ctx._.service.synonyms = ctx.body;
+            ctx.body = await config.updateConfig(ctx._.service);
         }
     }
 
     if (ctx.request.url.includes("/options")) {
-        ctx.service.options = ctx.body;
-        config.updateConfig(ctx.service);
+        ctx._.service.options = ctx.body;
+        config.updateConfig(ctx._.service);
     }
 });

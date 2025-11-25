@@ -55,7 +55,6 @@ class Configuration {
             console.log = (data: any) => {
                 if (data) process.stdout.write(typeof data === "object" ? util.inspect(data, { showHidden: false, depth: null, colors: true }) + EConstant.return : data + EConstant.return);
             };
-            setDebug(true);
     }
 
     allReady(): boolean {
@@ -64,12 +63,12 @@ class Configuration {
             .includes(false);
     }
 
-    // stean version
+    // app version
     version(): string {
         return `${Configuration.appVersion.version} [${Configuration.appVersion.date}]`;
     }
 
-    // stean repository version
+    // app repository version
     remoteVersion(): string | undefined {
         return Configuration.remoteVersion ? `${Configuration.remoteVersion.version} [${Configuration.remoteVersion.date}]` : undefined;
     }
@@ -465,7 +464,7 @@ class Configuration {
             return status;
             // no configuration file so First install
         } else {
-            logging.message("file", paths.configFile.fileName + " " + EChar.notOk).toLogAndFile();
+            logging.message("file", paths.configFile.fileName + " " + EChar.notOk).toLogAndFile(true);
             this.addListening(this.defaultHttp(), "First launch");
             return true;
         }

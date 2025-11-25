@@ -57,12 +57,12 @@ export class RootPgVisitor extends PgVisitor {
                 const id: Id = element.includes("(") ? String(element.split("(")[1].split(")")[0]) : undefined;
                 if (this.entity && this.entity.relations[nodeName]) {
                     const where = this.parentEntity ? `(SELECT id FROM (${this.query.toWhere(this)}) as nop)${id ? `and id = ${id}` : ""}` : this.id;
-                    const whereSql = link(this.ctx.model, this.entity.name, nodeName)
+                    const whereSql = link(this.ctx._.model(), this.entity.name, nodeName)
                         .split("$ID")
                         .join(<string>where);
 
                     this.query.where.init(whereSql);
-                    const tempEntity = models.entity(this.ctx.model, nodeName);
+                    const tempEntity = models.entity(this.ctx._.model(), nodeName);
                     if (tempEntity) {
                         this.swapEntity(tempEntity);
                         this.single = tempEntity.singular === nodeName || BigInt(this.id) > 0 ? true : false;
@@ -76,7 +76,7 @@ export class RootPgVisitor extends PgVisitor {
     }
 
     protected VisitRessourcesEntitySetName(node: Token, _context: IodataContext) {
-        this.entity = models.entityStrict(this.ctx.model, node.value.name);
+        this.entity = models.entityStrict(this.ctx._.model(), node.value.name);
         if (!this.entity) this.ctx.throw(EHttpCode.notFound, "Not Found");
     }
 
@@ -105,9 +105,9 @@ export class RootPgVisitor extends PgVisitor {
     }
 
     protected VisitRessourcesKeyPropertyValue(node: Token, _context: IodataContext) {
-        this.id = this.ctx.decodedUrl.idStr ? this.ctx.decodedUrl.idStr : node.value == "Edm.SByte" ? BigInt(node.raw) : node.raw;
+        this.id = this.ctx._.idStr ? this.ctx._.idStr : node.value == "Edm.SByte" ? BigInt(node.raw) : node.raw;
         this.query.where.notNull;
-        const condition = this.ctx.decodedUrl.idStr ? `"lora"."deveui" = '${this.ctx.decodedUrl.idStr.toLocaleUpperCase()}'` : ` id = ${this.id}`;
+        const condition = this.ctx._.idStr ? `"lora"."deveui" = '${this.ctx._.idStr.toLocaleUpperCase()}'` : ` id = ${this.id}`;
         if (this.query.where.notNull() === true) this.query.where.add(` AND ${condition}`);
         else this.query.where.init(condition);
     }
@@ -124,12 +124,12 @@ export class RootPgVisitor extends PgVisitor {
             });
         } else if (this.entity && this.entity.relations[node.value.name]) {
             const where = this.parentEntity ? `(SELECT ID FROM (${this.query.toWhere(this)}) AS nop)` : this.id;
-            const whereSql = link(this.ctx.model, this.entity.name, node.value.name)
+            const whereSql = link(this.ctx._.model(), this.entity.name, node.value.name)
                 .split("$ID")
                 .join(<string>where);
 
             this.query.where.init(whereSql);
-            const tempEntity = models.entity(this.ctx.model, node.value.name);
+            const tempEntity = models.entity(this.ctx._.model(), node.value.name);
             if (tempEntity) {
                 this.swapEntity(tempEntity);
                 this.single = tempEntity.singular === node.value.name || BigInt(this.id) > 0 ? true : false;
@@ -152,8 +152,8 @@ export class RootPgVisitor extends PgVisitor {
 
     StartVisitRessources(node: Token) {
         console.log(logging.head("INIT PgVisitor").to().text());
-        this.limit = this.ctx.service.nb_page || 200;
-        this.numeric = this.ctx.service.extensions.includes(EExtensions.resultNumeric);
+        this.limit = this.ctx._.service.nb_page || 200;
+        this.numeric = this.ctx._.service.extensions.includes(EExtensions.resultNumeric);
         const temp = this.VisitRessources(node);
         this.verifyRessources();
         return temp;
@@ -167,7 +167,7 @@ export class RootPgVisitor extends PgVisitor {
                     include.navigationProperty = names[0];
                     const visitor = new PgVisitor(this.ctx, { ...this.options });
                     if (visitor) {
-                        const nameEntity = models.entity(this.ctx.model, names[0]);
+                        const nameEntity = models.entity(this.ctx._.model(), names[0]);
                         if (nameEntity) {
                             visitor.entity = nameEntity;
                             visitor.navigationProperty = names[1];

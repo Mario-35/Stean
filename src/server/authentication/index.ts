@@ -10,4 +10,5 @@ export { createToken } from "./createToken";
 export { decodeToken } from "./decodeToken";
 export { getAuthenticatedUser } from "./getAuthenticatedUser";
 export { loginUser } from "./loginUser";
+export { setToken } from "./setToken";
 export { userAuthenticated } from "./userAuthenticated";

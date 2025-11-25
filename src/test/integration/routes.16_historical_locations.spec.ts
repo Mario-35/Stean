@@ -10,12 +10,13 @@
 process.env.NODE_ENV = "test";
 import chai from "chai";
 import chaiHttp from "chai-http";
-import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, limitResult, infos, apiInfos, showHide, nbColorTitle, nbColor, testVersion, _RAWDB } from "./constant";
+import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, identification, limitResult, infos, apiInfos, showHide, nbColorTitle, nbColor, testVersion, _RAWDB } from "./constant";
 import { server } from "../../server/index";
 import { Ientity } from "../../server/types";
 import { testsKeys as locations_testsKeys } from "./routes.15_locations.spec";
 import { executeQuery, last } from "./executeQuery";
 import { addStartNewTest, addTest, writeLog } from "./tests";
+import { EConstant } from "../../server/enums";
 const testsKeys = ["@iot.selfLink", "@iot.id", "Thing@iot.navigationLink", "Locations@iot.navigationLink", "time"];
 chai.use(chaiHttp);
 const should = chai.should();
@@ -307,7 +308,7 @@ describe("endpoint : HistoricalLocations", () => {
                 chai.request(server)
                     .patch(`/test/${infos.request}`)
                     .send(infos.params)
-                    .set("Cookie", `${keyTokenName}=${token}`)
+                    .set("Cookie", `${EConstant.appName}=${token}`)
                     .end((err: Error, res: any) => {
                         should.not.exist(err);
                         res.status.should.equal(201);
@@ -334,7 +335,7 @@ describe("endpoint : HistoricalLocations", () => {
             chai.request(server)
                 .patch(`/test/${infos.request}`)
                 .send(datas)
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(404);
@@ -359,7 +360,7 @@ describe("endpoint : HistoricalLocations", () => {
                 });
                 chai.request(server)
                     .delete(`/test/${infos.request}`)
-                    .set("Cookie", `${keyTokenName}=${token}`)
+                    .set("Cookie", `${EConstant.appName}=${token}`)
                     .end((err: Error, res: any) => {
                         should.not.exist(err);
                         res.status.should.equal(204);
@@ -385,7 +386,7 @@ describe("endpoint : HistoricalLocations", () => {
             });
             chai.request(server)
                 .delete(`/test/${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`)
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(404);

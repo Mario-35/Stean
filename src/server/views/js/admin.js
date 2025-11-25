@@ -36,10 +36,7 @@ jsonDatas.onpaste = function() {
 		}, 100);
 	}
 };
-// update datas after key up
-jsonDatas.onkeyup = function() {
-	setJSON();
-};
+
 
 // catch click on service block
 btnBlank.onclick = async (e) => {	

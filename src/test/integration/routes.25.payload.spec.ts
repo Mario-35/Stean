@@ -10,10 +10,11 @@
 process.env.NODE_ENV = "test";
 import chai from "chai";
 import chaiHttp from "chai-http";
-import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, identification, keyTokenName, limitResult, nbColor, nbColorTitle, testVersion, _RAWDB, infos } from "./constant";
+import { IApiDoc, generateApiDoc, IApiInput, prepareToApiDoc, identification, limitResult, nbColor, nbColorTitle, testVersion, _RAWDB, infos } from "./constant";
 import { server } from "../../server/index";
 import { Ientity } from "../../server/types";
 import { addStartNewTest, addTest, writeLog } from "./tests";
+import { EConstant } from "../../server/enums";
 
 chai.use(chaiHttp);
 
@@ -69,7 +70,7 @@ describe("endpoint : Payload", () => {
             chai.request(server)
                 .post(`/test/${infos.request}`)
                 .send(infos.params)
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(201);
@@ -100,7 +101,7 @@ describe("endpoint : Payload", () => {
             chai.request(server)
                 .post(`/test/${infos.request}`)
                 .send(infos.params)
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(404);
@@ -126,7 +127,7 @@ describe("endpoint : Payload", () => {
             chai.request(server)
                 .post(`/test/${infos.request}`)
                 .send(infos.params)
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(400);
@@ -148,7 +149,7 @@ describe("endpoint : Payload", () => {
             chai.request(server)
                 .post(`/test/${infos.request}`)
                 .send({})
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(400);
@@ -175,7 +176,7 @@ describe("endpoint : Payload", () => {
             chai.request(server)
                 .post(`/test/${infos.request}`)
                 .send(infos.params)
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(409);
@@ -206,7 +207,7 @@ describe("endpoint : Payload", () => {
             chai.request(server)
                 .post(`/test/${infos.request}`)
                 .send(infos.params)
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(201);
@@ -239,7 +240,7 @@ describe("endpoint : Payload", () => {
             chai.request(server)
                 .post(`/test/${infos.request}`)
                 .send(infos.params)
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(400);
@@ -272,7 +273,7 @@ describe("endpoint : Payload", () => {
             chai.request(server)
                 .post(`/test/${infos.request}`)
                 .send(infos.params)
-                .set("Cookie", `${keyTokenName}=${token}`)
+                .set("Cookie", `${EConstant.appName}=${token}`)
                 .end((err: Error, res: any) => {
                     should.not.exist(err);
                     res.status.should.equal(400);

@@ -69,7 +69,7 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
                       query: input.toString(),
                       singular: false,
                       count: true,
-                      strip: input.ctx.service.options.includes(EOptions.stripNull),
+                      strip: input.ctx._.service.options.includes(EOptions.stripNull),
                       fullCount: input.count === true ? input.toPgQuery()?.count : undefined,
                       fields: generateFields(input)
                   });
@@ -113,7 +113,7 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
       ${graphNames.join("")}
         <script>
         ${addJsFile("graph.js")}
-          const linkBase = "${ctx.decodedUrl.root}";
+          const linkBase = "${ctx._.root}";
           ${formatedDatas.join(";")}                             
         </script>`;
         },

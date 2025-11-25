@@ -34,6 +34,22 @@ export class Trace {
               }${notNull(error) ? `,${FORMAT_JSONB(error)}` : ""}) RETURNING id;`;
     }
 
+    async createTable(datas?: string) {
+        await Trace.adminConnection
+        .unsafe(`CREATE TABLE public.log 
+            ( id int8 GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1 NO CYCLE ) NOT NULL, 
+            "date" timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL, 
+            "method" text NULL, 
+            url text NULL, 
+            datas jsonb NULL, 
+            error jsonb NULL, 
+            CONSTRAINT log_pkey PRIMARY KEY (id) ); 
+            CREATE INDEX log_id ON public.log USING btree (id);`
+        )
+        .catch((err) => process.stdout.write(err + EConstant.return));
+        if (datas) await Trace.adminConnection.unsafe(datas);
+    }
+
     /**
      * Add to trace
      *
@@ -49,14 +65,8 @@ export class Trace {
                     ctx.traceId = BigInt(res[0].id);
                 })
                 .catch(async (error) => {
-                    console.log(error);
                     if (error.code === "42P01") {
-                        await Trace.adminConnection
-                            .unsafe(
-                                `CREATE TABLE public.log ( id int8 GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1 NO CYCLE ) NOT NULL, "date" timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL, "method" text NULL, url text NULL, datas jsonb NULL, CONSTRAINT log_pkey PRIMARY KEY (id) ); CREATE INDEX log_id ON public.log USING btree (id); `
-                            )
-                            .catch((err) => process.stdout.write(err + EConstant.return));
-                        Trace.adminConnection.unsafe(datas);
+                        await this.createTable(datas);
                     } else process.stdout.write(error + EConstant.return);
                 });
         }
@@ -71,8 +81,10 @@ export class Trace {
         console.log(logging.whereIam(new Error().stack));
         try {
             await Trace.adminConnection.unsafe(this.query(ctx, error));
-        } catch (err) {
-            console.log("---- [Error Log Error]-------------");
+        } catch (err: any) {
+            if (err.code === "42P01") 
+                await this.createTable(this.query(ctx, error)).then(() => true);            
+            console.log("---- [Error Log Error] -------------");
             console.log(err);
         }
     }
@@ -112,11 +124,10 @@ export class Trace {
 
     async rePlay(ctx: koaContext): Promise<boolean> {
         console.log(logging.whereIam(new Error().stack));
-        await this.get(`SELECT * FROM log WHERE id=${ctx.decodedUrl.id}`).then(async (input: Record<string, any>) => {
+        await this.get(`SELECT * FROM log WHERE id=${ctx._.id}`).then(async (input: Record<string, any>) => {
             if (["POST", "PUT", "PATCH"].includes(input.method)) {
-                // const id = getBigIntFromString(input.url );
                 try {
-                    await fetch(ctx.decodedUrl.origin + input.url + "?$replay=" + ctx.decodedUrl.id, {
+                    await fetch(ctx._.origin + input.url + "?$replay=" + ctx._.id, {
                         method: input.method,
                         headers: {
                             "Content-Type": EEncodingType.json

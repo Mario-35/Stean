@@ -27,8 +27,8 @@ export class Users extends Common {
     // Override get all to return all users only if rights are good
     async getAll(): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
-        if (this.ctx.user?.PDCUAS[EUserRights.SuperAdmin] === true || this.ctx.user?.PDCUAS[EUserRights.Admin] === true) {
-            const temp = await executeSqlValues(config.getService(EConstant.admin), `SELECT ${models.entityColumnListForSelect(this.ctx.model, USER, true)} FROM "${USER.table}" ORDER BY "id"`);
+        if (this.ctx._.user?.PDCUAS[EUserRights.SuperAdmin] === true || this.ctx._.user?.PDCUAS[EUserRights.Admin] === true) {
+            const temp = await executeSqlValues(config.getService(EConstant.admin), `SELECT ${models.entityColumnListForSelect(this.ctx._.model(), USER, true)} FROM "${USER.table}" ORDER BY "id"`);
             return this.formatReturnResult({
                 body: hidePassword(temp)
             });

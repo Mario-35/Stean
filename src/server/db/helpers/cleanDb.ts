@@ -15,14 +15,14 @@ import { queries } from "../queries";
 
 export const cleanDb = async (ctx: koaContext) => {
     const result: Record<string, string> = {};
-    const listTables = await executeSqlValues(ctx.service, queries.listPartionned()).then((res) => {
+    const listTables = await executeSqlValues(ctx._.service, queries.listPartionned()).then((res) => {
         const listTables: string[] = res[0 as keyof object];
         return listTables.filter((table) => !table.endsWith("iddefault")).filter((table) => !table.endsWith("_id0"));
     });
-    await executeSql(ctx.service, [queries.updateNb("datastream", true), queries.updateNb("multidatastream", true)]);
+    await executeSql(ctx._.service, [queries.updateNb("datastream", true), queries.updateNb("multidatastream", true)]);
     await asyncForEach(listTables, async (table: string) => {
         logging.status(true, queries.cluster(table));
-        await executeSql(ctx.service, queries.cluster(table)).then(() => {
+        await executeSql(ctx._.service, queries.cluster(table)).then(() => {
             result[table] = EChar.ok;
         });
     });

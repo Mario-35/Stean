@@ -144,7 +144,7 @@ export class InsertFromCsv {
         END`
                     : def;
             };
-            const stream = await streamCsvFile(this.ctx.service, this.paramsFile, sqlRequest);
+            const stream = await streamCsvFile(this.ctx._.service, this.paramsFile, sqlRequest);
             logging
                 .message(`COPY TO ${this.paramsFile.tempTable}`, stream > 0 ? EChar.ok : EChar.notOk)
                 .to()

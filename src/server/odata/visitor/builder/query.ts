@@ -40,7 +40,7 @@ export class Query {
 
     private columnList(tableName: string, main: PgVisitor, element: PgVisitor): string[] | undefined {
         // get good entity name
-        const tempEntity = models.entity(main.ctx.model, tableName);
+        const tempEntity = models.entity(main.ctx._.model(), tableName);
         if (!tempEntity) {
             logging.error("no entity For", tableName);
             return;
@@ -58,12 +58,12 @@ export class Query {
         }
         const returnValue: string[] = [];
         // create selfLink
-        const selfLink = `CONCAT('${main.ctx.decodedUrl.root}/${tempEntity.name}(', "${tempEntity.table}"."id", ')') AS ${doubleQuotes(EConstant.selfLink)}`;
+        const selfLink = `CONCAT('${main.ctx._.root}/${tempEntity.name}(', "${tempEntity.table}"."id", ')') AS ${doubleQuotes(EConstant.selfLink)}`;
         // if $ref return only selfLink
         if (element.onlyRef == true) return [selfLink];
         if (element.showRelations == true) returnValue.push(selfLink);
         if (element.entity && isTestEntity(element.entity, "Logs") && isAllowedTo(main.ctx, EUserRights.Post) === true) {
-            const replay = `CONCAT('${main.ctx.decodedUrl.root}/Replays(', "${tempEntity.table}"."id", ')') AS ${doubleQuotes(EConstant.rePlay)}`;
+            const replay = `CONCAT('${main.ctx._.root}/Replays(', "${tempEntity.table}"."id", ')') AS ${doubleQuotes(EConstant.rePlay)}`;
             returnValue.push(replay);
         }
         // create list of columns
@@ -98,7 +98,7 @@ export class Query {
             });
         // add interval if requested
         if (main.interval && main.intervalColumns)
-            main.intervalColumns.push(`CONCAT('${main.ctx.decodedUrl.root}/${tempEntity.name}(', COALESCE("${EConstant.id}", '0')::text, ')') AS ${doubleQuotes(EConstant.selfLink)}`);
+            main.intervalColumns.push(`CONCAT('${main.ctx._.root}/${tempEntity.name}(', COALESCE("${EConstant.id}", '0')::text, ')') AS ${doubleQuotes(EConstant.selfLink)}`);
         // If observation entity
         if (isTestEntity(tempEntity, "Observations") === true && element.onlyRef === false) {
             if (main.interval && !isReturnGraph(main)) returnValue.push(`timestamp_ceil("resultTime", interval '${main.interval}') AS srcdate`);
@@ -132,15 +132,15 @@ export class Query {
                             const index = relations.indexOf(name);
                             // if is relation
                             if (element.entity && index >= 0) {
-                                item.entity = models.entity(main.ctx.model, name);
-                                item.query.where.add(`${item.query.where.notNull() === true ? " AND " : ""}${expand(main.ctx.model, element.entity.name, name)}`);
+                                item.entity = models.entity(main.ctx._.model(), name);
+                                item.query.where.add(`${item.query.where.notNull() === true ? " AND " : ""}${expand(main.ctx._.model(), element.entity.name, name)}`);
                                 // create sql query for this relatiion (IN JSON result)
                                 const query = this.pgQueryToString(this.create(item, false));
                                 if (query)
                                     relations[index] = `(${queries.asJson({
                                         query: query,
-                                        singular: models.isEntitySingular(main.ctx.model, name),
-                                        strip: main.ctx.service.options.includes(EOptions.stripNull),
+                                        singular: models.isEntitySingular(main.ctx._.model(), name),
+                                        strip: main.ctx._.service.options.includes(EOptions.stripNull),
                                         count: false
                                     })}) AS ${doubleQuotes(name)}`;
                                 else throw new Error(EErrors.invalidQuery);
@@ -149,18 +149,18 @@ export class Query {
                     // create all relations Query
                     if (toWhere === false)
                         relations
-                            .filter((e) => e.includes("SELECT") || Object.keys(main.ctx.model).includes(models.entityName(main.ctx.model, e) || e))
+                            .filter((e) => e.includes("SELECT") || Object.keys(main.ctx._.model()).includes(models.entityName(main.ctx._.model(), e) || e))
                             .forEach((rel: string) => {
                                 if (rel[0] == "(") select.push(rel);
                                 else if (element.entity && element.showRelations == true && main.onlyRef == false) {
                                     select.push(
-                                        ` CONCAT('${main.ctx.decodedUrl.root}/${element.entity.name}(', ${doubleQuotes(element.entity.table)}."id", ')/${rel}') AS "${rel}${EConstant.navLink}"`
+                                        ` CONCAT('${main.ctx._.root}/${element.entity.name}(', ${doubleQuotes(element.entity.table)}."id", ')/${rel}') AS "${rel}${EConstant.navLink}"`
                                     );
                                 }
                             });
 
                     const pagination =
-                        element.ctx.service.options.includes(EOptions.optimized) &&
+                        element.ctx._.service.options.includes(EOptions.optimized) &&
                         element.query.where.toString().includes(`"observation"."${element.parentEntity?.table}_id" =`) &&
                         (isReturnGraph(element) || element.skip > 0)
                             ? `"observation"."${element.parentEntity?.table}_id" =${element.query.where.toString().split("=")[1].split(" ")[0]}`
@@ -170,7 +170,7 @@ export class Query {
                             pagination,
                             `_nb > ${element.skip}${
                                 isReturnGraph(element)
-                                    ? ` AND _nb % (SELECT COALESCE(NULLIF(COUNT(id) / ${element.ctx.service.nb_graph}, 0), 1) FROM "datastream_id${pagination.split("=")[1].split(" ")[0]}") = 0`
+                                    ? ` AND _nb % (SELECT COALESCE(NULLIF(COUNT(id) / ${element.ctx._.service.nb_graph}, 0), 1) FROM "datastream_id${pagination.split("=")[1].split(" ")[0]}") = 0`
                                     : ""
                             }`
                         );

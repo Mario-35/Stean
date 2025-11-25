@@ -32,16 +32,16 @@ export class Observations extends Common {
         // IF MultiDatastream
         if (
             (dataInput[MULTIDATASTREAM.singular] && dataInput[MULTIDATASTREAM.singular] != null) ||
-            (this.ctx.odata.parentEntity && this.ctx.odata.parentEntity.name.startsWith(MULTIDATASTREAM.singular))
+            (this.ctx._.odata.parentEntity && this.ctx._.odata.parentEntity.name.startsWith(MULTIDATASTREAM.singular))
         ) {
             // get MultiDatastream search ID
             const searchID: Id =
                 dataInput[MULTIDATASTREAM.singular] && dataInput[MULTIDATASTREAM.singular] != null
                     ? BigInt(dataInput[MULTIDATASTREAM.singular][EConstant.id])
-                    : getBigIntFromString(this.ctx.odata.parentId);
+                    : getBigIntFromString(this.ctx._.odata.parentId);
             if (!searchID) this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: messages.str(EErrors.noFound, MULTIDATASTREAM.name) });
             // Search id keys
-            const tempSql = await executeSqlValues(this.ctx.service, queries.multiDatastreamsUnitsKeys(searchID));
+            const tempSql = await executeSqlValues(this.ctx._.service, queries.multiDatastreamsUnitsKeys(searchID));
             if (tempSql[0 as keyof object] === null) this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: messages.str(EErrors.noFound, MULTIDATASTREAM.name) });
 
             const multiDatastream: Record<string, any> = tempSql[0 as keyof object];
@@ -60,9 +60,9 @@ export class Observations extends Common {
                 dataInput["result"] = { value: Object.values(dataInput["result"]), valueskeys: dataInput["result"] };
             }
         } // IF Datastream
-        else if ((dataInput[DATASTREAM.singular] && dataInput[DATASTREAM.singular] != null) || (this.ctx.odata.parentEntity && this.ctx.odata.parentEntity.name.startsWith(DATASTREAM.singular))) {
+        else if ((dataInput[DATASTREAM.singular] && dataInput[DATASTREAM.singular] != null) || (this.ctx._.odata.parentEntity && this.ctx._.odata.parentEntity.name.startsWith(DATASTREAM.singular))) {
             if (dataInput["result"] && typeof dataInput["result"] != "object")
-                dataInput["result"] = this.ctx.service.extensions.includes(EExtensions.resultNumeric) ? dataInput["result"] : { value: dataInput["result"] };
+                dataInput["result"] = this.ctx._.service.extensions.includes(EExtensions.resultNumeric) ? dataInput["result"] : { value: dataInput["result"] };
             // if no stream go out with error
         } else if (this.ctx.request.method === "POST") {
             this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: EErrors.noStream });
@@ -118,7 +118,7 @@ export class Observations extends Common {
                 .join(",")})\n VALUES`;
             await asyncForEach(dataInput["dataArray"], async (values: string[]) => {
                 try {
-                    await executeSql(this.ctx.service, `${sql} (${this.columnsValues(keys, values)})\n`).then(() => (added += 1));
+                    await executeSql(this.ctx._.service, `${sql} (${this.columnsValues(keys, values)})\n`).then(() => (added += 1));
                 } catch (error) {
                     errors += 1;
                 }

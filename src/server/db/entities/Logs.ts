@@ -24,14 +24,14 @@ export class Logs extends Common {
     async getAll(): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
         // create query
-        this.ctx.odata.query.where.add(`"url" LIKE '%${this.ctx.service.name}%'`);
-        let sql = this.ctx.odata.getSql();
+        this.ctx._.odata.query.where.add(`"url" LIKE '%${this.ctx._.service.name}%'`);
+        let sql = this.ctx._.odata.getSql();
         // Return results
         if (sql)
             return await config.trace.getValues(sql).then(async (res: Record<string, any>) => {
                 return res[0] > 0
                     ? this.formatReturnResult({
-                          [EConstant.count]: this.ctx.odata.returnFormat === returnFormats.dataArray ? +Object.entries(res[1][0]["dataArray"]).length : +res[0],
+                          [EConstant.count]: this.ctx._.odata.returnFormat === returnFormats.dataArray ? +Object.entries(res[1][0]["dataArray"]).length : +res[0],
                           [EConstant.nextLink]: this.nextLink(res[0]),
                           [EConstant.prevLink]: this.prevLink(res[0]),
                           value: res[1]
@@ -44,22 +44,22 @@ export class Logs extends Common {
     async getSingle(): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
         // create query
-        this.ctx.odata.query.where.add(` AND url LIKE '%${this.ctx.service.name}%'`);
-        const sql = this.ctx.odata.getSql();
+        this.ctx._.odata.query.where.add(` AND url LIKE '%${this.ctx._.service.name}%'`);
+        const sql = this.ctx._.odata.getSql();
         // Return results
         if (sql)
             return await config.trace
                 .getValues(sql)
                 .then((res: Record<string, any>) => {
-                    if (this.ctx.odata.query.select && this.ctx.odata.onlyValue === true) {
-                        const temp = res[this.ctx.odata.query.select[0 as keyof object] == "id" ? EConstant.id : 0];
+                    if (this.ctx._.odata.query.select && this.ctx._.odata.onlyValue === true) {
+                        const temp = res[this.ctx._.odata.query.select[0 as keyof object] == "id" ? EConstant.id : 0];
                         if (typeof temp === "object") {
-                            this.ctx.odata.returnFormat = returnFormats.json;
+                            this.ctx._.odata.returnFormat = returnFormats.json;
                             return this.formatReturnResult({ body: temp });
                         } else return this.formatReturnResult({ body: String(temp) });
                     }
                     return this.formatReturnResult({
-                        body: this.ctx.odata.single === true ? res[1][0] : { value: res[1] }
+                        body: this.ctx._.odata.single === true ? res[1][0] : { value: res[1] }
                     });
                 })
                 .catch((err: Error) => this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: err }));

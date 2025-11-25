@@ -8,9 +8,10 @@
 process.env.NODE_ENV = "test";
 import chai from "chai";
 import chaiHttp from "chai-http";
-import { IApiDoc, IApiInput, prepareToApiDoc, generateApiDoc, identification, keyTokenName, limitResult, testVersion } from "./constant";
+import { IApiDoc, IApiInput, prepareToApiDoc, generateApiDoc, identification, limitResult, testVersion } from "./constant";
 import { server } from "../../server/index";
 import { addPostFile, addStartNewTest, addTest, writeLog } from "./tests";
+import { EConstant } from "../../server/enums";
 chai.use(chaiHttp);
 const should = chai.should();
 const docs: IApiDoc[] = [];
@@ -82,7 +83,7 @@ describe("CSV Import", function () {
             .field("method", "POST")
             .field("nb", "1")
             .attach("file", "./src/test/integration/files/simple.csv")
-            .set("Cookie", `${keyTokenName}=${token}`)
+            .set("Cookie", `${EConstant.appName}=${token}`)
             .end((err: Error, res: any) => {
                 should.not.exist(err);
                 res.should.have.status(201);
@@ -108,7 +109,7 @@ describe("CSV Import", function () {
             .field("method", "POST")
             .field("nb", "1")
             .attach("file", "./src/test/integration/files/simple.csv")
-            .set("Cookie", `${keyTokenName}=${token}`)
+            .set("Cookie", `${EConstant.appName}=${token}`)
             .end((err: Error, res: any) => {
                 if (err) console.log(err);
                 else {
@@ -137,7 +138,7 @@ describe("CSV Import", function () {
             .field("method", "POST")
             .field("nb", "1")
             .attach("file", "./src/test/integration/files/multi.csv")
-            .set("Cookie", `${keyTokenName}=${token}`)
+            .set("Cookie", `${EConstant.appName}=${token}`)
             .end((err: Error, res: any) => {
                 if (err) console.log(err);
                 else {
@@ -166,7 +167,7 @@ describe("CSV Import", function () {
             .field("method", "POST")
             .field("nb", "1")
             .attach("file", "./src/test/integration/files/multi.csv")
-            .set("Cookie", `${keyTokenName}=${token}`)
+            .set("Cookie", `${EConstant.appName}=${token}`)
             .end(function (err, res) {
                 if (err) console.log(err);
                 else {

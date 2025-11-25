@@ -8,7 +8,8 @@
  *
  */
 
-import { IdecodedUrl, Ientities, IserviceInfos, Iuser } from ".";
+import { Ientities, IserviceInfos, Iuser } from ".";
+import { Chose } from "../context";
 export interface IqueryOptions {
     user: Iuser;
     methods: string[];
@@ -17,7 +18,7 @@ export interface IqueryOptions {
     method?: string;
     options: string;
     services: { [key: string]: IserviceInfos };
-    decodedUrl: IdecodedUrl;
+    chose: Chose;
     datas?: Record<string, any>;
     results?: Record<string, any> | string;
     graph: boolean;

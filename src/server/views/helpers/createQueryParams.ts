@@ -17,25 +17,26 @@ import { blankUser } from "./";
 export async function createQueryParams(ctx: koaContext): Promise<IqueryOptions | undefined> {
     console.log(logging.whereIam(new Error().stack));
     let user = await getAuthenticatedUser(ctx);
-    user = user ? user : blankUser(ctx.service);
+    user = user ? user : blankUser(ctx._.service);
     const listEntities =
         user.superAdmin === true
-            ? Object.keys(ctx.model)
+            ? Object.keys(ctx._.model())
             : user.admin === true
-            ? Object.keys(ctx.model).filter((elem: string) => ctx.model[elem].order > 0 || ctx.model[elem].createOrder === 99 || ctx.model[elem].createOrder === -1)
+            ? Object.keys(ctx._.model()).filter((elem: string) => ctx._.model()[elem].order > 0 || ctx._.model()[elem].createOrder === 99 || ctx._.model()[elem].createOrder === -1)
             : user.canPost === true
-            ? Object.keys(ctx.model).filter((elem: string) => ctx.model[elem].order > 0 || ctx.model[elem].createOrder === 99 || ctx.model[elem].createOrder === -1)
-            : Object.keys(ctx.model).filter((elem: string) => ctx.model[elem].order > 0);
+            ? Object.keys(ctx._.model()).filter((elem: string) => ctx._.model()[elem].order > 0 || ctx._.model()[elem].createOrder === 99 || ctx._.model()[elem].createOrder === -1)
+            : Object.keys(ctx._.model()).filter((elem: string) => ctx._.model()[elem].order > 0);
     listEntities.push("Services", "Logs");
     return {
         methods: ["GET"],
-        decodedUrl: ctx.decodedUrl,
+        // decodedUrl: ctx._,
+        chose: ctx._,
         entity: "",
         options: ctx.querystring ? ctx.querystring : "",
         user: user,
         graph: ctx.url.includes("$resultFormat=graph"),
-        admin: ctx.service.name === EConstant.admin,
+        admin: ctx._.service.name === EConstant.admin,
         services: config.getInfosForAll(ctx),
-        _DATAS: Object.fromEntries(Object.entries(ctx.model).filter(([k, v]) => listEntities.includes(k) && v.order >= 0)) as Ientities
+        _DATAS: Object.fromEntries(Object.entries(ctx._.model()).filter(([k, v]) => listEntities.includes(k) && v.order >= 0)) as Ientities
     };
 }

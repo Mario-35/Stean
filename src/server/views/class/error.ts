@@ -22,7 +22,7 @@ export class HtmlError extends CoreHtmlView {
         this.error(datas.message, datas.url);
     }
     private error(message: string | undefined, url: string) {
-        // const ref = this.ctx.decodedUrl && this.ctx.decodedUrl.linkbase ? `${this.ctx.decodedUrl.linkbase + `/${this.ctx.service.apiVersion}/Query`}` : "";
+        // const ref = this.ctx.- && this.ctx.-.linkbase ? `${this.ctx.-.linkbase + `/${this.ctx.-.service.apiVersion}/Query`}` : "";
         this._HTMLResult = [
             `<!DOCTYPE html>
             <html>
