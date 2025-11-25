@@ -72,7 +72,7 @@ export class Models {
     }
 
     public async infos(ctx: koaContext) {
-        const temp = config.getInfos(ctx, ctx._.service.name);
+        const temp = ctx._.toString();
         const result: Record<string, any> = {
             ...hidePassword(temp),
             ready: config.connection(ctx._.service.name) ? true : false,

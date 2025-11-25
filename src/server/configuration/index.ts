@@ -244,39 +244,6 @@ class Configuration {
     }
 
     /**
-     * Return infos of a service
-     *
-     * @param 1
-     * @param name service name
-     * @returns infos as IserviceInfos
-     */
-    getInfos = (ctx: koaContext, name: string): IserviceInfos => {
-        const protocol: string = ctx.request.headers["x-forwarded-proto"]
-            ? ctx.request.headers["x-forwarded-proto"].toString()
-            : Configuration.services[name].options.includes(EOptions.forceHttps)
-            ? "https"
-            : ctx.protocol;
-
-        // make linkbase
-        let linkBase = ctx.request.headers["x-forwarded-host"]
-            ? `${protocol}://${ctx.request.headers["x-forwarded-host"].toString()}`
-            : ctx.request.header.host
-            ? `${protocol}://${ctx.request.header.host}`
-            : "";
-
-        // make rootName
-        if (!linkBase.includes(name)) linkBase += "/" + name;
-        const version = Configuration.services[name].apiVersion || undefined;
-        return {
-            protocol: protocol,
-            linkBase: linkBase,
-            root: process.env.NODE_ENV?.trim() === EConstant.test ? `proxy/${version || ""}` : `${linkBase}/${version || ""}`,
-            model: version ? `https://app.diagrams.net/?lightbox=1&edit=_blank#U${linkBase}/${version}/draw` : "",
-            service: Configuration.services[name]
-        };
-    };
-
-    /**
      * Return infos for all services
      *
      * @param ctx koa context
@@ -286,7 +253,7 @@ class Configuration {
     getInfosForAll(ctx: koaContext): { [key: string]: IserviceInfos } {
         const result: Record<string, any> = {};
         this.getServicesNames().forEach((conf: string) => {
-            result[conf] = this.getInfos(ctx, conf);
+            result[conf] = ctx._.toString();
         });
         return result;
     }

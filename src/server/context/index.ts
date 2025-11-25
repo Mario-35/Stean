@@ -1,3 +1,11 @@
+/**
+ * SteanContext for API
+ *
+ * @copyright 2020-present Inrae
+ * @author mario.adam@inrae.fr
+ *
+ */
+
 import { config } from "../configuration";
 import { setDebug } from "../constants";
 import { EConstant, EFrom, EHttpCode, EOptions } from "../enums";
@@ -8,8 +16,10 @@ import { RootPgVisitor } from "../odata/visitor";
 import {  Id, Iservice, IuserToken, koaContext } from "../types";
 
 /**
- * Paths Class
+ * SteanContext Class
 */
+
+
 
 export class SteanContext {
     href: string;
@@ -34,19 +44,13 @@ export class SteanContext {
     user: IuserToken;
 
     constructor(ctx: koaContext) {
-        this.decodeUrl(ctx)
-    }
-    
-    private decodeUrl(ctx: koaContext) {
         console.log(logging.whereIam(new Error().stack));
-        // get input.separator
-        const input: string = ctx.href;
         // debug mode
-        setDebug(input.includes("?$debug=true"));
+        setDebug(ctx.href.includes("?$debug=true"));
         // decode url
         const url = new URL(
             cleanUrl(
-                removeFromUrl(input, ["debug=true"])
+                removeFromUrl(ctx.href, ["debug=true"])
                 .normalize("NFD")
                 .replace(/[\u0300-\u036f]/g, "")
             )
@@ -76,8 +80,7 @@ export class SteanContext {
         try {
             const configName = config.getConfigNameFromName( paths[0].toLowerCase());
             if (configName) {
-                this.service = config.getService(configName);
-                
+                this.service = config.getService(configName);                
                 this.protocol = ctx.request.headers["x-forwarded-proto"]
                 ? ctx.request.headers["x-forwarded-proto"].toString()
                 : this.service.options.includes(EOptions.forceHttps)
@@ -107,6 +110,15 @@ export class SteanContext {
 
     model() {
         return models.getModel(this.service);
+    }
+
+    toString() {
+        return {
+            protocol: this.protocol,
+            linkBase: this.linkBase,
+            root: this.root,
+            service: this.service
+        }
     }
     
 }
