@@ -40,21 +40,21 @@ export class Login extends CoreHtmlView {
                     <input  id="tab-2" type="radio" name="tab" class="sign-up" ${datas.login ? "" : "checked"}>
                     <label for="tab-2" class="tab">Sign Up</label>
                     <div class="login-form">
-                      <form action="${this.ctx._.root}/login" method="post">
+                      <form action="${this.ctx._.root()}/login" method="post">
                         <div class="sign-in-htm">
                           ${this.textInput({ name: "username", label: "Username", value: "" })}
                           ${this.textInput({ name: "password", label: "Password", value: "", password: true })}
                           ${this.checkBox({ name: "check", checked: true, label: " Keep me Signed in" })}
                           ${this.submitButton("Sign In")}
                           ${this.hr()}
-                          ${this.button(`${this.ctx._.root}/Query`, "Return to Query")}
+                          ${this.button(`${this.ctx._.root()}/Query`, "Return to Query")}
                           <div class="foot-lnk">
                             <a href="#forgot">Forgot Password?</a>
                           </div>
                         </div>
                       </form>
             
-                      <form action="${this.ctx._.root}/register" method="post">
+                      <form action="${this.ctx._.root()}/register" method="post">
                         <div class="sign-up-htm">
                           ${this.textInput({
                               name: "username",

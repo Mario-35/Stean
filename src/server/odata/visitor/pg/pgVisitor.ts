@@ -120,7 +120,7 @@ export class PgVisitor extends Visitor {
         else if (this.isSelect(context) && tempEntity && tempEntity.relations[input]) {
             const entityName = models.entityName(this.ctx._.model(), input);
             return tempEntity && entityName
-                ? `CONCAT('${this.ctx._.root}/${tempEntity.name}(', "${tempEntity.table}"."id", ')/${entityName}') AS "${entityName}${EConstant.navLink}"`
+                ? `CONCAT('${this.ctx._.root()}/${tempEntity.name}(', "${tempEntity.table}"."id", ')/${entityName}') AS "${entityName}${EConstant.navLink}"`
                 : undefined;
         }
     }

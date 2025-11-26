@@ -124,10 +124,10 @@ export class Trace {
 
     async rePlay(ctx: koaContext): Promise<boolean> {
         console.log(logging.whereIam(new Error().stack));
-        await this.get(`SELECT * FROM log WHERE id=${ctx._.id}`).then(async (input: Record<string, any>) => {
+        await this.get(`SELECT * FROM log WHERE id=${ctx._.id()}`).then(async (input: Record<string, any>) => {
             if (["POST", "PUT", "PATCH"].includes(input.method)) {
                 try {
-                    await fetch(ctx._.origin + input.url + "?$replay=" + ctx._.id, {
+                    await fetch(ctx._.origin + input.url + "?$replay=" + ctx._.id(), {
                         method: input.method,
                         headers: {
                             "Content-Type": EEncodingType.json

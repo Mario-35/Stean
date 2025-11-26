@@ -32,6 +32,8 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     createBearerToken(ctx);
     ctx._ = new SteanContext(ctx);
 
+    // logging.debug(ctx._ );
+
 
     // if logs show log file
     // if (ctx.path.includes("logs-")) return logsRoute(ctx, paths.root + "logs\\" + `${decodedUrl ? decodedUrl.path : ctx.path}`);
@@ -71,7 +73,7 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     // forcing post loras with different version IT'S POSSIBLE BECAUSE COLUMN ARE THE SAME FOR ALL VERSION
     if (ctx._.service.apiVersion != ctx._.service.apiVersion) {
         if (!(ctx.request.method === "POST" && ctx.originalUrl.includes(`${ctx._.service.apiVersion}/Loras`)))
-            ctx.redirect(ctx.request.method === "GET" ? ctx.originalUrl.replace(String(ctx._.service.apiVersion), ctx._.service.apiVersion) : `${ctx._.linkBase}/${ctx._.service.apiVersion}/`);
+            ctx.redirect(ctx.request.method === "GET" ? ctx.originalUrl.replace(String(ctx._.service.apiVersion), ctx._.service.apiVersion) : `${ctx._.base()}/${ctx._.service.apiVersion}/`);
     }
     // Clean query string
     ctx.querystring = ctx.request.method === "POST" && ctx.originalUrl.includes(`${ctx._.service.apiVersion}/Loras`) ? "" : decodeURIComponent(querystring.unescape(ctx.querystring));

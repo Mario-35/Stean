@@ -68,7 +68,7 @@ unProtectedRoutes.get("/*path", async (ctx) => {
             }
         // logs
         case "LOGGING":
-            ctx.redirect(`${ctx._.root}/logging`);
+            ctx.redirect(`${ctx._.root()}/logging`);
             return;
         // export service
         case "EXPORT":
@@ -81,7 +81,7 @@ unProtectedRoutes.get("/*path", async (ctx) => {
             return;
         // User login
         case "LOGIN":
-            if (userAuthenticated(ctx)) ctx.redirect(`${ctx._.root}/status`);
+            if (userAuthenticated(ctx)) ctx.redirect(`${ctx._.root()}/status`);
             else {
                 const bodyLogin = new Login(ctx, { url: "", login: true });
                 ctx.type = returnFormats.html.type;
@@ -100,7 +100,7 @@ unProtectedRoutes.get("/*path", async (ctx) => {
                 }
             }
             ctx.cookies.set(EConstant.appName);
-            ctx.redirect(`${ctx._.root}/login`);
+            ctx.redirect(`${ctx._.root()}/login`);
             return;
         // Create user
         case "REGISTER":
@@ -111,7 +111,7 @@ unProtectedRoutes.get("/*path", async (ctx) => {
         // Logout user
         case "LOGOUT":
             ctx.cookies.set(EConstant.appName);
-            if (ctx.request.header.accept && ctx.request.header.accept.includes("text/html")) ctx.redirect(`${ctx._.root}/login`);
+            if (ctx.request.header.accept && ctx.request.header.accept.includes("text/html")) ctx.redirect(`${ctx._.root()}/login`);
             else ctx.status = EHttpCode.ok;
             ctx.body = {
                 message: EInfos.logoutOk
@@ -145,7 +145,7 @@ unProtectedRoutes.get("/*path", async (ctx) => {
                     (ctx.body = await createService(testDatas)), (ctx.status = EHttpCode.created);
                 } catch (error) {
                     ctx.status = EHttpCode.badRequest;
-                    ctx.redirect(`${ctx._.root}/error`);
+                    ctx.redirect(`${ctx._.root()}/error`);
                 }
                 return;
             }
@@ -160,7 +160,7 @@ unProtectedRoutes.get("/*path", async (ctx) => {
                     ctx.body = await createDatabase(ctx._.service.pg.database);
                 } catch (error) {
                     ctx.status = EHttpCode.badRequest;
-                    ctx.redirect(`${ctx._.root}/error`);
+                    ctx.redirect(`${ctx._.root()}/error`);
                 }
                 return;
             }

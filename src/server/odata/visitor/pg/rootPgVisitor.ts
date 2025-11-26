@@ -56,7 +56,7 @@ export class RootPgVisitor extends PgVisitor {
                 const nodeName = element.includes("(") ? element.split("(")[0] : element;
                 const id: Id = element.includes("(") ? String(element.split("(")[1].split(")")[0]) : undefined;
                 if (this.entity && this.entity.relations[nodeName]) {
-                    const where = this.parentEntity ? `(SELECT id FROM (${this.query.toWhere(this)}) as nop)${id ? `and id = ${id}` : ""}` : this.id;
+                    const where = this.parentEntity ? `(SELECT id FROM (${this.query.toWhere(this)}) AS nop)${id ? `AND id = ${id}` : ""}` : this.id;
                     const whereSql = link(this.ctx._.model(), this.entity.name, nodeName)
                         .split("$ID")
                         .join(<string>where);
@@ -105,9 +105,10 @@ export class RootPgVisitor extends PgVisitor {
     }
 
     protected VisitRessourcesKeyPropertyValue(node: Token, _context: IodataContext) {
-        this.id = this.ctx._.idStr ? this.ctx._.idStr : node.value == "Edm.SByte" ? BigInt(node.raw) : node.raw;
+        this.id = this.ctx._.isIString() ? this.ctx._.id() : node.value == "Edm.SByte" ? BigInt(node.raw) : node.raw;
         this.query.where.notNull;
-        const condition = this.ctx._.idStr ? `"lora"."deveui" = '${this.ctx._.idStr.toLocaleUpperCase()}'` : ` id = ${this.id}`;
+        // const condition = this.ctx._.id() ? `"lora"."deveui" = '${this.ctx._.id().toLocaleUpperCase()}'` : ` id = ${this.id}`;
+        const condition = this.ctx._.isIString() ? `"lora"."deveui" = '${String(this.ctx._.id()).toLocaleUpperCase()}'` : ` id = ${this.id}`;
         if (this.query.where.notNull() === true) this.query.where.add(` AND ${condition}`);
         else this.query.where.init(condition);
     }

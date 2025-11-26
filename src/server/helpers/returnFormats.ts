@@ -113,7 +113,7 @@ const _returnFormats: { [key in EReturnFormats]: IreturnFormat } = {
       ${graphNames.join("")}
         <script>
         ${addJsFile("graph.js")}
-          const linkBase = "${ctx._.root}";
+          const linkBase = "${ctx._.root()}";
           ${formatedDatas.join(";")}                             
         </script>`;
         },

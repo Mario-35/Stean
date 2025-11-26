@@ -24,8 +24,6 @@ import {  Id, Iservice, IuserToken, koaContext } from "../types";
 export class SteanContext {
     href: string;
     origin: string;
-    linkBase: string;
-    root: string;
     protocol: string;
     host: string;
     hostname: string;
@@ -34,8 +32,8 @@ export class SteanContext {
     search: string;
     
     path: string;
-    id: Id;
-    idStr: string | undefined;
+    private _id: Id;
+    private _idStr: string | undefined;
     
     service: Iservice;
     odata: RootPgVisitor;
@@ -75,8 +73,8 @@ export class SteanContext {
             this.path = paths.slice(2).join("/");
         }
         this.path = idStr ? this.path.replace(String(id), "0") : this.path ;
-        this.id = isNaN(+id) ? BigInt(0) : BigInt(id);
-        this.idStr = idStr;
+        this._id = isNaN(+id) ? BigInt(0) : BigInt(id);
+        this._idStr = idStr;
         try {
             const configName = config.getConfigNameFromName( paths[0].toLowerCase());
             if (configName) {
@@ -86,39 +84,41 @@ export class SteanContext {
                 : this.service.options.includes(EOptions.forceHttps)
                 ? "https"
                 : ctx.protocol;
-                
-                // make linkbase
-                this.linkBase = ctx.request.headers["x-forwarded-host"]
-                ? `${this.protocol}://${ctx.request.headers["x-forwarded-host"].toString()}`
-                : ctx.request.header.host
-                ? `${this.protocol}://${ctx.request.header.host}`
-                : "Error";
-                
-                // make rootName
-                if (!this.linkBase.includes(configName)) this.linkBase += "/" + configName;
-                
-                this.root = process.env.NODE_ENV?.trim() === EConstant.test ? `proxy/${this.service.apiVersion || ""}` : `${this.linkBase}/${this.service.apiVersion || ""}`;
             }
-            else ctx.throw(EHttpCode.notFound);            
+            else ctx.throw(EHttpCode.notFound);
         } catch (error) {
             logging.debug(error);
             ctx.throw(EHttpCode.notFound);            
         }
         this.from = ctx.request.headers.host === "mqtt" ? EFrom.mqtt : EFrom.unknown
-        // get model
     }
-
+    
+    root() {
+        return  process.env.NODE_ENV?.trim() === EConstant.test ? `proxy/${this.service.apiVersion || ""}` : `${this.origin}/${this.service.name}/${this.service.apiVersion || ""}`;
+    }
+    
     model() {
         return models.getModel(this.service);
+    }
+
+    base() {
+        return `${this.origin}/${this.service.name}`;
     }
 
     toString() {
         return {
             protocol: this.protocol,
-            linkBase: this.linkBase,
-            root: this.root,
+            base: this.base(),
+            root: this.root(),
             service: this.service
         }
     }
     
+    id(): string | bigint {
+        return this._idStr ? this._idStr : this._id ? BigInt(this._id) : BigInt(0);
+    }
+
+    isIString() {
+        return typeof this.id() === 'string'
+    }
 }

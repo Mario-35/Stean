@@ -93,8 +93,9 @@ export class Query extends CoreHtmlView {
     toString() {
         this.replacers({
             start: this.params.results ? "jsonObj = JSON.parse(`" + this.params.results + "`); jsonViewer.showJSON(jsonObj);" : "",
-            action: `${this.params._.root}/${this.params._.service.apiVersion}/CreateObservations`
+            action: `${this.params._.root()}/${this.params._.service.apiVersion}/CreateObservations`
         });
+        logging.debug(this.params);
         this.replacer("_PARAMS={}", "_PARAMS=" + JSON.stringify(this.params, this.bigIntReplacer));
         return super.toString();
     }

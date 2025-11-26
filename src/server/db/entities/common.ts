@@ -28,8 +28,8 @@ export class Common {
     constructor(ctx: koaContext) {
         console.log(logging.whereIam(new Error().stack));
         this.ctx = ctx;
-        this.nextLinkBase = removeKeyFromUrl(`${this.ctx._.root}/${this.ctx.href.split(`${ctx._.service.apiVersion}/`)[1]}`, ["top", "skip"]);
-        this.linkBase = `${this.ctx._.root}/${this.constructor.name}`;
+        this.nextLinkBase = removeKeyFromUrl(`${this.ctx._.root()}/${this.ctx.href.split(`${ctx._.service.apiVersion}/`)[1]}`, ["top", "skip"]);
+        this.linkBase = `${this.ctx._.root()}/${this.constructor.name}`;
     }
 
     getErrorCode(err: Error | any, actual: number): number {

@@ -219,9 +219,9 @@ export class Payload extends Common {
                         result: tempResult["result"]["value"]
                     };
                     result[EConstant.id] = tempResult.id;
-                    result[EConstant.selfLink] = `${this.ctx._.root}/Observations(${tempResult.id})`;
+                    result[EConstant.selfLink] = `${this.ctx._.root()}/Observations(${tempResult.id})`;
                     Object.keys(OBSERVATION.relations).forEach((word) => {
-                        result[`${word}${EConstant.navLink}`] = `${this.ctx._.root}/Observations(${tempResult.id})/${word}`;
+                        result[`${word}${EConstant.navLink}`] = `${this.ctx._.root()}/Observations(${tempResult.id})/${word}`;
                     });
                     return this.formatReturnResult({ body: result, query: sql });
                 } else {
@@ -230,7 +230,7 @@ export class Payload extends Common {
                         this.ctx.throw(EHttpCode.conflict, {
                             code: EHttpCode.conflict,
                             detail: EErrors.observationExist,
-                            link: `${this.ctx._.root}/Observations(${[tempResult.duplicate]})`
+                            link: `${this.ctx._.root()}/Observations(${[tempResult.duplicate]})`
                         });
                 }
             });
@@ -300,9 +300,9 @@ export class Payload extends Common {
                         result: tempResult["result"]["value"]
                     };
                     result[EConstant.id] = tempResult.id;
-                    result[EConstant.selfLink] = `${this.ctx._.root}/Observations(${tempResult.id})`;
+                    result[EConstant.selfLink] = `${this.ctx._.root()}/Observations(${tempResult.id})`;
                     Object.keys(OBSERVATION.relations).forEach((word) => {
-                        result[`${word}${EConstant.navLink}`] = `${this.ctx._.root}/Observations(${tempResult.id})/${word}`;
+                        result[`${word}${EConstant.navLink}`] = `${this.ctx._.root()}/Observations(${tempResult.id})/${word}`;
                     });
                     return this.formatReturnResult({
                         body: result,
@@ -314,7 +314,7 @@ export class Payload extends Common {
                         this.ctx.throw(EHttpCode.conflict, {
                             code: EHttpCode.conflict,
                             detail: EErrors.observationExist,
-                            link: `${this.ctx._.root}/Observations(${[tempResult.duplicate]})`
+                            link: `${this.ctx._.root()}/Observations(${[tempResult.duplicate]})`
                         });
                 }
             });

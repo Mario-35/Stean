@@ -45,8 +45,8 @@ export class Status extends CoreHtmlView {
                         <h3>Admin : ${user.admin === true ? EChar.ok : !sec ? EChar.ok : EChar.notOk}</h3>
                         <h3>Super admin : ${user.superAdmin === true ? EChar.ok : !sec ? EChar.ok : EChar.notOk}</h3>
                         ${this.foot([
-                            { href: `${this.ctx._.root}/Logout`, class: "button-logout", name: "Logout" },
-                            { href: `${this.ctx._.root}/Query`, class: "button-query", name: "Query" }
+                            { href: `${this.ctx._.root()}/Logout`, class: "button-logout", name: "Logout" },
+                            { href: `${this.ctx._.root()}/Query`, class: "button-query", name: "Query" }
                         ])}
                     </div>
                 </div>

@@ -58,12 +58,12 @@ export class Query {
         }
         const returnValue: string[] = [];
         // create selfLink
-        const selfLink = `CONCAT('${main.ctx._.root}/${tempEntity.name}(', "${tempEntity.table}"."id", ')') AS ${doubleQuotes(EConstant.selfLink)}`;
+        const selfLink = `CONCAT('${main.ctx._.root()}/${tempEntity.name}(', "${tempEntity.table}"."id", ')') AS ${doubleQuotes(EConstant.selfLink)}`;
         // if $ref return only selfLink
         if (element.onlyRef == true) return [selfLink];
         if (element.showRelations == true) returnValue.push(selfLink);
         if (element.entity && isTestEntity(element.entity, "Logs") && isAllowedTo(main.ctx, EUserRights.Post) === true) {
-            const replay = `CONCAT('${main.ctx._.root}/Replays(', "${tempEntity.table}"."id", ')') AS ${doubleQuotes(EConstant.rePlay)}`;
+            const replay = `CONCAT('${main.ctx._.root()}/Replays(', "${tempEntity.table}"."id", ')') AS ${doubleQuotes(EConstant.rePlay)}`;
             returnValue.push(replay);
         }
         // create list of columns
@@ -98,7 +98,7 @@ export class Query {
             });
         // add interval if requested
         if (main.interval && main.intervalColumns)
-            main.intervalColumns.push(`CONCAT('${main.ctx._.root}/${tempEntity.name}(', COALESCE("${EConstant.id}", '0')::text, ')') AS ${doubleQuotes(EConstant.selfLink)}`);
+            main.intervalColumns.push(`CONCAT('${main.ctx._.root()}/${tempEntity.name}(', COALESCE("${EConstant.id}", '0')::text, ')') AS ${doubleQuotes(EConstant.selfLink)}`);
         // If observation entity
         if (isTestEntity(tempEntity, "Observations") === true && element.onlyRef === false) {
             if (main.interval && !isReturnGraph(main)) returnValue.push(`timestamp_ceil("resultTime", interval '${main.interval}') AS srcdate`);
@@ -154,7 +154,7 @@ export class Query {
                                 if (rel[0] == "(") select.push(rel);
                                 else if (element.entity && element.showRelations == true && main.onlyRef == false) {
                                     select.push(
-                                        ` CONCAT('${main.ctx._.root}/${element.entity.name}(', ${doubleQuotes(element.entity.table)}."id", ')/${rel}') AS "${rel}${EConstant.navLink}"`
+                                        ` CONCAT('${main.ctx._.root()}/${element.entity.name}(', ${doubleQuotes(element.entity.table)}."id", ')/${rel}') AS "${rel}${EConstant.navLink}"`
                                     );
                                 }
                             });

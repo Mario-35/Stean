@@ -358,7 +358,7 @@ export class Models {
             .forEach((value: string) => {
                 expectedResponse.push({
                     name: ctx._.model()[value].name,
-                    url: `${ctx._.linkBase}/${ctx._.service.apiVersion}/${value}`
+                    url: `${ctx._.base()}/${ctx._.service.apiVersion}/${value}`
                 });
             });
 
@@ -408,7 +408,7 @@ export class Models {
                 list.push(`${ctx._.origin}/#api-Token`);
                 list.push(`${ctx._.origin}/#api-Import`);
                 list.push(`${ctx._.origin}/#api-Format`);
-                temp[`${ctx._.linkBase}/${ctx._.service.apiVersion}/req/receive-updates-via-mqtt/receive-updates`] = {
+                temp[`${ctx._.base()}/${ctx._.service.apiVersion}/req/receive-updates-via-mqtt/receive-updates`] = {
                     "endpoints": [`mqtt://server.example.com:${config.getService(EConstant.admin).ports?.ws}`, "ws://server.example.com/sensorThings"]
                 };
                 return temp;

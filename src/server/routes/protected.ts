@@ -35,12 +35,12 @@ protectedRoutes.post("/*path", async (ctx: koaContext, next) => {
             process.exit(100);
             return;
         case "LOGIN":
-            if (ctx.request["token" as keyof object]) ctx.redirect(`${ctx._.root}/status`);
+            if (ctx.request["token" as keyof object]) ctx.redirect(`${ctx._.root()}/status`);
             await loginUser(ctx).then((user: Iuser | undefined) => {
                 if (user) {
                     setToken(ctx, String(user["token" as keyof object]));
                     ctx.status = EHttpCode.ok;
-                    if (ctx.request.header.accept && ctx.request.header.accept.includes("text/html")) ctx.redirect(`${ctx._.root}/Status`);
+                    if (ctx.request.header.accept && ctx.request.header.accept.includes("text/html")) ctx.redirect(`${ctx._.root()}/Status`);
                     else
                         ctx.body = {
                             message: EInfos.loginOk,
@@ -85,7 +85,7 @@ protectedRoutes.post("/*path", async (ctx: koaContext, next) => {
                 try {
                     await userAccess.post(ctx._.service.name, ctx.body);
                 } catch (error) {
-                    ctx.redirect(`${ctx._.root}/error`);
+                    ctx.redirect(`${ctx._.root()}/error`);
                 }
             } else {
                 const createHtml = new Login(ctx, {

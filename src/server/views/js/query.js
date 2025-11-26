@@ -101,12 +101,12 @@ function setProgression(nb) {
 	populateSelect(services, Object.keys(_PARAMS.services), _PARAMS._.service.name);
 	populateSelect(methodOption, entityOption.value == "Loras" ? ["GET", "POST"] : _PARAMS.methods, _PARAMS.method ? _PARAMS.method : "GET");
 
-	idOption.value = _PARAMS._.idStr || _PARAMS._.id;
+	idOption.value = _PARAMS._._idStr || _PARAMS._._id;
 	idSubOption.value = 0;
 
 	refresh();
 	optVersion.value = `${_PARAMS._.service.apiVersion}`;
-	optHost.value = _PARAMS._.linkBase;
+	optHost.value = `${_PARAMS._.origin}/${_PARAMS._.service.name}`;
 	if (_PARAMS.datas) jsonDatas.value = _PARAMS.datas;
 	queryOptions.value = _PARAMS.options;
 	if (window.location.href.includes('Query?')) decodeUrl(window.location.href);
