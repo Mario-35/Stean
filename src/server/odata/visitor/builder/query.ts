@@ -42,7 +42,7 @@ export class Query {
         // get good entity name
         const tempEntity = models.entity(main.ctx._.model(), tableName);
         if (!tempEntity) {
-            logging.error("no entity For", tableName);
+            logging.error(tableName, "no entity For");
             return;
         }
         // Add ceil and return if graph

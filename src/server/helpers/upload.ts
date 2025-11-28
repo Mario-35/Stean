@@ -13,6 +13,7 @@ import util from "util";
 import fs from "fs";
 import { koaContext } from "../types";
 import { paths } from "../paths";
+import { logging } from "../log";
 /**
  *
  * @param ctx Koa context
@@ -49,7 +50,7 @@ export const upload = (ctx: koaContext): Promise<object> => {
                     data["state"] = `GET ${chunk.length} bytes`;
                 });
                 file.on("error", (error: Error) => {
-                    console.log(error);
+                    logging.error(error);
                 });
                 file.on("end", () => {
                     data["state"] = "UPLOAD FINISHED";
@@ -62,8 +63,7 @@ export const upload = (ctx: koaContext): Promise<object> => {
         });
         // catch error
         busboy.on("error", (error: Error) => {
-            console.log(error);
-            data["state"] = "ERROR";
+            data["state"] = logging.error(error).return("ERROR");
             reject(error);
         });
         // finish

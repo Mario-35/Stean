@@ -14,6 +14,7 @@ import { RootPgVisitor } from "./visitor";
 import { koaContext } from "../types";
 import { EConstant, EErrors, EHttpCode } from "../enums";
 import { doSomeWorkAfterCreateAst, escapesOdata } from "./visitor/helper";
+import { logging } from "../log";
 
 export const createOdata = async (ctx: koaContext): Promise<RootPgVisitor | undefined> => {
     // init Ressource wich have to be tested first
@@ -73,8 +74,7 @@ export const createOdata = async (ctx: koaContext): Promise<RootPgVisitor | unde
     try {
         astRessources = src.length > 1 ? <Token>resourcePath(<string>[src.shift(), src.shift()].filter((e) => e !== "").join("/")) : <Token>resourcePath(<string>urlSrcSplit[0]);
     } catch (error) {
-        console.log(error);
-        ctx.throw(EHttpCode.notFound, { code: EHttpCode.badRequest, detail: EErrors.notValid });
+        ctx.throw(EHttpCode.notFound, logging.error(error).return({ code: EHttpCode.badRequest, detail: EErrors.notValid }));
     }
     // INIT query
     const astQuery: Token = <Token>query(decodeURIComponent(urlSrcSplit[1]));

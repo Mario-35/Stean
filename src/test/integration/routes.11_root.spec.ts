@@ -19,8 +19,7 @@ addToApiDoc({
         2
     )}
     <a class="tabLogo" href="mailto: sensorThings@inrae.fr"><img src="./assets/mail.png" alt="mail"></a><span class="tabLink">sensorThings@inrae.fr</span>${blank(2)}
-    <a class="tabLogo" href="https://sensorthings.wiki.inrae.fr" target="_blank"><img src="./assets/wiki.png" alt="wiki"></a><span class="tabLink">https://sensorthings.wiki.inrae.fr</span>${blank(2)}
-    <a class="tabLogo" href="./assets/tests.html" target="_blank"><img src="./assets/tests.png" alt="wiki"></a><span class="tabLink">All Tests</span>${blank(2)}
+      <a class="tabLogo" href="https://github.com/Mario-35/Stean/blob/main/builds/tests.md" target="_blank"><img src="./assets/tests.png" alt="tests"></a><span class="tabLink">All Tests</span>${blank(2)}
     <div class="text"><b>
       <p>Welcome to API documentation for the Open Geospatial Consortium (OGC) SensorThings international standard. This
         API provides an open and unified way to interconnect Internet of Things (IoT) devices over the Web as well as

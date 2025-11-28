@@ -202,7 +202,6 @@ export class Common {
      */
     async addMultiLines(dataInput: Record<string, any> | undefined): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
-        // TODO
         // stop save to log cause if datainput too big
         if (this.ctx.log) this.ctx.log.datas = { datas: EInfos.MultilinesNotSaved };
         // create queries
@@ -219,8 +218,7 @@ export class Common {
         await executeSqlValues(this.ctx._.service, sqls.join(";"))
             .then((res: Record<string, any>) => results.push(res[0 as keyof object]))
             .catch((error: Error) => {
-                console.log(error);
-                this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: error["detail" as keyof object] });
+                this.ctx.throw(EHttpCode.badRequest, logging.error(error).return({ code: EHttpCode.badRequest, detail: error["detail" as keyof object] }));
             });
         // Return results
         return this.formatReturnResult({

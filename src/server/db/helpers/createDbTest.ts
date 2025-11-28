@@ -7,6 +7,7 @@
  */
 
 import { EHttpCode } from "../../enums";
+import { logging } from "../../log";
 import { koaContext } from "../../types";
 import { testDatas } from "../createDb";
 import { createService } from "./createService";
@@ -16,8 +17,7 @@ export const createDbTest = async (ctx: koaContext) => {
         ctx.body = await createService(testDatas);
         ctx.status = EHttpCode.created;
     } catch (error) {
-        console.log(error);
-        ctx.status = EHttpCode.badRequest;
+        logging.error(error).return(EHttpCode.badRequest);
         ctx.redirect(`${ctx._.root()}/error`);
     }
 };

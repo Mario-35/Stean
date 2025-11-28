@@ -9,6 +9,7 @@
 import { Id } from ".";
 import { _STREAM } from "../db/constants";
 import { EObservationType } from "../enums";
+
 export interface IstreamInfos {
     type: _STREAM;
     id: Id;

@@ -6,6 +6,8 @@
  *
  */
 
+import { logging } from "../log";
+
 /**
  *
  * @param input url string
@@ -23,7 +25,7 @@ export function getUrlKey(input: string, key: string): string | undefined {
                 if (e.toUpperCase().startsWith(`${key.toUpperCase()}=`)) result = e.split("=")[1];
             });
     } catch (error) {
-        return result;
+        return logging.error(error).return(result);
     }
     return result;
 }

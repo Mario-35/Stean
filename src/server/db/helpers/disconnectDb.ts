@@ -24,7 +24,7 @@ export const disconnectDb = async (dbName: string, drop: boolean): Promise<boole
             return true;
         });
     } catch (error) {
-        logging.error(EErrors.execQuery, error).toLogAndFile();
+        logging.error(error, EErrors.execQuery);
     }
     return false;
 };

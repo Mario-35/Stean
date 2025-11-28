@@ -1,7 +1,7 @@
 import { _DEBUG, appVersion, timestampNow } from "../constants";
 import { EChar, EColor, EConstant, EInfos } from "../enums";
 import util from "util";
-import { logToHtml } from "../helpers";
+import { isTest, logToHtml } from "../helpers";
 import { paths } from "../paths";
 
 export class LoggingResult {
@@ -50,12 +50,16 @@ export class Logging {
         if (input) Logging._s += input;
     }
 
-    return() {
+    newLine() {
         this.add(EConstant.return);
     }
 
+    _formatColor(col?: number) {
+        return `\x1b[${col || EColor.White}m`;
+    }
+
     color(col?: number) {
-        this.add(`\x1b[${col || EColor.White}m`);
+        this.add(this._formatColor(col));
         return this;
     }
 
@@ -131,14 +135,6 @@ export class Logging {
         return typeof input === "object" ? util.inspect(input, { showHidden: false, depth: null, colors: true }) : input;
     }
 
-    // function to be used in catch
-
-    error<T>(message: string = "Error", error: T) {
-        this.separator(message, EColor.Red);
-        this.return();
-        this.add(this.objet(error));
-        return this;
-    }
 
     /**
      *
@@ -210,25 +206,25 @@ export class Logging {
     logo() {
         this.init(true);
         this.color(EColor.Blue);
-        this.return();
+        this.newLine();
         this.text(` ____ __________    _     _   _`, EColor.Green);
-        this.return();
+        this.newLine();
         this.text(`/ ___|_ __  ____|  / \\   | \\ | |`, EColor.Green);
-        this.return();
+        this.newLine();
         this.text(`\\___ \\| | |  _|   / _ \\  |  \\| |`, EColor.Green);
-        this.return();
+        this.newLine();
         this.text(` ___) | | | |___ / ___ \\ | |\\  |`, EColor.Green);
-        this.return();
+        this.newLine();
         this.text(`|____/|_| |_____|_/   \\_\\|_| \\_|`, EColor.Green);
         this.space();
         this.text(`run API ${EChar.arrowright}`, EColor.Blue);
         this.text(` ${appVersion.version} du ${appVersion.date}`, EColor.Green);
-        this.return();
+        this.newLine();
         this.space(EChar.web);
         this.text("https://github.com/Mario-35/Stean/", EColor.White);
         this.space(EChar.mail);
         this.text("mario.adam@inrae.fr", EColor.Yellow);
-        this.return();
+        this.newLine();
         return this;
     }
 
@@ -270,5 +266,31 @@ export class Logging {
         this.add(this.objet(data));
         process.stdout.write(Logging._s + `\x1b[${EColor.Reset}m${EConstant.return}`);
     }
+
+    _log(color: EColor, title: string, data: any) {
+                this.init(true);
+        this.add(this.objet(data)); 
+        return `${this._formatColor(color)}${'▬'.repeat(25)} ${this._formatColor()}${title} ${this._formatColor(color)}${'▬'.repeat(25)}\x1b[0m${EConstant.return}${Logging._s}${EConstant.return}${this._formatColor(color)}${'▬'.repeat(52 + title.length)}\x1b[0m${EConstant.return}`;
+    }
+
+    error(error: any, title?: any) {
+        const tmp = this._log(EColor.Red, title || 'Error', error);
+        if (!isTest()) process.stdout.write(tmp);
+        paths.logFile.writeStream(tmp);
+        return this;
+    }
+
+    return(ret: any) {
+        return ret;
+    }
+
+    trace(data: any, message?: any) {
+                this.init(true);
+        this.add(this.objet(data)); 
+        const tmp = this._log(EColor.Blue, message || 'Trace', data);
+         if (!isTest()) process.stdout.write(tmp);
+        paths.logFile.writeStream(tmp);
+    }
+
 }
 export const logging = new Logging();

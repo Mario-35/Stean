@@ -30,7 +30,7 @@ export class apiAccess implements Icomon {
         if (entityName && entityName in entities) {
             // @ts-ignore
             this.myEntity = new entities[(this.ctx, entityName)](ctx);
-        } else logging.error(EErrors.noValidEntity, entityName);
+        } else logging.error(entityName, EErrors.noValidEntity);
     }
 
     formatDataInput(input: object | undefined): object | undefined {

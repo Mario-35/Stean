@@ -12,8 +12,6 @@ import { queries } from "../db/queries";
 import { EColumnType, EConstant, EDataType, EErrors, EExtensions, EInfos, EOptions, ERelations } from "../enums";
 import { doubleQuotes, deepClone, isTest, formatPgTableColumn, isString, hidePassword } from "../helpers";
 import { Iservice, Ientities, Ientity, IstreamInfos, koaContext, IentityRelation, getColumnType, IentityColumn, Id, typeExtensions } from "../types";
-import path from "path";
-import fs from "fs";
 import {
     LORASTREAMS,
     DECODER,
@@ -45,31 +43,6 @@ export class Models {
     static models: {
         [key: string]: Ientities;
     } = {};
-
-    // Create drawInfo diagram
-    public drawIo(ctx: koaContext) {
-        const deleteId = (id: string) => {
-            const start = `<mxCell id="${id}"`;
-            const end = "</mxCell>";
-            fileContent = fileContent.replace(`${start}${fileContent.split(start)[1].split(end)[0]}${end}`, "");
-        };
-        let fileContent = fs.readFileSync(path.join(__dirname, "/", "model.drawio"), "utf8");
-        fileContent = fileContent.replace("&gt;Version&lt;", `&gt;version : ${ctx._.service.apiVersion}&lt;`);
-        ["114", "115", "117", "118", "119", "116", "120", "121"].forEach((e) => deleteId(e));
-        fileContent = fileContent.replace(`&lt;hr&gt;COLUMNS.${ctx.mode.MultiDatastreams.name}`, "");
-        fileContent = fileContent.replace(`&lt;hr&gt;COLUMNS.${ctx.mode.MultiDatastreams.name}`, "");
-        fileContent = fileContent.replace(`&lt;strong&gt;${ctx.mode.MultiDatastreams.singular}&lt;/strong&gt;`, "");
-        Object.keys(ctx.mode).forEach((strEntity: string) => {
-            fileContent = fileContent.replace(
-                `COLUMNS.${ctx.mode[strEntity].name}`,
-                Object.keys(ctx.mode[strEntity].columns)
-                    .filter((word) => !word.includes("_") && !word.includes("id"))
-                    .map((colName: string) => `&lt;p style=&quot;margin: 0px; margin-left: 8px;&quot;&gt;${colName}: ${getColumnType(ctx.mode[strEntity].columns[colName]).toUpperCase()}&lt;/p&gt;`)
-                    .join("")
-            );
-        });
-        return fileContent;
-    }
 
     public async infos(ctx: koaContext) {
         const temp = ctx._.toString();
@@ -162,7 +135,7 @@ export class Models {
                         : undefined;
                 })
                 .catch((error) => {
-                    logging.error(EInfos.createUser, error).toLogAndFile();
+                    logging.error(error, EInfos.createUser);
                     return undefined;
                 });
         }
@@ -426,7 +399,7 @@ export class Models {
 
     public getModel(service: Iservice | string): Ientities {
         service = this.getService(service);
-        Models.models[service.name] = this.create(service.apiVersion, service.options, service.extensions);
+        if (!Models.models[service.name]) Models.models[service.name] = this.create(service.apiVersion, service.options, service.extensions);
         return Models.models[service.name];
     }
 

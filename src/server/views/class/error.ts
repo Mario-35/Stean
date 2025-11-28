@@ -31,14 +31,14 @@ export class HtmlError extends CoreHtmlView {
                     <div class="login-error">
                         <div class="login-html">
                             ${this.title("Error", "titleError")}
-                            <h3>${message}</h3>
+                            <h3>${message || ""}</h3>
                             ${this.hr()}
                             <div id="outer">
                                 <div class="inner">
-                                    <a href="${url}" class="button-submit">${url.includes("admin") ? "Admin login" : "Login"}</a>
+                                    <a href="${url.includes("admin") ? `${this.ctx._.root()}/admin` : `${this.ctx._.root()}/Login`}" class="button-submit">${url.includes("admin") ? "Admin login" : "Login"}</a>
                                 </div>
                                 <div class="inner">
-                                    <a  href="/" class="button">Documentation</a>
+                                    <a  href="${this.ctx._.root()}/help" class="button">Documentation</a>
                                 </div>
                             </div>
                         </div>

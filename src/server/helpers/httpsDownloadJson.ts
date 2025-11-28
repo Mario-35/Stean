@@ -7,6 +7,7 @@
  */
 
 import https from "https";
+import { logging } from "../log";
 
 export function httpsDownloadJSON(url: string, filename?: string): Promise<JSON | Error> {
     return new Promise((resolve, reject) => {
@@ -21,7 +22,7 @@ export function httpsDownloadJSON(url: string, filename?: string): Promise<JSON 
                     .on("end", () => resolve(JSON.parse(data)));
             });
         } catch (error) {
-            reject(undefined);
+            reject(logging.error(error).return(undefined));
         }
     });
 }

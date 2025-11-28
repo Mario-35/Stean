@@ -8,8 +8,7 @@
 
 import { decodeToken } from "../authentication";
 import { _DEBUG } from "../constants";
-import { logging } from "../log";
-import { EColor, EErrors, EHttpCode } from "../enums";
+import { EErrors, EHttpCode } from "../enums";
 import { createBearerToken, returnFormats, splitLast } from "../helpers";
 import { adminRoute, logsRoute, exportRoute, docRoute } from "./helper";
 import { config } from "../configuration";
@@ -19,10 +18,12 @@ import querystring from "querystring";
 import { koaContext } from "../types";
 import { paths } from "../paths";
 import { SteanContext } from "../context";
+import { logging } from "../log";
 
 export const routerHandle = async (ctx: koaContext, next: any) => {
     // copy body
     ctx.body = ctx.request.body;
+
     // if configuration exist
     if (config.configFileExist() === true)
         await config.trace.write(ctx); // trace request
@@ -30,13 +31,13 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
 
     // create token
     createBearerToken(ctx);
+    
+    // create stean context
     ctx._ = new SteanContext(ctx);
 
-    // logging.debug(ctx._ );
-
-
     // if logs show log file
-    // if (ctx.path.includes("logs-")) return logsRoute(ctx, paths.root + "logs\\" + `${decodedUrl ? decodedUrl.path : ctx.path}`);
+    if (ctx._.redirect && ctx._.redirect.includes("logs-")) return logsRoute(ctx, ctx._.redirect);
+
     // Specials routes
     switch (splitLast(ctx.path, "/").toLocaleUpperCase()) {
         // admin page
@@ -61,8 +62,7 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     if (splitLast(ctx.path, "/").toLocaleUpperCase().startsWith("REPLAYS(")) {
         await config.trace.rePlay(ctx);
     }
-    logging.separator("decodeUrl", EColor.White, true).to().file().log();
-    logging.message("decodedUrl", ctx._).to().file().log();
+    
     // if service is not identified get out
     if (!ctx._.service) throw new Error(EErrors.noNameIdentified);
     // get service
@@ -85,10 +85,7 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
         ctx._.user = decodeToken(ctx);
         await next().then(async () => {});
     } catch (error: any) {
-        // In prod console is romoved
-        console.log("\x1b[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ route error ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\x1b[0m");
-        console.log(error);
-        console.log("\x1b[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\x1b[0m");
+        logging.error(error);
         const tempError = {
             code: error.statusCode || null,
             message: error.message || null,

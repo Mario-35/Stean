@@ -11,6 +11,7 @@
 import fs from "fs";
 import crypto from "crypto";
 import { EConstant } from "../enums";
+import { logging } from "../log";
 
 const decrypt = (input: string, key: string): string => {
     input = input.split(EConstant.return + EConstant.newline).join("");
@@ -20,7 +21,7 @@ const decrypt = (input: string, key: string): string => {
             const decrpyted = Buffer.concat([decipher.update(Buffer.from(input.slice(33), "hex")), decipher.final()]);
             return decrpyted.toString();
         } catch (error) {
-            console.log(error);
+            logging.error(error);
         }
     }
     return input;

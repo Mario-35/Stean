@@ -53,8 +53,7 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
             return EChar.ok;
         })
         .catch((error: Error) => {
-            console.log(error);
-            return EChar.notOk;
+            return logging.error(error).return(EChar.notOk);
         });
 
     // test user connection
@@ -74,7 +73,7 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
     returnValue[messages.str(EInfos.create, "tablefunc")] = await dbConnection
         .unsafe(queries.createExtension("tablefunc"))
         .then(() => EChar.ok)
-        .catch((err: Error) => err.message);
+        .catch((err: Error) => logging.error(err).return(err.message));
 
     // Get complete model
     const DB = models.getModel(service);
@@ -97,7 +96,7 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
     // create user
     returnValue[messages.str(EInfos.create, "user")] = await createUser(service)
         .then(() => EChar.ok)
-        .catch((err: Error) => err.message);
+        .catch((err: Error) => logging.error(err).return(err.message));
 
     // loop to create each services
     await asyncForEach(pgFunctions(), async (query: string) => {
@@ -109,7 +108,7 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
                 returnValue["  ■■■►  " + name] = EChar.ok;
             })
             .catch((error: Error) => {
-                console.log(error);
+                logging.error(error);
                 process.exit(111);
             });
     });
@@ -128,8 +127,7 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
                             returnValue[messages.str(EInfos.create, "trigger")] = EChar.ok;
                         })
                         .catch((error: Error) => {
-                            console.log(error);
-                            returnValue[messages.str(EInfos.create, "trigger")] = EChar.notOk;
+                            returnValue[messages.str(EInfos.create, "trigger")] = logging.error(error).return(EChar.notOk);
                         });
                 });
             }
@@ -139,26 +137,16 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
     // If only numeric extension
     if (service.extensions.includes(EExtensions.highPrecision)) {
         returnValue[messages.str(EInfos.create, "High Precision result")] = await dbConnection
-            .unsafe(`ALTER TABLE ${doubleQuotes(DB.Observations.table)} ALTER COLUMN 'result' TYPE float4 USING null;`)
-            .then(() => {
-                return EChar.ok;
-            })
-            .catch((error: Error) => {
-                console.log(error);
-                return EChar.notOk;
-            });
+        .unsafe(`ALTER TABLE ${doubleQuotes(DB.Observations.table)} ALTER COLUMN 'result' TYPE float4 USING null;`)
+        .then(() => EChar.ok)
+        .catch((error: Error) => logging.error(error).return(EChar.notOk));
     }
 
     // final test
     returnValue["ALL finished ..."] = await dbConnection
         .unsafe(queries.countUser(servicePg.user))
-        .then(() => {
-            return EChar.ok;
-        })
-        .catch((error: Error) => {
-            console.log(error);
-            return EChar.notOk;
-        });
+        .then(() => EChar.ok)
+        .catch((error: Error) => logging.error(error).return(EChar.notOk));
 
     return returnValue;
 };

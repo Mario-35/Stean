@@ -85,7 +85,7 @@ export class Observations extends Common {
                         const tmp = input[index]["name" as keyof object];
                         res.push(`(SELECT id from "${elem.toLowerCase()}" WHERE name = '${tmp}')`);
                     } catch (error) {
-                        res.push(`null`);
+                        res.push(logging.error(error).return(`null`));
                     }
                 }
             } else
@@ -120,6 +120,7 @@ export class Observations extends Common {
                 try {
                     await executeSql(this.ctx._.service, `${sql} (${this.columnsValues(keys, values)})\n`).then(() => (added += 1));
                 } catch (error) {
+                    logging.error(error);
                     errors += 1;
                 }
             });

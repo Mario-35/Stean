@@ -28,7 +28,7 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
                 const tempDatas = objectEntity.formatDataInput(datas);
                 if (tempDatas) return tempDatas;
             } catch (error) {
-                console.log(error);
+                logging.error(error);
             }
         }
         return datas;

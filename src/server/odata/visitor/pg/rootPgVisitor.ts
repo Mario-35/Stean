@@ -42,7 +42,7 @@ export class RootPgVisitor extends PgVisitor {
                 logging.message("node.raw", node.raw).to().file().log();
             }
         } else {
-            logging.error(`Ressource Not Found ============> VisitRessources${node.type}`, node);
+            logging.error(node, `Ressource Not Found ============> VisitRessources${node.type}`);
             throw new Error(`Unhandled node type: ${node.type}`);
         }
         return this;
@@ -185,7 +185,7 @@ export class RootPgVisitor extends PgVisitor {
         try {
             return postSqlFromPgVisitor(datas, this);
         } catch (error) {
-            return undefined;
+            return logging.error(error).return(undefined);
         }
     }
 
@@ -193,7 +193,7 @@ export class RootPgVisitor extends PgVisitor {
         try {
             return postSqlFromPgVisitor(datas, this);
         } catch (error) {
-            return undefined;
+           return logging.error(error).return(undefined);
         }
     }
 }

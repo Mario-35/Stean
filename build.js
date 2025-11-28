@@ -264,7 +264,6 @@ copyFolderRecursiveSync("./src/server/views/js", _DEST + "views/");
 copyFolderRecursiveSync( "./src/server/views/css", _DEST + "views/" );
 copyFolderRecursiveSync( "./src/server/db/createDb/pgFunctions", _DEST + "db/createDb/" );
 copyFileSync( "./src/server/favicon.ico", _DEST );
-copyFileSync("./src/server/models/model.drawio", _DEST + "models/");
 
 const packageJson = require("./package.json");
 delete packageJson.scripts;
@@ -276,9 +275,12 @@ packageJson["scripts"] = {
 fs.writeFile(FINAL + "package.json", JSON.stringify(packageJson, null, 2), { encoding: "utf-8" },function (err) {
   if (err) console.log(err);
   messageWrite("package.json", "user mode");
+  const start = fs.readFileSync(_DEST + "start.js", "utf-8");
+  writeFile(FINAL + "stean.js", start.replace('require(".");', 'require("./server/index");'), "create start file");
+  if (mode.includes("dev")) {
+     copyFileSync("./src/server/configuration/configuration.json", _DEST + "configuration/");
+   }
   if (!mode.includes("dev")) {
-    const start = fs.readFileSync(_DEST + "start.js", "utf-8");
-    writeFile(FINAL + "stean.js", start.replace('require(".");', 'require("./server/index");'), "create start file");
     ugly("./build/", {
       compressor: cleanCSS ,
       output: "build/",

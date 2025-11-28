@@ -97,7 +97,7 @@ export class Services extends Common {
                             return res[0];
                         })
                         .catch((err: Error) => {
-                            logging.error(EErrors.execQuery, err).toLogAndFile();
+                            logging.error(err, EErrors.execQuery).toLogAndFile();
                             return;
                         })
                 });

@@ -62,10 +62,10 @@ export function formatColumnValue(columnName: string, value: any, column: Ientit
                         try {
                             return value.includes("'") ? simpleQuotes(escapeSimpleQuotes(value)) : simpleQuotes(value);
                         } catch (error) {
-                            return simpleQuotes(typeof value === "object" ? JSON.stringify(value) : value);
+                            return logging.error(error).return(simpleQuotes(typeof value === "object" ? JSON.stringify(value) : value));
                         }
                     default:
-                        logging.error(`ERROR formatColumnValue : ${columnName}`, value).toLogAndFile();
+                        logging.error(value, `ERROR formatColumnValue : ${columnName}`);
                         return undefined;
                 }
         }

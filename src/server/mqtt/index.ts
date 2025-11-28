@@ -64,7 +64,7 @@ export class MqttServer {
                     });
                 }
             } catch (error) {
-                reject(error);
+                reject(logging.error(error).return(error));
             }
         });
     }
@@ -87,7 +87,7 @@ export class MqttServer {
                             return callback(user ? null : new Error(EErrors.authFailed), user ? true : false);
                         })
                         .catch((error: Error) => {
-                            logging.error(EErrors.authFailed, error);
+                            logging.error(error, EErrors.authFailed);
                             return callback(error, false);
                         });
                 }
@@ -108,7 +108,7 @@ export class MqttServer {
                                 return callback(user ? null : new Error(EErrors.authFailed), user ? true : false);
                             })
                             .catch((error: Error) => {
-                                logging.error(EErrors.authFailed, error);
+                                logging.error(error, EErrors.authFailed);
                                 return callback(error, false);
                             });
                     }

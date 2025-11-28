@@ -35,7 +35,7 @@ export class CoreHtmlView {
             try {
                 this.adminConnection = JSON.parse(decrypt(this.datas.connection)).login;
             } catch (error) {
-                this.adminConnection = false;
+                this.adminConnection = logging.error(error).return(false);
             }
         }
     }

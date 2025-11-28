@@ -34,7 +34,7 @@ export function createInsertValues(entity: Ientity, input: Record<string, any>):
                 if (tmp) {
                     keys.push(doubleQuotes(elem));
                     values.push(tmp);
-                } else logging.error(`ERROR createInsertValues : ${elem}`, input[elem]).toLogAndFile();
+                } else logging.error(input[elem], `ERROR createInsertValues : ${elem}`);
             }
         });
         return `\n\t(${keys.join(",\n\t")})\n\tVALUES\n\t(${values.join(",\n\t")})`;

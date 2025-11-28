@@ -6,6 +6,7 @@
  *
  */
 
+import { logging } from "../../log";
 import { koaContext } from "../../types";
 
 /**
@@ -18,9 +19,8 @@ import { koaContext } from "../../types";
 
 export const testRoute = async (ctx: koaContext): Promise<string[] | { [key: string]: any }> => {
     try {
-        return { "Test": "No Test" };
+        return { "ready": ctx._.service.ready};
     } catch (error) {
-        console.log(error);
-        return { error: error };
+        return logging.error(error).return({ error: error });
     }
 };

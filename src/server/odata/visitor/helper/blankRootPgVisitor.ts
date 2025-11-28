@@ -7,6 +7,7 @@
  */
 
 import { RootPgVisitor } from "..";
+import { logging } from "../../../log";
 import { Ientity, koaContext } from "../../../types";
 import { Token } from "../../parser";
 import { query, resourcePath } from "../../parser/parser";
@@ -25,7 +26,6 @@ export const blankRootPgVisitor = (ctx: koaContext, entity: Ientity): RootPgVisi
             astRessources
         ).start(astQuery);
     } catch (error) {
-        console.log(error);
-        return undefined;
+        return logging.error(error).return(undefined);
     }
 };

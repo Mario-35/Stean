@@ -194,7 +194,7 @@ export class PgVisitor extends Visitor {
                     logging.message("context", context).to().file().log();
                 }
             } else {
-                logging.error(`Node error =================> Visit${node.type}`, node);
+                logging.error(node, `Node error =================> Visit${node.type}`);
                 throw new Error(`Unhandled node type: ${node.type}`);
             }
         }

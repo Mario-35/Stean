@@ -33,7 +33,7 @@ export const createTable = async (serviceName: string, tableEntity: Ientity, doA
                 return EChar.ok;
             })
             .catch((error: Error) => {
-                logging.error(messages.str(EErrors.connError, serviceName), error).toLogAndFile();
+                logging.error(error, messages.str(EErrors.connError, serviceName));
                 process.exit(111);
             });
     }
@@ -51,7 +51,7 @@ export const createTable = async (serviceName: string, tableEntity: Ientity, doA
     const returnValue: Record<string, string> = {};
 
     if (!config.connection(serviceName)) {
-        logging.error(messages.str(EErrors.connError, serviceName), "connection Error");
+        logging.error("connection Error", messages.str(EErrors.connError, serviceName));
         return { error: "connection Error" };
     }
 

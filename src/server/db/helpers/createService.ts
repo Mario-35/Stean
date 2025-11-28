@@ -47,16 +47,15 @@ export const createService = async (dataInput: Record<string, any>): Promise<Rec
         await disconnectDb(newServiceName, true);
         results[messages.str(EInfos.disconnect, mess)] = EChar.ok;
     } catch (error) {
-        results[messages.str(EInfos.disconnect, mess)] = EChar.notOk;
-        console.log(error);
+        results[messages.str(EInfos.disconnect, mess)] = logging.error(error).return(EChar.notOk);
     }
 
     try {
         await createDatabase(newServiceName);
         results[messages.str(EInfos.create, mess)] = EChar.ok;
     } catch (error) {
-        results[messages.str(EInfos.create, mess)] = EChar.notOk;
-        console.log(error);
+        results[messages.str(EInfos.create, mess)] = logging.error(error).return(EChar.notOk);
+        ;
     }
 
     const model = models.getModel(newService);
@@ -81,9 +80,8 @@ export const createService = async (dataInput: Record<string, any>): Promise<Rec
                                 console.log(error);
                                 results[entityName] = EChar.notOk;
                             });
-                    } catch (error) {
-                        console.log(error);
-                        results[entityName] = EChar.notOk;
+                    } catch (error) {                    
+                        results[entityName] = logging.error(error).return(EChar.notOk);
                     }
                 }
             }

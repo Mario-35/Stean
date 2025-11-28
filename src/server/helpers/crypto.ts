@@ -9,6 +9,7 @@
 import crypto from "crypto";
 import { paths } from "../paths";
 import { EConstant } from "../enums";
+import { logging } from "../log";
 
 /**
  *
@@ -37,7 +38,7 @@ export const decrypt = (input: string): string => {
             const decrpyted = Buffer.concat([decipher.update(Buffer.from(input.slice(33), "hex")), decipher.final()]);
             return decrpyted.toString();
         } catch (error) {
-            console.log(error);
+            logging.error(error);
         }
     }
     return input;

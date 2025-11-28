@@ -24,7 +24,7 @@ const executeSqlOne = async (service: Iservice, query: string): Promise<object> 
                 resolve(res);
             })
             .catch((err: Error) => {
-                if (!isTest() && +err["code" as keyof object] === 23505) logging.error(EErrors.execQuery, err).toLogAndFile();
+                if (!isTest() && +err["code" as keyof object] === 23505) logging.error(err, EErrors.execQuery);
                 reject(err);
             });
     });
@@ -45,7 +45,7 @@ const executeSqlMulti = async (service: Iservice, queries: string[]): Promise<ob
                 resolve(res);
             })
             .catch((err: Error) => {
-                if (!isTest() && +err["code" as keyof object] === 23505) logging.error(EErrors.execQuery, err).toLogAndFile();
+                if (!isTest() && +err["code" as keyof object] === 23505) logging.error(err, EErrors.execQuery);
                 reject(err);
             });
     });

@@ -37,6 +37,7 @@ import { highlight, languages } from "prismjs";
 import "prismjs/components/prism-python";
 import "prismjs/components/prism-http";
 import "prismjs/components/prism-json";
+import { logging } from "../../server/log";
 export const VERSION = packageJson.version;
 
 const documentation: { [key: string]: IApiDoc[] } = {};
@@ -166,8 +167,7 @@ export const prepareToApiDoc = (input: IApiInput): IApiDoc => {
     try {
         tmp = JSON.stringify(input.params);
     } catch (error) {
-        console.log(error);
-        tmp = String(input.params);
+        tmp = logging.error(error).return(String(input.params));
     }
     // if (input.examples && input.examples.http) input.examples.mario = highlight(`proxy${input.examples.http}`, languages.javascipt, "javascipt tokens");
     switch (input.type) {

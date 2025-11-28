@@ -6,6 +6,7 @@
  *
  */
 
+import { logging } from "../log";
 import { Id } from "../types";
 
 /**
@@ -23,7 +24,7 @@ export const getBigIntFromString = (input: string | bigint | number): Id => {
             }
             return BigInt(input);
         } catch (error) {
-            console.log(error);
+            logging.error(error);
         }
     }
 };

@@ -20,7 +20,7 @@ export const decodeloraDeveuiPayload = async (service: Iservice, loraDeveui: str
             try {
                 return decodingPayload({ ...res[0] }, payload);
             } catch (error) {
-                logging.error(EErrors.DecodingPayloadError, error).toLogAndFile();
+                logging.error(error, EErrors.DecodingPayloadError);
                 return undefined;
             }
         })

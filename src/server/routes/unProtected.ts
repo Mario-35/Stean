@@ -127,11 +127,6 @@ unProtectedRoutes.get("/*path", async (ctx) => {
                 ctx.body = [resultSql];
             }
             return;
-        // Show draw.io model
-        case "DRAW":
-            ctx.type = returnFormats.xml.type;
-            ctx.body = models.drawIo(ctx);
-            return;
         // Infos and link of a services
         case "INFOS":
             ctx.type = returnFormats.json.type;
@@ -144,7 +139,7 @@ unProtectedRoutes.get("/*path", async (ctx) => {
                 try {
                     (ctx.body = await createService(testDatas)), (ctx.status = EHttpCode.created);
                 } catch (error) {
-                    ctx.status = EHttpCode.badRequest;
+                    ctx.status = logging.error(error).return(EHttpCode.badRequest);
                     ctx.redirect(`${ctx._.root()}/error`);
                 }
                 return;
@@ -159,7 +154,7 @@ unProtectedRoutes.get("/*path", async (ctx) => {
                     ctx.status = EHttpCode.created;
                     ctx.body = await createDatabase(ctx._.service.pg.database);
                 } catch (error) {
-                    ctx.status = EHttpCode.badRequest;
+                    ctx.status = logging.error(error).return(EHttpCode.badRequest);
                     ctx.redirect(`${ctx._.root()}/error`);
                 }
                 return;

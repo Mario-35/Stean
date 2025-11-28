@@ -109,7 +109,7 @@ export const relationInfos = (model: Ientities, entityName: string, relationName
                                 };
                         }
                     }
-                    logging.error("Relation Infos", "defaultUnique").toLogAndFile();
+                    logging.error("defaultUnique", "Relation Infos");
                     break;
                 // === : 2
                 case ERelations.belongsTo:
@@ -190,7 +190,7 @@ export const relationInfos = (model: Ientities, entityName: string, relationName
                                 };
                         }
                     }
-                    logging.error("Relation Infos", "belongsTo").toLogAndFile();
+                    logging.error("belongsTo", "Relation Infos");
 
                     break;
                 // === : 3
@@ -263,7 +263,7 @@ export const relationInfos = (model: Ientities, entityName: string, relationName
                                 return fnHasMany();
                         }
                     }
-                    logging.error("Relation Infos", "belongsToMany").toLogAndFile();
+                    logging.error("belongsToMany", "Relation Infos");
 
                     break;
                 // === : 4
@@ -303,7 +303,7 @@ export const relationInfos = (model: Ientities, entityName: string, relationName
                                 return fnHasMany();
                         }
                     }
-                    logging.error("Relation Infos", "hasMany").toLogAndFile();
+                    logging.error("hasMany", "Relation Infos");
                     break;
                 // === : 5
                 case ERelations.hasOne:
@@ -353,7 +353,7 @@ export const relationInfos = (model: Ientities, entityName: string, relationName
                                 };
                         }
                     }
-                    logging.error("Relation Infos", "hasOne").toLogAndFile();
+                    logging.error("hasOne", "Relation Infos");
                     break;
             }
         }

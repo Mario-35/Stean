@@ -8,6 +8,7 @@
 
 import { connectWeb, httpsDownloadJSON } from ".";
 import { EConstant } from "../enums";
+import { logging } from "../log";
 import { Iversion } from "../types";
 
 /**
@@ -20,8 +21,7 @@ export async function readRemoteVersion(): Promise<Iversion | undefined> {
             const version = await httpsDownloadJSON(file, "stean_latest.info");
             return version ? { version: version["version" as keyof object], date: version["date" as keyof object] } : undefined;
         } catch (error) {
-            console.log(error);
-            return;
+            return logging.error(error).return(undefined);
         }
     });
 }

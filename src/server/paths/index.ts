@@ -10,6 +10,7 @@ import path from "path";
 import fs from "fs";
 import { File } from "./files";
 import { EConstant } from "../enums";
+import { logging } from "../log";
 
 /**
  * Paths Class
@@ -37,6 +38,7 @@ class Paths {
         try {
             this.key = fs.readFileSync(path.join(this.app, "/configuration/", ".key"), "utf8");
         } catch (error) {
+            logging.error(error);
             this.key = "zLwX893Mtt9Rc0TKvlInDXuZTFj9rxDV";
             fs.writeFileSync(path.join(this.app, "/configuration/", ".key"), this.key, { encoding: "utf-8" });
         }

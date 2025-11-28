@@ -33,7 +33,6 @@ protectedRoutes.post("/*path", async (ctx: koaContext, next) => {
             // login html page or connection login
             logging.head("essai").toLogAndFile();
             process.exit(100);
-            return;
         case "LOGIN":
             if (ctx.request["token" as keyof object]) ctx.redirect(`${ctx._.root()}/status`);
             await loginUser(ctx).then((user: Iuser | undefined) => {
@@ -85,6 +84,7 @@ protectedRoutes.post("/*path", async (ctx: koaContext, next) => {
                 try {
                     await userAccess.post(ctx._.service.name, ctx.body);
                 } catch (error) {
+                    logging.error(error);
                     ctx.redirect(`${ctx._.root()}/error`);
                 }
             } else {

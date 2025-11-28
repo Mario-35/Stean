@@ -98,7 +98,7 @@ export class Trace {
                 })
                 .catch((err: Error) => {
                     if (!isTest() && +err["code" as keyof object] === 23505) {
-                        logging.error(EErrors.execQuery, query).toLogAndFile();
+                        logging.error(query, EErrors.execQuery);
                     }
                     reject(err);
                 });
@@ -115,7 +115,7 @@ export class Trace {
                 })
                 .catch((err: Error) => {
                     if (!isTest() && +err["code" as keyof object] === 23505) {
-                        logging.error(EErrors.execQuery, query).toLogAndFile();
+                        logging.error(query, EErrors.execQuery);
                     }
                     reject(err);
                 });
@@ -136,8 +136,7 @@ export class Trace {
                     });
                     return true;
                 } catch (error) {
-                    console.log(error);
-                    return false;
+                    return logging.error(error).return(false);
                 }
             }
         });

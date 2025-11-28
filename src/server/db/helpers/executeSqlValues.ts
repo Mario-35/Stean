@@ -29,7 +29,7 @@ const executeSqlOneValues = async (service: Iservice, query: string): Promise<ob
                 resolve(res[0]);
             })
             .catch((err: Error) => {
-                if (!isTest() && +err["code" as keyof object] === 23505) logging.error(EErrors.execQuery, err).toLogAndFile();
+                if (!isTest() && +err["code" as keyof object] === 23505) logging.error(err, EErrors.execQuery);
                 reject(err);
             });
     });
@@ -47,7 +47,7 @@ const executeSqlMultiValues = async (service: Iservice, queries: string[]): Prom
                     result = { ...result, ...res[0] };
                 })
                 .catch((err: Error) => {
-                    if (!isTest() && +err["code" as keyof object] === 23505) logging.error(EErrors.execQuery, err).toLogAndFile();
+                    if (!isTest() && +err["code" as keyof object] === 23505) logging.error(err, EErrors.execQuery);
                     reject(err);
                 });
         });
