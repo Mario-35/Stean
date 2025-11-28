@@ -49,7 +49,8 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
         // logging for all
         case "HELP":
         case "DOCUMENTATION":
-            return await docRoute(ctx);
+            if (ctx._.service) ctx.redirect(ctx._.origin + "/documentation")
+            else return await docRoute(ctx);
         case "LOGGING":
             return await logsRoute(ctx, paths.logFile.fileName);
     }

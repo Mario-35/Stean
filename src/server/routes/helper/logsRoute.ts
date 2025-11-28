@@ -8,7 +8,6 @@
  */
 
 import { returnFormats } from "../../helpers";
-import { logging } from "../../log";
 import { koaContext } from "../../types";
 import { HtmlLogs } from "../../views/class/logs";
 
@@ -18,8 +17,6 @@ import { HtmlLogs } from "../../views/class/logs";
  * @param ctx koa context
  */
 export const logsRoute = async (ctx: koaContext, file: string) => {
-    logging.debug("===================================================================================")
-    logging.debug(file)
     const bodyLogs = new HtmlLogs(ctx, { url: file });
     ctx.type = returnFormats.html.type;
     ctx.body = bodyLogs.toString();
