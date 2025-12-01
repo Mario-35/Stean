@@ -59,9 +59,56 @@ Le serveur est disponible sous le port 8029
 Afin d'accéder au panneau d'administration vous devez entrer vos identifiants PostgreSQL ayant des droits admin.
 
 Vous arriver sur l’écran suivant :
+
 ![admin](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/admin.jpg "admin")
 
 
+Le bouton {...} permet de proposer un service 'type';
 
+
+# Les options :
+
+    - canDrop: (postgresSql Drop) permet de recreer n service : http://<pi-adress>:8029/canDrop
+
+    - forceHttps: Cette option rajoute un s au http des requettes
+
+    - stripNull: supprime les valeurs null des JSON retourns par l'api,
+    
+    - unique: option ajoutant a la norme sensorThings l'impossibilité de creer des doublons dans toutes les entites qui ont la propiete name une seule occurence de se nom ne peut etre creer ainsi que dans les observations a la meme date le meme result ne peut etre ajouter (cera permet lors des importations en masse d'importer des doublons), cette option permet aussi d'identifier un entrée par son nom par exemple :
+
+    ```JSON
+    {
+        "name": "Thing with existing Location test",
+        "description": "Create Thing with existing location inside tests",
+        "properties": {
+            "Deployment Condition": "Deployed in a third floor balcony",
+            "Case Used": "Radiation shield"
+        },
+        "Locations": [
+            {
+                "@iot.id": "1"
+            }
+        ]
+    }
+    ```
+
+    on identifie une location par son id l'apport de name permet :
+
+
+    ```JSON
+    {
+        "name": "Thing with existing Location test",
+        "description": "Create Thing with existing location inside tests",
+        "properties": {
+            "Deployment Condition": "Deployed in a third floor balcony",
+            "Case Used": "Radiation shield"
+        },
+        "Locations": [
+            {
+                "@iot.name": "On the Moon"
+            }
+        ]
+    }
+    ```
 
 
