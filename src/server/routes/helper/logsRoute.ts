@@ -12,9 +12,9 @@ import { koaContext } from "../../types";
 import { HtmlLogs } from "../../views/class/logs";
 
 /**
- * Generate logs root page
- *
+ * 
  * @param ctx koa context
+ * @param file file to load
  */
 export const logsRoute = async (ctx: koaContext, file: string) => {
     const bodyLogs = new HtmlLogs(ctx, { url: file });

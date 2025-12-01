@@ -66,22 +66,17 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     
     // if service is not identified get out
     if (!ctx._.service) throw new Error(EErrors.noNameIdentified);
-    // get service
-    // if (decodedUrl.service && decodedUrl.configName) ctx._.service = config.getService(decodedUrl.configName);
-    // else return;
-    // ctx._.service = ctx._.service;
 
     // forcing post loras with different version IT'S POSSIBLE BECAUSE COLUMN ARE THE SAME FOR ALL VERSION
     if (ctx._.service.apiVersion != ctx._.service.apiVersion) {
         if (!(ctx.request.method === "POST" && ctx.originalUrl.includes(`${ctx._.service.apiVersion}/Loras`)))
             ctx.redirect(ctx.request.method === "GET" ? ctx.originalUrl.replace(String(ctx._.service.apiVersion), ctx._.service.apiVersion) : `${ctx._.base()}/${ctx._.service.apiVersion}/`);
     }
+
     // Clean query string
     ctx.querystring = ctx.request.method === "POST" && ctx.originalUrl.includes(`${ctx._.service.apiVersion}/Loras`) ? "" : decodeURIComponent(querystring.unescape(ctx.querystring));
-
  
     try {
-        // Init config context
         if (!ctx._.service) return;
         ctx._.user = decodeToken(ctx);
         await next().then(async () => {});
