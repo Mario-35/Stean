@@ -68,3 +68,13 @@
     add partitionned for multiDatastream
     correction odata context and graph
     add copy existing service 
+
+## version 1.3.0
+    update npm packages
+    add restart functionality
+    correction default foi visible
+
+## version 1.3.1
+    updates libs
+    correction redirect documentation
+
