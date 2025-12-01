@@ -371,13 +371,3 @@ async function saveDecoder() {
 	if (_PARAMS.message) notifyConfirm("Confirmation", _PARAMS.message);
 }
 )();
-
-// test charly loop
-testLoop.onclick = () => {
-	loop();
-};
-
-// copy service to actual service
-// btnCopyService.onclick = () => {
-// 	copyFromService();
-// };

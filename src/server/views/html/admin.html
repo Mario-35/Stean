@@ -21,7 +21,7 @@
       })(document, window, 0);
     </script>
   </head>
-  <body onload="document.documentElement.className = localStorage.getItem('theme');">
+  <body>
     <div id="spinner" class="loading">Loading&#8230;</div>
     <div id="container">
       <div id="first">
@@ -122,16 +122,9 @@
                       </div>
                     </div>
                   </div>
-                  <div class="patrom-row">
-                    <div class="patrom-button-bar__item">
-                      <button class="patrom-button-bar__button" id="btnService"> Create service </button>
-                    </div>
-                    <div class="patrom-button-bar__item">
-                      <button class="patrom-button-bar__button" id="btnBlank"> Blank </button>
-                    </div>
-                  </div>
                 </div>
               </div>
+
               <!-- Logs -->
               <div class="patrom-accordion">
                 <input class="patrom-accordion-check" type="checkbox" name="propertyTab" id="chck4">
@@ -147,44 +140,29 @@
                   </div>
                 </div>
               </div>
+              
 
+          <hr>
 
-
-            <!-- Tools-->
-            <div class="patrom-accordion">
-              <input class="patrom-accordion-check" type="checkbox" id="chck5">
-              <label class="patrom-accordion-label" for="chck5">Tools</label>
-              <div class="patrom-accordion-content">
-                <!-- Distant root -->
-                <div class="patrom-row">
-                  <div class="patrom-col-span-12">
-                      <label for="optDistHost">Distant root :</label>
-                      <input id="optDistHost" name="optDistHost" type="text" class="patrom-text-input fillCol" >
-                  </div>
-                </div>
-                <div class="patrom-row">
-                  <!-- Version -->
-                  <div class="patrom-col-span-4">
-                    <button id="testLoop" name="testLoop" type="button">Test loop</button>
-                  </div>
-                  <!-- Top -->
-                  <div class="patrom-col-span-4">
-                      <label for="disTop">Top :</label>
-                      <input id="disTopOption" name="disTop" maxlength="8" type="text" class="patrom-text-input fillCol" size="6">
-                  </div>
-                  <!-- Skip -->
-                  <div class="patrom-col-span-4">
-                      <label for="distSkip">Skip :</label>
-                      <input id="distSkipOption" name="distSkip" maxlength="8" type="text" class="patrom-text-input fillCol" size="6">
-                  </div>
-                </div>
+          <!-- BUTTONS ICONS -->
+          <div class="patrom-row left">
+            <div class="patrom-col-span-12">
+              <div class="patrom-row left">
+                <button type="button" id="btnRoot" class="patrom-button-bar__button size-lg" title="Root">
+                  <svg width="24" height="24" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none">
+                    <path class="svg-icon" fill-rule="evenodd" 
+                    d="M11.126 2.601a.75.75 0 00-1.025.273l-5.5 9.5a.75.75 0 001.298.752l5.5-9.5a.75.75 0 00-.273-1.025z" clip-rule="evenodd" />
+                  </svg>
+                </button>
+                <button type="button" id="btnBlank" class="patrom-button-bar__button size-lg" title="Blank">
+                  <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path class="svg-icon" d="M5,3H7V5H5v5a2,2,0,0,1-2,2,2,2,0,0,1,2,2v5H7v2H5c-1.07-.27-2-.9-2-2V15a2,2,0,0,0-2-2H0V11H1A2,2,0,0,0,3,9V5A2,2,0,0,1,5,3M19,3a2,2,0,0,1,2,2V9a2,2,0,0,0,2,2h1v2H23a2,2,0,0,0-2,2v4a2,2,0,0,1-2,2H17V19h2V14a2,2,0,0,1,2-2,2,2,0,0,1-2-2V5H17V3h2M12,15a1,1,0,1,1-1,1,1,1,0,0,1,1-1M8,15a1,1,0,1,1-1,1,1,1,0,0,1,1-1m8,0a1,1,0,1,1-1,1A1,1,0,0,1,16,15Z" />
+                  </svg>
+                </button>
+                <button class="patrom-button patrom-button--success" id="btnService">Create service</button>
               </div>
             </div>
-
-
-
-
-
+          </div>
 
 
 
