@@ -272,22 +272,21 @@
             <mxPoint x="-5" y="-28" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="nOy2KNT5f1WZuLcqEmOU-74" edge="1" parent="1" source="nOy2KNT5f1WZuLcqEmOU-11" style="endArrow=none;html=1;endSize=12;startArrow=none;startSize=14;startFill=0;edgeStyle=orthogonalEdgeStyle;rounded=0;endFill=0;exitX=0.404;exitY=0.013;exitDx=0;exitDy=0;exitPerimeter=0;" target="nOy2KNT5f1WZuLcqEmOU-4" value="">
+        <mxCell id="nOy2KNT5f1WZuLcqEmOU-77" edge="1" parent="1" source="nOy2KNT5f1WZuLcqEmOU-11" style="endArrow=none;html=1;endSize=12;startArrow=none;startSize=14;startFill=0;edgeStyle=orthogonalEdgeStyle;rounded=0;endFill=0;exitX=0.43;exitY=-0.013;exitDx=0;exitDy=0;exitPerimeter=0;" target="nOy2KNT5f1WZuLcqEmOU-4" value="">
           <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="462" y="404" />
-            </Array>
-            <mxPoint x="460" y="404" as="sourcePoint" />
-            <mxPoint x="462" y="212" as="targetPoint" />
+            <mxPoint x="454.5" y="441" as="sourcePoint" />
+            <mxPoint x="454.5" y="350" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="nOy2KNT5f1WZuLcqEmOU-75" connectable="0" parent="nOy2KNT5f1WZuLcqEmOU-74" style="edgeLabel;resizable=0;html=1;align=left;verticalAlign=top;" value="1" vertex="1">
+        <mxCell id="nOy2KNT5f1WZuLcqEmOU-78" connectable="0" parent="nOy2KNT5f1WZuLcqEmOU-77" style="edgeLabel;resizable=0;html=1;align=left;verticalAlign=top;" value="&lt;div&gt;0..*&lt;/div&gt;" vertex="1">
           <mxGeometry relative="1" x="-1" as="geometry">
             <mxPoint x="5" y="-30" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="nOy2KNT5f1WZuLcqEmOU-76" connectable="0" parent="nOy2KNT5f1WZuLcqEmOU-74" style="edgeLabel;resizable=0;html=1;align=right;verticalAlign=top;" value="&lt;div&gt;0..*&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry relative="1" x="1" as="geometry" />
+        <mxCell id="nOy2KNT5f1WZuLcqEmOU-79" connectable="0" parent="nOy2KNT5f1WZuLcqEmOU-77" style="edgeLabel;resizable=0;html=1;align=right;verticalAlign=top;" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="1" as="geometry">
+            <mxPoint x="-5" as="offset" />
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>
