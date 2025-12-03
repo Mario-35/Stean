@@ -21,13 +21,13 @@ Il est a noter que la forte utilisation de FROST fait que l'outil est devenu le 
 
 Ceci a amené A créer un serveur sensorThings sous NoeJS 
 
-# La promesse de depart de STEAN
+## La promesse de depart de STEAN
     - respect STRICT du modele
     - le multi Base matif
     - stream import / export csv
 
 
-# Installation :
+## Installation :
 
 installer / deployer STEAN est tres simple :
 ```
@@ -39,7 +39,7 @@ Lance le script qui installera NodeJS, PostgreSQL, PM2 et enfin créera le scrip
 La mise a jour ce fait en lançant le script a nouveau qui sera capable de détecter ce qui est déjà installé.
 
 
-# Premiere Utilisation
+## Premiere Utilisation
 
 http://localhost:8029/help la documentation e l'API
 
@@ -61,7 +61,9 @@ Vous arriver sur l’écran suivant :
 
 Le bouton {...} permet de proposer un service 'type':
 
-Les options :
+## Creation 'un service
+
+### Les options :
 
 - canDrop: (postgresSql Drop) permet de recreer n service : http://<pi-adress>:8029/canDrop
 
@@ -69,41 +71,55 @@ Les options :
 
 - stripNull: supprime les valeurs null des JSON retourns par l'api,
 
+
+
+### Les extensions :
+    - users ajoute un gestion des droits utilisateurs
+    - lora : ajote 'une
+    tasking = "tasking",
+    mqtt = "mqtt",
+    highPrecision = "highPrecision",
+    resultNumeric = "resultNumeric"
+
+
 - unique: option ajoutant a la norme sensorThings l'impossibilité de creer des doublons dans toutes les entites qui ont la propiete name une seule occurence de se nom ne peut etre creer ainsi que dans les observations a la meme date le meme result ne peut etre ajouter (cera permet lors des importations en masse d'importer des doublons), cette option permet aussi d'identifier un entrée par son nom par exemple 
 
-    ```JSON
-    {
-        "name": "Thing with existing Location test",
-        "description": "Create Thing with existing location inside tests",
-        "properties": {
-            "Deployment Condition": "Deployed in a third floor balcony",
-            "Case Used": "Radiation shield"
-        },
-        "Locations": [
-            {
-                "@iot.id": "1"
-            }
-        ]
-    }
-    ```
+```JSON
+{
+    "name": "Thing with existing Location test",
+    "description": "Create Thing with existing location inside tests",
+    "properties": {
+        "Deployment Condition": "Deployed in a third floor balcony",
+        "Case Used": "Radiation shield"
+    },
+    "Locations": [
+        {
+            "@iot.id": "1"
+        }
+    ]
+}
+```
 
-    on identifie une location par son id l'apport de name permet :
+On identifie une location par son id l'apport de l'option unique permet :
 
 
-    ```JSON
-    {
-        "name": "Thing with existing Location test",
-        "description": "Create Thing with existing location inside tests",
-        "properties": {
-            "Deployment Condition": "Deployed in a third floor balcony",
-            "Case Used": "Radiation shield"
-        },
-        "Locations": [
-            {
-                "@iot.name": "On the Moon"
-            }
-        ]
-    }
-    ```
+```JSON
+{
+    "name": "Thing with existing Location test",
+    "description": "Create Thing with existing location inside tests",
+    "properties": {
+        "Deployment Condition": "Deployed in a third floor balcony",
+        "Case Used": "Radiation shield"
+    },
+    "Locations": [
+        {
+            "@iot.name": "On the Moon"
+        }
+    ]
+}
+```
+
+
+
 
 

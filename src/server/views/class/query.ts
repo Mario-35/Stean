@@ -28,6 +28,7 @@ export class Query extends CoreHtmlView {
         if (datas.queryOptions) this.params = datas.queryOptions;
         this.createQueryHtmlString();
     }
+    
     createQueryHtmlString() {
         console.log(logging.whereIam(new Error().stack));
         // if js or css .min

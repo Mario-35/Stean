@@ -167,6 +167,7 @@ export class Models {
                 entityRelation: "LoraStreams"
             };
             base["Payload"] = PAYLOAD;
+            // logging.debug(base);
         }
         if (extensions && extensions.includes(EExtensions.users)) {
             base["Users"] = USER;
