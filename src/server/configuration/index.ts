@@ -252,7 +252,7 @@ class Configuration {
     getInfosForAll(ctx: koaContext): { [key: string]: IserviceInfos } {
         const result: Record<string, any> = {};
         this.getServicesNames().forEach((conf: string) => {
-            result[conf] = ctx._.toString();
+            result[conf] = ctx._.customInfosContext(conf);
         });
         return result;
     }

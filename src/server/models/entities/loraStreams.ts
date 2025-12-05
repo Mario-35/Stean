@@ -16,10 +16,9 @@ export const LORASTREAMS: Ientity = new Entity("LoraStreams", {
     type: EentityType.link,
     order: -1,
     columns: {
-        // id: new SmallInt().generated().column(),
+        lora_id: new SmallInt().notNull().column(),
         datastream_id: new SmallInt().unique().column(),
         multidatastream_id: new SmallInt().unique().column(),
-        lora_id: new SmallInt().notNull().column()
     },
     relations: {},
     trigger: []

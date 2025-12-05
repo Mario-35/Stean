@@ -8,6 +8,9 @@
 
 // change service in service name select
 services.addEventListener("change", () => {
+	console.log("===========================================================")
+	console.log(services.value)
+	console.log(_PARAMS.services)
 	window.location.href = `${_PARAMS.services[services.value].root}/Query`;
 });
 

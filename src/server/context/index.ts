@@ -81,11 +81,7 @@ export class SteanContext {
                 const configName = config.getConfigNameFromName( splitPath[0].toLowerCase());                
                 if (configName) {
                     this.service = config.getService(configName);                
-                    this.protocol = ctx.request.headers["x-forwarded-proto"]
-                    ? ctx.request.headers["x-forwarded-proto"].toString()
-                    : this.service.options.includes(EOptions.forceHttps)
-                    ? "https"
-                    : ctx.protocol;
+                    this.protocol = this._protocol(ctx, this.service);
                 }
             } catch (error) {
                 logging.error(error);           
@@ -120,6 +116,25 @@ export class SteanContext {
             base: this.base(),
             root: this.root(),
             service: this.service
+        }
+    }   
+    
+    private _protocol(ctx: koaContext, serv: Iservice) {
+        return  this.protocol = ctx.request.headers["x-forwarded-proto"]
+            ? ctx.request.headers["x-forwarded-proto"].toString()
+            : serv.options.includes(EOptions.forceHttps)
+            ? "https"
+            : ctx.protocol;
+    }
+
+    // custom infos for html views 
+    customInfosContext(serviceName: string) {
+        const service = config.getService(serviceName)
+        return {
+            protocol: this.protocol,
+            base: this.service ? `${this.origin}/${serviceName}` : this.origin,
+            root:  `${this.origin}/${serviceName}/${service.apiVersion || ""}`,
+            service: service
         }
     }    
 }

@@ -34,7 +34,7 @@ import {
     THINGLOCATION,
     MULTIDATASTREAMOBSERVEDPROPERTY
 } from "./entities";
-import { Geometry, Jsonb, Text } from "./types";
+import { Geometry, Jsonb, Text, Texts } from "./types";
 import { logging } from "../log";
 import { _DEBUG } from "../constants";
 import { executeSql, executeSqlValues } from "../db/helpers";
@@ -70,6 +70,7 @@ export class Models {
             result["Postgres"]["version"] = res[0 as keyof object];
             result["Postgres"]["extensions"] = res[1 as keyof object];
         });
+        if(ctx._.service.extensions.includes(EExtensions.users))
         await executeSql(ctx._.service, `select username, "canPost", "canDelete", "canCreateUser", "canCreateDb", "admin", "superAdmin" FROM public.user ORDER By username;`).then((res) => {
             Object.keys(res).forEach((e) => {
                 result["users"][res[+e as keyof object]["username"]] = {
@@ -156,22 +157,18 @@ export class Models {
 
         if ((extensions && extensions.includes(EExtensions.lora)) || !extensions) {
             base["LoraStreams"] = LORASTREAMS;
+            const streamObject = {
+                type: ERelations.hasMany,
+                entityRelation: LORASTREAMS.name
+            };
             base["Decoders"] = DECODER;
             base["Loras"] = LORA;
-            base["Datastreams"].relations["Loras"] = {
-                type: ERelations.hasMany,
-                entityRelation: "LoraStreams"
-            };
-            base["MultiDatastreams"].relations["Loras"] = {
-                type: ERelations.hasMany,
-                entityRelation: "LoraStreams"
-            };
+            base["Datastreams"].relations["Loras"] = streamObject;
+            base["MultiDatastreams"].relations["Loras"] = streamObject;
             base["Payload"] = PAYLOAD;
-            // logging.debug(base);
         }
-        if (extensions && extensions.includes(EExtensions.users)) {
+        if (extensions && extensions.includes(EExtensions.users)) 
             base["Users"] = USER;
-        }
         return base;
     }
 
@@ -215,9 +212,21 @@ export class Models {
                 return this.version1_0(extensions);
             case "v1.1":
                 return this.version1_1(deepClone(this.version1_0(extensions)));
+            case "v2.0":
+                return this.version2_0(this.version1_1(deepClone(this.version1_0(extensions))));
             default:
                 return {};
         }
+    }
+
+    version2_0(entities: Ientities): Ientities {
+        // add properties to entities
+        ["Things", "Locations", "Sensors", "ObservedProperties", "Sensors", "Datastreams", "MultiDatastreams"].forEach((entityName: string) => {
+            if (entities[entityName]) entities[entityName].columns["description"] = new Texts().column();
+        });
+        // add geom to Location
+        entities.Locations.columns["geom"] = new Geometry().column();
+        return entities;
     }
 
     public listVersion() {

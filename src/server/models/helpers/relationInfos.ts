@@ -79,29 +79,6 @@ export const relationInfos = (model: Ientities, entityName: string, relationName
                         expand: temp.replace("$ID", formatPgTableColumn(leftEntity.table, "id"))
                     };
                 } 
-                // else if (rightEntity.relations[leftEntity.name].entityRelation === leftEntity.relations[rightEntity.name].entityRelation) {
-                //     logging.debug("#########################################################");
-                //     const entityRelation = rightEntity.relations[leftEntity.name].entityRelation;
-                //     if(entityRelation) {
-                //         const complexEntity =  models.entity(model, entityRelation); 
-                //         if (complexEntity && rightRelation) {
-                //         leftKey = _Key(complexEntity, leftEntity);
-                //         rightKey = _Key(complexEntity, rightEntity);
-                //         const temp = `${formatPgTableColumn(rightEntity.table, "id")} IN (SELECT ${formatPgTableColumn(complexEntity.table, rightKey)} FROM ${formatPgTableColumn(
-                //             complexEntity.table
-                //         )} WHERE ${formatPgTableColumn(complexEntity.table, leftKey)} =$ID)`;
-                //         return {
-                //             type: `${leftRelation.type}.${rightRelation.type}`,
-                //             leftKey: leftKey,
-                //             rightKey: rightKey,
-                //             entity: complexEntity,
-                //             column: idColumnName(leftEntity, rightEntity) || "id",
-                //             link: temp,
-                //             expand: temp.replace("$ID", formatPgTableColumn(leftEntity.table, "id"))
-                //         };
-                //     }
-                //     }
-                // }
                 return fnError();
             };
             console.log(

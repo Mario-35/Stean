@@ -41,14 +41,20 @@ jsonDatas.onpaste = function() {
 // catch click on service block
 btnBlank.onclick = async (e) => {	
 	e.preventDefault();
-	optVersion.value = "v1.1";
-	dateOption.value = "DD/MM/YYYY hh:mi:ss";
-    pageOption.value = 200;
-    graphOption.value = 1000000;
-    csvOption.value =";";
-	populateMultiSelect("optionsOption", _PARAMS.options, ["canDrop", "unique", "optimized"]);
-	populateMultiSelect("extensionsOption", _PARAMS.extensions, ["base", "multiDatastream"]);
-	updateDataService();
+	const newName = window.prompt("Name of the service", name);
+	if (newName !== null && newName !== "") {
+		optVersion.value = "v1.1";
+		dateOption.value = "DD/MM/YYYY hh:mi:ss";
+		pageOption.value = 200;
+		graphOption.value = 1000000;
+		csvOption.value =";";
+		optName.value = newName || "";
+		optPassword.value = newName || "";
+		optRepeat.value = newName ||"";
+		populateMultiSelect("optionsOption", _PARAMS.options, ["canDrop", "unique", "optimized"]);
+		populateMultiSelect("extensionsOption", _PARAMS.extensions, ["base", "multiDatastream"]);
+		updateDataService();
+	}	
 }
 
 btnService.onclick = async (e) => {	

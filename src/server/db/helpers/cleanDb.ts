@@ -22,6 +22,7 @@ export const cleanDb = async (ctx: koaContext) => {
     await executeSql(ctx._.service, [queries.updateNb("datastream", true), queries.updateNb("multidatastream", true)]);
     await asyncForEach(listTables, async (table: string) => {
         logging.status(true, queries.cluster(table));
+        await executeSql(ctx._.service, queries.createClusterIndex(table));
         await executeSql(ctx._.service, queries.cluster(table)).then(() => {
             result[table] = EChar.ok;
         });

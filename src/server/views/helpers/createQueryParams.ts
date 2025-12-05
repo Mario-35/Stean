@@ -29,7 +29,6 @@ export async function createQueryParams(ctx: koaContext): Promise<IqueryOptions 
     listEntities.push("Services", "Logs");
     return {
         methods: ["GET"],
-        // decodedUrl: ctx._,
         _: ctx._,
         entity: "",
         options: ctx.querystring ? ctx.querystring : "",
