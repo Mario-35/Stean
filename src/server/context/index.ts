@@ -82,11 +82,13 @@ export class SteanContext {
                 if (configName) {
                     this.service = config.getService(configName);                
                     this.protocol = this._protocol(ctx, this.service);
+                    this.origin = `${this.protocol}://${url.origin.split('://')[1]}`;
                 }
             } catch (error) {
                 logging.error(error);           
             }
         }
+
         this.from = ctx.request.headers.host === "mqtt" ? EFrom.mqtt : EFrom.unknown
     }
     
