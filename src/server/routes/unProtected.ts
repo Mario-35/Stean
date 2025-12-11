@@ -47,8 +47,7 @@ unProtectedRoutes.get("/*path", async (ctx) => {
         // Clean
         case "CLEAN":
             ctx.type = returnFormats.json.type;
-            ctx.body = await cleanDb(ctx);
-            // ctx.body = { clean: isState(EState.normal) ? await cleanDb(ctx) : "Not Ready" };
+            ctx.body = { clean: isState(EState.normal) ? await cleanDb(ctx) : "Not Ready" };
             return;
         // Restart
         case "RESTART":
