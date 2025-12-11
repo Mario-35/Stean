@@ -32,10 +32,5 @@ export const EConstant = Object.freeze({
     port: 5432,
     voidtable: "voidTable",
     voidSql: "SELECT 1=1",
-    stringException: ["CONCAT", "CASE", "COALESCE"],
-    helmetConfig: {
-        defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-inline'", "cdnjs.cloudflare.com"],
-        styleSrc: ["'self'", "'unsafe-inline'", "cdnjs.cloudflare.com", "fonts.googleapis.com"]
-    }
+    stringException: ["CONCAT", "CASE", "COALESCE"]
 });
