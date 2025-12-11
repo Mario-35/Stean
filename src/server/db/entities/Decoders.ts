@@ -12,7 +12,6 @@ import { asyncForEach } from "../../helpers";
 import { decodingPayload } from "../../lora";
 import { logging } from "../../log";
 import { executeSql } from "../helpers";
-import { _DEBUG } from "../../constants";
 import { queries } from "../queries";
 
 /**

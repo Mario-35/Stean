@@ -22,7 +22,7 @@ export const isReturnGeoJson = (inputE: Ientity | string, input: RootPgVisitor |
 export const isObservation = (input: RootPgVisitor | PgVisitor): boolean =>
     (input.entity && isTestEntity(input.entity, "Observations")) || (input.parentEntity && isTestEntity(input.parentEntity, "Observations")) ? true : false;
 export const isAdmin = (service: Iservice): boolean => service && service.name === EConstant.admin;
-export const isAllowedTo = (ctx: koaContext, what: EUserRights): boolean => (ctx._.service.extensions.includes(EExtensions.users) ? ctx._.user && ctx._.user.PDCUAS[what] === true : true);
+export const isAllowedTo = (ctx: koaContext, what: EUserRights): boolean => (ctx._.inExtension(EExtensions.users) ? ctx._.user && ctx._.user.PDCUAS[what] === true : true);
 export const isLog = (input: RootPgVisitor | PgVisitor): boolean => (input.entity && isTestEntity(input.entity, "Logs") ? true : false);
 
 export function isString(obj: any) {

@@ -19,3 +19,5 @@ export { Texts } from "./texts";
 export { Time } from "./time";
 export { Timestamp } from "./timestamp";
 export { Period } from "./period";
+export { Numeric } from "./numeric";
+export { Real } from "./real";

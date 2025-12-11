@@ -13,7 +13,6 @@ import { config } from "../../configuration";
 import { logging } from "../../log";
 import { executeSql } from "./executeSql";
 import { executeSqlValues } from "./executeSqlValues";
-import { _DEBUG } from "../../constants";
 
 export async function streamCsvFile(service: Iservice, paramsFile: IcsvFile, sqlRequest: IcsvImport): Promise<number> {
     console.log(logging.whereIam(new Error().stack));

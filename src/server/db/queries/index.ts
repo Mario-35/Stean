@@ -205,7 +205,7 @@ FROM
         STRING_AGG(concat, ',') AS datas 
         ${
             ids.length === 1
-                ? `FROM (${query.replace("@GRAPH@", `CONCAT('[new Date("', TO_CHAR("resultTime", 'YYYY/MM/DD HH24:MI'), '"), ', result->'value' ,']')`)}) AS z`
+                ? `FROM (${query.replace("@GRAPH@", `CONCAT('[new Date("', TO_CHAR("resultTime", 'YYYY/MM/DD HH24:MI'), '"), ', "result"->'value' ,']')`)}) AS z`
                 : ` FROM (
                 SELECT CONCAT( '[new Date("', TO_CHAR( date, 'YYYY/MM/DD HH24:MI' ), '"), ', ${ids.map((e, n) => `coalesce(y.res${n + 1},'null'),','`)}, ']' ) 
                   FROM (
@@ -484,5 +484,16 @@ FROM
     createClusterIndex(table: string) {
         return `CREATE UNIQUE INDEX IF NOT EXISTS "${table}_nb" on ${table} (_nb);`;
     }
+
+    extensions( ) {
+      return  `SELECT 
+                (SELECT to_regclass('public.lora') IS NOT NULL) as Lora,
+                (SELECT to_regclass('public.multidatastream') IS NOT NULL) as multidatastream,
+                (SELECT to_regclass('public.datastream_id0') IS not NULL) as partitioned,
+                (SELECT pg_typeof(result)::text FROM observation limit 1) = 'numeric' AS numeric,
+                (SELECT count(*) FROM pg_catalog.pg_constraint con INNER JOIN pg_catalog.pg_class rel ON rel.oid = con.conrelid INNER JOIN pg_catalog.pg_namespace nsp ON nsp.oid = connamespace WHERE nsp.nspname = 'public' AND rel.relname = 'thing' AND con.conname LIKE '%name%') = 1 as unique
+                `;
+    }
+
 }
 export const queries = new Queries();

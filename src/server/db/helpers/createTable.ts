@@ -11,8 +11,9 @@ import { logging } from "../../log";
 import { doubleQuotes } from "../../helpers";
 import { Ientity } from "../../types";
 import { EChar, EErrors } from "../../enums";
-import { _DEBUG } from "../../constants";
 import { messages } from "../../messages";
+import { OBSERVATION } from "../../models/entities";
+import { Numeric } from "../../models/types/numeric";
 
 /**
  *
@@ -54,6 +55,11 @@ export const createTable = async (serviceName: string, tableEntity: Ientity, doA
         logging.error("connection Error", messages.str(EErrors.connError, serviceName));
         return { error: "connection Error" };
     }
+    
+    // If only numeric extension
+    if (config.getService(serviceName)._numeric && tableEntity.name === OBSERVATION.name) {
+        tableEntity.columns["result"] = new Numeric().column();
+    };
 
     Object.keys(tableEntity.columns).forEach((column) => {
         if (tableEntity.columns[column].create.trim() != "") tabIeInsert.push(`${doubleQuotes(column)} ${tableEntity.columns[column].create}`);

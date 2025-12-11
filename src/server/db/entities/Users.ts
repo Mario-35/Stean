@@ -16,7 +16,6 @@ import { models } from "../../models";
 import { logging } from "../../log";
 import { USER } from "../../models/entities";
 import { executeSqlValues } from "../helpers";
-import { _DEBUG } from "../../constants";
 
 export class Users extends Common {
     constructor(ctx: koaContext) {

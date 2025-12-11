@@ -284,8 +284,8 @@ export const testDatas: Record<string, any> = {
         "date_format": "DD/MM/YYYY HH24:MI:SS",
         "nb_page": 1000,
         "alias": [],
-        "extensions": ["base", "multiDatastream", "lora", "users", "mqtt", "logs"],
-        "options": ["canDrop", "unique", "optimized"]
+        "extensions": ["base", "multiDatastream", "lora", "users", "mqtt", "logs", "partitioned", "unique"],
+        "options": ["canDrop"]
     },
     "Things": [
         {

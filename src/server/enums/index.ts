@@ -26,5 +26,6 @@ export { ESensorEncodingType } from "./sensorEncodingType";
 export { ERelations } from "./relations";
 export { EOptions } from "./options";
 export { EQuery } from "./query";
+export { EState } from "./state";
 export { EUserRights } from "./userRights";
 export const enumKeys = (input: any) => Object.keys(input).filter((prop) => isNaN(parseInt(prop)));

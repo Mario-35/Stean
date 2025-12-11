@@ -7,7 +7,7 @@
  */
 import Router from "koa-router";
 import { userAuthenticated, getAuthenticatedUser } from "../authentication";
-import { _DEBUG, _READY } from "../constants";
+import { getState, isState } from "../constants";
 import { getUrlKey, isAdmin, returnFormats } from "../helpers";
 import { apiAccess } from "../db/dataAccess";
 import { IreturnResult } from "../types";
@@ -17,11 +17,10 @@ import { config } from "../configuration";
 import { createDatabase, testDatas } from "../db/createDb";
 import { cleanDb, disconnectDb, executeSql, exportService } from "../db/helpers";
 import { models } from "../models";
-import { testRoute } from "./helper";
 import { createService } from "../db/helpers";
 import { HtmlError, Login, Status, Query } from "../views/";
 import { createQueryParams } from "../views/helpers";
-import { EOptions, EHttpCode, EConstant, EInfos } from "../enums";
+import { EOptions, EHttpCode, EConstant, EInfos, EState } from "../enums";
 import { logging } from "../log";
 
 export const unProtectedRoutes = new Router<DefaultState, Context>();
@@ -40,10 +39,10 @@ unProtectedRoutes.get("/*path", async (ctx) => {
             ctx.redirect(`${ctx._.origin}/documentation`);
             return;
         // tests only for testing wip features
-        case "TEST":
+        case "STATE":
             if (!isAdmin(ctx._.service)) {
                 ctx.type = returnFormats.json.type;
-                ctx.body = await testRoute(ctx);
+                ctx.body = { "state": getState()};
                 return;
             }
             ctx.throw(EHttpCode.notFound);
@@ -56,14 +55,14 @@ unProtectedRoutes.get("/*path", async (ctx) => {
         // Clean
         case "CLEAN":
             ctx.type = returnFormats.json.type;
-            ctx.body = { clean: _READY === true ? await cleanDb(ctx) : "Not Ready" };
+            ctx.body = { clean: isState(EState.normal) ? await cleanDb(ctx) : "Not Ready" };
             return;
         // Restart
         case "RESTART":
             if (userAuthenticated(ctx)) {
                 ctx.type = returnFormats.json.type;
-                ctx.status = _READY === true ? 200 : 202;
-                ctx.body = { restart: _READY === true ? await config.start(true) : "Not Ready" };
+                ctx.status = isState(EState.normal) ? 200 : 202;
+                ctx.body = { restart: isState(EState.normal) ? await config.start(true) : "Not Ready" };
                 return;
             }
         // logs
@@ -148,7 +147,7 @@ unProtectedRoutes.get("/*path", async (ctx) => {
         // Drop DB
         case "DROP":
             console.log(logging.head("drop database").to().text());
-            if (ctx._.service.options.includes(EOptions.canDrop).toString()) {
+            if (ctx._.isOption(EOptions.canDrop)) {
                 await disconnectDb(ctx._.service.pg.database, true);
                 try {
                     ctx.status = EHttpCode.created;

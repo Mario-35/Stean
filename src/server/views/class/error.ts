@@ -6,7 +6,6 @@
  *
  */
 
-import { _DEBUG } from "../../constants";
 import { logging } from "../../log";
 import { Idatas, koaContext } from "../../types";
 import { CoreHtmlView } from "./core";

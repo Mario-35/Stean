@@ -15,7 +15,6 @@ import { createInsertValues, createUpdateValues, getUniques, getIsId, relationIn
 import { apiAccess } from "../../../db/dataAccess";
 import { PgVisitor } from "..";
 import { DATASTREAM } from "../../../models/entities";
-import { _DEBUG } from "../../../constants";
 import { queries } from "../../../db/queries";
 
 export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor): string | undefined {
@@ -397,7 +396,7 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
         sqlResult += queries.asJson({
             query: `SELECT ${temp && temp.select ? temp.select : "*"} FROM ${names[postEntity.table]} ${temp && temp.groupBy ? `GROUP BY ${temp.groupBy}` : ""}`,
             singular: false,
-            strip: src.ctx._.service.options.includes(EOptions.stripNull),
+            strip: src.ctx._.isOption(EOptions.stripNull),
             count: false
         });
     return sqlResult;

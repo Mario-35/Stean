@@ -21,7 +21,6 @@ import { Login, Query } from "../views";
 import { createQueryParams } from "../views/helpers";
 import { logging } from "../log";
 import { executeSqlValues } from "../db/helpers";
-import { _DEBUG, _READY } from "../constants";
 import { messages } from "../messages";
 import { queries } from "../db/queries";
 export const protectedRoutes = new Router<DefaultState, Context>();
@@ -102,7 +101,7 @@ protectedRoutes.post("/*path", async (ctx: koaContext, next) => {
     // Add new lora observation this is a special route without ahtorisatiaon to post (deveui and correct payload limit risks)
     if (
         (ctx._.user && ctx._.user.id > 0) ||
-        !ctx._.service.extensions.includes(EExtensions.users) ||
+        !ctx._.inExtension(EExtensions.users) ||
         ctx.request.url.includes("/Lora") ||
         (ctx.request.headers["authorization"] && ctx.request.headers["authorization"] === config.getBrokerId())
     ) {
@@ -179,7 +178,7 @@ protectedRoutes.post("/*path", async (ctx: koaContext, next) => {
 });
 
 protectedRoutes.patch("/*path", async (ctx) => {
-    if ((!ctx._.service.extensions.includes(EExtensions.users) || isAllowedTo(ctx, EUserRights.Post) === true) && Object.keys(ctx.body).length > 0) {
+    if ((!ctx._.inExtension(EExtensions.users) || isAllowedTo(ctx, EUserRights.Post) === true) && Object.keys(ctx.body).length > 0) {
         const odataVisitor = await createOdata(ctx);
         if (odataVisitor) {
             ctx._.odata = odataVisitor;
@@ -205,7 +204,7 @@ protectedRoutes.patch("/*path", async (ctx) => {
 });
 
 protectedRoutes.delete("/*path", async (ctx) => {
-    if (!ctx._.service.extensions.includes(EExtensions.users) || isAllowedTo(ctx, EUserRights.Delete) === true) {
+    if (!ctx._.inExtension(EExtensions.users) || isAllowedTo(ctx, EUserRights.Delete) === true) {
         const odataVisitor = await createOdata(ctx);
         if (odataVisitor) {
             ctx._.odata = odataVisitor;

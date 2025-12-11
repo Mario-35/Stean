@@ -7,7 +7,6 @@
  */
 
 import { config } from "../../configuration";
-import { _DEBUG } from "../../constants";
 import { EChar, EExtensions } from "../../enums";
 import { logging } from "../../log";
 import { Idatas, Iuser, koaContext } from "../../types";
@@ -25,7 +24,7 @@ export class Status extends CoreHtmlView {
     }
     public status(ctx: koaContext, user: Iuser) {
         const service = config.getConfigNameFromDatabase(user.database);
-        const sec = ctx._.service.extensions.includes(EExtensions.users);
+        const sec = ctx._.inExtension(EExtensions.users);
         this._HTMLResult = [
             `<!DOCTYPE html>
         <html> 

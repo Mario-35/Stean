@@ -12,7 +12,6 @@ import { config } from "../../configuration";
 import { logging } from "../../log";
 import { EConstant, EHttpCode } from "../../enums";
 import { returnFormats } from "../../helpers";
-import { _DEBUG } from "../../constants";
 
 export class Logs extends Common {
     constructor(ctx: koaContext) {

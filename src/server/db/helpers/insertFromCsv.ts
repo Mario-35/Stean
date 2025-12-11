@@ -12,7 +12,6 @@ import { logging } from "../../log";
 import { EChar } from "../../enums";
 import { OBSERVATION } from "../../models/entities";
 import { splitLast } from "../../helpers";
-import { _DEBUG } from "../../constants";
 import readline from "readline";
 import fs from "fs";
 import { createReadStream } from "fs";

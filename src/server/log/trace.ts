@@ -6,7 +6,6 @@
  *
  */
 
-import { _DEBUG } from "../constants";
 import { isTest, notNull, simpleQuotes } from "../helpers";
 import { koaContext } from "../types";
 import postgres from "postgres";

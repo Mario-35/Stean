@@ -10996,11 +10996,11 @@
   
     // Touch event functions
     var onZoomHandleTouchEvent, onCanvasTouchEvent, addTouchEvents;
-    toXDataWindow = function toXDataWindow(zoomHandleStatus) {
+    toXDataWindow = function toXDataWindow(zoomHandlEState) {
       var xDataLimits = self.dygraph_.xAxisExtremes();
       var fact = (xDataLimits[1] - xDataLimits[0]) / self.canvasRect_.w;
-      var xDataMin = xDataLimits[0] + (zoomHandleStatus.leftHandlePos - self.canvasRect_.x) * fact;
-      var xDataMax = xDataLimits[0] + (zoomHandleStatus.rightHandlePos - self.canvasRect_.x) * fact;
+      var xDataMin = xDataLimits[0] + (zoomHandlEState.leftHandlePos - self.canvasRect_.x) * fact;
+      var xDataMax = xDataLimits[0] + (zoomHandlEState.rightHandlePos - self.canvasRect_.x) * fact;
       return [xDataMin, xDataMax];
     };
     onZoomStart = function onZoomStart(e) {
@@ -11029,16 +11029,16 @@
       clientXLast = e.clientX;
   
       // Move handle.
-      var zoomHandleStatus = self.getZoomHandleStatus_();
+      var zoomHandlEState = self.getZoomHandlEState_();
       var newPos;
       if (handle == self.leftZoomHandle_) {
-        newPos = zoomHandleStatus.leftHandlePos + delX;
-        newPos = Math.min(newPos, zoomHandleStatus.rightHandlePos - handle.width - 3);
+        newPos = zoomHandlEState.leftHandlePos + delX;
+        newPos = Math.min(newPos, zoomHandlEState.rightHandlePos - handle.width - 3);
         newPos = Math.max(newPos, self.canvasRect_.x);
       } else {
-        newPos = zoomHandleStatus.rightHandlePos + delX;
+        newPos = zoomHandlEState.rightHandlePos + delX;
         newPos = Math.min(newPos, self.canvasRect_.x + self.canvasRect_.w);
-        newPos = Math.max(newPos, zoomHandleStatus.leftHandlePos + handle.width + 3);
+        newPos = Math.max(newPos, zoomHandlEState.leftHandlePos + handle.width + 3);
       }
       var halfHandleWidth = handle.width / 2;
       handle.style.left = newPos - halfHandleWidth + 'px';
@@ -11068,12 +11068,12 @@
     };
     doZoom = function doZoom() {
       try {
-        var zoomHandleStatus = self.getZoomHandleStatus_();
+        var zoomHandlEState = self.getZoomHandlEState_();
         self.isChangingRange_ = true;
-        if (!zoomHandleStatus.isZoomed) {
+        if (!zoomHandlEState.isZoomed) {
           self.dygraph_.resetZoom();
         } else {
-          var xDataWindow = toXDataWindow(zoomHandleStatus);
+          var xDataWindow = toXDataWindow(zoomHandlEState);
           self.dygraph_.doZoomXDates_(xDataWindow[0], xDataWindow[1]);
         }
       } finally {
@@ -11088,7 +11088,7 @@
       return e.clientX > leftHandleClientX && e.clientX < rightHandleClientX;
     };
     onPanStart = function onPanStart(e) {
-      if (!isPanning && isMouseInPanZone(e) && self.getZoomHandleStatus_().isZoomed) {
+      if (!isPanning && isMouseInPanZone(e) && self.getZoomHandlEState_().isZoomed) {
         utils.cancelEvent(e);
         isPanning = true;
         clientXLast = e.clientX;
@@ -11113,9 +11113,9 @@
       clientXLast = e.clientX;
   
       // Move range view
-      var zoomHandleStatus = self.getZoomHandleStatus_();
-      var leftHandlePos = zoomHandleStatus.leftHandlePos;
-      var rightHandlePos = zoomHandleStatus.rightHandlePos;
+      var zoomHandlEState = self.getZoomHandlEState_();
+      var leftHandlePos = zoomHandlEState.leftHandlePos;
+      var rightHandlePos = zoomHandlEState.rightHandlePos;
       var rangeSize = rightHandlePos - leftHandlePos;
       if (leftHandlePos + delX <= self.canvasRect_.x) {
         leftHandlePos = self.canvasRect_.x;
@@ -11154,7 +11154,7 @@
     doPan = function doPan() {
       try {
         self.isChangingRange_ = true;
-        self.dygraph_.dateWindow_ = toXDataWindow(self.getZoomHandleStatus_());
+        self.dygraph_.dateWindow_ = toXDataWindow(self.getZoomHandlEState_());
         self.dygraph_.drawGraph_(false);
       } finally {
         self.isChangingRange_ = false;
@@ -11449,10 +11449,10 @@
     var margin = 1;
     var width = this.canvasRect_.w - margin;
     var height = this.canvasRect_.h - margin;
-    var zoomHandleStatus = this.getZoomHandleStatus_();
+    var zoomHandlEState = this.getZoomHandlEState_();
     ctx.strokeStyle = this.getOption_('rangeSelectorForegroundStrokeColor');
     ctx.lineWidth = this.getOption_('rangeSelectorForegroundLineWidth');
-    if (!zoomHandleStatus.isZoomed) {
+    if (!zoomHandlEState.isZoomed) {
       ctx.beginPath();
       ctx.moveTo(margin, margin);
       ctx.lineTo(margin, height);
@@ -11460,8 +11460,8 @@
       ctx.lineTo(width, margin);
       ctx.stroke();
     } else {
-      var leftHandleCanvasPos = Math.max(margin, zoomHandleStatus.leftHandlePos - this.canvasRect_.x);
-      var rightHandleCanvasPos = Math.min(width, zoomHandleStatus.rightHandlePos - this.canvasRect_.x);
+      var leftHandleCanvasPos = Math.max(margin, zoomHandlEState.leftHandlePos - this.canvasRect_.x);
+      var rightHandleCanvasPos = Math.min(width, zoomHandlEState.rightHandlePos - this.canvasRect_.x);
       var veilColour = this.getOption_('rangeSelectorVeilColour');
       ctx.fillStyle = veilColour ? veilColour : 'rgba(240, 240, 240, ' + this.getOption_('rangeSelectorAlpha').toString() + ')';
       ctx.fillRect(0, 0, leftHandleCanvasPos, this.canvasRect_.h);
@@ -11482,7 +11482,7 @@
    * Returns the current zoom handle position information.
    * @return {Object} The zoom handle status.
    */
-  rangeSelector.prototype.getZoomHandleStatus_ = function () {
+  rangeSelector.prototype.getZoomHandlEState_ = function () {
     var halfHandleWidth = this.leftZoomHandle_.width / 2;
     var leftHandlePos = parseFloat(this.leftZoomHandle_.style.left) + halfHandleWidth;
     var rightHandlePos = parseFloat(this.rightZoomHandle_.style.left) + halfHandleWidth;

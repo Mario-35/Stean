@@ -14,7 +14,6 @@ import { logging } from "../../log";
 import { config } from "../../configuration";
 import { EConstant, EHttpCode, EInfos } from "../../enums";
 import { queries } from "../queries";
-import { _DEBUG } from "../../constants";
 
 /**
  * Common Class for all entities

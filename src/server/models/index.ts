@@ -9,9 +9,9 @@
 import { config } from "../configuration";
 import { _STREAM } from "../db/constants";
 import { queries } from "../db/queries";
-import { EColumnType, EConstant, EDataType, EErrors, EExtensions, EInfos, EOptions, ERelations } from "../enums";
+import { EColumnType, EConstant, EDataType, EErrors, EExtensions, EInfos, ERelations } from "../enums";
 import { doubleQuotes, deepClone, isTest, formatPgTableColumn, isString, hidePassword } from "../helpers";
-import { Iservice, Ientities, Ientity, IstreamInfos, koaContext, IentityRelation, getColumnType, IentityColumn, Id, typeExtensions } from "../types";
+import { Iservice, Ientities, Ientity, IstreamInfos, koaContext, IentityRelation, getColumnType, IentityColumn, Id } from "../types";
 import {
     LORASTREAMS,
     DECODER,
@@ -34,9 +34,8 @@ import {
     THINGLOCATION,
     MULTIDATASTREAMOBSERVEDPROPERTY
 } from "./entities";
-import { Geometry, Jsonb, Text, Texts } from "./types";
+import { Geometry, Jsonb, Numeric, Text, Texts } from "./types";
 import { logging } from "../log";
-import { _DEBUG } from "../constants";
 import { executeSql, executeSqlValues } from "../db/helpers";
 
 export class Models {
@@ -61,7 +60,7 @@ export class Models {
                 result["Ogc link"] = "https://docs.ogc.org/is/15-078r6/15-078r6.html";
                 break;
         }
-        if (ctx._.service.extensions.includes(EExtensions.tasking)) extensions["tasking"] = "https://docs.ogc.org/is/17-079r1/17-079r1.html";
+        if (ctx._.inExtension(EExtensions.tasking)) extensions["tasking"] = "https://docs.ogc.org/is/17-079r1/17-079r1.html";
 
         await executeSqlValues(
             ctx._.service,
@@ -70,7 +69,7 @@ export class Models {
             result["Postgres"]["version"] = res[0 as keyof object];
             result["Postgres"]["extensions"] = res[1 as keyof object];
         });
-        if(ctx._.service.extensions.includes(EExtensions.users))
+        if(ctx._.inExtension(EExtensions.users))
         await executeSql(ctx._.service, `select username, "canPost", "canDelete", "canCreateUser", "canCreateDb", "admin", "superAdmin" FROM public.user ORDER By username;`).then((res) => {
             Object.keys(res).forEach((e) => {
                 result["users"][res[+e as keyof object]["username"]] = {
@@ -94,7 +93,7 @@ export class Models {
                 result["tables"] = res[0 as keyof object]["results"][0 as keyof object];
             });
         });
-        if (ctx._.service.options.includes(EOptions.optimized))
+        if (ctx._.service._partitioned === true)
             await executeSql(ctx._.service, queries.countAll()).then((res) => {
                 result["partitioned"] = {};
                 Object.values(res[0 as keyof object]["results"]).forEach((e: any) => (result["partitioned"][e["table_name"]] = e["count"]));
@@ -149,13 +148,12 @@ export class Models {
      * @param extensions extensions services
      * @returns Ientities
      */
-    private makeModel(entities: Ientity[], extensions?: typeof typeExtensions) {
+    private makeModel(entities: Ientity[], service?: Iservice) {
         const base: Ientities = {};
         entities.forEach((e) => {
             base[e.name] = e;
         });
-
-        if ((extensions && extensions.includes(EExtensions.lora)) || !extensions) {
+        if ((service && service._lora === true) || !service) {
             base["LoraStreams"] = LORASTREAMS;
             const streamObject = {
                 type: ERelations.hasMany,
@@ -167,12 +165,13 @@ export class Models {
             base["MultiDatastreams"].relations["Loras"] = streamObject;
             base["Payload"] = PAYLOAD;
         }
-        if (extensions && extensions.includes(EExtensions.users)) 
+        if (service && service.extensions && service.extensions.includes(EExtensions.users)) 
             base["Users"] = USER;
+        
         return base;
     }
 
-    private version1_0(extensions?: typeof typeExtensions): Ientities {
+    private version1_0(service: Iservice): Ientities {
         return this.makeModel(
             [
                 THING,
@@ -191,7 +190,7 @@ export class Models {
                 CREATEOBSERVATION,
                 MULTIDATASTREAMOBSERVEDPROPERTY
             ],
-            extensions
+            service
         );
     }
 
@@ -205,15 +204,15 @@ export class Models {
         return entities;
     }
 
-    private createVersion(verStr: string, extensions?: typeof typeExtensions): Ientities {
+    private createVersion(verStr: string, service: Iservice): Ientities {
         console.log(logging.whereIam(new Error().stack));
         switch (verStr) {
             case "v1.0":
-                return this.version1_0(extensions);
+                return this.version1_0(service);
             case "v1.1":
-                return this.version1_1(deepClone(this.version1_0(extensions)));
+                return this.version1_1(deepClone(this.version1_0(service)));
             case "v2.0":
-                return this.version2_0(this.version1_1(deepClone(this.version1_0(extensions))));
+                return this.version2_0(this.version1_1(deepClone(this.version1_0(service))));
             default:
                 return {};
         }
@@ -231,7 +230,7 @@ export class Models {
 
     public listVersion() {
         // MUST BE SORTED
-        return ["v1.0", "v1.1"];
+        return ["v1.0", "v1.1","v2.0"];
     }
 
     public getService(service: Iservice | string): Iservice {
@@ -364,7 +363,7 @@ export class Models {
                     "https://docs.ogc.org/is/18-088/18-088.html#req-data-array-data-array",
                     "https://docs.ogc.org/is/18-088/18-088.html#req-resource-path-resource-path-to-entities",
                     "http://docs.oasis-open.org/odata/odata-json-format/v4.01/odata-json-format-v4.01.html",
-                    "https://datatracker.ietf.org/doc/html/rfc4180"
+                    "http://www.rfc.fr/rfc/en/rfc4180.pdf"
                 ];
                 // "http://www.opengis.net/spec/iot_sensing/1.1/req/receive-updates-via-mqtt/receive-updates",
                 // "https://fraunhoferiosb.github.io/FROST-Server/extensions/DeepSelect.html",
@@ -377,9 +376,9 @@ export class Models {
                 // "https://github.com/INSIDE-information-systems/SensorThingsAPI/blob/master/EntityLinking/Linking.md#Expand",
                 // "https://github.com/INSIDE-information-systems/SensorThingsAPI/blob/master/EntityLinking/Linking.md#Filter",
                 // "https://github.com/INSIDE-information-systems/SensorThingsAPI/blob/master/EntityLinking/Linking.md#NavigationLinks"],
-                if (ctx._.service.extensions.includes(EExtensions.lora)) list.push(`${ctx._.origin}/#api-Loras`);
+                if (ctx._.service._lora === true) list.push(`${ctx._.origin}/documentation?Loras`);
                 list.push("https://docs.ogc.org/is/18-088/18-088.html#multidatastream-extension");
-                if (ctx._.service.extensions.includes(EExtensions.mqtt))
+                if (ctx._.inExtension(EExtensions.mqtt))
                     list.push("https://docs.ogc.org/is/18-088/18-088.html#req-create-observations-via-mqtt-observations-creation", "https://docs.ogc.org/is/18-088/18-088.html#mqtt-extension");
                 const temp: Record<string, any> = {
                     "value": expectedResponse.filter((elem) => Object.keys(elem).length),
@@ -387,10 +386,10 @@ export class Models {
                         "conformance": list
                     }
                 };
-                list.push(`${ctx._.origin}/#api-Services`);
-                list.push(`${ctx._.origin}/#api-Token`);
-                list.push(`${ctx._.origin}/#api-Import`);
-                list.push(`${ctx._.origin}/#api-Format`);
+                list.push(`${ctx._.origin}/documentation?Services`);
+                list.push(`${ctx._.origin}/documentation?Token`);
+                list.push(`${ctx._.origin}/documentation?Import`);
+                list.push(`${ctx._.origin}/documentation?Format`);
                 temp[`${ctx._.base()}/${ctx._.service.apiVersion}/req/receive-updates-via-mqtt/receive-updates`] = {
                     "endpoints": [`mqtt://server.example.com:${config.getService(EConstant.admin).ports?.ws}`, "ws://server.example.com/sensorThings"]
                 };
@@ -409,15 +408,17 @@ export class Models {
 
     public getModel(service: Iservice | string): Ientities {
         service = this.getService(service);
-        if (!Models.models[service.name]) Models.models[service.name] = this.create(service.apiVersion, service.options, service.extensions);
+        if (!Models.models[service.name]) Models.models[service.name] = this.create(service.apiVersion, service);
         return Models.models[service.name];
     }
 
-    private create(version: string, options: string[], extensions: typeof typeExtensions): Ientities {
-        console.log(logging.whereIam(new Error().stack));
-        let model = this.createVersion(version, extensions);
-        const name = options.includes(EOptions.unique) ? new Text().notNull().default(EInfos.noName).unique().column() : new Text().notNull().column();
-        const description = options.includes(EOptions.unique) ? new Text().notNull().default(EInfos.noName).unique().column() : new Text().notNull().column();
+    private create(version: string, service: Iservice): Ientities {
+        console.log(logging.whereIam(new Error().stack));        
+        let model = this.createVersion(version, service);
+        const name = service._unique === true ? new Text().notNull().default(EInfos.noName).unique().column() : new Text().notNull().column();
+        const description = service._unique === true ? new Text().notNull().default(EInfos.noName).unique().column() : new Text().notNull().column();
+        // const result = service._numeric === true ? new Numeric().column() : new Any().column();
+       if (service._numeric ) model[OBSERVATION.name].columns["result"] = new Numeric().column();
         Object.keys(model).forEach((k: string) => {
             if (model[k].columns["name"]) model[k].columns.name = name;
             if (model[k].columns["description"]) model[k].columns.name = description;

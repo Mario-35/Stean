@@ -12,7 +12,7 @@ import { logging } from "../log";
 import { EEncodingType, EErrors, EInfos } from "../enums";
 import { loginUser } from "../authentication";
 import { createServer } from "aedes-server-factory";
-import { _DEBUG } from "../constants";
+import { isDebug } from "../constants";
 
 export class MqttServer {
     broker: Aedes;
@@ -125,7 +125,7 @@ export class MqttServer {
         this.broker.published = (packet: AedesPublishPacket, client: Client | null, callback: any) => {
             if (client) {
                 console.log(logging.whereIam("published"));
-                if (client && _DEBUG)
+                if (client && isDebug())
                     logging
                         .message(`[PUBLISHED] ${client ? client.id : client}`, packet.payload.toString())
                         .to()
@@ -136,7 +136,7 @@ export class MqttServer {
         this.broker.on("client", (client: Client | null) => {
             if (client) {
                 console.log(logging.whereIam(`client : ${client ? client.id : client}`));
-                if (_DEBUG)
+                if (isDebug())
                     logging
                         .message(`[CLIENT_CONNECTED] ${client ? client.id : client} connected to broker`, this.broker.id)
                         .to()
@@ -148,7 +148,7 @@ export class MqttServer {
         this.broker.on("clientDisconnect", (client: Client | null) => {
             if (client) {
                 console.log(logging.whereIam(new Error().stack));
-                if (_DEBUG)
+                if (isDebug())
                     logging
                         .message(`$[CLIENT_DISCONNECTED] ${client ? client.id : client} disconnected from the broker`, this.broker.id)
                         .to()
@@ -160,7 +160,7 @@ export class MqttServer {
         this.broker.on("subscribe", (subscriptions: Subscription[], client: Client | null) => {
             if (client) {
                 console.log(logging.whereIam(new Error().stack));
-                if (_DEBUG)
+                if (isDebug())
                     logging
                         .message(`[TOPIC_SUBSCRIBED] ${client ? client.id : client} subscribed to topics: ${subscriptions.map((s: any) => s.topic).join(",")} on broker`, this.broker.id)
                         .to()
@@ -172,7 +172,7 @@ export class MqttServer {
         this.broker.on("unsubscribe", (subscriptions: any, client: Client | null) => {
             if (client) {
                 console.log(logging.whereIam("unsubscribe"));
-                if (_DEBUG)
+                if (isDebug())
                     logging
                         .message(`[TOPIC_UNSUBSCRIBED] $${client ? client.id : client} unsubscribed to topics: ${subscriptions.map((s: any) => s.topic).join(",")} from broker`, this.broker.id)
                         .to()

@@ -8,13 +8,13 @@
 
 import { config } from "../configuration";
 import { setDebug } from "../constants";
-import { EConstant, EFrom, EOptions } from "../enums";
+import { EConstant, EExtensions, EFrom, EOptions } from "../enums";
 import { cleanUrl, removeFromUrl } from "../helpers";
 import { logging } from "../log";
 import { models } from "../models";
 import { RootPgVisitor } from "../odata/visitor";
 import { paths } from "../paths";
-import { Iservice, IuserToken, koaContext } from "../types";
+import { Iservice, Iuser, IuserToken, koaContext } from "../types";
 
 /**
  * SteanContext Class
@@ -75,7 +75,7 @@ export class SteanContext {
 
         // id string or number
         this._id = isNaN(+id) ? BigInt(0) : BigInt(id);
-        if (splitPath[0].startsWith("logs-")) this.redirect = paths.root + "logs\\" + `${ctx.path}`;
+        if (splitPath[0]?.startsWith("logs-")) this.redirect = paths.root + "logs\\" + `${ctx.path}`;
         else {
             try {
                 const configName = config.getConfigNameFromName( splitPath[0].toLowerCase());                
@@ -122,7 +122,7 @@ export class SteanContext {
     private _protocol(ctx: koaContext, serv: Iservice) {
         return  this.protocol = ctx.request.headers["x-forwarded-proto"]
             ? ctx.request.headers["x-forwarded-proto"].toString()
-            : serv.options.includes(EOptions.forceHttps)
+            : this.isOption(EOptions.forceHttps)
             ? "https"
             : ctx.protocol;
     }
@@ -136,5 +136,30 @@ export class SteanContext {
             root:  `${this.origin}/${serviceName}/${service.apiVersion || ""}`,
             service: service
         }
-    }    
+    }  
+    
+    isOption(option: EOptions): boolean {
+          return this.service.options.includes(option);
+    }
+
+    inExtension(option: EExtensions): boolean {
+          return this.service.extensions.includes(option);
+    }
+
+    blankUser(): Iuser {
+        return {
+            id: 0,
+            username: "query",
+            password: "",
+            email: "",
+            database: this.service.pg.database,
+            canPost: !this.inExtension(EExtensions.users),
+            canDelete: !this.inExtension(EExtensions.users),
+            canCreateUser: !this.inExtension(EExtensions.users),
+            canCreateDb: !this.inExtension(EExtensions.users),
+            admin: false,
+            superAdmin: false
+        };
+    }
+    
 }

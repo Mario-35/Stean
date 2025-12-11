@@ -1,3 +1,5 @@
+import { filterObject } from "./filterObject";
+
 /**
  * Main Helpers.
  *
@@ -69,3 +71,7 @@ export const formatPgTableColumn = (table: string, column?: string) => `\"${tabl
 export const formatPgSelectTableColumn = (table: string, column?: string) => `SELECT ${column === "*" ? "*" : formatPgTableColumn(table, column)} FROM \"${table}\"`;
 export const splitLast = (input: string, separateur: string) => input.split(separateur).reverse()[0];
 export const makeNull = (input: string): string => input.replace(/'null'+/g, "null");
+
+export function filterUnderscore(input: any) {
+        return filterObject(input, (v, k) => String(v)[0] != "_");    
+};

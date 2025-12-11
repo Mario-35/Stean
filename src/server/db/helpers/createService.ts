@@ -12,9 +12,9 @@ import { doubleQuotes, asyncForEach } from "../../helpers";
 import { models } from "../../models";
 import { createInsertValues } from "../../models/helpers";
 import { logging } from "../../log";
-import { EChar, EInfos } from "../../enums";
-import { _DEBUG } from "../../constants";
+import { EChar, EInfos, EState } from "../../enums";
 import { messages } from "../../messages";
+import { setState } from "../../constants";
 
 /**
  *
@@ -25,7 +25,7 @@ import { messages } from "../../messages";
 
 export const createService = async (dataInput: Record<string, any>): Promise<Record<string, any>> => {
     console.log(logging.whereIam(new Error().stack));
-
+    setState(EState.createDb);
     const prepareDatas = (dataInput: Record<string, string>, entity: string): object => {
         if (entity === "Observations") {
             if (!dataInput["resultTime"] && dataInput["phenomenonTime"]) dataInput["resultTime"] = dataInput["phenomenonTime"];
@@ -88,5 +88,6 @@ export const createService = async (dataInput: Record<string, any>): Promise<Rec
         }
     );
 
+    setState(EState.normal);
     return results;
 };

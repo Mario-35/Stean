@@ -10,7 +10,6 @@ import { config } from "../../configuration";
 import { logging } from "../../log";
 import { isTest } from "../../helpers";
 import { Iservice } from "../../types";
-import { _DEBUG } from "../../constants";
 import { EErrors } from "../../enums";
 
 const executeSqlOne = async (service: Iservice, query: string): Promise<object> => {

@@ -6,12 +6,12 @@
  *
  */
 
-import { _DEBUG, appVersion, setDebug, setReady } from "../constants";
-import { asyncForEach, compareVersions, decrypt, encrypt, hidePassword, isProduction, isTest } from "../helpers";
+import { appVersion, isDebug, setDebug, setState } from "../constants";
+import { asyncForEach, compareVersions, decrypt, encrypt, filterUnderscore, hidePassword, isProduction, isTest } from "../helpers";
 import { Iservice, IdbConnection, IserviceInfos, koaContext, Iversion } from "../types";
 import { messages } from "../messages";
 import { app } from "..";
-import { EChar, EColor, EConstant, EOptions } from "../enums";
+import { EChar, EColor, EConstant, EState } from "../enums";
 import path from "path";
 import util from "util";
 import fs from "fs";
@@ -57,11 +57,15 @@ class Configuration {
             };
     }
 
-    allReady(): boolean {
-        return !Object.values(Configuration.services)
-            .map((e) => e.ready)
-            .includes(false);
-    }
+     testAllReady() {
+         if (!Object.values(Configuration.services)
+            .filter(e => e.name != EConstant.admin)
+            .map((e) => e.status === EState.normal)
+            .includes(false)) {
+                setState(EState.normal);
+                logging.startEnd(`INIT FINISHED ${EConstant.appName} ${EInfos.ver} : ${appVersion.version}`, EColor.Green, EColor.Yellow).toLogAndFile(true);
+            }
+     }
 
     // app version
     version(): string {
@@ -76,11 +80,6 @@ class Configuration {
     // is update
     upToDate(): boolean {
         return Configuration.upToDate;
-    }
-
-    // update options
-    private async createUpdateOptions(connectionName: string): Promise<void> {
-        logging.status(true, EInfos.UpdateCount).toLogAndFile(true);
     }
 
     // create a new instance in DB
@@ -152,7 +151,7 @@ class Configuration {
             Configuration.services = JSON.parse(decrypt(fileContent));
             const infosAdmin = Configuration.services[EConstant.admin].pg;
             Configuration.adminConnection = postgres(`postgres://${infosAdmin.user}:${infosAdmin.password}@${infosAdmin.host}:${infosAdmin.port || 5432}/${EConstant.pg}`, {
-                debug: _DEBUG,
+                debug: isDebug(),
                 connection: {
                     application_name: `${EConstant.appName} ${appVersion}`
                 }
@@ -199,7 +198,8 @@ class Configuration {
                 process.exit(112);
             }
             // rewrite file (to update config modification except in test mode)
-            if (!isTest() && config.configFileExist() === false) this.writeConfig();
+            if (!isTest()) this.writeConfig();
+            // if (!isTest() && config.configFileExist() === false) this.writeConfig();
         } catch (error: any) {
             logging.error(error, EErrors.configFileError);
             process.exit(111);
@@ -292,7 +292,7 @@ class Configuration {
      */
     private writeConfig(input?: JSON): boolean {
         logging.message(EInfos.writeConfig, paths.configFile.fileName).toLogAndFile(true);
-        const datas: string = input ? JSON.stringify(input, null, 4) : JSON.stringify({ admin: Configuration.services[EConstant.admin] }, null, 4);
+        const datas: string = input ? JSON.stringify(filterUnderscore(input), null, 4) : JSON.stringify({ admin: filterUnderscore(Configuration.services[EConstant.admin])}, null, 4);
         return this.writeFile(paths.configFile.fileName, isProduction() === true ? encrypt(datas) : datas);
     }
 
@@ -362,7 +362,6 @@ class Configuration {
 
     private async refresh(connectionName: string): Promise<boolean> {
         await this.reCreatePgFunctions(connectionName);
-        await this.createUpdateOptions(connectionName);
         return true;
     }
 
@@ -427,6 +426,7 @@ class Configuration {
                 }
             );
             // this.initMqtt();
+            this.testAllReady();
             return status;
             // no configuration file so First install
         } else {
@@ -619,45 +619,50 @@ class Configuration {
                                 })
                                 .then(() => true)
                                 .catch((err: Error) => logging.error(err, EInfos.delTemp).return(false)),
-                            "Delete temp table(s)"
-                        )
-                        .to()
-                        .log()
-                        .file();
-                await this.refresh(serviceName);
-                await this.connection(serviceName)
-                    .unsafe(queries.logLevel("WARNING"))
-                    .then(() => {
+                                "Delete temp table(s)"
+                            )
+                            .to()
+                            .log()
+                            .file();
+                            await this.refresh(serviceName);
+                            await this.connection(serviceName)
+                            .unsafe(queries.logLevel("WARNING"))
+                            .then(() => {
                         logging.status(true, EInfos.logLevel).toLogAndFile(true);
                     })
                     .catch((err: Error) => logging.error(err, EInfos.logLevel).return(true));
-
-                if (Configuration.services[serviceName].options.includes(EOptions.optimized)) {
-                    Configuration.services[serviceName].ready = false;
-                    this.connection(serviceName)
-                        .unsafe(`\n${queries.addNbToTable("observation")}\n${queries.updateNb("datastream", false)}\n${queries.updateNb("multidatastream", false)}`)
-                        .then(() => {
-                            Configuration.services[serviceName].ready = true;
-                            logging.statusAfter(serviceName, EInfos.updateNb).toLogAndFile(true);
-                            if (this.allReady() === true) {
-                                setReady(true);
-                                logging.startEnd(`INIT FINISHED ${EConstant.appName} ${EInfos.ver} : ${appVersion.version}`, EColor.Green, EColor.Yellow).toLogAndFile(true);
-                            }
-                        });
-                } else Configuration.services[serviceName].ready = true;
-                return true;
-            })
-            .catch(async (error: Error) => {
-                // Password authentication failed
-                if (error["code" as keyof object] === "ECONNREFUSED") {
-                    logging.error(error, EErrors.connUser);
-                } else if (error["code" as keyof object] === "28P01") {
-                    if (!isTest()) return await this.createDB(serviceName);
-                    // Database does not exist
-                } else if (error["code" as keyof object] === "3D000" && create == true) {
-                    logging.message(EInfos.startCreateDB, Configuration.services[serviceName].pg.database).toLogAndFile(true);
-                    if (serviceName !== EConstant.test) return await this.createDB(serviceName);
-                } else return logging.error(error, EErrors.connUser).return(false);
+                if (serviceName !== EConstant.admin) {
+                    await this.connection(serviceName).unsafe(queries.extensions()).then((res) => {
+                        Configuration.services[serviceName]._lora = res[0].lora;
+                        Configuration.services[serviceName]._partitioned = res[0].partitioned;
+                        Configuration.services[serviceName]._unique = res[0].unique;
+                        Configuration.services[serviceName]._numeric = res[0].numeric;
+                    }).catch(() => null);
+                    if (Configuration.services[serviceName]._partitioned) {
+                        Configuration.services[serviceName].status = EState.start;
+                        this.connection(serviceName)
+                            .unsafe(`\n${queries.addNbToTable("observation")}\n${queries.updateNb("datastream", false)}\n${queries.updateNb("multidatastream", false)}`)
+                            .then(() => {
+                                Configuration.services[serviceName].status = EState.normal;
+                                logging.statusAfter(serviceName, EInfos.updateNb).toLogAndFile(true);
+                            });
+                    } else {
+                        Configuration.services[serviceName].status = EState.normal;                        
+                    }
+                }
+            return true;
+        })
+        .catch(async (error: Error) => {
+            // Password authentication failed
+            if (error["code" as keyof object] === "ECONNREFUSED") {
+                logging.error(error, EErrors.connUser);
+            } else if (error["code" as keyof object] === "28P01") {
+                if (!isTest()) return await this.createDB(serviceName);
+                // Database does not exist
+            } else if (error["code" as keyof object] === "3D000" && create == true) {
+                logging.message(EInfos.startCreateDB, Configuration.services[serviceName].pg.database).toLogAndFile(true);
+                if (serviceName !== EConstant.test) return await this.createDB(serviceName);
+            } else return logging.error(error, EErrors.connUser).return(false);
                 return false;
             });
     }
@@ -727,7 +732,7 @@ class Configuration {
     }
 
     async start(restart: boolean): Promise<boolean> {
-        setReady(false);
+        setState(restart === true ? EState.restart : EState.start);
         logging.start(restart === true ? "Restart" : "Start").toLogAndFile(true);
         return this.initialisation()
             .then(async () => {

@@ -7,7 +7,6 @@
  */
 
 import { config } from "../../configuration";
-import { _DEBUG } from "../../constants";
 import { EConstant, EExtensions, enumKeys, EOptions } from "../../enums";
 import { removeAllQuotes } from "../../helpers";
 import { logging } from "../../log";
@@ -58,7 +57,7 @@ export class Admin extends CoreHtmlView {
                 .listVersion()
                 .reverse()
                 .map((e) => e.replace("_", ".")),
-            extensions: enumKeys(EExtensions).filter((e) => !["file", "base"].includes(e)),
+            extensions: [... enumKeys(EExtensions).filter((e) => !["file", "base"].includes(e)), "unique", "Lora", "partitioned"],
             options: enumKeys(EOptions),
             logsFiles: paths.logFile.list()
         };
@@ -100,7 +99,8 @@ export class Admin extends CoreHtmlView {
         const cards = Object.keys(services)
             .filter((e) => e !== EConstant.test)
             .map(
-                (e) => `<div class="card">
+                (e) => `
+            <div class="card">
                 <div class="title" onclick="selectCard('${e}')">${e}</div>
                 <button class="del-btn" id="del${e}" onclick="delService('${e}')"> X </button>
                 <div class="product">
@@ -132,9 +132,13 @@ export class Admin extends CoreHtmlView {
                     <span class="csv canPoint" onclick="editCsv('${e}', this)">${services[e].service.csvDelimiter}</span>
                     <select class="patrom-select tabindex="1" onchange="selectChange('${e}', this)">
                         <option selected="selected">Services</option>                        
-                        ${services[e].service.extensions.includes("users") && services[e].service.users ? "<option>Users</option>" : ""} 
-                        ${services[e].service.extensions.includes("lora") ? "<option>Loras</option>" : ""} 
-                        ${services[e].service.extensions.includes("lora") ? "<option>Synonyms</option>" : ""} 
+                        ${services[e].service.extensions.includes(EExtensions.users) && services[e].service.users ? "<option>users</option>" : ""} 
+                        ${services[e].service._lora ? "<option>lora</option>" : ""} 
+                        ${services[e].service.extensions.includes(EExtensions.mqtt) ? "<option>mqtt</option>" : ""} 
+                        ${services[e].service.extensions.includes(EExtensions.tasking) ? "<option>tasking</option>" : ""}
+                        ${services[e].service._numeric ? "<option>resultNumeric</option>" : ""} 
+                        ${services[e].service._partitioned ? "<option>partitioned</option>" : ""} 
+                        ${services[e].service._unique ? "<option>unique</option>" : ""} 
                     </select>
                 </div>
 
@@ -147,14 +151,7 @@ export class Admin extends CoreHtmlView {
                     <span class="service-name">point per graph :</span>
                     <span class="page canPoint" onclick="editGraph('${e}', this)">${services[e].service.nb_graph}</span>
                 </div>
-
-
-
-
-
-
-
-                </div>`
+            </div>`
             );
 
         this.replacers({ cards: cards.join("") });

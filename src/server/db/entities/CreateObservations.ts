@@ -11,13 +11,13 @@ import { IcsvColumn, IcsvFile, Id, IreturnResult, IstreamInfos, koaContext } fro
 import { executeSql, executeSqlValues, dateToDateWithTimeZone, InsertFromCsv } from "../helpers";
 import { doubleQuotes, asyncForEach, splitLast, makeNull } from "../../helpers";
 import { messages } from "../../messages/";
-import { EChar, EConstant, EDatesType, EErrors, EExtensions, EHttpCode, EInfos } from "../../enums";
+import { EChar, EConstant, EDatesType, EErrors, EHttpCode, EInfos, EState } from "../../enums";
 import util from "util";
 import { models } from "../../models";
 import { logging } from "../../log";
 import { OBSERVATION } from "../../models/entities";
-import { _DEBUG } from "../../constants";
 import { queries } from "../queries";
+import { setState } from "../../constants";
 
 /**
  * CreateObservations Class
@@ -54,7 +54,7 @@ export class CreateObservations extends Common {
                             : `${separateur}${elem}${separateur}`
                         : `${separateur}{${elem}}${separateur}`
                     : index === this.indexResult && type === "VALUES"
-                    ? this.ctx._.service.extensions.includes(EExtensions.resultNumeric)
+                    ? this.ctx._.service._numeric
                         ? elem
                         : `'{"value": ${elem}}'`
                     : `${separateur}${elem}${separateur}`
@@ -62,6 +62,7 @@ export class CreateObservations extends Common {
         });
         return res;
     }
+    
     // Override get all to return error Bad request
     async getAll(): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
@@ -73,6 +74,7 @@ export class CreateObservations extends Common {
         console.log(logging.whereIam(new Error().stack));
         this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest });
     }
+
     // Override post to posted file as createObservations
     async postForm(): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
@@ -125,9 +127,11 @@ export class CreateObservations extends Common {
         }
         return undefined;
     }
+
     // Override post xson file as createObservations
     async postJson(dataInput: Record<string, any>): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
+        setState(EState.import);
         const returnValue: string[] = [];
         let total = 0;
         /// classic Create
@@ -168,17 +172,21 @@ export class CreateObservations extends Common {
                 });
             }
         }
+        setState(EState.normal);
     }
+
     // Override post caller
     async post(dataInput: JSON): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
         return this.ctx.datas ? await this.postForm() : await this.postJson(dataInput);
     }
+
     // Override update to return error Bad request
     async update(dataInput: Record<string, any> | undefined): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
         this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest });
     }
+
     // Override delete to return error Bad request
     async delete(idInput: Id | string): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));

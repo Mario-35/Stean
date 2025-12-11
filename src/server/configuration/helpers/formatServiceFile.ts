@@ -6,11 +6,10 @@
  *
  */
 import util from "util";
-import { EConstant, EErrors, EOptions } from "../../enums";
-import { unikeList, unique } from "../../helpers";
+import { EConstant, EErrors, EOptions, EState } from "../../enums";
+import { isTest, unikeList, unique } from "../../helpers";
 import { Iservice, typeExtensions } from "../../types";
 import { logging } from "../../log";
-import { _DEBUG } from "../../constants";
 /**
  *
  * @param name configuration name
@@ -54,7 +53,11 @@ export function formatServiceFile(name: string, input: Record<string, any>): Ise
         csvDelimiter: input["csvDelimiter"] ? input["csvDelimiter"] : ";",
         synonyms: input["synonyms"] ? input["synonyms"] : undefined,
         users: undefined,
-        ready: false
+        status: EState.normal,
+        _partitioned: isTest(), // true if test
+        _lora: isTest(), // true if test
+        _unique: isTest(), // true if test
+        _numeric: false,
     };
 
     if (Object.values(returnValue).includes("ERROR"))

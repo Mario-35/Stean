@@ -17,11 +17,11 @@ import { messages } from "../../../messages";
 import { EColumnType, EConstant, EDataType, EErrors, EHttpCode, EQuery } from "../../../enums";
 import { models } from "../../../models";
 import { logging } from "../../../log";
-import { _DEBUG } from "../../../constants";
 import { Visitor } from "./visitor";
 import { Query } from "../builder";
 import { relationInfos } from "../../../models/helpers";
 import { isTestEntity } from "../../../helpers/tests";
+import { isDebug } from "../../../constants";
 
 export class PgVisitor extends Visitor {
     entity: Ientity | undefined = undefined;
@@ -54,7 +54,7 @@ export class PgVisitor extends Visitor {
     parameters: unknown[] = [];
     ast: Token;
     showRelations = true;
-    debugOdata = isTest() ? false : _DEBUG;
+    debugOdata = isTest() ? false : isDebug();
     single: boolean = false;
     constructor(ctx: koaContext, options = <SqlOptions>{}) {
         console.log(logging.whereIam(new Error().stack));

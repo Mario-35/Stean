@@ -1,4 +1,4 @@
-import { _DEBUG, appVersion, timestampNow } from "../constants";
+import { appVersion, isDebug, timestampNow } from "../constants";
 import { EChar, EColor, EConstant, EInfos } from "../enums";
 import util from "util";
 import { isTest, logToHtml } from "../helpers";
@@ -93,7 +93,7 @@ export class Logging {
 
     whereIam(input?: string) {
         // important to preserve catch console log error
-        if (_DEBUG === true) {
+        if (isDebug()) {
             this.init(Logging.can);
             this.text("■■■► ", EColor.Red);
             this.message(
@@ -229,7 +229,7 @@ export class Logging {
     }
 
     to(force?: boolean) {
-        Logging.can = force || _DEBUG;
+        Logging.can = force || isDebug();
         return new LoggingResult(Logging.can === true ? Logging._s : "");
     }
 

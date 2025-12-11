@@ -16,7 +16,6 @@ import { logging } from "../../../log";
 import { expand } from "../../../models/helpers";
 import { isAllowedTo, isTestEntity } from "../../../helpers/tests";
 import { createDefaultContext, createIentityColumnAliasOptions } from "../helper";
-import { _DEBUG } from "../../../constants";
 import { queries } from "../../../db/queries";
 export class Query {
     from: string;
@@ -140,7 +139,7 @@ export class Query {
                                     relations[index] = `(${queries.asJson({
                                         query: query,
                                         singular: models.isEntitySingular(main.ctx._.model(), name),
-                                        strip: main.ctx._.service.options.includes(EOptions.stripNull),
+                                        strip: main.ctx._.isOption(EOptions.stripNull),
                                         count: false
                                     })}) AS ${doubleQuotes(name)}`;
                                 else throw new Error(EErrors.invalidQuery);
@@ -160,7 +159,7 @@ export class Query {
                             });
 
                     const pagination =
-                        element.ctx._.service.options.includes(EOptions.optimized) &&
+                        element.ctx._.service._partitioned &&
                         element.query.where.toString().includes(`"observation"."${element.parentEntity?.table}_id" =`) &&
                         (isReturnGraph(element) || element.skip > 0)
                             ? `"observation"."${element.parentEntity?.table}_id" =${element.query.where.toString().split("=")[1].split(" ")[0]}`

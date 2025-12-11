@@ -60,67 +60,95 @@ Vous arrivez sur l’écran suivant :
 
 Le bouton {...} permet de proposer un service 'type':
 
+## Creation d'un service
 
-
-
-
-## Creation 'un service
+```JSON
+{
+    "name": "nouveau",
+    "pg": {
+        "host": "localhost",
+        "port": 5432,
+        "user": "nouveau",
+        "password": "nouveau",
+        "database": "nouveau",
+        "retry": 2
+    },
+    "version": "v1.1",
+    "date_format": "DD/MM/YYYY hh:mi:ss",
+    "nb_page": "200",
+    "nb_graph": "1000000",
+    "extensions": [
+        "base",
+        "multiDatastream",
+        "partitioned"
+    ],
+    "options": [
+        "canDrop",
+        "unique"
+    ],
+    "csvDelimiter": ";"
+}
+```
 
 ### Les options :
 
-- **canDrop**: (postgresSql Drop) permet de recreer n service : http://<pi-adress>:8029/canDrop
+Les options peuvent être activé ou désactivés car elle n'impacte pas la base de données.
+
+- **canDrop**: (postgresSql Drop) permet de recreer n service : http://service/version:8029/canDrop
 
 - **forceHttps**: Cette option rajoute un s au http des requettes
 
-- **stripNull**: supprime les valeurs null des JSON retourns par l'api,
-
-
+- **stripNull**: supprime les valeurs null des JSON retournés par l'api,
 
 ### Les extensions :
+
+Les extensions sont un choix fait a la creation du service.
+
 - **users** ajoute une gestion des droits utilisateurs : par default uniquement les requette GET donc de lecture sont possible pour Ajouter (POST), Modifier (Push) et Delete (Del)
-- **lora** : ajoute deux entite
+
+- **partitioned** : Installe une mécanique de partitionnement totalement transparente pour l'utilisateur augmentant les performances pour des services avec une volumétrie importante.
+
+- **lora** : ajoute deux entités : Lora et decodeur
     tasking = "tasking",
     mqtt = "mqtt",
-    highPrecision = "highPrecision",
-    resultNumeric = "resultNumeric"
 
+- **numeric**: Cette option indique que ce service ne gere qu'un result de type numérique ameliorant les peformances MAIS ne permet pas d'avoir de multiDatastream
 
-- **unique**: option ajoutant a la norme sensorThings l'impossibilité de creer des doublons dans toutes les entites qui ont la propiete name une seule occurence de se nom ne peut etre creer ainsi que dans les observations a la meme date le meme result ne peut etre ajouter (cera permet lors des importations en masse d'importer des doublons), cette option permet aussi d'identifier un entrée par son nom par exemple 
+- **unique**: ajoute a la norme sensorThings l'impossibilité de creer des doublons dans toutes les entites qui ont la propiete name une seule occurence de se nom ne peut etre creer ainsi que dans les observations a la meme date le meme result ne peut etre ajouter (cera permet lors des importations en masse d'importer des doublons), cette option permet aussi d'identifier un entrée par son nom par exemple 
 
-```JSON
-{
-    "name": "Thing with existing Location test",
-    "description": "Create Thing with existing location inside tests",
-    "properties": {
-        "Deployment Condition": "Deployed in a third floor balcony",
-        "Case Used": "Radiation shield"
-    },
-    "Locations": [
-        {
-            "@iot.id": "1"
-        }
-    ]
-}
-```
+    ```JSON
+    {
+        "name": "Thing with existing Location test",
+        "description": "Create Thing with existing location inside tests",
+        "properties": {
+            "Deployment Condition": "Deployed in a third floor balcony",
+            "Case Used": "Radiation shield"
+        },
+        "Locations": [
+            {
+                "@iot.id": "1"
+            }
+        ]
+    }
+    ```
 
-On identifie une location par son id l'apport de l'option unique permet :
+    On identifie une location par son id l'apport de l'option unique permet :
 
-
-```JSON
-{
-    "name": "Thing with existing Location test",
-    "description": "Create Thing with existing location inside tests",
-    "properties": {
-        "Deployment Condition": "Deployed in a third floor balcony",
-        "Case Used": "Radiation shield"
-    },
-    "Locations": [
-        {
-            "@iot.name": "On the Moon"
-        }
-    ]
-}
-```
+    ```JSON
+    {
+        "name": "Thing with existing Location test",
+        "description": "Create Thing with existing location inside tests",
+        "properties": {
+            "Deployment Condition": "Deployed in a third floor balcony",
+            "Case Used": "Radiation shield"
+        },
+        "Locations": [
+            {
+                "@iot.name": "On the Moon"
+            }
+        ]
+    }
+    ```
 
 
 

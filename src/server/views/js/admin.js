@@ -21,8 +21,8 @@ function updateDataService()  {
 		"date_format": dateOption.value || "DD/MM/YYYY hh:mi:ss",
         "nb_page": pageOption.value || 200,
         "nb_graph": graphOption.value || 1000000,
-		"extensions": ext.length > 0 ? ext : ["base", "multiDatastream"],
-        "options": opt.length > 0 ? opt : ["canDrop", "unique", "optimized"],
+		"extensions": ext.length > 0 ? ext : ["base", "multiDatastream", "partitioned", "unique"],
+        "options": opt.length > 0 ? opt : ["canDrop"],
         "csvDelimiter": csvOption.value || ";"
 	}
 	setJSON(JSON.stringify(obj, null, 4));
@@ -51,8 +51,8 @@ btnBlank.onclick = async (e) => {
 		optName.value = newName || "";
 		optPassword.value = newName || "";
 		optRepeat.value = newName ||"";
-		populateMultiSelect("optionsOption", _PARAMS.options, ["canDrop", "unique", "optimized"]);
-		populateMultiSelect("extensionsOption", _PARAMS.extensions, ["base", "multiDatastream"]);
+		populateMultiSelect("optionsOption", _PARAMS.options, ["canDrop"]);
+		populateMultiSelect("extensionsOption", _PARAMS.extensions, ["base", "multiDatastream", "partitioned", "unique"]);
 		updateDataService();
 	}	
 }
@@ -101,7 +101,7 @@ function fillService(name, newName) {
 	optPassword.value = newName || "";
 	optRepeat.value = newName ||"";
 	Labelchck1.innerText = "Service " + optName.value;
-	optDistHost.value = _PARAMS.services[name].linkBase + "/" + serv.apiVersion + "/" ;
+	optDistHost.value = _PARAMS.services[name].base + "/" + serv.apiVersion + "/" ;
 }
 
 // load Log file from log select
@@ -128,7 +128,7 @@ async function selectCard(name) {
 async function delService(name) {
 	const newName = window.prompt("Name of the service", name);
 	if (newName !== null && newName !== "") {
-		let response = await fetch(`${_PARAMS.services[newName].linkBase}/${_PARAMS.services[newName]["service"].apiVersion}/Services(${newName})`, {
+		let response = await fetch(`${_PARAMS.services[newName].base}/${_PARAMS.services[newName]["service"].apiVersion}/Services(${newName})`, {
 			method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
@@ -142,7 +142,7 @@ function editPage(name ,elem) {
 	const temp = window.prompt("Number of page for " + name, elem.textContent);
 	if (temp !== null && temp !== "" && +temp > 0) {
 		elem.textContent = temp; 		
-		fetch(`${_PARAMS.services[name].linkBase}/${_PARAMS.services[name]["service"]["service"].apiVersion}/nb_page`, {
+		fetch(`${_PARAMS.services[name].base}/${_PARAMS.services[name]["service"]["service"].apiVersion}/nb_page`, {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -156,7 +156,7 @@ function editGraph(name ,elem) {
 	const temp = window.prompt("Number of point for graph", elem.textContent);
 	if (temp !== null && temp !== "" && +temp > 0) {
 		elem.textContent = temp; 		
-		fetch(`${_PARAMS.services[name].linkBase}/${_PARAMS.services[name]["service"].apiVersion}/nb_graph`, {
+		fetch(`${_PARAMS.services[name].base}/${_PARAMS.services[name]["service"].apiVersion}/nb_graph`, {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -174,7 +174,7 @@ async function editList(name ,elem) {
 	const temp = window.prompt("Synonyms for " + elem, _PARAMS.services[name]["service"].synonyms[elem]);
 	if (temp !== null && temp !== "" && temp != lines) {
 		_PARAMS.services[name]["service"].synonyms[elem] = temp.split(',');
-		await fetch(`${_PARAMS.services[name].linkBase}/${_PARAMS.services[name]["service"].apiVersion}/synonyms`, {
+		await fetch(`${_PARAMS.services[name].base}/${_PARAMS.services[name]["service"].apiVersion}/synonyms`, {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -191,7 +191,7 @@ async function editCsv(name ,elem) {
 	const temp = window.prompt("Csv delimiter for " + name, elem.textContent);
 	if (temp === "," || temp === ";") elem.textContent = temp; 
 	if (temp === "," || temp === ";") {
-		await fetch(`${_PARAMS.services[name].linkBase}/${_PARAMS.services[name]["service"].apiVersion}/csvDelimiter`, {
+		await fetch(`${_PARAMS.services[name].base}/${_PARAMS.services[name]["service"].apiVersion}/csvDelimiter`, {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -208,7 +208,7 @@ async function selectChange(name ,elem) {
 			getElement("infos"+ name).innerHTML = _PARAMS.services[name].stats["Users"].map(e => `<option value="${e["username"]}" onclick="showUserInfos('${name}', '${e["username"]}')">${e["username"]}</option>`).join("\n");
 			break;
 		case "Loras":
-			const url = `${_PARAMS.services[name].linkBase}/${_PARAMS.services[name]["service"].apiVersion}/Decoders?$select=id,name`;		
+			const url = `${_PARAMS.services[name].base}/${_PARAMS.services[name]["service"].apiVersion}/Decoders?$select=id,name`;		
 			const datas = await getDatas(url);
 			getElement("infos"+ name).innerHTML =  Object.values(datas.value).map(e => `<option value="${e.name}" onclick="showDecoderInfos('${name}','${e["@iot.id"]}')">${e.name}</option>`).join("\n");
 			break;
@@ -223,7 +223,7 @@ async function selectChange(name ,elem) {
 					_PARAMS.services[name]["service"].options.splice(index, 1);
 				} else _PARAMS.services[name]["service"].options.push(elem.textContent);
 				try {					
-					await fetch(`${_PARAMS.services[name].linkBase}/${_PARAMS.services[name]["service"].apiVersion}/options`, {
+					await fetch(`${_PARAMS.services[name].base}/${_PARAMS.services[name]["service"].apiVersion}/options`, {
 						method: "PUT",
 						headers: {
 							"Content-Type": "application/json",
@@ -232,7 +232,7 @@ async function selectChange(name ,elem) {
 					});
 				} catch (error) {
 					console.log(error);
-					await fetch(`${_PARAMS.services[name].linkBase.replace('https', 'http')}/${_PARAMS.services[name]["service"].apiVersion}/options`, {
+					await fetch(`${_PARAMS.services[name].base.replace('https', 'http')}/${_PARAMS.services[name]["service"].apiVersion}/options`, {
 						method: "PUT",
 						headers: {
 							"Content-Type": "application/json",
@@ -275,7 +275,7 @@ function showUserInfos(service, element) {
 
 // change view for standard default infos
 async function showDecoderInfos(name, decoder) {
-	const datas = await getDatas(`${_PARAMS.services[name].linkBase}/${_PARAMS.services[name]["service"].apiVersion}/Decoders(${decoder})`);
+	const datas = await getDatas(`${_PARAMS.services[name].base}/${_PARAMS.services[name]["service"].apiVersion}/Decoders(${decoder})`);
 	decoderWindow(datas, name);
 }
 
@@ -302,7 +302,7 @@ async function deleteDecoder() {
 	const serviceName = getElement("optDecoderId").name;
 	const id = getElement("optDecoderId").value;	
 	if (Number(id) > 0) {
-		let response = await fetch(`${_PARAMS.services[serviceName].linkBase}/${_PARAMS.services[serviceName]["service"].apiVersion}/Decoders(${id})`, {
+		let response = await fetch(`${_PARAMS.services[serviceName].base}/${_PARAMS.services[serviceName]["service"].apiVersion}/Decoders(${id})`, {
 			method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
@@ -319,7 +319,7 @@ async function deleteDecoder() {
 // Save decoder as PUT http verb
 async function saveDecoder() {
 	const serviceName = getElement("optDecoderId").name;	
-	await fetch(`${_PARAMS.services[serviceName].linkBase}/${_PARAMS.services[serviceName]["service"].apiVersion}/Decoders`, {
+	await fetch(`${_PARAMS.services[serviceName].base}/${_PARAMS.services[serviceName]["service"].apiVersion}/Decoders`, {
 		method: "PUT",
 		headers: {
 			"Content-Type": "application/json",
@@ -348,7 +348,7 @@ function decodingPayload(payload) {
 // Save configs as PUT http verb
 async function saveDecoder() {
 	const serviceName = getElement("optDecoderId").name;	
-	await fetch(`${_PARAMS.services[serviceName].linkBase}/${_PARAMS.services[serviceName]["service"].apiVersion}/Synonims`, {
+	await fetch(`${_PARAMS.services[serviceName].base}/${_PARAMS.services[serviceName]["service"].apiVersion}/Synonims`, {
 		method: "PUT",
 		headers: {
 			"Content-Type": "application/json",

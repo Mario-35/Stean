@@ -7,7 +7,7 @@
  */
 
 import { config } from "../../configuration";
-import { _DEBUG, appVersion } from "../../constants";
+import { appVersion } from "../../constants";
 import { EConstant, EInfos } from "../../enums";
 import { decrypt } from "../../helpers";
 import { logging } from "../../log";

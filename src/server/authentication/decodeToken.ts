@@ -10,7 +10,6 @@ import jsonwebtoken from "jsonwebtoken";
 import { IuserToken, koaContext } from "../types";
 import { blankUserToken } from "../types/userToken";
 import { logging } from "../log";
-import { _DEBUG } from "../constants";
 
 /**
  * decode token from koa context

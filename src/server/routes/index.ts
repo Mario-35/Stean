@@ -7,7 +7,6 @@
  */
 
 import { decodeToken } from "../authentication";
-import { _DEBUG } from "../constants";
 import { EErrors, EHttpCode } from "../enums";
 import { createBearerToken, returnFormats, splitLast } from "../helpers";
 import { adminRoute, logsRoute, exportRoute, docRoute } from "./helper";

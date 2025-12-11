@@ -78,3 +78,12 @@
     updates libs
     correction redirect documentation
 
+## version 1.3.5
+    remove drawio diagram
+    better admin creation service
+    add clean route
+    add state route
+    extension clean
+    options clean
+    creation of stean documentation
+

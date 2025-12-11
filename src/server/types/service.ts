@@ -7,6 +7,7 @@
  */
 
 import { Isynonyms, typeExtensions } from ".";
+import { EState } from "../enums";
 import { IdbConnection } from "./dbConnection";
 export interface Iservice {
     date: string; // date write
@@ -29,5 +30,9 @@ export interface Iservice {
     synonyms: Isynonyms | undefined;
     csvDelimiter: ";" | ","; // csv format delimiter
     users: JSON | undefined; // users list
-    ready: boolean; // flag when all init done (optimisation)
+    status: EState; // status of the service
+    _partitioned: boolean;
+    _lora: boolean;
+    _unique: boolean;
+    _numeric: boolean;
 }

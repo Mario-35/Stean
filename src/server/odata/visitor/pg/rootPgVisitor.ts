@@ -10,13 +10,12 @@ import { Id, IodataContext, IvisitRessource, koaContext } from "../../../types";
 import { Token } from "../../parser/lexer";
 import { SqlOptions } from "../../parser/sqlOptions";
 import { postSqlFromPgVisitor } from "../helper";
-import { EConstant, EErrors, EExtensions, EHttpCode } from "../../../enums";
+import { EConstant, EErrors, EHttpCode } from "../../../enums";
 import { logging } from "../../../log";
 import { PgVisitor } from "../.";
 import { models } from "../../../models";
 import { link } from "../../../models/helpers";
 import { doubleQuotes } from "../../../helpers";
-import { _DEBUG } from "../../../constants";
 
 export class RootPgVisitor extends PgVisitor {
     static root = true;
@@ -154,7 +153,7 @@ export class RootPgVisitor extends PgVisitor {
     StartVisitRessources(node: Token) {
         console.log(logging.head("INIT PgVisitor").to().text());
         this.limit = this.ctx._.service.nb_page || 200;
-        this.numeric = this.ctx._.service.extensions.includes(EExtensions.resultNumeric);
+        this.numeric = this.ctx._.service._numeric;
         const temp = this.VisitRessources(node);
         this.verifyRessources();
         return temp;

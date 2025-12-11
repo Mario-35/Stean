@@ -11,7 +11,5 @@ export enum EOptions {
     canDrop = "canDrop",
     forceHttps = "forceHttps",
     locked = "locked",
-    optimized = "optimized",
     stripNull = "stripNull",
-    unique = "unique"
 }

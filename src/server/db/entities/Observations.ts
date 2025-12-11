@@ -10,10 +10,9 @@ import { Common } from "./common";
 import { Id, IreturnResult, koaContext } from "../../types";
 import { asyncForEach, doubleQuotes, getBigIntFromString, makeNull } from "../../helpers";
 import { messages } from "../../messages";
-import { EConstant, EErrors, EExtensions, EHttpCode } from "../../enums";
+import { EConstant, EErrors, EHttpCode } from "../../enums";
 import { logging } from "../../log";
 import { executeSql, executeSqlValues } from "../helpers";
-import { _DEBUG } from "../../constants";
 import { queries } from "../queries";
 import { DATASTREAM, MULTIDATASTREAM, OBSERVATION } from "../../models/entities";
 
@@ -62,7 +61,7 @@ export class Observations extends Common {
         } // IF Datastream
         else if ((dataInput[DATASTREAM.singular] && dataInput[DATASTREAM.singular] != null) || (this.ctx._.odata.parentEntity && this.ctx._.odata.parentEntity.name.startsWith(DATASTREAM.singular))) {
             if (dataInput["result"] && typeof dataInput["result"] != "object")
-                dataInput["result"] = this.ctx._.service.extensions.includes(EExtensions.resultNumeric) ? dataInput["result"] : { value: dataInput["result"] };
+                dataInput["result"] = this.ctx._.service._numeric ? dataInput["result"] : { value: dataInput["result"] };
             // if no stream go out with error
         } else if (this.ctx.request.method === "POST") {
             this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: EErrors.noStream });

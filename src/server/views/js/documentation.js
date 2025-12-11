@@ -19,7 +19,7 @@ function getExamples(input, datas) {
 			`<div class="patrom-tab">`,
 			`<code class='language-${lang}'>`,
 			
-			lang === 'http' ? `${_PARAMS.services['test'].linkBase}/${input[lang].replace('DATASSATAD', datas)}`: input[lang].replace('DATASSATAD', datas),
+			lang === 'http' ? `${_PARAMS.services['test'].base}/${input[lang].replace('DATASSATAD', datas)}`: input[lang].replace('DATASSATAD', datas),
 			`</code>`,
 			`</div>`);
 	});
@@ -96,12 +96,13 @@ function getStructure(input) {
 }
 
 function replaceProxy(input) {	
-	return input.replaceAll('proxy', _PARAMS.services['test'].linkBase );
+	return input.replaceAll('proxy', _PARAMS.services['test'].base );
 }
 
 function showDoc(event) {
-	const main = event ? getMenuMain(event.srcElement) : 'sensorThings';
-	const actual = docDatas[main][event ? event.srcElement.id : 0];	
+	const start = window.location.href.split('?')[1];
+	const main = event ? getMenuMain(event.srcElement) : start ? start.split("=")[0] :'sensorThings';
+	const actual = docDatas[main][event ? event.srcElement.id : start && start. includes("=") ? start.split("=")[1] : 0];	
 	const content = getContent(actual);
 
 	document.getElementById("content").innerHTML = content;

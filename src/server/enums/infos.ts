@@ -31,7 +31,6 @@ export const enum EInfos {
     accessServies = "Access service table",
     createServies = "Create service table",
     createFunc = "(re)create PostgresSql functions",
-    UpdateCount = "Update count indexes",
     createServ = "Create Service",
     db = "dataBase",
     queryAfter = "Query after initialisation",

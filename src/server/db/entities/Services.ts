@@ -14,7 +14,6 @@ import { createService } from "../helpers";
 import { userAuthenticated } from "../../authentication";
 import { logging } from "../../log";
 import { EErrors, EExtensions, EHttpCode } from "../../enums";
-import { _DEBUG } from "../../constants";
 import { queries } from "../queries";
 
 export class Services extends Common {
@@ -60,7 +59,7 @@ export class Services extends Common {
     // Override Post service
     async post(dataInput: Record<string, any> | undefined): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
-        if (!this.ctx._.service.extensions.includes(EExtensions.users)) this.ctx.throw(EHttpCode.Unauthorized);
+        if (!this.ctx._.inExtension(EExtensions.users)) this.ctx.throw(EHttpCode.Unauthorized);
         if (dataInput && dataInput["create"] && dataInput["create"]["name"]) {
             return this.formatReturnResult({
                 body: await createService(dataInput)

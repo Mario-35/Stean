@@ -809,7 +809,7 @@ class JSONViewer {
 	}
 
 	isExternal(string) {
-		return (string.toUpperCase().endsWith(".PDF") || string.toUpperCase().endsWith(".HTML"));
+		return (string.toUpperCase().endsWith(".PDF") || string.toUpperCase().includes(".HTML") || string.includes("documentation?"));
 	}
 
 	isCode(string) {

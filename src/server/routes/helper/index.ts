@@ -10,7 +10,6 @@ export const emailIsValid = (email: string): boolean => /^[^\s@]+@[^\s@]+\.[^\s@
 // at least one number, one lowercase and one uppercase letter
 // at least six characters that are letters, numbers or the underscore
 export const checkPassword = (str: string): boolean => /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}$/.test(str);
-export { testRoute } from "./testRoute";
 export { postgresAdmin } from "./postgresAdmin";
 export { formatConfig } from "./formatConfig";
 export { adminRoute } from "./adminRoute";
