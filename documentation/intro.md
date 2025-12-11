@@ -8,7 +8,7 @@ Le seul server FROST disponible à l'époque contient des lacunes et limitations
 
 Lacunes :
 - concernant le result (dans le modèle il est any c'est à dire ce que l'on veut) dans Frost c'est number au mieux string
-- en cas de volumétrie importante le docker est douteux et le server JAVA sans partition ce qui oblige par exemple un count approximatif (à 100 000 près sur une base de 10 000 000)
+- en cas de volumétrie importante le docker est douteux et le server JAVA avec postgresSql sans partition ce qui oblige par exemple un count approximatif (à 100 000 près sur une base de 10 000 000)
 - gestion du multiDatastream en tant qu'extension imparfait voire inutilisable
 - les TM_Period des datastream ou multiDatastream sont en fait des chaines de caractères ne permettant pas la recherche
 
@@ -41,7 +41,9 @@ une fois l'installation terminé il ne rest plus qu'à lancer :
 
 ## Première Utilisation
 
-http://localhost:8029/help la documentation e l'API
+http://localhost:8029/help la documentation de l'API
+
+http://localhost:8029/state état de l'API
 
 http://localhost:8029/admin panneau d'administration
 

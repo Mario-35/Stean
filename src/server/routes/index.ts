@@ -18,6 +18,7 @@ import { koaContext } from "../types";
 import { paths } from "../paths";
 import { SteanContext } from "../context";
 import { logging } from "../log";
+import { getState } from "../constants";
 
 export const routerHandle = async (ctx: koaContext, next: any) => {
     // copy body
@@ -52,6 +53,10 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
             else return await docRoute(ctx);
         case "LOGGING":
             return await logsRoute(ctx, paths.logFile.fileName);
+        case "STATE":
+            ctx.type = returnFormats.json.type;
+            ctx.body = { "state": getState()};
+            return;
     }
     // error decodedUrl
     if (ctx._.error) {

@@ -7,8 +7,8 @@
  */
 import Router from "koa-router";
 import { userAuthenticated, getAuthenticatedUser } from "../authentication";
-import { getState, isState } from "../constants";
-import { getUrlKey, isAdmin, returnFormats } from "../helpers";
+import { isState } from "../constants";
+import { getUrlKey, returnFormats } from "../helpers";
 import { apiAccess } from "../db/dataAccess";
 import { IreturnResult } from "../types";
 import { DefaultState, Context } from "koa";
@@ -38,14 +38,6 @@ unProtectedRoutes.get("/*path", async (ctx) => {
         case "DOC":
             ctx.redirect(`${ctx._.origin}/documentation`);
             return;
-        // tests only for testing wip features
-        case "STATE":
-            if (!isAdmin(ctx._.service)) {
-                ctx.type = returnFormats.json.type;
-                ctx.body = { "state": getState()};
-                return;
-            }
-            ctx.throw(EHttpCode.notFound);
         // error show in html if query call
         case "ERROR":
             const bodyError = new HtmlError(ctx, { url: "what ?" });
