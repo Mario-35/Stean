@@ -76,7 +76,7 @@ export class SteanContext {
         // id string or number
         this._id = isNaN(+id) ? BigInt(0) : BigInt(id);
         if (splitPath[0]?.startsWith("logs-")) this.redirect = paths.root + "logs\\" + `${ctx.path}`;
-        else {
+        else if (splitPath[0]) {
             try {
                 const configName = config.getConfigNameFromName( splitPath[0].toLowerCase());                
                 if (configName) {

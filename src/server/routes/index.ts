@@ -35,6 +35,8 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     // create stean context
     ctx._ = new SteanContext(ctx);
 
+    logging.message("context", ctx._).toLogAndFile();
+
     // if logs show log file
     if (ctx._.redirect && ctx._.redirect.includes("logs-")) return logsRoute(ctx, ctx._.redirect);
 

@@ -10,7 +10,6 @@ import path from "path";
 import Koa from "koa";
 import bodyParser from "koa-bodyparser";
 import logger from "koa-logger";
-// import helmet from "koa-helmet";
 import cors from "@koa/cors";
 import serve from "koa-static";
 import favicon from "koa-favicon";
@@ -42,8 +41,6 @@ export const app = new Koa();
 app.use(favicon(path.join(__dirname, "/", "favicon.ico")));
 // add public folder [static]
 app.use(serve(path.join(__dirname, "/", "public")));
-// helmet protection https://github.com/venables/koa-helmet
-// app.use(helmet.contentSecurityPolicy({ directives: EConstant.helmetConfig }));
 // bodybarser https://github.com/koajs/bodyparser
 app.use(bodyParser({ enableTypes: ["json", "text", "form"] }));
 // router
