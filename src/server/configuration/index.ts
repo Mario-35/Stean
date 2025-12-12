@@ -426,7 +426,6 @@ class Configuration {
                 }
             );
             // this.initMqtt();
-            this.testAllReady();
             return status;
             // no configuration file so First install
         } else {
@@ -452,6 +451,7 @@ class Configuration {
                     })
                     .catch((err) => logging.error(err, EInfos.queryAfter).return(false));
             }
+            Configuration.services[service].status = EState.normal;
         });
         return true;
     }
@@ -549,7 +549,7 @@ class Configuration {
                         admin: false
                     });
                     this.messageListen(key, res ? EChar.web : EChar.notOk, true);
-                    this.addListening(this.defaultHttp(), key);
+                    this.addListening(this.defaultHttp(), key);                    
                 }
                 return res;
             })
@@ -737,7 +737,10 @@ class Configuration {
         return this.initialisation()
             .then(async () => {
                 await config.afterInitialisation();
-                logging.logo().toLogAndFile(true);
+                logging.logo().toLogAndFile(true);                            
+                if (restart === true) 
+                    setState(EState.normal); 
+                else this.testAllReady();
                 return true;
             })
             .catch((err) => {

@@ -7,7 +7,7 @@
  */
 import Router from "koa-router";
 import { userAuthenticated, getAuthenticatedUser } from "../authentication";
-import { isState } from "../constants";
+import { isState, setState } from "../constants";
 import { getUrlKey, returnFormats } from "../helpers";
 import { apiAccess } from "../db/dataAccess";
 import { IreturnResult } from "../types";
@@ -55,6 +55,7 @@ unProtectedRoutes.get("/*path", async (ctx) => {
                 ctx.type = returnFormats.json.type;
                 ctx.status = isState(EState.normal) ? 200 : 202;
                 ctx.body = { restart: isState(EState.normal) ? await config.start(true) : "Not Ready" };
+                setState(EState.normal);
                 return;
             }
         // logs
