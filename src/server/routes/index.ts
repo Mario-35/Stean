@@ -39,7 +39,7 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
 
     // if logs show log file
     if (ctx._.redirect && ctx._.redirect.includes("logs-")) return logsRoute(ctx, ctx._.redirect);
-logging.debug(ctx._);
+    
     // Specials routes
     if(!ctx._.service ||ctx._.service.name === "admin") switch (splitLast(ctx.path, "/").toLocaleUpperCase()) {
         // admin page
