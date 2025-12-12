@@ -52,7 +52,7 @@ http://localhost:8029/help la documentation de l'API
 
 http://localhost:8029/infos infos sur l'API
 
-    Permet d'obtenir des infos sur l'api elle meme ainsi que la version de postgresSql et de posGis utilisé
+Permet d'obtenir des infos sur l'api elle meme ainsi que la version de postgresSql et de posGis utilisé
 
 ```JSON
 {
