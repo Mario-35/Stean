@@ -22,6 +22,7 @@ Ceci a amené A créer un serveur sensorThings sous NodeJS
     - respect STRICT du modèle
     - le multi Base matif
     - stream import / export csv
+    - Ultra performant (y compris sur une VM)
 
 ## Installation :
 
@@ -49,12 +50,40 @@ une fois l'installation terminé il ne rest plus qu'à lancer :
 
 http://localhost:8029/help la documentation de l'API
 
+http://localhost:8029/infos infos sur l'API
+
+    Permet d'obtenir des infos sur l'api elle meme ainsi que la version de postgresSql et de posGis utilisé
+
+````JSON
+{
+    "Postgres":{
+        "version":"PostgreSQL 17.7 on x86_64-windows, compiled by msvc-19.44.35219, 64-bit",
+        "extension":["plpgsql-1.0","postgis-3.5.3"],
+        "?column?":null},
+    "services":["test","essai"],
+    "stean version":["test","essai"],
+    "stean":{
+        "version":"1.3.5",
+        "date":"11/12/2025-12:04:20"
+    },
+    "state":"normal"
+}
+```
+
+
 http://localhost:8029/state état de l'API
+- start : Demarrage en cours
+- createDb : Creation de base en cours
+- restart : Redemarrage en cours
+- normal : etat normal 
+- clean : En cours de nettoyage
+- import : En cours d'importation de données
+- maintenance : Maintenance en cours (http://localhost:8029/maintenance=true)
+
 
 http://localhost:8029/admin panneau d'administration
 
-Afin d'accéder au panneau d'administration vous devez entre vos identifiants PostgreSQL
-(si PostgreSQL n'etait pas installé le script le fait avec comme mot de passe par defaut : **postgres**)
+Afin d'accéder au panneau d'administration vous devez entre vos identifiants PostgreSQL (si PostgreSQL n'était pas installé le script le fait avec comme mot de passe par défaut : **PostgreSQL**)
 
 ![firstStart](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/firstStart.jpg "first Start")
 
@@ -88,11 +117,11 @@ Le bouton {...} permet de proposer un service 'type':
     "extensions": [
         "base",
         "multiDatastream",
-        "partitioned"
+        "partitioned",
+        "unique"
     ],
     "options": [
         "canDrop",
-        "unique"
     ],
     "csvDelimiter": ";"
 }

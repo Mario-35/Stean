@@ -14,5 +14,6 @@ export { postgresAdmin } from "./postgresAdmin";
 export { formatConfig } from "./formatConfig";
 export { adminRoute } from "./adminRoute";
 export { exportRoute } from "./exportRoute";
+export { InfosRoute } from "./infosRoute";
 export { logsRoute } from "./logsRoute";
 export { docRoute } from "./docRoute";

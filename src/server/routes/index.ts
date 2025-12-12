@@ -9,7 +9,7 @@
 import { decodeToken } from "../authentication";
 import { EErrors, EHttpCode } from "../enums";
 import { createBearerToken, returnFormats, splitLast } from "../helpers";
-import { adminRoute, logsRoute, exportRoute, docRoute } from "./helper";
+import { adminRoute, logsRoute, exportRoute, docRoute, InfosRoute } from "./helper";
 import { config } from "../configuration";
 export { unProtectedRoutes } from "./unProtected";
 export { protectedRoutes } from "./protected";
@@ -43,6 +43,9 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     // Specials routes
     switch (splitLast(ctx.path, "/").toLocaleUpperCase()) {
         // admin page
+        case "INFOS":
+            return await InfosRoute(ctx);
+        // export page
         case "ADMIN":
             return await adminRoute(ctx);
         // export page
