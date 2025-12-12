@@ -34,10 +34,16 @@ Lance le script qui installera NodeJS, PostgreSQL, PM2 et enfin créera le scrip
 
 La mise à jour ce fait en lançant le script à nouveau qui sera capable de détecter ce qui est déjà installé.
 
+![install](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/install.gif "install")
+
+
 une fois l'installation terminé il ne rest plus qu'à lancer :
 ```
 ./run.sh
 ```
+
+![run](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/runSh.jpg "run")
+
 
 ## Première Utilisation
 
