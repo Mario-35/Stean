@@ -54,7 +54,7 @@ http://localhost:8029/infos infos sur l'API
 
     Permet d'obtenir des infos sur l'api elle meme ainsi que la version de postgresSql et de posGis utilisé
 
-````JSON
+```JSON
 {
     "Postgres":{
         "version":"PostgreSQL 17.7 on x86_64-windows, compiled by msvc-19.44.35219, 64-bit",
