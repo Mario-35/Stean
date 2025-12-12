@@ -61,7 +61,6 @@ Permet d'obtenir des infos sur l'api elle meme ainsi que la version de postgresS
         "extension":["plpgsql-1.0","postgis-3.5.3"],
         "?column?":null},
     "services":["test","essai"],
-    "stean version":["test","essai"],
     "stean":{
         "version":"1.3.5",
         "date":"11/12/2025-12:04:20"
