@@ -70,7 +70,7 @@ check_node() {
     if ! command -v node > /dev/null
     then
         echo "Installing Node..."
-        sudo  curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+        sudo  curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
         sudo apt install nodejs
         NODEVER=$(node -v) 
     else
