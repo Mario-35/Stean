@@ -27,9 +27,9 @@ une fois l'installation terminé il ne rest plus qu'à lancer :
 
 ## Première Utilisation
 
-http://localhost:8029/help la documentation de l'API
+http://rootApi/help la documentation de l'API
 
-http://localhost:8029/infos infos sur l'API
+http://rootApi/infos infos sur l'API
 
 Permet d'obtenir des infos sur l'api elle meme ainsi que la version de postgresSql et de posGis utilisé
 
@@ -48,17 +48,17 @@ Permet d'obtenir des infos sur l'api elle meme ainsi que la version de postgresS
 }
 ```
 
-http://localhost:8029/state état de l'API
+http://rootApi/state état de l'API
 - start : Demarrage en cours
 - createDb : Creation de base en cours
 - restart : Redemarrage en cours
 - normal : etat normal 
 - clean : En cours de nettoyage
 - import : En cours d'importation de données
-- maintenance : Maintenance en cours (http://localhost:8029/maintenance=true)
+- maintenance : Maintenance en cours (http://rootApi/maintenance=true)
 
 
-http://localhost:8029/admin panneau d'administration
+http://rootApi/admin panneau d'administration
 
 Afin d'accéder au panneau d'administration vous devez entre vos identifiants PostgreSQL (si PostgreSQL n'était pas installé le script le fait avec comme mot de passe par défaut : **PostgreSQL**)
 
@@ -104,7 +104,7 @@ Le bouton {...} permet de proposer un service 'type':
 }
 ```
 
-http://localhost:8029/nouveau/v1.1/infos infos sur le service
+http://rootApi/nouveau/v1.1/infos infos sur le service
 
 ### Les options :
 
