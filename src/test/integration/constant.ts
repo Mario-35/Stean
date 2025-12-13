@@ -482,7 +482,23 @@ export const infos: Record<string, any> = {
             thinglocation_thing_id: 'ON public."thinglocation" USING btree ("thing_id")'
         }
     },
-    Decoders: {},
+    Decoders: {
+        definition: "Decoder is an entity for adding decode mechanism when receive payload identified by the deveui posted",
+        reference: "",
+        columns: {
+            id: definitions.id,
+            name: "A property provides a name for the decoder, commonly a descriptive name.",
+            hash: "A calculated Hash use to compare version of the decoder",
+            code: "Javascript code executed to decode payload",
+            nomenclature: "Nomenclature generaly done by the constructor",
+            synonym: "List of payload synonyms."
+        },
+        relations: {
+            Datastream: "A Lora can have zero-to-many Datastreams. One Datastream SHALL occur in one-and-only-one Lora.",
+            MultiDatastream: "A Lora can have one-and-only-one MultiDatastream. One MultiDatastream SHALL occur in one-and-only-one Lora.",
+            Decoder: "A Decoder can have zero-to-many Lora. One Lora SHALL occur in one-and-only-one Decoder."
+        }
+    },
     Loras: {
         definition: "Lora is an extension for adding lora/lorawan sensor in sensorThings, the link with sensor is done by deveui (the unique ID of lora sensor)",
         reference: "",

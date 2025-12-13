@@ -21,7 +21,7 @@ export const enum EErrors {
     serviceCreateError = "Error while creating services table",
     serviceUpdateteError = "Error while updating services table",
     configName = "Configname $1 not found",
-    noNameIdentified = "No name indentified",
+    noNameIdentified = "No service name indentified",
     notPresentInConfigName = "$1 : not present in config File",
     tokenInvalid = "Token MUST NOT be provided in more than one place",
     tokenMissing = "[koa-bearer-token]: You must provide a secret token to cookie attribute, or disable signed property",

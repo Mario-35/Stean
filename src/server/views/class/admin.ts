@@ -57,7 +57,7 @@ export class Admin extends CoreHtmlView {
                 .listVersion()
                 .reverse()
                 .map((e) => e.replace("_", ".")),
-            extensions: [... enumKeys(EExtensions).filter((e) => !["file", "base"].includes(e)), "unique", "Lora", "partitioned"],
+            extensions: [... enumKeys(EExtensions).filter((e) => !["base"].includes(e)), "unique", "Lora", "partitioned"],
             options: enumKeys(EOptions),
             logsFiles: paths.logFile.list()
         };
@@ -133,12 +133,8 @@ export class Admin extends CoreHtmlView {
                     <select class="patrom-select tabindex="1" onchange="selectChange('${e}', this)">
                         <option selected="selected">Services</option>                        
                         ${services[e].service.extensions.includes(EExtensions.users) && services[e].service.users ? "<option>users</option>" : ""} 
-                        ${services[e].service._lora ? "<option>lora</option>" : ""} 
                         ${services[e].service.extensions.includes(EExtensions.mqtt) ? "<option>mqtt</option>" : ""} 
                         ${services[e].service.extensions.includes(EExtensions.tasking) ? "<option>tasking</option>" : ""}
-                        ${services[e].service._numeric ? "<option>resultNumeric</option>" : ""} 
-                        ${services[e].service._partitioned ? "<option>partitioned</option>" : ""} 
-                        ${services[e].service._unique ? "<option>unique</option>" : ""} 
                     </select>
                 </div>
 

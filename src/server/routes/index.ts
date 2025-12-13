@@ -31,17 +31,16 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
 
     // create token
     createBearerToken(ctx);
-    
     // create stean context
     ctx._ = new SteanContext(ctx);
-
+    
     logging.message("context", ctx._).toLogAndFile();
 
     // if logs show log file
     if (ctx._.redirect && ctx._.redirect.includes("logs-")) return logsRoute(ctx, ctx._.redirect);
     
     // Specials routes
-    if(!ctx._.service ||ctx._.service.name === "admin") switch (splitLast(ctx.path, "/").toLocaleUpperCase()) {
+    if(!ctx._.service || (ctx._.service && ctx._.service.name === "admin")) switch (splitLast(ctx.path, "/").toLocaleUpperCase()) {
         // admin page
         case "INFOS":
             return await InfosRoute(ctx);
