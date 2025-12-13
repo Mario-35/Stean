@@ -8,8 +8,10 @@ Installer / déployer STEAN est très simple :
 curl -fsSL https://raw.githubusercontent.com/Mario-35/Stean/main/scripts/stean.sh -o stean.sh && chmod +x stean.sh && ./stean.sh
 ```
 
-Lance le script qui installera NodeJS, PostgreSQL, PM2 et enfin créera le script run.sh permettant de lancer STEAN.
-
+Lance le script qui installera NodeJS, PostgreSQL / PostGis, PM2 et enfin créera le script run.sh permettant de lancer STEAN.
+![nodejs](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/nodejs.png "nodejs")
+![postgresPostGis](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/postgresSql.png "postgresPostGis")
+![pm2](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/pm2.jpg "pm2")
 La mise à jour ce fait en lançant le script à nouveau qui sera capable de détecter ce qui est déjà installé.
 
 ![install](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/install.gif "install")
