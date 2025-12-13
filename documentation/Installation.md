@@ -8,6 +8,7 @@ curl -fsSL https://raw.githubusercontent.com/Mario-35/Stean/main/scripts/stean.s
 ```
 
 Lance le script qui installera NodeJS, PostgreSQL / PostGis, PM2 et enfin créera le script run.sh permettant de lancer STEAN.
+
 ![nodejs](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/nodejs.png "nodejs")
 ![postgresPostGis](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/postgresPostGis.png "postgresPostGis")
 ![pm2](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/pm2.jpg "pm2")

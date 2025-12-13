@@ -27,7 +27,7 @@ Une entité Lora :
 | Properties | Propriétés |
 | deveui | numéro d'identification unique du capteur |
 
-La mécanique est très simple quand l'API recoi un POST /Lora :
+La mécanique est très simple quand l'API recoi un POST /Payload :
 L’API recherche le capteur via son deveui décode le payload envoyé grâce au décodeur associé et l'ajoute aux observations pour le(s) datastream(s) ou le multiDatastream associé à l'entité Lora.
 
 Créer un décodeur :
@@ -133,6 +133,10 @@ Généralement le code javascript est fourni par le constructeur et souvent pré
 }
 ```
 
+Le Query vous permet de tester un payload pour un ou tous les décodeurs : En choisissant l'entité Decoders une entrée payload apparait saisissez votre payload puis cliquer sur le bouton Query et le test se lancera.
+
+![payload](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/payload.jpg "payload")
+
 Associer un décodeur à un multiDatasream :
 ```JSON
 {
@@ -147,6 +151,11 @@ Associer un décodeur à un multiDatasream :
     "deveui": "8cf9574000009L8C"
 }
 ```
+
+Vous avez la possibilité de rechercher les capteurs via leur deveui et pas pas que par l'id :
+
+http://rootApi/Loras(2CF7F1203150012A)
+
 http://rootApi/payload POST
 ```JSON
 {
@@ -156,3 +165,5 @@ http://rootApi/payload POST
     "frame": "010610324200000107103E4900009808"
 }
 ```
+
+le Query vous permet de tester les deveui ou 
