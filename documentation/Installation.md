@@ -1,5 +1,4 @@
-# [STEAN](./intro.md)
-
+# [STEAN](https://github.com/Mario-35/Stean/blob/main/documentation/intro.md)
 
 ## Installation :
 

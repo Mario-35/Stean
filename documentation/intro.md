@@ -25,5 +25,5 @@ Ceci a amené A créer un serveur sensorThings sous NodeJS
     - Ultra performant (y compris sur une VM)
 
 
-- [Installation](./installation.md)
+- [Installation](https://github.com/Mario-35/Stean/blob/main/documentation/Installation.md)
 
