@@ -28,4 +28,6 @@ Ceci a amené A créer un serveur sensorThings sous NodeJS en typeScript
         CPU: 4 CPU(s), 83 MHz
         Mémoire: 8 Go
 
-- [Installation](https://github.com/Mario-35/Stean/blob/main/documentation/Installation.md)
+- [Installation](https://github.com/Mario-35/Stean/blob/main/documentation/installation.md)
+- [Import](https://github.com/Mario-35/Stean/blob/main/documentation/import.md)
+- [Lora](https://github.com/Mario-35/Stean/blob/main/documentation/lora.md)

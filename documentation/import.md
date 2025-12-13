@@ -1,3 +1,13 @@
+# [STEAN](https://github.com/Mario-35/Stean/blob/main/documentation/intro.md)
+
+## Importation :
+
+
+STEAN offre la possibilité d’importer et d’exporter en csv en utilisant la puissance de PostgreSQL et de o' fonction COPY. Une mécanique de streaming csv a été développée afin de pouvoir importer de grande masse de csv sans avoir à le stocker sur le serveur et façon très rapide :
+
+Cette fonctionnalité est utilisée à travers le CreateObservations ce qui rends cette fonctionnalité totalement transparente au modèle de base.
+
+
 Creation d'un flux complet :
 
 http://rootApi/Datastreams 
@@ -43,7 +53,7 @@ http://rootApi/Datastreams
 }
 ```
 
-l'importation du fichier se fait en postant un createObservation en y attachant un fomulaire indiquant le fichier
+l'importation du fichier se fait en postant un createObservation en y attachant le fichier au format FORM
 
 Imaginon un fichier CSV
 
@@ -88,8 +98,7 @@ Si le csv contiens plusieurs colonnes il est tout à fait possible de :
     }
 }
 ```
-
-STEAN vou offre la possibilite de le faire via le query
+STEAN vous offre la possibilité de le faire via le Query
 
 ![import](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/import_datastream.jpg "import")
 
