@@ -4,18 +4,18 @@
 
 Installer / déployer STEAN est très simple :
 ```
-curl -fsSL https://raw.githubusercontent.com/Mario-35/Stean/main/scripts/stean.sh -o stean.sh && chmod +x stean.sh && ./stean.sh
+curl -fsSL ../scripts/stean.sh -o stean.sh && chmod +x stean.sh && ./stean.sh
 ```
 
 Lance le script qui installera NodeJS, PostgreSQL / PostGis, PM2 et enfin créera le script run.sh permettant de lancer STEAN.
 
-![nodejs](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/nodejs.png "nodejs")
-![postgresPostGis](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/postgresPostGis.png "postgresPostGis")
-![pm2](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/pm2.jpg "pm2")
+![nodejs](../assets/images/nodejs.png "nodejs")
+![postgresPostGis](../assets/images/postgresPostGis.png "postgresPostGis")
+![pm2](../assets/images/pm2.jpg "pm2")
 
 La mise à jour ce fait en lançant le script à nouveau qui sera capable de détecter ce qui est déjà installé.
 
-![install](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/install.gif "install")
+![install](../assets/images/install.gif "install")
 
 
 une fois l'installation terminé il ne rest plus qu'à lancer :
@@ -23,7 +23,7 @@ une fois l'installation terminé il ne rest plus qu'à lancer :
 ./run.sh
 ```
 
-![run](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/runSh.jpg "run")
+![run](../assets/images/runSh.jpg "run")
 
 
 ## Première Utilisation
@@ -63,11 +63,11 @@ http://rootApi/admin panneau d'administration
 
 Afin d'accéder au panneau d'administration vous devez entre vos identifiants PostgreSQL (si PostgreSQL n'était pas installé le script le fait avec comme mot de passe par défaut : **postgres**)
 
-![firstStart](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/firstStart.jpg "first Start")
+![firstStart](../assets/images/firstStart.jpg "first Start")
 
 Vous arrivez sur l’écran suivant :
 
-![admin](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/admin.jpg "admin")
+![admin](../assets/images/admin.jpg "admin")
 
 ## Création d'un service
 
@@ -115,7 +115,7 @@ Les extensions sont un choix fait a la creation du service.
 
 - **partitioned** : Installe une mécanique de partitionnement totalement transparente pour l'utilisateur augmentant les performances pour des services avec une volumétrie importante.
 
-- **lora** : ajoute deux entités : Lora et decodeur pour plus d'informations allez a la section [Lora](https://github.com/Mario-35/Stean/blob/main/documentation/lora.md)
+- **lora** : ajoute deux entités : Lora et decodeur pour plus d'informations allez a la section [Lora](./lora.md)
 
 - **numeric**: Cette option indique que ce service ne gere qu'un result de type numérique ameliorant les peformances MAIS ne permet pas d'avoir de multiDatastream
 
@@ -159,9 +159,9 @@ Les extensions sont un choix fait a la creation du service.
 
     **tasking** : mécanique d'automatisation
 
-    **mqtt** : Gestion de la mécanique de message MQTT pour plus d'informations allez a la section [MQTT](https://github.com/Mario-35/Stean/blob/main/documentation/mqtt.md)
+    **mqtt** : Gestion de la mécanique de message MQTT pour plus d'informations allez a la section [MQTT](./mqtt.md)
 
-    **multiDatastream** : Gestion des multiDatastream pour plus d'informations allez a la section [multiDatastream](https://github.com/Mario-35/Stean/blob/main/documentation/multidatastream.md)
+    **multiDatastream** : Gestion des multiDatastream pour plus d'informations allez a la section [multiDatastream](./multidatastream.md)
 
 ### Les options :
 
@@ -175,7 +175,7 @@ Les options peuvent être activé ou désactivés car elle n'impacte pas la base
 
 lorsque des services sont disponibles l'écran suivant est disponible :
 
-![admin](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/admin_options.jpg "admin")
+![admin](../assets/images/admin_options.jpg "admin")
 
 Vous avez la possibilité d'activer ou non les options ou les paramètres tels que la pagination, en cliquant sur la barre du nom les informations son dupliqués afin de créer un service identique (en y changeant le nom bien sûr) en passant la souris sur le titre la croix rouge apparait permettant de supprimer le service (y compris les données).
 

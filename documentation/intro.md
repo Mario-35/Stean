@@ -4,7 +4,7 @@
 
 le modèle :
 
-![lora](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/drawio_STA_V1.1.jpg "lora")
+![lora](../assets/images/drawio_STA_V1.1.jpg "lora")
 
 L'intérêt du modèle sensorThings ne faisaient aucun doute aussi lors des premiers essais il apparut que :
 
@@ -32,6 +32,6 @@ Ceci a amené A créer un serveur sensorThings sous NodeJS en typeScript
         CPU: 4 CPU(s), 83 MHz
         Mémoire: 8 Go
 
-- [Installation](https://github.com/Mario-35/Stean/blob/main/documentation/installation.md)
-- [Import](https://github.com/Mario-35/Stean/blob/main/documentation/import.md)
-- [Lora](https://github.com/Mario-35/Stean/blob/main/documentation/lora.md)
+- [Installation](./installation.md)
+- [Import](./import.md)
+- [Lora](./lora.md)

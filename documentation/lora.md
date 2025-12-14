@@ -1,4 +1,4 @@
-# [STEAN](https://github.com/Mario-35/Stean/blob/main/documentation/intro.md)
+# [STEAN](./intro.md)
 
 
 ## Lora :
@@ -6,7 +6,7 @@
 l'extension lora ajoute deux entitées au modele de facon transparente :
 
 
-![lora](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/drawio_STA_V1.1_Lora.jpg "lora")
+![lora](../assets/images/drawio_STA_V1.1_Lora.jpg "lora")
 
 Une entité décodeur :
 
@@ -135,7 +135,7 @@ Généralement le code javascript est fourni par le constructeur et souvent pré
 Le Query vous permet de tester un payload pour un ou tous les décodeurs : 
 En choisissant l'entité Decoders une entrée payload apparait saisissez votre payload puis cliquer sur le bouton Query et le test se lancera.
 
-![payload](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/payload.jpg "payload")
+![payload](../assets/images/payload.jpg "payload")
 
 ### Créer un Lora :
 
