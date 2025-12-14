@@ -7,6 +7,6 @@ le modèle :
 ## SOMAIRE
 
 - [Genéqe](./genese.md)
-- [Installation](./installation.md)
+- [installer](./installer.md)
 - [Import](./import.md)
 - [Lora](./lora.md)

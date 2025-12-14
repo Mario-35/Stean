@@ -6,7 +6,6 @@
  *
  */
 
-import { logging } from "../log";
 
 /**
  *
@@ -25,7 +24,7 @@ export function getUrlKey(input: string, key: string): string | undefined {
                 if (e.toUpperCase().startsWith(`${key.toUpperCase()}=`)) result = e.split("=")[1];
             });
     } catch (error) {
-        return logging.error(error).return(result);
+        return result;
     }
     return result;
 }
