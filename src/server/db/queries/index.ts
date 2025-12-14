@@ -205,7 +205,7 @@ FROM
         STRING_AGG(concat, ',') AS datas 
         ${
             ids.length === 1
-                ? `FROM (${query.replace("@GRAPH@", `CONCAT('[new Date("', TO_CHAR("resultTime", 'YYYY/MM/DD HH24:MI'), '"), ', "result"->'value' ,']')`)}) AS z`
+                ? `FROM (${query.replace("@GRAPH@", `CONCAT('[new Date("', TO_CHAR("resultTime", 'YYYY/MM/DD HH24:MI'), '"), ', "result"${input.ctx._.service._numeric ? '' : `->'value'`} ,']')`)}) AS z`
                 : ` FROM (
                 SELECT CONCAT( '[new Date("', TO_CHAR( date, 'YYYY/MM/DD HH24:MI' ), '"), ', ${ids.map((e, n) => `coalesce(y.res${n + 1},'null'),','`)}, ']' ) 
                   FROM (

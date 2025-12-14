@@ -169,6 +169,11 @@ https://rootApi/MultiDatastreams(3,4)/Observations?$resultFormat=graph
 
 ![graph](../assets/images/graphMultiDatastreamSuperpose.jpg "graph")
 
+Enfin un petit hack non present dans le modele mais dans odata qui est autorisé dans STEAN :
+http://localhost:8029/agrhys/v1.1/Datastreams(1)/Observations?$resultFormat=graph&$filter=phenomenonTime gt now(- INTERVAL '10 day')
+
+permet de voir les capteurs sur un graph durant les 5 dernier jours ce qui est entre parenthese du now est un interval au format [postgresSQL](https://docs.postgresql.fr/13/functions-datetime.html#FUNCTIONS-DATETIME-TABLE)
+
 ## graphdatas :
 
 Renvoi le resultat sous forme de données pour dyGraph natif

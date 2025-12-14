@@ -10,4 +10,5 @@ export interface SqlOptions {
     onlyRef: boolean;
     onlyValue: boolean;
     valueskeys: boolean;
+    nowInterval: string | undefined;
 }

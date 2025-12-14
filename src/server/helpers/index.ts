@@ -48,6 +48,7 @@ export { hideUnderscoreObject } from "./hideUnderscoreObject";
 export { searchInJson } from "./searchInJson";
 export { flatten } from "./flatten";
 export { listFiles } from "./listFiles";
+export { betweenParentheses } from "./betweenParentheses";
 export { compareVersions } from "./compareVersions";
 export { promiseHttpsRequest } from "./promiseHttpsRequest";
 export { httpsDownload } from "./httpsDownload";

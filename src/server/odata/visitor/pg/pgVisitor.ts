@@ -722,7 +722,9 @@ export class PgVisitor extends Visitor {
                 this.addToWhere(columnOrData(0, method.toUpperCase(), false), context);
                 break;
             case "now":
-                this.addToWhere("NOW()", context);
+                if (this.options.nowInterval)
+                    this.addToWhere(`(now() ${this.options.nowInterval.split("%27").join("'").split("%20").join(" ")})::date`, context);
+                    else this.addToWhere("NOW()", context);
                 break;
             case "date":
                 this.addToWhere(`${method.toUpperCase()}(`, context);

@@ -8,7 +8,7 @@
 
 import { query, resourcePath } from "./parser/parser";
 import { Token } from "./parser/lexer";
-import { cleanUrl } from "../helpers";
+import { betweenParentheses, cleanUrl } from "../helpers";
 import { SqlOptions } from "./parser/sqlOptions";
 import { RootPgVisitor } from "./visitor";
 import { koaContext } from "../types";
@@ -21,7 +21,8 @@ export const createOdata = async (ctx: koaContext): Promise<RootPgVisitor | unde
     const options: SqlOptions = {
         onlyValue: false,
         onlyRef: false,
-        valueskeys: false
+        valueskeys: false,
+        nowInterval: undefined
     };
     // normalize href
     let urlSrc = `${ctx._.path}${ctx._.search}`;
@@ -38,6 +39,13 @@ export const createOdata = async (ctx: koaContext): Promise<RootPgVisitor | unde
 
     replaceElement("geography%27", "%27");
     replaceElement("@iot.");
+    if (urlSrc.includes('now(') && !urlSrc.includes('now()')) {
+        options.nowInterval = betweenParentheses(urlSrc);
+        logging.debug("####################################")
+        logging.debug(options.nowInterval)
+        logging.debug("####################################")
+        replaceElement(options.nowInterval);
+    }
 
     // clean id in url
     urlSrc = cleanUrl(replaceElement(EConstant.id, "id"));
