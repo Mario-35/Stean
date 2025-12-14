@@ -4,8 +4,9 @@
 
 - [Genéqe](./genese.md)
 - [installer](./installer.md)
-- [Importer / Exporter](./import.md)
-- [Copier](./copie.md)
+- [Importer / Exporter](./importer.md)
+- [Copier](./copier.md)
+- [Formats](./formats.md)
 - [Lora](./lora.md)
 
 ## MODELE
