@@ -1,4 +1,4 @@
-# [STEAN](./intro.md)
+# [STEAN](/intro.md)
 
 ## Installation :
 
@@ -167,11 +167,11 @@ Les extensions sont un choix fait a la creation du service.
 
 Les options peuvent être activé ou désactivés car elle n'impacte pas la base de données.
 
-- **canDrop**: (postgresSql Drop) permet de recreer n service : http://service/version:8029/canDrop
+- **canDrop**: (postgresSQL Drop) permet de recréer un service : http://service/version:8029/canDrop
 
-- **forceHttps**: Cette option rajoute un s au http des requettes
+- **forceHttps**: Cette option rajoute un s au http lors des requettes
 
-- **stripNull**: supprime les valeurs null des JSON retournés par l'api,
+- **stripNull**: supprime les valeurs null des JSON retournés par l'API,
 
 lorsque des services sont disponibles l'écran suivant est disponible :
 
@@ -179,6 +179,6 @@ lorsque des services sont disponibles l'écran suivant est disponible :
 
 Vous avez la possibilité d'activer ou non les options ou les paramètres tels que la pagination, en cliquant sur la barre du nom les informations son dupliqués afin de créer un service identique (en y changeant le nom bien sûr) en passant la souris sur le titre la croix rouge apparait permettant de supprimer le service (y compris les données).
 
-
+Un système de monitoring est en cours de développement.
 
 

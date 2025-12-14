@@ -2,7 +2,6 @@
 
 ## Importation :
 
-
 STEAN offre la possibilité d’importer et d’exporter en csv en utilisant la puissance de PostgreSQL et de o' fonction COPY. Une mécanique de streaming csv a été développée afin de pouvoir importer de grande masse de csv sans avoir à le stocker sur le serveur et façon très rapide :
 
 Cette fonctionnalité est utilisée à travers le CreateObservations ce qui rends cette fonctionnalité totalement transparente au modèle de base.
@@ -102,3 +101,18 @@ STEAN vous offre la possibilité de le faire via le Query
 
 ![import](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/import_datastream.jpg "import")
 
+## Exportation :
+
+http://rootApi/Things?$resultFormat=csv exporte toutes les Things au format xml
+http://rootApi/Datastreams(1)/Observations?$resultFormat=csv=csv exporte toutes les observations du datastream 1 au format xml
+
+et ce sans limite de taille grace au stream csv.
+
+http://rootApi/export 
+
+
+Cette fonctionnalité permet d'exporter une structure complete (sans les observations) au format JSON:
+
+En y renseignant un nom, une database, password different et correct si vous postereffectuez un POST de ce JSON dans l'entité Services vous recréer totalement ce service sans les observations (mais vous pouvez pas l'import puis export csv le faire).
+
+Evidement votre source est une source STEAN mai si ce n'est pas le cas : la serction [copie service ](https://github.com/Mario-35/Stean/blob/main/documentation/copie.md) est pour vous.
