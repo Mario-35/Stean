@@ -1,4 +1,4 @@
-# [STEAN](https://github.com/Mario-35/Stean/blob/main/documentation/intro.md)
+# [STEAN](./intro.md)
 
 ## Installation :
 
@@ -61,26 +61,24 @@ http://rootApi/state état de l'API
 
 http://rootApi/admin panneau d'administration
 
-Afin d'accéder au panneau d'administration vous devez entre vos identifiants PostgreSQL (si PostgreSQL n'était pas installé le script le fait avec comme mot de passe par défaut : **PostgreSQL**)
+Afin d'accéder au panneau d'administration vous devez entre vos identifiants PostgreSQL (si PostgreSQL n'était pas installé le script le fait avec comme mot de passe par défaut : **postgres**)
 
 ![firstStart](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/firstStart.jpg "first Start")
-
-Le serveur est disponible sous le port 8029
-
-Afin d'accéder au panneau d'administration vous devez entrer vos identifiants PostgreSQL ayant des droits admin.
 
 Vous arrivez sur l’écran suivant :
 
 ![admin](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/admin.jpg "admin")
 
+## Création d'un service
+
 Le bouton {...} permet de proposer un service 'type':
 
-## Creation d'un service
+saisissez un nom et le JSON suivant est poprosé.
 
 ```JSON
 {
-    "name": "nouveau",
-    "pg": {
+    "name": "nouveau", // nom du service : c'est le nom qui sera utilisé avant le numéro de version dans l'url
+    "pg": { // connection postgresSQL
         "host": "localhost",
         "port": 5432,
         "user": "nouveau",
@@ -88,34 +86,26 @@ Le bouton {...} permet de proposer un service 'type':
         "database": "nouveau",
         "retry": 2
     },
-    "version": "v1.1",
-    "date_format": "DD/MM/YYYY hh:mi:ss",
-    "nb_page": "200",
-    "nb_graph": "1000000",
-    "extensions": [
+    "version": "v1.1", // version du modèle
+    "date_format": "DD/MM/YYYY hh:mi:ss", 
+    "nb_page": "200", // nombre d'éléments par default lors de la pagination
+    "nb_graph": "1000000", // nombre d'éléments maximum pour le graph
+    "extensions": [ // voir çi après
         "base",
         "multiDatastream",
         "partitioned",
         "unique"
     ],
-    "options": [
+    "options": [ // voir çi après
         "canDrop",
     ],
-    "csvDelimiter": ";"
+    "csvDelimiter": ";" // caractères de séparation csv
 }
 ```
 
+reste plus qu'à cliquer sur Create service afin de créer le service, a la fin de la creation l'API redemarre (c'est extremement rapide) et redemande l'acces, le service ainsi que la base de données est crée.
+
 http://rootApi/nouveau/v1.1/infos infos sur le service
-
-### Les options :
-
-Les options peuvent être activé ou désactivés car elle n'impacte pas la base de données.
-
-- **canDrop**: (postgresSql Drop) permet de recreer n service : http://service/version:8029/canDrop
-
-- **forceHttps**: Cette option rajoute un s au http des requettes
-
-- **stripNull**: supprime les valeurs null des JSON retournés par l'api,
 
 ### Les extensions :
 
@@ -125,10 +115,7 @@ Les extensions sont un choix fait a la creation du service.
 
 - **partitioned** : Installe une mécanique de partitionnement totalement transparente pour l'utilisateur augmentant les performances pour des services avec une volumétrie importante.
 
-- **lora** : ajoute deux entités : Lora et decodeur? pour plus d'informations allez a la section [Lora](./lora.md)
-
-    tasking = "tasking",
-    mqtt = "mqtt",
+- **lora** : ajoute deux entités : Lora et decodeur pour plus d'informations allez a la section [Lora](https://github.com/Mario-35/Stean/blob/main/documentation/lora.md)
 
 - **numeric**: Cette option indique que ce service ne gere qu'un result de type numérique ameliorant les peformances MAIS ne permet pas d'avoir de multiDatastream
 
@@ -168,6 +155,29 @@ Les extensions sont un choix fait a la creation du service.
     }
     ```
 
+    Il faut noter que les trois extensions suivantes sont ajoutées dans tous les cas :
+
+    **tasking** : mécanique d'automatisation
+
+    **mqtt** : Gestion de la mécanique de message MQTT pour plus d'informations allez a la section [MQTT](https://github.com/Mario-35/Stean/blob/main/documentation/mqtt.md)
+
+    **multiDatastream** : Gestion des multiDatastream pour plus d'informations allez a la section [multiDatastream](https://github.com/Mario-35/Stean/blob/main/documentation/multidatastream.md)
+
+### Les options :
+
+Les options peuvent être activé ou désactivés car elle n'impacte pas la base de données.
+
+- **canDrop**: (postgresSql Drop) permet de recreer n service : http://service/version:8029/canDrop
+
+- **forceHttps**: Cette option rajoute un s au http des requettes
+
+- **stripNull**: supprime les valeurs null des JSON retournés par l'api,
+
+lorsque des services sont disponibles l'écran suivant est disponible :
+
+![admin](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/admin_options.jpg "admin")
+
+Vous avez la possibilité d'activer ou non les options ou les paramètres tels que la pagination, en cliquant sur la barre du nom les informations son dupliqués afin de créer un service identique (en y changeant le nom bien sûr) en passant la souris sur le titre la croix rouge apparait permettant de supprimer le service (y compris les données).
 
 
 

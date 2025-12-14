@@ -45,12 +45,17 @@ export class Models {
 
     public async infos(ctx: koaContext) {
         const temp = ctx._.toString();
+        let model = "https://app.diagrams.net?lightbox=1&edit=_blank#Uhttps%3A%2F%2Fraw.githubusercontent.com%2FMario-35%2FStean%2Frefs%2Fheads%2Fmain%2Fdrawio%2FSTA%2520V1.1.drawio";
+        if (ctx._.service._lora) model = "https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=STA%20V1.1.Lora.drawio&dark=auto#Uhttps%3A%2F%2Fraw.githubusercontent.com%2FMario-35%2FStean%2Fmain%2Fdrawio%2FSTA%2520V1.1.Lora.drawio";
+        
         const result: Record<string, any> = {
             ...hidePassword(temp),
+            model: model,
             ready: config.connection(ctx._.service.name) ? true : false,
             Postgres: {},
             users: {}
         };
+
         const extensions: Record<string, any> = {};
         switch (ctx._.service.apiVersion) {
             case "11":

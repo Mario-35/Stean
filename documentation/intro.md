@@ -2,6 +2,10 @@
 
 ## La genèse de STEAN
 
+le modèle :
+
+![lora](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/drawio_STA_V1.1.jpg "lora")
+
 L'intérêt du modèle sensorThings ne faisaient aucun doute aussi lors des premiers essais il apparut que :
 
 Le seul server FROST disponible à l'époque contient des lacunes et limitations :

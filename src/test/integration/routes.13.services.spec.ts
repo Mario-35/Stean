@@ -34,10 +34,9 @@ const conf = {
     },
     "version": "v1.1",
     "date_format": "DD/MM/YYYY hh:mi:ss",
-    "webSite": "@_URL_@/apidoc/",
     "nb_page": 200,
-    "alias": [""],
-    "extensions": ["base", "multiDatastream", "logs", "users"],
+    "nb_graph": 1000000,
+    "extensions": ["base", "multiDatastream", "logs", "users", "Unique", "Partitioned"],
     "options": ["canDrop"]
 };
 const confPres = {
@@ -52,12 +51,12 @@ const confPres = {
     },
     "version": "[v1.1] Model",
     "date_format": "[DD/MM/YYYY hh:mi:ss] Date format",
-    "webSite": "Web site",
     "nb_page": "[200] Default pagination number",
-    "alias": ["name", "Alias"],
+    "nb_graph": "[1000000] Default maximum point in graph",
     "extensions": ["List of extensions"],
     "options": ["List of options"]
 };
+
 addToApiDoc({
     type: "infos",
     short: "Presentation",

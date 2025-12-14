@@ -22,7 +22,7 @@ export function formatServiceFile(name: string, input: Record<string, any>): Ise
     const options = input["options"] ? unique([...String(input["options"]).split(",")]) : [EOptions.canDrop];
     const extensions: typeof typeExtensions = input["extensions"] ? (unique([...String(input["extensions"]).split(",")]) as typeof typeExtensions) : ["base"];
     const version = name === EConstant.admin ? "v1.1" : String(input["version"] || input["apiVersion"]).trim();
-
+logging.debug(input);
     const returnValue: Iservice = {
         date: new Date().toLocaleString(),
         name: name,
@@ -54,10 +54,10 @@ export function formatServiceFile(name: string, input: Record<string, any>): Ise
         synonyms: input["synonyms"] ? input["synonyms"] : undefined,
         users: undefined,
         status: EState.normal,
-        _partitioned: isTest(), // true if test
-        _lora: isTest(), // true if test
-        _unique: isTest(), // true if test
-        _numeric: false,
+        _partitioned: isTest() ? true : input["extensions"].includes("partitioned"), // true if test
+        _lora: isTest()? true : input["extensions"].includes("Lora"), // true if test
+        _unique: isTest()? true : input["extensions"].includes("unique"), // true if test
+        _numeric: false? true : input["extensions"].includes("numeric"),
     };
 
     if (Object.values(returnValue).includes("ERROR"))
