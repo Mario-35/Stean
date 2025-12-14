@@ -1,4 +1,4 @@
-# [STEAN](./intro.md)
+# [STEAN](./documentation.md)
 
 ## Importation :
 

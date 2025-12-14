@@ -1,5 +1,4 @@
-# [STEAN](./intro.md)
-
+# [STEAN](./documentation.md)
 
 ## Lora :
 
