@@ -1,4 +1,4 @@
-# [STEAN](/intro.md)
+# [STEAN](./intro.md)
 
 ## Copie :
 
