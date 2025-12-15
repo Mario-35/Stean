@@ -6,7 +6,6 @@ STEAN offre la possibilité d’importer et d’exporter en csv en utilisant la 
 
 Cette fonctionnalité est utilisée à travers le CreateObservations ce qui rends cette fonctionnalité totalement transparente au modèle de base.
 
-
 Creation d'un flux complet :
 
 http://rootApi/Datastreams 
@@ -111,8 +110,8 @@ et ce sans limite de taille grace au stream csv.
 http://rootApi/export 
 
 
-Cette fonctionnalité permet d'exporter une structure complete (sans les observations) au format JSON:
+Cette fonctionnalité permet d'exporter une structure complete (sans les observations) au format JSON
 
-En y renseignant un nom, une database, password different et correct si vous postereffectuez un POST de ce JSON dans l'entité Services vous recréer totalement ce service sans les observations (mais vous pouvez pas l'import puis export csv le faire).
+En y renseignant un nom, une database, password different et correct si vous effectuez un **POST** de ce JSON dans l'entité Services vous recréer totalement ce service sans les observations (mais vous pouvez pas l'import puis export csv le faire).
 
-Evidement votre source est une source STEAN mai si ce n'est pas le cas : la serction [copie service ](./copie.md) est pour vous.
+Evidement votre source est une source STEAN mais si ce n'est pas le cas : la serction [copie service ](./copier.md) est pour vous.

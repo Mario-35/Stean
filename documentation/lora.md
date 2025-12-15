@@ -2,12 +2,11 @@
 
 ## Lora :
 
-l'extension lora ajoute deux entitées au modele de facon transparente :
-
+L'extension **Lora** ajoute deux entitées au modele de facon transparente :
 
 ![lora](../assets/images/drawio_STA_V1.1_Lora.jpg "lora")
 
-Une entité décodeur :
+Une entité **Decoder** :
 
 | Colone | Description |
 | --- | ----------- |
@@ -17,7 +16,7 @@ Une entité décodeur :
 | nomenclature | Nomenclature du décodeur |
 | synonym | synonyme du payload |
 
-Une entité Lora :
+Une entité **Lora** :
 
 | Colone | Description |
 | --- | ----------- |
@@ -38,8 +37,8 @@ le code doit etre :
   };
 ```
 
-L’api lancera le code avec le payload dans bytes et la nomenclature en paramètre.
-Généralement le code javascript est fourni par le constructeur et souvent présent sur un dépôt
+L’API lancera le code avec le payload dans bytes et la nomenclature en paramètre.
+Généralement le code javascript est fourni par le constructeur et souvent présent sur un dépôt il suffit d'un copier/coller, prochainement un outil dedié va être ajouté a STEAN.
 
 ```JSON
 {
@@ -138,7 +137,7 @@ En choisissant l'entité Decoders une entrée payload apparait saisissez votre p
 
 ### Créer un Lora :
 
-L'entité Loar permet d'ssocier un décodeur à un datastream ou à un multiDatasream :
+L'entité **Lora** permet d'ssocier un décodeur à un datastream ou à un multiDatasream :
 
 ```JSON
 {

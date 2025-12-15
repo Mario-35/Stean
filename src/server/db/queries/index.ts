@@ -481,6 +481,13 @@ FROM
         return `CLUSTER ${table} USING "${table}_nb";`;
     }
 
+    toNumeric() {
+        return `ALTER TABLE observation ADD COLUMN resulte numeric;
+                UPDATE observation SET resulte = (result->>'value')::numeric WHERE multidatastream_id IS NULL;
+                ALTER TABLE observation DROP COLUMN result;
+                ALTER TABLE observation RENAME COLUMN resulte TO result;`;
+    }
+
     createClusterIndex(table: string) {
         return `CREATE UNIQUE INDEX IF NOT EXISTS "${table}_nb" on ${table} (_nb);`;
     }

@@ -111,7 +111,8 @@ http://rootApi/nouveau/v1.1/infos infos sur le service
 
 Les extensions sont un choix fait a la creation du service.
 
-- **users** ajoute une gestion des droits utilisateurs : par default uniquement les requette GET donc de lecture sont possible pour Ajouter (POST), Modifier (Push) et Delete (Del)
+- **base** Automatiquement ajouté il s’agit de la brique de base de sensorThing
+- **users** ajoute une gestion des droits utilisateurs : par default uniquement les requette **GET** donc de lecture sont possible pour Ajouter **POST**, Modifier **PUSH** et Delete **DEL**
 
 - **partitioned** : Installe une mécanique de partitionnement totalement transparente pour l'utilisateur augmentant les performances pour des services avec une volumétrie importante.
 
