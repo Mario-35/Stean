@@ -105,7 +105,7 @@ export class Query {
                 element.splitResult.forEach((elem: string) => {
                     const one = element && element.splitResult && element.splitResult.length === 1;
                     const alias: string = one ? "result" : elem;
-                    returnValue.push(`(result->>'valueskeys')::json->'${element.splitResult && formatPgString(one ? element.splitResult[0] : alias)}' AS "${removeAllQuotes(one ? elem : alias)}"`);
+                    returnValue.push(`(result->>'valueskeys')::json->'${element.splitResult && formatPgString(one ? element.splitResult[0] : alias)}' AS "${removeAllQuotes(alias)}"`);
                     this.keyNames.add(one ? elem : alias);
                 });
         }

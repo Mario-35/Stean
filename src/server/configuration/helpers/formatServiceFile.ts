@@ -22,7 +22,6 @@ export function formatServiceFile(name: string, input: Record<string, any>): Ise
     const options = input["options"] ? unique([...String(input["options"]).split(",")]) : [EOptions.canDrop];
     const extensions: typeof typeExtensions = input["extensions"] ? (unique([...String(input["extensions"]).split(",")]) as typeof typeExtensions) : ["base"];
     const version = name === EConstant.admin ? "v1.1" : String(input["version"] || input["apiVersion"]).trim();
-logging.debug(input);
     const returnValue: Iservice = {
         date: new Date().toLocaleString(),
         name: name,

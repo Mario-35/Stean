@@ -9,7 +9,7 @@
 - [format graph ](#graph )
 - [format graphDatas ](#graphdatas )
 
-## json :
+## <a name="json"></a>json :
 
 http://rootApi/Things Le format natif par default de l'API
 
@@ -47,7 +47,7 @@ http://rootApi/Things Le format natif par default de l'API
 }
 ```
 
-## csv :
+## <a name="csv"></a>csv :
 
 Le format CSV qui dans stean est totalement gérér c'est a dire qu'un appel de type :
 
@@ -65,11 +65,11 @@ http://rootApi/Things(1)/Locations?$resultFormat=csv
 
 sont possible
 
-## txt :
+## <a name="txt"></a>txt :
 
 http://rootApi/Things?$resultFormat=txt renvoi le resultat au format texte
 
-## dataarray :
+## <a name="dataarray"></a>dataarray :
 
 http://rootApi/Things?$resultFormat=dataArray renvoi le resultat au forma dataArray
 
@@ -103,7 +103,7 @@ http://rootApi/Things?$resultFormat=dataArray renvoi le resultat au forma dataAr
 }
 ```
 
-## geojson :
+## <a name="geojson"></a>geojson :
 
 http://localhost:8029/agrhys/v1.1/Locations?$resultFormat=GeoJSON
 
@@ -140,12 +140,12 @@ si vous le faites dans le Query vous avez une icone qui apparait permetant d'ouv
 ![geoJson](../assets/images/geoJson.jpg "geoJson")
 
 
-## sql :
+## <a name="sql"></a>sql :
 
 Renvoi la requête SQL généré par la requête, cette option a un intérêt uniquement avec le Query car vous pouvez éditez la requête et l'encoder le Query vous créera une url encodé reconnu par l'api (utile lors de la mise en œuvre d'interface avec des requêtes spécifiques voir des mises en forme particulières)
 
 
-## graph :
+## <a name="graph"></a>graph :
 
 Renvoi le resultat sous forme de graph avec une generation des données coté serveur donnant ainsi une rapidite d'affichage tres poussé
 
@@ -174,7 +174,7 @@ http://localhost:8029/agrhys/v1.1/Datastreams(1)/Observations?$resultFormat=grap
 
 permet de voir les capteurs sur un graph durant les 5 dernier jours ce qui est entre parenthese du now est un interval au format [postgresSQL](https://docs.postgresql.fr/13/functions-datetime.html#FUNCTIONS-DATETIME-TABLE)
 
-## graphdatas :
+## <a name="graphdatas"></a>graphdatas :
 
 Renvoi le resultat sous forme de données pour dyGraph natif
 

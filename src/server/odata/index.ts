@@ -41,9 +41,6 @@ export const createOdata = async (ctx: koaContext): Promise<RootPgVisitor | unde
     replaceElement("@iot.");
     if (urlSrc.includes('now(') && !urlSrc.includes('now()')) {
         options.nowInterval = betweenParentheses(urlSrc);
-        logging.debug("####################################")
-        logging.debug(options.nowInterval)
-        logging.debug("####################################")
         replaceElement(options.nowInterval);
     }
 

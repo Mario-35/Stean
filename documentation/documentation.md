@@ -2,11 +2,12 @@
 
 ## SOMAIRE
 
-- [Genéqe](./genese.md)
+- [Genése](./genese.md)
 - [installer](./installer.md)
 - [Importer / Exporter](./importer.md)
 - [Copier](./copier.md)
 - [Formats](./formats.md)
+- [multiDatastream](./multiDatastream.md)
 - [Lora](./lora.md)
 
 ## MODELE

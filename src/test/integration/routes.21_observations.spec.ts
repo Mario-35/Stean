@@ -75,6 +75,7 @@ describe("endpoint : Observations", () => {
                 done();
             });
     });
+
     describe(`{get} ${entity.name} ${nbColorTitle}[9.2]`, () => {
         afterEach(() => {
             writeLog(true);
@@ -137,7 +138,6 @@ describe("endpoint : Observations", () => {
             const infos = addTest({
                 type: "get",
                 short: "Return error if exist",
-
                 description: "",
                 reference: "",
                 request: `${testVersion}/${entity.name}(${BigInt(Number.MAX_SAFE_INTEGER)})`
@@ -157,7 +157,6 @@ describe("endpoint : Observations", () => {
             const infos = addTest({
                 type: "get",
                 short: "Return error not found",
-
                 description: "",
                 reference: "",
                 request: `${testVersion}/${entity.singular}`
@@ -189,33 +188,28 @@ describe("endpoint : Observations", () => {
                     done();
                 });
         });
-        // it(`Return all Observations references in the Datastream that holds the id 10`, (done) => {
-        //     api : `{get} Datastreams(10)/${entity.name}/$ref get references from Datastream`;
-        // 	const url = `GetDatastreams${entity.name}/$ref`;
-        //     const infos = addTest({
-        // url,
-        //         description: `Get ${entity.name}s refs from Datastreams`,
-        //         examples: {
-        //             http: `/${testVersion}/Datastreams(10)/${entity.name}/$ref`,
-        //             curl: defaultGet("curl", "KEYHTTP"),
-        //             javascript: defaultGet("javascript", "KEYHTTP"),
-        //             python: defaultGet("python", "KEYHTTP")
-        //         }
-        //     };
-        //     chai.request(server)
-        //         .get(`/test/${infos.request}`)
-        //         .end((err: Error, res: any) => {
-        //             should.not.exist(err);
-        //             res.status.should.equal(200);
-        //             res.type.should.equal("application/json");
-        //             res.body.should.include.keys("value");
-        //             res.body.value.length.should.eql(3);
-        //             res.body.value[0]["@iot.selfLink"].should.contain("/Observations(8)");
-        //             addToApiDoc({ ...infos, result: limitResult(res) });
-        //
-        //             done();
-        //         });
-        // });
+
+        it(`Return all Observations references in the Datastream that holds the id 2`, (done) => {
+            const infos = addTest({
+                type: "get",
+                short: "Ref",
+                description: `Get ${entity.name}s refs from Datastreams`,
+                request: `/${testVersion}/Datastreams(2)/${entity.name}/$ref`,
+            });
+            chai.request(server)
+                .get(`/test/${infos.request}`)
+                .end((err: Error, res: any) => {
+                    should.not.exist(err);
+                    res.status.should.equal(200);
+                    res.type.should.equal("application/json");
+                    res.body.should.include.keys("value");
+                    res.body.value.length.should.eql(12);
+                    res.body.value[0]["@iot.selfLink"].should.contain("/Observations(25)");
+                    addToApiDoc({ ...infos, result: limitResult(res) });        
+                    done();
+                });
+        });
+
         it(`Return all Observations and $expand query option`, (done) => {
             const name = "Datastream";
             const infos = addTest({
@@ -353,7 +347,7 @@ describe("endpoint : Observations", () => {
                     res.type.should.equal("application/json");
                     const id = res.body["@iot.count"];
                     Object.keys(res.body.value).length.should.eql(id);
-                    res.body.value[0].should.include.keys(testDatas.MultiDatastreams[0].unitOfMeasurements[0].name);
+                    res.body.value[0].should.include.keys("result");
                     addToApiDoc({ ...infos, result: limitResult(res) });
 
                     done();
@@ -423,34 +417,29 @@ describe("endpoint : Observations", () => {
                 });
         });
 
-        // it("Return Observations with time intevval", (done) => {
-        //     const infos = addTest({
-        //         short: "{get} Get with interval`,
-        //         description: "Retrieve observations with 1 hour interval.",
-        //         examples: {
-        //             http: `/${testVersion}/Datastreams(1)/${entity.name}?$interval='1 hour'`,
-        //             curl: defaultGet("curl", "KEYHTTP"),
-        //             javascript: defaultGet("javascript", "KEYHTTP"),
-        //             python: defaultGet("python", "KEYHTTP")
-        //         }
-        //     };
-        //     chai.request(server)
-        //         .get(`/test/${infos.request}`)
-        //         .end((err: Error, res: any) => {
-        //             console.log(res.body);
+        it("Return Observations with time intevval", (done) => {
+            const infos = addTest({
+                type: "get",
+                short: "{get} Get with interval",
+                description: "Retrieve observations with 1 hour interval.",
+                request: `/${testVersion}/Datastreams(1)/${entity.name}?$interval=1 hour`,
+            });
+            chai.request(server)
+                .get(`/test/${infos.request}`)
+                .end((err: Error, res: any) => {
+                    should.not.exist(err);
+                    res.status.should.equal(200);
+                    res.type.should.equal("application/json");
+                    Object.keys(res.body).length.should.eql(2);
+                    Object.keys(res.body).length.should.eql(2);
+                    res.body.value[0].should.include.keys("result");
+                    addToApiDoc({ ...infos, result: limitResult(res) });
+                    done();
+                });
+        });
 
-        //             should.not.exist(err);
-        //             res.status.should.equal(200);
-        //             res.type.should.equal("application/json");
-        //             Object.keys(res.body).length.should.eql(2);
-        //             Object.keys(res.body).length.should.eql(2);
-        //             res.body.value[0].should.include.keys("result");
-        //             res.body.value[0]["result"].should.eql(temp);
-        //             addToApiDoc({ ...infos, result: limitResult(res) });
-        //             done();
-        //         });
-        // });
     });
+    
     describe(`{post} ${entity.name} ${nbColorTitle}[10.2]`, () => {
         afterEach(() => {
             writeLog(true);

@@ -238,35 +238,6 @@ describe("endpoint : MultiDatastream", () => {
                     done();
                 });
         });
-        // it(`Return ${entity.name} from an observation filter`, (done) => {
-        //     const infos = addTest({
-        //         short: "{get} ${entity.name} Get From observations filter`,
-        //         description: "Get Datastream(s) from Observations filter.",
-        //         examples: {
-        //             http: `/${testVersion}/${entity.name}?$filter=Observations/result eq '[ 35, 17.5, 11.666666666666666 ]'`,
-        //             curl: defaultGet("curl", "KEYHTTP"),
-        //             javascript: defaultGet("javascript", "KEYHTTP"),
-        //             python: defaultGet("python", "KEYHTTP")
-        //         }
-        //     };
-        //     chai.request(server)
-        //         .get(`/test/${infos.request}`)
-        //         .end((err: Error, res: any) => {
-        //             console.log(res.body);
-
-        //             should.not.exist(err);
-        //             res.status.should.equal(200);
-        //             res.type.should.equal("application/json");
-        //             res.body.should.include.keys("value");
-        //             res.body.value[0].should.include.keys(testsKeys);
-        //             res.body["@iot.count"].should.eql(1);
-        //             res.body.value.length.should.eql(1);
-        //             res.body.value[0]["@iot.id"].should.eql(10);
-        //             res.body.value[0]["@iot.selfLink"].should.contain("/Datastreams(10)");
-        //             addToApiDoc({ ...infos, result: res });
-        //             done();
-        //         });
-        // });
 
         it(`Return ${entity.name} Subentity Thing ${nbColor}[9.2.6]`, (done) => {
             const name = "Thing";
