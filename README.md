@@ -1,4 +1,4 @@
-![Logo](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/logo.png "Logo")
+![Logo](./assets/images/logo.png "Logo")
 
 # SensorThings Enhanced API Node [![version](https://img.shields.io/badge/version-1.3.0-red)](https://github.com/Mario-35/Stean/blob/main/realease.md) [![licence](https://img.shields.io/badge/licence-MIT-red)](https://github.com/Mario-35/Stean?tab=MIT-1-ov-file#readme)
 
@@ -78,7 +78,7 @@ Now you are able to use cURL from your Mac PC!
 
 
 
-```curl -fsSL https://raw.githubusercontent.com/Mario-35/Stean/main/scripts/stean.sh -o stean.sh && chmod +x stean.sh && ./stean.sh```
+```curl -fsSL ./scripts/stean.sh -o stean.sh && chmod +x stean.sh && ./stean.sh```
 
 
 
@@ -91,7 +91,7 @@ after install if all is good run
 
 you have something like this :
 
-![run](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/run.jpg "run")
+![run](./assets/images/runSh.jpg "run")
 
 http://localhost:8029/help show the documentation
 
@@ -99,13 +99,13 @@ http://localhost:8029/admin (to admin stean and install services)
 
 To access admin panel you hawe to be indentified with admin postgres access enter on installatitg process.
 
-![firstStart](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/firstStart.jpg "firstStart")
+![firstStart](./assets/images/firstStart.jpg "firstStart")
 
 ## use on local windows as production (for testing)
 
 You must have postgresSql with postGis installed.
 
-use :  [script](https://raw.githubusercontent.com/Mario-35/Stean/main/scripts/install.ps1) as install.ps1
+use :  [script](./scripts/install.ps1) as install.ps1
 
 ## for developper
 
@@ -116,18 +116,18 @@ use :  [script](https://raw.githubusercontent.com/Mario-35/Stean/main/scripts/in
 
 ## Want to use this with docker
 
-![Docker](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/logo-docker.png "Docker")
+![Docker](./assets/images/docker.png "Docker")
 
 <details>
     <summary>Tech Stack</summary>
 
 The project run under nodeJS.
 
-![Nodejs](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/nodejs.png "Nodejs")
+![Nodejs](./assets/images/nodejs.png "Nodejs")
 
-![TypeScript](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/ts.png "TypeScript") ![Javascript](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/js.png "Javascript")
+![TypeScript](./assets/images/ts.png "TypeScript") ![Javascript](./assets/images/js.png "Javascript")
 
-![HTML JS CSS](https://raw.githubusercontent.com/Mario-35/Stean/main/assets/images/html.png "HTML JS CSS")
+![HTML JS CSS](./assets/images/html.png "HTML JS CSS")
 
 ## Directory Structure
 
