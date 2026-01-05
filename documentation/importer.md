@@ -2,7 +2,7 @@
 
 ## Importation :
 
-STEAN offre la possibilité d’importer et d’exporter en csv en utilisant la puissance de PostgreSQL et de o' fonction COPY. Une mécanique de streaming csv a été développée afin de pouvoir importer de grande masse de csv sans avoir à le stocker sur le serveur et façon très rapide :
+STEAN offre la possibilité d’importer et d’exporter en csv en utilisant la puissance de PostgreSQL et de la fonction COPY. Une mécanique de streaming csv a été développée afin de pouvoir importer de grande masse de csv sans avoir à le stocker sur le serveur de façon très rapide :
 
 Cette fonctionnalité est utilisée à travers le CreateObservations ce qui rends cette fonctionnalité totalement transparente au modèle de base.
 

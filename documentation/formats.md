@@ -71,7 +71,7 @@ http://rootApi/Things?$resultFormat=txt renvoi le resultat au format texte
 
 ## <a name="dataarray"></a>dataarray :
 
-http://rootApi/Things?$resultFormat=dataArray renvoi le resultat au forma dataArray
+http://rootApi/Things?$resultFormat=dataArray renvoi le resultat au format dataArray et pas seulement pour les observations.
 
 ```JSON
 {
@@ -105,7 +105,7 @@ http://rootApi/Things?$resultFormat=dataArray renvoi le resultat au forma dataAr
 
 ## <a name="geojson"></a>geojson :
 
-http://localhost:8029/agrhys/v1.1/Locations?$resultFormat=GeoJSON
+http://rootApi/Locations?$resultFormat=GeoJSON
 
 Si l'entité selectionné contiens une proprieté GeoJSON le resultat retourne toutes le valeurs GeoJSON
 
@@ -162,6 +162,7 @@ https://rootApi/Datastreams(3,9)/Observations?$resultFormat=graph permet d'avoir
 bien évidement cela marche pour le multiDatasream :
 
 https://rootApi/MultiDatastreams(3)/Observations?$resultFormat=graph
+
 ![graph](../assets/images/graphMultiDatastream.jpg "graph")
 
 et aussi en superposition :
@@ -170,7 +171,7 @@ https://rootApi/MultiDatastreams(3,4)/Observations?$resultFormat=graph
 ![graph](../assets/images/graphMultiDatastreamSuperpose.jpg "graph")
 
 Enfin un petit hack non present dans le modele mais dans odata qui est autorisé dans STEAN :
-http://localhost:8029/agrhys/v1.1/Datastreams(1)/Observations?$resultFormat=graph&$filter=phenomenonTime gt now(- INTERVAL '10 day')
+http://rootApi/Datastreams(1)/Observations?$resultFormat=graph&$filter=phenomenonTime gt now(- INTERVAL '10 day')
 
 permet de voir les capteurs sur un graph durant les 5 dernier jours ce qui est entre parenthese du now est un interval au format [postgresSQL](https://docs.postgresql.fr/13/functions-datetime.html#FUNCTIONS-DATETIME-TABLE)
 

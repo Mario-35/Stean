@@ -21,8 +21,6 @@ async function loop(obj) {
 
 }
 
-
-
 async function getDatas(url) {
 	try {
 		const response = await fetch(encodeURI(url), {
@@ -79,7 +77,6 @@ function renameProp(obj, propOldName, propNewName) {
 	}
 	return obj;
 }
-
 
 function cleanData(obj) {
 	obj = removeProp(obj, "@iot.id");
@@ -231,34 +228,11 @@ async function copyFromServiceObservations() {
 			datas = await getDatas(url);
 			setProgression(prog);
 			url = datas["@iot.nextLink"] ? datas["@iot.nextLink"] : undefined;
-			// url = undefined;	
 			await postDatas(dest + "Observations", datas);
-
 		} catch (err) {
 			notifyError("Error", err);
 		}
 	};
 	notifyOk("Copy observations", src);
 };
-// async function copyFromServiceObservations() {
-// 	if (optDistHost.value.trim() === "") {
-// 		notifyError("Error", "Distant root can't be empty");
-// 		return;
-// 	} 
-// 	if (optDistHostStep.value === "") optDistHostStep.value = 2000;
-// 	const src = optDistHost.value;
-// 	const dest = `${optHost.value}/${optVersion.value}/`;
-// 	let url = src + "Observations?$expand=Datastream($select=name),MultiDatastream($select=name),FeatureOfInterest($select=name)&$orderby=phenomenonTime&$top="+ optDistHostStep.value;
-// 	if (optDistHostStart.value || 0 > 0) url = url + '&$skip=' + optDistHostStart.value;
-// 	while (url) {
-// 		try {
-// 			let datas  = await getDatas(url); 
-// 			url = datas["@iot.nextLink"] ? datas["@iot.nextLink"] : undefined;
-// 			datas = cleanData(datas["value"]);		
-// 			await postDatas(dest+"Observations", renameProp(datas, "name", "@iot.name"));
-// 		} catch (err) {
-// 			notifyError("Error", err);
-// 		}
-//     };
-// 	notifyOk("Copy observations", src);
-// };
+
