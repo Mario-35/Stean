@@ -92,7 +92,7 @@ if (Test-Path $POSTGRES) {
     }
 
     # Check if Postgis is installed
-    $POSTGIS = "$POSTGRES\$latest\share\contrib"
+    $POSTGIS = "$latest\share\contrib"
     if (Test-Path $POSTGIS) {
         $filter = "postgis*"
         $first = Get-ChildItem -Path $POSTGIS -Filter $filter | Sort-Object LastAccessTime -Descending | Select-Object -First 1
