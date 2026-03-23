@@ -32,24 +32,24 @@ protectedRoutes.post("/*path", async (ctx: koaContext, next) => {
             // login html page or connection login
             logging.head("essai").toLogAndFile();
             process.exit(100);
-        case "LOGIN":
-            if (ctx.request["token" as keyof object]) ctx.redirect(`${ctx._.root()}/status`);
-            await loginUser(ctx).then((user: Iuser | undefined) => {
-                if (user) {
-                    setToken(ctx, String(user["token" as keyof object]));
-                    ctx.status = EHttpCode.ok;
-                    if (ctx.request.header.accept && ctx.request.header.accept.includes("text/html")) ctx.redirect(`${ctx._.root()}/Status`);
-                    else
-                        ctx.body = {
-                            message: EInfos.loginOk,
-                            user: user.username,
-                            token: user.token
-                        };
-                } else {
-                    ctx.throw(EHttpCode.Unauthorized);
-                }
-            });
-            return;
+            case "LOGIN":
+                if (ctx.request["token" as keyof object]) ctx.redirect(`${ctx._.root()}/status`);
+                await loginUser(ctx).then((user: Iuser | undefined) => {
+                    if (user) {
+                        setToken(ctx, String(user["token" as keyof object]));
+                        ctx.status = EHttpCode.ok;
+                        if (ctx.request.header.accept?.includes("text/html")) ctx.redirect(`${ctx._.root()}/Status`);
+                        else
+                            ctx.body = {
+                                message: EInfos.loginOk,
+                                user: user.username,
+                                token: user.token
+                            };
+                    } else {
+                        ctx.throw(EHttpCode.Unauthorized);
+                    }
+                });
+                return;
         case "REGISTER":
             const why: Record<string, string> = {};
             // Username

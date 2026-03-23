@@ -14,7 +14,6 @@ function showGraph(element, infos, value) {
 			ylabel: infos[2],
 			xlabel: infos[0],
 			legend: 'always',
-			rollPeriod: 30,
 			showRangeSelector: true,
 			resizable: "both",
 			connectSeparatedPoints: false

@@ -21,18 +21,22 @@ import { logging } from "../log";
 import { getState } from "../constants";
 
 export const routerHandle = async (ctx: koaContext, next: any) => {
+    
     // copy body
     ctx.body = ctx.request.body;
-
+    
     // if configuration exist
     if (config.configFileExist() === true)
         await config.trace.write(ctx); // trace request
     else return await adminRoute(ctx); // admin route for first start
-
+    
     // create token
     createBearerToken(ctx);
     // create stean context
     ctx._ = new SteanContext(ctx);
+
+    // exclude devtools
+    if ( ctx._.href.includes("com.chrome.devtools.json")) return;
     
     logging.message("context", ctx._).toLogAndFile();
 
@@ -71,7 +75,7 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     if (splitLast(ctx.path, "/").toLocaleUpperCase().startsWith("REPLAYS(")) {
         await config.trace.rePlay(ctx);
     }
-    
+        
     // if service is not identified get out
     if (!ctx._.service) throw new Error(EErrors.noNameIdentified);
 

@@ -57,6 +57,7 @@ export function formatServiceFile(name: string, input: Record<string, any>): Ise
         _lora: isTest()? true : input["extensions"].includes("Lora"), // true if test
         _unique: isTest()? true : input["extensions"].includes("unique"), // true if test
         _numeric: false? true : input["extensions"].includes("numeric"),
+        _user: false? true : input["extensions"].includes("user"),
     };
 
     if (Object.values(returnValue).includes("ERROR"))

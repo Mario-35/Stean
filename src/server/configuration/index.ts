@@ -632,11 +632,13 @@ class Configuration {
                     })
                     .catch((err: Error) => logging.error(err, EInfos.logLevel).return(true));
                 if (serviceName !== EConstant.admin) {
+                    console.log(Configuration.services)
                     await this.connection(serviceName).unsafe(queries.extensions()).then((res) => {
                         Configuration.services[serviceName]._lora = res[0].lora;
                         Configuration.services[serviceName]._partitioned = res[0].partitioned;
                         Configuration.services[serviceName]._unique = res[0].unique;
                         Configuration.services[serviceName]._numeric = res[0].numeric;
+                        Configuration.services[serviceName]._user = res[0].user;
                     }).catch(() => null);
                     if (Configuration.services[serviceName]._partitioned) {
                         Configuration.services[serviceName].status = EState.start;

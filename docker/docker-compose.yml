@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+    db:
+        container_name: postgis
+        image: postgis/postgis
+        ports:
+            - "5433:5432"
+#        volumes:
+#            - data:/data/db
+        restart: always
+        environment:
+            POSTGRES_USER: sensorthings
+            POSTGRES_DB: postgres
+            POSTGRES_PASSWORD: sensorthings
+            ALLOW_IP_RANGE: 0.0.0.0/0
+    stean:
+        container_name: stean
+        image: mario35/api-stean:latest
+        depends_on:
+            - db
+        ports:
+            - "8029:8029"
+#volumes:
+#     data: {}

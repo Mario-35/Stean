@@ -35,4 +35,5 @@ export interface Iservice {
     _lora: boolean;
     _unique: boolean;
     _numeric: boolean;
+    _user: boolean;
 }

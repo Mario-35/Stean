@@ -25,7 +25,8 @@ import { logging } from "../log";
 
 export const unProtectedRoutes = new Router<DefaultState, Context>();
 // ALL others
-unProtectedRoutes.get("/*path", async (ctx) => {    
+unProtectedRoutes.get("/*path", async (ctx) => {
+    const canHtml = ctx.request.header.accept?.includes('text/html');
     switch (ctx._.path.toUpperCase()) {
         // Root path
         case `/`:
@@ -40,9 +41,11 @@ unProtectedRoutes.get("/*path", async (ctx) => {
             return;
         // error show in html if query call
         case "ERROR":
-            const bodyError = new HtmlError(ctx, { url: "what ?" });
-            ctx.type = returnFormats.html.type;
-            ctx.body = bodyError.toString();
+            if (canHtml) {  
+                const bodyError = new HtmlError(ctx, { url: "what ?" });
+                ctx.type = returnFormats.html.type;
+                ctx.body = bodyError.toString();
+            }
             return;
         // Clean
         case "CLEAN":
@@ -54,13 +57,12 @@ unProtectedRoutes.get("/*path", async (ctx) => {
             if (userAuthenticated(ctx)) {
                 ctx.type = returnFormats.json.type;
                 ctx.status = isState(EState.normal) ? 200 : 202;
-                ctx.body = { restart: isState(EState.normal) ? await config.start(true) : "Not Ready" };
-                
+                ctx.body = { restart: isState(EState.normal) ? await config.start(true) : "Not Ready" };                
                 return;
             }
         // logs
         case "LOGGING":
-            ctx.redirect(`${ctx._.root()}/logging`);
+            if (canHtml) ctx.redirect(`${ctx._.root()}/logging`);
             return;
         // export service
         case "EXPORT":
@@ -74,7 +76,7 @@ unProtectedRoutes.get("/*path", async (ctx) => {
         // User login
         case "LOGIN":
             if (userAuthenticated(ctx)) ctx.redirect(`${ctx._.root()}/status`);
-            else {
+            else if (canHtml) {             
                 const bodyLogin = new Login(ctx, { url: "", login: true });
                 ctx.type = returnFormats.html.type;
                 ctx.body = bodyLogin.toString();
@@ -84,26 +86,34 @@ unProtectedRoutes.get("/*path", async (ctx) => {
         case "STATUS":
             if (userAuthenticated(ctx)) {
                 const user = await getAuthenticatedUser(ctx);
-                if (user) {
-                    const bodyStatus = new Status(ctx, { url: "", user: user });
-                    ctx.type = returnFormats.html.type;
-                    ctx.body = bodyStatus.toString();
+                if (canHtml) {
+                    if (user) {
+                        const bodyStatus = new Status(ctx, { url: "", user: user });
+                        ctx.type = returnFormats.html.type;
+                        ctx.body = bodyStatus.toString();
+                        return;
+                    }
+                } else {
+                    console.log(user);
                     return;
                 }
+            } else if (canHtml) {
+                ctx.cookies.set(EConstant.appName);
+                ctx.redirect(`${ctx._.root()}/login`);
             }
-            ctx.cookies.set(EConstant.appName);
-            ctx.redirect(`${ctx._.root()}/login`);
             return;
         // Create user
         case "REGISTER":
-            const bodyLogin = new Login(ctx, { url: "", login: false });
-            ctx.type = returnFormats.html.type;
-            ctx.body = bodyLogin.toString();
+            if (canHtml) {  
+                const bodyLogin = new Login(ctx, { url: "", login: false });
+                ctx.type = returnFormats.html.type;
+                ctx.body = bodyLogin.toString();
+            }
             return;
         // Logout user
         case "LOGOUT":
             ctx.cookies.set(EConstant.appName);
-            if (ctx.request.header.accept && ctx.request.header.accept.includes("text/html")) ctx.redirect(`${ctx._.root()}/login`);
+            if (ctx.request.header.accept?.includes("text/html")) ctx.redirect(`${ctx._.root()}/login`);
             else ctx.status = EHttpCode.ok;
             ctx.body = {
                 message: EInfos.logoutOk
@@ -154,14 +164,16 @@ unProtectedRoutes.get("/*path", async (ctx) => {
             ctx.throw(EHttpCode.notFound);
         // Return Query HTML Page Tool
         case "QUERY":
-            const tempContext = await createQueryParams(ctx);
-            if (tempContext) {
-                const bodyQuery = new Query(ctx, { url: "", queryOptions: tempContext });
-                ctx.set("script-src", "self");
-                ctx.set("Content-Security-Policy", "self");
-                ctx.type = returnFormats.html.type;
-                ctx.body = bodyQuery.toString();
-            }
+            if (canHtml) {  
+                const tempContext = await createQueryParams(ctx);
+                if (tempContext) {
+                    const bodyQuery = new Query(ctx, { url: "", queryOptions: tempContext });
+                    ctx.set("script-src", "self");
+                    ctx.set("Content-Security-Policy", "self");
+                    ctx.type = returnFormats.html.type;
+                    ctx.body = bodyQuery.toString();
+                }
+            }            
             return;
     } // END Switch
 

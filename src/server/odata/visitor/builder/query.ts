@@ -181,7 +181,8 @@ export class Query {
                         groupBy: element.query.groupBy.notNull() === true ? element.query.groupBy.toString() : undefined,
                         orderBy: element.query.orderBy.notNull() === true ? element.query.orderBy.toString() : pagination ? "_nb" : element.entity.orderBy,
                         join: element.joinOffset,
-                        skip: pagination ? 0 : element.skip,
+                        skip: element.skip,
+                        // skip: pagination ? 0 : element.skip,
                         limit: element.limit,
                         keys: this.keyNames.toArray(),
                         count: element.countOffset

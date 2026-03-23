@@ -39,9 +39,22 @@ const getUser = async (configName: string, username: string, password: string): 
 export const loginUser = async (ctx: koaContext | undefined, login?: { configName: string; username: string; password: string }): Promise<Iuser | undefined> => {
     if (login) return await getUser(login.configName, login.username, login.password);
     if (ctx) {
-        const body: Record<string, any> = ctx.request.body as Record<string, any>;
+        if (ctx.header.username && ctx.header.password) 
+            return await getUser(ctx._.service.name, String(ctx.header.username), String(ctx.header.password)).then((user: any) => user);
+
+        let body: Record<string, any> = {};     
+        if(ctx.url.includes("?") && ctx.url.includes("&"))
+            ctx.url.split("?")[1].split("&")
+            .forEach(e => {
+                const tmp = e.split('=');
+                if (["username","password"].includes(tmp[0])) body[tmp[0]]  = tmp[1];
+            });
+
+        if (!body["username"] || !body["password"]) body = ctx.request.body as Record<string, any>;
+
         if (body["username"] && body["password"]) 
             return await getUser(ctx._.service.name, body["username"], body["password"]).then((user: any) => user);
+
         ctx.throw(EHttpCode.Unauthorized);
     }
 };

@@ -1,0 +1,27 @@
+[
+    {
+	"data": {
+	  "Data": 4.590106964111328,
+	  "Cause": [],
+	  "Report": "Standard",
+	  "EndPoint": 0,
+	  "ClusterID": "AnalogInput",
+	  "CommandID": "ReportAttributes",
+	  "AttributeID": "PresentValue",
+	  "AttributeType": "SinglePrecision"
+	},
+	"fcnt": 6536,
+	"rxpk": {
+	  "datr": "SF8BW125",
+	  "freq": 867.1,
+	  "lsnr": 1.7999999523163,
+	  "rssi": -116
+	},
+	"frame": "110A000C0055394092E228",
+	"DevEUI": "70b3d5e75e014f06",
+	"deveui": "70B3D5E75E014F06",
+	"DevAddr": "00014f06",
+	"timestamp": 1695116976,
+	"sensorInstallId": "70b3d5e75e014f06"
+  }
+]

@@ -1,0 +1,83 @@
+[
+    {
+	"gps": [],
+	"data": {
+	  "battery": 3.25,
+	  "humidity": 98.00390625,
+	  "temperature": 9.510388183593747
+	},
+	"date": "2023-04-25T10:25:19+02:00",
+	"lora": {
+	  "freq": 867.1,
+	  "lsnr": 9.5,
+	  "rssi": -104,
+	  "data_rate": "SF7BW125"
+	},
+	"deveui": "8CF9574000002D2D",
+	"gateway": {
+	  "best": "7076FF00560602AB",
+	  "number": 9
+	},
+	"lorawan": {
+	  "adr": true,
+	  "fcnt": 67224,
+	  "port": 8,
+	  "type": "unconfirmed_data_up",
+	  "devaddr": "00002d2d"
+	},
+	"sensor_id": "8CF9574000002D2D",
+	"timestamp": "2023-04-25T10:25:19+02:00",
+	"formatedDatas": {
+	  "battery": 3.25,
+	  "humidity": 98.00390625,
+	  "temperature": 9.510388183593747
+	},
+	"decodedPayload": {
+	  "error": "Decoding Payload error"
+	},
+	"decodedPayloadInvalid": {
+	  "error": "Payload invalid"
+	},
+	"payload_ciphered": null,
+	"payload_deciphered": "011C52D5C2014518AF"
+  },
+{
+  "gps": [],
+  "data": {
+    "battery": 3.2800000000000002,
+    "humidity": 71.63671875,
+    "temperature": 13.829921264648434
+  },
+  "date": "2023-04-25T13:57:01+02:00",
+  "lora": {
+    "freq": 868.3,
+    "lsnr": 5,
+    "rssi": -102,
+    "data_rate": "SF7BW125"
+  },
+  "deveui": "8CF9574000002D2D",
+  "gateway": {
+    "best": "7076FF00560602AB",
+    "number": 5
+  },
+  "lorawan": {
+    "adr": true,
+    "fcnt": 67238,
+    "port": 8,
+    "type": "unconfirmed_data_up",
+    "devaddr": "00002d2d"
+  },
+  "sensor_id": "8CF9574000002D2D",
+  "timestamp": "2023-04-25T13:57:01+02:00",
+  "formatedDatas": {
+    "battery": 3.2800000000000002,
+    "humidity": 71.63671875,
+    "temperature": 13.829921264648434
+  },
+  "decodedPayload": {
+    "error": "Decoding Payload error"
+  },
+  "payload_ciphered": null,
+  "payload_deciphered": "0167589FC2014518B2"
+}
+]

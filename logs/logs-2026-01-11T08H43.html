@@ -1,0 +1,1673 @@
+<!DOCTYPE html>
+<html>
+<body style="background-color:#353535;"><span style="color:#00FF00"> ■■■■■■■■■■■■■■■■■■■■</span><span style="color:#00FFFF">  Read configuration </span><span style="color:#FFFFFF"> 🡸</span><span style="color:#FFFF00">  D:\stean\src\server\configuration\configuration.json </span><span style="color:#00FF00"> ■■■■■■■■■■■■■■■■■■■■</span><br /><span style="color:#0FA2DB"> ■■■■■■■■■■■■■■■■■■■■</span><span style="color:#00FFFF">  Start stean version : 1.3.5 </span><span style="color:#FFFFFF"> du</span><span style="color:#FFFF00">  11/01/2026-09:29:49 [test] </span><span style="color:#0FA2DB"> ■■■■■■■■■■■■■■■■■■■■</span><br /><span style="color:#00FF00"> ■■■■■■■■■■■■■■■■■■■■</span><span style="color:#00FFFF">  Read configuration </span><span style="color:#FFFFFF"> 🡸</span><span style="color:#FFFF00">  D:\stean\src\server\configuration\configuration.json </span><span style="color:#00FF00"> ■■■■■■■■■■■■■■■■■■■■</span><br /><span style="color:#85D076"> ■■■■■■■■■■■■</span><span style="color:#FFFFFF">  postgres </span><span style="color:#85D076"> ■■■■■■■■■■■■</span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+Error: Same configuration name found for test
+    at Configuration.addConfig [90m(D:\stean\[39msrc\server\configuration\index.ts:515:23[90m)[39m
+    at createService [90m(D:\stean\[39msrc\server\db\helpers\createService.ts:38:16[90m)[39m
+    at [90mD:\stean\[39msrc\server\routes\unProtected.ts:132:52
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at [90mD:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:260:18
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at [90mD:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:34:12
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:265:33[90m)[39m
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:22[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+<span style="color:#FFFFFF">     </span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  Test database exist </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  (re)create PostgresSql functions </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  Set log level </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🌍 </span><span style="color:#FFFFFF">  Database admin Ready </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#85D076"> ■■■■■■■■■■■■</span><span style="color:#FFFFFF">  test </span><span style="color:#85D076"> ■■■■■■■■■■■■</span><br /><span style="color:#85D076"> </span><br /><span style="color:#00FF00">  ____ __________    _     _   _</span><br /><span style="color:#00FF00"> / ___|_ __  ____|  / \   | \ | |</span><br /><span style="color:#00FF00"> \___ \| | |  _|   / _ \  |  \| |</span><br /><span style="color:#00FF00">  ___) | | | |___ / ___ \ | |\  |</span><br /><span style="color:#00FF00"> |____/|_| |_____|_/   \_\|_| \_| </span><span style="color:#85D076"> run API 🡺</span><span style="color:#00FF00">  1.3.5 du 11/01/2026-09:29:49</span><br /> 🌍 </span><span style="color:#FFFFFF"> https://github.com/Mario-35/Stean/ 📧 </span><span style="color:#FFFF00"> mario.adam@inrae.fr<span style="color:#00FF00"> ■■■■■■■■■■■■■■■■■■■■</span><span style="color:#FFFF00">   INIT FINISHED stean version : 1.3.5 </span><span style="color:#FFFFFF"> </span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> ■■■■■■■■■■■■■■■■■■■■</span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+PostgresError: la base de donn�es � test � n'existe pas
+    at ErrorResponse [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:794:26[90m)[39m
+    at handle [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:480:6[90m)[39m
+    at Socket.data [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:315:9[90m)[39m
+[90m    at Socket.emit (node:events:508:28)[39m
+[90m    at Socket.emit (node:domain:489:12)[39m
+[90m    at addChunk (node:internal/streams/readable:559:12)[39m
+[90m    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)[39m
+[90m    at Socket.Readable.push (node:internal/streams/readable:390:5)[39m
+[90m    at TCP.onStreamRead (node:internal/stream_base_commons:189:23)[39m
+    at new Query [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\query.js:35:9[90m)[39m
+    at sql [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\index.js:112:11[90m)[39m
+    at getUser [90m(D:\stean\[39msrc\server\authentication\loginUser.ts:21:63[90m)[39m
+    at loginUser [90m(D:\stean\[39msrc\server\authentication\loginUser.ts:44:26[90m)[39m
+    at [90mD:\stean\[39msrc\server\routes\protected.ts:37:28
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at [90mD:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:260:18
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at [90mD:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:34:12
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:265:33[90m)[39m
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:237:34[90m)[39m
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:22[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  severity_local: [32m'FATAL'[39m,
+  severity: [32m'FATAL'[39m,
+  code: [32m'3D000'[39m,
+  file: [32m'postinit.c'[39m,
+  line: [32m'1034'[39m,
+  routine: [32m'InitPostgres'[39m,
+  query: [90mundefined[39m,
+  parameters: [90mundefined[39m,
+  args: [ [32m'stean'[39m ],
+  types: [1mnull[22m,
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+PostgresError: la base de donn�es � test � n'existe pas
+    at ErrorResponse [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:794:26[90m)[39m
+    at handle [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:480:6[90m)[39m
+    at Socket.data [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:315:9[90m)[39m
+[90m    at Socket.emit (node:events:508:28)[39m
+[90m    at Socket.emit (node:domain:489:12)[39m
+[90m    at addChunk (node:internal/streams/readable:559:12)[39m
+[90m    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)[39m
+[90m    at Socket.Readable.push (node:internal/streams/readable:390:5)[39m
+[90m    at TCP.onStreamRead (node:internal/stream_base_commons:189:23)[39m
+    at new Query [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\query.js:35:9[90m)[39m
+    at sql [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\index.js:112:11[90m)[39m
+    at getUser [90m(D:\stean\[39msrc\server\authentication\loginUser.ts:21:63[90m)[39m
+    at loginUser [90m(D:\stean\[39msrc\server\authentication\loginUser.ts:44:26[90m)[39m
+    at [90mD:\stean\[39msrc\server\routes\protected.ts:37:28
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at [90mD:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:260:18
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at [90mD:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:34:12
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:265:33[90m)[39m
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:237:34[90m)[39m
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:22[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  severity_local: [32m'FATAL'[39m,
+  severity: [32m'FATAL'[39m,
+  code: [32m'3D000'[39m,
+  file: [32m'postinit.c'[39m,
+  line: [32m'1034'[39m,
+  routine: [32m'InitPostgres'[39m,
+  query: [90mundefined[39m,
+  parameters: [90mundefined[39m,
+  args: [ [32m'stean'[39m ],
+  types: [1mnull[22m,
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+PostgresError: la base de donn�es � test � n'existe pas
+    at ErrorResponse [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:794:26[90m)[39m
+    at handle [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:480:6[90m)[39m
+    at Socket.data [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:315:9[90m)[39m
+[90m    at Socket.emit (node:events:508:28)[39m
+[90m    at Socket.emit (node:domain:489:12)[39m
+[90m    at addChunk (node:internal/streams/readable:559:12)[39m
+[90m    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)[39m
+[90m    at Socket.Readable.push (node:internal/streams/readable:390:5)[39m
+[90m    at TCP.onStreamRead (node:internal/stream_base_commons:189:23)[39m
+    at new Query [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\query.js:35:9[90m)[39m
+    at sql [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\index.js:112:11[90m)[39m
+    at getUser [90m(D:\stean\[39msrc\server\authentication\loginUser.ts:21:63[90m)[39m
+    at loginUser [90m(D:\stean\[39msrc\server\authentication\loginUser.ts:44:26[90m)[39m
+    at [90mD:\stean\[39msrc\server\routes\protected.ts:37:28
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at [90mD:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:260:18
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at [90mD:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:34:12
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:265:33[90m)[39m
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:237:34[90m)[39m
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:22[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  severity_local: [32m'FATAL'[39m,
+  severity: [32m'FATAL'[39m,
+  code: [32m'3D000'[39m,
+  file: [32m'postinit.c'[39m,
+  line: [32m'1034'[39m,
+  routine: [32m'InitPostgres'[39m,
+  query: [90mundefined[39m,
+  parameters: [90mundefined[39m,
+  args: [ [32m'stean'[39m ],
+  types: [1mnull[22m,
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+PostgresError: la base de donn�es � test � n'existe pas
+    at ErrorResponse [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:794:26[90m)[39m
+    at handle [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:480:6[90m)[39m
+    at Socket.data [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:315:9[90m)[39m
+[90m    at Socket.emit (node:events:508:28)[39m
+[90m    at Socket.emit (node:domain:489:12)[39m
+[90m    at addChunk (node:internal/streams/readable:559:12)[39m
+[90m    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)[39m
+[90m    at Socket.Readable.push (node:internal/streams/readable:390:5)[39m
+[90m    at TCP.onStreamRead (node:internal/stream_base_commons:189:23)[39m
+    at new Query [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\query.js:35:9[90m)[39m
+    at sql.unsafe [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\index.js:121:21[90m)[39m
+    at [90mD:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:25:14
+    at new Promise (<anonymous>)
+    at executeSqlOneValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:21:12[90m)[39m
+    at executeSqlValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:57:33[90m)[39m
+    at Models.infos [90m(D:\stean\[39msrc\server\models\index.ts:107:31[90m)[39m
+    at [90mD:\stean\[39msrc\server\routes\unProtected.ts:125:37
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at [90mD:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:260:18
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at [90mD:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:34:12
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:265:33[90m)[39m
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:22[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  severity_local: [32m'FATAL'[39m,
+  severity: [32m'FATAL'[39m,
+  code: [32m'3D000'[39m,
+  file: [32m'postinit.c'[39m,
+  line: [32m'1034'[39m,
+  routine: [32m'InitPostgres'[39m,
+  query: [90mundefined[39m,
+  parameters: [90mundefined[39m,
+  args: [],
+  types: [1mnull[22m,
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+UnauthorizedError: Unauthorized
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at Services.getSingle [90m(D:\stean\[39msrc\server\db\entities\Services.ts:52:57[90m)[39m
+    at apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:55[90m)[39m
+    at [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:90
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+UnauthorizedError: Unauthorized
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\routes\protected.ts:177:21
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at [90mD:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:260:18
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at [90mD:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:34:12
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:265:33[90m)[39m
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:237:34[90m)[39m
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:22[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+PostgresError: la relation « user » n'existe pas
+    at ErrorResponse [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:794:26[90m)[39m
+    at handle [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:480:6[90m)[39m
+    at Socket.data [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:315:9[90m)[39m
+[90m    at Socket.emit (node:events:508:28)[39m
+[90m    at Socket.emit (node:domain:489:12)[39m
+[90m    at addChunk (node:internal/streams/readable:559:12)[39m
+[90m    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)[39m
+[90m    at Socket.Readable.push (node:internal/streams/readable:390:5)[39m
+[90m    at TCP.onStreamRead (node:internal/stream_base_commons:189:23)[39m
+    at new Query [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\query.js:35:9[90m)[39m
+    at sql [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\index.js:112:11[90m)[39m
+    at getUser [90m(D:\stean\[39msrc\server\authentication\loginUser.ts:21:63[90m)[39m
+    at loginUser [90m(D:\stean\[39msrc\server\authentication\loginUser.ts:44:26[90m)[39m
+    at [90mD:\stean\[39msrc\server\routes\protected.ts:37:28
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at [90mD:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:260:18
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at [90mD:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:34:12
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:265:33[90m)[39m
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:237:34[90m)[39m
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:22[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  severity_local: [32m'ERREUR'[39m,
+  severity: [32m'ERROR'[39m,
+  code: [32m'42P01'[39m,
+  position: [32m'15'[39m,
+  file: [32m'parse_relation.c'[39m,
+  line: [32m'1452'[39m,
+  routine: [32m'parserOpenTable'[39m,
+  query: [32m'SELECT * FROM "user" WHERE username = $1 LIMIT 1'[39m,
+  parameters: [ [32m'stean'[39m ],
+  args: [ [32m'stean'[39m ],
+  types: [ [33m0[39m ],
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+BadRequestError: Bad Request
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\db\entities\common.ts:153:62
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async Things.getAll [90m(D:\stean\[39msrc\server\db\entities\common.ts:141:28[90m)[39m
+    at async apiAccess.getAll [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:42:35[90m)[39m
+    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:104
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  code: [33m400[39m,
+  detail: [32m"la relation « thing » n'existe pas"[39m,
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+BadRequestError: Bad Request
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\db\entities\common.ts:192:62
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async Things.getSingle [90m(D:\stean\[39msrc\server\db\entities\common.ts:180:28[90m)[39m
+    at async apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:35[90m)[39m
+    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:71
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  code: [33m400[39m,
+  detail: PostgresError: la relation « thing » n'existe pas
+      at ErrorResponse [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:794:26[90m)[39m
+      at handle [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:480:6[90m)[39m
+      at Socket.data [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:315:9[90m)[39m
+  [90m    at Socket.emit (node:events:508:28)[39m
+  [90m    at Socket.emit (node:domain:489:12)[39m
+  [90m    at addChunk (node:internal/streams/readable:559:12)[39m
+  [90m    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)[39m
+  [90m    at Socket.Readable.push (node:internal/streams/readable:390:5)[39m
+  [90m    at TCP.onStreamRead (node:internal/stream_base_commons:189:23)[39m
+      at new Query [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\query.js:35:9[90m)[39m
+      at sql.unsafe [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\index.js:121:21[90m)[39m
+      at [90mD:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:25:14
+      at new Promise (<anonymous>)
+      at executeSqlOneValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:21:12[90m)[39m
+      at executeSqlValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:57:33[90m)[39m
+      at Things.getSingle [90m(D:\stean\[39msrc\server\db\entities\common.ts:180:50[90m)[39m
+      at apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:55[90m)[39m
+      at [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:90
+      at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+      at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+      at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+      at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+    severity_local: [32m'ERREUR'[39m,
+    severity: [32m'ERROR'[39m,
+    code: [32m'42P01'[39m,
+    position: [32m'656'[39m,
+    file: [32m'parse_relation.c'[39m,
+    line: [32m'1452'[39m,
+    routine: [32m'parserOpenTable'[39m,
+    query: [32m'SELECT COUNT(t) AS "@iot.count",\n'[39m +
+      [32m"\tCOALESCE( JSON_AGG(t), '[]') AS value\n"[39m +
+      [32m'\tFROM (\n'[39m +
+      [32m`\tSELECT CONCAT('proxy/v1.1/Things(', "thing"."id", ')') AS "@iot.selfLink",\n`[39m +
+      [32m'\t\t"thing"."id" AS "@iot.id",\n'[39m +
+      [32m'\t\t"name",\n'[39m +
+      [32m'\t\t"description",\n'[39m +
+      [32m'\t\t"properties",\n'[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/Locations') AS "Locations@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/HistoricalLocations') AS "HistoricalLocations@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/Datastreams') AS "Datastreams@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/MultiDatastreams') AS "MultiDatastreams@iot.navigationLink"\n`[39m +
+      [32m' FROM "thing"\n'[39m +
+      [32m'  WHERE  id = 1\n'[39m +
+      [32m'ORDER BY id\n'[39m +
+      [32m' LIMIT 1000\n'[39m +
+      [32m') AS t'[39m,
+    parameters: [],
+    args: [],
+    types: []
+  },
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+BadRequestError: Bad Request
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\db\entities\common.ts:192:62
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async Things.getSingle [90m(D:\stean\[39msrc\server\db\entities\common.ts:180:28[90m)[39m
+    at async apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:35[90m)[39m
+    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:71
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  code: [33m400[39m,
+  detail: PostgresError: la relation « thing » n'existe pas
+      at ErrorResponse [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:794:26[90m)[39m
+      at handle [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:480:6[90m)[39m
+      at Socket.data [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:315:9[90m)[39m
+  [90m    at Socket.emit (node:events:508:28)[39m
+  [90m    at Socket.emit (node:domain:489:12)[39m
+  [90m    at addChunk (node:internal/streams/readable:559:12)[39m
+  [90m    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)[39m
+  [90m    at Socket.Readable.push (node:internal/streams/readable:390:5)[39m
+  [90m    at TCP.onStreamRead (node:internal/stream_base_commons:189:23)[39m
+      at new Query [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\query.js:35:9[90m)[39m
+      at sql.unsafe [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\index.js:121:21[90m)[39m
+      at [90mD:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:25:14
+      at new Promise (<anonymous>)
+      at executeSqlOneValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:21:12[90m)[39m
+      at executeSqlValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:57:33[90m)[39m
+      at Things.getSingle [90m(D:\stean\[39msrc\server\db\entities\common.ts:180:50[90m)[39m
+      at apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:55[90m)[39m
+      at [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:90
+      at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+      at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+      at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+      at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+    severity_local: [32m'ERREUR'[39m,
+    severity: [32m'ERROR'[39m,
+    code: [32m'42P01'[39m,
+    position: [32m'656'[39m,
+    file: [32m'parse_relation.c'[39m,
+    line: [32m'1452'[39m,
+    routine: [32m'parserOpenTable'[39m,
+    query: [32m'SELECT COUNT(t) AS "@iot.count",\n'[39m +
+      [32m"\tCOALESCE( JSON_AGG(t), '[]') AS value\n"[39m +
+      [32m'\tFROM (\n'[39m +
+      [32m`\tSELECT CONCAT('proxy/v1.1/Things(', "thing"."id", ')') AS "@iot.selfLink",\n`[39m +
+      [32m'\t\t"thing"."id" AS "@iot.id",\n'[39m +
+      [32m'\t\t"name",\n'[39m +
+      [32m'\t\t"description",\n'[39m +
+      [32m'\t\t"properties",\n'[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/Locations') AS "Locations@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/HistoricalLocations') AS "HistoricalLocations@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/Datastreams') AS "Datastreams@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/MultiDatastreams') AS "MultiDatastreams@iot.navigationLink"\n`[39m +
+      [32m' FROM "thing"\n'[39m +
+      [32m'  WHERE  id = 9007199254740991\n'[39m +
+      [32m'ORDER BY id\n'[39m +
+      [32m' LIMIT 1000\n'[39m +
+      [32m') AS t'[39m,
+    parameters: [],
+    args: [],
+    types: []
+  },
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+NotFoundError: Not Found
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at RootPgVisitor.VisitRessourcesEntitySetName [90m(D:\stean\[39msrc\server\odata\visitor\pg\rootPgVisitor.ts:79:41[90m)[39m
+    at RootPgVisitor.VisitRessources [90m(D:\stean\[39msrc\server\odata\visitor\pg\rootPgVisitor.ts:38:23[90m)[39m
+    at RootPgVisitor.VisitRessourcesResourcePath [90m(D:\stean\[39msrc\server\odata\visitor\pg\rootPgVisitor.ts:51:39[90m)[39m
+    at RootPgVisitor.VisitRessources [90m(D:\stean\[39msrc\server\odata\visitor\pg\rootPgVisitor.ts:38:23[90m)[39m
+    at RootPgVisitor.StartVisitRessources [90m(D:\stean\[39msrc\server\odata\visitor\pg\rootPgVisitor.ts:157:27[90m)[39m
+    at new RootPgVisitor [90m(D:\stean\[39msrc\server\odata\visitor\pg\rootPgVisitor.ts:28:24[90m)[39m
+    at createOdata [90m(D:\stean\[39msrc\server\odata\index.ts:86:18[90m)[39m
+    at [90mD:\stean\[39msrc\server\routes\unProtected.ts:172:47
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at [90mD:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:260:18
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at [90mD:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:34:12
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:265:33[90m)[39m
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:22[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+BadRequestError: Bad Request
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\db\entities\common.ts:192:62
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async Things.getSingle [90m(D:\stean\[39msrc\server\db\entities\common.ts:180:28[90m)[39m
+    at async apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:35[90m)[39m
+    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:71
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  code: [33m400[39m,
+  detail: PostgresError: la relation « thing » n'existe pas
+      at ErrorResponse [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:794:26[90m)[39m
+      at handle [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:480:6[90m)[39m
+      at Socket.data [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:315:9[90m)[39m
+  [90m    at Socket.emit (node:events:508:28)[39m
+  [90m    at Socket.emit (node:domain:489:12)[39m
+  [90m    at addChunk (node:internal/streams/readable:559:12)[39m
+  [90m    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)[39m
+  [90m    at Socket.Readable.push (node:internal/streams/readable:390:5)[39m
+  [90m    at TCP.onStreamRead (node:internal/stream_base_commons:189:23)[39m
+      at new Query [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\query.js:35:9[90m)[39m
+      at sql.unsafe [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\index.js:121:21[90m)[39m
+      at [90mD:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:25:14
+      at new Promise (<anonymous>)
+      at executeSqlOneValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:21:12[90m)[39m
+      at executeSqlValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:57:33[90m)[39m
+      at Things.getSingle [90m(D:\stean\[39msrc\server\db\entities\common.ts:180:50[90m)[39m
+      at apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:55[90m)[39m
+      at [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:90
+      at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+      at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+      at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+      at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+    severity_local: [32m'ERREUR'[39m,
+    severity: [32m'ERROR'[39m,
+    code: [32m'42P01'[39m,
+    position: [32m'102'[39m,
+    file: [32m'parse_relation.c'[39m,
+    line: [32m'1452'[39m,
+    routine: [32m'parserOpenTable'[39m,
+    query: [32m'SELECT COUNT(t) AS "@iot.count",\n'[39m +
+      [32m"\tCOALESCE( JSON_AGG(t), '[]') AS value\n"[39m +
+      [32m'\tFROM (\n'[39m +
+      [32m'\tSELECT "name"\n'[39m +
+      [32m' FROM "thing"\n'[39m +
+      [32m'  WHERE  id = 1\n'[39m +
+      [32m'ORDER BY id\n'[39m +
+      [32m' LIMIT 1000\n'[39m +
+      [32m') AS t'[39m,
+    parameters: [],
+    args: [],
+    types: []
+  },
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+NotFoundError: Not Found
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at RootPgVisitor.VisitRessourcesEntityCollectionNavigationProperty [90m(D:\stean\[39msrc\server\odata\visitor\pg\rootPgVisitor.ts:140:30[90m)[39m
+    at RootPgVisitor.VisitRessources [90m(D:\stean\[39msrc\server\odata\visitor\pg\rootPgVisitor.ts:38:23[90m)[39m
+    at RootPgVisitor.VisitRessourcesPropertyPath [90m(D:\stean\[39msrc\server\odata\visitor\pg\rootPgVisitor.ts:144:35[90m)[39m
+    at RootPgVisitor.VisitRessources [90m(D:\stean\[39msrc\server\odata\visitor\pg\rootPgVisitor.ts:38:23[90m)[39m
+    at RootPgVisitor.VisitRessourcesSingleNavigation [90m(D:\stean\[39msrc\server\odata\visitor\pg\rootPgVisitor.ts:116:78[90m)[39m
+    at RootPgVisitor.VisitRessources [90m(D:\stean\[39msrc\server\odata\visitor\pg\rootPgVisitor.ts:38:23[90m)[39m
+    at RootPgVisitor.VisitRessourcesCollectionNavigationPath [90m(D:\stean\[39msrc\server\odata\visitor\pg\rootPgVisitor.ts:96:41[90m)[39m
+    at RootPgVisitor.VisitRessources [90m(D:\stean\[39msrc\server\odata\visitor\pg\rootPgVisitor.ts:38:23[90m)[39m
+    at RootPgVisitor.VisitRessourcesCollectionNavigation [90m(D:\stean\[39msrc\server\odata\visitor\pg\rootPgVisitor.ts:91:35[90m)[39m
+    at RootPgVisitor.VisitRessources [90m(D:\stean\[39msrc\server\odata\visitor\pg\rootPgVisitor.ts:38:23[90m)[39m
+    at RootPgVisitor.VisitRessourcesResourcePath [90m(D:\stean\[39msrc\server\odata\visitor\pg\rootPgVisitor.ts:52:41[90m)[39m
+    at RootPgVisitor.VisitRessources [90m(D:\stean\[39msrc\server\odata\visitor\pg\rootPgVisitor.ts:38:23[90m)[39m
+    at RootPgVisitor.StartVisitRessources [90m(D:\stean\[39msrc\server\odata\visitor\pg\rootPgVisitor.ts:157:27[90m)[39m
+    at new RootPgVisitor [90m(D:\stean\[39msrc\server\odata\visitor\pg\rootPgVisitor.ts:28:24[90m)[39m
+    at createOdata [90m(D:\stean\[39msrc\server\odata\index.ts:86:18[90m)[39m
+    at [90mD:\stean\[39msrc\server\routes\unProtected.ts:172:47
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at [90mD:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:260:18
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at [90mD:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:34:12
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:265:33[90m)[39m
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:22[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  code: [33m404[39m,
+  detail: [32m'Not a valid id: Path is not valid.'[39m,
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+BadRequestError: Bad Request
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\db\entities\common.ts:192:62
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async Things.getSingle [90m(D:\stean\[39msrc\server\db\entities\common.ts:180:28[90m)[39m
+    at async apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:35[90m)[39m
+    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:71
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  code: [33m400[39m,
+  detail: PostgresError: la relation « thing » n'existe pas
+      at ErrorResponse [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:794:26[90m)[39m
+      at handle [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:480:6[90m)[39m
+      at Socket.data [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:315:9[90m)[39m
+  [90m    at Socket.emit (node:events:508:28)[39m
+  [90m    at Socket.emit (node:domain:489:12)[39m
+  [90m    at addChunk (node:internal/streams/readable:559:12)[39m
+  [90m    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)[39m
+  [90m    at Socket.Readable.push (node:internal/streams/readable:390:5)[39m
+  [90m    at TCP.onStreamRead (node:internal/stream_base_commons:189:23)[39m
+      at new Query [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\query.js:35:9[90m)[39m
+      at sql.unsafe [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\index.js:121:21[90m)[39m
+      at [90mD:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:25:14
+      at new Promise (<anonymous>)
+      at executeSqlOneValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:21:12[90m)[39m
+      at executeSqlValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:57:33[90m)[39m
+      at Things.getSingle [90m(D:\stean\[39msrc\server\db\entities\common.ts:180:50[90m)[39m
+      at apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:55[90m)[39m
+      at [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:90
+      at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+      at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+      at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+      at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+    severity_local: [32m'ERREUR'[39m,
+    severity: [32m'ERROR'[39m,
+    code: [32m'42P01'[39m,
+    position: [32m'21'[39m,
+    file: [32m'parse_relation.c'[39m,
+    line: [32m'1452'[39m,
+    routine: [32m'parserOpenTable'[39m,
+    query: [32m'SELECT "name"\n FROM "thing"\n  WHERE  id = 1\nORDER BY id\n LIMIT 1000\n'[39m,
+    parameters: [],
+    args: [],
+    types: []
+  },
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+BadRequestError: Bad Request
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\db\entities\common.ts:153:62
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async Things.getAll [90m(D:\stean\[39msrc\server\db\entities\common.ts:141:28[90m)[39m
+    at async apiAccess.getAll [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:42:35[90m)[39m
+    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:104
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  code: [33m400[39m,
+  detail: [32m"la relation « thing » n'existe pas"[39m,
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+BadRequestError: Bad Request
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\db\entities\common.ts:153:62
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async Things.getAll [90m(D:\stean\[39msrc\server\db\entities\common.ts:141:28[90m)[39m
+    at async apiAccess.getAll [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:42:35[90m)[39m
+    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:104
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  code: [33m400[39m,
+  detail: [32m"la relation « thing » n'existe pas"[39m,
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+BadRequestError: Bad Request
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\db\entities\common.ts:153:62
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async Things.getAll [90m(D:\stean\[39msrc\server\db\entities\common.ts:141:28[90m)[39m
+    at async apiAccess.getAll [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:42:35[90m)[39m
+    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:104
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  code: [33m400[39m,
+  detail: [32m"la relation « thing » n'existe pas"[39m,
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+BadRequestError: Bad Request
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\db\entities\common.ts:153:62
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async Locations.getAll [90m(D:\stean\[39msrc\server\db\entities\common.ts:141:28[90m)[39m
+    at async apiAccess.getAll [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:42:35[90m)[39m
+    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:104
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  code: [33m400[39m,
+  detail: [32m"la relation « location » n'existe pas"[39m,
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+BadRequestError: Bad Request
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\db\entities\common.ts:153:62
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async HistoricalLocations.getAll [90m(D:\stean\[39msrc\server\db\entities\common.ts:141:28[90m)[39m
+    at async apiAccess.getAll [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:42:35[90m)[39m
+    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:104
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  code: [33m400[39m,
+  detail: [32m"la relation « historicallocation » n'existe pas"[39m,
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+BadRequestError: Bad Request
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\db\entities\common.ts:153:62
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async Datastreams.getAll [90m(D:\stean\[39msrc\server\db\entities\common.ts:141:28[90m)[39m
+    at async apiAccess.getAll [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:42:35[90m)[39m
+    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:104
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  code: [33m400[39m,
+  detail: [32m"la relation « datastream » n'existe pas"[39m,
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+BadRequestError: Bad Request
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\db\entities\common.ts:153:62
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async MultiDatastreams.getAll [90m(D:\stean\[39msrc\server\db\entities\common.ts:141:28[90m)[39m
+    at async apiAccess.getAll [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:42:35[90m)[39m
+    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:104
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  code: [33m400[39m,
+  detail: [32m"la relation « multidatastream » n'existe pas"[39m,
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+BadRequestError: Bad Request
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\db\entities\common.ts:192:62
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async Things.getSingle [90m(D:\stean\[39msrc\server\db\entities\common.ts:180:28[90m)[39m
+    at async apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:35[90m)[39m
+    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:71
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  code: [33m400[39m,
+  detail: PostgresError: la relation « thing » n'existe pas
+      at ErrorResponse [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:794:26[90m)[39m
+      at handle [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:480:6[90m)[39m
+      at Socket.data [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:315:9[90m)[39m
+  [90m    at Socket.emit (node:events:508:28)[39m
+  [90m    at Socket.emit (node:domain:489:12)[39m
+  [90m    at addChunk (node:internal/streams/readable:559:12)[39m
+  [90m    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)[39m
+  [90m    at Socket.Readable.push (node:internal/streams/readable:390:5)[39m
+  [90m    at TCP.onStreamRead (node:internal/stream_base_commons:189:23)[39m
+      at new Query [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\query.js:35:9[90m)[39m
+      at sql.unsafe [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\index.js:121:21[90m)[39m
+      at [90mD:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:25:14
+      at new Promise (<anonymous>)
+      at executeSqlOneValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:21:12[90m)[39m
+      at executeSqlValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:57:33[90m)[39m
+      at Things.getSingle [90m(D:\stean\[39msrc\server\db\entities\common.ts:180:50[90m)[39m
+      at apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:55[90m)[39m
+      at [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:90
+      at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+      at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+      at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+      at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+    severity_local: [32m'ERREUR'[39m,
+    severity: [32m'ERROR'[39m,
+    code: [32m'42P01'[39m,
+    position: [32m'1210'[39m,
+    file: [32m'parse_relation.c'[39m,
+    line: [32m'1452'[39m,
+    routine: [32m'parserOpenTable'[39m,
+    query: [32m'SELECT COUNT(t) AS "@iot.count",\n'[39m +
+      [32m"\tCOALESCE( JSON_AGG(t), '[]') AS value\n"[39m +
+      [32m'\tFROM (\n'[39m +
+      [32m`\tSELECT CONCAT('proxy/v1.1/Things(', "thing"."id", ')') AS "@iot.selfLink",\n`[39m +
+      [32m'\t\t"thing"."id" AS "@iot.id",\n'[39m +
+      [32m'\t\t"name",\n'[39m +
+      [32m'\t\t"description",\n'[39m +
+      [32m'\t\t"properties",\n'[39m +
+      [32m"\t\t(SELECT COALESCE( JSON_AGG(t), '[]') AS value\n"[39m +
+      [32m'\tFROM (\n'[39m +
+      [32m`\tSELECT CONCAT('proxy/v1.1/Locations(', "location"."id", ')') AS "@iot.selfLink",\n`[39m +
+      [32m'\t\t"location"."id" AS "@iot.id",\n'[39m +
+      [32m'\t\t"name",\n'[39m +
+      [32m'\t\t"description",\n'[39m +
+      [32m'\t\t"encodingType",\n'[39m +
+      [32m'\t\t"location",\n'[39m +
+      [32m'\t\t"properties",\n'[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Locations(', "location"."id", ')/Things') AS "Things@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Locations(', "location"."id", ')/HistoricalLocations') AS "HistoricalLocations@iot.navigationLink"\n`[39m +
+      [32m' FROM "location"\n'[39m +
+      [32m'  WHERE "location"."id" IN (SELECT "thinglocation"."location_id" FROM "thinglocation" WHERE "thinglocation"."thing_id" ="thing"."id")\n'[39m +
+      [32m'ORDER BY id\n'[39m +
+      [32m' ) AS t) AS "Locations",\n'[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/HistoricalLocations') AS "HistoricalLocations@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/Datastreams') AS "Datastreams@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/MultiDatastreams') AS "MultiDatastreams@iot.navigationLink"\n`[39m +
+      [32m' FROM "thing"\n'[39m +
+      [32m'  WHERE  id = 6\n'[39m +
+      [32m'ORDER BY id\n'[39m +
+      [32m' LIMIT 1000\n'[39m +
+      [32m') AS t'[39m,
+    parameters: [],
+    args: [],
+    types: []
+  },
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+BadRequestError: Bad Request
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\db\entities\common.ts:192:62
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async Things.getSingle [90m(D:\stean\[39msrc\server\db\entities\common.ts:180:28[90m)[39m
+    at async apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:35[90m)[39m
+    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:71
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  code: [33m400[39m,
+  detail: PostgresError: la relation « thing » n'existe pas
+      at ErrorResponse [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:794:26[90m)[39m
+      at handle [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:480:6[90m)[39m
+      at Socket.data [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:315:9[90m)[39m
+  [90m    at Socket.emit (node:events:508:28)[39m
+  [90m    at Socket.emit (node:domain:489:12)[39m
+  [90m    at addChunk (node:internal/streams/readable:559:12)[39m
+  [90m    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)[39m
+  [90m    at Socket.Readable.push (node:internal/streams/readable:390:5)[39m
+  [90m    at TCP.onStreamRead (node:internal/stream_base_commons:189:23)[39m
+      at new Query [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\query.js:35:9[90m)[39m
+      at sql.unsafe [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\index.js:121:21[90m)[39m
+      at [90mD:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:25:14
+      at new Promise (<anonymous>)
+      at executeSqlOneValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:21:12[90m)[39m
+      at executeSqlValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:57:33[90m)[39m
+      at Things.getSingle [90m(D:\stean\[39msrc\server\db\entities\common.ts:180:50[90m)[39m
+      at apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:55[90m)[39m
+      at [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:90
+      at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+      at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+      at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+      at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+    severity_local: [32m'ERREUR'[39m,
+    severity: [32m'ERROR'[39m,
+    code: [32m'42P01'[39m,
+    position: [32m'823'[39m,
+    file: [32m'parse_relation.c'[39m,
+    line: [32m'1452'[39m,
+    routine: [32m'parserOpenTable'[39m,
+    query: [32m'SELECT COUNT(t) AS "@iot.count",\n'[39m +
+      [32m"\tCOALESCE( JSON_AGG(t), '[]') AS value\n"[39m +
+      [32m'\tFROM (\n'[39m +
+      [32m`\tSELECT CONCAT('proxy/v1.1/Things(', "thing"."id", ')') AS "@iot.selfLink",\n`[39m +
+      [32m'\t\t"thing"."id" AS "@iot.id",\n'[39m +
+      [32m'\t\t"name",\n'[39m +
+      [32m'\t\t"description",\n'[39m +
+      [32m'\t\t"properties",\n'[39m +
+      [32m"\t\t(SELECT COALESCE( JSON_AGG(t), '[]') AS value\n"[39m +
+      [32m'\tFROM (\n'[39m +
+      [32m'\tSELECT "location"\n'[39m +
+      [32m' FROM "location"\n'[39m +
+      [32m'  WHERE "location"."id" IN (SELECT "thinglocation"."location_id" FROM "thinglocation" WHERE "thinglocation"."thing_id" ="thing"."id")\n'[39m +
+      [32m'ORDER BY id\n'[39m +
+      [32m' ) AS t) AS "Locations",\n'[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/HistoricalLocations') AS "HistoricalLocations@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/Datastreams') AS "Datastreams@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/MultiDatastreams') AS "MultiDatastreams@iot.navigationLink"\n`[39m +
+      [32m' FROM "thing"\n'[39m +
+      [32m'  WHERE  id = 6\n'[39m +
+      [32m'ORDER BY id\n'[39m +
+      [32m' LIMIT 1000\n'[39m +
+      [32m') AS t'[39m,
+    parameters: [],
+    args: [],
+    types: []
+  },
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+BadRequestError: Bad Request
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\db\entities\common.ts:192:62
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async Things.getSingle [90m(D:\stean\[39msrc\server\db\entities\common.ts:180:28[90m)[39m
+    at async apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:35[90m)[39m
+    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:71
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  code: [33m400[39m,
+  detail: PostgresError: la relation « thing » n'existe pas
+      at ErrorResponse [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:794:26[90m)[39m
+      at handle [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:480:6[90m)[39m
+      at Socket.data [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:315:9[90m)[39m
+  [90m    at Socket.emit (node:events:508:28)[39m
+  [90m    at Socket.emit (node:domain:489:12)[39m
+  [90m    at addChunk (node:internal/streams/readable:559:12)[39m
+  [90m    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)[39m
+  [90m    at Socket.Readable.push (node:internal/streams/readable:390:5)[39m
+  [90m    at TCP.onStreamRead (node:internal/stream_base_commons:189:23)[39m
+      at new Query [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\query.js:35:9[90m)[39m
+      at sql.unsafe [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\index.js:121:21[90m)[39m
+      at [90mD:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:25:14
+      at new Promise (<anonymous>)
+      at executeSqlOneValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:21:12[90m)[39m
+      at executeSqlValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:57:33[90m)[39m
+      at Things.getSingle [90m(D:\stean\[39msrc\server\db\entities\common.ts:180:50[90m)[39m
+      at apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:55[90m)[39m
+      at [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:90
+      at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+      at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+      at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+      at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+    severity_local: [32m'ERREUR'[39m,
+    severity: [32m'ERROR'[39m,
+    code: [32m'42P01'[39m,
+    position: [32m'1667'[39m,
+    file: [32m'parse_relation.c'[39m,
+    line: [32m'1452'[39m,
+    routine: [32m'parserOpenTable'[39m,
+    query: [32m'SELECT COUNT(t) AS "@iot.count",\n'[39m +
+      [32m"\tCOALESCE( JSON_AGG(t), '[]') AS value\n"[39m +
+      [32m'\tFROM (\n'[39m +
+      [32m`\tSELECT CONCAT('proxy/v1.1/Things(', "thing"."id", ')') AS "@iot.selfLink",\n`[39m +
+      [32m'\t\t"thing"."id" AS "@iot.id",\n'[39m +
+      [32m'\t\t"name",\n'[39m +
+      [32m'\t\t"description",\n'[39m +
+      [32m'\t\t"properties",\n'[39m +
+      [32m"\t\t(SELECT COALESCE( JSON_AGG(t), '[]') AS value\n"[39m +
+      [32m'\tFROM (\n'[39m +
+      [32m`\tSELECT CONCAT('proxy/v1.1/Locations(', "location"."id", ')') AS "@iot.selfLink",\n`[39m +
+      [32m'\t\t"location"."id" AS "@iot.id",\n'[39m +
+      [32m'\t\t"name",\n'[39m +
+      [32m'\t\t"description",\n'[39m +
+      [32m'\t\t"encodingType",\n'[39m +
+      [32m'\t\t"location",\n'[39m +
+      [32m'\t\t"properties",\n'[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Locations(', "location"."id", ')/Things') AS "Things@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Locations(', "location"."id", ')/HistoricalLocations') AS "HistoricalLocations@iot.navigationLink"\n`[39m +
+      [32m' FROM "location"\n'[39m +
+      [32m'  WHERE "location"."id" IN (SELECT "thinglocation"."location_id" FROM "thinglocation" WHERE "thinglocation"."thing_id" ="thing"."id")\n'[39m +
+      [32m'ORDER BY id\n'[39m +
+      [32m' ) AS t) AS "Locations",\n'[39m +
+      [32m"\t\t(SELECT COALESCE( JSON_AGG(t), '[]') AS value\n"[39m +
+      [32m'\tFROM (\n'[39m +
+      [32m`\tSELECT CONCAT('proxy/v1.1/HistoricalLocations(', "historicallocation"."id", ')') AS "@iot.selfLink",\n`[39m +
+      [32m'\t\t"historicallocation"."id" AS "@iot.id",\n'[39m +
+      [32m'\t\t"time",\n'[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/HistoricalLocations(', "historicallocation"."id", ')/Thing') AS "Thing@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/HistoricalLocations(', "historicallocation"."id", ')/Locations') AS "Locations@iot.navigationLink"\n`[39m +
+      [32m' FROM "historicallocation"\n'[39m +
+      [32m'  WHERE "historicallocation"."thing_id" ="thing"."id"\n'[39m +
+      [32m'ORDER BY id\n'[39m +
+      [32m' ) AS t) AS "HistoricalLocations",\n'[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/Datastreams') AS "Datastreams@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/MultiDatastreams') AS "MultiDatastreams@iot.navigationLink"\n`[39m +
+      [32m' FROM "thing"\n'[39m +
+      [32m'  WHERE  id = 6\n'[39m +
+      [32m'ORDER BY id\n'[39m +
+      [32m' LIMIT 1000\n'[39m +
+      [32m') AS t'[39m,
+    parameters: [],
+    args: [],
+    types: []
+  },
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+BadRequestError: Bad Request
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\db\entities\common.ts:192:62
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async Things.getSingle [90m(D:\stean\[39msrc\server\db\entities\common.ts:180:28[90m)[39m
+    at async apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:35[90m)[39m
+    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:71
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  code: [33m400[39m,
+  detail: PostgresError: la relation « thing » n'existe pas
+      at ErrorResponse [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:794:26[90m)[39m
+      at handle [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:480:6[90m)[39m
+      at Socket.data [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:315:9[90m)[39m
+  [90m    at Socket.emit (node:events:508:28)[39m
+  [90m    at Socket.emit (node:domain:489:12)[39m
+  [90m    at addChunk (node:internal/streams/readable:559:12)[39m
+  [90m    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)[39m
+  [90m    at Socket.Readable.push (node:internal/streams/readable:390:5)[39m
+  [90m    at TCP.onStreamRead (node:internal/stream_base_commons:189:23)[39m
+      at new Query [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\query.js:35:9[90m)[39m
+      at sql.unsafe [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\index.js:121:21[90m)[39m
+      at [90mD:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:25:14
+      at new Promise (<anonymous>)
+      at executeSqlOneValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:21:12[90m)[39m
+      at executeSqlValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:57:33[90m)[39m
+      at Things.getSingle [90m(D:\stean\[39msrc\server\db\entities\common.ts:180:50[90m)[39m
+      at apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:55[90m)[39m
+      at [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:90
+      at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+      at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+      at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+      at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+    severity_local: [32m'ERREUR'[39m,
+    severity: [32m'ERROR'[39m,
+    code: [32m'42P01'[39m,
+    position: [32m'1806'[39m,
+    file: [32m'parse_relation.c'[39m,
+    line: [32m'1452'[39m,
+    routine: [32m'parserOpenTable'[39m,
+    query: [32m'SELECT COUNT(t) AS "@iot.count",\n'[39m +
+      [32m"\tCOALESCE( JSON_AGG(t), '[]') AS value\n"[39m +
+      [32m'\tFROM (\n'[39m +
+      [32m`\tSELECT CONCAT('proxy/v1.1/Things(', "thing"."id", ')') AS "@iot.selfLink",\n`[39m +
+      [32m'\t\t"thing"."id" AS "@iot.id",\n'[39m +
+      [32m'\t\t"name",\n'[39m +
+      [32m'\t\t"description",\n'[39m +
+      [32m'\t\t"properties",\n'[39m +
+      [32m"\t\t(SELECT COALESCE( JSON_AGG(t), '[]') AS value\n"[39m +
+      [32m'\tFROM (\n'[39m +
+      [32m`\tSELECT CONCAT('proxy/v1.1/Locations(', "location"."id", ')') AS "@iot.selfLink",\n`[39m +
+      [32m'\t\t"location"."id" AS "@iot.id",\n'[39m +
+      [32m'\t\t"name",\n'[39m +
+      [32m'\t\t"description",\n'[39m +
+      [32m'\t\t"encodingType",\n'[39m +
+      [32m'\t\t"location",\n'[39m +
+      [32m'\t\t"properties",\n'[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Locations(', "location"."id", ')/Things') AS "Things@iot.navigationLink",\n`[39m +
+      [32m"\t\t(SELECT COALESCE( JSON_AGG(t), '[]') AS value\n"[39m +
+      [32m'\tFROM (\n'[39m +
+      [32m`\tSELECT CONCAT('proxy/v1.1/HistoricalLocations(', "historicallocation"."id", ')') AS "@iot.selfLink",\n`[39m +
+      [32m'\t\t"historicallocation"."id" AS "@iot.id",\n'[39m +
+      [32m'\t\t"time",\n'[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/HistoricalLocations(', "historicallocation"."id", ')/Thing') AS "Thing@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/HistoricalLocations(', "historicallocation"."id", ')/Locations') AS "Locations@iot.navigationLink"\n`[39m +
+      [32m' FROM "historicallocation"\n'[39m +
+      [32m'  WHERE "historicallocation"."id" IN (SELECT "locationhistoricallocation"."historicallocation_id" FROM "locationhistoricallocation" WHERE "locationhistoricallocation"."location_id" ="location"."id")\n'[39m +
+      [32m'ORDER BY id\n'[39m +
+      [32m' ) AS t) AS "HistoricalLocations"\n'[39m +
+      [32m' FROM "location"\n'[39m +
+      [32m'  WHERE "location"."id" IN (SELECT "thinglocation"."location_id" FROM "thinglocation" WHERE "thinglocation"."thing_id" ="thing"."id")\n'[39m +
+      [32m'ORDER BY id\n'[39m +
+      [32m' ) AS t) AS "Locations",\n'[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/HistoricalLocations') AS "HistoricalLocations@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/Datastreams') AS "Datastreams@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/MultiDatastreams') AS "MultiDatastreams@iot.navigationLink"\n`[39m +
+      [32m' FROM "thing"\n'[39m +
+      [32m'  WHERE  id = 6\n'[39m +
+      [32m'ORDER BY id\n'[39m +
+      [32m' LIMIT 1000\n'[39m +
+      [32m') AS t'[39m,
+    parameters: [],
+    args: [],
+    types: []
+  },
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+BadRequestError: Bad Request
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\db\entities\common.ts:192:62
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async Things.getSingle [90m(D:\stean\[39msrc\server\db\entities\common.ts:180:28[90m)[39m
+    at async apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:35[90m)[39m
+    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:71
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  code: [33m400[39m,
+  detail: PostgresError: la relation « thing » n'existe pas
+      at ErrorResponse [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:794:26[90m)[39m
+      at handle [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:480:6[90m)[39m
+      at Socket.data [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:315:9[90m)[39m
+  [90m    at Socket.emit (node:events:508:28)[39m
+  [90m    at Socket.emit (node:domain:489:12)[39m
+  [90m    at addChunk (node:internal/streams/readable:559:12)[39m
+  [90m    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)[39m
+  [90m    at Socket.Readable.push (node:internal/streams/readable:390:5)[39m
+  [90m    at TCP.onStreamRead (node:internal/stream_base_commons:189:23)[39m
+      at new Query [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\query.js:35:9[90m)[39m
+      at sql.unsafe [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\index.js:121:21[90m)[39m
+      at [90mD:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:25:14
+      at new Promise (<anonymous>)
+      at executeSqlOneValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:21:12[90m)[39m
+      at executeSqlValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:57:33[90m)[39m
+      at Things.getSingle [90m(D:\stean\[39msrc\server\db\entities\common.ts:180:50[90m)[39m
+      at apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:55[90m)[39m
+      at [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:90
+      at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+      at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+      at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+      at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+    severity_local: [32m'ERREUR'[39m,
+    severity: [32m'ERROR'[39m,
+    code: [32m'42P01'[39m,
+    position: [32m'1113'[39m,
+    file: [32m'parse_relation.c'[39m,
+    line: [32m'1452'[39m,
+    routine: [32m'parserOpenTable'[39m,
+    query: [32m'SELECT COUNT(t) AS "@iot.count",\n'[39m +
+      [32m"\tCOALESCE( JSON_AGG(t), '[]') AS value\n"[39m +
+      [32m'\tFROM (\n'[39m +
+      [32m`\tSELECT CONCAT('proxy/v1.1/Things(', "thing"."id", ')') AS "@iot.selfLink",\n`[39m +
+      [32m'\t\t"thing"."id" AS "@iot.id",\n'[39m +
+      [32m'\t\t"name",\n'[39m +
+      [32m'\t\t"description",\n'[39m +
+      [32m'\t\t"properties",\n'[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/Locations') AS "Locations@iot.navigationLink",\n`[39m +
+      [32m"\t\t(SELECT COALESCE( JSON_AGG(t), '[]') AS value\n"[39m +
+      [32m'\tFROM (\n'[39m +
+      [32m`\tSELECT CONCAT('proxy/v1.1/HistoricalLocations(', "historicallocation"."id", ')') AS "@iot.selfLink",\n`[39m +
+      [32m'\t\t"historicallocation"."id" AS "@iot.id",\n'[39m +
+      [32m'\t\t"time",\n'[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/HistoricalLocations(', "historicallocation"."id", ')/Thing') AS "Thing@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/HistoricalLocations(', "historicallocation"."id", ')/Locations') AS "Locations@iot.navigationLink"\n`[39m +
+      [32m' FROM "historicallocation"\n'[39m +
+      [32m'  WHERE "historicallocation"."thing_id" ="thing"."id"\n'[39m +
+      [32m'ORDER BY id\n'[39m +
+      [32m' ) AS t) AS "HistoricalLocations",\n'[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/Datastreams') AS "Datastreams@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/MultiDatastreams') AS "MultiDatastreams@iot.navigationLink"\n`[39m +
+      [32m' FROM "thing"\n'[39m +
+      [32m'  WHERE  id = 6\n'[39m +
+      [32m'ORDER BY id\n'[39m +
+      [32m' LIMIT 1000\n'[39m +
+      [32m') AS t'[39m,
+    parameters: [],
+    args: [],
+    types: []
+  },
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+BadRequestError: Bad Request
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\db\entities\common.ts:192:62
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async Things.getSingle [90m(D:\stean\[39msrc\server\db\entities\common.ts:180:28[90m)[39m
+    at async apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:35[90m)[39m
+    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:71
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  code: [33m400[39m,
+  detail: PostgresError: la relation « thing » n'existe pas
+      at ErrorResponse [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:794:26[90m)[39m
+      at handle [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:480:6[90m)[39m
+      at Socket.data [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:315:9[90m)[39m
+  [90m    at Socket.emit (node:events:508:28)[39m
+  [90m    at Socket.emit (node:domain:489:12)[39m
+  [90m    at addChunk (node:internal/streams/readable:559:12)[39m
+  [90m    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)[39m
+  [90m    at Socket.Readable.push (node:internal/streams/readable:390:5)[39m
+  [90m    at TCP.onStreamRead (node:internal/stream_base_commons:189:23)[39m
+      at new Query [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\query.js:35:9[90m)[39m
+      at sql.unsafe [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\index.js:121:21[90m)[39m
+      at [90mD:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:25:14
+      at new Promise (<anonymous>)
+      at executeSqlOneValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:21:12[90m)[39m
+      at executeSqlValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:57:33[90m)[39m
+      at Things.getSingle [90m(D:\stean\[39msrc\server\db\entities\common.ts:180:50[90m)[39m
+      at apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:55[90m)[39m
+      at [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:90
+      at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+      at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+      at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+      at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+    severity_local: [32m'ERREUR'[39m,
+    severity: [32m'ERROR'[39m,
+    code: [32m'42P01'[39m,
+    position: [32m'2114'[39m,
+    file: [32m'parse_relation.c'[39m,
+    line: [32m'1452'[39m,
+    routine: [32m'parserOpenTable'[39m,
+    query: [32m'SELECT COUNT(t) AS "@iot.count",\n'[39m +
+      [32m"\tCOALESCE( JSON_AGG(t), '[]') AS value\n"[39m +
+      [32m'\tFROM (\n'[39m +
+      [32m`\tSELECT CONCAT('proxy/v1.1/Things(', "thing"."id", ')') AS "@iot.selfLink",\n`[39m +
+      [32m'\t\t"thing"."id" AS "@iot.id",\n'[39m +
+      [32m'\t\t"name",\n'[39m +
+      [32m'\t\t"description",\n'[39m +
+      [32m'\t\t"properties",\n'[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/Locations') AS "Locations@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/HistoricalLocations') AS "HistoricalLocations@iot.navigationLink",\n`[39m +
+      [32m"\t\t(SELECT COALESCE( JSON_AGG(t), '[]') AS value\n"[39m +
+      [32m'\tFROM (\n'[39m +
+      [32m`\tSELECT CONCAT('proxy/v1.1/Datastreams(', "datastream"."id", ')') AS "@iot.selfLink",\n`[39m +
+      [32m'\t\t"datastream"."id" AS "@iot.id",\n'[39m +
+      [32m'\t\t"name",\n'[39m +
+      [32m'\t\t"description",\n'[39m +
+      [32m'\t\t"observationType",\n'[39m +
+      [32m'\t\t"unitOfMeasurement",\n'[39m +
+      [32m'\t\t"observedArea",\n'[39m +
+      [32m`\t\tNULLIF (CONCAT_WS('/', to_char((SELECT MIN("phenomenonTime") FROM "observation" WHERE "observation"."datastream_id" = datastream.id),'YYYY-MM-DD"T"HH24:MI:SSZ'),  to_char((SELECT MAX("phenomenonTime") FROM "observation" WHERE "observation"."datastream_id" =datastream.id),'YYYY-MM-DD"T"HH24:MI:SSZ')), '') AS "phenomenonTime",\n`[39m +
+      [32m`\t\tNULLIF (CONCAT_WS('/', to_char((SELECT MIN("resultTime") FROM "observation" WHERE "observation"."datastream_id" = datastream.id),'YYYY-MM-DD"T"HH24:MI:SSZ'),  to_char((SELECT MAX("resultTime") FROM "observation" WHERE "observation"."datastream_id" =datastream.id),'YYYY-MM-DD"T"HH24:MI:SSZ')), '') AS "resultTime",\n`[39m +
+      [32m'\t\t"properties",\n'[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Datastreams(', "datastream"."id", ')/Thing') AS "Thing@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Datastreams(', "datastream"."id", ')/Sensor') AS "Sensor@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Datastreams(', "datastream"."id", ')/ObservedProperty') AS "ObservedProperty@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Datastreams(', "datastream"."id", ')/Observations') AS "Observations@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Datastreams(', "datastream"."id", ')/Loras') AS "Loras@iot.navigationLink"\n`[39m +
+      [32m' FROM "datastream"\n'[39m +
+      [32m'  WHERE "datastream"."thing_id" ="thing"."id"\n'[39m +
+      [32m'ORDER BY id\n'[39m +
+      [32m' ) AS t) AS "Datastreams",\n'[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/MultiDatastreams') AS "MultiDatastreams@iot.navigationLink"\n`[39m +
+      [32m' FROM "thing"\n'[39m +
+      [32m'  WHERE  id = 6\n'[39m +
+      [32m'ORDER BY id\n'[39m +
+      [32m' LIMIT 1000\n'[39m +
+      [32m') AS t'[39m,
+    parameters: [],
+    args: [],
+    types: []
+  },
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+BadRequestError: Bad Request
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\db\entities\common.ts:153:62
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async Things.getAll [90m(D:\stean\[39msrc\server\db\entities\common.ts:141:28[90m)[39m
+    at async apiAccess.getAll [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:42:35[90m)[39m
+    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:104
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  code: [33m400[39m,
+  detail: [32m"la relation « thing » n'existe pas"[39m,
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+BadRequestError: Bad Request
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\db\entities\common.ts:192:62
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async Things.getSingle [90m(D:\stean\[39msrc\server\db\entities\common.ts:180:28[90m)[39m
+    at async apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:35[90m)[39m
+    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:71
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  code: [33m400[39m,
+  detail: PostgresError: la relation « thing » n'existe pas
+      at ErrorResponse [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:794:26[90m)[39m
+      at handle [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:480:6[90m)[39m
+      at Socket.data [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:315:9[90m)[39m
+  [90m    at Socket.emit (node:events:508:28)[39m
+  [90m    at Socket.emit (node:domain:489:12)[39m
+  [90m    at addChunk (node:internal/streams/readable:559:12)[39m
+  [90m    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)[39m
+  [90m    at Socket.Readable.push (node:internal/streams/readable:390:5)[39m
+  [90m    at TCP.onStreamRead (node:internal/stream_base_commons:189:23)[39m
+      at new Query [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\query.js:35:9[90m)[39m
+      at sql.unsafe [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\index.js:121:21[90m)[39m
+      at [90mD:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:25:14
+      at new Promise (<anonymous>)
+      at executeSqlOneValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:21:12[90m)[39m
+      at executeSqlValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:57:33[90m)[39m
+      at Things.getSingle [90m(D:\stean\[39msrc\server\db\entities\common.ts:180:50[90m)[39m
+      at apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:55[90m)[39m
+      at [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:90
+      at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+      at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+      at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+      at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+    severity_local: [32m'ERREUR'[39m,
+    severity: [32m'ERROR'[39m,
+    code: [32m'42P01'[39m,
+    position: [32m'2392'[39m,
+    file: [32m'parse_relation.c'[39m,
+    line: [32m'1452'[39m,
+    routine: [32m'parserOpenTable'[39m,
+    query: [32m'SELECT COUNT(t) AS "@iot.count",\n'[39m +
+      [32m"\tCOALESCE( JSON_AGG(t), '[]') AS value\n"[39m +
+      [32m'\tFROM (\n'[39m +
+      [32m`\tSELECT CONCAT('proxy/v1.1/Things(', "thing"."id", ')') AS "@iot.selfLink",\n`[39m +
+      [32m'\t\t"thing"."id" AS "@iot.id",\n'[39m +
+      [32m'\t\t"name",\n'[39m +
+      [32m'\t\t"description",\n'[39m +
+      [32m'\t\t"properties",\n'[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/Locations') AS "Locations@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/HistoricalLocations') AS "HistoricalLocations@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/Datastreams') AS "Datastreams@iot.navigationLink",\n`[39m +
+      [32m"\t\t(SELECT COALESCE( JSON_AGG(t), '[]') AS value\n"[39m +
+      [32m'\tFROM (\n'[39m +
+      [32m`\tSELECT CONCAT('proxy/v1.1/MultiDatastreams(', "multidatastream"."id", ')') AS "@iot.selfLink",\n`[39m +
+      [32m'\t\t"multidatastream"."id" AS "@iot.id",\n'[39m +
+      [32m'\t\t"name",\n'[39m +
+      [32m'\t\t"description",\n'[39m +
+      [32m'\t\t"unitOfMeasurements",\n'[39m +
+      [32m'\t\t"observationType",\n'[39m +
+      [32m'\t\t"multiObservationDataTypes",\n'[39m +
+      [32m'\t\t"observedArea",\n'[39m +
+      [32m`\t\tNULLIF (CONCAT_WS('/', to_char((SELECT MIN("phenomenonTime") FROM "observation" WHERE "observation"."multidatastream_id" = multidatastream.id),'YYYY-MM-DD"T"HH24:MI:SSZ'),  to_char((SELECT MAX("phenomenonTime") FROM "observation" WHERE "observation"."multidatastream_id" =multidatastream.id),'YYYY-MM-DD"T"HH24:MI:SSZ')), '') AS "phenomenonTime",\n`[39m +
+      [32m`\t\tNULLIF (CONCAT_WS('/', to_char((SELECT MIN("resultTime") FROM "observation" WHERE "observation"."multidatastream_id" = multidatastream.id),'YYYY-MM-DD"T"HH24:MI:SSZ'),  to_char((SELECT MAX("resultTime") FROM "observation" WHERE "observation"."multidatastream_id" =multidatastream.id),'YYYY-MM-DD"T"HH24:MI:SSZ')), '') AS "resultTime",\n`[39m +
+      [32m'\t\t"properties",\n'[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/MultiDatastreams(', "multidatastream"."id", ')/Thing') AS "Thing@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/MultiDatastreams(', "multidatastream"."id", ')/Sensor') AS "Sensor@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/MultiDatastreams(', "multidatastream"."id", ')/Observations') AS "Observations@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/MultiDatastreams(', "multidatastream"."id", ')/ObservedProperties') AS "ObservedProperties@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/MultiDatastreams(', "multidatastream"."id", ')/FeatureOfInterest') AS "FeatureOfInterest@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/MultiDatastreams(', "multidatastream"."id", ')/Loras') AS "Loras@iot.navigationLink"\n`[39m +
+      [32m' FROM "multidatastream"\n'[39m +
+      [32m'  WHERE "multidatastream"."thing_id" ="thing"."id"\n'[39m +
+      [32m'ORDER BY id\n'[39m +
+      [32m' ) AS t) AS "MultiDatastreams"\n'[39m +
+      [32m' FROM "thing"\n'[39m +
+      [32m'  WHERE  id = 11\n'[39m +
+      [32m'ORDER BY id\n'[39m +
+      [32m' LIMIT 1000\n'[39m +
+      [32m') AS t'[39m,
+    parameters: [],
+    args: [],
+    types: []
+  },
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+BadRequestError: Bad Request
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\db\entities\common.ts:153:62
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async Things.getAll [90m(D:\stean\[39msrc\server\db\entities\common.ts:141:28[90m)[39m
+    at async apiAccess.getAll [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:42:35[90m)[39m
+    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:104
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  code: [33m400[39m,
+  detail: [32m"la relation « thing » n'existe pas"[39m,
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+BadRequestError: Bad Request
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\db\entities\common.ts:192:62
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async Datastreams.getSingle [90m(D:\stean\[39msrc\server\db\entities\common.ts:180:28[90m)[39m
+    at async apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:35[90m)[39m
+    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:71
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  code: [33m400[39m,
+  detail: PostgresError: la relation « datastream » n'existe pas
+      at ErrorResponse [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:794:26[90m)[39m
+      at handle [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:480:6[90m)[39m
+      at Socket.data [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:315:9[90m)[39m
+  [90m    at Socket.emit (node:events:508:28)[39m
+  [90m    at Socket.emit (node:domain:489:12)[39m
+  [90m    at addChunk (node:internal/streams/readable:559:12)[39m
+  [90m    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)[39m
+  [90m    at Socket.Readable.push (node:internal/streams/readable:390:5)[39m
+  [90m    at TCP.onStreamRead (node:internal/stream_base_commons:189:23)[39m
+      at new Query [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\query.js:35:9[90m)[39m
+      at sql.unsafe [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\index.js:121:21[90m)[39m
+      at [90mD:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:25:14
+      at new Promise (<anonymous>)
+      at executeSqlOneValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:21:12[90m)[39m
+      at executeSqlValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:57:33[90m)[39m
+      at Datastreams.getSingle [90m(D:\stean\[39msrc\server\db\entities\common.ts:180:50[90m)[39m
+      at apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:55[90m)[39m
+      at [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:90
+      at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+      at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+      at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+      at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+    severity_local: [32m'ERREUR'[39m,
+    severity: [32m'ERROR'[39m,
+    code: [32m'42P01'[39m,
+    position: [32m'1485'[39m,
+    file: [32m'parse_relation.c'[39m,
+    line: [32m'1452'[39m,
+    routine: [32m'parserOpenTable'[39m,
+    query: [32m'SELECT COUNT(t) AS "@iot.count",\n'[39m +
+      [32m"\tCOALESCE( JSON_AGG(t), '[]') AS value\n"[39m +
+      [32m'\tFROM (\n'[39m +
+      [32m`\tSELECT CONCAT('proxy/v1.1/Datastreams(', "datastream"."id", ')') AS "@iot.selfLink",\n`[39m +
+      [32m'\t\t"datastream"."id" AS "@iot.id",\n'[39m +
+      [32m'\t\t"name",\n'[39m +
+      [32m'\t\t"description",\n'[39m +
+      [32m'\t\t"observationType",\n'[39m +
+      [32m'\t\t"unitOfMeasurement",\n'[39m +
+      [32m'\t\t"observedArea",\n'[39m +
+      [32m`\t\tNULLIF (CONCAT_WS('/', to_char((SELECT MIN("phenomenonTime") FROM "observation" WHERE "observation"."datastream_id" = datastream.id),'YYYY-MM-DD"T"HH24:MI:SSZ'),  to_char((SELECT MAX("phenomenonTime") FROM "observation" WHERE "observation"."datastream_id" =datastream.id),'YYYY-MM-DD"T"HH24:MI:SSZ')), '') AS "phenomenonTime",\n`[39m +
+      [32m`\t\tNULLIF (CONCAT_WS('/', to_char((SELECT MIN("resultTime") FROM "observation" WHERE "observation"."datastream_id" = datastream.id),'YYYY-MM-DD"T"HH24:MI:SSZ'),  to_char((SELECT MAX("resultTime") FROM "observation" WHERE "observation"."datastream_id" =datastream.id),'YYYY-MM-DD"T"HH24:MI:SSZ')), '') AS "resultTime",\n`[39m +
+      [32m'\t\t"properties",\n'[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Datastreams(', "datastream"."id", ')/Thing') AS "Thing@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Datastreams(', "datastream"."id", ')/Sensor') AS "Sensor@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Datastreams(', "datastream"."id", ')/ObservedProperty') AS "ObservedProperty@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Datastreams(', "datastream"."id", ')/Observations') AS "Observations@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Datastreams(', "datastream"."id", ')/Loras') AS "Loras@iot.navigationLink"\n`[39m +
+      [32m' FROM "datastream"\n'[39m +
+      [32m'  WHERE "datastream"."thing_id" =6 AND  id = 7\n'[39m +
+      [32m'ORDER BY id\n'[39m +
+      [32m' LIMIT 1000\n'[39m +
+      [32m') AS t'[39m,
+    parameters: [],
+    args: [],
+    types: []
+  },
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+BadRequestError: Bad Request
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\db\entities\common.ts:192:62
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async Datastreams.getSingle [90m(D:\stean\[39msrc\server\db\entities\common.ts:180:28[90m)[39m
+    at async apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:35[90m)[39m
+    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:71
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  code: [33m400[39m,
+  detail: PostgresError: la relation « datastream » n'existe pas
+      at ErrorResponse [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:794:26[90m)[39m
+      at handle [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:480:6[90m)[39m
+      at Socket.data [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:315:9[90m)[39m
+  [90m    at Socket.emit (node:events:508:28)[39m
+  [90m    at Socket.emit (node:domain:489:12)[39m
+  [90m    at addChunk (node:internal/streams/readable:559:12)[39m
+  [90m    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)[39m
+  [90m    at Socket.Readable.push (node:internal/streams/readable:390:5)[39m
+  [90m    at TCP.onStreamRead (node:internal/stream_base_commons:189:23)[39m
+      at new Query [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\query.js:35:9[90m)[39m
+      at sql.unsafe [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\index.js:121:21[90m)[39m
+      at [90mD:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:25:14
+      at new Promise (<anonymous>)
+      at executeSqlOneValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:21:12[90m)[39m
+      at executeSqlValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:57:33[90m)[39m
+      at Datastreams.getSingle [90m(D:\stean\[39msrc\server\db\entities\common.ts:180:50[90m)[39m
+      at apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:55[90m)[39m
+      at [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:90
+      at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+      at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+      at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+      at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+    severity_local: [32m'ERREUR'[39m,
+    severity: [32m'ERROR'[39m,
+    code: [32m'42P01'[39m,
+    position: [32m'102'[39m,
+    file: [32m'parse_relation.c'[39m,
+    line: [32m'1452'[39m,
+    routine: [32m'parserOpenTable'[39m,
+    query: [32m'SELECT COUNT(t) AS "@iot.count",\n'[39m +
+      [32m"\tCOALESCE( JSON_AGG(t), '[]') AS value\n"[39m +
+      [32m'\tFROM (\n'[39m +
+      [32m'\tSELECT "name"\n'[39m +
+      [32m' FROM "datastream"\n'[39m +
+      [32m'  WHERE "datastream"."thing_id" =6 AND  id = 7\n'[39m +
+      [32m'ORDER BY id\n'[39m +
+      [32m' LIMIT 1000\n'[39m +
+      [32m') AS t'[39m,
+    parameters: [],
+    args: [],
+    types: []
+  },
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+BadRequestError: Bad Request
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\db\entities\common.ts:192:62
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async Things.getSingle [90m(D:\stean\[39msrc\server\db\entities\common.ts:180:28[90m)[39m
+    at async apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:35[90m)[39m
+    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:71
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  code: [33m400[39m,
+  detail: PostgresError: la relation « thing » n'existe pas
+      at ErrorResponse [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:794:26[90m)[39m
+      at handle [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:480:6[90m)[39m
+      at Socket.data [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:315:9[90m)[39m
+  [90m    at Socket.emit (node:events:508:28)[39m
+  [90m    at Socket.emit (node:domain:489:12)[39m
+  [90m    at addChunk (node:internal/streams/readable:559:12)[39m
+  [90m    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)[39m
+  [90m    at Socket.Readable.push (node:internal/streams/readable:390:5)[39m
+  [90m    at TCP.onStreamRead (node:internal/stream_base_commons:189:23)[39m
+      at new Query [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\query.js:35:9[90m)[39m
+      at sql.unsafe [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\index.js:121:21[90m)[39m
+      at [90mD:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:25:14
+      at new Promise (<anonymous>)
+      at executeSqlOneValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:21:12[90m)[39m
+      at executeSqlValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:57:33[90m)[39m
+      at Things.getSingle [90m(D:\stean\[39msrc\server\db\entities\common.ts:180:50[90m)[39m
+      at apiAccess.getSingle [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:47:55[90m)[39m
+      at [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:90
+      at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+      at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+      at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+      at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+    severity_local: [32m'ERREUR'[39m,
+    severity: [32m'ERROR'[39m,
+    code: [32m'42P01'[39m,
+    position: [32m'656'[39m,
+    file: [32m'parse_relation.c'[39m,
+    line: [32m'1452'[39m,
+    routine: [32m'parserOpenTable'[39m,
+    query: [32m'SELECT COUNT(t) AS "@iot.count",\n'[39m +
+      [32m"\tCOALESCE( JSON_AGG(t), '[]') AS value\n"[39m +
+      [32m'\tFROM (\n'[39m +
+      [32m`\tSELECT CONCAT('proxy/v1.1/Things(', "thing"."id", ')') AS "@iot.selfLink",\n`[39m +
+      [32m'\t\t"thing"."id" AS "@iot.id",\n'[39m +
+      [32m'\t\t"name",\n'[39m +
+      [32m'\t\t"description",\n'[39m +
+      [32m'\t\t"properties",\n'[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/Locations') AS "Locations@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/HistoricalLocations') AS "HistoricalLocations@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/Datastreams') AS "Datastreams@iot.navigationLink",\n`[39m +
+      [32m`\t\t CONCAT('proxy/v1.1/Things(', "thing"."id", ')/MultiDatastreams') AS "MultiDatastreams@iot.navigationLink"\n`[39m +
+      [32m' FROM "thing"\n'[39m +
+      [32m'  WHERE "thing"."id" = (SELECT "datastream"."thing_id" FROM "datastream" WHERE "datastream"."id" =(SELECT id FROM (SELECT id\n'[39m +
+      [32m' FROM "datastream"\n'[39m +
+      [32m' WHERE "datastream"."thing_id" =6 AND  id = 7\n'[39m +
+      [32m') AS nop))\n'[39m +
+      [32m'ORDER BY id\n'[39m +
+      [32m' LIMIT 1000\n'[39m +
+      [32m') AS t'[39m,
+    parameters: [],
+    args: [],
+    types: []
+  },
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+BadRequestError: Bad Request
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\db\entities\common.ts:153:62
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async Datastreams.getAll [90m(D:\stean\[39msrc\server\db\entities\common.ts:141:28[90m)[39m
+    at async apiAccess.getAll [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:42:35[90m)[39m
+    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:104
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  code: [33m400[39m,
+  detail: [32m"la relation « datastream » n'existe pas"[39m,
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+BadRequestError: Bad Request
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\db\entities\common.ts:153:62
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async Things.getAll [90m(D:\stean\[39msrc\server\db\entities\common.ts:141:28[90m)[39m
+    at async apiAccess.getAll [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:42:35[90m)[39m
+    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:104
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  code: [33m400[39m,
+  detail: [32m"la relation « thing » n'existe pas"[39m,
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+BadRequestError: Bad Request
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\db\entities\common.ts:153:62
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async Things.getAll [90m(D:\stean\[39msrc\server\db\entities\common.ts:141:28[90m)[39m
+    at async apiAccess.getAll [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:42:35[90m)[39m
+    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:185:104
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  code: [33m400[39m,
+  detail: [32m"la relation « thing » n'existe pas"[39m,
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+UnauthorizedError: Unauthorized
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\routes\protected.ts:177:21
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at [90mD:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:260:18
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at [90mD:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:34:12
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:265:33[90m)[39m
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:237:34[90m)[39m
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:22[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+UnauthorizedError: Unauthorized
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\routes\protected.ts:177:21
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at [90mD:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:260:18
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at [90mD:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:34:12
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:265:33[90m)[39m
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:237:34[90m)[39m
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:22[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+UnauthorizedError: Unauthorized
+    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
+    at [90mD:\stean\[39msrc\server\routes\protected.ts:177:21
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at [90mD:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:260:18
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at [90mD:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:34:12
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:265:33[90m)[39m
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:237:34[90m)[39m
+    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
+    at cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:22[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  headers: { [32m'Access-Control-Allow-Origin'[39m: [32m'*'[39m, vary: [32m'Origin'[39m }
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mconnection for test error [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
+PostgresError: la relation « decoder » n'existe pas
+    at ErrorResponse [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:794:26[90m)[39m
+    at handle [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:480:6[90m)[39m
+    at Socket.data [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:315:9[90m)[39m
+[90m    at Socket.emit (node:events:508:28)[39m
+[90m    at Socket.emit (node:domain:489:12)[39m
+[90m    at addChunk (node:internal/streams/readable:559:12)[39m
+[90m    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)[39m
+[90m    at Socket.Readable.push (node:internal/streams/readable:390:5)[39m
+[90m    at TCP.onStreamRead (node:internal/stream_base_commons:189:23)[39m
+    at new Query [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\query.js:35:9[90m)[39m
+    at sql.unsafe [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\index.js:121:21[90m)[39m
+    at executeMessageQuery [90m(D:\stean\[39msrc\server\db\helpers\createTable.ts:29:14[90m)[39m
+    at createTable [90m(D:\stean\[39msrc\server\db\helpers\createTable.ts:88:44[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
+    at async [90mD:\stean\[39msrc\server\db\createDb\createDatabase.ts:84:33
+    at async asyncForEach [90m(D:\stean\[39msrc\server\helpers\asyncForEach.ts:20:9[90m)[39m
+    at async createDatabase [90m(D:\stean\[39msrc\server\db\createDb\createDatabase.ts:81:13[90m)[39m
+    at async createService [90m(D:\stean\[39msrc\server\db\helpers\createService.ts:54:9[90m)[39m
+    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:132:33
+    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
+    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
+    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
+    at async serve [90m(D:\stean\[39mnode_modules\[4mkoa-static[24m\index.js:53:9[90m)[39m {
+  severity_local: [32m'ERREUR'[39m,
+  severity: [32m'ERROR'[39m,
+  code: [32m'42P01'[39m,
+  file: [32m'namespace.c'[39m,
+  line: [32m'639'[39m,
+  routine: [32m'RangeVarGetRelidExtended'[39m,
+  query: [32m'ALTER TABLE "lora" ADD CONSTRAINT "lora_pkey" PRIMARY KEY ("id");ALTER TABLE "lora" ADD CONSTRAINT "lora_unik_name" UNIQUE ("name");ALTER TABLE "lora" ADD CONSTRAINT "lora_unik_deveui" UNIQUE ("deveui");ALTER TABLE "lora" ADD CONSTRAINT "lora_decoder_id_fkey" FOREIGN KEY ("decoder_id") REFERENCES "decoder"("id") ON UPDATE CASCADE ON DELETE CASCADE'[39m,
+  parameters: [],
+  args: [],
+  types: []
+}
+[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m

@@ -837,12 +837,12 @@ describe("endpoint : Thing [8.2.1]", () => {
                     "Deployment Condition": "Deployed in a third floor balcony",
                     "Case Used": "Radiation shield"
                 },
-                "Locations": {
+                "Locations": [{
                     "name": "Saint-Malo",
                     "description": "City of Saint-Malo",
                     "encodingType": "application/geo+json",
                     "location": geo["Saint-Brieuc"].geometry
-                }
+                }]
             };
             const infos = addTest({
                 type: "post",

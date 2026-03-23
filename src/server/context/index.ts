@@ -151,14 +151,14 @@ export class SteanContext {
     blankUser(): Iuser {
         return {
             id: 0,
-            username: "query",
+            username: "guest",
             password: "",
             email: "",
             database: this.service.pg.database,
             canPost: !this.inExtension(EExtensions.users),
             canDelete: !this.inExtension(EExtensions.users),
-            canCreateUser: !this.inExtension(EExtensions.users),
-            canCreateDb: !this.inExtension(EExtensions.users),
+            canCreateUser: false,
+            canCreateDb: false,
             admin: false,
             superAdmin: false
         };

@@ -58,6 +58,9 @@ export class Models {
 
         const extensions: Record<string, any> = {};
         switch (ctx._.service.apiVersion) {
+            case "20":
+                result["Ogc link"] = "https://hylkevds.github.io/23-019/23-019.html";
+                break;
             case "11":
                 result["Ogc link"] = "https://docs.ogc.org/is/18-088/18-088.html";
                 break;

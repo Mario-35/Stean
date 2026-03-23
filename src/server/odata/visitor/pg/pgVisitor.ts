@@ -294,7 +294,7 @@ export class PgVisitor extends Visitor {
     protected VisitSkip(node: Token, context: IodataContext) {
         this.skip = +node.value.raw;
     }
-
+    
     protected VisitTop(node: Token, context: IodataContext) {
         this.limit = +node.value.raw;
     }

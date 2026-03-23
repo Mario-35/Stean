@@ -84,7 +84,7 @@ export const defaultPostPatch = (lang: string, method: string, request: string):
             );
         case "PYTHON":
             return highlight(
-                `import requests\r\nimport json\r\nresponse_API = requests.${method}('proxy/${request}', (headers = { "Content-Type": "${EEncodingType.json}" }), (data = json.dumps(DATASSATAD)))\r\ndata = response_API.text\r\nparse_json = json.loads(data)\r\nprint(parse_json)`,
+                `import requests\r\nimport json\r\nresponse_API = requests.${method}('proxy/${request}', (headers = { "Content-Type": "${EEncodingType.json}" }), (data = json.dumps(DATASSATAD)))\r\nif response_api.ok: \r\n\tparse_json = response_api.json() \r\n\tprint(parse_json) \r\nelse: \r\n\tprint(requete.text)`,
                 languages.python,
                 "python"
             );
@@ -182,25 +182,25 @@ export const prepareToApiDoc = (input: IApiInput): IApiDoc => {
         case "post":
             input.examples = {
                 http: defaultGet("http", `${input.request}`),
-                curl: defaultPost("curl", "KEYHTTP"),
-                javascript: defaultPost("javascript", "KEYHTTP"),
-                python: defaultPost("python", "KEYHTTP")
+                curl: defaultPost("curl", `${input.request}`),
+                javascript: defaultPost("javascript", `${input.request}`),
+                python: defaultPost("python", `${input.request}`)
             };
             break;
         case "patch":
             input.examples = {
                 http: defaultGet("http", `${input.request}`),
-                curl: defaultPatch("curl", "KEYHTTP"),
-                javascript: defaultPatch("javascript", "KEYHTTP"),
-                python: defaultPatch("python", "KEYHTTP")
+                curl: defaultPatch("curl", `${input.request}`),
+                javascript: defaultPatch("javascript", `${input.request}`),
+                python: defaultPatch("python", `${input.request}`)
             };
             break;
         case "delete":
             input.examples = {
                 http: defaultGet("http", `${input.request}`),
-                curl: defaultDelete("curl", "KEYHTTP"),
-                javascript: defaultDelete("javascript", "KEYHTTP"),
-                python: defaultDelete("python", "KEYHTTP")
+                curl: defaultDelete("curl", `${input.request}`),
+                javascript: defaultDelete("javascript", `${input.request}`),
+                python: defaultDelete("python", `${input.request}`)
             };
             break;
 

@@ -87,3 +87,9 @@
     options clean
     creation of stean documentation
 
+
+## version 1.3.6
+    corrections in documentation
+    correction with top pagination from github
+    remove rollPeriod in default graph (without multiple stream)
+    

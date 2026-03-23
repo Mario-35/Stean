@@ -1,0 +1,123 @@
+{
+    "Things": { 
+        "table": "THINGS",
+        "columns": {
+            "id": "ID",
+            "name": "NAME",
+            "description": "DESCRIPTION",
+            "properties": "PROPERTIES"
+        }
+    },
+    "FeaturesOfInterest": {
+        "table": "FEATURES",
+        "columns": {
+            "id": "ID",
+            "name": "NAME",
+            "description": "DESCRIPTION",
+            "properties": "PROPERTIES",
+            "feature": "FEATURE",
+            "geom": "GEOM",
+            "encodingType": "ENCODING_TYPE"
+        }
+    },
+    "Locations": { 
+        "table": "LOCATIONS",
+        "columns": {
+            "id": "ID",
+            "name": "NAME",
+            "description": "DESCRIPTION",
+            "properties": "PROPERTIES",
+            "feature": "FEATURE",
+            "geom": "GEOM",
+            "location": "LOCATION",
+            "encodingType": "ENCODING_TYPE"
+        }        
+    },
+    "HistoricalLocations": { 
+        "table": "HIST_LOCATIONS",
+        "columns": {
+            "time": "TIME",
+            "thing_id": "THING_ID",
+            "id": "ID"
+        }
+    },
+    "LocationsHistoricalLocations": { 
+        "table": "LOCATIONS_HIST_LOCATIONS",
+        "columns": {
+            "location_id": "LOCATION_ID",
+            "historicallocation_id": "HIST_LOCATION_ID"
+        }
+    },
+    "ObservedProperties": { 
+        "table": "OBS_PROPERTIES",
+        "columns": {
+            "id": "ID",
+            "name": "NAME",
+            "definition": "DEFINITION",
+            "description": "DESCRIPTION",
+            "properties": "PROPERTIES"
+        }
+    },
+    "Sensors": { 
+        "table": "SENSORS",
+        "columns": {
+            "id": "ID",
+            "name": "NAME",
+            "description": "DESCRIPTION",
+            "properties": "PROPERTIES",
+            "encoding_type": "ENCODING_TYPE",
+            "metadata": "METADATA"
+        }
+    },
+    "Datastreams": { 
+        "table": "DATASTREAMS",
+        "columns": {
+            "id": "ID",
+            "name": "NAME",
+            "description": "DESCRIPTION",
+            "properties": "PROPERTIES",
+            "observation_type": "OBSERVATION_TYPE",
+            "_phenomenonTimeStart": "PHENOMENON_TIME_START",
+            "_phenomenonTimeEnd": "PHENOMENON_TIME_END",
+            "_resultTimeStart": "RESULT_TIME_START",
+            "_resultTimeEnd": "RESULT_TIME_END",
+            "observedArea": "OBSERVED_AREA",
+            "_default_featureofinterest": "LAST_FOI_ID",
+            "unitOfMeasurement": ["UNIT_NAME", "UNIT_SYMBOL", "UNIT_DEFINITION"],
+        }
+    },
+    "Observations": { 
+        "table": "OBSERVATIONS",
+        "columns": {
+            "id": "ID",
+            "name": "NAME",
+            "description": "DESCRIPTION",
+            "properties": "PROPERTIES",
+            "encoding_type": "ENCODING_TYPE",
+            "metadata": "METADATA"
+        }
+    },
+
+
+
+	id int8 GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1 NO CYCLE) NOT NULL,
+	"phenomenonTime" timestamptz NOT NULL,
+	"result" jsonb NULL,
+	"resultTime" timestamptz NOT NULL,
+	"resultQuality" jsonb NULL,
+	"validTime" timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	parameters jsonb NULL,
+	datastream_id int8 NULL,
+	multidatastream_id int8 NULL,
+	featureofinterest_id int8 DEFAULT '1'::bigint NOT NULL,
+
+
+
+
+    "ThingsLocations": { "table": "THINGS_LOCATIONS",
+        "columns": {
+            "thing_id": "THING_ID",
+            "location_id": "LOCATION_ID"
+        }
+    }
+}

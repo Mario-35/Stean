@@ -495,6 +495,7 @@ FROM
     extensions( ) {
       return  `SELECT 
                 (SELECT to_regclass('public.lora') IS NOT NULL) as Lora,
+                (SELECT to_regclass('public.user') IS NOT NULL) as user,
                 (SELECT to_regclass('public.multidatastream') IS NOT NULL) as multidatastream,
                 (SELECT to_regclass('public.datastream_id0') IS not NULL) as partitioned,
                 (SELECT pg_typeof(result)::text FROM observation limit 1) = 'numeric' AS numeric,

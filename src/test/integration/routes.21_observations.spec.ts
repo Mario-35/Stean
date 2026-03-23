@@ -453,7 +453,7 @@ describe("endpoint : Observations", () => {
             };
             const infos = addTest({
                 type: "post",
-                short: "With existing FOI",
+                short: "Basic",
                 description: `Post a new ${entity.name}.${showHide(`Post${entity.name}`, apiInfos["10.2"])}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#link-existing-entities-when-creating",
                 request: `${testVersion}/${entity.name}`,

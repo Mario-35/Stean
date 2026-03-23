@@ -22,7 +22,7 @@ export class Status extends CoreHtmlView {
         super(ctx, datas);
         if (datas.user) this.status(ctx, datas.user);
     }
-    public status(ctx: koaContext, user: Iuser) {
+    public status(ctx: koaContext, user: Iuser) {        
         const service = config.getConfigNameFromDatabase(user.database);
         const sec = ctx._.inExtension(EExtensions.users);
         this._HTMLResult = [
@@ -39,10 +39,10 @@ export class Status extends CoreHtmlView {
                         <h3>Status : ${user.id && user.id > 0 ? EChar.ok : !sec ? EChar.ok : EChar.notOk}</h3> 
                         <h3>Post : ${user.canPost === true ? EChar.ok : !sec ? EChar.ok : EChar.notOk}</h3>
                         <h3>Delete : ${user.canDelete === true ? EChar.ok : !sec ? EChar.ok : EChar.notOk}</h3>
-                        <h3>Create User: ${user.canCreateUser === true ? EChar.ok : !sec ? EChar.ok : EChar.notOk}</h3>
-                        <h3>Create Service : ${user.canCreateDb === true ? EChar.ok : !sec ? EChar.ok : EChar.notOk}</h3>
-                        <h3>Admin : ${user.admin === true ? EChar.ok : !sec ? EChar.ok : EChar.notOk}</h3>
-                        <h3>Super admin : ${user.superAdmin === true ? EChar.ok : !sec ? EChar.ok : EChar.notOk}</h3>
+                        <h3>Create User: ${user.canCreateUser === true ? EChar.ok : EChar.notOk}</h3>
+                        <h3>Create Service : ${user.canCreateDb === true ? EChar.ok : EChar.notOk}</h3>
+                        <h3>Admin : ${user.admin === true ? EChar.ok : EChar.notOk}</h3>
+                        <h3>Super admin : ${user.superAdmin === true ? EChar.ok : EChar.notOk}</h3>
                         ${this.foot([
                             { href: `${this.ctx._.root()}/Logout`, class: "button-logout", name: "Logout" },
                             { href: `${this.ctx._.root()}/Query`, class: "button-query", name: "Query" }
