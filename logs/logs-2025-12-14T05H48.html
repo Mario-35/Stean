@@ -1,1301 +1,0 @@
-<!DOCTYPE html>
-<html>
-<body style="background-color:#353535;"><span style="color:#0FA2DB"> ■■■■■■■■■■■■■■■■■■■■</span><span style="color:#00FFFF">  Start stean version : 1.3.5 </span><span style="color:#FFFFFF"> du</span><span style="color:#FFFF00">  12/12/2025-15:33:22 [development] </span><span style="color:#0FA2DB"> ■■■■■■■■■■■■■■■■■■■■</span><br /><span style="color:#00FF00"> ■■■■■■■■■■■■■■■■■■■■</span><span style="color:#00FFFF">  Read configuration </span><span style="color:#FFFFFF"> 🡸</span><span style="color:#FFFF00">  D:\stean\src\server\configuration\configuration.json </span><span style="color:#00FF00"> ■■■■■■■■■■■■■■■■■■■■</span><br /><span style="color:#00FFFF"> ■■■■■■■■■■■■■■■■■■■■</span><span style="color:#FFFFFF">   PostgreSQL 17.7 on x86_64-windows </span><span style="color:#FFFFFF"> </span><span style="color:#FFFFFF">  </span><span style="color:#00FFFF"> ■■■■■■■■■■■■■■■■■■■■</span><br />{  pg: {    host: </span><span style="color:#00FF00"> 'localhost'</span><span style="color:#FFFFFF"> ,    port: </span><span style="color:#FFFF00"> 5432</span><span style="color:#FFFFFF"> ,    user: </span><span style="color:#00FF00"> 'stean'</span><span style="color:#FFFFFF"> ,    retry: </span><span style="color:#FFFF00"> 2</span><span style="color:#FFFFFF"> ,    database: </span><span style="color:#00FF00"> 'test'</span><span style="color:#FFFFFF"> ,    password: </span><span style="color:#00FF00"> 'stean'</span><span style="color:#FFFFFF">   },  date: </span><span style="color:#00FF00"> '13/12/2025 16:08:24'</span><span style="color:#FFFFFF"> ,  name: </span><span style="color:#00FF00"> 'test'</span><span style="color:#FFFFFF"> ,  _lora: </span><span style="color:#FFFF00"> false</span><span style="color:#FFFFFF"> ,  alias: [ </span><span style="color:#00FF00"> ''</span><span style="color:#FFFFFF">  ],  status: </span><span style="color:#00FF00"> 'normal'</span><span style="color:#FFFFFF"> ,  _unique: </span><span style="color:#FFFF00"> false</span><span style="color:#FFFFFF"> ,  nb_page: </span><span style="color:#FFFF00"> 1000</span><span style="color:#FFFFFF"> ,  options: [ </span><span style="color:#00FF00"> 'canDrop'</span><span style="color:#FFFFFF"> , </span><span style="color:#00FF00"> 'unique'</span><span style="color:#FFFFFF"> , </span><span style="color:#00FF00"> 'optimized'</span><span style="color:#FFFFFF">  ],  _numeric: </span><span style="color:#FFFF00"> false</span><span style="color:#FFFFFF"> ,  nb_graph: </span><span style="color:#FFFF00"> 1000000</span><span style="color:#FFFFFF"> ,  apiVersion: </span><span style="color:#00FF00"> 'v1.1'</span><span style="color:#FFFFFF"> ,  extensions: [ </span><span style="color:#00FF00"> 'base'</span><span style="color:#FFFFFF"> , </span><span style="color:#00FF00"> 'lora'</span><span style="color:#FFFFFF"> , </span><span style="color:#00FF00"> 'users'</span><span style="color:#FFFFFF"> , </span><span style="color:#00FF00"> 'mqtt'</span><span style="color:#FFFFFF"> , </span><span style="color:#00FF00"> 'logs'</span><span style="color:#FFFFFF">  ],  date_format: </span><span style="color:#00FF00"> 'DD/MM/YYYY HH24:MI:SS'</span><span style="color:#FFFFFF"> ,  _partitioned: </span><span style="color:#FFFF00"> false</span><span style="color:#FFFFFF"> ,  csvDelimiter: </span><span style="color:#00FF00"> ';'</span><span style="color:#FFFFFF"> }</span><span style="color:#00FF00"> Write configuration</span><span style="color:#00FFFF">  : </span><span style="color:#FFFFFF"> D:\stean\src\server\configuration\configuration.json<span style="color:#85D076"> ■■■■■■■■■■■■</span><span style="color:#FFFFFF">  postgres </span><span style="color:#85D076"> ■■■■■■■■■■■■</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  Test database exist </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  (re)create PostgresSql functions </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  Set log level </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🌍 </span><span style="color:#FFFFFF">  Database admin Ready </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#85D076"> ■■■■■■■■■■■■</span><span style="color:#FFFFFF">  rennes </span><span style="color:#85D076"> ■■■■■■■■■■■■</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🌍 </span><span style="color:#FFFFFF">  admin Listening on port 8029 </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  Test database exist </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  (re)create PostgresSql functions </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  Set log level </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#00FF00"> Create optimized column for pagination</span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  rennes </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🌍 </span><span style="color:#FFFFFF">  Database rennes Ready </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🌍 </span><span style="color:#FFFFFF">  ADD rennes Listening on port 8029 </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#85D076"> ■■■■■■■■■■■■</span><span style="color:#FFFFFF">  nouv </span><span style="color:#85D076"> ■■■■■■■■■■■■</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  Test database exist </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  (re)create PostgresSql functions </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  Set log level </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#00FF00"> Create optimized column for pagination</span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  nouv </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🌍 </span><span style="color:#FFFFFF">  Database nouv Ready </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🌍 </span><span style="color:#FFFFFF">  ADD nouv Listening on port 8029 </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#85D076"> ■■■■■■■■■■■■</span><span style="color:#FFFFFF">  agrhys </span><span style="color:#85D076"> ■■■■■■■■■■■■</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  Test database exist </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  (re)create PostgresSql functions </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  Set log level </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#00FF00"> Create optimized column for pagination</span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  agrhys </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🌍 </span><span style="color:#FFFFFF">  Database agrhys Ready </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🌍 </span><span style="color:#FFFFFF">  ADD agrhys Listening on port 8029 </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#85D076"> ■■■■■■■■■■■■</span><span style="color:#FFFFFF">  one </span><span style="color:#85D076"> ■■■■■■■■■■■■</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  Test database exist </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  (re)create PostgresSql functions </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  Set log level </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#00FF00"> Create optimized column for pagination</span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  one </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🌍 </span><span style="color:#FFFFFF">  Database one Ready </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🌍 </span><span style="color:#FFFFFF">  ADD one Listening on port 8029 </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#85D076"> ■■■■■■■■■■■■</span><span style="color:#FFFFFF">  two </span><span style="color:#85D076"> ■■■■■■■■■■■■</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  Test database exist </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  (re)create PostgresSql functions </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  Set log level </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#00FF00"> Create optimized column for pagination</span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  two </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🌍 </span><span style="color:#FFFFFF">  Database two Ready </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🌍 </span><span style="color:#FFFFFF">  ADD two Listening on port 8029 </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#85D076"> ■■■■■■■■■■■■</span><span style="color:#FFFFFF">  test </span><span style="color:#85D076"> ■■■■■■■■■■■■</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  Test database exist </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  (re)create PostgresSql functions </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  Set log level </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">  13/12/2025 16:20:51  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">GET</span><span style="color:#DBA57D"> /two/v1.1/drop</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">     </span><span style="color:#00FF00"> Create optimized column for pagination</span><span style="color:#85D076">  🡺 </span><span style="color:#FFFFFF">  test </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🌍 </span><span style="color:#FFFFFF">  Database test Ready </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#FFFFFF">     </span><span style="color:#85D076">  🌍 </span><span style="color:#FFFFFF">  ADD test Listening on port 8029 </span><span style="color:#FFFFFF"> ✔️️</span><br /><span style="color:#85D076"> </span><br /><span style="color:#00FF00">  ____ __________    _     _   _</span><br /><span style="color:#00FF00"> / ___|_ __  ____|  / \   | \ | |</span><br /><span style="color:#00FF00"> \___ \| | |  _|   / _ \  |  \| |</span><br /><span style="color:#00FF00">  ___) | | | |___ / ___ \ | |\  |</span><br /><span style="color:#00FF00"> |____/|_| |_____|_/   \_\|_| \_| </span><span style="color:#85D076"> run API 🡺</span><span style="color:#00FF00">  1.3.5 du 12/12/2025-15:33:22</span><br /> 🌍 </span><span style="color:#FFFFFF"> https://github.com/Mario-35/Stean/ 📧 </span><span style="color:#FFFF00"> mario.adam@inrae.fr<span style="color:#00FF00"> ■■■■■■■■■■■■■■■■■■■■</span><span style="color:#FFFF00">   INIT FINISHED stean version : 1.3.5 </span><span style="color:#FFFFFF"> </span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> ■■■■■■■■■■■■■■■■■■■■</span><br /><span style="color:#FFFFFF">  13/12/2025 16:20:55  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">GET</span><span style="color:#DBA57D"> /two/v1.1/drop</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 4,458ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 3.31kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:02  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">GET</span><span style="color:#DBA57D"> /test/v1.1/Query</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:02  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">GET</span><span style="color:#DBA57D"> /test/v1.1/Query</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 200</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 37ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 338.11kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:18  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/FeaturesOfInterest</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError to while executing query [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-PostgresError: la valeur d'une clé dupliquée rompt la contrainte unique « featureofinterest_name_key »
-    at ErrorResponse [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:794:26[90m)[39m
-    at handle [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:480:6[90m)[39m
-    at Socket.data [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:315:9[90m)[39m
-[90m    at Socket.emit (node:events:508:28)[39m
-[90m    at Socket.emit (node:domain:489:12)[39m
-[90m    at addChunk (node:internal/streams/readable:559:12)[39m
-[90m    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)[39m
-[90m    at Socket.Readable.push (node:internal/streams/readable:390:5)[39m
-[90m    at TCP.onStreamRead (node:internal/stream_base_commons:189:23)[39m
-    at new Query [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\query.js:35:9[90m)[39m
-    at sql.unsafe [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\index.js:121:21[90m)[39m
-    at [90mD:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:25:14
-    at new Promise (<anonymous>)
-    at executeSqlOneValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:21:12[90m)[39m
-    at executeSqlValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:57:33[90m)[39m
-    at FeaturesOfInterest.post [90m(D:\stean\[39msrc\server\db\entities\common.ts:253:50[90m)[39m
-    at apiAccess.post [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:52:144[90m)[39m
-    at [90mD:\stean\[39msrc\server\routes\protected.ts:113:90
-[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m {
-  severity_local: [32m'ERREUR'[39m,
-  severity: [32m'ERROR'[39m,
-  code: [32m'23505'[39m,
-  detail: [32m'La clé « (name)=(Default Feature of Interest) » existe déjà.'[39m,
-  schema_name: [32m'public'[39m,
-  table_name: [32m'featureofinterest'[39m,
-  constraint_name: [32m'featureofinterest_name_key'[39m,
-  file: [32m'nbtinsert.c'[39m,
-  line: [32m'673'[39m,
-  routine: [32m'_bt_check_unique'[39m,
-  query: [32m'WITH featureofinterest AS (\n'[39m +
-    [32m'\tINSERT INTO "featureofinterest" \n'[39m +
-    [32m'\t("name",\n'[39m +
-    [32m'\t"description",\n'[39m +
-    [32m'\t"encodingType",\n'[39m +
-    [32m'\t"feature")\n'[39m +
-    [32m'\tVALUES\n'[39m +
-    [32m"\t('Default Feature of Interest',\n"[39m +
-    [32m"\t'Default Feature of Interest',\n"[39m +
-    [32m"\t'application/vnd.geo+json',\n"[39m +
-    [32m"\t'{}') RETURNING *)SELECT COALESCE( JSON_AGG(t), '[]') AS value\n"[39m +
-    [32m'\tFROM (\n'[39m +
-    [32m`\tSELECT CONCAT('http://localhost:8029/test/v1.1/FeaturesOfInterest(', "featureofinterest"."id", ')') AS "@iot.selfLink",\n`[39m +
-    [32m'\t\t"featureofinterest"."id" AS "@iot.id",\n'[39m +
-    [32m'\t\t"name",\n'[39m +
-    [32m'\t\t"description",\n'[39m +
-    [32m'\t\t"encodingType",\n'[39m +
-    [32m'\t\t"feature",\n'[39m +
-    [32m'\t\t"properties",\n'[39m +
-    [32m`\t\t CONCAT('http://localhost:8029/test/v1.1/FeaturesOfInterest(', "featureofinterest"."id", ')/Observations') AS "Observations@iot.navigationLink" FROM featureofinterest ) AS t`[39m,
-  parameters: [],
-  args: [],
-  types: []
-}
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:18  </span><span style="color:#FF0000"> xxx</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/FeaturesOfInterest</span><span style="color:#FFFFFF">  </span><span style="color:#FFFF00"> 400</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 44ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> -</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-BadRequestError: Bad Request
-    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
-    at [90mD:\stean\[39msrc\server\db\entities\common.ts:270:43
-[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
-    at async FeaturesOfInterest.post [90m(D:\stean\[39msrc\server\db\entities\common.ts:253:28[90m)[39m
-    at async apiAccess.post [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:52:124[90m)[39m
-    at async [90mD:\stean\[39msrc\server\routes\protected.ts:113:71
-    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
-    at async logger [90m(D:\stean\[39mnode_modules\[4mkoa-logger[24m\index.js:130:7[90m)[39m
-    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
-    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m {
-  code: [33m400[39m,
-  detail: [32m"la valeur d'une clé dupliquée rompt la contrainte unique « featureofinterest_name_key »"[39m,
-  headers: {
-    [32m'Access-Control-Allow-Origin'[39m: [32m'http://localhost:8029'[39m,
-    vary: [32m'Origin'[39m
-  }
-}
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:18  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/FeaturesOfInterest</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:18  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/FeaturesOfInterest</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 10ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 424b</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:18  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-09-01T00:01:00Z/2025-02-14T05:08:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-09-01T00:01:00Z/2025-02-14T05:08:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-09-01T00:01:00Z/2025-02-14T05:08:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-09-01T00:01:00Z/2025-02-14T05:08:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:18  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/FeaturesOfInterest</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:18  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/FeaturesOfInterest</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 6ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 443b</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:18  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 156ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1021b</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:18  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-09-01T00:01:00Z/2025-02-14T05:08:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-09-01T00:01:00Z/2025-02-14T05:08:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-09-01T00:01:00Z/2025-02-14T05:08:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-09-01T00:01:00Z/2025-02-14T05:08:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:18  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 84ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.03kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:19  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:19  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 59ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.06kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:19  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:19  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 80ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.03kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:19  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:19  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 83ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.03kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:20  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:20  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 66ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.03kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:20  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:20  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 81ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.01kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:20  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:20  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 69ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.03kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:21  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:21  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 82ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.05kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:21  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:21  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 82ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.03kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:21  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:21  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 80ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.03kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:22  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2007-08-03T01:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2007-08-03T01:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2007-08-03T01:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2007-08-03T01:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:22  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 80ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.04kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:22  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T00:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T00:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T00:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T00:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:22  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 80ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.03kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:22  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-02T00:00:00Z/2025-01-13T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-02T00:00:00Z/2025-01-13T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-02T00:00:00Z/2025-01-13T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-02T00:00:00Z/2025-01-13T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:23  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 74ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.02kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:23  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1991-01-07T07:00:00Z/2023-12-31T23:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1991-01-07T07:00:00Z/2023-12-31T23:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1991-01-07T07:00:00Z/2023-12-31T23:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1991-01-07T07:00:00Z/2023-12-31T23:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:23  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 74ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.02kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:23  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:23  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 89ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.05kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:24  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:24  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 81ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.04kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:24  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:24  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 85ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.05kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:24  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:25  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 93ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.04kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:25  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:25  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 71ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.05kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:25  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:25  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 84ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.04kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:26  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:26  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 79ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.05kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:26  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:26  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 85ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.05kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:27  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:27  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 84ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.05kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:27  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:27  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 88ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.05kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:27  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:28  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 96ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.05kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:28  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:28  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 87ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.05kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:28  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:28  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 85ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.05kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:29  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:29  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 93ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.05kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:29  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:29  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 93ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.05kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:30  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:30  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 95ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.05kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:30  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:30  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 96ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.05kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:30  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:30  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /test/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 96ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.05kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:34  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">GET</span><span style="color:#DBA57D"> /test/v1.1/Things</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:34  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">GET</span><span style="color:#DBA57D"> /test/v1.1/Things</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 200</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 8ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 9.89kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:48  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">GET</span><span style="color:#DBA57D"> /two/v1.1/Query</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:48  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">GET</span><span style="color:#DBA57D"> /two/v1.1/Query</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 200</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 13ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 337.18kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:50  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">GET</span><span style="color:#DBA57D"> /two/v1.1/Things</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:50  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">GET</span><span style="color:#DBA57D"> /two/v1.1/Things</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 200</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 5ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 12b</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:57  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/FeaturesOfInterest</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError to while executing query [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-PostgresError: la valeur d'une clé dupliquée rompt la contrainte unique « featureofinterest_name_key »
-    at ErrorResponse [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:794:26[90m)[39m
-    at handle [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:480:6[90m)[39m
-    at Socket.data [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\connection.js:315:9[90m)[39m
-[90m    at Socket.emit (node:events:508:28)[39m
-[90m    at Socket.emit (node:domain:489:12)[39m
-[90m    at addChunk (node:internal/streams/readable:559:12)[39m
-[90m    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)[39m
-[90m    at Socket.Readable.push (node:internal/streams/readable:390:5)[39m
-[90m    at TCP.onStreamRead (node:internal/stream_base_commons:189:23)[39m
-    at new Query [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\query.js:35:9[90m)[39m
-    at sql.unsafe [90m(D:\stean\[39mnode_modules\[4mpostgres[24m\cjs\src\index.js:121:21[90m)[39m
-    at [90mD:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:25:14
-    at new Promise (<anonymous>)
-    at executeSqlOneValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:21:12[90m)[39m
-    at executeSqlValues [90m(D:\stean\[39msrc\server\db\helpers\executeSqlValues.ts:57:33[90m)[39m
-    at FeaturesOfInterest.post [90m(D:\stean\[39msrc\server\db\entities\common.ts:253:50[90m)[39m
-    at apiAccess.post [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:52:144[90m)[39m
-    at [90mD:\stean\[39msrc\server\routes\protected.ts:113:90
-[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m {
-  severity_local: [32m'ERREUR'[39m,
-  severity: [32m'ERROR'[39m,
-  code: [32m'23505'[39m,
-  detail: [32m'La clé « (name)=(Default Feature of Interest) » existe déjà.'[39m,
-  schema_name: [32m'public'[39m,
-  table_name: [32m'featureofinterest'[39m,
-  constraint_name: [32m'featureofinterest_name_key'[39m,
-  file: [32m'nbtinsert.c'[39m,
-  line: [32m'673'[39m,
-  routine: [32m'_bt_check_unique'[39m,
-  query: [32m'WITH featureofinterest AS (\n'[39m +
-    [32m'\tINSERT INTO "featureofinterest" \n'[39m +
-    [32m'\t("name",\n'[39m +
-    [32m'\t"description",\n'[39m +
-    [32m'\t"encodingType",\n'[39m +
-    [32m'\t"feature")\n'[39m +
-    [32m'\tVALUES\n'[39m +
-    [32m"\t('Default Feature of Interest',\n"[39m +
-    [32m"\t'Default Feature of Interest',\n"[39m +
-    [32m"\t'application/vnd.geo+json',\n"[39m +
-    [32m"\t'{}') RETURNING *)SELECT COALESCE( JSON_AGG(t), '[]') AS value\n"[39m +
-    [32m'\tFROM (\n'[39m +
-    [32m`\tSELECT CONCAT('http://localhost:8029/two/v1.1/FeaturesOfInterest(', "featureofinterest"."id", ')') AS "@iot.selfLink",\n`[39m +
-    [32m'\t\t"featureofinterest"."id" AS "@iot.id",\n'[39m +
-    [32m'\t\t"name",\n'[39m +
-    [32m'\t\t"description",\n'[39m +
-    [32m'\t\t"encodingType",\n'[39m +
-    [32m'\t\t"feature",\n'[39m +
-    [32m'\t\t"properties",\n'[39m +
-    [32m`\t\t CONCAT('http://localhost:8029/two/v1.1/FeaturesOfInterest(', "featureofinterest"."id", ')/Observations') AS "Observations@iot.navigationLink" FROM featureofinterest ) AS t`[39m,
-  parameters: [],
-  args: [],
-  types: []
-}
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:57  </span><span style="color:#FF0000"> xxx</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/FeaturesOfInterest</span><span style="color:#FFFFFF">  </span><span style="color:#FFFF00"> 400</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 23ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> -</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-BadRequestError: Bad Request
-    at Object.throw [90m(D:\stean\[39mnode_modules\[4mkoa[24m\lib\context.js:96:11[90m)[39m
-    at [90mD:\stean\[39msrc\server\db\entities\common.ts:270:43
-[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
-    at async FeaturesOfInterest.post [90m(D:\stean\[39msrc\server\db\entities\common.ts:253:28[90m)[39m
-    at async apiAccess.post [90m(D:\stean\[39msrc\server\db\dataAccess\apiAccess.ts:52:124[90m)[39m
-    at async [90mD:\stean\[39msrc\server\routes\protected.ts:113:71
-    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
-    at async logger [90m(D:\stean\[39mnode_modules\[4mkoa-logger[24m\index.js:130:7[90m)[39m
-    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
-    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m {
-  code: [33m400[39m,
-  detail: [32m"la valeur d'une clé dupliquée rompt la contrainte unique « featureofinterest_name_key »"[39m,
-  headers: {
-    [32m'Access-Control-Allow-Origin'[39m: [32m'http://localhost:8029'[39m,
-    vary: [32m'Origin'[39m
-  }
-}
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:57  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-09-01T00:01:00Z/2025-02-14T05:08:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-09-01T00:01:00Z/2025-02-14T05:08:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-09-01T00:01:00Z/2025-02-14T05:08:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-09-01T00:01:00Z/2025-02-14T05:08:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:57  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/FeaturesOfInterest</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:57  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/FeaturesOfInterest</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 7ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 419b</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:58  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 89ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1008b</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:58  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/FeaturesOfInterest</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:58  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/FeaturesOfInterest</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 12ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 438b</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:58  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-09-01T00:01:00Z/2025-02-14T05:08:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-09-01T00:01:00Z/2025-02-14T05:08:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-09-01T00:01:00Z/2025-02-14T05:08:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-09-01T00:01:00Z/2025-02-14T05:08:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:58  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 77ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.02kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:58  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:58  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 72ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.04kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:58  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:58  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 41ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.01kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:59  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:59  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 38ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.01kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:59  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1999-11-19T15:00:00Z/2024-12-26T16:40:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:59  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 41ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.01kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:59  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:59  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 40ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:59  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:59  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 43ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.02kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:21:59  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:21:59  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 41ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.04kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:00  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:22:00  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 40ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.02kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:00  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T02:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:22:00  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 61ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.02kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:00  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2007-08-03T01:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2007-08-03T01:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2007-08-03T01:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2007-08-03T01:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:22:00  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 57ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.03kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:00  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T00:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T00:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T00:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-01T00:00:00Z/2025-01-14T03:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:22:00  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 57ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.03kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:01  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-02T00:00:00Z/2025-01-13T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-02T00:00:00Z/2025-01-13T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-02T00:00:00Z/2025-01-13T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1994-01-02T00:00:00Z/2025-01-13T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:22:01  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 71ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.01kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:01  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1991-01-07T07:00:00Z/2023-12-31T23:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1991-01-07T07:00:00Z/2023-12-31T23:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1991-01-07T07:00:00Z/2023-12-31T23:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-1991-01-07T07:00:00Z/2023-12-31T23:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:22:01  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 65ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.01kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:01  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:22:02  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 54ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.04kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:02  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:22:02  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 54ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.04kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:02  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:22:02  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 65ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.04kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:03  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:22:03  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 63ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.04kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:03  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:22:03  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 55ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.04kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:03  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:22:04  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 68ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.04kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:04  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:22:04  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 59ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.04kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:04  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:22:04  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 67ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.04kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:05  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:22:05  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 66ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.04kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:05  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:22:05  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 70ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.04kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:06  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:22:06  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 69ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.04kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:06  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:22:06  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 82ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.04kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:06  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:22:06  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 67ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.04kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:07  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:22:07  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 71ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.04kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:07  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:22:07  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 71ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.04kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:08  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:22:08  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 65ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.04kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:08  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:22:08  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 71ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.04kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:09  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37m($1) is not a valid entity [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-ThingsLocations
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : phenomenonTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR formatColumnValue : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mERROR createInsertValues : resultTime [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-2019-01-01T00:30:00Z/2020-01-01T00:00:00Z
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:22:09  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">POST</span><span style="color:#DBA57D"> /two/v1.1/Datastreams</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 201</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 62ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.04kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:13  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">GET</span><span style="color:#DBA57D"> /two/v1.1/Things</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:13  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">GET</span><span style="color:#DBA57D"> /two/v1.1/Things</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 200</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 9ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.12kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:17  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">GET</span><span style="color:#DBA57D"> /two/v1.1/Things(1)/Locations</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:17  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">GET</span><span style="color:#DBA57D"> /two/v1.1/Things(1)/Locations</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 200</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 16ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 502b</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:19  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">GET</span><span style="color:#DBA57D"> /two/v1.1/Locations(1)/Things</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:22:19  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">GET</span><span style="color:#DBA57D"> /two/v1.1/Locations(1)/Things</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 200</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 5ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 578b</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:23:26  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">GET</span><span style="color:#DBA57D"> /agrhys/v1.1/Query</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:23:26  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">GET</span><span style="color:#DBA57D"> /agrhys/v1.1/Query</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 200</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 13ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 335.06kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:23:28  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">GET</span><span style="color:#DBA57D"> /agrhys/v1.1/Things</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:23:28  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">GET</span><span style="color:#DBA57D"> /agrhys/v1.1/Things</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 200</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 18ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 1.15kb</span><span style="color:#FFFFFF"> </span><br /><span style="color:#FFFFFF">  13/12/2025 16:23:37  </span><span style="color:#DBA57D"> 🡸</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">GET</span><span style="color:#DBA57D"> /agrhys/v1.1/export</span><span style="color:#FFFFFF"> </span><br />[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-TypeError: Cannot read properties of undefined (reading 'split')
-    at getUrlKey [90m(D:\stean\[39msrc\server\helpers\getUrlKey.ts:23:13[90m)[39m
-    at [90mD:\stean\[39msrc\server\db\helpers\exportToJson.ts:50:38
-    at asyncForEach [90m(D:\stean\[39msrc\server\helpers\asyncForEach.ts:20:15[90m)[39m
-    at exportToJson [90m(D:\stean\[39msrc\server\db\helpers\exportToJson.ts:24:23[90m)[39m
-    at exportService [90m(D:\stean\[39msrc\server\db\helpers\index.ts:26:69[90m)[39m
-    at [90mD:\stean\[39msrc\server\routes\unProtected.ts:68:43
-    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
-    at [90mD:\stean\[39mnode_modules\[4mkoa-router[24m\lib\router.js:260:18
-    at dispatch [90m(D:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:42:32[90m)[39m
-    at [90mD:\stean\[39mnode_modules\[4mkoa-compose[24m\index.js:34:12
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-TypeError: Cannot read properties of undefined (reading 'split')
-    at getUrlKey [90m(D:\stean\[39msrc\server\helpers\getUrlKey.ts:23:13[90m)[39m
-    at [90mD:\stean\[39msrc\server\db\helpers\exportToJson.ts:50:38
-    at asyncForEach [90m(D:\stean\[39msrc\server\helpers\asyncForEach.ts:20:15[90m)[39m
-[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
-    at async exportToJson [90m(D:\stean\[39msrc\server\db\helpers\exportToJson.ts:24:5[90m)[39m
-    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:68:24
-    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
-    at async logger [90m(D:\stean\[39mnode_modules\[4mkoa-logger[24m\index.js:130:7[90m)[39m
-    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
-    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-TypeError: Cannot read properties of undefined (reading 'split')
-    at getUrlKey [90m(D:\stean\[39msrc\server\helpers\getUrlKey.ts:23:13[90m)[39m
-    at [90mD:\stean\[39msrc\server\db\helpers\exportToJson.ts:50:38
-    at asyncForEach [90m(D:\stean\[39msrc\server\helpers\asyncForEach.ts:20:15[90m)[39m
-[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
-    at async exportToJson [90m(D:\stean\[39msrc\server\db\helpers\exportToJson.ts:24:5[90m)[39m
-    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:68:24
-    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
-    at async logger [90m(D:\stean\[39mnode_modules\[4mkoa-logger[24m\index.js:130:7[90m)[39m
-    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
-    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-TypeError: Cannot read properties of undefined (reading 'split')
-    at getUrlKey [90m(D:\stean\[39msrc\server\helpers\getUrlKey.ts:23:13[90m)[39m
-    at [90mD:\stean\[39msrc\server\db\helpers\exportToJson.ts:50:38
-    at asyncForEach [90m(D:\stean\[39msrc\server\helpers\asyncForEach.ts:20:15[90m)[39m
-[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
-    at async exportToJson [90m(D:\stean\[39msrc\server\db\helpers\exportToJson.ts:24:5[90m)[39m
-    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:68:24
-    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
-    at async logger [90m(D:\stean\[39mnode_modules\[4mkoa-logger[24m\index.js:130:7[90m)[39m
-    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
-    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-TypeError: Cannot read properties of undefined (reading 'split')
-    at getUrlKey [90m(D:\stean\[39msrc\server\helpers\getUrlKey.ts:23:13[90m)[39m
-    at [90mD:\stean\[39msrc\server\db\helpers\exportToJson.ts:50:38
-    at asyncForEach [90m(D:\stean\[39msrc\server\helpers\asyncForEach.ts:20:15[90m)[39m
-[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
-    at async exportToJson [90m(D:\stean\[39msrc\server\db\helpers\exportToJson.ts:24:5[90m)[39m
-    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:68:24
-    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
-    at async logger [90m(D:\stean\[39mnode_modules\[4mkoa-logger[24m\index.js:130:7[90m)[39m
-    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
-    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-TypeError: Cannot read properties of undefined (reading 'split')
-    at getUrlKey [90m(D:\stean\[39msrc\server\helpers\getUrlKey.ts:23:13[90m)[39m
-    at [90mD:\stean\[39msrc\server\db\helpers\exportToJson.ts:50:38
-    at asyncForEach [90m(D:\stean\[39msrc\server\helpers\asyncForEach.ts:20:15[90m)[39m
-[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
-    at async exportToJson [90m(D:\stean\[39msrc\server\db\helpers\exportToJson.ts:24:5[90m)[39m
-    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:68:24
-    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
-    at async logger [90m(D:\stean\[39mnode_modules\[4mkoa-logger[24m\index.js:130:7[90m)[39m
-    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
-    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-TypeError: Cannot read properties of undefined (reading 'split')
-    at getUrlKey [90m(D:\stean\[39msrc\server\helpers\getUrlKey.ts:23:13[90m)[39m
-    at [90mD:\stean\[39msrc\server\db\helpers\exportToJson.ts:50:38
-    at asyncForEach [90m(D:\stean\[39msrc\server\helpers\asyncForEach.ts:20:15[90m)[39m
-[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
-    at async exportToJson [90m(D:\stean\[39msrc\server\db\helpers\exportToJson.ts:24:5[90m)[39m
-    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:68:24
-    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
-    at async logger [90m(D:\stean\[39mnode_modules\[4mkoa-logger[24m\index.js:130:7[90m)[39m
-    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
-    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-TypeError: Cannot read properties of undefined (reading 'split')
-    at getUrlKey [90m(D:\stean\[39msrc\server\helpers\getUrlKey.ts:23:13[90m)[39m
-    at [90mD:\stean\[39msrc\server\db\helpers\exportToJson.ts:50:38
-    at asyncForEach [90m(D:\stean\[39msrc\server\helpers\asyncForEach.ts:20:15[90m)[39m
-[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
-    at async exportToJson [90m(D:\stean\[39msrc\server\db\helpers\exportToJson.ts:24:5[90m)[39m
-    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:68:24
-    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
-    at async logger [90m(D:\stean\[39mnode_modules\[4mkoa-logger[24m\index.js:130:7[90m)[39m
-    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
-    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-TypeError: Cannot read properties of undefined (reading 'split')
-    at getUrlKey [90m(D:\stean\[39msrc\server\helpers\getUrlKey.ts:23:13[90m)[39m
-    at [90mD:\stean\[39msrc\server\db\helpers\exportToJson.ts:50:38
-    at asyncForEach [90m(D:\stean\[39msrc\server\helpers\asyncForEach.ts:20:15[90m)[39m
-[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
-    at async exportToJson [90m(D:\stean\[39msrc\server\db\helpers\exportToJson.ts:24:5[90m)[39m
-    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:68:24
-    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
-    at async logger [90m(D:\stean\[39mnode_modules\[4mkoa-logger[24m\index.js:130:7[90m)[39m
-    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
-    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-TypeError: Cannot read properties of undefined (reading 'split')
-    at getUrlKey [90m(D:\stean\[39msrc\server\helpers\getUrlKey.ts:23:13[90m)[39m
-    at [90mD:\stean\[39msrc\server\db\helpers\exportToJson.ts:50:38
-    at asyncForEach [90m(D:\stean\[39msrc\server\helpers\asyncForEach.ts:20:15[90m)[39m
-[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
-    at async exportToJson [90m(D:\stean\[39msrc\server\db\helpers\exportToJson.ts:24:5[90m)[39m
-    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:68:24
-    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
-    at async logger [90m(D:\stean\[39mnode_modules\[4mkoa-logger[24m\index.js:130:7[90m)[39m
-    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
-    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-TypeError: Cannot read properties of undefined (reading 'split')
-    at getUrlKey [90m(D:\stean\[39msrc\server\helpers\getUrlKey.ts:23:13[90m)[39m
-    at [90mD:\stean\[39msrc\server\db\helpers\exportToJson.ts:50:38
-    at asyncForEach [90m(D:\stean\[39msrc\server\helpers\asyncForEach.ts:20:15[90m)[39m
-[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
-    at async exportToJson [90m(D:\stean\[39msrc\server\db\helpers\exportToJson.ts:24:5[90m)[39m
-    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:68:24
-    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
-    at async logger [90m(D:\stean\[39mnode_modules\[4mkoa-logger[24m\index.js:130:7[90m)[39m
-    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
-    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ [37mError [31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-TypeError: Cannot read properties of undefined (reading 'split')
-    at getUrlKey [90m(D:\stean\[39msrc\server\helpers\getUrlKey.ts:23:13[90m)[39m
-    at [90mD:\stean\[39msrc\server\db\helpers\exportToJson.ts:50:38
-    at asyncForEach [90m(D:\stean\[39msrc\server\helpers\asyncForEach.ts:20:15[90m)[39m
-[90m    at processTicksAndRejections (node:internal/process/task_queues:103:5)[39m
-    at async exportToJson [90m(D:\stean\[39msrc\server\db\helpers\exportToJson.ts:24:5[90m)[39m
-    at async [90mD:\stean\[39msrc\server\routes\unProtected.ts:68:24
-    at async cors [90m(D:\stean\[39mnode_modules\[4m@koa\cors[24m\index.js:109:16[90m)[39m
-    at async logger [90m(D:\stean\[39mnode_modules\[4mkoa-logger[24m\index.js:130:7[90m)[39m
-    at async routerHandle [90m(D:\stean\[39msrc\server\routes\index.ts:90:9[90m)[39m
-    at async bodyParser [90m(D:\stean\[39mnode_modules\[4mkoa-bodyparser[24m\index.js:78:5[90m)[39m
-[31m▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[0m
-<span style="color:#FFFFFF">  13/12/2025 16:23:38  </span><span style="color:#DBA57D"> 🡺</span><span style="color:#FFFFFF">  <span style="font-weight:bold;">GET</span><span style="color:#DBA57D"> /agrhys/v1.1/export</span><span style="color:#FFFFFF">  </span><span style="color:#00FF00"> 200</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 203ms</span><span style="color:#FFFFFF">  </span><span style="color:#DBA57D"> 111.35kb</span><span style="color:#FFFFFF"> </span><br />
