@@ -9,6 +9,7 @@
 
 export enum EOptions {
     canDrop = "canDrop",
+    readOnly = "readOnly",
     forceHttps = "forceHttps",
     locked = "locked",
     stripNull = "stripNull",

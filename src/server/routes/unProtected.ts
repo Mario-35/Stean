@@ -150,7 +150,7 @@ unProtectedRoutes.get("/*path", async (ctx) => {
         // Drop DB
         case "DROP":
             console.log(logging.head("drop database").to().text());
-            if (ctx._.isOption(EOptions.canDrop)) {
+            if (ctx._.isOption(EOptions.canDrop) && !ctx._.isOption(EOptions.readOnly)) {
                 await disconnectDb(ctx._.service.pg.database, true);
                 try {
                     ctx.status = EHttpCode.created;

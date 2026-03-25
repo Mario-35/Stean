@@ -6,7 +6,7 @@
  *
  */
 
-import { EConstant } from "../../enums";
+import { EConstant, EOptions } from "../../enums";
 import { removeAllQuotes } from "../../helpers";
 import { logging } from "../../log";
 import { Idatas, IqueryOptions, koaContext } from "../../types";
@@ -54,7 +54,7 @@ export class Query extends CoreHtmlView {
             }
         };
         // users possibilities
-        if (this.params.user.canPost) {
+        if (this.params.user.canPost && !this.ctx._.service.options.includes(EOptions.readOnly)) {
             this.params.methods.push("POST");
             this.params.methods.push("PATCH");
             if (this.params.user.canDelete) this.params.methods.push("DELETE");

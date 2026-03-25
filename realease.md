@@ -92,4 +92,5 @@
     corrections in documentation
     correction with top pagination from github
     remove rollPeriod in default graph (without multiple stream)
-    
+    add readNoly option
+    add null result in observatioàn !!! NOT in STA standard

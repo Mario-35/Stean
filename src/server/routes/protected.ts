@@ -13,7 +13,7 @@ import fs from "fs";
 import { IreturnResult, Iuser, koaContext } from "../types";
 import { DefaultState, Context } from "koa";
 import { createOdata } from "../odata";
-import { EConstant, EErrors, EExtensions, EHttpCode, EInfos, EUserRights } from "../enums";
+import { EConstant, EErrors, EExtensions, EHttpCode, EInfos, EOptions, EUserRights } from "../enums";
 import { loginUser, setToken } from "../authentication";
 import { config } from "../configuration";
 import { checkPassword, emailIsValid } from "./helper";
@@ -26,12 +26,15 @@ import { queries } from "../db/queries";
 export const protectedRoutes = new Router<DefaultState, Context>();
 
 protectedRoutes.post("/*path", async (ctx: koaContext, next) => {
-    switch (ctx._.path.toUpperCase()) {
-        // Restart App
-        case "RESTART":
-            // login html page or connection login
-            logging.head("essai").toLogAndFile();
-            process.exit(100);
+
+    const readOnly = ctx._.isOption(EOptions.readOnly);
+
+        switch (ctx._.path.toUpperCase()) {
+            // Restart App
+            case "RESTART":
+                // login html page or connection login
+                logging.head("essai").toLogAndFile();
+                process.exit(100);
             case "LOGIN":
                 if (ctx.request["token" as keyof object]) ctx.redirect(`${ctx._.root()}/status`);
                 await loginUser(ctx).then((user: Iuser | undefined) => {
@@ -50,61 +53,57 @@ protectedRoutes.post("/*path", async (ctx: koaContext, next) => {
                     }
                 });
                 return;
-        case "REGISTER":
-            const why: Record<string, string> = {};
-            // Username
-            if (ctx.body["username"].trim() === "") {
-                why["username"] = messages.str(EErrors.empty, "username").toString();
-            } else {
-                const user = await executeSqlValues(config.getService(EConstant.admin), queries.getUser(ctx.body["username"]));
-                if (user) why["username"] = EErrors.alreadyPresent;
-            }
-            // Email
-            if (ctx.body["email"].trim() === "") {
-                why["email"] = messages.str(EErrors.empty, "email").toString();
-            } else {
-                if (emailIsValid(ctx.body["email"]) === false) why["email"] = messages.str(EErrors.invalid, "email").toString();
-            }
-            // Password
-            if (ctx.body["password"].trim() === "") {
-                why["password"] = messages.str(EErrors.empty, "password").toString();
-            }
-            // Repeat password
-            if ((ctx.body["repeat"] as string).trim() === "") {
-                why["repeat"] = messages.str(EErrors.empty, "repeat password").toString();
-            } else {
-                if (ctx.body["password"] != ctx.body.repeat) {
-                    why["repeat"] = EErrors.passowrdDifferent;
+            case "REGISTER":
+                const why: Record<string, string> = {};
+                // Username
+                if (ctx.body["username"].trim() === "") {
+                    why["username"] = messages.str(EErrors.empty, "username").toString();
                 } else {
-                    if (checkPassword(ctx.body["password"]) === false) why["password"] = messages.str(EErrors.invalid, "password").toString();
+                    const user = await executeSqlValues(config.getService(EConstant.admin), queries.getUser(ctx.body["username"]));
+                    if (user) why["username"] = EErrors.alreadyPresent;
                 }
-            }
-            if (Object.keys(why).length === 0) {
-                try {
-                    await userAccess.post(ctx._.service.name, ctx.body);
-                } catch (error) {
-                    logging.error(error);
-                    ctx.redirect(`${ctx._.root()}/error`);
+                // Email
+                if (ctx.body["email"].trim() === "") {
+                    why["email"] = messages.str(EErrors.empty, "email").toString();
+                } else {
+                    if (emailIsValid(ctx.body["email"]) === false) why["email"] = messages.str(EErrors.invalid, "email").toString();
                 }
-            } else {
-                const createHtml = new Login(ctx, {
-                    url: "",
-                    login: false,
-                    body: ctx.request.body,
-                    why: why
-                });
-                ctx.type = returnFormats.html.type;
-                ctx.body = createHtml.toString();
-            }
-            return;
-    }
+                // Password
+                if (ctx.body["password"].trim() === "") {
+                    why["password"] = messages.str(EErrors.empty, "password").toString();
+                }
+                // Repeat password
+                if ((ctx.body["repeat"] as string).trim() === "") {
+                    why["repeat"] = messages.str(EErrors.empty, "repeat password").toString();
+                } else {
+                    if (ctx.body["password"] != ctx.body.repeat) {
+                        why["repeat"] = EErrors.passowrdDifferent;
+                    } else {
+                        if (checkPassword(ctx.body["password"]) === false) why["password"] = messages.str(EErrors.invalid, "password").toString();
+                    }
+                }
+                if (Object.keys(why).length === 0) {
+                    try {
+                        await userAccess.post(ctx._.service.name, ctx.body);
+                    } catch (error) {
+                        logging.error(error);
+                        ctx.redirect(`${ctx._.root()}/error`);
+                    }
+                } else {
+                    const createHtml = new Login(ctx, {
+                        url: "",
+                        login: false,
+                        body: ctx.request.body,
+                        why: why
+                    });
+                    ctx.type = returnFormats.html.type;
+                    ctx.body = createHtml.toString();
+                }
+                return;
+        }
+
     // Add new lora observation this is a special route without ahtorisatiaon to post (deveui and correct payload limit risks)
-    if (
-        (ctx._.user && ctx._.user.id > 0) ||
-        !ctx._.inExtension(EExtensions.users) ||
-        ctx.request.url.includes("/Lora") ||
-        (ctx.request.headers["authorization"] && ctx.request.headers["authorization"] === config.getBrokerId())
-    ) {
+    if ( (!readOnly && ctx._.user && ctx._.user.id > 0) || !ctx._.inExtension(EExtensions.users) || ctx.request.url.includes("/Lora") || (!readOnly && ctx.request.headers["authorization"] && ctx.request.headers["authorization"] === config.getBrokerId()) ) {
         if (ctx.request.type.startsWith("application/json") && Object.keys(ctx.body).length > 0) {
             const odataVisitor = await createOdata(ctx);
             if (odataVisitor)  {
@@ -175,6 +174,7 @@ protectedRoutes.post("/*path", async (ctx: koaContext, next) => {
             ctx.throw(EHttpCode.badRequest, { details: EErrors.payloadIsMalformed });
         }
     } else ctx.throw(EHttpCode.Unauthorized);
+
 });
 
 protectedRoutes.patch("/*path", async (ctx) => {
@@ -204,6 +204,7 @@ protectedRoutes.patch("/*path", async (ctx) => {
 });
 
 protectedRoutes.delete("/*path", async (ctx) => {
+    if (ctx._.isOption(EOptions.readOnly)) ctx.throw(EHttpCode.Unauthorized);
     if (!ctx._.inExtension(EExtensions.users) || isAllowedTo(ctx, EUserRights.Delete) === true) {
         const odataVisitor = await createOdata(ctx);
         if (odataVisitor) {

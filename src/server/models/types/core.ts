@@ -16,7 +16,7 @@ export class Core {
     constructor(dataType: EDataType, cast?: string) {
         this._ = {
             dataType: dataType,
-            create: `${EDataType[dataType.toString() as keyof typeof EDataType]}@NULL@@UNIQUE@@DEFAULT@`.toUpperCase(),
+            create: `${EDataType[dataType.toString() as keyof typeof EDataType]}@NULL@@NOTNULL@@UNIQUE@@DEFAULT@`.toUpperCase(),
             alias(options: IentityColumnAliasOptions) {
                 return doubleQuotes(options.columnName);
             }
@@ -35,12 +35,17 @@ export class Core {
     }
 
     column(): IentityColumn {
-        this._.create = this._.create.replace("@DEFAULT@", "").replace("@NULL@", "").replace("@UNIQUE@", "");
+        this._.create = this._.create.replace("@DEFAULT@", "").replace("@NOTNULL@", "").replace("@NULL@", "").replace("@UNIQUE@", "");
         return this._;
     }
 
     notNull(): this {
-        this._.create = this._.create.replace("@NULL@", " NOT NULL");
+        this._.create = this._.create.replace("@NOTNULL@", " NOT NULL");
+        return this;
+    }
+
+    null(): this {
+        this._.create = this._.create.replace("@NULL@", " NULL");
         return this;
     }
 

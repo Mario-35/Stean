@@ -5,7 +5,6 @@
  * @author mario.adam@inrae.fr
  *
  */
-
 import { config } from "../configuration";
 import { setDebug } from "../constants";
 import { EConstant, EExtensions, EFrom, EOptions } from "../enums";
@@ -136,6 +135,7 @@ export class SteanContext {
             protocol: this.protocol,
             base: this.service ? `${this.origin}/${serviceName}` : this.origin,
             root:  `${this.origin}/${serviceName}/${service.apiVersion || ""}`,
+            readOnly: service.options.includes(EOptions.readOnly),
             service: service
         }
     }  

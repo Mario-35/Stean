@@ -19,6 +19,11 @@ import { IentityColumn } from "../../types";
  */
 
 export function formatColumnValue(columnName: string, value: any, column: IentityColumn): string | undefined {
+    console.log("#####################################################################################################");
+    console.log(columnName);
+    console.log(value);
+    console.log(column);
+    
     const idLink = (value: any) => {
         return value.hasOwnProperty(EConstant.name)
             ? `(SELECT "id" FROM "${columnName.split("_")[0]}" WHERE "name" = '${escapeSimpleQuotes(value[EConstant.name])}')`
