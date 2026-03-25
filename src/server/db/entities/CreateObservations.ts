@@ -17,7 +17,6 @@ import { models } from "../../models";
 import { logging } from "../../log";
 import { OBSERVATION } from "../../models/entities";
 import { queries } from "../queries";
-import { setState } from "../../constants";
 
 /**
  * CreateObservations Class
@@ -120,6 +119,13 @@ export class CreateObservations extends Common {
             );
             // Restore logs and triggers
             await executeSql(this.ctx._.service, queries.logsAndTriggers(true));
+            // pagination after Insert
+            this.ctx.state = EState.optimized;
+            executeSql(this.ctx._.service, queries.addNbToTable("observation"))
+                .then(() => { logging.statusAfter("Import CSV", EInfos.updateNb).toLogAndFile(true); 
+                    this.ctx.state = EState.normal;
+                });
+                
             return this.formatReturnResult({
                 total: sqlInsert.count,
                 body: [`Add ${resultSql[0]["inserted"]} on ${resultSql[0]["total"]} lines from ${splitLast(paramsFile.filename, "/")}`]
@@ -131,7 +137,7 @@ export class CreateObservations extends Common {
     // Override post xson file as createObservations
     async postJson(dataInput: Record<string, any>): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
-        setState(EState.import);
+        this.ctx.state = EState.import;
         const returnValue: string[] = [];
         let total = 0;
         /// classic Create
@@ -172,7 +178,7 @@ export class CreateObservations extends Common {
                 });
             }
         }
-        setState(EState.normal);
+        this.ctx.state = EState.normal;
     }
 
     // Override post caller

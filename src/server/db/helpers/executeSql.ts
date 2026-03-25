@@ -14,7 +14,7 @@ import { EErrors } from "../../enums";
 
 const executeSqlOne = async (service: Iservice, query: string): Promise<object> => {
     console.log(logging.whereIam(new Error().stack));
-    return new Promise(async function (resolve, reject) {
+    return new Promise(async function (resolve, reject) {        
         logging.query(`executeSqlOne ${service.name}`, query).toLogAndFile();
         await config
             .connection(service.name)

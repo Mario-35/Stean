@@ -12,10 +12,9 @@ import { asyncForEach } from "../../helpers";
 import { logging } from "../../log";
 import { koaContext } from "../../types";
 import { queries } from "../queries";
-import { setState } from "../../constants";
 
 export const cleanDb = async (ctx: koaContext) => {
-    setState(EState.clean);
+    ctx.state = EState.clean;
     const result: Record<string, string> = {};
     const listTables = await executeSqlValues(ctx._.service, queries.listPartionned()).then((res) => {
         const listTables: string[] = res[0 as keyof object];
@@ -43,6 +42,6 @@ export const cleanDb = async (ctx: koaContext) => {
     .then(() => EChar.ok)
     .catch(() => EChar.notOk);
 
-    setState(EState.normal);
+    ctx.state = EState.normal;
     return result;
 };

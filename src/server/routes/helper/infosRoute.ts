@@ -8,7 +8,7 @@
  */
 
 import { config } from "../../configuration";
-import { appVersion, getState } from "../../constants";
+import { appVersion } from "../../constants";
 import { returnFormats } from "../../helpers";
 import { koaContext } from "../../types";
 
@@ -27,7 +27,7 @@ export const InfosRoute = async (ctx: koaContext) => {
         "extensions": res[1 as keyof object],
         "services": config.getServicesNames(),
         "stean": appVersion,
-        "state": getState(),
+        "state": config.getState(ctx),
         }
     });
 };

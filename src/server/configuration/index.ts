@@ -6,7 +6,7 @@
  *
  */
 
-import { appVersion, isDebug, setDebug, setState } from "../constants";
+import { appVersion, isDebug, setDebug } from "../constants";
 import { asyncForEach, compareVersions, decrypt, encrypt, filterUnderscore, hidePassword, isProduction, isTest } from "../helpers";
 import { Iservice, IdbConnection, IserviceInfos, koaContext, Iversion } from "../types";
 import { messages } from "../messages";
@@ -41,6 +41,7 @@ class Configuration {
     static appVersion: Iversion;
     static remoteVersion: Iversion | undefined;
     static upToDate: boolean = true;
+    static state: EState;
     trace: Trace;
     static afterInit: Record<string, string[] | undefined> = {};
 
@@ -57,15 +58,37 @@ class Configuration {
             };
     }
 
-     testAllReady() {
-         if (!Object.values(Configuration.services)
+     getReady(): boolean {
+        return  !Object.values(Configuration.services)
             .filter(e => e.name != EConstant.admin)
             .map((e) => e.status === EState.normal)
-            .includes(false)) {
-                setState(EState.normal);
-                logging.startEnd(`INIT FINISHED ${EConstant.appName} ${EInfos.ver} : ${appVersion.version}`, EColor.Green, EColor.Yellow).toLogAndFile(true);
-            }
+            .includes(false) && Configuration.state === EState.normal;
      }
+
+     setState(state: EState) {
+        Configuration.state = state; 
+     }
+
+     getState(ctx?: koaContext) {
+        const result:Record<string, string> = {};
+        if(ctx) 
+          result[ctx._.service.name] = ctx._.service.status
+         else 
+            Object.values(Configuration.services)
+            .filter(e => e.name != EConstant.admin)
+            .map((e) => result[e.name] = e.status)
+        return result;
+     }
+
+    //  testAllReady() {
+    //      if (!Object.values(Configuration.services)
+    //         .filter(e => e.name != EConstant.admin)
+    //         .map((e) => e.status === EState.normal)
+    //         .includes(false)) {
+    //             setState(EState.normal);
+    //             logging.startEnd(`INIT FINISHED ${EConstant.appName} ${EInfos.ver} : ${appVersion.version}`, EColor.Green, EColor.Yellow).toLogAndFile(true);
+    //         }
+    //  }
 
     // app version
     version(): string {
@@ -733,15 +756,13 @@ class Configuration {
     }
 
     async start(restart: boolean): Promise<boolean> {
-        setState(restart === true ? EState.restart : EState.start);
+        Configuration.state = restart === true ? EState.restart : EState.start;
         logging.start(restart === true ? "Restart" : "Start").toLogAndFile(true);
         return this.initialisation()
             .then(async () => {
                 await config.afterInitialisation();
                 logging.logo().toLogAndFile(true);                            
-                if (restart === true) 
-                    setState(EState.normal); 
-                else this.testAllReady();
+                Configuration.state = EState.normal; 
                 return true;
             })
             .catch((err) => {

@@ -7,11 +7,11 @@
 */
 
 import { Iversion } from "./types";
-import { EConstant, EState } from "./enums";
+import { EConstant } from "./enums";
 import { getVersion } from "./helpers";
 
 process.env.NODE_ENV = process.env.NODE_ENV || "production";
-let _state: EState = EState.start;
+// let _state: EState = EState.start;
 let _debug = process.env.NODE_ENV?.trim() === EConstant.test || false;
 
 export const appVersion: Iversion = getVersion();
@@ -20,17 +20,15 @@ export function setDebug(state: boolean) {
     _debug = state;
 }
 
-export function setState(state: EState) {
-    _state = state;
-}
+// export function setState(state: EState) {
+//     console.log("====================================");
+//     console.log(state);
+//     _state = state;
+// }
 
-export function isState(state: EState) {
-    return _state === state;
-}
-
-export function getState() {
-    return _state;
-}
+// export function isState(state: EState) {
+//     return _state === state;
+// }
 
 export function isDebug() {
     return _debug === true;

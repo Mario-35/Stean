@@ -7,7 +7,6 @@
  */
 import Router from "koa-router";
 import { userAuthenticated, getAuthenticatedUser } from "../authentication";
-import { isState } from "../constants";
 import { getUrlKey, returnFormats } from "../helpers";
 import { apiAccess } from "../db/dataAccess";
 import { IreturnResult } from "../types";
@@ -50,14 +49,14 @@ unProtectedRoutes.get("/*path", async (ctx) => {
         // Clean
         case "CLEAN":
             ctx.type = returnFormats.json.type;
-            ctx.body = { clean: isState(EState.normal) ? await cleanDb(ctx) : "Not Ready" };
+            ctx.body = { clean: ctx.state === EState.normal ? await cleanDb(ctx) : "Not Ready" };
             return;
         // Restart
         case "RESTART":
             if (userAuthenticated(ctx)) {
                 ctx.type = returnFormats.json.type;
-                ctx.status = isState(EState.normal) ? 200 : 202;
-                ctx.body = { restart: isState(EState.normal) ? await config.start(true) : "Not Ready" };                
+                ctx.status = ctx.state === EState.normal ? 200 : 202;
+                ctx.body = { restart: ctx.state === EState.normal ? await config.start(true) : "Not Ready" };                
                 return;
             }
         // logs
@@ -128,6 +127,11 @@ unProtectedRoutes.get("/*path", async (ctx) => {
                 ctx.status = EHttpCode.created;
                 ctx.body = [resultSql];
             }
+            return;
+        // Infos and link of a services
+        case "STATE":
+            ctx.type = returnFormats.json.type;
+            ctx.body =  config.getState(ctx);
             return;
         // Infos and link of a services
         case "INFOS":
