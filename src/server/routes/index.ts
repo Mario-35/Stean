@@ -7,7 +7,7 @@
  */
 
 import { decodeToken } from "../authentication";
-import { EErrors, EHttpCode } from "../enums";
+import { EHttpCode } from "../enums";
 import { createBearerToken, returnFormats, splitLast } from "../helpers";
 import { adminRoute, logsRoute, exportRoute, docRoute, InfosRoute } from "./helper";
 import { config } from "../configuration";
@@ -42,27 +42,26 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     // if logs show log file
     if (ctx._.redirect && ctx._.redirect.includes("logs-")) return logsRoute(ctx, ctx._.redirect);
     
-    // Specials routes
-    if(!ctx._.service || (ctx._.service && ctx._.service.name === "admin")) switch (splitLast(ctx.path, "/").toLocaleUpperCase()) {
+         switch (splitLast(ctx.path, "/").toLocaleUpperCase()) {
         // admin page
         case "INFOS":
             return await InfosRoute(ctx);
-        // export page
+            // export page
         case "ADMIN":
             return await adminRoute(ctx);
         // export page
         case "EXPORT":
-            await exportRoute(ctx);
+            return await exportRoute(ctx);
         // logging for all
         case "HELP":
         case "DOCUMENTATION":
             if (ctx._.service) ctx.redirect(ctx._.origin + "/documentation")
             else return await docRoute(ctx);
-        case "LOGGING":
+        case "LOGGING":            
             return await logsRoute(ctx, paths.logFile.fileName);
         case "STATE":
             ctx.type = returnFormats.json.type;
-            ctx.body = config.getState();
+            ctx.body = config.getState(ctx);
             return;
     }
     // error decodedUrl
@@ -76,7 +75,7 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     }
         
     // if service is not identified get out
-    if (!ctx._.service) throw new Error(EErrors.noNameIdentified);
+    if (!ctx._.service) ctx.throw(EHttpCode.badRequest);
 
     // forcing post loras with different version IT'S POSSIBLE BECAUSE COLUMN ARE THE SAME FOR ALL VERSION
     if (ctx._.service.apiVersion != ctx._.service.apiVersion) {

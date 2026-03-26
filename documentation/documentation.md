@@ -9,6 +9,7 @@
 - [Formats](./formats.md)
 - [multiDatastream](./multiDatastream.md)
 - [Lora](./lora.md)
+- [Etats](./etats.md)
 - [Users et token](./users.md)
 
 ## MODELE

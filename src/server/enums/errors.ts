@@ -8,6 +8,7 @@
 
 export const enum EErrors {
     Unauthorized = "Unauthorized",
+    badReq = "Bad request",
     noAdmin = "No Admin connection",
     connError = "connection for $1 error",
     noConfig = "No configuration found for $1",

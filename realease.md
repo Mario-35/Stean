@@ -96,3 +96,4 @@
     add null result in observatioàn !!! NOT in STA standard
     add optimisez pagination after csv import
     add optimised table in state
+    add state documentation

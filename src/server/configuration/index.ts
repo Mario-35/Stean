@@ -69,9 +69,9 @@ class Configuration {
         Configuration.state = state; 
      }
 
-     getState(ctx?: koaContext) {
+     getState(ctx: koaContext) {
         const result:Record<string, string> = {};
-        if(ctx) 
+        if(ctx && ctx._.service) 
           result[ctx._.service.name] = ctx._.service.status
          else 
             Object.values(Configuration.services)
