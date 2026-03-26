@@ -56,9 +56,6 @@ export const exportToJson = async (ctx: koaContext) => {
         }
     );
     delete result["FeaturesOfInterest"][0];
-    // const sql = asCsv("select * from observation", ctx._.service.csvDelimiter);
-    // console.log(sql);
-    // ctx.attachment("obsexport.csv");
-    // return await config.connection(ctx._.service.name).unsafe(sql).readable();
+    
     return result;
 };

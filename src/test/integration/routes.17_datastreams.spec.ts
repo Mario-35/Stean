@@ -24,7 +24,7 @@ import {
     nbColor,
     nbColorTitle,
     testVersion,
-    _RAWDB
+    _RAWDB,
 } from "./constant";
 import { server } from "../../server/index";
 import { Ientity } from "../../server/types";
@@ -300,6 +300,33 @@ describe("endpoint : Datastream", () => {
                 short: "From observations filter",
                 description: "Get Datastream(s) from Observations filter.",
                 request: `${testVersion}/${entity.name}?$filter=Observations/result eq 63.15`
+            });
+            chai.request(server)
+                .get(`/test/${infos.request}`)
+                .end((err: Error, res: any) => {
+                    should.not.exist(err);
+                    res.status.should.equal(200);
+                    res.type.should.equal("application/json");
+                    res.body.should.include.keys("value");
+                    res.body.value[0].should.include.keys(testsKeys);
+                    res.body["@iot.count"].should.eql(1);
+                    const id = res.body.value[0]["@iot.id"];
+                    res.body.value.length.should.eql(1);
+                    res.body.value[0]["@iot.selfLink"].should.contain(`/Datastreams(${id})`);
+                    addToApiDoc({
+                        ...infos,
+                        result: res
+                    });
+
+                    done();
+                });
+        });
+        it(`Return ${entity.name} from an ObservedProperty filter`, (done) => {
+            const infos = addTest({
+                type: "get",
+                short: "From ObservedProperty filter",
+                description: "Get Datastream(s) from ObservedProperty filter.",
+                request: `${testVersion}/${entity.name}?$filter=ObservedProperty/id eq 2`
             });
             chai.request(server)
                 .get(`/test/${infos.request}`)

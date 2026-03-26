@@ -20,16 +20,6 @@ export function setDebug(state: boolean) {
     _debug = state;
 }
 
-// export function setState(state: EState) {
-//     console.log("====================================");
-//     console.log(state);
-//     _state = state;
-// }
-
-// export function isState(state: EState) {
-//     return _state === state;
-// }
-
 export function isDebug() {
     return _debug === true;
 }

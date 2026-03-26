@@ -61,7 +61,6 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
         case "LOGGING":
             return await logsRoute(ctx, paths.logFile.fileName);
         case "STATE":
-            console.log(config.getReady());
             ctx.type = returnFormats.json.type;
             ctx.body = config.getState();
             return;

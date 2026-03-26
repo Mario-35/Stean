@@ -18,12 +18,7 @@ import { IentityColumn } from "../../types";
  * @returns string or undefined
  */
 
-export function formatColumnValue(columnName: string, value: any, column: IentityColumn): string | undefined {
-    console.log("#####################################################################################################");
-    console.log(columnName);
-    console.log(value);
-    console.log(column);
-    
+export function formatColumnValue(columnName: string, value: any, column: IentityColumn): string | undefined {    
     const idLink = (value: any) => {
         return value.hasOwnProperty(EConstant.name)
             ? `(SELECT "id" FROM "${columnName.split("_")[0]}" WHERE "name" = '${escapeSimpleQuotes(value[EConstant.name])}')`
@@ -31,7 +26,7 @@ export function formatColumnValue(columnName: string, value: any, column: Ientit
             ? value[EConstant.id]
             : simpleQuotes(value.trim());
     };
-    // console.log(logging.head(`${columnName} [${column.dataType}] ==> ${value}`).to().text());
+    
     if (value)
         switch (value) {
             case void 0:

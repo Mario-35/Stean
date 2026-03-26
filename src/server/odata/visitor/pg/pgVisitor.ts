@@ -521,7 +521,8 @@ export class PgVisitor extends Visitor {
                 // @ts-ignore
                 this.query[context.target].add(alias);
             } else {
-                context.identifier = node.value.name;
+                // context.identifier = node.value.name;
+                context.identifier = node.value.name.includes('"."') ? node.value.name.split('.')[1]: node.value.name;
                 if (this.entity && context.target && !context.relation) {
                     let alias = this.getColumnAlias(this.entity, node.value.name, context, false, undefined);
                     alias = context.target === EQuery.Where ? alias?.split(" AS ")[0] : EQuery.OrderBy ? doubleQuotes(node.value.name) : alias;
