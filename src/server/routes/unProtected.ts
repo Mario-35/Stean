@@ -134,7 +134,7 @@ unProtectedRoutes.get("/*path", async (ctx) => {
             ctx.body =  config.getState(ctx);
             return;
         // Infos and link of a services
-        case "INFOS":
+        case "INFO":
             ctx.type = returnFormats.json.type;
             ctx.body = await models.infos(ctx);
             return;

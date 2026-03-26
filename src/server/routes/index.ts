@@ -42,6 +42,7 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
     // if logs show log file
     if (ctx._.redirect && ctx._.redirect.includes("logs-")) return logsRoute(ctx, ctx._.redirect);
     
+    // if(!ctx._.service) 
          switch (splitLast(ctx.path, "/").toLocaleUpperCase()) {
         // admin page
         case "INFOS":
@@ -55,13 +56,15 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
         // logging for all
         case "HELP":
         case "DOCUMENTATION":
-            if (ctx._.service) ctx.redirect(ctx._.origin + "/documentation")
-            else return await docRoute(ctx);
+            if 
+                (ctx._.service) ctx.redirect(ctx._.origin + "/documentation")
+            else 
+                return await docRoute(ctx);
         case "LOGGING":            
             return await logsRoute(ctx, paths.logFile.fileName);
-        case "STATE":
+        case "STATES":
             ctx.type = returnFormats.json.type;
-            ctx.body = config.getState(ctx);
+            ctx.body = config.getState();
             return;
     }
     // error decodedUrl
