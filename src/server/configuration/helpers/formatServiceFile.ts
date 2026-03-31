@@ -52,7 +52,7 @@ export function formatServiceFile(name: string, input: Record<string, any>): Ise
         csvDelimiter: input["csvDelimiter"] ? input["csvDelimiter"] : ";",
         synonyms: input["synonyms"] ? input["synonyms"] : undefined,
         users: undefined,
-        status: EState.normal,
+        state: EState.starting,
         _partitioned: isTest() ? true : input["extensions"].includes("partitioned"), // true if test
         _lora: isTest()? true : input["extensions"].includes("Lora"), // true if test
         _unique: isTest()? true : input["extensions"].includes("unique"), // true if test

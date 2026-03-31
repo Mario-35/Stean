@@ -9,6 +9,7 @@
 
 import { config } from "../../configuration";
 import { appVersion } from "../../constants";
+import { queries } from "../../db/queries";
 import { returnFormats } from "../../helpers";
 import { koaContext } from "../../types";
 
@@ -20,11 +21,14 @@ import { koaContext } from "../../types";
 export const InfosRoute = async (ctx: koaContext) => {
     ctx.type = returnFormats.html.type;
     ctx.body = await 
-        config.adminConnection().unsafe( ` select version(), (SELECT ARRAY(SELECT extname||'-'||extversion AS extension FROM pg_extension) AS extension), (SELECT c.relname||'.'||a.attname FROM pg_attribute a JOIN pg_class c ON (a.attrelid=c.relfilenode) WHERE a.atttypid = 114) ;`
-    ).then((res) => {
+        config.adminConnection().unsafe(queries.infos()).then((res) => {
+            console.log("###########################################################");
+            console.log(res);
+            
         return {
         "Postgres": res[0 as keyof object],
         "extensions": res[1 as keyof object],
+        "logFile": res[2 as keyof object],
         "services": config.getServicesNames(),
         "stean": appVersion,
         "state": config.getState(ctx),

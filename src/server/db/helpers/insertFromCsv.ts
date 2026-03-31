@@ -136,11 +136,16 @@ export class InsertFromCsv {
             const kelName = (search: string, def: any) => {
                 const tmp = sqlRequest.columns.findIndex((element) => element === search);
                 return tmp > 0
-                    ? `CASE value${tmp}
-            WHEN 'NULL' THEN NULL
-            WHEN NULL THEN NULL
-            ELSE (SELECT id FROM "${search.toLowerCase()}" WHERE name = value${tmp}::JSONB->>'name')
-        END`
+                    ? `CASE UPPER(value${tmp})
+                        WHEN '' THEN NULL
+                        WHEN 'NULL' THEN NULL
+                        WHEN 'NONE' THEN NULL
+                        WHEN 'NA' THEN NULL
+                        WHEN 'NC' THEN NULL
+                        WHEN 'NAN' THEN NULL
+                        WHEN NULL THEN NULL
+                        ELSE (SELECT id FROM "${search.toLowerCase()}" WHERE name = value${tmp}::JSONB->>'name')
+                    END`
                     : def;
             };
             const stream = await streamCsvFile(this.ctx._.service, this.paramsFile, sqlRequest);

@@ -47,6 +47,9 @@ export class RootPgVisitor extends PgVisitor {
         return this;
     }
 
+    protected VisitRessourcesBoundOperation(node: Token, context?: IodataContext) {  
+    }
+    
     protected VisitRessourcesResourcePath(node: Token, context?: IodataContext) {
         if (node.value.resource) this.VisitRessources(node.value.resource, context);
         if (node.value.navigation) this.VisitRessources(node.value.navigation, context);

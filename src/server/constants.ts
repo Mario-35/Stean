@@ -11,8 +11,7 @@ import { EConstant } from "./enums";
 import { getVersion } from "./helpers";
 
 process.env.NODE_ENV = process.env.NODE_ENV || "production";
-// let _state: EState = EState.start;
-let _debug = process.env.NODE_ENV?.trim() === EConstant.test || false;
+let _debug:boolean = process.env.NODE_ENV?.trim() === EConstant.test || false;
 
 export const appVersion: Iversion = getVersion();
 export const timestampNow = (): string => new Date().toLocaleTimeString();

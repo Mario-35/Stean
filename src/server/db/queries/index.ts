@@ -6,6 +6,7 @@
  *
  */
 
+import { appVersion } from "../../constants";
 import { EConstant, EDataType } from "../../enums";
 import { cleanStringComma, doubleQuotes, escapeSimpleQuotes, formatPgString, simpleQuotes } from "../../helpers";
 import { DECODER, LORA, USER } from "../../models/entities";
@@ -20,9 +21,14 @@ class Queries {
     terminate(name: string) {
         return `SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname = '${name}';`;
     }
+    terminateAll() {
+        return `SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND application_name = '${EConstant.appName} ${appVersion.version}';`;
+    }
+
     dropDB(name: string) {
         return `DROP DATABASE IF EXISTS ${name};`;
     }
+
     insertConfig(name: string, datas: any) {
         return `INSERT INTO public.services ("name", "datas") VALUES('${name}', ${datas}) ON CONFLICT (name) DO UPDATE SET datas = ${datas};`;
     }
@@ -39,6 +45,31 @@ class Queries {
         return `SET session_replication_role = ${status === true ? "DEFAULT" : "replica"};`;
     }
 
+    infos() {return ` SELECT 
+                        version(), 
+                        (
+                          SELECT 
+                            ARRAY(
+                              SELECT 
+                                extname || '-' || extversion AS extension 
+                              FROM 
+                                pg_extension
+                            ) AS extension
+                        ), 
+                        (
+                          SELECT 
+                            c.relname || '.' || a.attname 
+                          FROM 
+                            pg_attribute a 
+                            JOIN pg_class c ON (a.attrelid = c.relfilenode) 
+                          WHERE 
+                            a.atttypid = 114
+                        ),
+                        (
+                          SELECT concat(current_setting('data_directory'), '/', pg_current_logfile())
+                        ) AS logfile;`
+    }
+
     deleteFromId(table: string, id: Id | string) {
         return id ? `DELETE FROM "${table}" WHERE "id" = ${id} RETURNING id` : "";
     }
@@ -51,25 +82,75 @@ class Queries {
         return `ALTER TABLE IF EXISTS "${table}" ADD COLUMN IF NOT EXISTS _nb BIGINT NULL;`;
     }
 
-    updateNb(stream: string, all: boolean) {
-        return `UPDATE "observation" SET _nb = row_number FROM ( SELECT ROW_NUMBER() OVER ( PARTITION BY ${stream}_id ORDER BY "phenomenonTime" ), id FROM "observation" WHERE ${stream}_id IS NOT NULL ) i WHERE "observation".id = i.id${
-            all === true ? "" : " AND _nb IS NULL"
-        };`;
+    // updateNb(stream: string, all: boolean) {
+    //     return `UPDATE "observation" SET _nb = row_number FROM ( SELECT ROW_NUMBER() OVER ( PARTITION BY ${stream}_id ORDER BY "phenomenonTime" ), id FROM "observation" WHERE ${stream}_id IS NOT NULL ) i WHERE "observation".id = i.id${
+    //         all === true ? "" : " AND _nb IS NULL"
+    //     };`;
+    // }
+
+    updateNb(stream: string, all: boolean, id?: string) {
+      // return ` ${ all === true ? `UPDATE "observation" SET _nb = NULL ${id ? ` WHERE ${stream}_id = ${id}` : ''};` : ''}
+      return `UPDATE 
+                "observation" 
+              SET 
+                _nb = ${ all === true ? "" : `(SELECT COUNT(id) FROM "observation" WHERE ${stream}_id = i."${stream}_id" AND _nb IS NOT NULL ) +`} row_number
+              FROM 
+                (
+                  SELECT 
+                    id,      
+                    ROW_NUMBER() OVER (
+                      PARTITION BY ${stream}_id 
+                      ORDER BY 
+                        "phenomenonTime"
+                    ), 
+                    "${stream}_id" 
+                  FROM 
+                    "observation" 
+                  WHERE 
+                    ${stream}_id ${id ? `= ${id}` : 'IS NOT NULL'}
+                    ${ all === true ? "" : " AND _nb IS NULL"}
+                ) i 
+              WHERE 
+                "observation".id = i.id
+                ${ all === true ? "" : " AND _nb IS NULL"};`;
     }
 
-    logLevel(level: string) {
-        return `SET client_min_messages TO ${level};`;
-    }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    corretcNb(message: string) {
+      try {
+        message = `${message.split('«')[1].split('_nb')[0].split('_id').join("_id = ")}`
+        return  `UPDATE observation SET _nb = NULL WHERE ${message}`;        
+      } catch (error) {
+        return '';
+      }
+    }
+    
     createExtension(name: string) {
         return `CREATE EXTENSION IF NOT EXISTS ${name}`;
     }
-    drop(table: string) {
+
+    dropTable(table: string) {
         return `DROP TABLE "${table}";`;
     }
+
     createTableService() {
         return `CREATE TABLE public.services ( "name" text NOT NULL, "datas" jsonb NULL, CONSTRAINT services_unik_name UNIQUE (name) ); CREATE INDEX services_name ON public.services USING btree (name);`;
     }
+
     createRole(name: string, password: string) {
         return `CREATE ROLE ${name} WITH PASSWORD '${password}' ${this.rights()}`;
     }
@@ -89,12 +170,15 @@ class Queries {
     createTrigger(table: string, triggerName: string) {
         return `CREATE TRIGGER "${table}_${triggerName}" BEFORE INSERT OR DELETE ON "${table}" FOR EACH ROW EXECUTE PROCEDURE ${triggerName}();`;
     }
+
     dropTrigger(table: string, triggerName: string) {
         return `DROP TRIGGER IF EXISTS "${table}_${triggerName}" ON "${table}";`;
     }
+
     asCsv(sql: string, csvDelimiter: ";" | ",") {
         return `COPY (${sql}) TO STDOUT WITH (FORMAT CSV, NULL "NULL", HEADER, DELIMITER '${csvDelimiter}')`;
     }
+
     asJson(input: { query: string; singular: boolean; count: boolean; strip: boolean; fullCount?: string; fields?: string[] }) {
         return input.query.trim() === ""
             ? ""
@@ -203,8 +287,7 @@ FROM
                   WHERE id = ${ids[0]} 
                ) AS infos, 
         STRING_AGG(concat, ',') AS datas 
-        ${
-            ids.length === 1
+        ${ids.length === 1
                 ? `FROM (${query.replace("@GRAPH@", `CONCAT('[new Date("', TO_CHAR("resultTime", 'YYYY/MM/DD HH24:MI'), '"), ', "result"${input.ctx._.service._numeric ? '' : `->'value'`} ,']')`)}) AS z`
                 : ` FROM (
                 SELECT CONCAT( '[new Date("', TO_CHAR( date, 'YYYY/MM/DD HH24:MI' ), '"), ', ${ids.map((e, n) => `coalesce(y.res${n + 1},'null'),','`)}, ']' ) 
@@ -361,13 +444,19 @@ FROM
           FROM 
             "lorastream" 
           WHERE 
-            "lorastream"."lora_id" = (SELECT id FROM "lora" WHERE deveui = '${input}')`;
+            "lorastream"."lora_id" = 
+              (
+                SELECT id FROM "lora" WHERE deveui = '${input}'
+              )`;
     }
+
     multiDatastreamFromDeveui(input: string): string {
-        return `(SELECT jsonb_agg(tmp.units -> 'name') AS keys FROM ( SELECT jsonb_array_elements("unitOfMeasurements") AS units ) AS tmp ) FROM "multidatastream" WHERE "multidatastream".id = (${this.streamFromDeveui(
-            "multidatastream",
-            input
-        )})`;
+        return `(
+                  SELECT jsonb_agg(tmp.units -> 'name') AS keys 
+                    FROM ( 
+                      SELECT jsonb_array_elements("unitOfMeasurements") AS units 
+                    ) AS tmp 
+                ) FROM "multidatastream" WHERE "multidatastream".id = (${this.streamFromDeveui( "multidatastream", input )})`;
     }
 
     multiDatastreamKeys(inputID: Id | string) {
@@ -376,57 +465,58 @@ FROM
 
     streamInfosFromDeveui(input: string): string {
         return `WITH multidatastream AS (
-  SELECT 
-    JSON_AGG(t) AS multidatastream 
-  FROM 
-    (
-      SELECT 
-        id AS multidatastream, 
-        id, 
-        _default_featureofinterest, 
-        thing_id, 
-        (
-          SELECT 
-            JSONB_AGG(tmp.units -> 'name') AS keys 
-          FROM 
-            (
-              SELECT 
-                JSONB_ARRAY_ELEMENTS("unitOfMeasurements") AS units
-            ) AS tmp
-        ) 
-      FROM 
-        "multidatastream" 
-      WHERE 
-        "multidatastream".id = (${this.streamFromDeveui("multidatastream", input)}
-        )
-    ) AS t
-), 
-datastream AS (
-  SELECT 
-    json_agg(t) AS datastream 
-  FROM 
-    (
-      SELECT 
-        id AS datastream, 
-        id, 
-        _default_featureofinterest, 
-        thing_id, 
-        '{}' :: jsonb AS keys 
-      FROM 
-        "datastream"
-      WHERE 
-        "datastream".id = (${this.streamFromDeveui("datastream", input)}
-        )
-    ) AS t
-) 
-SELECT 
-  datastream.datastream, 
-  multidatastream.multidatastream 
-FROM 
-  multidatastream, 
-  datastream
-`;
+                  SELECT 
+                    JSON_AGG(t) AS multidatastream 
+                  FROM 
+                    (
+                      SELECT 
+                        id AS multidatastream, 
+                        id, 
+                        _default_featureofinterest, 
+                        thing_id, 
+                        (
+                          SELECT 
+                            JSONB_AGG(tmp.units -> 'name') AS keys 
+                          FROM 
+                            (
+                              SELECT 
+                                JSONB_ARRAY_ELEMENTS("unitOfMeasurements") AS units
+                            ) AS tmp
+                        ) 
+                      FROM 
+                        "multidatastream" 
+                      WHERE 
+                        "multidatastream".id = (${this.streamFromDeveui("multidatastream", input)}
+                        )
+                    ) AS t
+                ), 
+                datastream AS (
+                  SELECT 
+                    json_agg(t) AS datastream 
+                  FROM 
+                    (
+                      SELECT 
+                        id AS datastream, 
+                        id, 
+                        _default_featureofinterest, 
+                        thing_id, 
+                        '{}' :: jsonb AS keys 
+                      FROM 
+                        "datastream"
+                      WHERE 
+                        "datastream".id = (${this.streamFromDeveui("datastream", input)}
+                        )
+                    ) AS t
+                ) 
+                SELECT 
+                  datastream.datastream, 
+                  multidatastream.multidatastream 
+                FROM 
+                  multidatastream, 
+                  datastream
+                `;
     }
+
     multiDatastreamsUnitsKeys(searchId: Id | string): string {
         return `SELECT jsonb_agg(tmp.units -> 'name') AS keys FROM ( SELECT jsonb_array_elements("unitOfMeasurements") AS units FROM "multidatastream" WHERE id = ${searchId} ) AS tmp`;
     }
@@ -488,8 +578,16 @@ FROM
                 ALTER TABLE observation RENAME COLUMN resulte TO result;`;
     }
 
+    cleanIndex_NB(stream: string, id: string) {
+        return `UPDATE observation SET _nb = NULL WHERE ${stream}_id = ${id}`;
+    }
+
     createClusterIndex(table: string) {
         return `CREATE UNIQUE INDEX IF NOT EXISTS "${table}_nb" on ${table} (_nb);`;
+    }
+
+    dropIndex(name: string) {
+        return `DROP INDEX "${name}" CASCADE;`;
     }
 
     extensions( ) {

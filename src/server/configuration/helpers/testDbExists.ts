@@ -24,7 +24,7 @@ export async function testDbExists(adminConn: IdbConnection, database: string): 
     return await postgres(`postgres://${adminConn.user}:${adminConn.password}@${adminConn.host}:${adminConn.port || 5432}/${database}`, {
         debug: isDebug(),
         connection: {
-            application_name: `${EConstant.appName} ${appVersion}`
+            application_name: `${EConstant.appName} ${appVersion.version}`
         }
     })`select 1+1 AS result`
         .then(async () => true)

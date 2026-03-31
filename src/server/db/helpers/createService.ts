@@ -24,7 +24,7 @@ import { messages } from "../../messages";
 
 export const createService = async (dataInput: Record<string, any>): Promise<Record<string, any>> => {
     console.log(logging.whereIam(new Error().stack));
-    config.setState(EState.createDb);
+    config.setGlobalState(EState.creating);
     const prepareDatas = (dataInput: Record<string, string>, entity: string): object => {
         if (entity === "Observations") {
             if (!dataInput["resultTime"] && dataInput["phenomenonTime"]) dataInput["resultTime"] = dataInput["phenomenonTime"];
@@ -86,7 +86,5 @@ export const createService = async (dataInput: Record<string, any>): Promise<Rec
             }
         }
     );
-
-    config.setState(EState.normal);
     return results;
 };

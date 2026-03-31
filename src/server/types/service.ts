@@ -30,7 +30,7 @@ export interface Iservice {
     synonyms: Isynonyms | undefined;
     csvDelimiter: ";" | ","; // csv format delimiter
     users: JSON | undefined; // users list
-    status: EState; // status of the service
+    state: EState; // status of the service
     _partitioned: boolean;
     _lora: boolean;
     _unique: boolean;

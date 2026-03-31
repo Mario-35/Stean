@@ -4,7 +4,9 @@
 
 Lorsque l'on utilise : 
 
-http://rootApi/state
+http://rootApi/states
+ou
+http://rootApi/state/ServiceName/states
 
 Affiche l'état de tous les services
 

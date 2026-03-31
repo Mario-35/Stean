@@ -8920,6 +8920,8 @@
    */
   Dygraph.prototype.parseArray_ = function (data) {
     // Peek at the first x value to see if it's numeric.
+    if (data === null) return;
+
     if (data.length === 0) {
       data = [[0]];
     }

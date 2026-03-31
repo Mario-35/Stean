@@ -35,6 +35,7 @@ export { IuserToken } from "./userToken";
 export { Iversion } from "./version";
 export { IqueryMaker } from "./queryMaker";
 export { Idatas } from "./datas";
+export { Ipool } from "./pool";
 export { IforwardConnection } from "./forwardConnection";
 export { IvisitRessource } from "./visitRessource";
 export type Ientities = { [key: string]: Ientity };

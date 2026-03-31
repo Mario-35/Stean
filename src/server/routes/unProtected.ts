@@ -49,14 +49,14 @@ unProtectedRoutes.get("/*path", async (ctx) => {
         // Clean
         case "CLEAN":
             ctx.type = returnFormats.json.type;
-            ctx.body = { clean: ctx.state === EState.normal ? await cleanDb(ctx) : "Not Ready" };
+            ctx.body = { clean: config.getReady() ? await cleanDb(ctx) : "Not Ready" };
             return;
         // Restart
         case "RESTART":
             if (userAuthenticated(ctx)) {
                 ctx.type = returnFormats.json.type;
-                ctx.status = ctx.state === EState.normal ? 200 : 202;
-                ctx.body = { restart: ctx.state === EState.normal ? await config.start(true) : "Not Ready" };                
+                ctx.status = ctx._.service.state === EState.normal ? 200 : 202;
+                ctx.body = { restart: ctx._.service.state === EState.normal ? await config.start(true) : "Not Ready" };                
                 return;
             }
         // logs

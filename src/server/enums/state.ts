@@ -8,12 +8,11 @@
  */
 
 export enum EState {
-    maintenance = "maintenance",
-    optimized = "optimized",
-    createDb = "createDb",
-    restart = "restart",
-    import = "import",
+    optimizing  = "optimizing ",
+    creating = "creating",
+    restarting = "restarting",
+    importing = "importing",
     normal = "normal",
-    clean = "clean",
-    start = "start",
+    cleaning= "cleaning",
+    starting = "starting",
 }

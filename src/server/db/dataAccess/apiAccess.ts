@@ -49,7 +49,10 @@ export class apiAccess implements Icomon {
 
     async post(dataInput?: Record<string, any> | undefined): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
-        if (this.myEntity) return isArray(this.ctx.body) ? await this.myEntity.addMultiLines(dataInput || this.ctx.body) : await this.myEntity.post(dataInput || this.ctx.body);
+        if (this.myEntity) 
+            return isArray(this.ctx.body && this.ctx._.odata.entity?.name !== "CreateObservations") 
+                ? await this.myEntity.addMultiLines(dataInput || this.ctx.body) 
+                : await this.myEntity.post(dataInput || this.ctx.body);
     }
 
     async update(dataInput?: Record<string, any> | undefined): Promise<IreturnResult | undefined> {

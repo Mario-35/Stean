@@ -26,7 +26,7 @@ export async function testDbConnection(host: string, username: string, password:
     return await postgres(`postgres://${username}:${password}@${host}:${port || 5432}/${database || "postgres"}`, {
         debug: isDebug(),
         connection: {
-            application_name: `${EConstant.appName} ${appVersion}`
+            application_name: `${EConstant.appName} ${appVersion.version}`
         }
     })`select 1+1 AS result`
         .then(async () => true)

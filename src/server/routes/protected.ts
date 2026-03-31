@@ -104,9 +104,10 @@ protectedRoutes.post("/*path", async (ctx: koaContext, next) => {
 
     // Add new lora observation this is a special route without ahtorisatiaon to post (deveui and correct payload limit risks)
     if ( (!readOnly && ctx._.user && ctx._.user.id > 0) || !ctx._.inExtension(EExtensions.users) || ctx.request.url.includes("/Lora") || (!readOnly && ctx.request.headers["authorization"] && ctx.request.headers["authorization"] === config.getBrokerId()) ) {
+        
         if (ctx.request.type.startsWith("application/json") && Object.keys(ctx.body).length > 0) {
             const odataVisitor = await createOdata(ctx);
-            if (odataVisitor)  {
+            if (odataVisitor)  {                
                 ctx._.odata = odataVisitor;
                 const objectAccess = new apiAccess(ctx);
                 const returnValue: IreturnResult | undefined | void = await objectAccess.post();

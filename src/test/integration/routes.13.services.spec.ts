@@ -8,7 +8,7 @@
 process.env.NODE_ENV = "test";
 import chai from "chai";
 import chaiHttp from "chai-http";
-import { IApiDoc, IApiInput, prepareToApiDoc, generateApiDoc, limitResult, testVersion, _RAWDB, identification, apiInfos, blank, infos } from "./constant";
+import { IApiDoc, IApiInput, prepareToApiDoc, generateApiDoc, limitResult, testVersion, _RAWDB, identification, apiInfos, blank, infos, } from "./constant";
 import { server } from "../../server/index";
 import { addStartNewTest, addTest, writeLog } from "./tests";
 import { Ientity } from "../../server/types";
@@ -86,7 +86,7 @@ describe("endpoint : Service", () => {
             const infos = addTest({
                 type: "get",
                 short: "infos",
-                description: "Retrieve all services",
+                description: "Retrieve all services infos",
                 reference: "",
                 request: `${testVersion}/infos`
             });
@@ -100,6 +100,40 @@ describe("endpoint : Service", () => {
                         ...infos,
                         result: res
                     });
+                    done();
+                });
+        });
+
+        it(`Return State`, (done) => {
+            const infos = addTest({
+                type: "get",
+                short: "infos",
+                description: "Retrieve service state",
+                reference: "",
+                request: `${testVersion}/state`
+            });
+            chai.request(server)
+                .get(`/test/${infos.request}`)
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.body.test.should.equal('starting');
+                    done();
+                });
+        });
+
+        it(`Return all State`, (done) => {
+            const infos = addTest({
+                type: "get",
+                short: "infos",
+                description: "Retrieve all services state",
+                reference: "",
+                request: `${testVersion}/states`
+            });
+            chai.request(server)
+                .get(`/test/${infos.request}`)
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.body.test.should.equal('starting');
                     done();
                 });
         });

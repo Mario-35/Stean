@@ -8,7 +8,7 @@
 
 import { appVersion, isDebug, setDebug } from "../constants";
 import { asyncForEach, compareVersions, decrypt, encrypt, filterUnderscore, hidePassword, isProduction, isTest } from "../helpers";
-import { Iservice, IdbConnection, IserviceInfos, koaContext, Iversion } from "../types";
+import { Iservice, IdbConnection, IserviceInfos, koaContext, Iversion, Ipool } from "../types";
 import { messages } from "../messages";
 import { app } from "..";
 import { EChar, EColor, EConstant, EState } from "../enums";
@@ -43,7 +43,8 @@ class Configuration {
     static upToDate: boolean = true;
     static state: EState;
     trace: Trace;
-    static afterInit: Record<string, string[] | undefined> = {};
+    static pool: Record<string, Ipool[] | undefined> = {};
+    // static pool: Record<string, string[] | undefined> = {};
 
     constructor() {
         // override console log for TDD important in production build will remove all console.log
@@ -58,38 +59,43 @@ class Configuration {
             };
     }
 
+    // test if all are in normal state
      getReady(): boolean {
-        return  !Object.values(Configuration.services)
+        return Object.values(Configuration.services)
             .filter(e => e.name != EConstant.admin)
-            .map((e) => e.status === EState.normal)
-            .includes(false) && Configuration.state === EState.normal;
+            .map((e) => e.state === EState.normal)
+            .includes(false) ? false: true && Configuration.state === EState.normal;
      }
 
-     setState(state: EState) {
-        Configuration.state = state; 
+     // set service state
+     setServiceState(service: Iservice, state: EState) {    
+        service.state = state;
+        this.setGlobalState(state);
+     }
+
+     setGlobalState(state: EState ) {
+        if (state === EState.normal) {
+            if (Object.values(Configuration.services)
+            .filter(e => e.name != EConstant.admin)
+            .map((e) => e.state === EState.normal)
+            .includes(false) === true) 
+                Configuration.state = EState.normal;
+            return;
+        } 
+        Configuration.state = state;      
      }
 
      getState(ctx?: koaContext) {
-        const result:Record<string, string> = {};
+        const result:Record<string, string> = {stean : Configuration.state};
         if(ctx && ctx._.service) 
-          result[ctx._.service.name] = ctx._.service.status
+          result[ctx._.service.name] = ctx._.service.state
          else 
             Object.values(Configuration.services)
             .filter(e => e.name != EConstant.admin)
-            .map((e) => result[e.name] = e.status)
+            .map((e) => result[e.name] = e.state)
         return result;
      }
-
-    //  testAllReady() {
-    //      if (!Object.values(Configuration.services)
-    //         .filter(e => e.name != EConstant.admin)
-    //         .map((e) => e.status === EState.normal)
-    //         .includes(false)) {
-    //             setState(EState.normal);
-    //             logging.startEnd(`INIT FINISHED ${EConstant.appName} ${EInfos.ver} : ${appVersion.version}`, EColor.Green, EColor.Yellow).toLogAndFile(true);
-    //         }
-    //  }
-
+     
     // app version
     version(): string {
         return `${Configuration.appVersion.version} [${Configuration.appVersion.date}]`;
@@ -172,13 +178,19 @@ class Configuration {
             }
             // decrypt file
             Configuration.services = JSON.parse(decrypt(fileContent));
-            const infosAdmin = Configuration.services[EConstant.admin].pg;
+            const infosAdmin = Configuration.services[EConstant.admin].pg;            
             Configuration.adminConnection = postgres(`postgres://${infosAdmin.user}:${infosAdmin.password}@${infosAdmin.host}:${infosAdmin.port || 5432}/${EConstant.pg}`, {
                 debug: isDebug(),
                 connection: {
-                    application_name: `${EConstant.appName} ${appVersion}`
+                    application_name: `${EConstant.appName} ${appVersion.version}`
                 }
             });
+
+            if (!isTest()) 
+                await Configuration.adminConnection
+                    .unsafe(queries.terminateAll())
+                    .then(() => logging.message(EInfos.killPgStean, `${EConstant.appName} ${appVersion.version}`).toLogAndFile(true))
+                    .catch((err) => logging.error(err, EErrors.serviceUpdateteError));
 
             try {
                 if (!isTest()) {
@@ -293,6 +305,7 @@ class Configuration {
      *
      * @returns service names
      */
+
     getServicesNames() {
         return Object.keys(Configuration.services).filter((e) => e !== EConstant.admin);
     }
@@ -367,7 +380,7 @@ class Configuration {
             debug: true,
             max: 2000,
             connection: {
-                application_name: `${EConstant.appName} ${appVersion}`
+                application_name: `${EConstant.appName} ${appVersion.version}`
             }
         });
     }
@@ -425,6 +438,7 @@ class Configuration {
      * @returns true if it's done
      */
     async initialisation(input?: string): Promise<boolean> {
+        // get version infos
         compareVersions().then((result) => {
             if (result) {
                 Configuration.appVersion = result.appVersion;
@@ -432,11 +446,13 @@ class Configuration {
                 Configuration.upToDate = result.upToDate;
             }
         });
+        // get config File
         if (this.configFileExist() === true || input) {
             await this.readConfigFile(input);
             let status = true;
             // Add test service
             Configuration.services[EConstant.test] = this.formatConfig(testDatas["create"]);
+            // loop on services
             await asyncForEach(
                 // Start connection ALL entries in config file
                 Object.keys(Configuration.services).filter((e) => e.toUpperCase()),
@@ -459,22 +475,50 @@ class Configuration {
     }
 
     /**
-     * Some sql run to clean services ...
-     *
-     * @returns boolean when it's done
+     * Add in pool
+     * 
+     * @param serviceName Name of the service
+     * @param input Ipool datas
+     */
+    poolAdd(serviceName: string, input: Ipool) {
+        if (Configuration.pool[serviceName])
+            Configuration.pool[serviceName].push(input);
+        else Configuration.pool[serviceName] = [input];
+    }    
+
+    /**
+     * Execute one pool data
+     * 
+     * @param service service 
+     * @param input Ipool datas
+     * @returns 
      */
 
-    async afterInitialisation(): Promise<boolean> {
-        await asyncForEach(Object.keys(Configuration.afterInit), async (service: string) => {
+    async runPool(service: Iservice, input: Ipool[]): Promise<boolean> {
+        console.log( input );
+        asyncForEach(input, async (pool: Ipool) => {
+            this.setServiceState(service, pool.state);
+            
+            await executeSql(service, pool.query)
+            .then(() => {
+                logging.init().text(EInfos.queryAfter, EColor.Magenta).status(true, service.name, pool.name).toLogAndFile(true);
+                this.setServiceState(service, EState.normal);
+            }).catch((err: Error) => logging.error(err, EInfos.queryAfter).return(false));
+        });
+        return true;
+    }
+
+    /**
+     * Execute pools
+     * 
+     * @returns 
+     */
+    async runPools(): Promise<boolean> {
+        await asyncForEach(Object.keys(Configuration.pool), async (service: string) => {
             const myService = this.getService(service);
-            if (Configuration.afterInit[service]) {
-                await executeSql(myService, Configuration.afterInit[service])
-                    .then(() => {
-                        logging.init().text(EInfos.queryAfter, EColor.Magenta).status(true, service).toLogAndFile(true);
-                    })
-                    .catch((err) => logging.error(err, EInfos.queryAfter).return(false));
+            if (Configuration.pool[service]) {
+                await this.runPool(myService, Configuration.pool[service]);
             }
-            Configuration.services[service].status = EState.normal;
         });
         return true;
     }
@@ -556,6 +600,7 @@ class Configuration {
      * @returns true if it's ok
      */
     private async addToServer(key: string): Promise<boolean> {
+        // test if service exist
         return await this.isServiceExist(key, true)
             .then(async (res: boolean) => {
                 if (res === true) {
@@ -621,40 +666,38 @@ class Configuration {
     /**
      *
      * @param serviceName service name
-     * @param create create if not exist
-     * @returns true if it's done
      */
+    async deleteTempsTables(serviceName: string): Promise<void> {
+        const listTempTables = await this.connection(serviceName)`SELECT array_agg(table_name) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE 'temp%';`;
+        const tables = listTempTables[0]["array_agg"];
+        if (tables != null)
+            logging.status(
+                    await this.connection(serviceName)
+                        .begin((sql) => {
+                            tables.forEach(async (table: string) => {
+                                await sql.unsafe(queries.dropTable(table));
+                            });
+                        })
+                        .then(() => true)
+                        .catch((err: Error) => logging.error(err, EInfos.delTemp).return(false)),
+                        "Delete temp table(s)"
+                    )
+                    .to()
+                    .log()
+                    .file();
+                    await this.refresh(serviceName);
+    }
+
     private async isServiceExist(serviceName: string, create: boolean): Promise<boolean> {
         logging.head(Configuration.services[serviceName].pg.database).toLogAndFile(true);
-        return await this.connection(serviceName)`select 1+1 AS result`
+        return await this.connection(serviceName)`SELECT 1+1 AS result`
             .then(async () => {
                 logging.status(true, EInfos.dbExist).toLogAndFile(true);
-                const listTempTables = await this.connection(serviceName)`SELECT array_agg(table_name) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE 'temp%';`;
-                const tables = listTempTables[0]["array_agg"];
-                if (tables != null)
-                    logging
-                        .status(
-                            await this.connection(serviceName)
-                                .begin((sql) => {
-                                    tables.forEach(async (table: string) => {
-                                        await sql.unsafe(queries.drop(table));
-                                    });
-                                })
-                                .then(() => true)
-                                .catch((err: Error) => logging.error(err, EInfos.delTemp).return(false)),
-                                "Delete temp table(s)"
-                            )
-                            .to()
-                            .log()
-                            .file();
-                            await this.refresh(serviceName);
-                            await this.connection(serviceName)
-                            .unsafe(queries.logLevel("WARNING"))
-                            .then(() => {
-                        logging.status(true, EInfos.logLevel).toLogAndFile(true);
-                    })
-                    .catch((err: Error) => logging.error(err, EInfos.logLevel).return(true));
+                // delete temp files without async
+                this.deleteTempsTables(serviceName);
+
                 if (serviceName !== EConstant.admin) {
+                    // get extensions params of service
                     await this.connection(serviceName).unsafe(queries.extensions()).then((res) => {
                         Configuration.services[serviceName]._lora = res[0].lora;
                         Configuration.services[serviceName]._partitioned = res[0].partitioned;
@@ -662,17 +705,13 @@ class Configuration {
                         Configuration.services[serviceName]._numeric = res[0].numeric;
                         Configuration.services[serviceName]._user = res[0].user;
                     }).catch(() => null);
-                    if (Configuration.services[serviceName]._partitioned) {
-                        Configuration.services[serviceName].status = EState.start;
-                        this.connection(serviceName)
-                            .unsafe(`\n${queries.addNbToTable("observation")}\n${queries.updateNb("datastream", false)}\n${queries.updateNb("multidatastream", false)}`)
-                            .then(() => {
-                                Configuration.services[serviceName].status = EState.normal;
-                                logging.statusAfter(serviceName, EInfos.updateNb).toLogAndFile(true);
-                            });
-                    } else {
-                        Configuration.services[serviceName].status = EState.normal;                        
-                    }
+                    // keep test for old service 
+                    if (Configuration.services[serviceName]._partitioned === true) {
+                        this.poolAdd(serviceName, { name: "Create optimized column", state:EState.optimizing, query: queries.addNbToTable("observation")});
+                        // this.poolAdd(serviceName, { name: "Generate optimized index for datastream", state:EState.optimizing, query: queries.updateNb("datastream", false)});
+                        // this.poolAdd(serviceName, { name: "Generate optimized index for multidatastream", state:EState.optimizing, query: queries.updateNb("multidatastream", false)});                        
+                    } else 
+                         this.setServiceState(Configuration.services[serviceName], EState.normal);
                 }
             return true;
         })
@@ -756,19 +795,26 @@ class Configuration {
     }
 
     async start(restart: boolean): Promise<boolean> {
-        Configuration.state = restart === true ? EState.restart : EState.start;
+        // set main state
+        this.setGlobalState(restart === true ? EState.restarting : EState.starting);
         logging.start(restart === true ? "Restart" : "Start").toLogAndFile(true);
-        return this.initialisation()
+        return await this.initialisation()
             .then(async () => {
-                await config.afterInitialisation();
-                logging.logo().toLogAndFile(true);                            
-                Configuration.state = EState.normal; 
+                // without wait for it
+                config.runPools().then((res: boolean) => {
+                    if (res === true) this.setGlobalState(EState.normal);
+                });
+                logging.logo().toLogAndFile(true);                
                 return true;
             })
             .catch((err) => {
                 console.log(err);
                 return false;
             });
+    }
+
+    out() {
+        process.exit(100);
     }
 }
 

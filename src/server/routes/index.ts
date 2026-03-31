@@ -72,10 +72,6 @@ export const routerHandle = async (ctx: koaContext, next: any) => {
         ctx.type = returnFormats.json.type;
         ctx.throw(EHttpCode.notFound);
     }
-
-    if (splitLast(ctx.path, "/").toLocaleUpperCase().startsWith("REPLAYS(")) {
-        await config.trace.rePlay(ctx);
-    }
         
     // if service is not identified get out
     if (!ctx._.service) ctx.throw(EHttpCode.badRequest);

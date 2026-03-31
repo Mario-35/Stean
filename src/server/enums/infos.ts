@@ -9,6 +9,7 @@
 export const enum EInfos {
     decodingPayload = "Decoding Payload",
     readConfig = "Read configuration",
+    killPgStean = "Stop all stean postgresSql activity",
     authOk = "Authorized access",
     disconnect = "Disconnect $1",
     create = "Create $1",
@@ -17,6 +18,7 @@ export const enum EInfos {
     startCreateDB = "Start create database",
     createDB = "Create database",
     createUser = "Create user",
+    errorNb = "Correction table optimized column for pagination",
     updateNb = "Create optimized column for pagination",
     csvFile = "csv file",
     classConstructor = "class $1 override $2",

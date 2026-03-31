@@ -10,7 +10,7 @@ import { isTest, notNull, simpleQuotes } from "../helpers";
 import { koaContext } from "../types";
 import postgres from "postgres";
 import { logging } from ".";
-import { EConstant, EEncodingType, EErrors } from "../enums";
+import { EConstant, EErrors } from "../enums";
 import { FORMAT_JSONB } from "../db/constants";
 
 /**
@@ -119,26 +119,5 @@ export class Trace {
                     reject(err);
                 });
         });
-    }
-
-    async rePlay(ctx: koaContext): Promise<boolean> {
-        console.log(logging.whereIam(new Error().stack));
-        await this.get(`SELECT * FROM log WHERE id=${ctx._.id()}`).then(async (input: Record<string, any>) => {
-            if (["POST", "PUT", "PATCH"].includes(input.method)) {
-                try {
-                    await fetch(ctx._.origin + input.url + "?$replay=" + ctx._.id(), {
-                        method: input.method,
-                        headers: {
-                            "Content-Type": EEncodingType.json
-                        },
-                        body: JSON.stringify(input.datas)
-                    });
-                    return true;
-                } catch (error) {
-                    return logging.error(error).return(false);
-                }
-            }
-        });
-        return false;
     }
 }

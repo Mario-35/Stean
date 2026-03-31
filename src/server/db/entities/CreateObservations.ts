@@ -17,6 +17,7 @@ import { models } from "../../models";
 import { logging } from "../../log";
 import { OBSERVATION } from "../../models/entities";
 import { queries } from "../queries";
+import { config } from "../../configuration";
 
 /**
  * CreateObservations Class
@@ -119,12 +120,6 @@ export class CreateObservations extends Common {
             );
             // Restore logs and triggers
             await executeSql(this.ctx._.service, queries.logsAndTriggers(true));
-            // pagination after Insert
-            this.ctx.state = EState.optimized;
-            executeSql(this.ctx._.service, queries.addNbToTable("observation"))
-                .then(() => { logging.statusAfter("Import CSV", EInfos.updateNb).toLogAndFile(true); 
-                    this.ctx.state = EState.normal;
-                });
                 
             return this.formatReturnResult({
                 total: sqlInsert.count,
@@ -137,16 +132,38 @@ export class CreateObservations extends Common {
     // Override post xson file as createObservations
     async postJson(dataInput: Record<string, any>): Promise<IreturnResult | undefined> {
         console.log(logging.whereIam(new Error().stack));
-        this.ctx.state = EState.import;
+        config.setServiceState(this.ctx._.service, EState.importing);
         const returnValue: string[] = [];
         let total = 0;
         /// classic Create
         const dataStreamId = await models.streamInfos(this.ctx, dataInput);
         if (!dataStreamId) this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: EErrors.noStream });
         else {
+            const columnList= [...dataInput["components"]];
+            // init add index
+            let addIndex = -1;        
+            // verify if resultTime present
+            if (!dataInput["components"].includes("resultTime") && dataInput["components"].includes("phenomenonTime")) {
+                // get the index in column lists
+                addIndex = dataInput["components"].indexOf("phenomenonTime");
+                // Add it to colum list to insert
+                columnList.push("resultTime");
+            }
+            // verify if phenomenonTime present
+            if (!dataInput["components"].includes("phenomenonTime") && dataInput["components"].includes("resultTime")) {
+                // get the index in column lists
+                addIndex = dataInput["components"].indexOf("resultTime");
+                // Add it to colum list to insert
+                columnList.push("phenomenonTime");
+            }
+            // create keys
+            const keys = [`"${dataStreamId.type?.toLowerCase()}_id"`].concat(this.createListColumnsValues("COLUMNS", columnList));
             await asyncForEach(dataInput["dataArray"], async (elem: string[]) => {
-                const keys = [`"${dataStreamId.type?.toLowerCase()}_id"`].concat(this.createListColumnsValues("COLUMNS", dataInput["components"]));
-                const values = this.createListColumnsValues("VALUES", [String(dataStreamId.id), ...elem]);
+                // if adding resultTime or phenomenonTime that is not in values
+                if (addIndex >= 0 ) 
+                    elem.push(elem[addIndex]);
+                // create insert values
+                const values = this.createListColumnsValues("VALUES", [String(dataStreamId.id), ...elem]);                
                 await executeSqlValues(this.ctx._.service, `INSERT INTO ${doubleQuotes(OBSERVATION.table)} (${keys}) VALUES (${makeNull(values.toString())}) RETURNING id`)
                     .then((res: Record<string, any>) => {
                         returnValue.push(this.linkBase.replace("Create", "") + "(" + res[0] + ")");
@@ -171,6 +188,14 @@ export class CreateObservations extends Common {
                         } else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: error });
                     });
             });
+
+            const stream = dataInput["MultiDatastream"] ? "MultiDatastream" : "Datastream";
+
+            executeSql(this.ctx._.service,`${queries.updateNb(stream.toLowerCase(), false, dataInput[stream]["@iot.id"])}`)
+            .then(() => {
+                config.setServiceState(this.ctx._.service, EState.normal);                
+            });
+            config.setServiceState(this.ctx._.service, EState.normal);
             if (returnValue) {
                 return this.formatReturnResult({
                     total: total,
@@ -178,13 +203,16 @@ export class CreateObservations extends Common {
                 });
             }
         }
-        this.ctx.state = EState.normal;
     }
 
     // Override post caller
     async post(dataInput: JSON): Promise<IreturnResult | undefined> {
-        console.log(logging.whereIam(new Error().stack));
-        return this.ctx.datas ? await this.postForm() : await this.postJson(dataInput);
+        console.log(logging.whereIam(new Error().stack));        
+        return this.ctx.datas 
+            ? await this.postForm() 
+            : await this.postJson(Array.isArray(dataInput) 
+                ? Object(dataInput)[0] 
+                : dataInput);
     }
 
     // Override update to return error Bad request

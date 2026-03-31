@@ -74,7 +74,9 @@ export class PgVisitor extends Visitor {
         this.parentEntity = this.entity;
         this.entity = newEntity;
         this.parentId = this.id;
-        this.id = id ? id : BigInt(0);
+        this.id = id 
+            ? id 
+            : BigInt(0);
     }
 
     changeContext(target: string | undefined) {
@@ -128,6 +130,7 @@ export class PgVisitor extends Visitor {
     cleanColumn(input: string) {
         return removeAllQuotes(input).split(".")[0];
     }
+    
     getColumnAlias(
         entity: Ientity,
         columnName: string,
@@ -140,6 +143,7 @@ export class PgVisitor extends Visitor {
         const retResult = models.entityColumn(this.ctx._.model(), entity, columnName)?.alias(options);
         return retResult ? `${showTable === true && retResult && retResult[0] === '"' ? `${doubleQuotes(entity.table)}.${retResult}` : retResult}` : undefined;
     }
+
     clear(input: string) {
         if (input.includes("@START@")) {
             input = input.split("@START@").join("(");
@@ -147,6 +151,7 @@ export class PgVisitor extends Visitor {
         }
         return input;
     }
+
     start(node: Token) {
         console.log(logging.head("Start PgVisitor").to().text());
         const temp = this.Visit(node);
@@ -155,6 +160,7 @@ export class PgVisitor extends Visitor {
         temp.query.where.init(this.clear(temp.query.where.toString()));
         return temp;
     }
+
     verifyQuery = (): void => {
         console.log(logging.head("verifyQuery").to().text());
         const expands: string[] = [];
@@ -179,6 +185,7 @@ export class PgVisitor extends Visitor {
             this.ctx.throw(EHttpCode.badRequest, { detail: EErrors.dataArrayNotAllowed });
         }
     };
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Visit(node: Token, context?: IodataContext) {
         this.ast = this.ast || node;
@@ -207,6 +214,7 @@ export class PgVisitor extends Visitor {
         }
         return this;
     }
+
     isOrderBy = (context: IodataContext): boolean => (context.target ? context.target === EQuery.OrderBy : false);
     isWhere = (context: IodataContext): boolean => (context.target ? context.target === EQuery.Where : false);
     isSelect = (context: IodataContext): boolean => (context.target ? context.target === EQuery.Select : false);
@@ -221,21 +229,25 @@ export class PgVisitor extends Visitor {
             visitor.Visit(item, context);
         });
     }
+
     protected VisitEntity(node: Token, context: IodataContext) {
         this.Visit(node.value.path, context);
         if (node.value.options) node.value.options.forEach((item: Token) => this.Visit(item, context));
     }
+
     protected VisitSplitResult(node: Token, context: IodataContext) {
         this.Visit(node.value.path, context);
         if (node.value.options) node.value.options.forEach((item: Token) => this.Visit(item, context));
         this.splitResult = removeAllQuotes(node.value).split(",");
     }
+
     protected VisitInterval(node: Token, context: IodataContext) {
         this.Visit(node.value.path, context);
         if (node.value.options) node.value.options.forEach((item: Token) => this.Visit(item, context));
         this.interval = node.value;
         if (this.interval) this.noLimit();
     }
+
     protected VisitPayload(node: Token, context: IodataContext) {
         this.Visit(node.value.path, context);
         if (node.value.options) node.value.options.forEach((item: Token) => this.Visit(item, context));
@@ -255,6 +267,7 @@ export class PgVisitor extends Visitor {
             this.showRelations = false;
         }
     }
+
     protected VisitExpandItem(node: Token, context: IodataContext) {
         this.Visit(node.value.path, context);
         if (node.value.options) node.value.options.forEach((item: Token) => this.Visit(item, context));
@@ -263,6 +276,7 @@ export class PgVisitor extends Visitor {
     protected VisitExpandPath(node: Token, context: IodataContext) {
         this.navigationProperty = node.raw;
     }
+
     // Start loop process
     protected VisitQueryOptions(node: Token, context: IodataContext) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -272,12 +286,14 @@ export class PgVisitor extends Visitor {
     protected VisitInlineCount(node: Token, context: IodataContext) {
         this.count = Literal.convert(node.value.value, node.value.raw);
     }
+
     protected VisitFilter(node: Token, context: IodataContext) {
         context = this.changeContext(EQuery.Where);
         // context.target = EQuery.Where;
         if (this.query.where.toString().trim() != "") this.addToWhere(" AND ", context);
         this.Visit(node.value, context);
     }
+
     protected VisitOrderBy(node: Token, context: IodataContext) {
         context = this.changeContext(EQuery.OrderBy);
         // context.target = EQuery.OrderBy;
@@ -286,6 +302,7 @@ export class PgVisitor extends Visitor {
             if (i < node.value.items.length - 1) this.query.orderBy.add(", ");
         });
     }
+
     protected VisitOrderByItem(node: Token, context: IodataContext) {
         this.Visit(node.value.expr, context);
         if (this.query.orderBy.notNull()) this.query.orderBy.add(node.value.direction > 0 ? " ASC" : " DESC");
@@ -298,6 +315,7 @@ export class PgVisitor extends Visitor {
     protected VisitTop(node: Token, context: IodataContext) {
         this.limit = +node.value.raw;
     }
+
     protected VisitSelect(node: Token, context: IodataContext) {
         context = this.changeContext(EQuery.Select);
 
@@ -306,6 +324,7 @@ export class PgVisitor extends Visitor {
             this.Visit(item, context);
         });
     }
+
     protected VisitSelectItem(node: Token, context: IodataContext) {
         const tempColumn = this.getColumn(node.raw, "", context);
         context.identifier = tempColumn ? tempColumn : node.raw;
@@ -314,34 +333,42 @@ export class PgVisitor extends Visitor {
             (this.query[context.target as keyof object] as Query).add(tempColumn ? `${tempColumn}${EConstant.columnSeparator}` : `${doubleQuotes(node.raw)}${EConstant.columnSeparator}`);
         this.showRelations = false;
     }
+
     protected VisitAndExpression(node: Token, context: IodataContext) {
         this.Visit(node.value.left, context);
         this.addToWhere(context.in && context.in === true ? " INTERSECT " : " AND ", context);
         this.Visit(node.value.right, context);
     }
+
     protected VisitOrExpression(node: Token, context: IodataContext) {
         this.Visit(node.value.left, context);
         this.addToWhere(" OR ", context);
         this.Visit(node.value.right, context);
     }
+
     protected VisitNotExpression(node: Token, context: IodataContext) {
         this.addToWhere(" NOT ", context);
         this.Visit(node.value, context);
     }
+
     protected VisitBoolParenExpression(node: Token, context: IodataContext) {
         this.addToWhere("(", context);
         this.Visit(node.value, context);
         this.addToWhere(")", context);
     }
+
     protected VisitCommonExpression(node: Token, context: IodataContext) {
         this.Visit(node.value, context);
     }
+
     protected VisitFirstMemberExpression(node: Token, context: IodataContext) {
         this.Visit(node.value, context);
     }
+
     protected VisitMemberExpression(node: Token, context: IodataContext) {
         this.Visit(node.value, context);
     }
+
     protected VisitPropertyPathExpression(node: Token, context: IodataContext) {
         if (node.value.current && node.value.next) {
             // deterwine if its column AND JSON
@@ -363,12 +390,14 @@ export class PgVisitor extends Visitor {
             }
         } else this.Visit(node.value, context);
     }
+
     protected VisitSingleNavigationExpression(node: Token, context: IodataContext) {
         if (node.value.current && node.value.next) {
             this.Visit(node.value.current, context);
             this.Visit(node.value.next, context);
         } else this.Visit(node.value, context);
     }
+
     protected VisitLesserThanExpression(node: Token, context: IodataContext) {
         context.sign = "<";
         if (!this.VisitDateType(node, context) && !this.VisitRangeType(node, context)) {
@@ -377,6 +406,7 @@ export class PgVisitor extends Visitor {
             this.Visit(node.value.right, context);
         }
     }
+
     protected VisitLesserOrEqualsExpression(node: Token, context: IodataContext) {
         context.sign = "<=";
         if (!this.VisitDateType(node, context) && !this.VisitRangeType(node, context)) {
@@ -449,18 +479,23 @@ export class PgVisitor extends Visitor {
                     return input;
             }
     }
+
     addToWhere(value: string, context: IodataContext) {
         console.log(logging.head("addToWhere").to().text());
-        if (context.target === EQuery.Geo) this.subQuery.where ? (this.subQuery.where += value) : (this.subQuery.where = value);
+        if (context.target === EQuery.Geo) this.subQuery.where 
+            ? (this.subQuery.where += value) 
+            : (this.subQuery.where = value);
         else this.query.where.add(value);
     }
 
     protected addExpressionToWhere(node: Token, context: IodataContext) {
-        if (this.query.where.toString().includes("@EXPRESSION@")) this.query.where.replace("@EXPRESSION@", `@EXPRESSION@ ${this.inverseSign(context.sign)}`);
+        if (this.query.where.toString().includes("@EXPRESSION@")) 
+            this.query.where.replace("@EXPRESSION@", `@EXPRESSION@ ${this.inverseSign(context.sign)}`);
         else if (!this.query.where.toString().includes("@EXPRESSIONSTRING@") && this.inverseSign(context.sign))
             // Important to keep space
             this.addToWhere(" " + context.sign, context);
     }
+
     protected VisitGreaterThanExpression(node: Token, context: IodataContext) {
         context.sign = ">";
         if (!this.VisitDateType(node, context) && !this.VisitRangeType(node, context)) {
@@ -469,6 +504,7 @@ export class PgVisitor extends Visitor {
             this.Visit(node.value.right, context);
         }
     }
+
     protected VisitGreaterOrEqualsExpression(node: Token, context: IodataContext) {
         context.sign = ">=";
         if (!this.VisitDateType(node, context) && !this.VisitRangeType(node, context)) {
@@ -477,15 +513,16 @@ export class PgVisitor extends Visitor {
             this.Visit(node.value.right, context);
         }
     }
+
     public createDefaultOptions(): Record<string, boolean> {
         return {
             valueskeys: this.valueskeys,
             numeric: this.numeric
         };
     }
+
     public createComplexWhere(entity: string, node: Token, context: IodataContext) {
         console.log(logging.head("createComplexWhere").to().text());
-
         if (context.target) {
             if (!models.entity(this.ctx._.model(), entity)) return;
             const tempEntity = models.entity(this.ctx._.model(), node.value.name);
@@ -512,7 +549,7 @@ export class PgVisitor extends Visitor {
 
     protected VisitODataIdentifier(node: Token, context: IodataContext) {
         const alias = this.getColumn(node.value.name, "", context);
-        node.value.name = alias || node.value.name;
+        node.value.name = alias|| node.value.name;
         if (context.relation && context.identifier && models.isEntityColumnType(this.ctx._.model(), this.ctx._.model()[context.relation], this.cleanColumn(context.identifier), "json")) {
             context.identifier = `${doubleQuotes(this.cleanColumn(context.identifier))}->>${simpleQuotes(node.raw)}`;
         } else {
@@ -550,6 +587,7 @@ export class PgVisitor extends Visitor {
             this.query.where.replace(/= null/, "IS NULL");
         }
     }
+
     protected VisitNotEqualsExpression(node: Token, context: IodataContext): void {
         context.sign = "<>";
         if (!this.VisitDateType(node, context) && !this.VisitRangeType(node, context)) {
@@ -559,6 +597,7 @@ export class PgVisitor extends Visitor {
             this.query.where.replace(/<> null$/, "IS NOT NULL");
         }
     }
+
     protected VisitLiteral(node: Token, context: IodataContext): void {
         if (this.entity && context.relation && context.table && context.target === EQuery.Where) {
             const temp = this.query.where
@@ -607,12 +646,14 @@ export class PgVisitor extends Visitor {
             else this.addToWhere(temp, context);
         }
     }
+
     protected VisitInExpression(node: Token, context: IodataContext): void {
         this.Visit(node.value.left, context);
         this.addToWhere(" IN (", context);
         this.Visit(node.value.right, context);
         this.addToWhere(":list)", context);
     }
+
     protected VisitArrayOrObject(node: Token, context: IodataContext): void {
         this.addToWhere((context.literal = SQLLiteral.convert(node.value, node.raw)), context);
     }
@@ -723,9 +764,7 @@ export class PgVisitor extends Visitor {
                 this.addToWhere(columnOrData(0, method.toUpperCase(), false), context);
                 break;
             case "now":
-                if (this.options.nowInterval)
-                    this.addToWhere(`(now() ${this.options.nowInterval.split("%27").join("'").split("%20").join(" ")})::date`, context);
-                    else this.addToWhere("NOW()", context);
+                this.addToWhere(this.options.nowInterval ? `(now() ${this.options.nowInterval.split("%27").join("'").split("%20").join(" ")})::date` : "NOW()", context);
                 break;
             case "date":
                 this.addToWhere(`${method.toUpperCase()}(`, context);
@@ -738,10 +777,6 @@ export class PgVisitor extends Visitor {
             case "geo":
                 const tmpGeo = new OdataGeoColumn(this, method, columnOrData(order[0], "", true));
                 context = tmpGeo.createColumn(columnOrData(order[1], "", true), context);
-                // if (method === "geo.length")
-                //   context = tmpGeo.createColumn(`ST_Length(ST_MakeLine(ST_AsText(@GEO@), ${columnOrData(order[1], "", true)}))`, context);
-                // else
-                //   context = tmpGeo.createColumn(`${method.toUpperCase().replace("GEO.", "ST_")}(ST_AsText(@GEO@), ${columnOrData(order[1], "", true)})`, context);
                 break;
             case "trim":
                 this.addToWhere(`TRIM(BOTH '${params.length == 2 ? cleanData(1) : " "}' FROM ${columnOrData(0, "", true)})`, context);
@@ -751,9 +786,11 @@ export class PgVisitor extends Visitor {
                 break;
         }
     }
+
     toString(): string {
         return this.query.toString(this);
     }
+
     toPgQuery(): IpgQuery | undefined {
         return this.query.toPgQuery(this);
     }
