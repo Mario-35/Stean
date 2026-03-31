@@ -78,7 +78,6 @@ describe("endpoint : Datastream", () => {
             const infos = addTest({
                 type: "get",
                 short: "All",
-
                 description: `Retrieve all ${entity.name}.${showHide(`Get${entity.name}`, apiInfos["9.2.2"])}`,
                 reference: "https://docs.ogc.org/is/18-088/18-088.html#usage-address-collection-entities",
                 request: `${testVersion}/${entity.name}`

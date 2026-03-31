@@ -112,6 +112,7 @@ export class CreateObservations extends Common {
             .file();
         if (sqlInsert) {
             const sqls = sqlInsert.query.map((e: string, index: number) => `${index === 0 ? "WITH " : ", "}updated${index + 1} as (${e})${EConstant.return}`);
+            process.stdout.write(sqls.join());
             // Remove logs and triggers for speed insert
             await executeSql(this.ctx._.service, queries.logsAndTriggers(false));
             const resultSql: Record<string, any> = await executeSql(

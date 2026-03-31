@@ -119,12 +119,6 @@ export class InsertFromCsv {
         });
     }
 
-    caseResultNull() {
-        return ["---", 'NA', '#REF!', "", 'NONE', 'NAN', 'NC'
-        ].map(e => `WHEN '${e.toUpperCase()}' THEN NULL`).join('');
-
-    }
-    
     async query(): Promise<{ count: number; query: string[] } | undefined> {
         console.log(logging.whereIam(new Error().stack));
         const sqlRequest = await this.createColumnsName();
@@ -133,7 +127,7 @@ export class InsertFromCsv {
                 const tmp = sqlRequest.columns.findIndex((element) => element === "result");
                 return tmp > 0
                     ? `json_build_object('value', TRANSLATE (SUBSTRING (value${tmp} FROM '(([0-9]+.*)*[0-9]+)'), '[]','')::FLOAT)`
-                    : `json_build_object('value', CASE UPPER("${this.paramsFile.tempTable}"."${def}") WHEN ${this.caseResultNull()} ELSE CAST(REPLACE(value2,',','.') AS FLOAT) END)`;
+                    : `json_build_object('value', CASE SUBSTRING("${this.paramsFile.tempTable}"."${def}" FROM 1 FOR 1) ~ '^[0-9]' WHEN 'true' THEN CAST(REPLACE("${this.paramsFile.tempTable}"."${def}",',','.') AS FLOAT) ELSE NULL END)`;
             };
             const kel = (search: string, def: any) => {
                 const tmp = sqlRequest.columns.findIndex((element) => element === search);
@@ -142,10 +136,11 @@ export class InsertFromCsv {
             const kelName = (search: string, def: any) => {
                 const tmp = sqlRequest.columns.findIndex((element) => element === search);
                 return tmp > 0
-                    ? `CASE UPPER(value${tmp})
-                        ${this.caseResultNull()}
-                        ELSE (SELECT id FROM "${search.toLowerCase()}" WHERE name = value${tmp}::JSONB->>'name')
-                    END`
+                    ? `CASE value${tmp}
+            WHEN 'NULL' THEN NULL
+            WHEN NULL THEN NULL
+            ELSE (SELECT id FROM "${search.toLowerCase()}" WHERE name = value${tmp}::JSONB->>'name')
+        END`
                     : def;
             };
             const stream = await streamCsvFile(this.ctx._.service, this.paramsFile, sqlRequest);
