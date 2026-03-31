@@ -72,10 +72,13 @@ export class Models {
 
         await executeSqlValues(
             ctx._.service,
-            ` select version(), (SELECT ARRAY(SELECT extname||'-'||extversion AS extension FROM pg_extension) AS extension), (SELECT c.relname||'.'||a.attname FROM pg_attribute a JOIN pg_class c ON (a.attrelid=c.relfilenode) WHERE a.atttypid = 114) ;`
+            queries.infos()
         ).then((res) => {
+            console.log(res);
+            
             result["Postgres"]["version"] = res[0 as keyof object];
             result["Postgres"]["extensions"] = res[1 as keyof object];
+            result["Postgres"]["log"] = res[3 as keyof object];
         });
         if(ctx._.inExtension(EExtensions.users))
         await executeSql(ctx._.service, `select username, "canPost", "canDelete", "canCreateUser", "canCreateDb", "admin", "superAdmin" FROM public.user ORDER By username;`).then((res) => {

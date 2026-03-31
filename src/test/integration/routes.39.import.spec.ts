@@ -8,7 +8,7 @@
 process.env.NODE_ENV = "test";
 import chai from "chai";
 import chaiHttp from "chai-http";
-import { IApiDoc, IApiInput, prepareToApiDoc, generateApiDoc, identification, limitResult, testVersion } from "./constant";
+import { IApiDoc, IApiInput, prepareToApiDoc, generateApiDoc, identification, limitResult, testVersion, testLog } from "./constant";
 import { server } from "../../server/index";
 import { addPostFile, addStartNewTest, addTest, writeLog } from "./tests";
 import { EConstant } from "../../server/enums";
@@ -85,6 +85,7 @@ describe("CSV Import", function () {
             .attach("file", "./src/test/integration/files/simple.csv")
             .set("Cookie", `${EConstant.appName}=${token}`)
             .end((err: Error, res: any) => {
+                testLog(res.body)
                 should.not.exist(err);
                 res.should.have.status(201);
                 res.body[0].should.eql("Add 12 on 12 lines from simple.csv");

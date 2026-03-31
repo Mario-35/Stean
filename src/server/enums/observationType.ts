@@ -15,3 +15,5 @@ export enum EObservationType {
     "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_TruthObservation" = "_resultBoolean",
     "http://www.opengis.net/def/observation-type/ogc-omxml/2.0/swe-array-observation" = "object"
 }
+
+
