@@ -544,8 +544,12 @@ FROM
         return `SELECT JSON_AGG(t) AS results FROM ( select table_name, ( xpath( '/row/c/text()', query_to_xml( format( 'select count(*) AS c from %I.%I', table_schema, table_name ), false, true, '' ) ) ) [1] :: text :: int AS count from information_schema.tables where table_name IN ( SELECT (inhrelid :: regclass):: text AS child FROM pg_catalog.pg_inherits WHERE inhparent = 'observation' :: regclass OR inhparent = 'datastream_id0' :: regclass ) order by count DESC ) AS t `;
     }
 
+    // listPartionned() {
+    //     return `SELECT array_agg(table_name) from information_schema.tables where table_name IN ( SELECT (inhrelid :: regclass):: text AS child FROM pg_catalog.pg_inherits WHERE inhparent = 'observation' :: regclass OR inhparent = 'datastream_id0' :: regclass )`;
+    // }
+    
     listPartionned() {
-        return `SELECT array_agg(table_name) from information_schema.tables where table_name IN ( SELECT (inhrelid :: regclass):: text AS child FROM pg_catalog.pg_inherits WHERE inhparent = 'observation' :: regclass OR inhparent = 'datastream_id0' :: regclass )`;
+        return `SELECT (inhrelid :: regclass):: text AS child FROM pg_catalog.pg_inherits WHERE inhparent = 'observation' :: regclass OR inhparent = 'datastream_id0' :: regclass`;
     }
 
     getDate() {

@@ -37,6 +37,7 @@ export const createOdata = async (ctx: koaContext): Promise<RootPgVisitor | unde
         replaceElement(input);
     };
 
+    replaceElement("%40", "@");
     replaceElement("geography%27", "%27");
     replaceElement("@iot.");
     if (urlSrc.includes('now(') && !urlSrc.includes('now()')) {

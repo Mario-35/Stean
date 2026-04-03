@@ -8,7 +8,7 @@
 
 import { executeSql, executeSqlValues } from ".";
 import { config } from "../../configuration";
-import { EChar, EState } from "../../enums";
+import { EState } from "../../enums";
 import { asyncForEach } from "../../helpers";
 // import { logging } from "../../log";
 import { koaContext } from "../../types";
@@ -28,11 +28,11 @@ export const cleanIndexes = async (ctx: koaContext, table: string) => {
 
 export const cleanDb = async (ctx: koaContext) => {
     config.setServiceState(ctx._.service, EState.cleaning);
-    const result: Record<string, string> = {};
+    // const result: Record<string, string> = {};
 
-    const listTables = await executeSqlValues(ctx._.service, queries.listPartionned()).then((res) => {
-        const listTables: string[] = res[0 as keyof object];
-        return listTables.filter((table) => !table.endsWith("iddefault")).filter((table) => !table.endsWith("_id0"));
+    await executeSqlValues(ctx._.service, queries.listPartionned()).then((res) => {
+        console.log(res);
+        
     });
     
     // result["Clean all nbs"] = 
@@ -40,13 +40,13 @@ export const cleanDb = async (ctx: koaContext) => {
     //             .then(() => EChar.ok)
     //             .catch(() => EChar.notOk);
     
-    await asyncForEach(listTables, async (table: string) => {
-        cleanIndexes(ctx, table);
-        result[`Create index for ${table}`] = 
-            await executeSql(ctx._.service, queries.dropIndex(table))
-            .then(() => EChar.ok)
-            .catch(() => EChar.notOk);
-        });
+    // await asyncForEach(listTables, async (table: string) => {
+    //     cleanIndexes(ctx, table);
+    //     result[`Create index for ${table}`] = 
+    //         await executeSql(ctx._.service, queries.dropIndex(table))
+    //         .then(() => EChar.ok)
+    //         .catch(() => EChar.notOk);
+    //     });
         
 
 
@@ -64,12 +64,12 @@ export const cleanDb = async (ctx: koaContext) => {
     //             .catch(() => EChar.notOk);
     // });
 
-    result["Complete Vacuum"] = 
-        await executeSql(ctx._.service, 'VACUUM;')        
-            .then(() => EChar.ok)
-            .catch(() => EChar.notOk);
+    // result["Complete Vacuum"] = 
+    //     await executeSql(ctx._.service, 'VACUUM;')        
+    //         .then(() => EChar.ok)
+    //         .catch(() => EChar.notOk);
 
-    config.setGlobalState(EState.normal);
+    // config.setGlobalState(EState.normal);
 
-    return result;
+    // return result;
 };

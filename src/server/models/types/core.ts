@@ -55,10 +55,10 @@ export class Core {
         return this;
     }
 
-    addIndexes(input: string | string[]) {
-        this._.indexes = typeof input === "string" ? [input] : input;
-        return this;
-    }
+    // addIndexes(input: string | string[]) {
+    //     this._.indexes = typeof input === "string" ? [input] : input;
+    //     return this;
+    // }
 
     partition(input: "main" | "sub") {
         this._.partition = input;

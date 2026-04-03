@@ -103,7 +103,7 @@ class Configuration {
 
     // app repository version
     remoteVersion(): string | undefined {
-        return Configuration.remoteVersion ? `${Configuration.remoteVersion.version} [${Configuration.remoteVersion.date}]` : undefined;
+        return Configuration.remoteVersion ? this.version() : undefined;
     }
 
     // is update
@@ -119,23 +119,23 @@ class Configuration {
         // test database connection
         return await this.adminConnection()
             .unsafe(datas)
-            .then((e) => true)
+            .then(() => true)
             .catch(async (error) => {
                 // relation does not exist error
                 if (error.code === "42P01") {
                     return await this.adminConnection()
                         .unsafe(queries.createTableService())
-                        .then(async (e) => {
+                        .then(async () => {
                             return await this.adminConnection()
                                 .unsafe(datas)
-                                .then((e) => true);
+                                .then(() => true);
                         })
                         .catch(async (error) => {
                             // relation already exist error
                             if (error.code === "42P07") {
                                 return await this.adminConnection()
                                     .unsafe(datas)
-                                    .then((e) => true);
+                                    .then(() => true);
                             } else {
                                 return logging.error(error).return(false);
                             }
@@ -157,8 +157,7 @@ class Configuration {
 
 
     messageListen(what: string, port: string, db?: boolean) {
-        if (db) logging.status(true, messages.str(EInfos.dbReady, what), EChar.web).toLogAndFile(true);
-        else logging.status(true, `${what} ${EInfos.listenPort} ${port}`, EChar.web).toLogAndFile(true);
+        logging.status(true, db ? messages.str(EInfos.dbReady, what) : `${what} ${EInfos.listenPort} ${port}`, EChar.web).toLogAndFile(true);
     }
 
     /**
@@ -185,13 +184,14 @@ class Configuration {
                     application_name: `${EConstant.appName} ${appVersion.version}`
                 }
             });
+            // Kill all sten postgres tasks
+            // if (!isTest()) 
+            //     await Configuration.adminConnection
+            //         .unsafe(queries.terminateAll())
+            //         .then(() => logging.message(EInfos.killPgStean, `${EConstant.appName} ${appVersion.version}`).toLogAndFile(true))
+            //         .catch((err) => logging.error(err, EErrors.serviceUpdateteError));
 
-            if (!isTest()) 
-                await Configuration.adminConnection
-                    .unsafe(queries.terminateAll())
-                    .then(() => logging.message(EInfos.killPgStean, `${EConstant.appName} ${appVersion.version}`).toLogAndFile(true))
-                    .catch((err) => logging.error(err, EErrors.serviceUpdateteError));
-
+            // loop on services
             try {
                 if (!isTest()) {
                     await this.adminConnection()
@@ -396,9 +396,8 @@ class Configuration {
         return temp;
     }
 
-    private async refresh(connectionName: string): Promise<boolean> {
-        await this.reCreatePgFunctions(connectionName);
-        return true;
+    private async refreshService(connectionName: string): Promise<boolean> {
+        return await this.reCreatePgFunctions(connectionName);
     }
 
     /**
@@ -408,6 +407,8 @@ class Configuration {
      */
     private async reCreatePgFunctions(connectionName: string): Promise<boolean> {
         await asyncForEach(pgFunctions(), async (query: string) => {
+            console.log(query);
+            
             await config
                 .connection(connectionName)
                 .unsafe(query)
@@ -499,7 +500,7 @@ class Configuration {
         asyncForEach(input, async (pool: Ipool) => {
             this.setServiceState(service, pool.state);
             
-            await executeSql(service, pool.query)
+            executeSql(service, pool.query)
             .then(() => {
                 logging.init().text(EInfos.queryAfter, EColor.Magenta).status(true, service.name, pool.name).toLogAndFile(true);
                 this.setServiceState(service, EState.normal);
@@ -684,18 +685,17 @@ class Configuration {
                     )
                     .to()
                     .log()
-                    .file();
-                    await this.refresh(serviceName);
+                    .file();                    
     }
 
     private async isServiceExist(serviceName: string, create: boolean): Promise<boolean> {
         logging.head(Configuration.services[serviceName].pg.database).toLogAndFile(true);
+
         return await this.connection(serviceName)`SELECT 1+1 AS result`
             .then(async () => {
                 logging.status(true, EInfos.dbExist).toLogAndFile(true);
                 // delete temp files without async
                 this.deleteTempsTables(serviceName);
-
                 if (serviceName !== EConstant.admin) {
                     // get extensions params of service
                     await this.connection(serviceName).unsafe(queries.extensions()).then((res) => {
@@ -707,9 +707,10 @@ class Configuration {
                     }).catch(() => null);
                     // keep test for old service 
                     if (Configuration.services[serviceName]._partitioned === true) {
-                        this.poolAdd(serviceName, { name: "Create optimized column", state:EState.optimizing, query: queries.addNbToTable("observation")});
+                        // this.poolAdd(serviceName, { name: "Create optimized column", state:EState.optimizing, query: queries.addNbToTable("observation")});
                         // this.poolAdd(serviceName, { name: "Generate optimized index for datastream", state:EState.optimizing, query: queries.updateNb("datastream", false)});
                         // this.poolAdd(serviceName, { name: "Generate optimized index for multidatastream", state:EState.optimizing, query: queries.updateNb("multidatastream", false)});                        
+                        this.setServiceState(Configuration.services[serviceName], EState.normal);
                     } else 
                          this.setServiceState(Configuration.services[serviceName], EState.normal);
                 }
@@ -772,7 +773,7 @@ class Configuration {
             // const datas = `UPDATE public.services SET "datas" = ${FORMAT_JSONB(input)} WHERE "name" = '${input.name}'`;
             return await this.adminConnection()
                 .unsafe(queries.updateConfig(input.name, FORMAT_JSONB(input)))
-                .then(async () => await this.refresh(input.name))
+                .then(async () => await this.refreshService(input.name))
                 .catch((err) => logging.error(err, EErrors.serviceUpdateteError).return(false));
         }
         return false;
@@ -801,6 +802,7 @@ class Configuration {
         return await this.initialisation()
             .then(async () => {
                 // without wait for it
+                
                 config.runPools().then((res: boolean) => {
                     if (res === true) this.setGlobalState(EState.normal);
                 });
