@@ -80,10 +80,20 @@ export class Common {
         console.log(logging.whereIam(new Error().stack));
         return {
             ...{
-                location: args[EConstant.selfLink] ? String(args[EConstant.selfLink]) : args.body && typeof args.body === "object" ? args.body[EConstant.selfLink] : undefined,
-                [EConstant.count]: args[EConstant.count] ? +args[EConstant.count] : undefined,
-                [EConstant.nextLink]: args[EConstant.nextLink] ? String(args[EConstant.nextLink]) : undefined,
-                [EConstant.prevLink]: args[EConstant.selfLink] ? String(args[EConstant.selfLink]) : undefined,
+                location: args[EConstant.selfLink] 
+                    ? String(args[EConstant.selfLink]) 
+                    : args.body && typeof args.body === "object" 
+                        ? args.body[EConstant.selfLink] 
+                        : undefined,
+                [EConstant.count]: args[EConstant.count] 
+                    ? +args[EConstant.count] 
+                    : undefined,
+                [EConstant.nextLink]: args[EConstant.nextLink] 
+                    ? String(args[EConstant.nextLink]) 
+                    : undefined,
+                [EConstant.prevLink]: args[EConstant.selfLink] 
+                    ? String(args[EConstant.selfLink]) 
+                    : undefined,
                 body: undefined,
                 total: undefined
             },
