@@ -14,6 +14,14 @@ import { PgVisitor, RootPgVisitor } from "../../odata/visitor";
 import { Id } from "../../types";
 
 class Queries {
+    private removeReturn(input: string) {
+      return input.replace(/\r\n/g, EConstant.return)
+        .split(EConstant.return)
+        .map((e: string) => e.trim())
+        .filter((e) => e.trim() != "")
+        .join(EConstant.return);
+    }
+
     creatdeDB(name: string) {
         return `CREATE DATABASE ${name};`;
     }
@@ -78,65 +86,15 @@ class Queries {
         return `SELECT id FROM "${table}" WHERE "name" = '${name}'`;
     }
 
-    addNbToTable(table: string) {
-        return `ALTER TABLE IF EXISTS "${table}" ADD COLUMN IF NOT EXISTS _nb BIGINT NULL;`;
-    }
-
-    // updateNb(stream: string, all: boolean) {
-    //     return `UPDATE "observation" SET _nb = row_number FROM ( SELECT ROW_NUMBER() OVER ( PARTITION BY ${stream}_id ORDER BY "phenomenonTime" ), id FROM "observation" WHERE ${stream}_id IS NOT NULL ) i WHERE "observation".id = i.id${
-    //         all === true ? "" : " AND _nb IS NULL"
-    //     };`;
-    // }
-
-    updateNb(stream: string, all: boolean, id?: string) {
-      // return ` ${ all === true ? `UPDATE "observation" SET _nb = NULL ${id ? ` WHERE ${stream}_id = ${id}` : ''};` : ''}
-      return `UPDATE 
-                "observation" 
-              SET 
-                _nb = ${ all === true ? "" : `(SELECT COUNT(id) FROM "observation" WHERE ${stream}_id = i."${stream}_id" AND _nb IS NOT NULL ) +`} row_number
-              FROM 
-                (
-                  SELECT 
-                    id,      
-                    ROW_NUMBER() OVER (
-                      PARTITION BY ${stream}_id 
-                      ORDER BY 
-                        "phenomenonTime"
-                    ), 
-                    "${stream}_id" 
-                  FROM 
-                    "observation" 
-                  WHERE 
-                    ${stream}_id ${id ? `= ${id}` : 'IS NOT NULL'}
-                    ${ all === true ? "" : " AND _nb IS NULL"}
-                ) i 
-              WHERE 
-                "observation".id = i.id
-                ${ all === true ? "" : " AND _nb IS NULL"};`;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    corretcNb(message: string) {
-      try {
-        message = `${message.split('«')[1].split('_nb')[0].split('_id').join("_id = ")}`
-        return  `UPDATE observation SET _nb = NULL WHERE ${message}`;        
-      } catch (error) {
-        return '';
-      }
+    createRowNumber(id: Id | string, offset: number, limit: number) {
+       return this.removeReturn(`id IN (
+                  SELECT id FROM (
+                      SELECT id, 
+                      ROW_NUMBER() OVER () FROM (
+                          SELECT id FROM "datastream_id${id}") 
+                          ${offset && offset > 0 ? `OFFSET ${offset}` : ''} 
+                          ${limit && limit > 0 ? `LIMIT ${limit}` : ''} 
+                ORDER BY "phenomenonTime"))`);
     }
     
     createExtension(name: string) {
@@ -543,10 +501,6 @@ FROM
     countAll() {
         return `SELECT JSON_AGG(t) AS results FROM ( select table_name, ( xpath( '/row/c/text()', query_to_xml( format( 'select count(*) AS c from %I.%I', table_schema, table_name ), false, true, '' ) ) ) [1] :: text :: int AS count from information_schema.tables where table_name IN ( SELECT (inhrelid :: regclass):: text AS child FROM pg_catalog.pg_inherits WHERE inhparent = 'observation' :: regclass OR inhparent = 'datastream_id0' :: regclass ) order by count DESC ) AS t `;
     }
-
-    // listPartionned() {
-    //     return `SELECT array_agg(table_name) from information_schema.tables where table_name IN ( SELECT (inhrelid :: regclass):: text AS child FROM pg_catalog.pg_inherits WHERE inhparent = 'observation' :: regclass OR inhparent = 'datastream_id0' :: regclass )`;
-    // }
     
     listPartionned() {
         return `SELECT (inhrelid :: regclass):: text AS child FROM pg_catalog.pg_inherits WHERE inhparent = 'observation' :: regclass OR inhparent = 'datastream_id0' :: regclass`;
@@ -571,27 +525,12 @@ FROM
         return `SELECT "${column}" FROM "${table}" WHERE ${test[EConstant.id] ? `id=${test[EConstant.id]}` : test[EConstant.name] ? `name='${test[EConstant.name]}'` : "ERROR"}`;
     }
 
-    cluster(table: string) {
-        return `CLUSTER ${table} USING "${table}_nb";`;
-    }
-
     toNumeric() {
         return `ALTER TABLE observation ADD COLUMN resulte numeric;
                 UPDATE observation SET resulte = (result->>'value')::numeric WHERE multidatastream_id IS NULL;
                 ALTER TABLE observation DROP COLUMN result;
                 ALTER TABLE observation RENAME COLUMN resulte TO result;`;
     }
-
-    cleanIndex_NB(stream: string, id: string) {
-        return `UPDATE observation SET _nb = NULL WHERE ${stream}_id = ${id}`;
-    }
-
-    // createClusterIndex(table: string) {
-    //     return `CREATE UNIQUE INDEX IF NOT EXISTS "${table}_nb" on ${table} (_nb);`;
-    // }
-    // dropClusterIndex(table: string) {
-    //     return `ALTER TABLE "${table}" SET WITHOUT CLUSTER;`;
-    // }
 
     dropIndex(name: string) {
         return `DROP INDEX "${name}" CASCADE;`;

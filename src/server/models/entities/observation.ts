@@ -24,11 +24,7 @@ export const OBSERVATION: Ientity = new Entity("Observations", {
         parameters: new Jsonb().column(),
         datastream_id: new Relation("Datastreams", EDataType.smallint).partition("main").column(),
         multidatastream_id: new Relation("MultiDatastreams", EDataType.smallint).partition("sub").column(),
-        featureofinterest_id: new Relation("FeaturesOfInterest", EDataType.smallint).notNull().default(1).column(),
-        // datastream_id: new Relation("Datastreams", EDataType.smallint).addIndexes(["phenomenonTime", "resultTime"]).partition("main").column(),
-        // multidatastream_id: new Relation("MultiDatastreams", EDataType.smallint).addIndexes(["phenomenonTime", "resultTime"]).partition("sub").column(),
-        // featureofinterest_id: new Relation("FeaturesOfInterest", EDataType.smallint).addIndexes(["phenomenonTime", "resultTime"]).notNull().default(1).column(),
-        _nb: new Bigint().column()
+        featureofinterest_id: new Relation("FeaturesOfInterest", EDataType.smallint).notNull().default(1).column()
     },
     relations: {
         Datastream: {

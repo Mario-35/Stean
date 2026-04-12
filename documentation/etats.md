@@ -14,13 +14,12 @@ http://rootApi/state/ServiceName/state
 
 Affiche l'état du service
 
-- maintenance: Maintenance en cours
-- optimized: Optimisation du partitionnement en cours,
-- createDb: Création d'une instance en cours,
-- restart: redémarre,
-- import: importation en cours,
-- clean: Nettoyage en cours,
-- start: Démarrage de l'api ,
+- optimizing: Optimisation du partitionnement en cours,
+- creating: Création d'une instance en cours,
+- restarting: redémarre,
+- importing: importation en cours,
+- cleaning: Nettoyage en cours,
+- starting: Démarrage de l'api ,
 - normal: normal,
 
 Certaines opérations comme l'import csv ne seront pas lancé si l'état n'est pas normal.

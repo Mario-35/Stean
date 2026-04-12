@@ -366,7 +366,6 @@ describe("endpoint : Thing [8.2.1]", () => {
             const infos = addTest({
                 type: "get",
                 short: `Subentity ${name}`,
-
                 description: "",
                 reference: "",
                 request: `${testVersion}/${entity.name}(6)/${name}`

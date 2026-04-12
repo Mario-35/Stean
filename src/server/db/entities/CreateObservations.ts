@@ -189,12 +189,12 @@ export class CreateObservations extends Common {
                     });
             });
 
-            const stream = dataInput["MultiDatastream"] ? "MultiDatastream" : "Datastream";
+            // const stream = dataInput["MultiDatastream"] ? "MultiDatastream" : "Datastream";
 
-            executeSql(this.ctx._.service,`${queries.updateNb(stream.toLowerCase(), false, dataInput[stream]["@iot.id"])}`)
-            .then(() => {
-                config.setServiceState(this.ctx._.service, EState.normal);                
-            });
+            // executeSql(this.ctx._.service,`${queries.updateNb(stream.toLowerCase(), false, dataInput[stream]["@iot.id"])}`)
+            // .then(() => {
+            //     config.setServiceState(this.ctx._.service, EState.normal);                
+            // });
             config.setServiceState(this.ctx._.service, EState.normal);
             if (returnValue) {
                 return this.formatReturnResult({

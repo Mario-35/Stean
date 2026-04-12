@@ -87,13 +87,17 @@
     options clean
     creation of stean documentation
 
-
 ## version 1.3.6
     corrections in documentation
     correction with top pagination from github
     remove rollPeriod in default graph (without multiple stream)
+
+## version 1.3.7
     add readNoly option
     add null result in observatioàn !!! NOT in STA standard
     add optimisez pagination after csv import
     add optimised table in state
     add state documentation
+
+## version 1.3.8
+    New row number query

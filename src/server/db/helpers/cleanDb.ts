@@ -35,11 +35,6 @@ export const cleanDb = async (ctx: koaContext) => {
         
     });
     
-    // result["Clean all nbs"] = 
-    //     await executeSql(ctx._.service, `UPDATE observation set _nb = NULL`)
-    //             .then(() => EChar.ok)
-    //             .catch(() => EChar.notOk);
-    
     // await asyncForEach(listTables, async (table: string) => {
     //     cleanIndexes(ctx, table);
     //     result[`Create index for ${table}`] = 

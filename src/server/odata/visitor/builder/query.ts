@@ -112,6 +112,10 @@ export class Query {
         return returnValue;
     }
 
+    private extractId(element: PgVisitor) {
+        return element.query.where.toString().split("=")[1].split(" ")[0];
+    }
+
     // Create SQL Query
     private create(main: RootPgVisitor | PgVisitor, toWhere: boolean, _element?: PgVisitor): IpgQuery | undefined {
         const element = _element ? _element : main;
@@ -158,19 +162,22 @@ export class Query {
                                 }
                             });
 
+
                     const pagination =
                         element.ctx._.service._partitioned &&
                         element.query.where.toString().includes(`"observation"."${element.parentEntity?.table}_id" =`) &&
                         (isReturnGraph(element) || element.skip > 0)
-                            ? `"observation"."${element.parentEntity?.table}_id" =${element.query.where.toString().split("=")[1].split(" ")[0]}`
+                            ? `"observation"."${element.parentEntity?.table}_id" =${this.extractId(element)}`
                             : undefined;
+
+
                     if (pagination)
                         element.query.where.replace(
                             pagination,
-                            `_nb > ${element.skip}${
+                            ` ${
                                 isReturnGraph(element)
-                                    ? ` AND _nb % (SELECT COALESCE(NULLIF(COUNT(id) / ${element.ctx._.service.nb_graph}, 0), 1) FROM "datastream_id${pagination.split("=")[1].split(" ")[0]}") = 0`
-                                    : ""
+                                    ? `${queries.createRowNumber(this.extractId(element), 0, 0)} AND id % (SELECT COALESCE(NULLIF(COUNT(id) / ${element.ctx._.service.nb_graph}, 0), 1) FROM "datastream_id${pagination.split("=")[1].split(" ")[0]}") = 0 ORDER BY "phenomenonTime"`
+                                    : queries.createRowNumber(this.extractId(element), element.skip, element.limit)
                             }`
                         );
 
@@ -179,11 +186,11 @@ export class Query {
                         from: pagination ? [`"${element.parentEntity?.table}_id${pagination.split("=")[1].split(" ")[0]}" AS "${element.entity.table}"`] : [doubleQuotes(element.entity.table)],
                         where: element.query.where.toString(),
                         groupBy: element.query.groupBy.notNull() === true ? element.query.groupBy.toString() : undefined,
-                        orderBy: element.query.orderBy.notNull() === true ? element.query.orderBy.toString() : pagination ? "_nb" : element.entity.orderBy,
+                        orderBy: element.query.orderBy.notNull() === true ? element.query.orderBy.toString() : pagination ? "" : element.entity.orderBy,
                         join: element.joinOffset,
-                        skip: element.skip,
+                        skip: pagination ? undefined : element.skip,
                         // skip: pagination ? 0 : element.skip,
-                        limit: element.limit,
+                        limit: pagination ? undefined : element.limit,
                         keys: this.keyNames.toArray(),
                         count: element.countOffset
                             ? element.countOffset

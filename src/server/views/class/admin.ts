@@ -137,8 +137,6 @@ export class Admin extends CoreHtmlView {
                         ${services[e].service.extensions.includes(EExtensions.tasking) ? "<option>tasking</option>" : ""}
                     </select>
                 </div>
-
-
                 <div class="description">
                     <span class="service-name">items per page :</span>
                     <span class="page canPoint" onclick="editPage('${e}', this)">${services[e].service.nb_page}</span>

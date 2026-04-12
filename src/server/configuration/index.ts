@@ -185,11 +185,11 @@ class Configuration {
                 }
             });
             // Kill all sten postgres tasks
-            // if (!isTest()) 
-            //     await Configuration.adminConnection
-            //         .unsafe(queries.terminateAll())
-            //         .then(() => logging.message(EInfos.killPgStean, `${EConstant.appName} ${appVersion.version}`).toLogAndFile(true))
-            //         .catch((err) => logging.error(err, EErrors.serviceUpdateteError));
+            if (!isTest()) 
+                await Configuration.adminConnection
+                    .unsafe(queries.terminateAll())
+                    .then(() => logging.message(EInfos.killPgStean, `${EConstant.appName} ${appVersion.version}`).toLogAndFile(true))
+                    .catch((err) => logging.error(err, EErrors.serviceUpdateteError));
 
             // loop on services
             try {
