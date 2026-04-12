@@ -84,7 +84,6 @@ export class Services extends Common {
 
     // Override Delete service
     async delete(idInput: Id | string): Promise<IreturnResult | undefined> {
-
         console.log(logging.whereIam(new Error().stack));
         if (typeof idInput === "string") {
             const conn = await config.delete(idInput);

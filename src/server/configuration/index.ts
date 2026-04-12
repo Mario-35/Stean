@@ -12,7 +12,6 @@ import { Iservice, IdbConnection, IserviceInfos, koaContext, Iversion, Ipool } f
 import { messages } from "../messages";
 import { app } from "..";
 import { EChar, EColor, EConstant, EState } from "../enums";
-import path from "path";
 import util from "util";
 import fs from "fs";
 import postgres from "postgres";
@@ -44,7 +43,6 @@ class Configuration {
     static state: EState;
     trace: Trace;
     static pool: Record<string, Ipool[] | undefined> = {};
-    // static pool: Record<string, string[] | undefined> = {};
 
     constructor() {
         // override console log for TDD important in production build will remove all console.log
@@ -73,6 +71,7 @@ class Configuration {
         this.setGlobalState(state);
      }
 
+     // set state
      setGlobalState(state: EState ) {
         if (state === EState.normal) {
             if (Object.values(Configuration.services)
@@ -85,6 +84,7 @@ class Configuration {
         Configuration.state = state;      
      }
 
+     // return state
      getState(ctx?: koaContext) {
         const result:Record<string, string> = {stean : Configuration.state};
         if(ctx && ctx._.service) 
@@ -233,7 +233,7 @@ class Configuration {
                 process.exit(112);
             }
             // rewrite file (to update config modification except in test mode)
-            if (!isTest()) this.writeConfig();
+            if (!isTest()) this.write();
             // if (!isTest() && config.configFileExist() === false) this.writeConfig();
         } catch (error: any) {
             logging.error(error, EErrors.configFileError);
@@ -316,7 +316,7 @@ class Configuration {
      * @param input admin config file
      * @returns true if it's done
      */
-    async initConfig(input: string): Promise<boolean> {
+    async init(input: string): Promise<boolean> {
         logging.message(EInfos.readConfig, paths.configFile.fileName).toLogAndFile(true);
         return await this.readConfigFile(input);
     }
@@ -326,7 +326,7 @@ class Configuration {
      *
      * @returns true if it's done
      */
-    private writeConfig(input?: JSON): boolean {
+    private write(input?: JSON): boolean {
         logging.message(EInfos.writeConfig, paths.configFile.fileName).toLogAndFile(true);
         const datas: string = input ? JSON.stringify(filterUnderscore(input), null, 4) : JSON.stringify({ admin: filterUnderscore(Configuration.services[EConstant.admin])}, null, 4);
         return this.writeFile(paths.configFile.fileName, isProduction() === true ? encrypt(datas) : datas);
@@ -641,7 +641,7 @@ class Configuration {
                 res.forEach((e: JSON) => {
                     result[e["datas" as keyof object]["name"]] = e["datas" as keyof object];
                 });
-                this.writeConfig(result);
+                this.write(result);
                 return hidePassword(result);
             });
     }
@@ -698,7 +698,7 @@ class Configuration {
                 this.deleteTempsTables(serviceName);
                 if (serviceName !== EConstant.admin) {
                     // get extensions params of service
-                    await this.connection(serviceName).unsafe(queries.extensions()).then((res) => {
+                    await this.connection(serviceName).unsafe(queries.getExtensions()).then((res) => {
                         Configuration.services[serviceName]._lora = res[0].lora;
                         Configuration.services[serviceName]._partitioned = res[0].partitioned;
                         Configuration.services[serviceName]._unique = res[0].unique;
@@ -755,20 +755,20 @@ class Configuration {
      *
      * @returns true if it's done
      */
-    public saveConfig(myPath: string): boolean {
-        logging.message(EInfos.writeConfig, `in ${myPath}`).toLogAndFile(true);
-        const datas: string = JSON.stringify({ admin: Configuration.services[EConstant.admin] }, null, 4);
-        if (this.writeFile(path.join(myPath, "configuration.json"), isProduction() === true ? encrypt(datas) : datas) === false) return false;
-        if (this.writeFile(path.join(myPath, ".key"), paths.key) === false) return false;
-        return true;
-    }
+    // public save(myPath: string): boolean {
+    //     logging.message(EInfos.writeConfig, `in ${myPath}`).toLogAndFile(true);
+    //     const datas: string = JSON.stringify({ admin: Configuration.services[EConstant.admin] }, null, 4);
+    //     if (this.writeFile(path.join(myPath, "configuration.json"), isProduction() === true ? encrypt(datas) : datas) === false) return false;
+    //     if (this.writeFile(path.join(myPath, ".key"), paths.key) === false) return false;
+    //     return true;
+    // }
 
     /**
      * Write an encrypt config file in json file
      *
      * @returns true if it's done
      */
-    public async updateConfig(input: Iservice): Promise<boolean> {
+    public async update(input: Iservice): Promise<boolean> {
         if (input.name !== EConstant.admin) {
             // const datas = `UPDATE public.services SET "datas" = ${FORMAT_JSONB(input)} WHERE "name" = '${input.name}'`;
             return await this.adminConnection()

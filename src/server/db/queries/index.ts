@@ -586,15 +586,18 @@ FROM
         return `UPDATE observation SET _nb = NULL WHERE ${stream}_id = ${id}`;
     }
 
-    createClusterIndex(table: string) {
-        return `CREATE UNIQUE INDEX IF NOT EXISTS "${table}_nb" on ${table} (_nb);`;
-    }
+    // createClusterIndex(table: string) {
+    //     return `CREATE UNIQUE INDEX IF NOT EXISTS "${table}_nb" on ${table} (_nb);`;
+    // }
+    // dropClusterIndex(table: string) {
+    //     return `ALTER TABLE "${table}" SET WITHOUT CLUSTER;`;
+    // }
 
     dropIndex(name: string) {
         return `DROP INDEX "${name}" CASCADE;`;
     }
 
-    extensions( ) {
+    getExtensions() {
       return  `SELECT 
                 (SELECT to_regclass('public.lora') IS NOT NULL) as Lora,
                 (SELECT to_regclass('public.user') IS NOT NULL) as user,

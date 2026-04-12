@@ -21,17 +21,14 @@ import { koaContext } from "../../types";
 export const InfosRoute = async (ctx: koaContext) => {
     ctx.type = returnFormats.html.type;
     ctx.body = await 
-        config.adminConnection().unsafe(queries.infos()).then((res) => {
-            console.log("###########################################################");
-            console.log(res);
-            
+        config.adminConnection().unsafe(queries.infos()).then((res) => {            
         return {
-        "Postgres": res[0 as keyof object],
-        "extensions": res[1 as keyof object],
-        "logFile": res[2 as keyof object],
-        "services": config.getServicesNames(),
-        "stean": appVersion,
-        "state": config.getState(ctx),
+            "Postgres": res[0 as keyof object],
+            "extensions": res[1 as keyof object],
+            "logFile": res[2 as keyof object],
+            "services": config.getServicesNames(),
+            "stean": appVersion,
+            "state": config.getState(ctx),
         }
     });
 };

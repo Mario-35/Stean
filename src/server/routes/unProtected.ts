@@ -232,12 +232,12 @@ unProtectedRoutes.put("/*path", async (ctx) => {
     if (ctx.request.url.includes("/synonyms")) {
         if (ctx.request.type.startsWith("application/json") && Object.keys(ctx.body).length > 0) {
             ctx._.service.synonyms = ctx.body;
-            ctx.body = await config.updateConfig(ctx._.service);
+            ctx.body = await config.update(ctx._.service);
         }
     }
 
     if (ctx.request.url.includes("/options")) {
         ctx._.service.options = ctx.body;
-        config.updateConfig(ctx._.service);
+        config.update(ctx._.service);
     }
 });

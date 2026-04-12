@@ -31,13 +31,16 @@ export async function postgresAdmin(ctx: koaContext): Promise<string | undefined
         });
         return Object.keys(mess).length > 0 ? mess : undefined;
     }
+    // get options
     if (!missingItems(src, ["optName", "optVersion", "optPassword", "optRepeat", "jsonDatas"])) {
         if (await config.addConfig(JSON.parse(src["jsonDatas"]))) ctx.redirect(`${ctx.request.origin}/admin`);
     }
+    // get connections and rights
     if (missingItems(src, ["host", "adminname", "port", "adminpassword"])) return;
+    // process ... 
     return await postgres(`postgres://${src["adminname"]}:${src["adminpassword"]}@${src["host"]}:${src["port"]}/postgres`, {})`select 1+1 AS result`
         .then(async () => {
-            if (config.configFileExist() === false) if (await config.initConfig(JSON.stringify({ "admin": formatConfig(src, true) }, null, 2))) await adminRoute(ctx);
+            if (config.configFileExist() === false) if (await config.init(JSON.stringify({ "admin": formatConfig(src, true) }, null, 2))) await adminRoute(ctx);
             return encrypt(JSON.stringify({ login: true, "host": src["host"], "adminname": src["adminname"], "port": src["port"], "adminpassword": src["adminpassword"] }));
         })
         .catch((error) => {
