@@ -101,3 +101,4 @@
 
 ## version 1.3.8
     New row number query
+    Optimisation multidatastream list

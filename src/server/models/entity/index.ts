@@ -87,7 +87,9 @@ export class Entity extends EntityPass {
                 const entityRelation = this._.columns[e].entityRelation;
                 if (entityRelation) {
                     if (!Entity.trigger[this._.table]) Entity.trigger[this._.table] = {};
-                    const relationTable = singular(entityRelation).toLowerCase();
+                    let relationTable = singular(entityRelation).toLowerCase();
+                    if (this._.table === "multidatastream" && relationTable === "observation")
+                        relationTable = "datastream_id0";                    
                     this._.columns[e].create = "";
                     this._.columns[e].alias = function functionResult(options: IentityColumnAliasOptions) {
                         return options.context?.target === EQuery.OrderBy
