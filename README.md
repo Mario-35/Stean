@@ -78,7 +78,9 @@ Now you are able to use cURL from your Mac PC!
 
 
 
-```curl -fsSL ./scripts/stean.sh -o stean.sh && chmod +x stean.sh && ./stean.sh```
+```
+curl -fsSL https://raw.githubusercontent.com/Mario-35/Stean/refs/heads/main/scripts/stean.sh -o stean.sh && chmod +x stean.sh && ./stean.sh
+```
 
 
 
