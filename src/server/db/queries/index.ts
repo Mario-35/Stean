@@ -91,10 +91,13 @@ class Queries {
                   SELECT id FROM (
                       SELECT id, 
                       ROW_NUMBER() OVER () FROM (
-                          SELECT id FROM "datastream_id${id}") 
+                          SELECT id FROM "datastream_id${id}"
+                          ORDER BY "phenomenonTime"
                           ${offset && offset > 0 ? `OFFSET ${offset}` : ''} 
-                          ${limit && limit > 0 ? `LIMIT ${limit}` : ''} 
-                ORDER BY "phenomenonTime"))`);
+                          ${limit && limit > 0 ? `LIMIT ${limit}` : ''}
+                        )
+                    )
+                )`);
     }
     
     createExtension(name: string) {
