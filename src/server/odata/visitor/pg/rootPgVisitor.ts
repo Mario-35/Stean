@@ -101,22 +101,29 @@ export class RootPgVisitor extends PgVisitor {
 
     protected VisitRessourcesSimpleKey(node: Token, context: IodataContext) {
         if (node.value.value.type === "KeyPropertyValue") {
-            this.single = true;
+            this.single = true;            
             this.VisitRessources(node.value.value, context);
         }
     }
 
     protected VisitRessourcesKeyPropertyValue(node: Token, _context: IodataContext) {
         this.id = this.ctx._.isIString() ? this.ctx._.id() : node.value == "Edm.SByte" ? BigInt(node.raw) : node.raw;
-        this.query.where.notNull;
-        // const condition = this.ctx._.id() ? `"lora"."deveui" = '${this.ctx._.id().toLocaleUpperCase()}'` : ` id = ${this.id}`;
         const condition = this.ctx._.isIString() ? `"lora"."deveui" = '${String(this.ctx._.id()).toLocaleUpperCase()}'` : ` id = ${this.id}`;
-        if (this.query.where.notNull() === true) this.query.where.add(` AND ${condition}`);
-        else this.query.where.init(condition);
+        if (this.query.where.notNull() === true) 
+            this.query.where.add(` AND ${condition}`);
+        else 
+            this.query.where.init(condition);
     }
 
     protected VisitRessourcesSingleNavigation(node: Token, context: IodataContext) {
         if (node.value.path && node.value.path.type === "PropertyPath") this.VisitRessources(node.value.path, context);
+    }
+
+    createPartitionnedName(name: string, subName:  string, id: string | bigint) {
+        if (name === "Observations")
+            if (subName === "Datastreams")
+                return `"datastream_id${id}" AS observation`;
+        return undefined; 
     }
 
     protected VisitRessourcesEntityCollectionNavigationProperty(node: Token, context: any) {
@@ -127,10 +134,10 @@ export class RootPgVisitor extends PgVisitor {
             });
         } else if (this.entity && this.entity.relations[node.value.name]) {
             const where = this.parentEntity ? `(SELECT ID FROM (${this.query.toWhere(this)}) AS nop)` : this.id;
-            const whereSql = link(this.ctx._.model(), this.entity.name, node.value.name)
+            this.partition = this.createPartitionnedName(node.value.name, this.entity.name, where);
+            const whereSql =  link(this.ctx._.model(), this.entity.name, node.value.name)
                 .split("$ID")
-                .join(<string>where);
-
+                .join(<string>where);   
             this.query.where.init(whereSql);
             const tempEntity = models.entity(this.ctx._.model(), node.value.name);
             if (tempEntity) {

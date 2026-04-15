@@ -194,9 +194,11 @@ export class Query {
                         keys: this.keyNames.toArray(),
                         count: element.countOffset
                             ? element.countOffset
-                            : `SELECT COUNT(DISTINCT ${Object.keys(element.entity.columns)[0]}) AS "${EConstant.count}" FROM (SELECT ${Object.keys(element.entity.columns)[0]} FROM "${
-                                  element.entity.table
-                              }"${element.query.where.notNull() === true ? ` WHERE ${element.query.where.toString()}` : ""}) AS c`
+                            : element.partition 
+                                ? `SELECT COUNT(DISTINCT ${Object.keys(element.entity.columns)[0]}) AS "${EConstant.count}" FROM ${element.partition?.split(' AS ')[0]} AS c`
+                                : `SELECT COUNT(DISTINCT ${Object.keys(element.entity.columns)[0]}) AS "${EConstant.count}" FROM (SELECT ${Object.keys(element.entity.columns)[0]} FROM "${
+                                    element.entity.table
+                                }"${element.query.where.notNull() === true ? ` WHERE ${element.query.where.toString()}` : ""}) AS c`
                     };
                     if (main.subQuery.from.length > 0 && main.subQuery.from[1] != "") res.from.push(`( ${this.pgQueryToString(main.subQuery)}) AS src`);
                     return res;

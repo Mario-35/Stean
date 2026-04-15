@@ -91,14 +91,10 @@ export class Entity extends EntityPass {
                     if (this._.table === "multidatastream" && relationTable === "observation")
                         relationTable = "datastream_id0";                    
                     this._.columns[e].create = "";
-                    this._.columns[e].alias = function functionResult(options: IentityColumnAliasOptions) {
+                    this._.columns[e].alias = function functionResult(options: IentityColumnAliasOptions) {  
                         return options.context?.target === EQuery.OrderBy
                             ? doubleQuotes(e)
-                            : `NULLIF (CONCAT_WS('/', to_char((SELECT MIN("${e}") FROM "${relationTable}" WHERE "${relationTable}"."${options.entity.table}_id" = ${options.entity.table}.id),'${
-                                  EDatesType.dateTz
-                              }'),  to_char((SELECT MAX("${e}") FROM "${relationTable}" WHERE "${relationTable}"."${options.entity.table}_id" =${options.entity.table}.id),'${
-                                  EDatesType.dateTz
-                              }')), '')${as(options)}`;
+                            : `(select dates_bound('${options.entity.table}_id', ${options.entity.table}.id, '${options.columnName}', '${EDatesType.dateTz}'))${as(options)}`
                     };
                 }
             }

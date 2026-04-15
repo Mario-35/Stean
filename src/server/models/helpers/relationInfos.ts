@@ -289,7 +289,6 @@ export const relationInfos = (model: Ientities, entityName: string, relationName
                                 };
                             // ===> 4.2
                             case ERelations.belongsTo:
-                                // const temp2 = `${formatPgTableColumn(rightEntity.table, "id")} IN (SELECT ${formatPgTableColumn(rightEntity.table, "id")} FROM ${formatPgTableColumn(rightEntity.table)} WHERE ${formatPgTableColumn(rightEntity.table, rightKey)} =$ID)`;
                                 const temp2 = `${formatPgTableColumn(rightEntity.table, rightKey)} =$ID`;
                                 return {
                                     type: `${leftRelation.type}.${rightRelation.type}`,

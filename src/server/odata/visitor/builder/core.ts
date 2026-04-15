@@ -29,7 +29,7 @@ export class Core {
     add(input: string) {
         this._src.push(input);
     }
-    init(input: string) {
+    init(input: string) {        
         this._src = [input];
     }
 
