@@ -225,9 +225,6 @@ describe("endpoint : Datastream", () => {
                     done();
                 });
         });
-
-
-
         it(`Return ${entity.name} count true and top 0`, (done) => {
             const infos = addTest({
                 type: "get",
@@ -252,10 +249,6 @@ describe("endpoint : Datastream", () => {
                     done();
                 });
         });
-
-
-
-
         it(`Return ${entity.name} All infos`, (done) => {
             const id = 9;
             const infos = addTest({
