@@ -109,7 +109,7 @@ export class Common {
      */
     public nextLink = (resLength: number): string | undefined => {
         if (this.ctx._.odata.limit < 1) return;
-        const max: number = this.ctx._.odata.limit > 0 ? +this.ctx._.odata.limit : +this.ctx._.service.nb_page;
+        const max: number = this.ctx._.odata.limit >= 0 ? +this.ctx._.odata.limit : +this.ctx._.service.nb_page;
         if (resLength >= max) return `${encodeURI(this.nextLinkBase)}${this.nextLinkBase.includes("?") ? "&" : "?"}$top=${this.ctx._.odata.limit}&$skip=${this.ctx._.odata.skip + this.ctx._.odata.limit}`;
     };
 
@@ -120,7 +120,7 @@ export class Common {
      * @returns string if correct
      */
     public prevLink = (resLength: number): string | undefined => {
-        if (this.ctx._.odata.limit < 1) return;
+        if (this.ctx._.odata.limit < 0) return;
         const prev = this.ctx._.odata.skip - this.ctx._.odata.limit;
         if (((this.ctx._.service.nb_page && resLength >= this.ctx._.service.nb_page) || this.ctx._.odata.limit) && prev >= 0)
             return `${encodeURI(this.nextLinkBase)}${this.nextLinkBase.includes("?") ? "&" : "?"}$top=${this.ctx._.odata.limit}&$skip=${prev}`;

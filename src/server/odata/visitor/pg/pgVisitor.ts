@@ -46,7 +46,7 @@ export class PgVisitor extends Visitor {
     joinOffset: string | undefined;
     countOffset: string | undefined;
     skip = 0;
-    limit = 0;
+    limit = -1;
     count = false;
     numeric = false;
     returnNull = false;
@@ -66,8 +66,7 @@ export class PgVisitor extends Visitor {
     // ***                                                           ROSSOURCES                                                                                            ***
     // ***********************************************************************************************************************************************************************
     public noLimit() {
-        // this.limit = 1000000;
-        this.limit = 0;
+        this.limit = -1;
         this.skip = 0;
     }
 

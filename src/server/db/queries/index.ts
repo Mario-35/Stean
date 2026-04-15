@@ -94,7 +94,7 @@ class Queries {
                           SELECT id FROM "datastream_id${id}"
                           ${order ? `ORDER BY "${order}"` : ''} 
                           ${offset && offset > 0 ? `OFFSET ${offset}` : ''} 
-                          ${limit && limit > 0 ? `LIMIT ${limit}` : ''}
+                          ${limit && limit >= 0 ? `LIMIT ${limit}` : ''}
                         )
                     )
                 )`);

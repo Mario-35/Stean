@@ -179,7 +179,7 @@ export class Query {
                                     : queries.createRowNumber(this.extractId(element), element.skip, element.limit)
                             }`
                         );
-
+                                                
                     const res = {
                         select: select.join(`,${EConstant.return}${EConstant.tab}${EConstant.tab}`),
                         from: pagination ? [`"${element.parentEntity?.table}_id${pagination.split("=")[1].split(" ")[0]}" AS "${element.entity.table}"`] : [element.partition || doubleQuotes(element.entity.table)],
@@ -213,7 +213,7 @@ export class Query {
                   input.groupBy ? `GROUP BY ${cleanStringComma(input.groupBy)}${EConstant.return}` : ""
               }${input.orderBy ? `ORDER BY ${cleanStringComma(input.orderBy, ["ASC", "DESC"])}${EConstant.return}` : ""}${
                   input.skip && input.skip > 0 ? `OFFSET ${input.skip}${EConstant.return}` : ""
-              } ${input.limit && input.limit > 0 ? `LIMIT ${input.limit}${EConstant.return}` : ""}`
+              } ${(input.limit || input.limit === 0) && +input.limit > -1 ? `LIMIT ${input.limit}${EConstant.return}` : ""}`
             : undefined;
     }
 

@@ -225,6 +225,37 @@ describe("endpoint : Datastream", () => {
                     done();
                 });
         });
+
+
+
+        it(`Return ${entity.name} count true and top 0`, (done) => {
+            const infos = addTest({
+                type: "get",
+                short: "From ObservedProperty filter",
+                description: "Get Datastream(s) with count true and top = 0'.",
+                request: `${testVersion}/${entity.name}?$count=true&$top=0`
+            });
+            chai.request(server)
+                .get(`/test/${infos.request}`)
+                .end((err: Error, res: any) => {
+                    should.not.exist(err);
+                    res.status.should.equal(200);
+                    res.type.should.equal("application/json");
+                    res.body.should.include.keys("value");
+                    res.body["@iot.count"].should.eql(14);
+                    res.body.value.length.should.eql(0);
+                    addToApiDoc({
+                        ...infos,
+                        result: res
+                    });
+
+                    done();
+                });
+        });
+
+
+
+
         it(`Return ${entity.name} All infos`, (done) => {
             const id = 9;
             const infos = addTest({
