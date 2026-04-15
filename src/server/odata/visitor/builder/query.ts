@@ -164,7 +164,6 @@ export class Query {
 
 
                     const pagination =
-                        element.ctx._.service._partitioned &&
                         element.query.where.toString().includes(`"observation"."${element.parentEntity?.table}_id" =`) &&
                         (isReturnGraph(element) || element.skip > 0)
                             ? `"observation"."${element.parentEntity?.table}_id" =${this.extractId(element)}`
@@ -183,7 +182,7 @@ export class Query {
 
                     const res = {
                         select: select.join(`,${EConstant.return}${EConstant.tab}${EConstant.tab}`),
-                        from: pagination ? [`"${element.parentEntity?.table}_id${pagination.split("=")[1].split(" ")[0]}" AS "${element.entity.table}"`] : [doubleQuotes(element.entity.table)],
+                        from: pagination ? [`"${element.parentEntity?.table}_id${pagination.split("=")[1].split(" ")[0]}" AS "${element.entity.table}"`] : [element.partition || doubleQuotes(element.entity.table)],
                         where: element.query.where.toString(),
                         groupBy: element.query.groupBy.notNull() === true ? element.query.groupBy.toString() : undefined,
                         orderBy: element.query.orderBy.notNull() === true ? element.query.orderBy.toString() : pagination ? "" : element.entity.orderBy,
