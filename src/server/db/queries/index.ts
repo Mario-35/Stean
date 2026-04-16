@@ -259,7 +259,7 @@ FROM
                         FROM 
                           "datastream_id${ids[n]}"  
                         ORDER BY ${pgQuery && pgQuery.orderBy ? ` ${cleanStringComma(pgQuery.orderBy, ["ASC", "DESC"])}` : `"resultTime" ASC `}
-                        ${input.limit ? `LIMIT ${input.limit}` : ``}
+                        ${input.limit > -1 ? `LIMIT ${input.limit}` : ``}
                       ) AS result${n + 1} ${n + 1 > 1 ? ` ON result${n}.date = result${n + 1}.date` : ""}`
                       )
                       .join(" ")} 

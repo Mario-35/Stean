@@ -30,8 +30,28 @@ export class CreateObservations extends Common {
         super(ctx);
     }
 
-    createListColumnsValues(type: "COLUMNS" | "VALUES", input: string[]): string[] {
+    createListColumnsValues(type: "COLUMNS" | "VALUES", input: string[], stream: IstreamInfos): string[] {
         console.log(logging.whereIam(new Error().stack));
+        function formatResult(value: any, test: boolean): string {
+            if(test) 
+                switch (String(stream.observationType)) {
+                case  "http://www.opengis.net/def/observation-type/ogc-om/2.0/om_complex-observation": // "_resulttext",
+                    return `'{"value": [${value}]}'`
+                case  "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_CountObservation": // = "number",
+                    return `'{"value": ${value}}'`
+                case  "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement": // = "number",
+                    return `'{"value": ${value}}'`
+                case  "http://www.opengis.net/def/observation-type/ogc-om/2.0/om_complex-observation": // = "array",
+                    return `'{"value": [${value}]}'`
+                case  "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Observation": // = "any",
+                    return `'{"value": "${value}"}'`
+                case  "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_TruthObservation": // = "_resultBoolean",
+                    return `'{"value": ${value}}'`
+                case  "http://www.opengis.net/def/observation-type/ogc-omxml/2.0/swe-array-observation": // = "object"
+                    return `'{"value": "${value}"}'`        
+            }
+            return `${separateur}${value}${separateur}`;
+        }
 
         const res: string[] = [];
         const separateur = type === "COLUMNS" ? '"' : "'";
@@ -43,7 +63,7 @@ export class CreateObservations extends Common {
                 case "FeatureOfInterest/id":
                     elem = "featureofinterest_id";
                     break;
-            }
+            }            
             res.push(
                 isNaN(+elem)
                     ? Array.isArray(elem)
@@ -51,13 +71,9 @@ export class CreateObservations extends Common {
                         : typeof elem === "string"
                         ? elem.endsWith("Z")
                             ? `TO_TIMESTAMP('${dateToDateWithTimeZone(elem)}', '${EDatesType.dateImport}')::TIMESTAMP`
-                            : `${separateur}${elem}${separateur}`
+                            : formatResult(elem, (index === this.indexResult && type === "VALUES"))
                         : `${separateur}{${elem}}${separateur}`
-                    : index === this.indexResult && type === "VALUES"
-                    ? this.ctx._.service._numeric
-                        ? elem
-                        : `'{"value": ${elem}}'`
-                    : `${separateur}${elem}${separateur}`
+                    : formatResult(elem, (index === this.indexResult && type === "VALUES"))
             );
         });
         return res;
@@ -137,6 +153,7 @@ export class CreateObservations extends Common {
         let total = 0;
         /// classic Create
         const dataStreamId = await models.streamInfos(this.ctx, dataInput);
+        
         if (!dataStreamId) this.ctx.throw(EHttpCode.notFound, { code: EHttpCode.notFound, detail: EErrors.noStream });
         else {
             const columnList= [...dataInput["components"]];
@@ -157,13 +174,13 @@ export class CreateObservations extends Common {
                 columnList.push("phenomenonTime");
             }
             // create keys
-            const keys = [`"${dataStreamId.type?.toLowerCase()}_id"`].concat(this.createListColumnsValues("COLUMNS", columnList));
+            const keys = [`"${dataStreamId.type?.toLowerCase()}_id"`].concat(this.createListColumnsValues("COLUMNS", columnList, dataStreamId));
             await asyncForEach(dataInput["dataArray"], async (elem: string[]) => {
                 // if adding resultTime or phenomenonTime that is not in values
                 if (addIndex >= 0 ) 
                     elem.push(elem[addIndex]);
                 // create insert values
-                const values = this.createListColumnsValues("VALUES", [String(dataStreamId.id), ...elem]);                
+                const values = this.createListColumnsValues("VALUES", [String(dataStreamId.id), ...elem], dataStreamId);                
                 await executeSqlValues(this.ctx._.service, `INSERT INTO ${doubleQuotes(OBSERVATION.table)} (${keys}) VALUES (${makeNull(values.toString())}) RETURNING id`)
                     .then((res: Record<string, any>) => {
                         returnValue.push(this.linkBase.replace("Create", "") + "(" + res[0] + ")");
