@@ -45,6 +45,13 @@ export class Core {
     replace(from: any, to: any) {
         this._src = this._src.map((e) => (typeof e === "string" ? e.replace(from, to) : e));
     }
+    cleanStart(searchs: string | string[]) {
+        if (typeof searchs === "string") searchs = [searchs];
+        searchs.forEach(search => {
+            if (typeof this._src[0] === "string" && this._src[0].trim().startsWith(search))
+                this._src[0] = this._src[0].trim().replace(search , '');
+        });
+    }
     pop() {
         return this._src.pop();
     }

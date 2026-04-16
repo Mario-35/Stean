@@ -56,7 +56,7 @@ export class PgVisitor extends Visitor {
     showRelations = true;
     debugOdata = isTest() ? false : isDebug();
     single: boolean = false;
-    partition: string | undefined;
+    partitioned: {from: string, where: string} | undefined;
     constructor(ctx: koaContext, options = <SqlOptions>{}) {
         console.log(logging.whereIam(new Error().stack));
         super(ctx, options);

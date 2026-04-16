@@ -11,6 +11,8 @@ const isNullOrNotNull = (input: any, ret: boolean): boolean => {
         if (input && input != "" && input != null) return ret;
       case "object":
         if (input && Object.keys(input).length > 0) return ret;
+      case "number":
+        if ((input || input === 0) && input >= 0) return ret;
       default:
         return !ret;
     }

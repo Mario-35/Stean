@@ -119,10 +119,15 @@ export class RootPgVisitor extends PgVisitor {
         if (node.value.path && node.value.path.type === "PropertyPath") this.VisitRessources(node.value.path, context);
     }
 
-    createPartitionnedName(name: string, subName:  string, id: string | bigint) {
-        if (name === "Observations")
-            if (subName === "Datastreams")
-                return `"datastream_id${id}" AS observation`;
+    createPartitionnedName(id: string | bigint) {        
+        if (this.entity?.partition?.main === `${this.parentEntity?.table}_id`)
+                return {
+                    from : `"${this.entity?.partition?.main}${id}" AS "${this.entity?.table}"` , 
+                    where: `"${this.entity?.table}"."${this.entity?.partition?.main}" =${id}` };
+        if (this.entity?.partition?.sub === `${this.parentEntity?.table}_id`)
+                return {
+                    from : `"${this.entity?.partition?.sub}${id}" AS "${this.entity?.table}"` , 
+                    where: `"${this.entity?.table}"."${this.entity?.partition?.sub}" =${id}` };
         return undefined; 
     }
 
@@ -134,16 +139,18 @@ export class RootPgVisitor extends PgVisitor {
             });
         } else if (this.entity && this.entity.relations[node.value.name]) {
             const where = this.parentEntity ? `(SELECT ID FROM (${this.query.toWhere(this)}) AS nop)` : this.id;
-            this.partition = this.createPartitionnedName(node.value.name, this.entity.name, where);
+            
+            
             const whereSql =  link(this.ctx._.model(), this.entity.name, node.value.name)
-                .split("$ID")
-                .join(<string>where);   
+            .split("$ID")
+            .join(<string>where);   
             this.query.where.init(whereSql);
             const tempEntity = models.entity(this.ctx._.model(), node.value.name);
             if (tempEntity) {
                 this.swapEntity(tempEntity);
                 this.single = tempEntity.singular === node.value.name || BigInt(this.id) > 0 ? true : false;
             }
+            this.partitioned = this.createPartitionnedName(where);
         } else if (this.entity && this.entity.columns[node.value.name]) {
             this.query.select.add(`${doubleQuotes(node.value.name)}${EConstant.columnSeparator}`);
             this.showRelations = false;

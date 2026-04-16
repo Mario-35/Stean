@@ -7,7 +7,7 @@
  */
 
 export const escapesOdata = (input: string): string => {
-    const codes = { "/": "%252F", "\\": "%255C" };
+    const codes = { "/": "%252F", "\\": "%255C", "&amp;": '&' };
     if (input.includes("%27")) {
         const pop: string[] = [];
         input.split("%27").forEach((v: string, i: number) => {

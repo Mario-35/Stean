@@ -86,18 +86,8 @@ class Queries {
         return `SELECT id FROM "${table}" WHERE "name" = '${name}'`;
     }
 
-    createRowNumber(id: Id | string, offset: number, limit: number, order?: string) {
-       return this.removeReturn(`id IN (
-                  SELECT id FROM (
-                      SELECT id, 
-                      ROW_NUMBER() OVER () FROM (
-                          SELECT id FROM "datastream_id${id}"
-                          ${order ? `ORDER BY "${order}"` : ''} 
-                          ${offset && offset > 0 ? `OFFSET ${offset}` : ''} 
-                          ${limit && limit >= 0 ? `LIMIT ${limit}` : ''}
-                        )
-                    )
-                )`);
+    createRowNumber(element: PgVisitor, offset: number, limit: number, order?: string) {
+       return this.removeReturn(`id IN ( SELECT id FROM ( SELECT id, ROW_NUMBER() OVER () FROM ( SELECT id FROM ${element.partitioned?.from.split(" AS ")[0].trim()}${order ? ` ORDER BY "${order}"` : ''}${offset && offset > 0 ? ` OFFSET ${offset}` : ''}${limit && limit >= 0 ? ` LIMIT ${limit}` : ''} )))`);
     }
     
     createExtension(name: string) {

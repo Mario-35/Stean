@@ -175,14 +175,17 @@ export class Query {
                             pagination,
                             ` ${
                                 isReturnGraph(element)
-                                    ? `${queries.createRowNumber(this.extractId(element), 0, 0)} AND id % (SELECT COALESCE(NULLIF(COUNT(id) / ${element.ctx._.service.nb_graph}, 0), 1) FROM "datastream_id${pagination.split("=")[1].split(" ")[0]}") = 0 ORDER BY "phenomenonTime"`
-                                    : queries.createRowNumber(this.extractId(element), element.skip, element.limit)
+                                    ? `${queries.createRowNumber(element, 0, 0)} AND id % (SELECT COALESCE(NULLIF(COUNT(id) / ${element.ctx._.service.nb_graph}, 0), 1) FROM "datastream_id${pagination.split("=")[1].split(" ")[0]}") = 0 ORDER BY "phenomenonTime"`
+                                    : queries.createRowNumber(element, element.skip, element.limit)
                             }`
                         );
-                                                
+                          
+                    // if partitionned remove bad where search
+                    if (element.partitioned) element.query.where.replace(element.partitioned.where, "");
+
                     const res = {
                         select: select.join(`,${EConstant.return}${EConstant.tab}${EConstant.tab}`),
-                        from: pagination ? [`"${element.parentEntity?.table}_id${pagination.split("=")[1].split(" ")[0]}" AS "${element.entity.table}"`] : [element.partition || doubleQuotes(element.entity.table)],
+                        from: pagination ? [`"${element.parentEntity?.table}_id${pagination.split("=")[1].split(" ")[0]}" AS "${element.entity.table}"`] : [element.partitioned ? element.partitioned.from : doubleQuotes(element.entity.table)],
                         where: element.query.where.toString(),
                         groupBy: element.query.groupBy.notNull() === true ? element.query.groupBy.toString() : undefined,
                         orderBy: element.query.orderBy.notNull() === true ? element.query.orderBy.toString() : pagination ? "" : element.entity.orderBy,
@@ -193,8 +196,8 @@ export class Query {
                         keys: this.keyNames.toArray(),
                         count: element.countOffset
                             ? element.countOffset
-                            : element.partition 
-                                ? `SELECT COUNT(DISTINCT ${Object.keys(element.entity.columns)[0]}) AS "${EConstant.count}" FROM ${element.partition?.split(' AS ')[0]} AS c`
+                            : element.partitioned 
+                                ? `SELECT COUNT(DISTINCT ${Object.keys(element.entity.columns)[0]}) AS "${EConstant.count}" FROM ${element.partitioned.from.split(' AS ')[0]} AS c`
                                 : `SELECT COUNT(DISTINCT ${Object.keys(element.entity.columns)[0]}) AS "${EConstant.count}" FROM (SELECT ${Object.keys(element.entity.columns)[0]} FROM "${
                                     element.entity.table
                                 }"${element.query.where.notNull() === true ? ` WHERE ${element.query.where.toString()}` : ""}) AS c`

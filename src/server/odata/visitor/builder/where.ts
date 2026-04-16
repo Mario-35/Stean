@@ -11,4 +11,9 @@ export class Where extends Core {
   constructor(input?: string | string[]) {
     super(input);
   }
+      replace(from: any, to: any) {
+        super.replace(from, to);
+        super.cleanStart(["AND", "OR", "NOT"]);
+        
+    }
 }
