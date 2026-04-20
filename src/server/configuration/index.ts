@@ -801,8 +801,7 @@ public getConfigNameFromDatabase(input: string): string | undefined {
         logging.start(restart === true ? "Restart" : "Start").toLogAndFile(true);
         return await this.initialisation()
         .then(async () => {
-            // without wait for it
-            
+            // without wait for it            
                 config.runPools().then((res: boolean) => {
                     if (res === true) this.setGlobalState(EState.normal);
                 });
