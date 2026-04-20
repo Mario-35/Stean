@@ -20,6 +20,6 @@ export interface IentityColumn {
         list: string[];
         default: string;
     };
-    indexes?: string[];
+    index?: boolean;
     partition?: "main" | "sub";
 }

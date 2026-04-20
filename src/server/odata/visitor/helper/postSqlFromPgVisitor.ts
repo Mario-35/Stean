@@ -62,7 +62,7 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
             : `\n\tON CONFLICT ("${conflictNames.join('","')}") DO ${nothing ? "NOTHING " : `UPDATE SET ${createUpdateValues(queryMaker[element].entity, queryMaker[element].datas)}`}`;
     };
 
-    const essai = (element: string): string[] => {
+    const conflictNames = (element: string): string[] => {
         console.log(logging.whereIam(new Error().stack));
         let conflictNames = Object.keys(queryMaker[element].datas).filter((e) => queryMaker[element].entity.columns[e].create.includes("UNIQUE"));
         return conflictNames;
@@ -137,7 +137,7 @@ export function postSqlFromPgVisitor(datas: Record<string, any>, src: PgVisitor)
                             canSpec == true ? "\tON CONFLICT DO NOTHING" : ""
                         } RETURNING ${retCol}),\n${element} AS (\n\tSELECT ${retCol} FROM "insert${element}" WHERE EXISTS (SELECT ${retCol} FROM "insert${element}")\n\tUNION ALL\n\tSELECT ${retCol} FROM "${
                             queryMaker[element].entity.table
-                        }" WHERE ${essai(element)
+                        }" WHERE ${conflictNames(element)
                             .map((e) => `${doubleQuotes(e)} = ${simpleQuotes(queryMaker[element].datas[e as keyof object])}`)
                             .join(" AND ")} AND NOT EXISTS (SELECT ${retCol} FROM "insert${element}"))`
                     );

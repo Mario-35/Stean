@@ -128,7 +128,7 @@ async function selectCard(name) {
 async function delService(name) {
 	const newName = window.prompt("Name of the service", name);
 	if (newName !== null && newName !== "") {
-		let response = await fetch(`${_PARAMS.services[newName].base}/${_PARAMS.services[newName]["service"].apiVersion}/Services(${newName})`, {
+		await fetch(`${_PARAMS.services[newName].base}/${_PARAMS.services[newName]["service"].apiVersion}/Services(${newName})`, {
 			method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
@@ -231,7 +231,7 @@ async function selectChange(name ,elem) {
 						body: JSON.stringify(_PARAMS.services[name]["service"].options)
 					});
 				} catch (error) {
-					console.log(error);
+					console.error(error);
 					await fetch(`${_PARAMS.services[name].base.replace('https', 'http')}/${_PARAMS.services[name]["service"].apiVersion}/options`, {
 						method: "PUT",
 						headers: {

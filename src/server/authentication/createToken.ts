@@ -1,10 +1,10 @@
 /**
  * createToken
+*
+* @copyright 2020-present Inrae
+* @author mario.adam@inrae.fr
  *
- * @copyright 2020-present Inrae
- * @author mario.adam@inrae.fr
- *
- */
+*/
 
 import { espireTime } from "../constants";
 import { paths } from "../paths";
@@ -16,7 +16,7 @@ import jsonwebtoken from "jsonwebtoken";
  * @param input Iuser
  * @param password string
  * @returns token as string
- */
+*/
 
 export const createToken = (input: Iuser, password: string): string => {
     return jsonwebtoken.sign(

@@ -30,6 +30,7 @@ export class CreateObservations extends Common {
         super(ctx);
     }
 
+    // creatle liste of data values
     createListColumnsValues(type: "COLUMNS" | "VALUES", input: string[], stream: IstreamInfos): string[] {
         console.log(logging.whereIam(new Error().stack));
         function formatResult(value: any, test: boolean): string {
@@ -119,7 +120,6 @@ export class CreateObservations extends Common {
             stream: streamInfos
         };
         // stream file in temp table and get query to insert
-
         const sqlInsert = await new InsertFromCsv(this.ctx, paramsFile).query();
         logging
             .message(messages.str(EInfos.streamFile, paramsFile.filename), sqlInsert ? EChar.ok : EChar.notOk)
@@ -185,33 +185,25 @@ export class CreateObservations extends Common {
                     .then((res: Record<string, any>) => {
                         returnValue.push(this.linkBase.replace("Create", "") + "(" + res[0] + ")");
                         total += 1;
-                    })
-                    .catch(async (error) => {
+                    }).catch(async (error) => {
                         if (error.code === "23505") {
                             returnValue.push(`Duplicate (${elem})`);
                             if (dataInput["duplicate"] && dataInput["duplicate"].toUpperCase() === "DELETE") {
                                 await executeSqlValues(
                                     this.ctx._.service,
                                     `DELETE FROM ${doubleQuotes(OBSERVATION.table)} WHERE 1=1 ` + keys.map((e, i) => `AND ${e} = ${values[i]}`).join(" ") + ` RETURNING id`
-                                )
-                                    .then((res: Record<string, any>) => {
-                                        returnValue.push(`delete id ==> ${res[0]}`);
-                                        total += 1;
-                                    })
-                                    .catch((error) => {
-                                        console.log(error);
-                                    });
+                                ).then((res: Record<string, any>) => {
+                                    returnValue.push(`delete id ==> ${res[0]}`);
+                                    total += 1;
+                                })
+                                .catch((error) => {
+                                    console.error(error);
+                                });
                             }
                         } else this.ctx.throw(EHttpCode.badRequest, { code: EHttpCode.badRequest, detail: error });
                     });
             });
-
-            // const stream = dataInput["MultiDatastream"] ? "MultiDatastream" : "Datastream";
-
-            // executeSql(this.ctx._.service,`${queries.updateNb(stream.toLowerCase(), false, dataInput[stream]["@iot.id"])}`)
-            // .then(() => {
-            //     config.setServiceState(this.ctx._.service, EState.normal);                
-            // });
+            
             config.setServiceState(this.ctx._.service, EState.normal);
             if (returnValue) {
                 return this.formatReturnResult({

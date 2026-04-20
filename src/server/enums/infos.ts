@@ -18,8 +18,6 @@ export const enum EInfos {
     startCreateDB = "Start create database",
     createDB = "Create database",
     createUser = "Create user",
-    errorNb = "Correction table optimized column for pagination",
-    updateNb = "Create optimized column for pagination",
     csvFile = "csv file",
     classConstructor = "class $1 override $2",
     conWeb = "Connected to internet",

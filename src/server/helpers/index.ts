@@ -11,9 +11,7 @@ export const unikeList = (input: string[]) => [...new Set(input)];
 export {
     isTest,
     isProduction,
-    isReturnDataArray,
-    isReturnCsv,
-    isReturnGraph,
+    isReturn,
     isObservation,
     isReturnGeoJson,
     isAdmin,

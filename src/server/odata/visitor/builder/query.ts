@@ -6,7 +6,7 @@
  *
  */
 
-import { doubleQuotes, cleanStringComma, isReturnDataArray, isReturnGraph, isReturnGeoJson, removeAllQuotes, formatPgString } from "../../../helpers";
+import { doubleQuotes, cleanStringComma, isReturn, isReturnGeoJson, removeAllQuotes, formatPgString, returnFormats } from "../../../helpers";
 import { IpgQuery } from "../../../types";
 import { PgVisitor, RootPgVisitor } from "..";
 import { models } from "../../../models";
@@ -45,7 +45,7 @@ export class Query {
             return;
         }
         // Add ceil and return if graph
-        if (isReturnGraph(main)) {
+        if (isReturn(main, [returnFormats.graph, returnFormats.graphDatas])) {
             if (element.query.orderBy.notNull()) element.query.orderBy.add(", ");
             return [main.interval ? `timestamp_ceil("resultTime", interval '${main.interval}') AS srcdate` : `@GRAPH@`];
         }
@@ -76,7 +76,7 @@ export class Query {
                       .split(EConstant.columnSeparator)
                       .filter((word: string) => word.trim() != "");
         // loop on columns
-        if (isReturnDataArray(main)) columns = columns.sort();
+        if (isReturn(main, [returnFormats.dataArray])) columns = columns.sort();
         columns
             .map((column: string) => {
                 if (main.interval) main.addToIntervalColumns(column, tempEntity.columns[column]);
@@ -87,10 +87,10 @@ export class Query {
             .filter((e) => e != "")
             .forEach((e: string) => {
                 if (e === "selfLink") e = selfLink;
-                const testIsCsvOrArray = isReturnDataArray(element);
+                const testIsCsvOrArray = isReturn(element, [returnFormats.dataArray]);
                 if (testIsCsvOrArray) this.keyNames.add(e);
                 returnValue.push(e);
-                if (e === "id" && (element.showRelations == true || isReturnDataArray(main))) {
+                if (e === "id" && (element.showRelations == true || isReturn(main, [returnFormats.dataArray]))) {
                     if (testIsCsvOrArray) this.keyNames.add("id");
                     else returnValue.push(selfLink);
                 }
@@ -100,7 +100,7 @@ export class Query {
             main.intervalColumns.push(`CONCAT('${main.ctx._.root()}/${tempEntity.name}(', COALESCE("${EConstant.id}", '0')::text, ')') AS ${doubleQuotes(EConstant.selfLink)}`);
         // If observation entity
         if (isTestEntity(tempEntity, "Observations") === true && element.onlyRef === false) {
-            if (main.interval && !isReturnGraph(main)) returnValue.push(`timestamp_ceil("resultTime", interval '${main.interval}') AS srcdate`);
+            if (main.interval && !isReturn(main, [returnFormats.graph, returnFormats.graphDatas])) returnValue.push(`timestamp_ceil("resultTime", interval '${main.interval}') AS srcdate`);
             if (element.splitResult && main.parentEntity && main.parentEntity.name === "MultiDatastreams")
                 element.splitResult.forEach((elem: string) => {
                     const one = element && element.splitResult && element.splitResult.length === 1;
@@ -165,7 +165,7 @@ export class Query {
 
                     const pagination =
                         element.query.where.toString().includes(`"observation"."${element.parentEntity?.table}_id" =`) &&
-                        (isReturnGraph(element) || element.skip > 0)
+                        (isReturn(element, [returnFormats.graph, returnFormats.graphDatas]) || element.skip > 0)
                             ? `"observation"."${element.parentEntity?.table}_id" =${this.extractId(element)}`
                             : undefined;
 
@@ -174,7 +174,7 @@ export class Query {
                         element.query.where.replace(
                             pagination,
                             ` ${
-                                isReturnGraph(element)
+                                isReturn(element, [returnFormats.graph, returnFormats.graphDatas])
                                     ? `${queries.createRowNumber(element, 0, 0)} AND id % (SELECT COALESCE(NULLIF(COUNT(id) / ${element.ctx._.service.nb_graph}, 0), 1) FROM "datastream_id${pagination.split("=")[1].split(" ")[0]}") = 0 ORDER BY "phenomenonTime"`
                                     : queries.createRowNumber(element, element.skip, element.limit)
                             }`

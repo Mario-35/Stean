@@ -183,7 +183,7 @@ export class Logging {
         this.line(20, colLine);
         this.color(colMess1);
         this.space(mess1);
-        this.text(separateur);
+        this.space(separateur);
         this.color(colMess2);
         this.space(mess2);
         this.line(20, colLine);

@@ -12,9 +12,9 @@ import { addCssFile } from "../views/css";
 import { addJsFile } from "../views/js";
 import util from "util";
 import { EConstant, EEncodingType, EErrors, EOptions, EReturnFormats } from "../enums";
-import { isReturnGraph } from ".";
 import { PgVisitor } from "../odata/visitor";
 import { DATASTREAM } from "../models/entities";
+import { isReturn } from "./tests";
 // Default "blank" function
 const defaultFunction = (input: string | object) => input;
 
@@ -22,7 +22,7 @@ const defaultFunction = (input: string | object) => input;
 const defaultForwat = (input: PgVisitor): string => input.toString();
 
 const generateFields = (input: PgVisitor) => {
-    if (isReturnGraph(input)) {
+    if (isReturn(input, [returnFormats.graph, returnFormats.graphDatas])) {
         const entity = input.parentEntity || input.entity;
         return entity ? [`(SELECT ${entity.table}."description" FROM ${entity.table} WHERE ${entity.table}."id" = ${input.parentId ? input.parentId : input.id}) AS title, `] : undefined;
     }
@@ -34,7 +34,7 @@ const generateFields = (input: PgVisitor) => {
  */
 const generateGraphSql = (input: PgVisitor) => {
     input.intervalColumns = ["id", "step as date", "result"];
-    if (isReturnGraph(input)) input.intervalColumns.push("concat");
+    if (isReturn(input, [returnFormats.graph, returnFormats.graphDatas])) input.intervalColumns.push("concat");
     const entity = input.parentEntity || input.entity;
     if (entity) {
         const id = input.parentId ? input.parentId : input.id;

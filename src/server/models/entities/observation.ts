@@ -16,7 +16,7 @@ export const OBSERVATION: Ientity = new Entity("Observations", {
     order: 7,
     columns: {
         id: new Bigint().generated().column(),
-        phenomenonTime: new Timestamp("tz").notNull().defaultOrder("asc").column(),
+        phenomenonTime: new Timestamp("tz").notNull().defaultOrder("asc").index().column(),
         result: new Any().null().column(),
         resultTime: new Timestamp("tz").notNull().column(),
         resultQuality: new Jsonb().column(),

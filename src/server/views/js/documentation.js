@@ -120,7 +120,7 @@ function showDoc(event) {
 		try {
 			jsonViewerSuccess.showJSON(JSON.parse(replaceProxy(actual.success)));
 		} catch (error) {
-			console.log(error);			
+			console.error(error);			
 		}
 		
 	}

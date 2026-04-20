@@ -25,7 +25,7 @@ export async function streamCsvFile(service: Iservice, paramsFile: IcsvFile, sql
         service,
         `CREATE TABLE "${paramsFile.tempTable}" ( id serial4 NOT NULL, ${cols.map((e) => `"${e}" varchar(255) NULL`)}, CONSTRAINT ${paramsFile.tempTable}_pkey PRIMARY KEY (id));`
     ).catch((error: any) => {
-        console.log(error);
+        console.error(error);
     });
     const writable = config
         .connection(service.name)
@@ -40,12 +40,12 @@ export async function streamCsvFile(service: Iservice, paramsFile: IcsvFile, sql
                         resolve(+e[0 as keyof object]);
                     })
                     .catch((error) => {
-                        console.log(error);
+                        console.error(error);
                         resolve(-1);
                     });
             })
             .on("error", (error) => {
-                console.log(error);
+                console.error(error);
                 resolve(-1);
             });
     });

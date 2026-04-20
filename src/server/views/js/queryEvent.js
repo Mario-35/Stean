@@ -86,7 +86,6 @@ btnPostTemplate.onclick = () => {
 			}
 		}
 	}) : {};
-	// jsonDatas.value = createTemplateDatas(entityOption.value);
 	jsonDatas.value = result;
 	setJSON();
 	buttonGo();

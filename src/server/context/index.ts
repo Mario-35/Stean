@@ -27,12 +27,10 @@ export class SteanContext {
     port: string;
     pathname: string;
     search: string;
-    redirect: string | undefined = undefined;
-    
+    redirect: string | undefined = undefined;    
     path: string;
     private _id: string | bigint;
-    private _idStr: string | undefined  = undefined;
-    
+    private _idStr: string | undefined  = undefined;    
     service: Iservice;
     odata: RootPgVisitor;
     from: EFrom;
@@ -141,11 +139,11 @@ export class SteanContext {
     }  
     
     isOption(option: EOptions): boolean {
-          return this.service.options.includes(option);
+        return this.service.options.includes(option);
     }
 
     inExtension(option: EExtensions): boolean {
-          return this.service.extensions.includes(option);
+        return this.service.extensions.includes(option);
     }
 
     blankUser(): Iuser {

@@ -29,6 +29,7 @@ export class Core {
     add(input: string) {
         this._src.push(input);
     }
+
     init(input: string) {        
         this._src = [input];
     }
@@ -36,15 +37,19 @@ export class Core {
     toArray(): string[] {
         return this._src;
     }
+
     toString(): string {
         return this._src.join("");
     }
+
     notNull() {
         return this._src.filter((e) => e! + "").length > 0;
     }
+
     replace(from: any, to: any) {
         this._src = this._src.map((e) => (typeof e === "string" ? e.replace(from, to) : e));
     }
+
     cleanStart(searchs: string | string[]) {
         if (typeof searchs === "string") searchs = [searchs];
         searchs.forEach(search => {
@@ -52,6 +57,7 @@ export class Core {
                 this._src[0] = this._src[0].trim().replace(search , '');
         });
     }
+    
     pop() {
         return this._src.pop();
     }

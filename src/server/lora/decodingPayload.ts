@@ -24,7 +24,7 @@ export const decodingPayload = (decoder: { name: string; code: string; nomenclat
         const result = F(payload, decoder.nomenclature === "{}" || decoder.nomenclature === "" ? null : nomenclature);
         return { decoder: decoder.name, result: result };
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return {
             decoder: decoder.name,
             result: undefined,

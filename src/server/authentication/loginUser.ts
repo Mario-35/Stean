@@ -3,8 +3,8 @@
  *
  * @copyright 2020-present Inrae
  * @author mario.adam@inrae.fr
- *
- */
+*
+*/
 
 import { createToken } from ".";
 import { config } from "../configuration";
@@ -16,7 +16,7 @@ import { Iuser, koaContext } from "../types";
  * get Iuser from koaContext
  * @param ctx koaContext
  * @returns Iuser | undefined
- */
+*/
 const getUser = async (configName: string, username: string, password: string): Promise<Iuser | undefined> => {
     const query = await config.connection(configName)<Iuser[]>`SELECT * FROM "user" WHERE username = ${username} LIMIT 1`;
     if (query.length === 1) {
@@ -34,27 +34,27 @@ const getUser = async (configName: string, username: string, password: string): 
  * @param ctx koaContext
  * @param login object
  * @returns Iuser | undefined
- */
+*/
 
 export const loginUser = async (ctx: koaContext | undefined, login?: { configName: string; username: string; password: string }): Promise<Iuser | undefined> => {
     if (login) return await getUser(login.configName, login.username, login.password);
     if (ctx) {
         if (ctx.header.username && ctx.header.password) 
             return await getUser(ctx._.service.name, String(ctx.header.username), String(ctx.header.password)).then((user: any) => user);
-
+        
         let body: Record<string, any> = {};     
         if(ctx.url.includes("?") && ctx.url.includes("&"))
             ctx.url.split("?")[1].split("&")
-            .forEach(e => {
-                const tmp = e.split('=');
-                if (["username","password"].includes(tmp[0])) body[tmp[0]]  = tmp[1];
-            });
-
+        .forEach(e => {
+            const tmp = e.split('=');
+            if (["username","password"].includes(tmp[0])) body[tmp[0]]  = tmp[1];
+        });
+        
         if (!body["username"] || !body["password"]) body = ctx.request.body as Record<string, any>;
-
+        
         if (body["username"] && body["password"]) 
             return await getUser(ctx._.service.name, body["username"], body["password"]).then((user: any) => user);
-
+        
         ctx.throw(EHttpCode.Unauthorized);
     }
 };

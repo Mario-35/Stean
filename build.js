@@ -328,11 +328,11 @@ fs.writeFile(FINAL + "package.json", JSON.stringify(packageJson, null, 2), { enc
       });
 
     } catch (error) {
-      console.log(error);
+      console.error(error);
       console.log("\x1b[31m No configuration file \x1b[34m : \x1b[37m found\x1b[0m");
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
     console.log("\x1b[31m configuration \x1b[34m : \x1b[37m not write\x1b[0m");
   }
 

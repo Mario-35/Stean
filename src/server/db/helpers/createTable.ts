@@ -79,10 +79,10 @@ export const createTable = async (serviceName: string, tableEntity: Ientity, doA
     const tabTemp: string[] = [];
 
     // CREATE INDEXES
-    // if (tableEntity.indexes)
-    //     Object.keys(tableEntity.indexes).forEach((index) => {
-    //         tabTemp.push(`CREATE INDEX "${index}" ${tableEntity.indexes[index]}`);
-    //     });
+    if (tableEntity.indexes)
+        Object.keys(tableEntity.indexes).forEach((index) => {
+            tabTemp.push(`CREATE INDEX "${index}" ${tableEntity.indexes[index]}`);
+        });
 
     if (tabTemp.length > 0) await executeMessageQuery(`${tab()}Indexes for ${tableEntity.name}`, tabTemp.join(";"));
 

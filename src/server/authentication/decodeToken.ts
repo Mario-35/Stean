@@ -3,8 +3,8 @@
  *
  * @copyright 2020-present Inrae
  * @author mario.adam@inrae.fr
- *
- */
+*
+*/
 
 import jsonwebtoken from "jsonwebtoken";
 import { IuserToken, koaContext } from "../types";
@@ -15,7 +15,7 @@ import { logging } from "../log";
  * decode token from koa context
  * @param ctx koaContext
  * @returns IuserToken
- */
+*/
 
 export const decodeToken = (ctx: koaContext): IuserToken => {
     console.log(logging.whereIam(new Error().stack));

@@ -40,48 +40,46 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
     
     // create blank DATABASE
     returnValue[EInfos.adminConnection] = await adminConnection
-    .unsafe(queries.creatdeDB(servicePg.database))
-    .then(async () => {
+    .unsafe(queries.creatdeDB(servicePg.database)).then(async () => {
         // create default USER if not exist
         returnValue[messages.str(EInfos.create, `/Alter ROLE ${servicePg.user}`)] = await createRole(service)
         .then(() => EChar.ok)
         .catch((error: Error) => {
-            console.log(error);
+            console.error(error);
             return EChar.notOk;
         });
         return EChar.ok;
-    })
-    .catch((error: Error) => {
+    }).catch((error: Error) => {
         return logging.error(error).return(EChar.notOk);
-            });
-            
-            // test user connection
-            const dbConnection = config.connection(service.name);
-            if (!dbConnection) {
-                returnValue["DROP Error"] = `No DB connection ${EChar.notOk}`;
-                return returnValue;
-            }
-            
-            // create postgis
-            returnValue[messages.str(EInfos.create, "postgis")] = await dbConnection
-            .unsafe(queries.createExtension("postgis"))
-            .then(() => EChar.ok)
-            .catch((err: Error) => err.message);
-            
-            // create tablefunc
-            returnValue[messages.str(EInfos.create, "tablefunc")] = await dbConnection
-            .unsafe(queries.createExtension("tablefunc"))
-            .then(() => EChar.ok)
-            .catch((err: Error) => logging.error(err).return(err.message));
-            
-            // Get complete model
-            const DB = models.getModel(service);
-            
-            // loop to create each table
-            await asyncForEach(
-                Object.keys(DB).filter((e) => e.trim() !== ""),
-                async (keyName: string) => {
-                    const res = await createTable(service.name, DB[keyName], undefined);
+    });
+    
+    // test user connection
+    const dbConnection = config.connection(service.name);
+    if (!dbConnection) {
+        returnValue["DROP Error"] = `No DB connection ${EChar.notOk}`;
+        return returnValue;
+    }
+    
+    // create postgis
+    returnValue[messages.str(EInfos.create, "postgis")] = await dbConnection
+    .unsafe(queries.createExtension("postgis"))
+    .then(() => EChar.ok)
+    .catch((err: Error) => err.message);
+    
+    // create tablefunc
+    returnValue[messages.str(EInfos.create, "tablefunc")] = await dbConnection
+    .unsafe(queries.createExtension("tablefunc"))
+    .then(() => EChar.ok)
+    .catch((err: Error) => logging.error(err).return(err.message));
+    
+    // Get complete model
+    const DB = models.getModel(service);
+    
+    // loop to create each table
+    await asyncForEach(
+        Object.keys(DB).filter((e) => e.trim() !== ""),
+        async (keyName: string) => {
+            const res = await createTable(service.name, DB[keyName], undefined);
                     Object.keys(res).forEach((e: string) => {
                         logging.message(e, res[e]);
                         returnValue["  ■■■►  " + e] = res[e];
@@ -94,46 +92,46 @@ export const createDatabase = async (serviceName: string): Promise<Record<string
             
             // create user
             returnValue[messages.str(EInfos.create, "user")] = await createUser(service)
-        .then(() => EChar.ok)
-        .catch((err: Error) => logging.error(err).return(err.message));
-        
-        // loop to create each services
-        await asyncForEach(pgFunctions(), async (query: string) => {
-            const name = query.split(" */")[0].split("/*")[1].trim();
-            await dbConnection
-            .unsafe(query)
-            .then(() => {
-                logging.message(name, EChar.ok);
-                returnValue["  ■■■►  " + name] = EChar.ok;
-            })
-            .catch((error: Error) => {
-                logging.error(error);
-                process.exit(111);
+            .then(() => EChar.ok)
+            .catch((err: Error) => logging.error(err).return(err.message));
+            
+            // loop to create each services
+            await asyncForEach(pgFunctions(), async (query: string) => {
+                const name = query.split(" */")[0].split("/*")[1].trim();
+                await dbConnection
+                .unsafe(query)
+                .then(() => {
+                    logging.message(name, EChar.ok);
+                    returnValue["  ■■■►  " + name] = EChar.ok;
+                })
+                .catch((error: Error) => {
+                    logging.error(error);
+                    process.exit(111);
+                });
             });
-        });
-        
-        // loop to create each triggers
-        await asyncForEach(
-            Object.keys(DB).filter((e) => e.trim() !== ""),
-            async (keyName: string) => {
-                if (DB[keyName].trigger) {
-                    await asyncForEach(DB[keyName].trigger, async (query: string) => {
-                    await dbConnection
-                    .unsafe(query)
-                    .then((e) => {
-                            // to preserve size
-                            DB[keyName].trigger = [];
-                            returnValue[messages.str(EInfos.create, "trigger")] = EChar.ok;
-                        })
-                        .catch((error: Error) => {
-                            returnValue[messages.str(EInfos.create, "trigger")] = logging.error(error).return(EChar.notOk);
+            
+            // loop to create each triggers
+            await asyncForEach(
+                Object.keys(DB).filter((e) => e.trim() !== ""),
+                async (keyName: string) => {
+                    if (DB[keyName].trigger) {
+                        await asyncForEach(DB[keyName].trigger, async (query: string) => {
+                            await dbConnection
+                            .unsafe(query)
+                            .then((e) => {
+                                // to preserve size
+                                DB[keyName].trigger = [];
+                                returnValue[messages.str(EInfos.create, "trigger")] = EChar.ok;
+                            })
+                            .catch((error: Error) => {
+                                returnValue[messages.str(EInfos.create, "trigger")] = logging.error(error).return(EChar.notOk);
+                            });
                         });
-                    });
+                    }
                 }
-            }
-        );
-        
-        // final test
+            );
+            
+            // final test
         returnValue["ALL finished ..."] = await dbConnection
         .unsafe(queries.countUser(servicePg.user))
         .then(() => EChar.ok)

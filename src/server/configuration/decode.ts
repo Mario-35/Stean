@@ -1,12 +1,12 @@
 /**
  * decode Tool
- *
- * @copyright 2020-present Inrae
- * @author mario.adam@inrae.fr
- *
- * NOT Use in API use to decode in command line
- *
- */
+*
+* @copyright 2020-present Inrae
+* @author mario.adam@inrae.fr
+*
+* NOT Use in API use to decode in command line
+*
+*/
 
 import fs from "fs";
 import crypto from "crypto";
@@ -32,5 +32,4 @@ function decode(file: fs.PathOrFileDescriptor) {
     const key = fs.readFileSync(__dirname + "/.key", "utf-8");
     return decrypt(fileTemp, key);
 }
-
 process.stdout.write(decode(__dirname + `/configuration.json`) + EConstant.return);

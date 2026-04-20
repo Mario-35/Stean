@@ -49,7 +49,7 @@ export class Entity extends EntityPass {
         this.prepareColums();
         this.createConstraints();
         this.createTriggers();
-        this.createPartition();
+        this.createPartition();        
     }
 
     toEntity() {
@@ -78,11 +78,10 @@ export class Entity extends EntityPass {
                 }
             }
 
-            if (this._.columns[e].indexes) {
-                this._.columns[e].indexes.forEach((k) => {
-                    this.addToIndexes(`${this._.table}_${e}_${k}`, `ON public."${this._.table}" USING btree ("${e}", "${k}")`);
-                });
+            if (this._.columns[e].index === true) {
+                    this.addToIndexes(`${this._.table}_${e}`, `ON public."${this._.table}" USING btree ("${e}")`);
             }
+            
             if (this._.columns[e].dataType === EDataType.tstzrange || this._.columns[e].dataType === EDataType.tsrange) {
                 const entityRelation = this._.columns[e].entityRelation;
                 if (entityRelation) {
@@ -115,7 +114,6 @@ export class Entity extends EntityPass {
                     `${this._.table}_unik_${elem}`,
                     this._.partition ? `UNIQUE NULLS NOT DISTINCT (${this.unik([this._.partition.main, this._.partition.sub || ""], elem)})` : `UNIQUE ("${elem}")`
                 );
-                this.addToIndexes(`${this._.table}_${elem}`, `ON public."${this._.table}" USING btree ("${elem}")`);
             }
         });
 
@@ -132,7 +130,6 @@ export class Entity extends EntityPass {
                     const value = `FOREIGN KEY ("${elem.toLowerCase()}_id") REFERENCES "${elem.toLowerCase()}"("id") ON UPDATE CASCADE ON DELETE CASCADE`;
                     if (this._.relations[elem].entityRelation && this.isIn(`${elem.toLowerCase()}_id`)) this.addToPass(this._.relations[elem].entityRelation, value);
                     else if (this.isIn(`${elem.toLowerCase()}_id`)) this.addToConstraints(`${this._.table}_${elem.toLowerCase()}_id_fkey`, value);
-                    if (!this._.relations[elem].entityRelation) this.addToIndexes(`${this._.table}_${elem.toLowerCase()}_id`, `ON public."${this._.table}" USING btree ("${elem.toLowerCase()}_id")`);
                     break;
                 case ERelations.defaultUnique:
                     this.addToConstraints(

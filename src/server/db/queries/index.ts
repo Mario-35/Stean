@@ -496,7 +496,7 @@ FROM
     }
     
     listPartionned() {
-        return `SELECT (inhrelid :: regclass):: text AS child FROM pg_catalog.pg_inherits WHERE inhparent = 'observation' :: regclass OR inhparent = 'datastream_id0' :: regclass`;
+        return `SELECT ARRAY(SELECT (inhrelid :: regclass):: text AS child FROM pg_catalog.pg_inherits WHERE inhparent = 'observation' :: regclass OR inhparent = 'datastream_id0' :: regclass)`;
     }
 
     getDate() {
@@ -538,6 +538,10 @@ FROM
                 (SELECT pg_typeof(result)::text FROM observation limit 1) = 'numeric' AS numeric,
                 (SELECT count(*) FROM pg_catalog.pg_constraint con INNER JOIN pg_catalog.pg_class rel ON rel.oid = con.conrelid INNER JOIN pg_catalog.pg_namespace nsp ON nsp.oid = connamespace WHERE nsp.nspname = 'public' AND rel.relname = 'thing' AND con.conname LIKE '%name%') = 1 as unique
                 `;
+    }
+
+    cluster(table: string) {
+        return `CLUSTER ${table} USING "${table}_nb";`;
     }
 
 }

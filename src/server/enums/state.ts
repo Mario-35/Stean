@@ -8,7 +8,6 @@
  */
 
 export enum EState {
-    optimizing  = "optimizing ",
     creating = "creating",
     restarting = "restarting",
     importing = "importing",

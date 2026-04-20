@@ -92,8 +92,9 @@ export class Services extends Common {
                     body: await conn
                         .unsafe(queries.deleteConfig(idInput))
                         .values()
-                        .then((res: Record<string, any>) => {
-                            return res[0];
+                        .then(() => {
+                            config.removeConfig(idInput);
+                            return true;
                         })
                         .catch((err: Error) => {
                             logging.error(err, EErrors.execQuery).toLogAndFile();

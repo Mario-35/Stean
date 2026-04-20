@@ -76,7 +76,7 @@ export const createService = async (dataInput: Record<string, any>): Promise<Rec
                                 results[entityName] = EChar.ok;
                             })
                             .catch((error: any) => {
-                                console.log(error);
+                                console.error(error);
                                 results[entityName] = EChar.notOk;
                             });
                     } catch (error) {                    

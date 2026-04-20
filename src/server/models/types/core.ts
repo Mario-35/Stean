@@ -51,14 +51,13 @@ export class Core {
 
     unique(): this {
         this._.create = this._.create.replace("@UNIQUE@", " UNIQUE");
-        // if (test) this._.create = this._.create.replace("@UNIQUE@", " UNIQUE");
         return this;
     }
 
-    // addIndexes(input: string | string[]) {
-    //     this._.indexes = typeof input === "string" ? [input] : input;
-    //     return this;
-    // }
+    index() {
+        this._.index = true;
+        return this;
+    }
 
     partition(input: "main" | "sub") {
         this._.partition = input;

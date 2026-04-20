@@ -14,7 +14,6 @@ http://rootApi/state/ServiceName/state
 
 Affiche l'état du service
 
-- optimizing: Optimisation du partitionnement en cours,
 - creating: Création d'une instance en cours,
 - restarting: redémarre,
 - importing: importation en cours,

@@ -8,7 +8,7 @@
 process.env.NODE_ENV = "test";
 import chai from "chai";
 import chaiHttp from "chai-http";
-import { IApiDoc, IApiInput, prepareToApiDoc, generateApiDoc, identification, limitResult, testVersion, testLog } from "./constant";
+import { IApiDoc, IApiInput, prepareToApiDoc, generateApiDoc, identification, limitResult, testVersion } from "./constant";
 import { server } from "../../server/index";
 import { addPostFile, addStartNewTest, addTest, writeLog } from "./tests";
 import { EConstant } from "../../server/enums";
@@ -86,7 +86,6 @@ describe("CSV Import", function () {
             .attach("file", "./src/test/integration/files/simple.csv")
             .set("Cookie", `${EConstant.appName}=${token}`)
             .end((err: Error, res: any) => {
-                testLog(res.body)
                 should.not.exist(err);
                 res.should.have.status(201);
                 res.body[0].should.eql("Add 12 on 12 lines from simple.csv");
@@ -186,36 +185,4 @@ describe("CSV Import", function () {
                 done();
             });
     });
-
-    // it("should insert 0 observations for duplicates values", (done) => {
-    //     const infos = addTest({
-    //         type: "post",
-    //         short: "CreateObservations with multi csv attached file",
-    //         description: "Import multi csv file",
-    //         reference: "",
-    //         request: `${testVersion}/CreateObservations`,
-    //         params: multi
-    //     });
-    //     chai.request(server)
-    //         .post(`/test/${infos.request}`)
-    //         .field("Content-Type", "multipart/form-data")
-    //         .field("datas", JSON.stringify(infos.params))
-    //         .field("method", "POST")
-    //         .field("nb", "1")
-    //         .attach("file", "./src/test/integration/files/na.csv")
-    //         .set("Cookie", `${EConstant.appName}=${token}`)
-    //         .end(function (err, res) {
-    //             testLog(res.body)
-    //             if (err) console.log(err);
-    //             else {
-    //                 res.should.have.status(201);
-    //                 res.body[0].should.eql("Add 10 on 10 lines from na.csv");
-    //             }
-    //             should.not.exist(err);
-    //             docs[docs.length - 1].error = JSON.stringify(res.body, null, 4);
-    //             generateApiDoc(docs, "Import");
-    //             addPostFile(infos);
-    //             done();
-    //         });
-    // });
 });

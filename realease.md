@@ -102,3 +102,9 @@
 ## version 1.3.8
     New row number query
     Optimisation multidatastream list
+    remove service input after delete a service
+    add input format in createObservation
+    add dates_bound pg function
+
+## version 1.3.9
+    clean route addes

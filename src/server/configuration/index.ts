@@ -1,10 +1,10 @@
 /**
  * Configuration class
- *
- * @copyright 2020-present Inrae
- * @author mario.adam@inrae.fr
- *
- */
+*
+* @copyright 2020-present Inrae
+* @author mario.adam@inrae.fr
+*
+*/
 
 import { appVersion, isDebug, setDebug } from "../constants";
 import { asyncForEach, compareVersions, decrypt, encrypt, filterUnderscore, hidePassword, isProduction, isTest } from "../helpers";
@@ -13,6 +13,7 @@ import { messages } from "../messages";
 import { app } from "..";
 import { EChar, EColor, EConstant, EState } from "../enums";
 import util from "util";
+import path from "path";
 import fs from "fs";
 import postgres from "postgres";
 import { createDatabase, pgFunctions, testDatas } from "../db/createDb";
@@ -29,7 +30,7 @@ import { EInfos } from "../enums/infos";
 import { EErrors } from "../enums/errors";
 /**
  * Class to create configs environements
- */
+*/
 class Configuration {
     // store all services
     static services: { [key: string]: Iservice } = {};
@@ -43,7 +44,7 @@ class Configuration {
     static state: EState;
     trace: Trace;
     static pool: Record<string, Ipool[] | undefined> = {};
-
+    
     constructor() {
         // override console log for TDD important in production build will remove all console.log
         if (isTest()) {
@@ -55,62 +56,62 @@ class Configuration {
             console.log = (data: any) => {
                 if (data) process.stdout.write(typeof data === "object" ? util.inspect(data, { showHidden: false, depth: null, colors: true }) + EConstant.return : data + EConstant.return);
             };
-    }
-
-    // test if all are in normal state
-     getReady(): boolean {
-        return Object.values(Configuration.services)
+        }
+        
+        // test if all are in normal state
+        getReady(): boolean {
+            return Object.values(Configuration.services)
             .filter(e => e.name != EConstant.admin)
             .map((e) => e.state === EState.normal)
             .includes(false) ? false: true && Configuration.state === EState.normal;
-     }
-
-     // set service state
-     setServiceState(service: Iservice, state: EState) {    
-        service.state = state;
-        this.setGlobalState(state);
-     }
-
-     // set state
+        }
+        
+        // set service state
+        setServiceState(service: Iservice, state: EState) {    
+            service.state = state;
+            this.setGlobalState(state);
+        }
+        
+        // set state
      setGlobalState(state: EState ) {
-        if (state === EState.normal) {
-            if (Object.values(Configuration.services)
-            .filter(e => e.name != EConstant.admin)
+         if (state === EState.normal) {
+             if (Object.values(Configuration.services)
+                .filter(e => e.name != EConstant.admin)
             .map((e) => e.state === EState.normal)
             .includes(false) === true) 
-                Configuration.state = EState.normal;
+            Configuration.state = EState.normal;
             return;
         } 
         Configuration.state = state;      
-     }
-
-     // return state
-     getState(ctx?: koaContext) {
+    }
+    
+    // return state
+    getState(ctx?: koaContext) {
         const result:Record<string, string> = {stean : Configuration.state};
         if(ctx && ctx._.service) 
-          result[ctx._.service.name] = ctx._.service.state
+            result[ctx._.service.name] = ctx._.service.state
          else 
             Object.values(Configuration.services)
-            .filter(e => e.name != EConstant.admin)
-            .map((e) => result[e.name] = e.state)
+        .filter(e => e.name != EConstant.admin)
+        .map((e) => result[e.name] = e.state)
         return result;
-     }
-     
+    }
+    
     // app version
     version(): string {
         return `${Configuration.appVersion.version} [${Configuration.appVersion.date}]`;
     }
-
+    
     // app repository version
     remoteVersion(): string | undefined {
         return Configuration.remoteVersion ? this.version() : undefined;
     }
-
+    
     // is update
     upToDate(): boolean {
         return Configuration.upToDate;
     }
-
+    
     // create a new instance in DB
     private async addService(input: Iservice): Promise<boolean> {
         // except admin
@@ -118,62 +119,62 @@ class Configuration {
         const datas = queries.insertConfig(input.name, FORMAT_JSONB(input));
         // test database connection
         return await this.adminConnection()
-            .unsafe(datas)
-            .then(() => true)
-            .catch(async (error) => {
-                // relation does not exist error
-                if (error.code === "42P01") {
+        .unsafe(datas)
+        .then(() => true)
+        .catch(async (error) => {
+            // relation does not exist error
+            if (error.code === "42P01") {
+                return await this.adminConnection()
+                .unsafe(queries.createTableService())
+                .then(async () => {
                     return await this.adminConnection()
-                        .unsafe(queries.createTableService())
-                        .then(async () => {
-                            return await this.adminConnection()
-                                .unsafe(datas)
-                                .then(() => true);
-                        })
-                        .catch(async (error) => {
-                            // relation already exist error
-                            if (error.code === "42P07") {
-                                return await this.adminConnection()
-                                    .unsafe(datas)
-                                    .then(() => true);
-                            } else {
-                                return logging.error(error).return(false);
-                            }
-                        });
-                    // Duplicate Key Violation error
-                } else if (error.code === "23505") {
-                    return true;
-                } else return logging.error(error, EInfos.createUser).return(false);
-            });
+                    .unsafe(datas)
+                    .then(() => true);
+                })
+                .catch(async (error) => {
+                    // relation already exist error
+                    if (error.code === "42P07") {
+                        return await this.adminConnection()
+                        .unsafe(datas)
+                        .then(() => true);
+                    } else {
+                        return logging.error(error).return(false);
+                    }
+                });
+                // Duplicate Key Violation error
+            } else if (error.code === "23505") {
+                return true;
+            } else return logging.error(error, EInfos.createUser).return(false);
+        });
     }
-
+    
     /**
      * log message of listening
-     *
-     * @param what messace log
-     * @param port port number
-     * @param db show db infos
-     */
-
-
-    messageListen(what: string, port: string, db?: boolean) {
-        logging.status(true, db ? messages.str(EInfos.dbReady, what) : `${what} ${EInfos.listenPort} ${port}`, EChar.web).toLogAndFile(true);
+    *
+    * @param what messace log
+    * @param port port number
+    * @param db show db infos
+    */
+   
+   
+   messageListen(what: string, port: string, db?: boolean) {
+       logging.status(true, db ? messages.str(EInfos.dbReady, what) : `${what} ${EInfos.listenPort} ${port}`, EChar.web).toLogAndFile(true);
     }
-
+    
     /**
      * Read string (or default configuration file) as configuration file
-     *
-     * @param input
-     * @returns true if it's done
-     */
-    private async readConfigFile(input?: string): Promise<boolean> {
-        logging.file(EInfos.readConfig, input ? "content" : paths.configFile.fileName).toLogAndFile(true);
-        try {
-            // load File
-            const fileContent = input || fs.readFileSync(paths.configFile.fileName, "utf8");
-            if (fileContent.trim() === "") {
-                logging.error(paths.configFile.fileName, messages.str(EErrors.fileEmpty, paths.configFile.fileName));
-                process.exit(111);
+    *
+    * @param input
+    * @returns true if it's done
+    */
+   private async readConfigFile(input?: string): Promise<boolean> {
+       logging.file(EInfos.readConfig, input ? "content" : paths.configFile.fileName).toLogAndFile(true);
+       try {
+           // load File
+           const fileContent = input || fs.readFileSync(paths.configFile.fileName, "utf8");
+           if (fileContent.trim() === "") {
+               logging.error(paths.configFile.fileName, messages.str(EErrors.fileEmpty, paths.configFile.fileName));
+               process.exit(111);
             }
             // decrypt file
             Configuration.services = JSON.parse(decrypt(fileContent));
@@ -187,10 +188,10 @@ class Configuration {
             // Kill all sten postgres tasks
             if (!isTest()) 
                 await Configuration.adminConnection
-                    .unsafe(queries.terminateAll())
-                    .then(() => logging.message(EInfos.killPgStean, `${EConstant.appName} ${appVersion.version}`).toLogAndFile(true))
-                    .catch((err) => logging.error(err, EErrors.serviceUpdateteError));
-
+            .unsafe(queries.terminateAll())
+            .then(() => logging.message(EInfos.killPgStean, `${EConstant.appName} ${appVersion.version}`).toLogAndFile(true))
+            .catch((err) => logging.error(err, EErrors.serviceUpdateteError));
+            
             // loop on services
             try {
                 if (!isTest()) {
@@ -201,23 +202,23 @@ class Configuration {
                                 Configuration.services[element["name" as keyof object]] = element["datas" as keyof object];
                             });
                         });
-                    await this.adminConnection()
+                        await this.adminConnection()
                         .unsafe("SELECT version()")
                         .then((res: any) => {
                             logging.startEnd(res[0].version.split(",")[0], EColor.Cyan, EColor.White).toLogAndFile(true);
                         });
-                }
-            } catch (error: any) {
-                logging.error(error, EInfos.accessServies);
-                if (error.code === "42P01")
+                    }
+                } catch (error: any) {
+                    logging.error(error, EInfos.accessServies);
+                    if (error.code === "42P01")
                     await this.adminConnection()
-                        .unsafe(queries.createTableService())
-                        .catch((e) => {
-                            logging.error(EErrors.serviceCreateError, EInfos.createServies);
-                            process.exit(112);
-                        });
+                .unsafe(queries.createTableService())
+                .catch((e) => {
+                    logging.error(EErrors.serviceCreateError, EInfos.createServies);
+                    process.exit(112);
+                });
             }
-
+            
             if (validJSONService(Configuration.services)) {
                 if (isTest() === true) {
                     Configuration.services[EConstant.admin] = this.formatConfig(EConstant.admin);
@@ -234,225 +235,224 @@ class Configuration {
             }
             // rewrite file (to update config modification except in test mode)
             if (!isTest()) this.write();
-            // if (!isTest() && config.configFileExist() === false) this.writeConfig();
         } catch (error: any) {
             logging.error(error, EErrors.configFileError);
             process.exit(111);
         }
-
+        
         this.trace = new Trace(Configuration.adminConnection);
         return true;
     }
-
+    
     /**
      *
      * @returns http port number
-     */
-    private defaultHttp(): number {
-        return Configuration.services[EConstant.admin] && Configuration.services[EConstant.admin].ports ? Configuration.services[EConstant.admin].ports?.http || 8029 : 8029;
+    */
+   private defaultHttp(): number {
+       return Configuration.services[EConstant.admin] && Configuration.services[EConstant.admin].ports ? Configuration.services[EConstant.admin].ports?.http || 8029 : 8029;
     }
-
+    
     /** Initialivze mqtt */
     // private initMqtt() {
-    //     Configuration.MqttServer = new MqttServer({
-    //         wsPort: Configuration.services[EConstant.admin].ports?.ws || 1883,
-    //         tcpPort: Configuration.services[EConstant.admin].ports?.tcp || 9000
-    //     });
-    // }
-
-    /**
-     *
-     * @returns broker id
-     */
-    getBrokerId() {
-        return Configuration.MqttServer.broker.id;
-    }
-
-    /**
-     * Test if config file exists
-     *
-     * @returns configuration file present
-     */
-    configFileExist(): boolean {
-        return fs.existsSync(paths.configFile.fileName);
-    }
-
-    /**
-     * Return infos for all services
-     *
-     * @param ctx koa context
-     * @param name service name
+        //     Configuration.MqttServer = new MqttServer({
+            //         wsPort: Configuration.services[EConstant.admin].ports?.ws || 1883,
+            //         tcpPort: Configuration.services[EConstant.admin].ports?.tcp || 9000
+            //     });
+            // }
+            
+            /**
+             *
+             * @returns broker id
+            */
+           getBrokerId() {
+               return Configuration.MqttServer.broker.id;
+            }
+            
+            /**
+             * Test if config file exists
+            *
+            * @returns configuration file present
+            */
+           configFileExist(): boolean {
+               return fs.existsSync(paths.configFile.fileName);
+            }
+            
+            /**
+             * Return infos for all services
+            *
+            * @param ctx koa context
+            * @param name service name
      * @returns infos as IserviceInfos
-     */
-    getInfosForAll(ctx: koaContext): { [key: string]: IserviceInfos } {
-        const result: Record<string, any> = {};
-        this.getServicesNames().forEach((conf: string) => {
-            result[conf] = ctx._.customInfosContext(conf);
-        });
-        return result;
-    }
-
-    /**
-     *
-     * @param name service name
-     * @returns service.
-     */
-    getService(name: string) {
-        return Configuration.services[name];
-    }
-
-    /**
-     *
-     * @returns service names
-     */
-
-    getServicesNames() {
-        return Object.keys(Configuration.services).filter((e) => e !== EConstant.admin);
-    }
-
-    /**
-     * Write an encrypt config file in json file
-     *
-     * @param input admin config file
-     * @returns true if it's done
-     */
-    async init(input: string): Promise<boolean> {
-        logging.message(EInfos.readConfig, paths.configFile.fileName).toLogAndFile(true);
-        return await this.readConfigFile(input);
-    }
-
-    /**
-     * Write an encrypt config file in json file
-     *
-     * @returns true if it's done
-     */
-    private write(input?: JSON): boolean {
-        logging.message(EInfos.writeConfig, paths.configFile.fileName).toLogAndFile(true);
-        const datas: string = input ? JSON.stringify(filterUnderscore(input), null, 4) : JSON.stringify({ admin: filterUnderscore(Configuration.services[EConstant.admin])}, null, 4);
+            */
+           getInfosForAll(ctx: koaContext): { [key: string]: IserviceInfos } {
+               const result: Record<string, any> = {};
+               this.getServicesNames().forEach((conf: string) => {
+                   result[conf] = ctx._.customInfosContext(conf);
+                });
+                return result;
+            }
+            
+            /**
+             *
+             * @param name service name
+             * @returns service.
+            */
+           getService(name: string) {
+               return Configuration.services[name];
+            }
+            
+            /**
+             *
+             * @returns service names
+            */
+           
+           getServicesNames() {
+               return Object.keys(Configuration.services).filter((e) => e !== EConstant.admin);
+            }
+            
+            /**
+             * Write an encrypt config file in json file
+            *
+            * @param input admin config file
+            * @returns true if it's done
+            */
+           async init(input: string): Promise<boolean> {
+               logging.message(EInfos.readConfig, paths.configFile.fileName).toLogAndFile(true);
+               return await this.readConfigFile(input);
+            }
+            
+            /**
+             * Write an encrypt config file in json file
+            *
+            * @returns true if it's done
+            */
+           private write(input?: JSON): boolean {
+               logging.message(EInfos.writeConfig, paths.configFile.fileName).toLogAndFile(true);
+               const datas: string = input ? JSON.stringify(filterUnderscore(input), null, 4) : JSON.stringify({ admin: filterUnderscore(Configuration.services[EConstant.admin])}, null, 4);
         return this.writeFile(paths.configFile.fileName, isProduction() === true ? encrypt(datas) : datas);
     }
-
+    
     /**
      *
      * @param query query
      * @returns result postgres.js object
-     */
-    async executeAdmin(query: string): Promise<object> {
-        logging.query("executeAdmin", query).toLogAndFile();
-        return new Promise(async function (resolve, reject) {
-            await config
-                .adminConnection()
-                .unsafe(query)
-                .then((res: object) => {
-                    resolve(res);
-                })
-                .catch((err: Error) => {
-                    reject(err);
-                });
+    */
+   async executeAdmin(query: string): Promise<object> {
+       logging.query("executeAdmin", query).toLogAndFile();
+       return new Promise(async function (resolve, reject) {
+           await config
+           .adminConnection()
+           .unsafe(query)
+           .then((res: object) => {
+               resolve(res);
+            })
+            .catch((err: Error) => {
+                reject(err);
+            });
         });
     }
-
+    
     /**
      *
      * @param name connection name
      * @returns postgres postgres.js
-     */
-    public connection(name: string): postgres.Sql<Record<string, unknown>> {
-        if (!Configuration.connections[name]) this.createDbConnectionFromConfigName(name);
-        return Configuration.connections[name] || this.createDbConnection(Configuration.services[name].pg);
+    */
+   public connection(name: string): postgres.Sql<Record<string, unknown>> {
+       if (!Configuration.connections[name]) this.createDbConnectionFromConfigName(name);
+       return Configuration.connections[name] || this.createDbConnection(Configuration.services[name].pg);
     }
 
     /**
      *
      * @returns return postgres.js connection with admin rights
-     */
+    */
     public adminConnection(): postgres.Sql<Record<string, unknown>> {
         return Configuration.adminConnection;
     }
-
+    
     /**
      *
      * @param input IdbConnection
      * @returns return postgres.js connection (psql connect string)
-     */
-    private createDbConnection(input: IdbConnection): postgres.Sql<Record<string, unknown>> {
-        return postgres(`postgres://${input.user}:${input.password}@${input.host}:${input.port || 5432}/${input.database}`, {
-            debug: true,
-            max: 2000,
-            connection: {
-                application_name: `${EConstant.appName} ${appVersion.version}`
+    */
+   private createDbConnection(input: IdbConnection): postgres.Sql<Record<string, unknown>> {
+       return postgres(`postgres://${input.user}:${input.password}@${input.host}:${input.port || 5432}/${input.database}`, {
+           debug: true,
+           max: 2000,
+           connection: {
+               application_name: `${EConstant.appName} ${appVersion.version}`
             }
         });
     }
-
+    
     /**
      *
      * @param input connection string name
      * @returns return postgres.js connection (psql connect string)
-     */
-    public createDbConnectionFromConfigName(input: string): postgres.Sql<Record<string, unknown>> {
-        const temp = this.createDbConnection(Configuration.services[input].pg);
-        Configuration.connections[input] = temp;
-        return temp;
+    */
+   public createDbConnectionFromConfigName(input: string): postgres.Sql<Record<string, unknown>> {
+       const temp = this.createDbConnection(Configuration.services[input].pg);
+       Configuration.connections[input] = temp;
+       return temp;
     }
-
+    
     private async refreshService(connectionName: string): Promise<boolean> {
         return await this.reCreatePgFunctions(connectionName);
     }
-
+    
     /**
      *
      * @param connection name
      * @returns true if it's done
-     */
-    private async reCreatePgFunctions(connectionName: string): Promise<boolean> {
-        await asyncForEach(pgFunctions(), async (query: string) => {
-            console.log(query);
-            
-            await config
-                .connection(connectionName)
-                .unsafe(query)
-                .catch((error: Error) => logging.error(error, EInfos.createFunc));
+    */
+   private async reCreatePgFunctions(connectionName: string): Promise<boolean> {
+       await asyncForEach(pgFunctions(), async (query: string) => {
+           console.log(query);
+           
+           await config
+           .connection(connectionName)
+           .unsafe(query)
+           .catch((error: Error) => logging.error(error, EInfos.createFunc));
         });
         logging.status(true, EInfos.createFunc).toLogAndFile(true);
         return true;
     }
-
+    
     /**
      *
      * @param port listening port
      * @param message messagu info
-     */
-    addListening(port: number, message: string) {
-        if (Configuration.listenPorts.includes(port)) this.messageListen(`ADD ${message}`, String(port));
-        else
-            app.listen(port, () => {
-                Configuration.listenPorts.push(port);
-                this.messageListen(message, String(port));
-            });
-    }
+    */
+   addListening(port: number, message: string) {
+       if (Configuration.listenPorts.includes(port)) this.messageListen(`ADD ${message}`, String(port));
+       else
+        app.listen(port, () => {
+    Configuration.listenPorts.push(port);
+    this.messageListen(message, String(port));
+});
+}
 
-    /**
-     * initialize configuration class
-     *
+/**
+ * initialize configuration class
+*
      * @param input specific config file
      * @returns true if it's done
-     */
-    async initialisation(input?: string): Promise<boolean> {
-        // get version infos
-        compareVersions().then((result) => {
-            if (result) {
-                Configuration.appVersion = result.appVersion;
-                Configuration.remoteVersion = result.remoteVersion;
-                Configuration.upToDate = result.upToDate;
-            }
-        });
-        // get config File
-        if (this.configFileExist() === true || input) {
-            await this.readConfigFile(input);
-            let status = true;
-            // Add test service
-            Configuration.services[EConstant.test] = this.formatConfig(testDatas["create"]);
+*/
+async initialisation(input?: string): Promise<boolean> {
+    // get version infos
+    compareVersions().then((result) => {
+        if (result) {
+            Configuration.appVersion = result.appVersion;
+            Configuration.remoteVersion = result.remoteVersion;
+            Configuration.upToDate = result.upToDate;
+        }
+    });
+    // get config File
+    if (this.configFileExist() === true || input) {
+        await this.readConfigFile(input);
+        let status = true;
+        // Add test service
+        Configuration.services[EConstant.test] = this.formatConfig(testDatas["create"]);
             // loop on services
             await asyncForEach(
                 // Start connection ALL entries in config file
@@ -474,110 +474,110 @@ class Configuration {
             return true;
         }
     }
-
+    
     /**
      * Add in pool
      * 
      * @param serviceName Name of the service
      * @param input Ipool datas
-     */
-    poolAdd(serviceName: string, input: Ipool) {
-        if (Configuration.pool[serviceName])
-            Configuration.pool[serviceName].push(input);
-        else Configuration.pool[serviceName] = [input];
-    }    
+    */
+   poolAdd(serviceName: string, input: Ipool) {
+       if (Configuration.pool[serviceName])
+        Configuration.pool[serviceName].push(input);
+    else Configuration.pool[serviceName] = [input];
+}    
 
-    /**
-     * Execute one pool data
-     * 
-     * @param service service 
-     * @param input Ipool datas
-     * @returns 
-     */
+/**
+ * Execute one pool data
+ * 
+ * @param service service 
+ * @param input Ipool datas
+ * @returns 
+*/
 
-    async runPool(service: Iservice, input: Ipool[]): Promise<boolean> {
-        console.log( input );
-        asyncForEach(input, async (pool: Ipool) => {
-            this.setServiceState(service, pool.state);
-            
-            executeSql(service, pool.query)
-            .then(() => {
-                logging.init().text(EInfos.queryAfter, EColor.Magenta).status(true, service.name, pool.name).toLogAndFile(true);
-                this.setServiceState(service, EState.normal);
-            }).catch((err: Error) => logging.error(err, EInfos.queryAfter).return(false));
-        });
-        return true;
-    }
+async runPool(service: Iservice, input: Ipool[]): Promise<boolean> {
+    console.log( input );
+    asyncForEach(input, async (pool: Ipool) => {
+        this.setServiceState(service, pool.state);
+        
+        executeSql(service, pool.query)
+        .then(() => {
+            logging.init().text(EInfos.queryAfter, EColor.Magenta).status(true, service.name, pool.name).toLogAndFile(true);
+            this.setServiceState(service, EState.normal);
+        }).catch((err: Error) => logging.error(err, EInfos.queryAfter).return(false));
+    });
+    return true;
+}
 
-    /**
-     * Execute pools
-     * 
-     * @returns 
-     */
-    async runPools(): Promise<boolean> {
-        await asyncForEach(Object.keys(Configuration.pool), async (service: string) => {
-            const myService = this.getService(service);
-            if (Configuration.pool[service]) {
-                await this.runPool(myService, Configuration.pool[service]);
-            }
-        });
-        return true;
-    }
+/**
+ * Execute pools
+ * 
+ * @returns 
+*/
+async runPools(): Promise<boolean> {
+    await asyncForEach(Object.keys(Configuration.pool), async (service: string) => {
+        const myService = this.getService(service);
+        if (Configuration.pool[service]) {
+            await this.runPool(myService, Configuration.pool[service]);
+        }
+    });
+    return true;
+}
 
-    /**
+/**
      * return config name from databse name
-     *
-     * @param input config to search
+*
+* @param input config to search
      * @returns config name or undefined
-     */
-    public getConfigNameFromDatabase(input: string): string | undefined {
-        if (input !== "all") {
-            const aliasName = Object.keys(Configuration.services).filter((configName: string) => Configuration.services[configName].pg.database === input)[0];
-            if (aliasName) return aliasName;
-            throw new Error(messages.str(EErrors.noConfig, input));
+*/
+public getConfigNameFromDatabase(input: string): string | undefined {
+    if (input !== "all") {
+        const aliasName = Object.keys(Configuration.services).filter((configName: string) => Configuration.services[configName].pg.database === input)[0];
+        if (aliasName) return aliasName;
+        throw new Error(messages.str(EErrors.noConfig, input));
         }
     }
-
+    
     /**
      * return config name from config name
-     *
-     * @param input config to search
-     * @returns config name or undefined
-     */
-    public getConfigNameFromName(name: string): string | undefined {
-        if (name) {
-            if (Object.keys(Configuration.services).includes(name)) return name;
-            Object.keys(Configuration.services).forEach((configName: string) => {
-                if (Configuration.services[configName].alias.includes(name)) return configName;
+    *
+    * @param input config to search
+    * @returns config name or undefined
+    */
+   public getConfigNameFromName(name: string): string | undefined {
+       if (name) {
+           if (Object.keys(Configuration.services).includes(name)) return name;
+           Object.keys(Configuration.services).forEach((configName: string) => {
+               if (Configuration.services[configName].alias.includes(name)) return configName;
             });
         }
     }
 
     /**
      * Return Iservice Formated for Iservice object or name found in json file
-     *
-     * @param input config nome to search
-     * @param name name of the config (if format)
-     * @returns
-     */
-    private formatConfig(input: object | string, name?: string): Iservice {
-        if (typeof input === "string") {
-            name = input;
+    *
+    * @param input config nome to search
+    * @param name name of the config (if format)
+    * @returns
+    */
+   private formatConfig(input: object | string, name?: string): Iservice {
+       if (typeof input === "string") {
+           name = input;
             input = Configuration.services[input];
         }
         const goodDbName = name ? name : input["pg" as keyof object] && input["pg" as keyof object]["database"] ? input["pg" as keyof object]["database"] : `ERROR`;
-
+        
         return formatServiceFile(goodDbName, input);
     }
-
+    
     /**
      * Add config to configuration file
-     *
-     * @param addJson service JSON
-     * @returns formated service
-     */
-    public async addConfig(addJson: object): Promise<Iservice | undefined> {
-        try {
+    *
+    * @param addJson service JSON
+    * @returns formated service
+    */
+   public async addConfig(addJson: object): Promise<Iservice | undefined> {
+       try {
             const formatedConfig = this.formatConfig(addJson);
             if (Configuration.services[formatedConfig.name]) {
                 throw new Error(`Same configuration name found for ${formatedConfig.name}`);
@@ -596,16 +596,16 @@ class Configuration {
 
     /**
      * Process to add an entry in server
-     *
-     * @param key name
-     * @returns true if it's ok
-     */
-    private async addToServer(key: string): Promise<boolean> {
-        // test if service exist
-        return await this.isServiceExist(key, true)
-            .then(async (res: boolean) => {
-                if (res === true) {
-                    await userAccess.post(key, {
+    *
+    * @param key name
+    * @returns true if it's ok
+    */
+   private async addToServer(key: string): Promise<boolean> {
+       // test if service exist
+       return await this.isServiceExist(key, true)
+       .then(async (res: boolean) => {
+           if (res === true) {
+               await userAccess.post(key, {
                         username: Configuration.services[key].pg.user,
                         email: "steandefault@email.com",
                         password: Configuration.services[key].pg.password,
@@ -626,57 +626,57 @@ class Configuration {
                 logging.error(error, "addToServer");
                 process.exit(111);
             });
-    }
-
-    /**
-     *
+        }
+        
+        /**
+         *
      * @returns JSON service create
-     */
-    async export(): Promise<Record<string, any>> {
-        return await this.adminConnection()
-            .unsafe("SELECT datas FROM services")
-            .then((res: any) => {
-                const fileContent = fs.readFileSync(paths.configFile.fileName, "utf8");
-                const result: JSON = JSON.parse(decrypt(fileContent));
-                res.forEach((e: JSON) => {
-                    result[e["datas" as keyof object]["name"]] = e["datas" as keyof object];
+        */
+       async export(): Promise<Record<string, any>> {
+           return await this.adminConnection()
+           .unsafe("SELECT datas FROM services")
+           .then((res: any) => {
+               const fileContent = fs.readFileSync(paths.configFile.fileName, "utf8");
+               const result: JSON = JSON.parse(decrypt(fileContent));
+               res.forEach((e: JSON) => {
+                   result[e["datas" as keyof object]["name"]] = e["datas" as keyof object];
                 });
                 this.write(result);
                 return hidePassword(result);
             });
-    }
+        }
 
-    /**
+        /**
      * Create dataBase
-     *
-     * @param serviceName service name
-     * @returns true if it's done
-     */
-    private async createDB(connectName: string): Promise<boolean> {
-        logging.message(EInfos.createDB, Configuration.services[connectName].pg.database).toLogAndFile(true);
+        *
+        * @param serviceName service name
+        * @returns true if it's done
+        */
+       private async createDB(connectName: string): Promise<boolean> {
+           logging.message(EInfos.createDB, Configuration.services[connectName].pg.database).toLogAndFile(true);
         return await createDatabase(connectName)
-            .then(async () => {
-                this.createDbConnectionFromConfigName(connectName);
-                return logging.message(`${EInfos.db} ${EInfos.createDB} [${Configuration.services[connectName].pg.database}]`, EChar.ok).toLogAndFile(true).result(true);
-            })
+        .then(async () => {
+            this.createDbConnectionFromConfigName(connectName);
+            return logging.message(`${EInfos.db} ${EInfos.createDB} [${Configuration.services[connectName].pg.database}]`, EChar.ok).toLogAndFile(true).result(true);
+        })
             .catch((err: Error) => {
                 return logging.error(err, EInfos.createDB).return(false);
             });
-    }
-
+        }
+        
     /**
      *
      * @param serviceName service name
-     */
+    */
     async deleteTempsTables(serviceName: string): Promise<void> {
         const listTempTables = await this.connection(serviceName)`SELECT array_agg(table_name) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE 'temp%';`;
         const tables = listTempTables[0]["array_agg"];
         if (tables != null)
             logging.status(
                     await this.connection(serviceName)
-                        .begin((sql) => {
-                            tables.forEach(async (table: string) => {
-                                await sql.unsafe(queries.dropTable(table));
+                    .begin((sql) => {
+                        tables.forEach(async (table: string) => {
+                            await sql.unsafe(queries.dropTable(table));
                             });
                         })
                         .then(() => true)
@@ -686,12 +686,12 @@ class Configuration {
                     .to()
                     .log()
                     .file();                    
-    }
-
-    private async isServiceExist(serviceName: string, create: boolean): Promise<boolean> {
-        logging.head(Configuration.services[serviceName].pg.database).toLogAndFile(true);
-
-        return await this.connection(serviceName)`SELECT 1+1 AS result`
+                }
+                
+                private async isServiceExist(serviceName: string, create: boolean): Promise<boolean> {
+                    logging.head(Configuration.services[serviceName].pg.database).toLogAndFile(true);
+                    
+                    return await this.connection(serviceName)`SELECT 1+1 AS result`
             .then(async () => {
                 logging.status(true, EInfos.dbExist).toLogAndFile(true);
                 // delete temp files without async
@@ -706,14 +706,11 @@ class Configuration {
                         Configuration.services[serviceName]._user = res[0].user;
                     }).catch(() => null);
                     // keep test for old service 
-                    if (Configuration.services[serviceName]._partitioned === true) {
-                        // this.poolAdd(serviceName, { name: "Create optimized column", state:EState.optimizing, query: queries.addNbToTable("observation")});
-                        // this.poolAdd(serviceName, { name: "Generate optimized index for datastream", state:EState.optimizing, query: queries.updateNb("datastream", false)});
-                        // this.poolAdd(serviceName, { name: "Generate optimized index for multidatastream", state:EState.optimizing, query: queries.updateNb("multidatastream", false)});                        
+                    if (Configuration.services[serviceName]._partitioned === true) {                     
                         this.setServiceState(Configuration.services[serviceName], EState.normal);
                     } else 
-                         this.setServiceState(Configuration.services[serviceName], EState.normal);
-                }
+                        this.setServiceState(Configuration.services[serviceName], EState.normal);
+                    }
             return true;
         })
         .catch(async (error: Error) => {
@@ -727,10 +724,10 @@ class Configuration {
                 logging.message(EInfos.startCreateDB, Configuration.services[serviceName].pg.database).toLogAndFile(true);
                 if (serviceName !== EConstant.test) return await this.createDB(serviceName);
             } else return logging.error(error, EErrors.connUser).return(false);
-                return false;
-            });
+            return false;
+        });
     }
-
+    
     /**
      *
      * @param path path with filename
@@ -752,57 +749,60 @@ class Configuration {
 
     /**
      * Write an encrypt config file in json file
-     *
-     * @returns true if it's done
-     */
-    // public save(myPath: string): boolean {
-    //     logging.message(EInfos.writeConfig, `in ${myPath}`).toLogAndFile(true);
-    //     const datas: string = JSON.stringify({ admin: Configuration.services[EConstant.admin] }, null, 4);
-    //     if (this.writeFile(path.join(myPath, "configuration.json"), isProduction() === true ? encrypt(datas) : datas) === false) return false;
-    //     if (this.writeFile(path.join(myPath, ".key"), paths.key) === false) return false;
-    //     return true;
-    // }
-
+    *
+    * @returns true if it's done
+    */
+   public save(myPath: string): boolean {
+        logging.message(EInfos.writeConfig, `in ${myPath}`).toLogAndFile(true);
+        const datas: string = JSON.stringify({ admin: Configuration.services[EConstant.admin] }, null, 4);
+        if (this.writeFile(path.join(myPath, "configuration.json"), isProduction() === true ? encrypt(datas) : datas) === false) return false;
+        if (this.writeFile(path.join(myPath, ".key"), paths.key) === false) return false;
+        return true;
+    }
+    
     /**
      * Write an encrypt config file in json file
-     *
-     * @returns true if it's done
-     */
-    public async update(input: Iservice): Promise<boolean> {
-        if (input.name !== EConstant.admin) {
-            // const datas = `UPDATE public.services SET "datas" = ${FORMAT_JSONB(input)} WHERE "name" = '${input.name}'`;
-            return await this.adminConnection()
-                .unsafe(queries.updateConfig(input.name, FORMAT_JSONB(input)))
-                .then(async () => await this.refreshService(input.name))
-                .catch((err) => logging.error(err, EErrors.serviceUpdateteError).return(false));
+    *
+    * @returns true if it's done
+    */
+   public async update(input: Iservice): Promise<boolean> {
+       if (input.name !== EConstant.admin) {
+           return await this.adminConnection()
+           .unsafe(queries.updateConfig(input.name, FORMAT_JSONB(input)))
+           .then(async () => await this.refreshService(input.name))
+           .catch((err) => logging.error(err, EErrors.serviceUpdateteError).return(false));
         }
         return false;
     }
-
+    
+    public removeConfig(input: string) {
+        delete Configuration.services[input];
+    }
+    
     public async delete(input: string): Promise<postgres.Sql<Record<string, unknown>> | undefined> {
         try {
             return await this.adminConnection()
-                .unsafe(queries.terminate(input))
-                .then(
-                    async () =>
-                        await this.adminConnection()
-                            .unsafe(queries.dropDB(input))
-                            .then(() => this.adminConnection())
-                );
+            .unsafe(queries.terminate(input))
+            .then(
+                async () =>
+                    await this.adminConnection()
+                .unsafe(queries.dropDB(input))
+                .then(() => this.adminConnection())
+            );
         } catch (error) {
             logging.error(error, EErrors.serviceUpdateteError);
             return;
         }
     }
-
+    
     async start(restart: boolean): Promise<boolean> {
         // set main state
         this.setGlobalState(restart === true ? EState.restarting : EState.starting);
         logging.start(restart === true ? "Restart" : "Start").toLogAndFile(true);
         return await this.initialisation()
-            .then(async () => {
-                // without wait for it
-                
+        .then(async () => {
+            // without wait for it
+            
                 config.runPools().then((res: boolean) => {
                     if (res === true) this.setGlobalState(EState.normal);
                 });
@@ -814,7 +814,7 @@ class Configuration {
                 return false;
             });
     }
-
+    
     out() {
         process.exit(100);
     }

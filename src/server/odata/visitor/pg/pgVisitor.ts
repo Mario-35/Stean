@@ -6,7 +6,7 @@
  *
  */
 
-import { simpleQuotes, isReturnGraph, isTest, removeAllQuotes, returnFormats, formatPgTableColumn, doubleQuotes } from "../../../helpers";
+import { simpleQuotes, isReturn, isTest, removeAllQuotes, returnFormats, formatPgTableColumn, doubleQuotes } from "../../../helpers";
 import { IodataContext, Ientity, IpgQuery, koaContext, IvisitRessource, IentityColumnAliasOptions, IentityColumn } from "../../../types";
 import { Token } from "../../parser/lexer";
 import { Literal } from "../../parser/literal";
@@ -263,7 +263,7 @@ export class PgVisitor extends Visitor {
         if (node.value.format) this.returnFormat = returnFormats[node.value.format as keyof object];
         if ([returnFormats.graph, returnFormats.graphDatas, returnFormats.csv].includes(this.returnFormat)) this.noLimit();
         this.showRelations = false;
-        if (isReturnGraph(this)) {
+        if (isReturn(this, [returnFormats.graph, returnFormats.graphDatas])) {
             this.showRelations = false;
         }
     }
