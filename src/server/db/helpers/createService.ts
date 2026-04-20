@@ -52,6 +52,7 @@ export const createService = async (dataInput: Record<string, any>): Promise<Rec
     try {
         await createDatabase(newServiceName);
         results[messages.str(EInfos.create, mess)] = EChar.ok;
+
     } catch (error) {
         results[messages.str(EInfos.create, mess)] = logging.error(error).return(EChar.notOk);
         ;
