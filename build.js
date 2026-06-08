@@ -10,8 +10,7 @@ var mkdirp = require("mkdirp");
 var archiver = require("archiver");
 var crypto = require("crypto");
 process.env.NODE_ENV = "build";
-const _DEST = "build/server/";
-const FINAL = "build/";
+const _DEST = "build/";
 
 function extend() {
   var defineProperty = Object.defineProperty;
@@ -272,11 +271,11 @@ packageJson["scripts"] = {
   "start": "pm2 start stean.js --watch"
 }
   
-fs.writeFile(FINAL + "package.json", JSON.stringify(packageJson, null, 2), { encoding: "utf-8" },function (err) {
+fs.writeFile(_DEST + "package.json", JSON.stringify(packageJson, null, 2), { encoding: "utf-8" },function (err) {
   if (err) console.log(err);
   messageWrite("package.json", "user mode");
   const start = fs.readFileSync(_DEST + "start.js", "utf-8");
-  writeFile(FINAL + "stean.js", start.replace('require(".");', 'require("./server/index");'), "create start file");
+  writeFile(_DEST + "stean.js", start.replace('require(".");', 'require("./server/index");'), "create start file");
   if (mode.includes("dev")) {
      copyFileSync("./src/server/configuration/configuration.json", _DEST + "configuration/");
    }
@@ -340,11 +339,11 @@ fs.writeFile(FINAL + "package.json", JSON.stringify(packageJson, null, 2), { enc
   const fileRelease = `stean_${packageJson.version}.zip`
   fs.writeFile(`./builds/stean_latest.info`, JSON.stringify({ "version": packageJson.version, "date": new Date().toLocaleDateString() + "-" + new Date().toLocaleTimeString()}), "utf-8");
 
-  if (!mode.includes("docker")) zipDirectory(FINAL, `./builds/${fileRelease}`).then(function (e) {
-    console.log(`\x1b[34m ${FINAL} \x1b[36m zip to ==> \x1b[37m ${fileRelease} \x1b[0m`);
+  if (!mode.includes("docker")) zipDirectory(_DEST, `./builds/${fileRelease}`).then(function (e) {
+    console.log(`\x1b[34m ${_DEST} \x1b[36m zip to ==> \x1b[37m ${fileRelease} \x1b[0m`);
 
-    zipDirectory(FINAL, `./builds/stean_latest.zip`).then(function (e) {
-      console.log(`\x1b[34m ${FINAL} \x1b[36m zip to ==> \x1b[37m stean_latest.zip \x1b[0m`);
+    zipDirectory(_DEST, `./builds/stean_latest.zip`).then(function (e) {
+      console.log(`\x1b[34m ${_DEST} \x1b[36m zip to ==> \x1b[37m stean_latest.zip \x1b[0m`);
     }); 
   }); 
   

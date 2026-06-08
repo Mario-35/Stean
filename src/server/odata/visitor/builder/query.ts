@@ -209,12 +209,14 @@ export class Query {
         }
         return undefined;
     }
+    
     private pgQueryToString(input: IpgQuery | undefined): string | undefined {
         console.log(logging.whereIam(new Error().stack));
+        const ovverideOrderBy = (input && input.where && input.where.includes("@ORDERBY@"));        
         return input
-            ? `SELECT ${input.select}${EConstant.return} FROM ${input.from}${EConstant.return} ${input.join ? input.join : ""} ${input.where ? `WHERE ${input.where}${EConstant.return}` : ""}${
+            ? `SELECT ${input.select}${EConstant.return} FROM ${input.from}${EConstant.return} ${input.join ? input.join : ""} ${input.where ? `WHERE ${input.where.replace("@ORDERBY@",`${input.orderBy ? ` ORDER BY ${cleanStringComma(input.orderBy, ["ASC", "DESC"])}` : ""}`)}${EConstant.return}` : ""}${
                   input.groupBy ? `GROUP BY ${cleanStringComma(input.groupBy)}${EConstant.return}` : ""
-              }${input.orderBy ? `ORDER BY ${cleanStringComma(input.orderBy, ["ASC", "DESC"])}${EConstant.return}` : ""}${
+              }${input.orderBy && !ovverideOrderBy ? `ORDER BY ${cleanStringComma(input.orderBy, ["ASC", "DESC"])}${EConstant.return}` : ""}${
                   input.skip && input.skip > 0 ? `OFFSET ${input.skip}${EConstant.return}` : ""
               } ${(input.limit || input.limit === 0) && +input.limit > -1 ? `LIMIT ${input.limit}${EConstant.return}` : ""}`
             : undefined;

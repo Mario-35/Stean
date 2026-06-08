@@ -7,7 +7,7 @@
         "resolveJsonModule": true,
         "experimentalDecorators": true,
         "strict": true,
-        "moduleResolution": "node",
+        "moduleResolution": "nodenext",
         "noUnusedLocals": true,
         "skipLibCheck": true,
         "noUnusedParameters": false,
@@ -18,9 +18,10 @@
             "node_modules/@types",
             "./types"
         ],
-        "outDir": "build/server",
         "noEmit": false,
-        "module": "commonjs",
+        "module": "node16",
+    "outDir": "./build",
+    "rootDir": "./src/server",
         "target": "es2022",
         "lib": [
             "es2017"
@@ -28,15 +29,11 @@
     },
     "ts-node": {
         "compilerOptions": {
-            "module": "commonjs"
+            "module": "nodenext"
         }
     },
     "include": [
-        "src/server/**/*.ts",
-        "env", 
-        "src/server/db/helpers/getEntitesListts", 
-        "src/server/views/monitor/index.js", 
-        "src/server/views/class/tracests"
+        "src/server/**/*.ts"
     ],
     "exclude": [
         "node_modules",
