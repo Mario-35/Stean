@@ -50,7 +50,7 @@ describe("Odata BuiltInMath [9.3.3.5.2]", () => {
                 should.not.exist(err);
                 res.status.should.equal(200);
                 res.type.should.equal("application/json");
-                res.body.value.length.should.eql(3);
+                res.body.value.length.should.eql(183);
                 addToApiDoc({ ...infos, result: limitResult(res) });
                 done();
             });
@@ -69,7 +69,7 @@ describe("Odata BuiltInMath [9.3.3.5.2]", () => {
                 should.not.exist(err);
                 res.status.should.equal(200);
                 res.type.should.equal("application/json");
-                res.body.value.length.should.eql(1);
+                res.body.value.length.should.eql(183);
                 addToApiDoc({ ...infos, result: limitResult(res) });
 
                 done();
@@ -89,7 +89,7 @@ describe("Odata BuiltInMath [9.3.3.5.2]", () => {
                 should.not.exist(err);
                 res.status.should.equal(200);
                 res.type.should.equal("application/json");
-                res.body.value.length.should.eql(3);
+                res.body.value.length.should.eql(183);
                 addToApiDoc({ ...infos, result: limitResult(res) });
 
                 done();

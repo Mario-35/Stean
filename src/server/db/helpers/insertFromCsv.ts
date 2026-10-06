@@ -126,8 +126,8 @@ export class InsertFromCsv {
             const kelResult = (def: any) => {
                 const tmp = sqlRequest.columns.findIndex((element) => element === "result");
                 return tmp > 0
-                    ? `json_build_object('value', TRANSLATE (SUBSTRING (value${tmp} FROM '(([0-9]+.*)*[0-9]+)'), '[]','')::FLOAT)`
-                    : `json_build_object('value', CASE SUBSTRING("${this.paramsFile.tempTable}"."${def}" FROM 1 FOR 1) ~ '^[0-9]' WHEN 'true' THEN CAST(REPLACE("${this.paramsFile.tempTable}"."${def}",',','.') AS FLOAT) ELSE NULL END)`;
+                    ? `json_build_object('value', TRANSLATE (SUBSTRING (value${tmp} FROM '[+-]?([0-9]*[.])?[0-9]+'), '[]','')::FLOAT)`
+                    : `json_build_object('value', CASE SUBSTRING("${this.paramsFile.tempTable}"."${def}" FROM 1 FOR 2) ~ '[0-9]+' WHEN 'true' THEN CAST(REPLACE("${this.paramsFile.tempTable}"."${def}",',','.') AS FLOAT) ELSE NULL END)`;
             };
             const kel = (search: string, def: any) => {
                 const tmp = sqlRequest.columns.findIndex((element) => element === search);

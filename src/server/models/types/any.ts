@@ -20,7 +20,7 @@ export class Any extends Core {
         this._.alias = function alias(options: IentityColumnAliasOptions) {
             if (options.context && options.context.target === EQuery.Where) {
                 const nbs = [1, 2, 3, 4, 5];
-                const translate = `TRANSLATE (SUBSTRING (${doubleQuotes(options.columnName)}->>'value' FROM '(([0-9]+.*)*[0-9]+)'), '[]','')`;
+                const translate = `TRANSLATE (SUBSTRING (${doubleQuotes(options.columnName)}->>'value' FROM '[+-]?([0-9]*[.])?[0-9]+'), '[]','')`;
                 const isOperation = options.operation && options.operation.trim() != "";
                 // json path = had to be ==
                 // if (options && !options.context.onEachResult && options.context.sign === "=") options.context.sign = "==";
