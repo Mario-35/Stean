@@ -113,3 +113,4 @@
     code review
 ## version 1.4.4
     correction csv import negative value 
+    add "::timestamp without time zone" to timestanp conversion to have correct TZ

@@ -9,7 +9,7 @@
 import { IcsvColumn, IcsvFile, IcsvImport, Iservice, koaContext } from "../../types";
 import { executeSql, executeSqlValues, streamCsvFile } from ".";
 import { logging } from "../../log";
-import { EChar } from "../../enums";
+import { EChar, EConstant } from "../../enums";
 import { OBSERVATION } from "../../models/entities";
 import { splitLast } from "../../helpers";
 import readline from "readline";
@@ -54,14 +54,14 @@ export class InsertFromCsv {
             if (regexDateHour.test(splitColumns[0]) == true || regexDateHourTz.test(splitColumns[0]) == true) {
                 returnValue.columns = this.creteNbColums(splitColumns.length);
                 fileStream.destroy();
-                returnValue.dateSql = `TO_TIMESTAMP(REPLACE("${this.paramsFile.tempTable}".value0, '24:00:00', '23:59:59'), 'DD/MM/YYYY HH24:MI:SS')`;
+                returnValue.dateSql = `TO_TIMESTAMP(REPLACE("${this.paramsFile.tempTable}".value0, '24:00:00', '23:59:59'), 'DD/MM/YYYY HH24:MI:SS')${EConstant.timeWithoutTZ}`;
                 return returnValue;
             } else if (regexDate.test(splitColumns[0]) == true && regexHour.test(splitColumns[1]) == true) {
                 returnValue.columns = Array(splitColumns.length)
                     .fill("")
                     .map((_, i) => `value${i}`);
                 fileStream.destroy();
-                returnValue.dateSql = `TO_TIMESTAMP(CONCAT("${this.paramsFile.tempTable}".value0, REPLACE("${this.paramsFile.tempTable}".value1, '24:00:00', '23:59:59')), 'DD/MM/YYYYHH24:MI:SS:MS')`;
+                returnValue.dateSql = `TO_TIMESTAMP(CONCAT("${this.paramsFile.tempTable}".value0, REPLACE("${this.paramsFile.tempTable}".value1, '24:00:00', '23:59:59')), 'DD/MM/YYYYHH24:MI:SS:MS')${EConstant.timeWithoutTZ}`;
                 return returnValue;
                 // detect if is csv observation save
             } else if (Object.keys(OBSERVATION.columns).includes(splitColumns[0]) || Object.keys(OBSERVATION.columns).includes(splitColumns[1])) {

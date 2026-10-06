@@ -32,5 +32,6 @@ export const EConstant = Object.freeze({
     port: 5432,
     voidtable: "voidTable",
     voidSql: "SELECT 1=1",
-    stringException: ["CONCAT", "CASE", "COALESCE"]
+    stringException: ["CONCAT", "CASE", "COALESCE"],
+    timeWithoutTZ: "::timestamp without time zone"
 });
