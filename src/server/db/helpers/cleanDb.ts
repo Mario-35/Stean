@@ -33,13 +33,15 @@ export const cleanDb = async (ctx: koaContext) => {
     
     await asyncForEach(listTables, async (table: string) => {
         logging.status(true, queries.cluster(table));
-        const query = `CLUSTER "${table}" USING "${table}_phenomenonTime_idx";`;
+        const query = [            
+            queries.clean24H("resultTime"),
+            queries.clean24H("phenomenonTime"),
+            `CLUSTER "${table}" USING "${table}_phenomenonTime_idx";`];
         result[`Cluster for ${table}`] = 
         await executeSql(ctx._.service, query)
             .then(() => EChar.ok)
             .catch(async (error: Error) => {
-                if (error["code" as keyof object] === "42704") {
-                    console.log("create Index");                    
+                if (error["code" as keyof object] === "42704") {                 
                         return await executeSql(ctx._.service,`CREATE INDEX "${table}_phenomenonTime_idx" ON public.${table} USING btree ("phenomenonTime")`).then(async () => {
                             return await executeSql(ctx._.service, query)
                             .then(() => EChar.ok)

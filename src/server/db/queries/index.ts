@@ -26,6 +26,11 @@ class Queries {
         return `CREATE DATABASE ${name};`;
     }
 
+    clean24H(name: string) {
+        return `UPDATE "observation" SET "${name}" = "${name}" + INTERVAL '1 sec' WHERE EXTRACT(HOUR FROM "${name}")=23 and EXTRACT(MINUTE FROM "${name}")=59 and EXTRACT(SECOND FROM "${name}")=59`;
+    }
+
+
     terminate(name: string) {
         return `SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname = '${name}';`;
     }
