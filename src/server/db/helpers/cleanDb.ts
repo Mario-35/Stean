@@ -11,17 +11,13 @@ import { config } from "../../configuration";
 import { EChar, EState } from "../../enums";
 import { asyncForEach } from "../../helpers";
 import { logging } from "../../log";
-// import { logging } from "../../log";
 import { koaContext } from "../../types";
 import { queries } from "../queries";
 
 export const cleanIndexes = async (ctx: koaContext, table: string) => {
     executeSqlValues(ctx._.service, `SELECT indexname FROM pg_indexes WHERE tablename = '${table}' and indexname LIKE '%_idx'`).then(async (res: any) => {
-        await asyncForEach(res, async (table: string) => {
-            console.log(table);
-            
+        await asyncForEach(res, async (table: string) => {            
             await executeSql(ctx._.service, queries.dropIndex(table));
-
         });
         
     });    

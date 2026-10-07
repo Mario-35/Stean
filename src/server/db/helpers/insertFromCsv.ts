@@ -168,6 +168,7 @@ export class InsertFromCsv {
                 '{"import": "${fileImport}","date": "${dateImport}"}'  
                FROM "${this.paramsFile.tempTable}" ON CONFLICT DO NOTHING returning 1`);
                 });
+                this.clean();
                 return {
                     count: stream,
                     query: scriptSql
@@ -175,6 +176,13 @@ export class InsertFromCsv {
             }
         }
     }
-}
 
-// json_build_object('value', CASE "${this.paramsFile.tempTable}".${kel("result", "value2")} WHEN '---' THEN NULL WHEN '#REF!' THEN NULL ELSE CAST(REPLACE(value2,',','.') AS float) END),
+    clean() {
+        executeSql(this.ctx._.service, [
+            `UPDATE "observation" SET "resultTime" = "resultTime" + INTERVAL '1 sec' WHERE EXTRACT(HOUR FROM "resultTime")=23 and EXTRACT(MINUTE FROM "resultTime")=59 and EXTRACT(SECOND FROM "resultTime")=59`,
+            `UPDATE "observation" SET "phenomenonTime" = "phenomenonTime" + INTERVAL '1 sec' WHERE EXTRACT(HOUR FROM "phenomenonTime")=23 and EXTRACT(MINUTE FROM "phenomenonTime")=59 and EXTRACT(SECOND FROM "phenomenonTime")=59`
+        ]).catch((error: any) => {
+            console.error(error);
+        });         
+    }
+}
