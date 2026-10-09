@@ -8,7 +8,7 @@
 process.env.NODE_ENV = "test";
 import chai from "chai";
 import chaiHttp from "chai-http";
-import { IApiDoc, IApiInput, prepareToApiDoc, generateApiDoc, limitResult, testVersion, _RAWDB, identification, apiInfos, blank, infos, } from "./constant";
+import { IApiDoc, IApiInput, prepareToApiDoc, generateApiDoc, limitResult, testVersion, _RAWDB, identification, apiInfos, blank, infos } from "./constant";
 import { server } from "../../server/index";
 import { addStartNewTest, addTest, writeLog } from "./tests";
 import { Ientity } from "../../server/types";
@@ -116,7 +116,7 @@ describe("endpoint : Service", () => {
                 .get(`/test/${infos.request}`)
                 .end((err, res) => {
                     should.not.exist(err);
-                    res.body.test.should.equal('starting');
+                    res.body.test.should.equal('normal');
                     done();
                 });
         });
@@ -133,7 +133,7 @@ describe("endpoint : Service", () => {
                 .get(`/test/${infos.request}`)
                 .end((err, res) => {
                     should.not.exist(err);
-                    res.body.test.should.equal('starting');
+                    res.body.stean.should.equal('creating');
                     done();
                 });
         });

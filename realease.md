@@ -114,3 +114,6 @@
 ## version 1.4.4
     correction csv import negative value 
     add "::timestamp without time zone" to timestanp conversion to have correct TZ
+    add tests for 24:00:00 hour
+    add tests for nulls errors result 
+    add tests for négative inserts

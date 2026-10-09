@@ -194,15 +194,15 @@ describe("CSV Import", function () {
             reference: "",
             request: `${testVersion}/CreateObservations`,
             params: {
-    "header": false,
-    "nan": true,
-    "columns": {
-        "1": {
-            "Datastream": 2,
-            "FeaturesOfInterest": 1
-        }
-    }
-}
+                "header": false,
+                "nan": true,
+                "columns": {
+                    "1": {
+                        "Datastream": 2,
+                        "FeaturesOfInterest": 1
+                    }
+                }
+            }
         });
         chai.request(server)
             .post(`/test/${infos.request}`)
@@ -223,6 +223,44 @@ describe("CSV Import", function () {
                     done();
                 }
             });
-    });    
+    });
 
+    it("should return 10 observations with special NULL values added from csv file", (done) => {
+        const infos = addTest({
+            type: "post",
+            short: "CreateObservations with multi csv attached file",
+            description: "Import multi csv file",
+            reference: "",
+            request: `${testVersion}/CreateObservations`,
+            params: {
+                "header": false,
+                "nan": true,
+                "columns": {
+                    "1": {
+                        "Datastream": 2,
+                        "FeaturesOfInterest": 1
+                    }
+                }
+            }
+        });
+        chai.request(server)
+            .post(`/test/${infos.request}`)
+            .field("Content-Type", "multipart/form-data")
+            .field("datas", JSON.stringify(infos.params))
+            .field("method", "POST")
+            .field("nb", "1")
+            .attach("file", "./src/test/integration/files/na.csv")
+            .set("Cookie", `${EConstant.appName}=${token}`)
+            .end((err: Error, res: any) => {
+                if (err) console.log(err);
+                else {
+                    should.not.exist(err);
+                    res.should.have.status(201);
+                    res.body[0].should.eql("Add 10 on 10 lines from na.csv");
+                    addToApiDoc({ ...infos, result: limitResult(res) });
+                    addPostFile(infos);
+                    done();
+                }
+            });
+    });
 });

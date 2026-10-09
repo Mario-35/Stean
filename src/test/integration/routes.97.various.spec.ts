@@ -21,10 +21,10 @@ const tests: Record<string, any> = {
     "/test/v1.1/Things?$filter=Datastreams/unitOfMeasurement/name eq 'Pression'": 1,
     "/test/v1.1/Things?$filter=Datastreams/unitOfMeasurement/name eq 'PM 2.5 Particulates (ug/m3)'": 1,
     "/test/v1.1/Observations?$filter=result gt 290 or result eq 250": 28,
-    "/test/v1.1/Observations?$filter=length(result) le 2": 286,
+    "/test/v1.1/Observations?$filter=length(result) le 2": 296,
     "/test/v1.1/Datastreams?$filter=ObservedProperty/name eq 'stream level'": 2,
     "/test/v1.1/Things?$filter=Datastreams/Observations/resultTime ge 2020-06-01T00:00:00Z and Datastreams/Observations/resultTime le 2022-07-01T00:00:00Z": 4,
-    "http://localhost:8029/test/v1.1/Observations?$debug=true&$filter=result%20eq%20-0.1 and resultTime eq '1994-02-1T00:00:00+01:00'": 1
+    "/test/v1.1/Observations?$filter=result eq -0.1 and resultTime eq '1994-02-13T00:00:00+01:00'": 1
     // "/test/v1.1/Locations?$filter=geo.intersects(location, geography'POLYGON (( -2.216815652511258 48.861982410214154, -2.0597541784431996 46.54337219625134, 2.8733501863528375 46.333340506967716, 1.413958211358164 48.61209155292218, 0.009716371272475044 48.95906378031344, -2.216815652511258 48.861982410214154))') and location/type eq 'Point'": 5,
     // "/test/v1.1/Locations?$filter=geo.intersects(geography'POLYGON ((-2.216815652511258 48.861982410214154, -2.0597541784431996 46.54337219625134, 2.8733501863528375 46.333340506967716, 1.413958211358164 48.61209155292218, 0.009716371272475044 48.95906378031344, -2.216815652511258 48.861982410214154))', location) and location/type eq 'Point'": 5,
     // "/test/v1.1/Things?$filter=Datastreams/Observations/FeatureOfInterest/id eq 'FOI_1' and Datastreams/Observations/resultTime ge 2010-06-01T00:00:00Z and date(Datastreams/Observations/resultTime) le date(2010-07-01T00:00:00Z)",

@@ -106,7 +106,7 @@ describe("Output formats", () => {
                     res.status.should.equal(200);
                     res.type.should.equal("application/json");
                     res.body.value[0].components.should.includes("Datastream");
-                    res.body["@iot.count"].should.eql(562);
+                    res.body["@iot.count"].should.eql(572);
                     done();
                 });
         });
@@ -118,7 +118,7 @@ describe("Output formats", () => {
                     res.status.should.equal(200);
                     res.type.should.equal("application/json");
                     res.body.value[0].components.should.includes("Datastream");
-                    res.body["@iot.count"].should.eql(562);
+                    res.body["@iot.count"].should.eql(572);
                     res.body.value[0]["dataArray"][0][2]["@iot.id"].should.equal(2);
                     done();
                 });
@@ -133,7 +133,7 @@ describe("Output formats", () => {
                     res.body.value[0].components.should.includes("Datastream");
                     Object.keys(res.body.value[0]["dataArray"][0][2]).should.include("@iot.id");
                     Object.keys(res.body.value[0]["dataArray"][0][2]).should.include("name");
-                    res.body["@iot.count"].should.eql(562);
+                    res.body["@iot.count"].should.eql(572);
                     done();
                 });
         });
