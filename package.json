@@ -31,7 +31,7 @@
         "upProd": "npm run build-ts && node build.js && git add -u && git commit --file .git/COMMIT_EDITMSG && git push",
         "upDev": "npm run build-ts && node build.js dev && git add -u && git commit --file .git/COMMIT_EDITMSG && git push",
         "local": "npm run test && npm run buildDev",
-        "publish": "npm run build && git add -u && git commit -m \"version 1.4.1\" && git push origin HEAD:main",
+        "publish": "npm run build && git add -u && git commit -m \"version 1.4.2\" && git push origin HEAD:main",
         "------TEST-------": "",
         "test": "set NODE_ENV=test && rimraf ./src/test/tests.md && node node_modules/mocha/bin/mocha -r ts-node/register src/test/integration/**/*.spec.ts",
         "redo": "rimraf node_modules/ && npm install",
