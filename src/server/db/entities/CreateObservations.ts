@@ -8,10 +8,10 @@
 
 import { Common } from "./common";
 import { IcsvColumn, IcsvFile, Id, IreturnResult, IstreamInfos, koaContext } from "../../types";
-import { executeSql, executeSqlValues, dateToDateWithTimeZone, InsertFromCsv } from "../helpers";
+import { executeSql, executeSqlValues, InsertFromCsv } from "../helpers";
 import { doubleQuotes, asyncForEach, splitLast, makeNull } from "../../helpers";
 import { messages } from "../../messages/";
-import { EChar, EConstant, EDatesType, EErrors, EHttpCode, EInfos, EState } from "../../enums";
+import { EChar, EConstant, EErrors, EHttpCode, EInfos, EState } from "../../enums";
 import util from "util";
 import { models } from "../../models";
 import { logging } from "../../log";
@@ -71,7 +71,7 @@ export class CreateObservations extends Common {
                         ? `'{"value": [${elem}]}'`
                         : typeof elem === "string"
                         ? elem.endsWith("Z")
-                            ? `TO_TIMESTAMP('${dateToDateWithTimeZone(elem)}', '${EDatesType.dateImport}')${EConstant.timeWithoutTZ}`
+                            ? `TO_TIMESTAMP(REPLACE('${elem}', 'T', ' '), 'YYYY-MM-DD HH24:MI:SS')${EConstant.timeWithoutTZ}`
                             : formatResult(elem, (index === this.indexResult && type === "VALUES"))
                         : `${separateur}{${elem}}${separateur}`
                     : formatResult(elem, (index === this.indexResult && type === "VALUES"))

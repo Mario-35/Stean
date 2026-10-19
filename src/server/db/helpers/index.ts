@@ -13,7 +13,6 @@ export { createDatabase } from "../createDb";
 export { createService } from "./createService";
 export { createTable } from "./createTable";
 export { createUser } from "./createUser";
-export { dateToDateWithTimeZone } from "./dateToDateWithTimeZone";
 export { getDBDateNow } from "./getDBDateNow";
 export { removeKeyFromUrl } from "./removeKeyFromUrl";
 export { getEntityIdInDatas } from "./getEntityIdInDatas";

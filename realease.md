@@ -111,9 +111,11 @@
     correction test state
 ## version 1.4.0
     code review
-## version 1.4.4
+## version 1.4.1
     correction csv import negative value 
     add "::timestamp without time zone" to timestanp conversion to have correct TZ
     add tests for 24:00:00 hour
     add tests for nulls errors result 
     add tests for négative inserts
+## version 1.4.2
+    error time zone in create observation 
