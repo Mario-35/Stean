@@ -70,13 +70,15 @@ check_node() {
     if ! command -v node > /dev/null
     then
         echo "Installing Node..."
-        sudo  curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
-        sudo apt install nodejs
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.8/install.sh | bash
+        \. "$HOME/.nvm/nvm.sh"
+        nvm install 24
         NODEVER=$(node -v) 
     else
         NODEVER=$(node -v) 
     fi    
 }
+
 
 # Function to check PostgreSQL-postgis and install it if not
 check_gnupg() {
