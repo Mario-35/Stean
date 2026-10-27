@@ -71,13 +71,8 @@ check_node() {
     then
         echo "Installing Node..."
         curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.8/install.sh | bash
-        # set env
-        env NVM_DIR="${HOME:-/root}/.nvm"
-
-        # install node
-        bash -c "source $NVM_DIR/nvm.sh && nvm install $NODE_VERSION"
-        # set ENTRYPOINT for reloading nvm-environment
-        ENTRYPOINT ["bash", "-c", "source $NVM_DIR/nvm.sh && exec \"$@\"", "--"]
+        \. "$HOME/.nvm/nvm.sh"
+        nvm install 24
         NODEVER=$(node -v) 
     else
         NODEVER=$(node -v) 
@@ -92,7 +87,7 @@ check_gnupg() {
     else
         echo "gnupg2 Not installed" #If not installed
         echo "gnupg2 Installing..."
-        sudo apt install gnupg2 -y #installation
+        sudo apt install gnupg2 #installation
     fi
 }
 
@@ -265,6 +260,13 @@ run_stean() {
 }
 
 check_gnupg;
+check_pg;
 check_node;
-
+check_pm2;
+check_unzip;
+check_dist
+stop_stean
+install_stean
+create_run_script;
+logo;
 
