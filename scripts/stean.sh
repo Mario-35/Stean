@@ -86,7 +86,7 @@ check_gnupg() {
     else
         echo "gnupg2 Not installed" #If not installed
         echo "gnupg2 Installing..."
-        sudo apt install gnupg2 #installation
+        sudo apt install gnupg2 -y #installation
     fi
 }
 
