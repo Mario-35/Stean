@@ -260,8 +260,8 @@ run_stean() {
 }
 
 check_gnupg;
-check_pg;
 check_node;
+check_pg;
 check_pm2;
 check_unzip;
 check_dist
