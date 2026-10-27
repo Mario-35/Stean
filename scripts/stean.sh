@@ -72,7 +72,7 @@ check_node() {
         echo "Installing Node..."
         curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.8/install.sh | bash
         # set env
-        ENV NVM_DIR="${HOME:-/root}/.nvm"
+        env NVM_DIR="${HOME:-/root}/.nvm"
 
         # install node
         bash -c "source $NVM_DIR/nvm.sh && nvm install $NODE_VERSION"
